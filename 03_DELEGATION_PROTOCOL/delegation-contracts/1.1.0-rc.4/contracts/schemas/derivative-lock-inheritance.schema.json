@@ -1,0 +1,828 @@
+{
+  "$defs": {
+    "AuthorityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string"
+        },
+        "field_scopes": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "principal": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "action",
+        "principal",
+        "field_scopes"
+      ],
+      "type": "object"
+    },
+    "BoundingBoxBasisPoints": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "width": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "x": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "y": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    "ChangeItem": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "REPLACE"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "value_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "operation",
+        "value_ref",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "DemandIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "request_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        }
+      },
+      "required": [
+        "request_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "EvidenceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceIdentityRef"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verdict": {
+          "enum": [
+            "PASS",
+            "CONCERNS",
+            "FAIL"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "verdict",
+        "evidence_refs",
+        "note"
+      ],
+      "type": "object"
+    },
+    "ExecutionIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "demand": {
+          "$ref": "#/$defs/DemandIdentityRef"
+        },
+        "execution_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "plan_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef"
+        }
+      },
+      "required": [
+        "execution_id",
+        "demand",
+        "plan_ref"
+      ],
+      "type": "object"
+    },
+    "FailureSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "VALIDATION",
+            "AUTHORITY",
+            "COMPATIBILITY",
+            "BUDGET",
+            "EXECUTION",
+            "INTEGRITY",
+            "LIFECYCLE",
+            "CAPABILITY",
+            "HUMAN_REVIEW",
+            "SECURITY"
+          ],
+          "type": "string"
+        },
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "field_paths": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "message": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "category",
+        "message",
+        "retryable",
+        "field_paths"
+      ],
+      "type": "object"
+    },
+    "IntegrityProof": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issued_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "key_id": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "nonce": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9_-]{86}$",
+          "type": "string"
+        },
+        "signer": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_id",
+        "signer",
+        "signature",
+        "issued_at",
+        "expires_at",
+        "nonce"
+      ],
+      "type": "object"
+    },
+    "MoneyAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "type": "string"
+        },
+        "minor_units": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "minor_units"
+      ],
+      "type": "object"
+    },
+    "PrincipalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "principal_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "principal_type": {
+          "enum": [
+            "CONTENT_HARNESS",
+            "DELEGATION_PROTOCOL",
+            "VISUAL_ASSET_EDITOR",
+            "CONTROL_TOWER"
+          ],
+          "type": "string"
+        },
+        "product_version": {
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "principal_id",
+        "principal_type",
+        "product_version"
+      ],
+      "type": "object"
+    },
+    "ResourceIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "resource_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        }
+      },
+      "required": [
+        "resource_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "ResultIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "result_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "result_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "State": {
+      "enum": [
+        "DRAFT",
+        "SUBMITTED",
+        "REJECTED",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "RESULT_READY",
+        "RESULT_REJECTED",
+        "COMPLETED",
+        "AMENDMENT_REQUIRED",
+        "SUPERSEDED",
+        "COST_APPROVAL_REQUIRED",
+        "CAPABILITY_GAP",
+        "HUMAN_REVIEW_REQUIRED",
+        "CANCELLATION_REQUESTED",
+        "CANCELLED",
+        "PARTIAL_RESULT_READY",
+        "INVALIDATED",
+        "REVOKED",
+        "REPLACED"
+      ],
+      "type": "string"
+    }
+  },
+  "$id": "https://contracts.cmf.dev/delegation/derivative-lock-inheritance/1.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "CMF delegation protocol derivative-lock-inheritance message.",
+  "properties": {
+    "authoritative_lock_authorization": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "applicable_wrong_reading_locks": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "enforcement_level": {
+                    "maximum": 100,
+                    "minimum": 1,
+                    "type": "integer",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "lock_id": {
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+                    "type": "string",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "meaning_hash": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "scope_paths": {
+                    "items": {
+                      "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+                      "type": "string",
+                      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                    },
+                    "minItems": 1,
+                    "type": "array",
+                    "uniqueItems": true,
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "statement": {
+                    "maxLength": 512,
+                    "minLength": 1,
+                    "type": "string",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  }
+                },
+                "required": [
+                  "lock_id",
+                  "statement",
+                  "meaning_hash",
+                  "scope_paths",
+                  "enforcement_level"
+                ],
+                "type": "object",
+                "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+              },
+              "minItems": 1,
+              "type": "array",
+              "uniqueItems": true,
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            "authoritative_demand_ref": {
+              "$ref": "#/$defs/DemandIdentityRef",
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            "authorization_evidence_ref": {
+              "$ref": "#/$defs/ResourceIdentityRef",
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            "supersedes_demand_ref": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/DemandIdentityRef",
+                  "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            }
+          },
+          "required": [
+            "authoritative_demand_ref",
+            "supersedes_demand_ref",
+            "applicable_wrong_reading_locks",
+            "authorization_evidence_ref"
+          ],
+          "type": "object",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "authoritative_parent_ref": {
+      "$ref": "#/$defs/ResourceIdentityRef",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "declared_at": {
+      "format": "date-time",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "derivation_type": {
+      "enum": [
+        "DETERMINISTIC_CROP",
+        "DETERMINISTIC_RESIZE",
+        "DETERMINISTIC_FORMAT_CONVERSION",
+        "DETERMINISTIC_COMPOSITE",
+        "SEMANTIC_TRANSFORMATION",
+        "TRANSFORMATIVE_RECOMPOSITION"
+      ],
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "derivative_ref": {
+      "$ref": "#/$defs/ResourceIdentityRef",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "derivative_semantics": {
+      "enum": [
+        "NON_SEMANTIC",
+        "SEMANTIC_TRANSFORMATIVE"
+      ],
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "derivative_wrong_reading_locks": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "enforcement_level": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer",
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          },
+          "lock_id": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+            "type": "string",
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          },
+          "meaning_hash": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": "string",
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          },
+          "scope_paths": {
+            "items": {
+              "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+              "type": "string",
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true,
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          },
+          "statement": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string",
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          }
+        },
+        "required": [
+          "lock_id",
+          "statement",
+          "meaning_hash",
+          "scope_paths",
+          "enforcement_level"
+        ],
+        "type": "object",
+        "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true,
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "governing_authoritative_demand_ref": {
+      "$ref": "#/$defs/DemandIdentityRef",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "inheritance_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "parent_contract_version": {
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "parent_lock_evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "parent_lock_set_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "parent_lock_set_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef",
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "parent_wrong_reading_locks": {
+          "anyOf": [
+            {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "enforcement_level": {
+                    "maximum": 100,
+                    "minimum": 1,
+                    "type": "integer",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "lock_id": {
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+                    "type": "string",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "meaning_hash": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "scope_paths": {
+                    "items": {
+                      "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+                      "type": "string",
+                      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                    },
+                    "minItems": 1,
+                    "type": "array",
+                    "uniqueItems": true,
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  },
+                  "statement": {
+                    "maxLength": 512,
+                    "minLength": 1,
+                    "type": "string",
+                    "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+                  }
+                },
+                "required": [
+                  "lock_id",
+                  "statement",
+                  "meaning_hash",
+                  "scope_paths",
+                  "enforcement_level"
+                ],
+                "type": "object",
+                "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+              },
+              "minItems": 1,
+              "type": "array",
+              "uniqueItems": true,
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        }
+      },
+      "required": [
+        "parent_wrong_reading_locks",
+        "parent_lock_set_ref",
+        "parent_lock_set_hash"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    }
+  },
+  "required": [
+    "inheritance_id",
+    "authoritative_parent_ref",
+    "parent_contract_version",
+    "governing_authoritative_demand_ref",
+    "parent_lock_evidence",
+    "derivative_ref",
+    "derivative_wrong_reading_locks",
+    "derivation_type",
+    "derivative_semantics",
+    "authoritative_lock_authorization",
+    "declared_at"
+  ],
+  "title": "Derivative Wrong-Reading-Lock Inheritance",
+  "type": "object",
+  "x-cmf-authority": {
+    "allowed_producers": [
+      "CONTENT_HARNESS",
+      "DELEGATION_PROTOCOL",
+      "VISUAL_ASSET_EDITOR",
+      "CONTROL_TOWER"
+    ],
+    "path_kind": "JSON_POINTER_TEMPLATE",
+    "value_owner_by_path": {
+      "/authoritative_lock_authorization": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}/enforcement_level": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}/lock_id": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}/meaning_hash": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}/scope_paths": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}/scope_paths/{index}": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/applicable_wrong_reading_locks/{index}/statement": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authoritative_demand_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authoritative_demand_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authoritative_demand_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authoritative_demand_ref/request_id": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authoritative_demand_ref/version": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authorization_evidence_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authorization_evidence_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authorization_evidence_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authorization_evidence_ref/resource_id": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/authorization_evidence_ref/version": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/supersedes_demand_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/supersedes_demand_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/supersedes_demand_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/supersedes_demand_ref/request_id": "SIGNING_PRINCIPAL",
+      "/authoritative_lock_authorization/supersedes_demand_ref/version": "SIGNING_PRINCIPAL",
+      "/authoritative_parent_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_parent_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/authoritative_parent_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/authoritative_parent_ref/resource_id": "SIGNING_PRINCIPAL",
+      "/authoritative_parent_ref/version": "SIGNING_PRINCIPAL",
+      "/declared_at": "SIGNING_PRINCIPAL",
+      "/derivation_type": "SIGNING_PRINCIPAL",
+      "/derivative_ref": "SIGNING_PRINCIPAL",
+      "/derivative_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/derivative_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/derivative_ref/resource_id": "SIGNING_PRINCIPAL",
+      "/derivative_ref/version": "SIGNING_PRINCIPAL",
+      "/derivative_semantics": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}/enforcement_level": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}/lock_id": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}/meaning_hash": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}/scope_paths": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}/scope_paths/{index}": "SIGNING_PRINCIPAL",
+      "/derivative_wrong_reading_locks/{index}/statement": "SIGNING_PRINCIPAL",
+      "/governing_authoritative_demand_ref": "SIGNING_PRINCIPAL",
+      "/governing_authoritative_demand_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/governing_authoritative_demand_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/governing_authoritative_demand_ref/request_id": "SIGNING_PRINCIPAL",
+      "/governing_authoritative_demand_ref/version": "SIGNING_PRINCIPAL",
+      "/inheritance_id": "SIGNING_PRINCIPAL",
+      "/parent_contract_version": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_lock_set_hash": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_lock_set_ref": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_lock_set_ref/canonical_ref": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_lock_set_ref/payload_hash": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_lock_set_ref/resource_id": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_lock_set_ref/version": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}/enforcement_level": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}/lock_id": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}/meaning_hash": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}/scope_paths": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}/scope_paths/{index}": "SIGNING_PRINCIPAL",
+      "/parent_lock_evidence/parent_wrong_reading_locks/{index}/statement": "SIGNING_PRINCIPAL"
+    }
+  },
+  "x-cmf-consumers": [
+    "CONTENT_HARNESS",
+    "DELEGATION_PROTOCOL",
+    "VISUAL_ASSET_EDITOR",
+    "CONTROL_TOWER"
+  ],
+  "x-cmf-idempotency": "REQUIRED",
+  "x-cmf-lifecycle-effects": [],
+  "x-cmf-message-type": "derivative-lock-inheritance",
+  "x-cmf-message-version": "1.0"
+}

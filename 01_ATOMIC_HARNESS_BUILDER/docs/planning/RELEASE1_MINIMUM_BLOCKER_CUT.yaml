@@ -1,0 +1,69 @@
+schema_version: cmf-builder-release1-minimum-blocker-cut/v1
+generated_on: "2026-07-15"
+target:
+  category: 2d_character_animation
+  profile_id: format02_minimal_coach_theatre
+  compilation_target: atomic_content_harness
+  human_reaction_collection: false
+question: minimum blockers that must close for the first dependency-safe Format 02 implementation sequence
+candidate_sequence:
+  story_ids: [ST-01.01]
+  dependency_closed: true
+  primary_outcome: start and resume one target-profiled Builder run
+semantic_minimum_cut:
+  cardinality: 0
+  blocker_ids: []
+  result: PASS_NON_EMPTY_READY_PREFIX
+  reason: HD-006 is category-conditional and Format 02 does not collect Human Reaction material.
+authorization_minimum_cut:
+  cardinality: 2
+  gates:
+    - gate_id: EG-EPIC-HASH
+      blocker: confirmed Epic validation-report hash discrepancy
+      affected_stories: [ST-01.01]
+      why_it_applies: implementation authorization must bind an integrity-consistent confirmed planning authority
+      format02_requires_it: true_for_authorization_not_story_semantics
+      closure_evidence: receipt-compatible hash or signed discrepancy disposition
+      owner: planning_governance
+      earliest_story_released_when_closed: ST-01.01
+    - gate_id: EG-DEVELOPMENT-CAPSULE
+      blocker: bounded Development Capsule not issued
+      affected_stories: [ST-01.01]
+      why_it_applies: READY is not implementation authority
+      format02_requires_it: true_for_actual_start
+      closure_evidence: signed ST-01.01 capsule naming contracts, tests, rollback, authority, budget, and stop boundary
+      owner: product_authority_and_implementation_governance
+      earliest_story_released_when_closed: ST-01.01
+human_authorization_required_after_cut: true
+current_implementation_authorized: false
+next_frontier:
+  earliest_story: ST-01.02
+  minimum_semantic_cut:
+    - blocker_id: BD-004
+      scoped_part: format02_minimal_coach_theatre_authoritative_corpus
+      affected_stories:
+        direct: [ST-01.02]
+        transitive_count: 67
+        transitive_range: ST-01.03_through_ST-12.04
+      why_it_applies: ST-01.02 must lock a real authoritative Format 02 evidence workspace.
+      format02_requires_it: true
+      closure_evidence: hash-locked authorized Format 02 corpus and source profile with license, privacy, and benchmark-eligibility metadata
+      owner: product_lead_and_evidence_steward
+      earliest_story_released_when_closed: ST-01.02
+not_in_first_story_cut:
+  - {blocker_id: HD-006, reason: conversational_execution_only}
+  - {blocker_id: HD-007, reason: conversational_certification_only}
+  - {blocker_id: BD-004, reason: first_activates_at_ST-01.02}
+  - {blocker_id: BD-007, reason: first_activates_at_ST-02.01}
+  - {blocker_id: BD-008, reason: production_certification_only}
+  - {blocker_id: BD-010, reason: first_activates_at_ST-04.01}
+  - {blocker_id: BD-014, reason: external_integration_frontier}
+  - {blocker_id: active_XRIs, reason: external_integration_or_production_certification_only}
+verdicts:
+  corrected_ready_story_count: 1
+  first_sequence_story_readiness: PASS
+  bounded_implementation_authorization_eligibility: CONDITIONAL_PASS
+  bounded_implementation_currently_authorized: false
+  full_release1_readiness: FAIL
+  full_product_readiness: FAIL
+

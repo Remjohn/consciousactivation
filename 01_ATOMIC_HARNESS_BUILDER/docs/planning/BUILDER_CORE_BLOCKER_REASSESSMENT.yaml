@@ -1,0 +1,107 @@
+schema_version: cmf-builder-core-blocker-reassessment/v1
+generated_on: "2026-07-15"
+status: CONFIRMED_APPLIED
+scope: category-neutral synthetic Builder proof
+genuine_builder_core_blockers:
+  - id: HUMAN_RECONFIRMATION_BUILDER_FIRST_AMENDMENTS
+    classification: GLOBAL_PLANNING_GOVERNANCE
+    reason: confirmed Story acceptance/dependency activation cannot change silently
+    earliest_effect: ST-01.01 supplemental amendment
+    state: CLOSED
+    closure: human used the exact confirmation phrase on 2026-07-15
+  - id: ST_01_01_SUPPLEMENTAL_PROOF_RECEIPT
+    classification: STORY_LOCAL
+    reason: the completed implementation currently authorizes only the Format 02 executable profile; the generic lifecycle remains useful but a test-only proof binding needs additive evidence
+    earliest_effect: ST-01.02
+    closure: passing supplemental acceptance, tests, observability, rollback, file scope, and additive receipt
+  - id: BD-010
+    classification: BUILDER_CORE
+    reason: the Builder must govern capability-to-skill decisions even when the correct specialized-skill set is empty
+    earliest_effect: ST-04.01
+    closure_options:
+      - approved empty-registry policy for deterministic code-owned capabilities
+      - evaluated seed-skill package with capability-gap rules
+    minimum_track_a_choice: approved empty-registry policy
+    state: CLOSED_FOR_BUILDER_CORE_SYNTHETIC_PROOF_ONLY
+    disposition: docs/planning/BD010_BUILDER_CORE_DISPOSITION.yaml
+    all_other_subscopes: OPEN
+  - id: PRIOR_STORY_COMPLETION_RECEIPTS
+    classification: STORY_LOCAL
+    reason: no Story may depend on an unfinished later or earlier Story
+    closure: each direct dependency issues a valid PASS receipt
+  - id: BOUNDED_CAPSULE_AND_AUTHORIZATION
+    classification: STORY_LOCAL
+    reason: planning readiness never grants implementation authority
+    closure: complete hash-valid capsule plus explicit human authorization for exactly one Story
+reclassified_later_blockers:
+  - id: BD-004
+    prior_effect: blocked ST-01.02 and therefore the whole confirmed graph
+    corrected_classification: FORMAT02_REFERENCE_VALIDATION
+    track_a_required: false
+    activates_when: a real profile corpus is bound or evaluated
+  - id: BD-007
+    prior_effect: blocked provider-backed syntax work and propagated downstream
+    corrected_classification: FORMAT02_REFERENCE_VALIDATION
+    track_a_required: false
+    activates_when: Format 02 provider comparison or visual-syntax parsing is evaluated
+  - id: BD-008
+    corrected_classification: PRODUCTION_CERTIFICATION
+    track_a_required: false
+    activates_when: protected evaluation, threshold, maturity, or production authorization is claimed
+  - id: BD-014
+    corrected_classification: EXTERNAL_PRODUCT_INTEGRATION
+    track_a_required: false
+    activates_when: VAE or Delegation target/handoff branch is compiled or compatibility-proven
+  - id: HD-006
+    corrected_classification: CONVERSATIONAL_FUTURE
+    track_a_required: false
+    activates_when: Human Reaction material is collected, stored, redacted, accessed, retained, or withdrawn
+  - id: HD-007
+    corrected_classification: PRODUCTION_CERTIFICATION
+    track_a_required: false
+    activates_when: conversational profiles seek protected evaluation or certification
+  - id: VAE_READINESS
+    corrected_classification: EXTERNAL_PRODUCT_INTEGRATION
+    track_a_required: false
+    activates_when: downstream VAE behavior or receipts are required
+  - id: DELEGATION_RUNTIME
+    corrected_classification: EXTERNAL_PRODUCT_INTEGRATION
+    track_a_required: false
+    note: RC4 schemas may remain pinned for compatibility but no runtime invocation is allowed on Track A
+  - id: EVALUATOR_OR_VLM_CERTIFICATION
+    corrected_classification: PRODUCTION_CERTIFICATION
+    track_a_required: false
+  - id: GPU_OR_COMFYUI
+    corrected_classification: EXTERNAL_PRODUCT_INTEGRATION
+    track_a_required: false
+  - id: FORMAT02_PRODUCTION_EVIDENCE
+    corrected_classification: FORMAT02_REFERENCE_VALIDATION
+    track_a_required: false
+cross_repository_assessment:
+  XDEP-001:
+    track_a_effect: governing read-only authority input
+    runtime_blocker: false
+  XDEP-002:
+    track_a_effect: none
+    classification: EXTERNAL_PRODUCT_INTEGRATION
+  XDEP-003:
+    track_a_effect: no direct dependency; RC4 remains pinned only where a shared contract is genuinely referenced
+    runtime_blocker: false
+  XDEP-004:
+    track_a_effect: none
+    classification: CONVERSATIONAL_FUTURE
+  XDEP-005:
+    track_a_effect: none
+    classification: CONTROL_TOWER_OR_OPERATIONS
+  XDEP-006:
+    track_a_effect: a synthetic frozen lineage fixture may satisfy structural references; Activation Compiler runtime is not required
+    runtime_blocker: false
+format02_archive_recovery_effect:
+  archive_recovered: true
+  track_a_effect: none
+  track_b_effect: evidence_input_only_not_governed_adoption
+current_ready_summary:
+  ready_stories_under_confirmed_graph: 0
+  completed_stories_on_track_a: [ST-01.01]
+  first_eligible_after_reconfirmation: ST-01.01 supplemental amendment
+implementation_authorized: false

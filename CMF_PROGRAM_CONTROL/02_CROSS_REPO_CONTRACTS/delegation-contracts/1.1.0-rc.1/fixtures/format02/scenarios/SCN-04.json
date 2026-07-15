@@ -1,0 +1,140 @@
+{
+  "assertions": {
+    "audit": {
+      "accepted_and_rejected_actions_receipted": true,
+      "committed_sequence_is_ordering_authority": true,
+      "expected_sequence": [
+        {
+          "audit_sequence": 1,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-04-msg-001",
+          "message_type": "budget-escalation-request",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        },
+        {
+          "audit_sequence": 2,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-04-msg-002",
+          "message_type": "budget-escalation-response",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        }
+      ],
+      "receipt_chain_required": true
+    },
+    "authority": [
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "budget-escalation-request",
+        "principal_type": "VISUAL_ASSET_EDITOR"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "budget-escalation-response",
+        "principal_type": "CONTENT_HARNESS"
+      }
+    ],
+    "effect_counts": {
+      "budget_escalations": 1,
+      "hard_ceiling_breaches": 0,
+      "replacement_authorizations": 1
+    },
+    "identity": [
+      "exact_demand_identity_is_preserved",
+      "correlation_and_causation_are_deterministic",
+      "pinned_profile_does_not_silently_upgrade"
+    ],
+    "negative_variants": [
+      "approval_without_new_authorization",
+      "expired_budget",
+      "denial_to_capability_gap"
+    ],
+    "outbox": {
+      "accepted_effects_publish_after_atomic_commit": true,
+      "delivery_redrive_must_not_duplicate_domain_effect": true,
+      "expected_deliveries": [
+        {
+          "audit_sequence": 1,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-04-msg-001"
+        },
+        {
+          "audit_sequence": 2,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-04-msg-002"
+        }
+      ]
+    },
+    "prohibited_effects": [
+      "work_beyond_hard_ceiling",
+      "in_place_budget_patch",
+      "vae_budget_approval"
+    ],
+    "projection": [
+      {
+        "correlation_id": "scn-04-member-corr-001",
+        "expected_state": "IN_PROGRESS",
+        "protocol_version": "1.0",
+        "source_audit_sequence": 2
+      },
+      {
+        "assertion": "denied_or_stale_effects_are_visible_without_becoming_authority"
+      }
+    ],
+    "race_variants": [
+      "budget_approval_before_cancellation",
+      "cancellation_before_budget_approval"
+    ]
+  },
+  "expected_initial_state": "IN_PROGRESS",
+  "expected_terminal_state": "IN_PROGRESS",
+  "fixture_profile": "FORMAT02_REFERENCE",
+  "lifecycle_sequence": [
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "sequence": 1,
+      "to_state": "COST_APPROVAL_REQUIRED",
+      "trigger": "budget_escalation_requested"
+    },
+    {
+      "from_state": "COST_APPROVAL_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "sequence": 2,
+      "to_state": "IN_PROGRESS",
+      "trigger": "budget_escalation_approved"
+    }
+  ],
+  "member_correlations": [
+    "scn-04-member-corr-001"
+  ],
+  "message_sequence": [
+    {
+      "causation_id": null,
+      "correlation_id": "scn-04-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:1ab1a0bd492a94867de1f31b9fa0616ca5a6ca8496fbf3e32b02d6a61b129703",
+      "fixture_ref": "packages/contracts/examples/budget-escalation-request.example.json",
+      "message_id": "scn-04-msg-001",
+      "message_type": "budget-escalation-request",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "sequence": 1
+    },
+    {
+      "causation_id": "scn-04-msg-001",
+      "correlation_id": "scn-04-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:b0ac7cbec176460008b7fff4146399904a87d9b531f4fad6da600cb24eb17162",
+      "fixture_ref": "packages/contracts/examples/budget-escalation-response.example.json",
+      "message_id": "scn-04-msg-002",
+      "message_type": "budget-escalation-response",
+      "principal_type": "CONTENT_HARNESS",
+      "sequence": 2
+    }
+  ],
+  "scenario_id": "SCN-04",
+  "title": "Budget escalation and approval"
+}

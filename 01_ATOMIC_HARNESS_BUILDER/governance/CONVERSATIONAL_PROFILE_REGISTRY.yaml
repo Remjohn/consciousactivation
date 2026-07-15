@@ -1,0 +1,49 @@
+schema_version: cmf-builder-conversational-profile-registry/v1
+status: STRUCTURAL_SUPPORT_UNCERTIFIED
+category_id: conversational_activation_expression
+compilation_target: atomic_content_harness
+governance_owner: product_lead_and_conversational_category_steward
+runtime_law: Activation First
+development_law: Visual Syntax First for evidence parsing; never runtime semantic invention
+profiles:
+  - profile_id: public_comment
+    canonical_name: Public Comment
+    surface: public_comment
+    required_inputs: [activative_intelligence_pack_ref, source_evidence_refs, consent_policy_ref]
+    required_outputs: [activative_call, evaluation_contract]
+    execution_owner: downstream_content_harness
+    release_1_certification: UNCERTIFIED
+  - profile_id: reply_dm
+    canonical_name: Reply / DM
+    surface: reply_or_dm
+    required_inputs: [activative_intelligence_pack_ref, prior_activative_call_ref, reaction_receipt_ref, consent_policy_ref]
+    required_outputs: [updated_activative_call, reaction_receipt_ref, recompile_decision]
+    execution_owner: downstream_content_harness
+    release_1_certification: UNCERTIFIED
+  - profile_id: reelcast_expression
+    canonical_name: ReelCast Expression
+    surface: reelcast
+    required_inputs: [activative_intelligence_pack_ref, reaction_receipt_refs, expression_moment_refs, consent_policy_ref]
+    required_outputs: [message_elevation, reelcast_close_call, identity_dna_amendment_proposal_refs]
+    execution_owner: reelcast_content_harness
+    builder_boundary: compile_validate_and_handoff_only
+    release_1_certification: UNCERTIFIED
+  - profile_id: interview_expression
+    canonical_name: Interview Expression
+    surface: interview
+    required_inputs: [guest_identity_dna_ref, audience_context_premise_ref, interviewer_resonance_ref, matrix_of_edging_ref, consent_policy_ref]
+    required_outputs: [adaptive_activative_call_sequence, reaction_receipts, expression_moments, identity_dna_amendment_proposals]
+    execution_owner: interview_content_harness
+    builder_boundary: compile_validate_and_handoff_only
+    release_1_certification: UNCERTIFIED
+common_failure_behavior:
+  missing_rich_lineage: BLOCK_HG-015
+  missing_consent_policy: BLOCK_HD-006
+  scripted_guest_landing: REJECT_CONSTITUTIONAL_VIOLATION
+  downstream_semantic_mutation: REJECT_HG-005
+test_seams:
+  - schema_contract_validation
+  - rich_to_sparse_lineage_round_trip
+  - reaction_receipt_recompile_routing
+  - expression_moment_provenance_and_withdrawal
+  - builder_external_runtime_boundary

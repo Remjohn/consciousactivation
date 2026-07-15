@@ -1,0 +1,125 @@
+{
+  "assertions": {
+    "audit": {
+      "accepted_and_rejected_actions_receipted": true,
+      "committed_sequence_is_ordering_authority": true,
+      "expected_sequence": [
+        {
+          "audit_sequence": 1,
+          "disposition": "REJECTED",
+          "message_id": "scn-08-msg-001",
+          "message_type": "visual-asset-demand",
+          "receipt_mode": "REJECTION",
+          "state_change_expected": false
+        },
+        {
+          "audit_sequence": 2,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-08-msg-002",
+          "message_type": "delegation-audit-receipt",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        }
+      ],
+      "receipt_chain_required": true
+    },
+    "authority": [
+      {
+        "expected_disposition": "REJECTED",
+        "message_type": "visual-asset-demand",
+        "principal_type": "VISUAL_ASSET_EDITOR"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "delegation-audit-receipt",
+        "principal_type": "DELEGATION_PROTOCOL"
+      }
+    ],
+    "effect_counts": {
+      "authority_denials": 1,
+      "state_changes": 0,
+      "vae_executions": 0
+    },
+    "identity": [
+      "exact_demand_identity_is_preserved",
+      "correlation_and_causation_are_deterministic",
+      "pinned_profile_does_not_silently_upgrade"
+    ],
+    "negative_variants": [
+      "vae_composition_mutation",
+      "hidden_extension_authority",
+      "forged_owner_principal"
+    ],
+    "outbox": {
+      "accepted_effects_publish_after_atomic_commit": true,
+      "delivery_redrive_must_not_duplicate_domain_effect": true,
+      "expected_deliveries": [
+        {
+          "audit_sequence": 1,
+          "delivery_kind": "REJECTION_RECEIPT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-08-msg-001"
+        },
+        {
+          "audit_sequence": 2,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-08-msg-002"
+        }
+      ]
+    },
+    "prohibited_effects": [
+      "production_start",
+      "demand_mutation",
+      "denial_without_audit"
+    ],
+    "projection": [
+      {
+        "correlation_id": "scn-08-member-corr-001",
+        "expected_state": "DRAFT",
+        "protocol_version": "1.0",
+        "source_audit_sequence": 2
+      },
+      {
+        "assertion": "denied_or_stale_effects_are_visible_without_becoming_authority"
+      }
+    ],
+    "race_variants": [
+      "denied_mutation_before_valid_submission",
+      "valid_submission_before_denied_mutation"
+    ]
+  },
+  "expected_initial_state": "DRAFT",
+  "expected_terminal_state": "DRAFT",
+  "fixture_profile": "FORMAT02_REFERENCE",
+  "lifecycle_sequence": [],
+  "member_correlations": [
+    "scn-08-member-corr-001"
+  ],
+  "message_sequence": [
+    {
+      "causation_id": null,
+      "correlation_id": "scn-08-member-corr-001",
+      "expected_disposition": "REJECTED",
+      "fixture_hash": "sha256:938b08f70bb712edad55dea21d73c9f913f631ddef50b7b107f5fab262ba158a",
+      "fixture_ref": "packages/contracts/examples/visual-asset-demand.example.json",
+      "message_id": "scn-08-msg-001",
+      "message_type": "visual-asset-demand",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "sequence": 1
+    },
+    {
+      "causation_id": "scn-08-msg-001",
+      "correlation_id": "scn-08-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:592121b348e6a836c8a90f9a1fa567bfa32f7ae7cdd7541dc2b7459fe521ad56",
+      "fixture_ref": "packages/contracts/examples/delegation-audit-receipt.example.json",
+      "message_id": "scn-08-msg-002",
+      "message_type": "delegation-audit-receipt",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "sequence": 2
+    }
+  ],
+  "scenario_id": "SCN-08",
+  "title": "Authority violation rejection"
+}

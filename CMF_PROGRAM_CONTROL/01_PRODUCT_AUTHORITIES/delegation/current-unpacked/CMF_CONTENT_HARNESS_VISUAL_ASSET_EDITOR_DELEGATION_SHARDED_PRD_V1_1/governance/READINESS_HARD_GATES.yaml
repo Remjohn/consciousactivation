@@ -1,0 +1,133 @@
+gate_id: DELEGATION-IMPLEMENTATION-AUTHORIZATION-001
+version: 1.1.0-draft
+authorization_states:
+- PROTOCOL_PRD_DRAFT
+- PROTOCOL_PRD_APPROVED
+- ARCHITECTURE_IN_PROGRESS
+- CONTRACT_FAMILY_VALIDATED
+- CROSS_PRODUCT_FIXTURES_READY
+- CONFORMANCE_SUITE_PASSING
+- IMPLEMENTATION_AUTHORIZED
+- FORMAT02_INTEGRATION_CERTIFIED
+- PRODUCTION_PROTOCOL_CERTIFIED
+hard_gates:
+- id: GATE-01
+  name: Product-boundary preservation
+  requires:
+  - architecture_preservation_pass
+  - no_third_authority
+- id: GATE-02
+  name: Decision and requirements completeness
+  requires:
+  - 16_decisions_locked
+  - 128_frs_registered
+  - 60_nfrs_registered
+  - traceability_complete
+- id: GATE-03
+  name: Shared contract family
+  requires:
+  - 25_schemas_present
+  - examples_validate
+  - message_registry_complete
+  - constitution_complete_visual_asset_demand
+  - non_empty_wrong_reading_locks
+  - expression_moment_lineage_supported
+- id: GATE-04
+  name: Authority and lifecycle executable proof
+  requires:
+  - authority_matrix_valid
+  - lifecycle_machine_valid
+  - illegal_transition_tests
+- id: GATE-05
+  name: Compatibility and integrity proof
+  requires:
+  - reference_manifests
+  - adapter_fixture
+  - migration_fixture
+  - signature_and_replay_tests
+  - lossless_constitutional_adapter_tests
+  - semantic_behavior_compatibility
+- id: GATE-06
+  name: Format 02 cross-product fixtures
+  requires:
+  - all_reference_scenarios_present
+  - single_asset
+  - delegation_set
+  - supersession
+  - budget
+  - amendment
+  - cancellation
+  - acknowledgement
+  - replacement
+- id: GATE-07
+  name: Resilience proof
+  requires:
+  - duplicate
+  - out_of_order
+  - restart
+  - audit_interruption
+  - timeout
+  - delayed_ack
+- id: GATE-08
+  name: Control Tower projection
+  requires:
+  - lifecycle_projection
+  - authority_projection
+  - budget_projection
+  - audit_chain_projection
+- id: GATE-09
+  name: Shared conformance suite
+  requires:
+  - producer
+  - consumer
+  - authority
+  - lifecycle
+  - compatibility
+  - resilience
+  - format02
+- id: GATE-10
+  name: Development Capsule
+  requires:
+  - architecture
+  - adrs
+  - schemas
+  - fixtures
+  - tests
+  - deployment
+  - observability
+  - migration
+  - rollback
+  - epics
+  - stories
+  - specs
+  - authorization_receipt
+outcomes:
+- IMPLEMENTATION_AUTHORIZED
+- NEEDS_PRODUCT_RATIFICATION
+- BLOCKED_CONTRACT_FAMILY
+- BLOCKED_AUTHORITY
+- BLOCKED_COMPATIBILITY
+- BLOCKED_FIXTURES
+- BLOCKED_CONFORMANCE
+- BLOCKED_ARCHITECTURE
+binding_prohibitions:
+- AP-001
+- AP-002
+- AP-003
+- AP-004
+- AP-005
+- AP-006
+- AP-007
+- AP-008
+- AP-009
+- AP-010
+- AP-011
+- AP-012
+- AP-013
+- AP-014
+- AP-015
+- AP-016
+- AP-017
+- AP-018
+- AP-019
+- AP-020

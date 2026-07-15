@@ -1,0 +1,70 @@
+schema_version: cmf-builder-story-completion-receipt-template/v1
+story_id: ST-03.04
+primary_epic: EP-03
+active_mode: DETERMINISTIC_ARTIFACT_SET
+receipt_type: StoryCompletionReceipt
+issuance_state: PENDING_STORY_COMPLETION
+implemented_outcome_required: true
+owned_obligations_required:
+  ADR-004: PASS_REQUIRED
+  AG-018: PASS_REQUIRED
+  FR-054: PASS_REQUIRED
+  FR-055: PASS_REQUIRED
+  FR-056: PASS_REQUIRED
+  FR-057: PASS_REQUIRED
+  FR-058: PASS_REQUIRED
+  NFR-MAINT-001: PASS_REQUIRED
+  NFR-REL-001: PASS_REQUIRED
+  NFR-REL-003: PASS_REQUIRED
+acceptance_criteria_required:
+  AC-01: PASS_REQUIRED
+  AC-02: PASS_REQUIRED
+  AC-03: PASS_REQUIRED
+  AC-04: PASS_REQUIRED
+  AC-05: PASS_REQUIRED
+  AC-06: PASS_REQUIRED
+  AC-07: PASS_REQUIRED
+  AC-08: PASS_REQUIRED
+  AC-09: PASS_REQUIRED
+  AC-10: PASS_REQUIRED
+  AC-11: PASS_REQUIRED
+  AC-12: PASS_REQUIRED
+required_sections:
+  - authorization_and_capsule_identity
+  - implemented_outcome
+  - requirements_satisfied
+  - source_IR_and_artifact_manifest_evidence
+  - deterministic_cross_artifact_and_drift_evidence
+  - files_changed_with_hashes
+  - tests_executed_and_results
+  - contract_and_architecture_validation
+  - observability_evidence
+  - rollback_and_cleanup_evidence
+  - unresolved_limitations
+  - newly_discovered_blockers
+  - canonical_receipt_hash
+required_validations:
+  prior_regression: PASS_112_OF_112
+  story_tests: PASS_ALL_MINIMUM_26
+  full_regression: PASS_ALL_NO_SKIPS
+  architecture_boundaries: PASS
+  deterministic_rerun: PASS_TWICE
+  artifact_inventory: PASS_21_OF_21
+  file_scope: PASS_EXACT_ALLOWLIST
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  schema_file_changes: []
+  external_product_behavior: false
+  task_execution: false
+  Atomic_Harness_Definition: false
+  Development_Capsule_generation: false
+  production_claim: false
+downstream_effect:
+  ST_03_04: COMPLETE_ONLY_ON_PASS
+  ST_03_05: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_ONLY
+  authorizes_ST_03_05_implementation: false
+  authorizes_full_release1: false
+  authorizes_full_product: false
+  authorizes_production: false
+completion_verdict_allowed: [PASS, FAIL]
+canonicalization: sha256_of_canonical_JSON_with_receipt_hash_field_omitted

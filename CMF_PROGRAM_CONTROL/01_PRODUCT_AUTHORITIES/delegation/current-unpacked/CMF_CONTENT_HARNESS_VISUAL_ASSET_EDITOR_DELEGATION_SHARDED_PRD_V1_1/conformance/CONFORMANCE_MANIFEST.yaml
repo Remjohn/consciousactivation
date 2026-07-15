@@ -1,0 +1,17 @@
+version: 1.0.0-draft
+suites:
+- suite_id: authority
+  path: authority-tests
+  required_for: CONTRACT_FAMILY_VALIDATED
+- suite_id: lifecycle
+  path: lifecycle-tests
+  required_for: CONTRACT_FAMILY_VALIDATED
+- suite_id: compatibility
+  path: compatibility-tests
+  required_for: CROSS_PRODUCT_FIXTURES_READY
+- suite_id: resilience
+  path: resilience-tests
+  required_for: CONFORMANCE_SUITE_PASSING
+- suite_id: format02_end_to_end
+  path: format02-end-to-end
+  required_for: FORMAT02_INTEGRATION_CERTIFIED

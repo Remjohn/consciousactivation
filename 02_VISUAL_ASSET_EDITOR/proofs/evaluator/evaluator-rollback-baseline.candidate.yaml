@@ -1,0 +1,15 @@
+classification: non_production_readiness_proof
+baseline_id: EVAL-ROLLBACK-F02-PENDING-001
+status: unbound
+profile_ref: character-scene-composition@1.1.0-draft
+evaluator_pin_ref: null
+program_pin_ref: EVAL-PIN-F02-CANDIDATE-001
+calibration_corpus_digest: sha256:d815f40c4e61f56ec4814d56db27e142e862ca6be0a6cede1d21652af558e0f6
+protected_set_digest: sha256:af4b4272121c96a7fd1c21aebae22928bcd8aa5adf561414547d48879d30eb7c
+rollback_triggers:
+  - evaluator_identity_drift
+  - protected_regression_failure
+  - critical_false_negative_limit_breached
+  - non_compensable_gate_behavior_changed
+restore_evidence: []
+rehearsal_receipt_ref: null

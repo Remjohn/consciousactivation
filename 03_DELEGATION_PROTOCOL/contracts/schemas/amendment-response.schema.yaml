@@ -1,0 +1,33 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Amendment Response
+type: object
+additionalProperties: false
+required:
+- proposal_ref
+- decision
+- authorization
+properties:
+  proposal_ref:
+    type: string
+    minLength: 1
+  decision:
+    type: string
+    minLength: 1
+    enum:
+    - accepted
+    - rejected
+    - alternative_requested
+  selected_option:
+    type:
+    - string
+    - 'null'
+  authorization:
+    type: object
+  resulting_demand:
+    type:
+    - object
+    - 'null'
+  reason:
+    type:
+    - string
+    - 'null'

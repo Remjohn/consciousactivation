@@ -1,0 +1,34 @@
+{
+  "fixture_type": "vae_delegation_rc4_boundary_cases",
+  "fixture_version": "1.0.0",
+  "source_release": "delegation-contracts@1.1.0-rc.4",
+  "expected_semantic_change": "portable_derivative_lock_inheritance_contract_and_enforcement",
+  "visual_asset_demand_bytes_changed_from_rc3": false,
+  "derivative_cases": {
+    "accept": [
+      "exact-inheritance.valid.json",
+      "stricter-addition.valid.json",
+      "authorized-new-demand-relaxation.valid.json"
+    ],
+    "reject": {
+      "lock-removal.invalid.json": "PARENT_LOCK_REMOVED",
+      "lock-weakening.invalid.json": "PARENT_LOCK_WEAKENED",
+      "missing-parent-evidence.invalid.json": "PARENT_LOCK_EVIDENCE_REQUIRED",
+      "ambiguous-derivation.invalid.json": "DERIVATION_CLASSIFICATION_REQUIRED",
+      "semantic-shortcut.invalid.json": "UNAUTHORIZED_LOCK_RELAXATION"
+    }
+  },
+  "evaluation": {
+    "supported_profile": "character-scene-composition@1.1.0-draft",
+    "unsupported_profile": "unknown-production-profile@9.9",
+    "unsupported_behavior": "REJECT",
+    "evaluator_status": "specified_not_certified",
+    "production_certification": false
+  },
+  "format_profile": {
+    "canonical_id": "format02_minimal_coach_theatre",
+    "historical_alias": "minimal_coach_theatre",
+    "strongest_state": "contract_compatible",
+    "production_certified": false
+  }
+}

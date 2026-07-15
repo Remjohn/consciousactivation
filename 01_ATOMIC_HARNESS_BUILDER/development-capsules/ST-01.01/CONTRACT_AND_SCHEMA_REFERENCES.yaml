@@ -1,0 +1,56 @@
+schema_version: cmf-builder-story-contract-references/v1
+story_id: ST-01.01
+governed_inputs:
+  - id: compilation_target_registry
+    path: governance/COMPILATION_TARGET_REGISTRY.yaml
+    sha256: 0e9c82b6f87a9b7f5dff317578c0da18241fbfd66e29cc2226e161399d4da2ca
+    access: read_only
+    use: recognize exactly the three compilation-target identities
+  - id: category_profile_compatibility
+    path: contracts/integration/CATEGORY_PROFILE_COMPATIBILITY.yaml
+    sha256: 781a438ef1298c1bc71da6ab54298774f09c0be97becf513510913f98fc97a71
+    access: read_only
+    use: bind the authorized Format 02 profile and preserve its contract_compatible non-certified state
+  - id: contract_registry
+    path: docs/contracts/CONTRACT_REGISTRY.yaml
+    sha256: cb9240ef0818a6180de75fe79c02901e3f41a2ec2ed97688fb754a567ad79fce
+    access: read_only
+contracts:
+  - contract_id: RunLifecycle
+    ownership: builder
+    state: planned_implementation_contract
+    governing_spec: docs/tech-specs/specs/TS-01-GOVERNED-LIFECYCLE-AND-TARGET-PROFILES.md
+    story_use: implement typed run, commands, events, authority, checkpoint and resume semantics
+  - contract_id: EvidenceWorkspace
+    ownership: builder
+    state: reference_only
+    governing_spec: docs/tech-specs/specs/TS-02-CONFIGURED-EVIDENCE-WORKSPACE.md
+    story_use: expose only the next required work identity; do not implement evidence behavior
+  - contract_id: ConstitutionalReadinessReceipt
+    ownership: builder
+    state: schema_reference_only
+    schema: docs/contracts/schemas/constitutional-evaluation.schema.json#/$defs/ConstitutionalReadinessReceipt
+    schema_file_sha256: 886c119ab0e8be6b1f469886f7baf2cebcc08ac95148a56ff084933ffb4afc9f
+    story_use: preserve the later readiness boundary; do not issue full-product readiness
+external_contracts:
+  delegation:
+    active_builder_pin_path: contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+    active_builder_pin_sha256: b3755b4749fba2584075b95202034a60188b1829bff1820ac92e1ff50134ecbf
+    active_package_version: 1.1.0-rc.4
+    direct_story_dependency: false
+    capsule_pin_effect: not_bound
+    reason: ST-01.01 neither compiles nor validates a Delegation handoff and must not absorb shared-contract behavior
+  visual_asset_editor:
+    direct_story_dependency: false
+    capsule_pin_effect: not_bound
+    reason: target identity is structural only; no VAE contract or realization behavior is used
+schema_authoring:
+  local_schema_change_allowed: false
+  schema_fork_allowed: false
+  generated_schema_output_in_scope: false
+compatibility_rules:
+  format02_strongest_state: contract_compatible
+  format02_production_certified: false
+  conversational_profiles_executable: false
+  interview_expression_structural_only: true
+

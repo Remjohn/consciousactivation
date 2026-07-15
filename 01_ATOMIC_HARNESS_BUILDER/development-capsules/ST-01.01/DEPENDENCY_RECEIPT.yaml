@@ -1,0 +1,57 @@
+schema_version: cmf-builder-story-dependency-receipt/v1
+story_id: ST-01.01
+evaluated_on: "2026-07-15"
+story_status: READY
+direct_story_dependencies: []
+required_prior_story_completion_receipts: []
+dependency_graph_result: PASS_EMPTY_ROOT
+semantic_blocker_cut:
+  cardinality: 0
+  blockers: []
+conditional_decisions:
+  HD-006:
+    applies: false
+    reason: authorized Format 02 profile collects no Human Reaction material
+  HD-007:
+    applies: false
+    reason: authorized Story performs no conversational evaluation or certification
+  BD-004:
+    applies: false
+    reason: authoritative Format 02 corpus first activates at ST-01.02
+  BD-007:
+    applies: false
+    reason: provider-backed visual syntax first activates at ST-02.01
+  BD-008:
+    applies: false
+    reason: production certification and protected thresholds are outside this Story
+  BD-010:
+    applies: false
+    reason: capability registry work first activates at ST-04.01
+  BD-014:
+    applies: false
+    reason: no VAE or Delegation target compilation occurs
+external_dependencies:
+  delegation_rc4:
+    active_program_version: 1.1.0-rc.4
+    direct_dependency: false
+    required_for_story: false
+  visual_asset_editor:
+    direct_dependency: false
+    required_for_story: false
+  active_xri_dependencies:
+    applicable_to_story: []
+authorization_gates:
+  EG-EPIC-HASH:
+    state: CLOSED_BY_GOVERNED_DISPOSITION
+    evidence: docs/planning/EPIC_VALIDATION_HASH_DISPOSITION.yaml
+    verdict: RECONCILED_NON_SEMANTIC
+  EG-DEVELOPMENT-CAPSULE:
+    state: EVALUATED_BY_CAPSULE_VALIDATION_REPORT
+    evidence: development-capsules/ST-01.01/CAPSULE_VALIDATION_REPORT.md
+  explicit_human_implementation_authority:
+    state: REQUIRED_NOT_YET_GRANTED
+full_release1_readiness: FAIL
+full_product_readiness: FAIL
+dependency_verdict: PASS_FOR_BOUNDED_CAPSULE
+implementation_authorized: false
+

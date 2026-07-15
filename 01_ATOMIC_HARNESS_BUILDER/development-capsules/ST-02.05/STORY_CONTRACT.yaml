@@ -1,0 +1,56 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-02.05
+primary_epic: EP-02
+title: Ratify and Freeze the Draft Harness Boundary
+active_mode: DECLARED_BOUNDARY
+readiness_status: READY
+implementation_authorized: false
+primary_outcome: >-
+  Downstream constitutional decisions start from an explicit, reviewable, and
+  stable product boundary.
+bounded_outcome: >-
+  For the governed category-neutral synthetic task, an authorized human can
+  approve, revise, or reject the predeclared atomic boundary. Approval records
+  the selected boundary, rejected alternatives, evidence, rationale, accepted
+  risks, and authority; deterministic Builder code then atomically freezes the
+  boundary and compiles a transparent Draft Harness Model whose constitutional
+  fields retain explicit authority and knowledge status.
+owned_obligations: [FR-036, FR-037, FR-038, FR-039, FR-040, HG-003]
+direct_dependency:
+  story_id: ST-01.02
+  required_receipt: ST-01.02:StoryCompletionReceipt
+  status: SATISFIED
+conditional_path:
+  amendment_id: BF-AM-003
+  selected_branch: DECLARED_BOUNDARY
+  direct_dependencies: [ST-01.02]
+  applicable_blockers: []
+  inactive_branches:
+    DISCOVERED_BOUNDARY:
+      direct_dependencies: [ST-02.04]
+      applicable_blockers: [BD-004, BD-007]
+    CONVERSATIONAL_DISCOVERY:
+      additional_blockers: [HD-006]
+component_boundary: >-
+  Builder-owned atomic-boundary validation, human decision authority, Draft
+  Harness Model compilation, immutable freeze, formal reopen/invalidation,
+  deterministic persistence, observations, and receipts for one synthetic
+  category-neutral definition.
+authority_split:
+  human: approve_revise_reject_and_reopen_atomic_boundary
+  code: validate_compile_commit_replay_hash_and_emit_receipts
+  agent: propose_or_explain_only_never_ratify
+failure_behavior:
+  - unratified promotion fails closed
+  - approval with incomplete decision evidence fails closed
+  - unresolved critical boundary contradiction prevents freeze
+  - unauthorized or non-human ratification fails without mutation
+  - silent broadening merging splitting or rewriting fails closed
+  - atomic commit failure leaves no partial model decision event or receipt
+compatibility:
+  category_binding: none_test_only
+  production_eligible: false
+  certified: false
+  Format02_affected: false
+  external_runtime_required: false
+completion_receipt_identity_rule: ST-02.05:StoryCompletionReceipt:sha256_of_canonical_receipt_payload

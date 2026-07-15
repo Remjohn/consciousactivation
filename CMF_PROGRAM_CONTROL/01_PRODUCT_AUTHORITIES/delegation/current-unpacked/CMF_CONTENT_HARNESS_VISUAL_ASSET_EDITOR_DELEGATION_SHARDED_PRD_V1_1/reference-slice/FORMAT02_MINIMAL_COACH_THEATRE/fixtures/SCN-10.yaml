@@ -1,0 +1,21 @@
+scenario_id: SCN-10
+title: Replay and out-of-order resilience
+purpose: Proves idempotent duplicate resolution and replay rejection.
+contracts:
+- type: visual-asset-submission
+  example_ref: ../../../contracts/examples/visual-asset-submission.example.yaml
+- type: submission-receipt
+  example_ref: ../../../contracts/examples/submission-receipt.example.yaml
+- type: delegation-audit-receipt
+  example_ref: ../../../contracts/examples/delegation-audit-receipt.example.yaml
+expected_shared_states:
+- DRAFT
+- SUBMITTED
+- ACCEPTED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation
+- duplicate_submission_returns_existing_receipt
+- replay_message_rejected

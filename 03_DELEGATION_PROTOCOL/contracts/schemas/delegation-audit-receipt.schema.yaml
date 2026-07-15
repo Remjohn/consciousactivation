@@ -1,0 +1,44 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Delegation Audit Receipt
+type: object
+additionalProperties: false
+required:
+- receipt_id
+- message_id
+- correlation_id
+- verification
+- persisted_at
+- audit_sequence
+- receipt_hash
+properties:
+  receipt_id:
+    type: string
+    minLength: 1
+    pattern: ^AUD-
+  message_id:
+    type: string
+    minLength: 1
+  correlation_id:
+    type: string
+    minLength: 1
+  verification:
+    type: object
+  accepted_transition:
+    type:
+    - object
+    - 'null'
+  persisted_at:
+    type: string
+    minLength: 1
+    format: date-time
+  audit_sequence:
+    type: integer
+    minimum: 1
+  previous_receipt_hash:
+    type:
+    - string
+    - 'null'
+  receipt_hash:
+    type: string
+    minLength: 1
+    pattern: '^sha256:'

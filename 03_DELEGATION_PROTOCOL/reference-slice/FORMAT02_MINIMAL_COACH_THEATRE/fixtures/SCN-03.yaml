@@ -1,0 +1,18 @@
+scenario_id: SCN-03
+title: In-flight demand supersession
+purpose: Proves field-level change classification, stale promotion prevention and reusable work.
+contracts:
+- type: visual-asset-demand
+  example_ref: ../../../contracts/examples/visual-asset-demand.example.yaml
+- type: demand-supersession
+  example_ref: ../../../contracts/examples/demand-supersession.example.yaml
+- type: selective-invalidation-receipt
+  example_ref: ../../../contracts/examples/selective-invalidation-receipt.example.yaml
+expected_shared_states:
+- IN_PROGRESS
+- SUPERSEDED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

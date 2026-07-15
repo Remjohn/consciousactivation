@@ -1,0 +1,42 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Asset Submission
+description: ''
+type: object
+additionalProperties: false
+required:
+- delegation_contract_version
+- demand_ref
+- execution_policy
+- idempotency_key
+properties:
+  delegation_contract_version: &id001
+    type: string
+  demand_ref:
+    type: object
+    required:
+    - request_id
+    - version
+    - uri
+    - sha256
+    properties:
+      request_id: *id001
+      version:
+        type: integer
+      uri: *id001
+      sha256: *id001
+  execution_policy:
+    type: object
+    required:
+    - budget_program
+    - priority
+    - experimental_policy
+    properties:
+      budget_program: *id001
+      priority: *id001
+      experimental_policy: *id001
+  callbacks:
+    type: object
+    properties:
+      event_webhook: *id001
+      completion_webhook: *id001
+  idempotency_key: *id001

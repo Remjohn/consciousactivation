@@ -1,0 +1,73 @@
+schema_version: cmf-builder-supplemental-completion-receipt-template/v1
+receipt_contract:
+  branch_id:
+    const: ST-01.01-SYNTHETIC-PROOF
+  supplemental_to_story:
+    const: ST-01.01
+  implemented_outcome:
+    required: true
+    constraint: must_match_BRANCH_CONTRACT_outcome_without_scope_expansion
+  requirements_verified:
+    required_exact_ids:
+      - ADR-001
+      - AG-001
+      - AG-002
+      - D001
+      - D006
+      - FR-001
+      - FR-002
+      - FR-003
+      - FR-004
+      - FR-005
+      - FR-006
+      - FR-007
+      - FR-008
+      - NFR-REL-002
+      - NFR-SEC-003
+    ownership_change_allowed: false
+  acceptance_criteria:
+    required_exact_ids: [AC-SP-01, AC-SP-02, AC-SP-03, AC-SP-04, AC-SP-05, AC-SP-06, AC-SP-07, AC-SP-08, AC-SP-09, AC-SP-10]
+    permitted_results: [PASS, FAIL]
+    all_must_pass_for_completion: true
+  files_changed:
+    required: true
+    constraint: exact_subset_of_ALLOWED_FILE_SCOPE
+  tests_executed:
+    required: true
+    skipped_mandatory_tests_allowed: false
+  test_results:
+    required: true
+    pass_required: true
+  schema_and_contract_validation:
+    required: true
+    pass_required: true
+  observability_evidence:
+    required: true
+    path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/OBSERVABILITY_EVIDENCE.yaml
+  rollback_evidence:
+    required: true
+    original_ST_01_01_regression_must_pass: true
+  original_completion_receipt:
+    required_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+  unresolved_limitations:
+    required: true
+    must_include:
+      - non_production
+      - non_certified
+      - ST_01_02_not_implemented
+      - no_external_runtime
+  hashes:
+    required_for:
+      - every_changed_file
+      - capsule_manifest
+      - synthetic_profile_fixture
+      - empty_skill_registry
+      - test_results
+      - observability_evidence
+      - file_change_manifest
+  completion_verdict:
+    permitted_values: [PASS, FAIL]
+    PASS_requires_all_contract_checks: true
+  effect_on_ST_01_02:
+    PASS: eligible_for_separate_readiness_reevaluation_not_automatic_implementation
+    FAIL: remains_BLOCKED_PENDING_SUPPLEMENTAL_BRANCH

@@ -1,0 +1,53 @@
+schema_version: cmf-builder-story-file-change-manifest/v1
+story_id: ST-03.03
+active_mode: PRE_RATIFIED_SYNTHETIC_INPUT
+hash_algorithm: sha256
+bundle_algorithm: sha256_sorted_path_colon_file_sha256_newline
+implementation_existing_source_files:
+  - {path: src/cmf_builder/domain/run.py, previous_sha256: 84c53d3efd829506a71f81cb590ec38eb6f54565a96ac534c8844d6ca845dc57, current_sha256: 59f913422663b18884dc8b05021198b35cd1be7b4c1e1fc2b83b09a9984c399a, exact_change: add_HarnessIR_reference_events_replay_state_hash_and_descendant_invalidation_support}
+  - {path: src/cmf_builder/application/atomicity_commands.py, previous_sha256: c36332217b569877365add54d0bf17e6b17808e0eceb2126f1b11023cd9b4600, current_sha256: a6d8bc8e35b056b8709cfb47093b0e70ec34841806155598bcb3e6c3d9370fa3, exact_change: include_existing_HarnessIR_descendant_in_formal_boundary_reopen_invalidation_only}
+  - {path: src/cmf_builder/application/ports.py, previous_sha256: 6303acd5afab5f4f7a73348facfb3858f74cca14f63dfca410e3459fb49aba59, current_sha256: d46636f5ea5f72e37f787b58a1479003391eac5b52190ccea85ddd935ca28936, exact_change: add_typed_HarnessIR_repository_fields_and_observation_fields}
+  - {path: src/cmf_builder/adapters/in_memory_run_repository.py, previous_sha256: 9e3eb5074ebc43d87b2f28810e0e018d744ea35600863ff2674f3957aaa2faec, current_sha256: 20a28b1bbcbc88429d2b6d8c147aa31219f2a6b7bb5294dc72af30ac09054e17, exact_change: add_atomic_development_test_HarnessIR_snapshot_receipt_commit_query_and_failure_injection}
+  - {path: src/cmf_builder/adapters/__init__.py, previous_sha256: dcf0f56931c6a1ffa718123d8f5d3f59070d3046bfb0df877e5c88ef58161733, current_sha256: 9f3dc7c1d9ba08f6b0ac345166b9e1b41627fc4f6686d1d429378b1af1d86f5b, exact_change: add_synthetic_only_ATOMICITY_RATIFICATION_to_GENESIS_edge_and_canonical_HarnessIR_prerequisite}
+implementation_new_source_files:
+  - {path: src/cmf_builder/domain/harness_ir.py, sha256: 035f47c4a388db2f2cb4532682725c5b48ed9831ecbd7636b0b11c23641ef356}
+  - {path: src/cmf_builder/application/harness_ir_commands.py, sha256: 13a286933f9f9e274c4c2db6b8606cb53544c6871cb794d049dc35d14a31924a}
+  - {path: src/cmf_builder/application/harness_ir_migrations.py, sha256: 4300dbd8e8531bc8c3b8a5235089fdf6da045a3aa8412b4b04867d76761651ba}
+architecture_existing_test_files:
+  - {path: tests/stories/st_01_01/test_architecture_boundary.py, previous_sha256: 4f29ee7896db48fad808f785badd12b7065ad80e24032cb63b71c75096199f1b, current_sha256: 96ee8b678790a1f99e5e1484fab059191c078497cf1b06af23e20873dfee384d, exact_change: add_three_ST_03_03_modules_to_expected_source_set_only}
+  - {path: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py, previous_sha256: 5ca9054ac6ac37c9f85f345e3dec9c922c09ef12e5d84b91dca5feac37ad3449, current_sha256: 541c898ca8213270300237c5135ccf0e2b6df71aa8ee4e348228d99082a91db8, exact_change: add_three_ST_03_03_modules_to_expected_source_set_only}
+  - {path: tests/stories/st_01_02/test_architecture_boundary.py, previous_sha256: 8b84a0a033655158aa2251bd6a48c4b3a1a80dd874fe60f877f7494a78df67b0, current_sha256: ffef079500132f46fc8286a9d37bb090b671e065c40e09b161429d4495d579e6, exact_change: add_three_ST_03_03_modules_to_expected_source_set_only}
+  - {path: tests/stories/st_02_05/test_architecture_boundary.py, previous_sha256: a943f23f4f2be76705ebc37763b71a2699f94adb2f2eee679f253cb756e14ef4, current_sha256: b5c9686f93a5545ac39903dd820abfd4993a31f561c348eab09392dd1b652cc4, exact_change: add_three_ST_03_03_modules_to_expected_source_set_only}
+story_test_files:
+  - {path: tests/stories/st_03_03/__init__.py, sha256: a03e83422936831058b48d87f5418238e1b86c8bc5f4b027384b4b731bf212b0}
+  - {path: tests/stories/st_03_03/test_acceptance.py, sha256: 5e625436d6a2766abd5fc4febcddcd9c2d752a11a9589257a38d5567cc80f131}
+  - {path: tests/stories/st_03_03/test_provenance_and_lineage.py, sha256: aab10ac6d96b3ce22dff6f52c4b408ed1e45a3b3912eb4d6767e8bcf512d2867}
+  - {path: tests/stories/st_03_03/test_compatibility_and_authority.py, sha256: c157eca0b78e7f24a0829dc64302b399c489fec74b2248b7a9e3ed8ef4184363}
+  - {path: tests/stories/st_03_03/test_failure.py, sha256: 1003a8bdc2bd7634c04a9c709594de6248328c0343e5daae50bafb6e78c8045e}
+  - {path: tests/stories/st_03_03/test_replay_invalidation_and_receipt.py, sha256: 4a6323d3784d9d8106edb3a083f3d7478270312fd4cbb6354e2d29b42f8e8547}
+  - {path: tests/stories/st_03_03/test_architecture_boundary.py, sha256: 8d7b6e832ef780020fac2245a71364ba9d597df98829a037763591333217d123}
+authorization_state_outputs:
+  - {path: development-capsules/ST-03.03/IMPLEMENTATION_AUTHORIZATION.yaml, current_sha256: 4cf4b7dad01d06d5b121540ccfb8ffa14ed8bb89c6af116918e7d6c896cd2373, exact_change: record_exact_human_phrase_and_granted_state_only}
+  - {path: development-capsules/ST-03.03/IMPLEMENTATION_AUTHORIZATION_REPORT.md, current_sha256: 1d93e9c1c55f4b45f27169eaee03ef2082d4a7fefb04a3063c536548521c2677, exact_change: record_exact_human_phrase_and_granted_state_only}
+completion_outputs:
+  - development-capsules/ST-03.03/completion/IMPLEMENTATION_REPORT.md
+  - development-capsules/ST-03.03/completion/TEST_RESULTS.json
+  - development-capsules/ST-03.03/completion/OBSERVABILITY_EVIDENCE.yaml
+  - development-capsules/ST-03.03/completion/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/ST-03.03/completion/ROLLBACK_EVIDENCE.md
+  - development-capsules/ST-03.03/completion/STORY_COMPLETION_RECEIPT.yaml
+bundle_hashes:
+  source_files_8: 242032a30eb5f4ddf592d4bf16cd41ed5af9c7bab44fcb90022bdd31e5c737b8
+  test_files_11: 95fd9957ec19d3e58205096e607c3990d3888f1c6f82d566f40eca25f36df7b4
+  implementation_files_19: e02e1fb92f33badd7ae8f4f308724a2d3ffa364e3a73bd270c15f4466d750cc1
+validation:
+  implementation_changed_path_count: 19
+  implementation_paths_exact_subset_of_allowlist: true
+  architecture_existing_file_changes_exact_source_set_updates: true
+  authorization_changes_exactly_recorded_phrase_and_granted_state: true
+  authority_module_unchanged_sha256: 2e768ef824ed5014ab7cc791d42172849a482491ba770701abe622c7a2fe9f7c
+  prohibited_paths_modified: []
+  external_dependencies_added: []
+  contract_or_database_schemas_modified: []
+  predecessor_completion_receipts_modified: []
+  verdict: PASS

@@ -1,0 +1,67 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Asset Memory Record
+description: ''
+type: object
+additionalProperties: false
+required:
+- asset_id
+- version
+- lifecycle_status
+- classification
+- visual_features
+- composition_geometry
+- production
+- evaluation
+- usage
+- lineage
+properties:
+  asset_id: &id001
+    type: string
+  version:
+    type: integer
+    minimum: 1
+  lifecycle_status: *id001
+  classification:
+    type: object
+    required:
+    - family
+    - subtype
+    - semantic_roles
+    - activative_functions
+    properties:
+      family: *id001
+      subtype: *id001
+      semantic_roles:
+        type: array
+        items: *id001
+      activative_functions:
+        type: array
+        items: *id001
+  visual_features:
+    type: object
+  composition_geometry:
+    type: object
+  production:
+    type: object
+  evaluation:
+    type: object
+  usage:
+    type: object
+    required:
+    - total_uses
+    - recent_uses
+    properties:
+      total_uses:
+        type: integer
+        minimum: 0
+      recent_uses:
+        type: array
+        items:
+          type: object
+  lineage:
+    type: object
+  syntax_context_fingerprints:
+    type: array
+    items: *id001
+  recurrence_summary:
+    type: object

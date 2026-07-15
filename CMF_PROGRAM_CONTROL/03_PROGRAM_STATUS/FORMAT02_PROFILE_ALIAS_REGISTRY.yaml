@@ -1,0 +1,54 @@
+schema_version: cmf-format-profile-alias-registry/v1
+registry_id: conscious-activations-format02-profile-aliases
+version: "1.0.0"
+status: ACTIVE
+updated: "2026-07-15"
+authority:
+  canonical_owner: atomic_harness_builder
+  source: CMF_PROGRAM_CONTROL/01_PRODUCT_AUTHORITIES/builder/current-unpacked/CMF_ATOMIC_HARNESS_BUILDER_NEXT_SHARDED_PRD_V1_2/governance/CANONICAL_CATEGORY_REGISTRY.yaml
+  authority_version: Builder_PRD_V1.2
+canonical_profile_id: format02_minimal_coach_theatre
+owning_category:
+  category_id: 2d_character_animation
+  canonical_name: 2D Character Animation
+accepted_aliases:
+  - alias: minimal_coach_theatre
+    classification: historical_compatibility_alias
+    accepted_for_read_and_migration: true
+    accepted_for_new_active_emission: false
+  - alias: Format 02 Minimal Coach Theatre
+    classification: human_readable_label
+    accepted_for_read_and_migration: true
+    accepted_for_new_active_emission: false
+migration_behavior:
+  active_emit: canonical_profile_id_only
+  alias_input: resolve_deterministically_to_canonical_and_record_alias_receipt
+  unknown_input: reject
+  ambiguous_input: reject
+  historical_artifacts: preserve_without_rewrite
+  identity_effect: no_certification_or_authority_change
+deprecation_policy:
+  canonical_id_deprecated: false
+  historical_aliases_deprecated_for_new_writes: true
+  historical_aliases_remain_readable: true
+  removal_requires: governed_major_version_migration_with_consumers_and_history_preserved
+certification_state:
+  reference_profile: true
+  structurally_supported: true
+  contract_compatible: true
+  benchmarked: false
+  limited_production_certified: false
+  production_certified: false
+  strongest_current_state: contract_compatible
+  evaluator_status: specified_not_certified
+  evidence_basis:
+    - Builder canonical category registry records REFERENCE_PATH_PENDING_CERTIFICATION
+    - VAE benchmark manifest is architecture_seed
+    - VAE controlled proof is partial fixture proof with runtime incomplete
+    - VAE evaluator is specified_not_certified
+    - RC4 consumer compatibility is validated locally but unsigned and non-production
+release_1_role: reference_profile
+production_authorized: false
+certification_inheritance:
+  conversational_profiles: prohibited
+  other_categories: prohibited

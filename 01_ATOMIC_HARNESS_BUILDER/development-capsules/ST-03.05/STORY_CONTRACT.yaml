@@ -1,0 +1,40 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-03.05
+primary_epic: EP-03
+active_mode: CONSTITUTIONAL_PRECEDENCE_VALIDATION
+outcome: >-
+  Deterministic Builder code validates the exact active ST-03.04 artifact set
+  against its HarnessIR and the hash-pinned constitutional precedence contract,
+  producing an immutable report and receipt that block any lower-authority
+  override, contradiction, missing applicability, unresolved reference, or lost
+  semantic lineage.
+owned_obligations: [CONST-001, FR-059]
+direct_dependency: ST-03.04:StoryCompletionReceipt
+implementation_owner: TS-06_Harness_IR_and_Compiler_owner
+component_boundary: Builder-owned constitutional and cross-artifact validation after deterministic artifact compilation; no downstream execution or later architecture compilation.
+typed_contracts:
+  - ConstitutionalPrecedencePolicy
+  - ArtifactConsistencyFinding
+  - ConstitutionalValidationReport
+  - ConstitutionalValidationReceipt
+  - ConstitutionalValidationInvalidation
+  - ValidateConstitutionalPrecedenceCommand
+required_behavior:
+  - verify_exact_hash_pinned_constitution_PRD_and_precedence_policy_identity
+  - require_one_active_hash_valid_ST_03_04_manifest_and_all_21_artifacts
+  - resolve_every_declared_source_node_to_the_exact_active_HarnessIR
+  - compare_every_projected_governed_value_with_its_HarnessIR_authority_provenance_knowledge_and_disposition
+  - require_generated_artifact_authority_to_remain_subordinate_to_HarnessIR
+  - preserve_separate_rich_Activative_lineage_keys_and_explicit_NOT_APPLICABLE_semantics
+  - block_syntax_valid_but_constitutionally_conflicting_or_incomplete_sets
+  - atomically_commit_report_run_reference_command_record_and_receipt
+  - preserve_replay_idempotency_invalidation_and_history
+failure_behavior:
+  - policy_hash_or_authority_identity_drift_fails_closed
+  - missing_extra_drifted_or_inconsistent_artifact_fails_closed
+  - missing_unresolved_or_undeclared_IR_reference_fails_closed
+  - lower_authority_override_semantic_compression_or_invention_fails_closed
+  - unauthorized_writer_stale_version_or_payload_conflict_fails_closed
+test_seam: deterministic command/report receipt replay conflict injection and upstream invalidation through the in-memory development adapter
+compatibility: HarnessIR 1.0.0 and artifact-manifest 1.0.0 only; any future version requires an explicit compatibility rule.
+production_claim: false

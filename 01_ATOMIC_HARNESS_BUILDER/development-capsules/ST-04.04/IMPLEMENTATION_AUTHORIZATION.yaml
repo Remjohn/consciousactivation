@@ -1,0 +1,49 @@
+schema_version: cmf-builder-bounded-implementation-authorization/v1
+story_id: ST-04.04
+active_mode: BUILDER_INTERNAL_HANDOFF
+authorization_state: AUTHORIZED_FOR_BOUNDED_IMPLEMENTATION
+capsule:
+  manifest_path: development-capsules/ST-04.04/CAPSULE_MANIFEST.json
+  manifest_sha256: bae745fdfba14a0b2192a50392aa2bd611c20002a88294f47f3db68ed59bbde0
+  immutable_inputs: PASS_18_OF_18
+  bundle_digest: 2981ad5a3a8fc6baf60c65725bab7a5bbec6b1cd43a6579628fe23a77f8f3c06
+dependency_gate:
+  ST_04_03_completion_receipt: PASS
+  receipt_sha256: 7351aa1c33cfd5ecd33bacbd93a7b08fa2329b18e2f754600c13a92e00f23d19
+  canonical_payload_sha256: bd8f7256d977433ab030b161052e23fada5987a72df75b4c5471000da353a074
+  predecessor_regression: PASS_292_OF_292_REVALIDATED_PREIMPLEMENTATION
+  BD_001: RESOLVED_BY_USER_DIRECTIVE
+  BD_014_internal_mode: NOT_APPLICABLE_BY_BF_AM_005
+  BD_014_external_mode: REMAINS_OPEN
+  XDEP_001_runtime_blocker: false
+readiness_gate:
+  story_status: READY
+  direct_dependencies_satisfied: true
+  applicable_blockers: []
+  acceptance_criteria_executable: PASS_12_OF_12
+  tests_defined: PASS
+  observability_defined: PASS
+  rollback_defined: PASS
+  file_scope_bounded: PASS
+  external_product_behavior_absorbed: false
+  minimum_complete_context_logic_absorbed: false
+  later_story_required: false
+  one_focused_context: true
+bounded_implementation_readiness: PASS
+implementation_authorized: true
+human_authorization_required: false
+human_authorization:
+  phrase: AUTHORIZE BUILDER ST-04.04 INTERNAL-HANDOFFS BOUNDED IMPLEMENTATION
+  supplied_on: '2026-07-15'
+  scope: ST_04_04_CAPSULE_ALLOWLIST_ONLY
+required_exact_phrase: AUTHORIZE BUILDER ST-04.04 INTERNAL-HANDOFFS BOUNDED IMPLEMENTATION
+authorization_scope_if_granted:
+  - exact_ST_04_04_capsule_allowlist_only
+  - synthetic_Builder_internal_context_and_typed_handoff_compilation_only
+  - no_external_product_handoff_or_BD_014_closure
+  - no_phase_execution_context_completeness_workflow_Control_Tower_or_external_runtime_behavior
+  - no_ST_04_05_or_later_story
+  - no_production_claim
+full_release1_readiness: FAIL
+full_product_readiness: FAIL
+production_authorized: false

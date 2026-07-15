@@ -1,0 +1,57 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Production Budget Program
+description: ''
+type: object
+additionalProperties: false
+required:
+- id
+- version
+- initial_candidates
+- maximum_candidates
+- maximum_parallel_jobs
+- maximum_quality_repair_rounds
+- learning_capture
+- hard_quality_gates_immutable
+properties:
+  id: &id001
+    type: string
+  version: *id001
+  initial_candidates:
+    type:
+    - integer
+    - string
+  maximum_candidates:
+    type:
+    - integer
+    - string
+  maximum_parallel_jobs:
+    type:
+    - integer
+    - string
+  maximum_quality_repair_rounds:
+    type: integer
+    minimum: 0
+    maximum: 3
+  maximum_gpu_seconds:
+    type:
+    - number
+    - 'null'
+  maximum_estimated_cost_usd:
+    type:
+    - number
+    - 'null'
+  maximum_wall_clock_seconds:
+    type:
+    - number
+    - 'null'
+  workflow_variants:
+    type:
+    - integer
+    - string
+  secondary_evaluator: *id001
+  learning_capture: *id001
+  experimental_capabilities: {}
+  controlled_variation_required:
+    type: boolean
+  hard_quality_gates_immutable:
+    const: true

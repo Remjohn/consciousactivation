@@ -1,0 +1,71 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-04.05
+active_mode: MINIMUM_COMPLETE_CONTEXT
+verdict: PASS
+deterministic_evidence_run:
+  seed: completion-evidence
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  graph_id: minimum-context-graph_e9268440a75f83ec8225313471a615cef2064a2882ec63941f75ba2dc1e05e54
+  graph_hash: sha256:e9268440a75f83ec8225313471a615cef2064a2882ec63941f75ba2dc1e05e54
+  receipt_id: context-compilation-receipt_ab2a6242cc7219ee4759167c88b99d82ae6df5046e4035c6251d4441cf6e162f
+  receipt_hash: sha256:ab2a6242cc7219ee4759167c88b99d82ae6df5046e4035c6251d4441cf6e162f
+  manifests:
+    - id: phase-context-manifest_42aeed143792b329fb82666ccf62a257457065f78acca988bf840396efa92a8f
+      hash: sha256:42aeed143792b329fb82666ccf62a257457065f78acca988bf840396efa92a8f
+      phase: governed_contract_ready
+      included: 3
+      excluded: 3
+      governed_tokens: 64
+      soft_budget_tokens: 96
+      hard_budget_tokens: 112
+    - id: phase-context-manifest_c03c24616ddad2a11eeaf26e954deafebfe5dc916b577614418f05b669179bec
+      hash: sha256:c03c24616ddad2a11eeaf26e954deafebfe5dc916b577614418f05b669179bec
+      phase: ratified_boundary_ready
+      included: 2
+      excluded: 4
+      governed_tokens: 48
+      soft_budget_tokens: 64
+      hard_budget_tokens: 80
+  aggregate_counts:
+    registered_references: 6
+    manifests: 2
+    required_and_included: 5
+    excluded: 7
+    conditionally_required: 0
+    optional: 0
+    forbidden_class_entries: 0
+    unavailable_non_required: 5
+    not_applicable: 2
+    summarized: 0
+    retrieved: 0
+    compressed: 0
+    overflow: 0
+success_events:
+  - ST-04.05:MinimumCompleteContextCompiled
+  - ST-04.05:ReferenceRegistryValidated
+  - ST-04.05:ContextCompletenessValidated
+  - ST-04.05:ContextMinimalityValidated
+  - ST-04.05:BudgetsAndNoTruncationValidated
+  - ST-04.05:OutcomeVerified
+failure_and_lifecycle_events:
+  outcome_rejected: PASS_TESTED
+  required_context_overflow_blocked: PASS_TESTED
+  command_replay_returned_without_duplicate_commit: PASS_TESTED
+  minimum_complete_context_invalidated: PASS_TESTED
+  injected_atomic_failure: PASS_TESTED
+observation_fields:
+  run_story_command_correlation_causation_authority_version_outcome: PASS
+  upstream_handoff_phase_module_ir_and_source_lineage: PASS
+  graph_receipt_manifest_reference_and_hash_identity: PASS
+  loading_modes_and_hard_soft_budgets: PASS
+  required_optional_conditional_forbidden_unavailable_not_applicable_counts: PASS
+  included_excluded_summarized_retrieved_compressed_overflow_counts: PASS
+  typed_failure_code_and_affected_descendants: PASS
+payload_safety:
+  conversation_history_payload_emitted: false
+  resource_payload_emitted: false
+  secret_emitted: false
+  machine_path_in_identity: false
+  wall_clock_or_random_identity_input: false
+  replay_duplicate_event_committed: false
+external_system_observation: NOT_APPLICABLE_NO_EXTERNAL_SYSTEM_INVOKED

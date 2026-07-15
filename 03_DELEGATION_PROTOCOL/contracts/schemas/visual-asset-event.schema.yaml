@@ -1,0 +1,23 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Asset Event
+type: object
+additionalProperties: false
+required:
+- execution_id
+- event_type
+- state
+properties:
+  execution_id:
+    type: string
+    minLength: 1
+  event_type:
+    type: string
+    minLength: 1
+  state:
+    type: object
+  reason:
+    type:
+    - object
+    - 'null'
+  references:
+    type: object

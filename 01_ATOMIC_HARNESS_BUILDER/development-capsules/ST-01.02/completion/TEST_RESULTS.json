@@ -1,0 +1,85 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-01.02",
+  "active_mode": "SYNTHETIC_DEFINITION",
+  "executed_on": "2026-07-15",
+  "runtime": "Python 3.12",
+  "verdict": "PASS",
+  "mandatory_suites": [
+    {
+      "name": "pre_implementation_dependency_regression",
+      "command": "python -m pytest -q tests/stories/st_01_01 tests/stories/st_01_01_synthetic_proof",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "ST_01_02_clean_run_1",
+      "command": "python -m pytest -q tests/stories/st_01_02",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 1.56,
+      "result": "PASS"
+    },
+    {
+      "name": "ST_01_02_clean_run_2",
+      "command": "python -m pytest -q tests/stories/st_01_02",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 1.21,
+      "result": "PASS"
+    },
+    {
+      "name": "combined_story_regression",
+      "command": "python -m pytest -q tests/stories/st_01_01 tests/stories/st_01_01_synthetic_proof tests/stories/st_01_02",
+      "passed": 57,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 3.37,
+      "result": "PASS"
+    },
+    {
+      "name": "repository_wide_regression",
+      "command": "python -m pytest -q",
+      "passed": 57,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 2.99,
+      "result": "PASS"
+    }
+  ],
+  "acceptance_coverage": {
+    "AC-01": ["test_acceptance.py", "test_authority_and_idempotency.py"],
+    "AC-02": ["test_acceptance.py", "test_source_identity.py"],
+    "AC-03": ["test_acceptance.py", "test_archive_and_path_safety.py", "test_observability_and_rollback.py"],
+    "AC-04": ["test_acceptance.py", "test_source_identity.py"],
+    "AC-05": ["test_archive_and_path_safety.py"],
+    "AC-06": ["test_acceptance.py", "test_source_identity.py"],
+    "AC-07": ["test_source_identity.py"],
+    "AC-08": ["test_source_identity.py", "test_authority_and_idempotency.py", "test_observability_and_rollback.py"],
+    "AC-09": ["test_acceptance.py", "test_authority_and_idempotency.py", "test_observability_and_rollback.py"],
+    "AC-10": ["test_acceptance.py", "test_architecture_boundary.py"]
+  },
+  "validation": {
+    "source_profile_json_parse": "PASS",
+    "source_profile_semantics": "PASS",
+    "capsule_immutable_inputs": "PASS_18_OF_18",
+    "capsule_bundle_digest": "PASS",
+    "implementation_authorization": "PASS_AUTHORIZED",
+    "dependency_hashes": "PASS_8_OF_8",
+    "AST_layer_boundary": "PASS",
+    "standard_library_only": "PASS",
+    "external_dependency_added": false,
+    "contract_or_database_schema_changed": false,
+    "source_pre_post_identity": "PASS_UNCHANGED",
+    "archive_extraction_performed": false,
+    "atomic_failure_rollback": "PASS",
+    "file_scope": "PASS"
+  },
+  "non_blocking_warnings": [
+    "pytest-asyncio reports its pre-existing unset asyncio_default_fixture_loop_scope deprecation warning; no asynchronous tests are used by this Story."
+  ]
+}

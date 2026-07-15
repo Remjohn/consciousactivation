@@ -1,0 +1,74 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-05.01
+active_mode: SYNTHETIC_EMPTY_SKILL_REGISTRY_CONSUMPTION
+emission_boundary: deterministic_in_memory_development_and_test_sink
+events:
+  - {name: synthetic_skill_registry_compilation_started, outcome: PASS, committed_state: true}
+  - {name: synthetic_skill_registry_validated, outcome: PASS, committed_state: true}
+  - {name: synthetic_skill_registry_snapshot_committed, outcome: PASS, committed_state: true}
+  - {name: synthetic_skill_registry_replayed, outcome: PASS, committed_state: unchanged_original_receipt_returned}
+  - {name: synthetic_skill_registry_rejected, outcome: FAIL, committed_state: false}
+  - {name: synthetic_skill_registry_invalidated, outcome: PASS, committed_state: immutable_descendant_invalidation}
+required_fields:
+  identity:
+    - run_id
+    - story_id
+    - command_id
+    - correlation_id
+    - causation_id
+    - stream_version
+  registry:
+    - skill_snapshot_id
+    - skill_snapshot_hash
+    - skill_registry_id
+    - skill_registry_version
+    - skill_registry_hash
+    - skill_policy_id
+    - skill_policy_hash
+    - skill_schema_hash
+    - skill_validation_receipt_id
+    - skill_validation_receipt_hash
+    - skill_consumption_receipt_id
+    - skill_consumption_receipt_hash
+  counts:
+    - skill_capability_count
+    - registered_skill_count
+    - required_external_skill_count
+    - skill_adaptation_count
+    - experimental_capability_count
+  authority_and_lineage:
+    - authority_identity
+    - provenance
+    - source_lock_id
+    - boundary_id
+    - model_id
+    - harness_ir_id
+    - harness_ir_hash
+    - artifact_set_id
+    - constitutional_report_id
+    - capability_graph_id
+    - module_graph_id
+    - phase_graph_id
+    - handoff_graph_id
+    - minimum_context_graph_id
+    - minimum_context_graph_hash
+  outcome:
+    - outcome
+    - failure_context
+    - skill_replay_status
+validation:
+  success_events_have_snapshot_receipt_and_exact_governance_pins: PASS
+  success_events_report_capability_count_5: PASS
+  success_events_report_registered_skill_count_0: PASS
+  success_events_report_required_external_skill_count_0: PASS
+  replay_event_returns_original_receipt_without_duplicate_state: PASS
+  rejection_event_is_typed_and_has_no_persisted_repository_state: PASS
+  invalidation_event_links_context_invalidation_and_preserves_history: PASS
+  secret_free: PASS
+  machine_path_free: PASS
+  deterministic_payloads: PASS
+test_evidence:
+  - tests/stories/st_05_01/test_acceptance.py
+  - tests/stories/st_05_01/test_failure.py
+  - tests/stories/st_05_01/test_replay_invalidation_and_receipt.py
+verdict: PASS

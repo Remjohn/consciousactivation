@@ -1,0 +1,77 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-05.02
+active_mode: SYNTHETIC_NO_SKILL_NECESSITY
+emitter: deterministic_in_memory_development_test_observer
+events:
+  synthetic_skill_necessity_started:
+    exercised: PASS
+    purpose: records_attributable_command_start_before_evaluation
+  synthetic_skill_alternatives_assessed:
+    exercised: PASS
+    purpose: records_fifty_ordered_assessments_across_five_capabilities
+  synthetic_no_skill_decision_committed:
+    exercised: PASS
+    purpose: records_atomic_decision_and_receipt_commit
+  synthetic_skill_necessity_replayed:
+    exercised: PASS
+    purpose: records_payload_safe_idempotent_replay
+  synthetic_skill_necessity_rejected:
+    exercised: PASS
+    purpose: records_typed_fail_closed_rejection_without_partial_state
+  synthetic_skill_necessity_invalidated:
+    exercised: PASS
+    purpose: records_descendant_invalidation_from_upstream_reopen
+required_fields:
+  - run_id
+  - story_id
+  - command_id
+  - decision_id
+  - decision_hash
+  - receipt_id
+  - receipt_hash
+  - snapshot_id
+  - snapshot_hash
+  - registry_id
+  - registry_version
+  - registry_hash
+  - policy_id
+  - policy_hash
+  - minimum_complete_context_id
+  - capability_count
+  - target_failure_count
+  - alternative_assessment_count
+  - selected_owner_counts
+  - external_skill_count
+  - missing_skill_count
+  - adaptation_count
+  - experiment_count
+  - jit_capsule_count
+  - skill_design_brief_disposition
+  - authority_actor_id
+  - authority_role
+  - provenance
+  - outcome
+  - failure_context
+  - replay_state
+determinism:
+  stable_event_vocabulary: PASS
+  canonical_payloads: PASS
+  identical_inputs_identical_decision_and_receipt: PASS
+  fresh_context_reproduction: PASS
+payload_safety:
+  filesystem_paths_emitted: false
+  secrets_emitted: false
+  protected_examples_emitted: false
+  external_runtime_data_emitted: false
+atomicity:
+  failure_before_commit_persisted_observations: 0
+  partial_decisions: 0
+  partial_receipts: 0
+  partial_command_records: 0
+  clean_retry: PASS
+evidence_tests:
+  - tests/stories/st_05_02/test_acceptance.py
+  - tests/stories/st_05_02/test_failure.py
+  - tests/stories/st_05_02/test_replay_invalidation_and_receipt.py
+verdict: PASS
+

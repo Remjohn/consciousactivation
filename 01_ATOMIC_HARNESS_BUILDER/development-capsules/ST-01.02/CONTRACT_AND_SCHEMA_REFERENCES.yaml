@@ -1,0 +1,77 @@
+schema_version: cmf-builder-contract-reference-set/v1
+story_id: ST-01.02
+contracts_to_implement:
+  SourceProfile:
+    owner: Builder
+    version: cmf-builder-source-profile/v1
+    required_fields:
+      - profile_id
+      - version
+      - target_profile_ref
+      - required_roles
+      - allowed_source_kinds
+      - allowed_media_types
+      - prohibited_extensions
+      - safety_limits
+      - authority_policy
+  SourceDescriptor:
+    owner: Builder
+    version: cmf-builder-source-descriptor/v1
+    required_fields:
+      - source_id
+      - canonical_uri
+      - relative_path
+      - source_kind
+      - role
+      - authority
+      - license
+      - privacy_class
+      - media_type
+      - size_bytes
+      - observed_mtime
+      - sha256
+      - discovered_from
+  SourceLock:
+    owner: Builder
+    version: cmf-builder-source-lock/v1
+    required_fields:
+      - lock_id
+      - run_id
+      - source_profile_ref
+      - target_profile_ref
+      - target_candidate_ref
+      - ordered_descriptors
+      - aggregate_hash
+      - created_at
+      - created_by
+      - invalidates_lock_ref
+  EvidenceWorkspaceReceipt:
+    owner: Builder
+    version: cmf-builder-evidence-workspace-receipt/v1
+    required_fields:
+      - receipt_id
+      - command_id
+      - run_id
+      - source_lock_ref
+      - source_profile_ref
+      - authority_identity
+      - event_ids
+      - diagnostics
+      - outcome
+      - receipt_hash
+governed_inputs:
+  - path: development-capsules/ST-01.02/SYNTHETIC_SOURCE_PROFILE.json
+    role: source_profile_contract_fixture
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml
+    sha256: 82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b
+    role: exact_target_candidate
+  - path: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+    sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+    role: already_validated_profile_dependency_not_a_source_to_ingest
+existing_read_only_contracts:
+  - path: docs/contracts/CONTRACT_REGISTRY.yaml
+    contract_id: ConstitutionalReadinessReceipt
+schema_changes_authorized: false
+database_schema_changes_authorized: false
+delegation_package_dependency: none
+local_delegation_schema_fork_authorized: false

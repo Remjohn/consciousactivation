@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf://builder/contracts/shared-activative-core/v1",
+  "title": "Shared Activative Core and Activative Intelligence Pack",
+  "$ref": "#/$defs/ActivativeIntelligencePack",
+  "$defs": {
+    "VersionedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["object_id", "version", "sha256", "authority"],
+      "properties": {
+        "object_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "authority": {"type": "string", "minLength": 1}
+      }
+    },
+    "SharedActivativeCore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_premise_refs", "identity_dna_ref", "context_premise_ref", "resonance_ref", "matrix_of_edging_ref", "hidden_pressure", "activation_directions", "roles", "stance", "stakes", "identity_urges", "participation_design", "intended_reaction", "smallest_useful_commitment", "wrong_reading_locks", "evaluation_contract_ref"],
+      "properties": {
+        "source_premise_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/VersionedRef"}},
+        "identity_dna_ref": {"$ref": "#/$defs/VersionedRef"},
+        "context_premise_ref": {"$ref": "#/$defs/VersionedRef"},
+        "resonance_ref": {"$ref": "#/$defs/VersionedRef"},
+        "matrix_of_edging_ref": {"$ref": "#/$defs/VersionedRef"},
+        "hidden_pressure": {"type": "string", "minLength": 1},
+        "activation_directions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "roles": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "stance": {"type": "string", "minLength": 1},
+        "stakes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "identity_urges": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "participation_design": {"type": "string", "minLength": 1},
+        "intended_reaction": {"type": "string", "minLength": 1},
+        "smallest_useful_commitment": {"type": "string", "minLength": 1},
+        "wrong_reading_locks": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "evaluation_contract_ref": {"$ref": "#/$defs/VersionedRef"}
+      }
+    },
+    "ActivativeIntelligencePack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pack_id", "version", "sha256", "status", "shared_core", "activative_call_seeds", "visual_branch_requirements", "registry_refs", "frozen_at"],
+      "properties": {
+        "pack_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "status": {"enum": ["DRAFT", "RATIFIED", "REVOKED"]},
+        "shared_core": {"$ref": "#/$defs/SharedActivativeCore"},
+        "activative_call_seeds": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "visual_branch_requirements": {"type": "array", "items": {"type": "string"}},
+        "registry_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/VersionedRef"}},
+        "frozen_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}

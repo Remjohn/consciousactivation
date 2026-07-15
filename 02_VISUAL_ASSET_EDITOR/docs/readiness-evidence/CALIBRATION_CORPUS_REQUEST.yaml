@@ -1,0 +1,105 @@
+package: vae_evaluator_calibration_corpus_request
+version: 1.0.0
+classification: non_production_readiness_proof
+status: awaiting_operator_corpus
+scope:
+  format: FORMAT02_MINIMAL_COACH_THEATRE
+  asset_family: character_scene_composition
+  evaluator_profile: character-scene-composition@1.1.0-draft
+  production_support_claimed: false
+
+minimum_corpus:
+  unique_cases: 30
+  note: case_family_counts_may_overlap_but_all_minima_and_30_unique_cases_are_required
+  accepted_positive_cases: 6
+  known_negative_cases: 8
+  adversarial_cases: 4
+  recurrence_cases:
+    total: 4
+    beneficial: 2
+    redundant: 2
+  repair_cases:
+    total: 6
+    vae_repairable: 3
+    upstream_semantic_repair_required: 2
+    non_repairable_or_reject: 1
+  technical_defect_cases: 4
+  no_text_delete_caption_cases: 4
+  wrong_reading_lock_violation_cases: 4
+  identity_drift_cases: 4
+  composition_failure_cases: 4
+  wrong_visible_action_cases: 3
+  feature_contract_cases:
+    total: 4
+    compliant: 2
+    non_compliant: 2
+
+required_case_payload:
+  identity:
+    - case_id
+    - immutable_case_version
+    - asset_sha256
+    - source_fixture_refs
+    - source_fixture_hashes
+  authority_context:
+    - activative_intelligence_lineage_refs
+    - activation_contract_ref
+    - visual_semantic_pack_ref
+    - visual_narrative_program_ref
+    - typed_versioned_feature_contract_refs
+    - somatic_route
+    - wrong_reading_locks
+  applicability:
+    - source_kind
+    - interview_provenance_applicability
+    - no_text_applicability
+    - delete_caption_applicability
+    - recurrence_applicability
+  labels:
+    - overall_accept_repair_reject
+    - per_dimension_categorical_labels
+    - per_lock_violation_labels
+    - responsible_layer
+    - repairability
+    - beneficial_or_redundant_recurrence_when_applicable
+    - annotator_confidence
+    - evidence_regions_and_rationale
+  provenance:
+    - case_origin
+    - rights_and_consent_record_ref
+    - creation_or_capture_date
+    - producer_identity_ref
+    - annotation_history
+
+labeling_roles:
+  independent_annotators_minimum: 2
+  adjudicator_required: true
+  annotator_training_set_separate_from_protected_set: true
+  evaluator_under_test_must_not_generate_authoritative_labels: true
+
+data_quality_gates:
+  - no_missing_required_authority_context
+  - non_empty_wrong_reading_locks
+  - interview_expression_has_required_reaction_receipt_and_expression_moment_refs
+  - non_interview_sources_do_not_receive_invented_interview_provenance
+  - every_asset_and_fixture_is_hash_pinned
+  - rights_and_consent_are_recorded
+  - label_disagreements_are_adjudicated
+  - duplicates_and_near_duplicates_are_grouped_before_split
+  - protected_cases_are_not_exposed_to_tuning
+
+split_request:
+  calibration_set:
+    minimum_unique_cases: 30
+    used_for: rubric_training_error_analysis_and_threshold_calibration
+  protected_regression_set:
+    minimum_cases: null
+    operator_and_evaluator_owner_must_approve_size_before_sealing: true
+    used_for: blind_regression_and_promotion_gates
+    minimum_coverage_rule: every_required_case_family_and_non_compensable_gate
+
+threshold_policy:
+  final_thresholds_in_this_request: none
+  thresholds_require_empirical_calibration_and_human_approval: true
+  non_compensable_gates_may_not_be_offset_by_other_scores: true
+

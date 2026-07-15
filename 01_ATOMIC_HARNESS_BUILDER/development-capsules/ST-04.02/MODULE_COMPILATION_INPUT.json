@@ -1,0 +1,57 @@
+{
+  "schema_version": "cmf-builder-synthetic-module-compilation-input/v1",
+  "scope": "ST-04.02_SYNTHETIC_CORE_ONLY",
+  "source_contract": "cmf-builder-capability-ownership/v1@1.0.0",
+  "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+  "implicit_modules_allowed": false,
+  "modules": [
+    {
+      "module_id": "atomic_boundary_module",
+      "responsibility": "declare_and_validate_the_ratified_atomic_boundary",
+      "owned_capabilities": ["atomic_boundary_declaration"],
+      "public_contract": {
+        "inputs": ["source_lock_ref", "ratification_ref"],
+        "outputs": ["frozen_atomic_boundary_ref"],
+        "side_effects": []
+      },
+      "invariants": ["source_lock_lineage_is_exact", "human_ratification_is_attributable", "boundary_versions_are_immutable"],
+      "exclusions": ["source_capture", "human_ratification", "workflow_execution"],
+      "dependencies": [],
+      "failure_owner": "cmf_builder.atomicity",
+      "failure_modes": ["stale_source_lock", "missing_ratification", "boundary_hash_drift"],
+      "boundary_rationale": "keep_human_ratification_and_deterministic_boundary_validation_cohesive_without_absorbing_source_capture_or_execution",
+      "test_seam": {
+        "public_command": "compile_atomic_boundary_contract",
+        "expected_fixtures": ["governed_synthetic_boundary"],
+        "contract_tests": ["source_lock_and_ratification_lineage", "immutable_boundary_identity"],
+        "failure_injections": ["stale_source_lock", "missing_ratification"],
+        "observable_outputs": ["boundary_ref", "boundary_validation_receipt_ref"]
+      }
+    },
+    {
+      "module_id": "governed_contract_module",
+      "responsibility": "compile_and_validate_the_governed_target_and_output_contract",
+      "owned_capabilities": ["deterministic_validation_and_receipt_generation", "target_and_output_contract_definition"],
+      "public_contract": {
+        "inputs": ["frozen_atomic_boundary_ref", "governed_target_definition_ref"],
+        "outputs": ["validated_target_contract_ref", "validation_receipt_ref"],
+        "side_effects": []
+      },
+      "invariants": ["constitutional_precedence_is_preserved", "target_contract_identity_is_content_addressed", "validation_is_fail_closed"],
+      "exclusions": ["workflow_execution", "external_runtime_execution", "production_publication"],
+      "dependencies": ["atomic_boundary_module"],
+      "failure_owner": "cmf_builder.constitutional_validation",
+      "failure_modes": ["stale_boundary", "authority_hash_drift", "target_contract_mismatch"],
+      "boundary_rationale": "keep_target_contract_compilation_and_deterministic_validation_on_one_public_contract_without_absorbing_workflow_or_external_runtime_behavior",
+      "test_seam": {
+        "public_command": "compile_governed_target_contract",
+        "expected_fixtures": ["governed_synthetic_target_contract"],
+        "contract_tests": ["target_output_contract_identity", "constitutional_precedence_preservation"],
+        "failure_injections": ["authority_hash_drift", "target_contract_mismatch"],
+        "observable_outputs": ["validated_target_contract_ref", "validation_receipt_ref"]
+      }
+    }
+  ],
+  "production_eligible": false,
+  "certified": false
+}

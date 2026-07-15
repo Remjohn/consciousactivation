@@ -1,0 +1,554 @@
+register_id: DELEGATION-CONTRACT-OWNERSHIP-001
+version: 1.1.0-rc.2
+status: constitutionally_aligned_local_candidate
+created: 2026-07-14
+schema_owner: delegation_protocol
+authority_model:
+  schema_ownership: The Delegation Protocol owns public schema shape, identifiers, versions and compatibility classification.
+  value_authority: Each payload field is authored only by the principal named for that field or field group.
+  validation: The Delegation Protocol validates authority but does not acquire the field's product authority.
+  references: Referenced immutable facts retain the authority of their source owner.
+  derived_data: A derived fact must name its derivation owner and may not overwrite its authoritative input.
+  open_objects: Wildcard ownership below is provisional; open public object shapes must be closed or governed before contract freeze.
+source_reconciliation:
+  local_schema_count: 26
+  matching_example_count: 26
+  local_static_validation: PASS
+  upstream_sources_physically_available: false
+  upstream_diff_reproducible: false
+  provisional_vae_snapshots:
+    - visual-asset-demand
+    - asset-result-contract
+    - visual-asset-event
+    - constraint-conflict
+    - visual-asset-submission
+    - submission-receipt
+  blocker: XRI-001
+
+contracts:
+  - contract: delegation-envelope
+    file: contracts/schemas/delegation-envelope.schema.yaml
+    producer: message_sender
+    consumers: [delegation_protocol]
+    field_authority:
+      delegation_protocol:
+        - protocol_version
+        - message_type
+        - message_version
+      message_sender:
+        - message_id
+        - correlation_id
+        - causation_id
+        - sender.*
+        - recipient.*
+        - authority.*
+        - occurred_at
+        - idempotency_key
+        - payload_hash
+        - payload_ref
+        - integrity.*
+    reconciliation: align
+    gaps: [ADR-DLG-002, ADR-DLG-003, ADR-DLG-008]
+
+  - contract: visual-asset-demand
+    file: contracts/schemas/visual-asset-demand.schema.yaml
+    producer: content_harness
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness:
+        - request_id
+        - version
+        - supersedes
+        - content_harness_ref
+        - category_profile
+        - format_profile
+        - asset_classification.*
+        - activative_semantic_lineage.*
+        - activation_contract.*
+        - semantic_intent.*
+        - visual_semantic_pack.*
+        - visual_narrative_program.*
+        - feature_contracts[]
+        - somatic_route_request.*
+        - activative_function.*
+        - wrong_reading_locks[]
+        - composition_intent.*
+        - identity_continuity.*
+        - reference_evidence[]
+        - delivery.*
+        - evaluation_policy.*
+        - execution_policy.*
+      content_harness_non_authoritative_enrichment:
+        - notes
+    canonical_message_version: '1.1'
+    identity_shape: resource_id_version_payload_hash_canonical_ref
+    reaction_and_expression_path: activative_semantic_lineage
+    reconciliation: constitutionally_aligned_local_candidate
+    gaps: [XRI-001, XRI-002]
+
+  - contract: visual-asset-submission
+    file: contracts/schemas/visual-asset-submission.schema.yaml
+    producer: content_harness
+    consumers: [delegation_protocol]
+    field_authority:
+      content_harness:
+        - demand_ref
+        - demand_hash
+        - execution_policy.*
+        - callbacks.*
+        - idempotency_key
+    reconciliation: align
+    gaps: [XRI-010, XRI-011, XRI-016, ADR-DLG-006]
+
+  - contract: submission-receipt
+    file: contracts/schemas/submission-receipt.schema.yaml
+    producer: unresolved_protocol_or_vae
+    consumers: [content_harness]
+    field_authority:
+      unresolved_conditional_owner:
+        - execution_id
+        - status
+        - accepted_demand_ref
+        - negotiated_profile.*
+        - rejection.*
+        - status_resource
+    reconciliation: blocked
+    gaps: [XRI-003, ADR-DLG-004]
+
+  - contract: visual-asset-event
+    file: contracts/schemas/visual-asset-event.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - execution_id
+        - event_type
+        - reason.*
+        - references.*
+      delegation_protocol_projection:
+        - state.*
+    reconciliation: replace_open_internal_state_projection
+    gaps: [XRI-006, XRI-009, ADR-DLG-007, ADR-DLG-009]
+
+  - contract: asset-result-contract
+    file: contracts/schemas/asset-result-contract.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - result_id
+        - demand.*
+        - visual_editor.*
+        - accepted_assets[]
+        - partial_unresolved[]
+        - authorization.production_authorized
+        - budget_receipt.*
+      content_harness_or_composition_runtime:
+        - authorization.downstream_consumption_authorized
+    reconciliation: blocked_provisional_authority_violation
+    gaps: [XRI-004, XRI-006, XRI-010, ADR-DLG-005, ADR-DLG-007]
+
+  - contract: result-acknowledgement
+    file: contracts/schemas/result-acknowledgement.schema.yaml
+    producer: content_harness_or_authorized_composition_runtime
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness_or_authorized_composition_runtime:
+        - result_ref
+        - acknowledgement
+        - verified_against.*
+        - checks.*
+        - authorization.*
+        - reason.*
+        - next_action.*
+    reconciliation: align
+    gaps: [XRI-006, XRI-010, ADR-DLG-005, ADR-DLG-007]
+
+  - contract: delegation-set
+    file: contracts/schemas/delegation-set.schema.yaml
+    producer: content_harness
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness:
+        - set_id
+        - version
+        - owner.*
+        - context.*
+        - members[]
+        - shared_constraints.*
+        - dependencies[]
+        - completion_policy.*
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, ADR-DLG-007, ADR-DLG-014]
+
+  - contract: budget-authorization
+    file: contracts/schemas/budget-authorization.schema.yaml
+    producer: content_harness_or_operator_policy
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness_or_operator_policy:
+        - authorization_id
+        - version
+        - program
+        - ceilings.*
+        - policy.*
+        - escalation.*
+        - owner
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, ADR-DLG-007, ADR-DLG-011]
+
+  - contract: budget-escalation-request
+    file: contracts/schemas/budget-escalation-request.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - escalation_id
+        - demand_ref
+        - execution_ref
+        - current_authorization.*
+        - consumption.*
+        - requested_extension.*
+        - justification.*
+        - predicted_outcome.*
+        - alternatives[]
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, XRI-010, ADR-DLG-007, ADR-DLG-011]
+
+  - contract: budget-escalation-response
+    file: contracts/schemas/budget-escalation-response.schema.yaml
+    producer: content_harness_or_operator_policy
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness_or_operator_policy:
+        - escalation_ref
+        - decision
+        - new_authorization.*
+        - authority.*
+        - reason
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, ADR-DLG-007, ADR-DLG-011]
+
+  - contract: cancellation-request
+    file: contracts/schemas/cancellation-request.schema.yaml
+    producer: content_harness_or_operator_policy
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness_or_operator_policy:
+        - cancellation_id
+        - demand_ref
+        - scope.*
+        - reason.*
+        - policy.*
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, XRI-010, ADR-DLG-007, ADR-DLG-011]
+
+  - contract: cancellation-receipt
+    file: contracts/schemas/cancellation-receipt.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - cancellation_ref
+        - final_state
+        - stopped_execution.*
+        - retained.*
+        - compute.*
+      delegation_protocol:
+        - downstream_consumption_authorized
+    reconciliation: align_with_derived_authorization_rule
+    gaps: [XRI-006, ADR-DLG-007, ADR-DLG-011]
+
+  - contract: constraint-conflict
+    file: contracts/schemas/constraint-conflict.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - conflict_id
+        - demand_ref
+        - status
+        - conflict.*
+        - evidence.*
+      content_harness_referenced_fact:
+        - preserved_authority.*
+    reconciliation: align_preserved_authority_as_reference_only
+    gaps: [XRI-006, XRI-010, ADR-DLG-007]
+
+  - contract: amendment-proposal
+    file: contracts/schemas/amendment-proposal.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - proposal_id
+        - demand_ref
+        - trigger.*
+        - options[]
+    reconciliation: align_non_binding
+    gaps: [XRI-006, XRI-010, ADR-DLG-007, ADR-DLG-012]
+
+  - contract: amendment-response
+    file: contracts/schemas/amendment-response.schema.yaml
+    producer: content_harness_or_owning_policy_principal
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness_or_owning_policy_principal:
+        - proposal_ref
+        - decision
+        - selected_option
+        - authorization.*
+        - resulting_demand.*
+        - reason
+    reconciliation: align_resulting_demand_as_new_reference
+    gaps: [XRI-006, ADR-DLG-006, ADR-DLG-007, ADR-DLG-012]
+
+  - contract: demand-supersession
+    file: contracts/schemas/demand-supersession.schema.yaml
+    producer: content_harness
+    consumers: [delegation_protocol, visual_asset_editor]
+    field_authority:
+      content_harness:
+        - previous_demand
+        - new_demand
+        - changed_fields[]
+        - unchanged_authority[]
+        - change_summary
+    reconciliation: align_to_exact_demand_identity_and_json_pointer
+    gaps: [XRI-010, ADR-DLG-006, ADR-DLG-012]
+
+  - contract: selective-invalidation-receipt
+    file: contracts/schemas/selective-invalidation-receipt.schema.yaml
+    producer: visual_asset_editor
+    consumers: [delegation_protocol, content_harness]
+    field_authority:
+      visual_asset_editor:
+        - supersession_ref
+        - reusable_outputs[]
+        - invalidated_outputs[]
+        - resumed_from_node
+        - impact_confidence
+    reconciliation: align_with_lineage_evidence
+    gaps: [ADR-DLG-012]
+
+  - contract: delegation-failure
+    file: contracts/schemas/delegation-failure.schema.yaml
+    producer: detecting_principal
+    consumers: [delegation_protocol, decision_owner]
+    field_authority:
+      detecting_principal:
+        - failure_id
+        - classification.*
+        - authority.*
+        - retry.*
+        - invalidation.*
+        - next_actions[]
+        - diagnostics_ref
+    controlled_vocabularies:
+      delegation_protocol:
+        - classification.family
+        - classification.code
+        - retry.retry_class
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, ADR-DLG-007]
+
+  - contract: compatibility-manifest
+    file: contracts/schemas/compatibility-manifest.schema.yaml
+    producer: registered_product_release
+    consumers: [delegation_protocol]
+    field_authority:
+      manifest_product_principal:
+        - product.*
+        - protocol_versions.*
+        - message_support.*
+        - supported_features[]
+        - unsupported_features[]
+        - certified_profiles[]
+    reconciliation: align_add_signature_and_closed_profiles
+    gaps: [XRI-006, XRI-007, XRI-012, ADR-DLG-007, ADR-DLG-010]
+
+  - contract: contract-migration
+    file: contracts/schemas/contract-migration.schema.yaml
+    producer: authorized_migration_service
+    consumers: [delegation_protocol, affected_products]
+    field_authority:
+      authorized_migration_service:
+        - migration_id
+        - source.*
+        - target.*
+        - transformations[]
+        - output.*
+      delegation_protocol:
+        - authority_effect.*
+        - validation.*
+    reconciliation: align_preserve_source_semantic_owners
+    gaps: [XRI-006, XRI-012, ADR-DLG-007, ADR-DLG-010]
+
+  - contract: invalidation-notice
+    file: contracts/schemas/invalidation-notice.schema.yaml
+    producer: owning_product
+    consumers: [delegation_protocol, downstream_consumers]
+    field_authority:
+      owning_product:
+        - notice_id
+        - affected_result.*
+        - action
+        - trigger.*
+        - scope.*
+        - affected_dimensions[]
+        - unaffected_dimensions[]
+        - decision_owner
+    reconciliation: align_and_close_nested_shapes
+    gaps: [XRI-006, ADR-DLG-007, ADR-DLG-013]
+
+  - contract: revocation-notice
+    file: contracts/schemas/revocation-notice.schema.yaml
+    producer: visual_asset_editor_or_integrity_authority
+    consumers: [delegation_protocol, downstream_consumers]
+    field_authority:
+      authorized_revocation_principal:
+        - notice_id
+        - asset_ref
+        - severity
+        - effective_immediately
+        - reason.*
+        - policy.*
+        - replacement.*
+    reconciliation: align_define_reason_to_principal_policy
+    gaps: [XRI-006, XRI-008, ADR-DLG-007, ADR-DLG-013, ADR-DLG-017]
+
+  - contract: replacement-notice
+    file: contracts/schemas/replacement-notice.schema.yaml
+    producer: owning_product
+    consumers: [delegation_protocol, downstream_consumers]
+    field_authority:
+      owning_product:
+        - notice_id
+        - affected_result
+        - replacement_result
+        - compatibility_status
+        - impact_ref
+    reconciliation: align_require_acknowledgement_fact
+    gaps: [ADR-DLG-013]
+
+  - contract: delegation-audit-receipt
+    file: contracts/schemas/delegation-audit-receipt.schema.yaml
+    producer: delegation_protocol
+    consumers: [audit_consumers]
+    field_authority:
+      delegation_protocol:
+        - receipt_id
+        - message_id
+        - correlation_id
+        - verification.*
+        - accepted_transition.*
+        - persisted_at
+        - audit_sequence
+        - previous_receipt_hash
+        - receipt_hash
+    reconciliation: align_define_canonical_hash_and_atomicity
+    gaps: [XRI-017, ADR-DLG-003, ADR-DLG-009]
+
+unresolved_field_ownership:
+  - contract: submission-receipt
+    paths: [execution_id, status, accepted_demand_ref, negotiated_profile.*, rejection.*, status_resource]
+    reason: Producer and authority are conditional between protocol validation and VAE admission.
+    issue: XRI-003
+  - contract: asset-result-contract
+    paths: [authorization.downstream_consumption_authorized]
+    reason: Field is present in a VAE-produced payload but is owned by the Content Harness or composition runtime.
+    issue: XRI-004
+
+open_object_gaps:
+  - amendment-proposal.trigger
+  - amendment-proposal.options[]
+  - amendment-proposal.options[].proposed_changes[]
+  - amendment-proposal.options[].predicted_effect
+  - amendment-response.authorization
+  - amendment-response.resulting_demand
+  - asset-result-contract.demand
+  - asset-result-contract.visual_editor
+  - asset-result-contract.accepted_assets[]
+  - asset-result-contract.authorization
+  - asset-result-contract.budget_receipt
+  - budget-authorization.ceilings
+  - budget-authorization.policy
+  - budget-authorization.escalation
+  - budget-escalation-request.current_authorization
+  - budget-escalation-request.consumption
+  - budget-escalation-request.requested_extension
+  - budget-escalation-request.justification
+  - budget-escalation-request.predicted_outcome
+  - budget-escalation-response.new_authorization
+  - budget-escalation-response.authority
+  - cancellation-request.scope
+  - cancellation-request.reason
+  - cancellation-request.policy
+  - cancellation-receipt.stopped_execution
+  - cancellation-receipt.retained
+  - cancellation-receipt.compute
+  - compatibility-manifest.message_support
+  - compatibility-manifest.product
+  - compatibility-manifest.protocol_versions
+  - compatibility-manifest.certified_profiles[]
+  - constraint-conflict.conflict
+  - constraint-conflict.evidence
+  - constraint-conflict.preserved_authority
+  - contract-migration.source
+  - contract-migration.target
+  - contract-migration.transformations[]
+  - contract-migration.authority_effect
+  - contract-migration.validation
+  - contract-migration.output
+  - delegation-audit-receipt.verification
+  - delegation-audit-receipt.accepted_transition
+  - delegation-failure.classification
+  - delegation-failure.authority
+  - delegation-failure.retry
+  - delegation-failure.invalidation
+  - delegation-set.owner
+  - delegation-set.context
+  - delegation-set.members[]
+  - delegation-set.shared_constraints
+  - delegation-set.dependencies[]
+  - delegation-set.completion_policy
+  - demand-supersession.changed_fields[]
+  - invalidation-notice.affected_result
+  - invalidation-notice.trigger
+  - invalidation-notice.scope
+  - result-acknowledgement.verified_against
+  - result-acknowledgement.checks
+  - result-acknowledgement.authorization
+  - result-acknowledgement.reason
+  - result-acknowledgement.next_action
+  - revocation-notice.reason
+  - revocation-notice.policy
+  - revocation-notice.replacement
+  - submission-receipt.negotiated_profile
+  - submission-receipt.rejection
+  - visual-asset-demand.asset_classification
+  - visual-asset-demand.semantic_intent
+  - visual-asset-demand.activative_function
+  - visual-asset-demand.composition_intent
+  - visual-asset-demand.composition_intent.canvas
+  - visual-asset-demand.composition_intent.directional_constraints
+  - visual-asset-demand.composition_intent.intended_region
+  - visual-asset-demand.composition_intent.role
+  - visual-asset-demand.identity_continuity
+  - visual-asset-demand.reference_evidence[]
+  - visual-asset-demand.delivery
+  - visual-asset-demand.evaluation_policy
+  - visual-asset-demand.execution_policy
+  - visual-asset-event.state
+  - visual-asset-event.reason
+  - visual-asset-event.references
+  - visual-asset-submission.execution_policy
+  - visual-asset-submission.callbacks
+
+readiness:
+  every_explicit_top_level_field_accounted_for: true
+  every_shared_field_has_one_enforceable_owner: false
+  nested_public_fields_fully_typed: false
+  upstream_provisional_diff_complete: false
+  implementation_gate: BLOCKED_AUTHORITY
+  next_action: Resolve XRI-003 and XRI-004, close open object paths, then verify against supplied upstream source artifacts.

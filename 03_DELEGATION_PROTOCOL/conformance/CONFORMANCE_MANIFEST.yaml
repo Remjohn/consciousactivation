@@ -1,0 +1,25 @@
+version: 1.1.0-rc.2
+protocol_version: '1.0'
+visual_asset_demand_version: '1.1'
+required_constitutional_cases:
+- AUTH-CONSTITUTION-001
+- COMP-CONSTITUTION-001
+- COMP-CONSTITUTION-002
+- COMP-CONSTITUTION-003
+- RES-CONSTITUTION-001
+suites:
+- suite_id: authority
+  path: authority-tests
+  required_for: CONTRACT_FAMILY_VALIDATED
+- suite_id: lifecycle
+  path: lifecycle-tests
+  required_for: CONTRACT_FAMILY_VALIDATED
+- suite_id: compatibility
+  path: compatibility-tests
+  required_for: CROSS_PRODUCT_FIXTURES_READY
+- suite_id: resilience
+  path: resilience-tests
+  required_for: CONFORMANCE_SUITE_PASSING
+- suite_id: format02_end_to_end
+  path: format02-end-to-end
+  required_for: FORMAT02_INTEGRATION_CERTIFIED

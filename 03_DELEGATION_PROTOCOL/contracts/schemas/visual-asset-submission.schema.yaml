@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Asset Submission
+type: object
+additionalProperties: false
+required:
+- demand_ref
+- demand_hash
+- execution_policy
+- idempotency_key
+properties:
+  demand_ref:
+    type: string
+    minLength: 1
+  demand_hash:
+    type: string
+    minLength: 1
+    pattern: '^sha256:'
+  execution_policy:
+    type: object
+  callbacks:
+    type: object
+  idempotency_key:
+    type: string
+    minLength: 1

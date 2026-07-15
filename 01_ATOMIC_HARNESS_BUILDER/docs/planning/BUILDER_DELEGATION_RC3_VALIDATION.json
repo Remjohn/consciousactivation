@@ -1,0 +1,68 @@
+{
+  "schema_version": "cmf-builder-delegation-rc3-validation/v1",
+  "validated_on": "2026-07-14",
+  "verdict": "PASS",
+  "scope": "bounded_pre_step_4_builder_cross_product_integration_correction",
+  "rc3_identity": {
+    "package_version": "1.1.0-rc.3",
+    "release_digest": "sha256:e3100f9b3ec5db4077def2861128795451085bb8993f1fe318f5aaf6a6653cdf",
+    "release_receipt_sha256": "sha256:bb5c5c236fd77b4715bb279f378e72881a05943527e1b88ad4845bb71f0f7c4d",
+    "release_manifest_sha256": "sha256:e7501488be54221da3ab437a32d57f80a74cabf3347b6b6b874922b1019ff51f",
+    "compatibility_profile": "cmf-delegation-compatibility-profile-1-0",
+    "trust_status": "local_unsigned_release_candidate",
+    "production_eligibility": false
+  },
+  "external_release_validation": {
+    "release_layout_validator": "PASS",
+    "release_receipt_entries_checked": 146,
+    "release_manifest_entries_checked": 145,
+    "released_hash_failures": 0,
+    "validator_tests": {"passed": 69, "failed": 0},
+    "protocol_tests": {"passed": 33, "failed": 0},
+    "clean_room": "PASS",
+    "test_execution_note": "A direct protocol discovery attempt omitted one or both released package roots and failed during import collection. The authoritative rerun used both release-local validators and protocol roots with pytest cache disabled; all 33 protocol tests passed."
+  },
+  "builder_mapping_validation": {
+    "command": "python -B docs/planning/tools/validate_builder_delegation_rc3_integration.py",
+    "checks": 20,
+    "passed": 20,
+    "failed": 0,
+    "results": [
+      {"name": "exact_rc3_pin", "verdict": "PASS"},
+      {"name": "release_receipt_manifest_and_profile_identity", "verdict": "PASS"},
+      {"name": "all_released_hashes", "verdict": "PASS"},
+      {"name": "generated_types_released", "verdict": "PASS"},
+      {"name": "source_kind_schema_enforcement", "verdict": "PASS"},
+      {"name": "source_kind_mapping", "verdict": "PASS"},
+      {"name": "ambiguous_source_kind_fails_closed", "verdict": "PASS"},
+      {"name": "mandatory_interview_provenance", "verdict": "PASS"},
+      {"name": "optional_non_interview_provenance", "verdict": "PASS"},
+      {"name": "category_profile_compatibility", "verdict": "PASS"},
+      {"name": "format02_certification_without_conversational_inheritance", "verdict": "PASS"},
+      {"name": "wrong_reading_lock_inheritance", "verdict": "PASS"},
+      {"name": "semantic_lineage_preservation", "verdict": "PASS"},
+      {"name": "no_local_schema_fork", "verdict": "PASS"},
+      {"name": "external_ownership_of_delegation_contracts", "verdict": "PASS"},
+      {"name": "no_active_rc1_or_rc2_dependency", "verdict": "PASS"},
+      {"name": "release_1_subset_reference", "verdict": "PASS"},
+      {"name": "existing_obligation_and_story_traceability", "verdict": "PASS"},
+      {"name": "confirmed_baseline_not_regenerated", "verdict": "PASS"},
+      {"name": "historical_prior_candidate_records_preserved", "verdict": "PASS"}
+    ]
+  },
+  "baseline_integrity": {
+    "planning_obligations": 410,
+    "epics": 12,
+    "stories": 69,
+    "new_obligations": 0,
+    "epic_redesign": false,
+    "story_redesign": false,
+    "production_code_written": false
+  },
+  "gate": {
+    "integration_correction": "PASS",
+    "step_4_started_on_corrected_baseline": false,
+    "implementation_readiness": "FAIL",
+    "production_implementation_authorized": false
+  }
+}

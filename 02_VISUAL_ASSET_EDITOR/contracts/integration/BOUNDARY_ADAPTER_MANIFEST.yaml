@@ -1,0 +1,82 @@
+artifact_type: vae_boundary_adapter_manifest
+artifact_version: 1.1.0
+adapter_id: vae-delegation-boundary@1.1.0-rc.4
+release_pin: contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+status: contract_defined_and_integration_tested_not_runtime_implemented
+
+ownership:
+  shared_contract_owner: DELEGATION_PROTOCOL
+  demand_semantics_owner: CONTENT_HARNESS
+  production_realization_owner: VISUAL_ASSET_EDITOR
+  downstream_acceptance_owner: CONTENT_HARNESS
+
+admission_pipeline:
+  - verify_exact_release_pin_and_receipt
+  - negotiate_lossless_semantic_compatibility
+  - validate_canonical_schema_and_closed_fields
+  - enforce_authority_lifecycle_and_integrity
+  - enforce_source_provenance_conditionals
+  - validate_and_enforce_portable_derivative_lock_inheritance
+  - validate_required_semantic_evaluation_capabilities_without_claiming_certification
+  - map_all_fields_to_immutable_demand_snapshot
+
+inbound:
+  message: visual-asset-demand@1.1
+  mapping: contracts/integration/VISUAL_ASSET_DEMAND_REQUEST_MAPPING.yaml
+  canonical_source: shared_release_only
+  prohibit:
+    - infer_source_kind
+    - invent_reaction_receipt_reference
+    - invent_expression_moment_reference
+    - drop_or_weaken_semantic_fields
+    - mutate_feature_contract
+    - substitute_local_schema
+
+outbound:
+  primary_result: asset-result-contract@1.0
+  mapping: contracts/integration/ASSET_RESULT_MAPPING.yaml
+  feasibility_channels:
+    - constraint-conflict@1.0
+    - amendment-proposal@1.0
+  prohibit:
+    - grant_downstream_consumption_authority
+    - rewrite_authoritative_demand
+    - rewrite_authoritative_feature_contract
+
+derivative_inbound:
+  message: derivative-lock-inheritance@1.0
+  mapping: contracts/integration/DERIVATIVE_LOCK_INHERITANCE_MAPPING.yaml
+  canonical_source: shared_release_only
+  prohibit:
+    - infer_derivation_classification
+    - invent_parent_lock_evidence
+    - remove_or_weaken_inherited_locks
+    - accept_parse_without_behavioral_enforcement
+
+semantic_enforcement:
+  source_discriminator:
+    path: /source_provenance/source_kind
+    mandatory: true
+    owner: CONTENT_HARNESS
+    interview_expression_requires:
+      - /activative_semantic_lineage/reaction_receipt_refs/0
+      - /activative_semantic_lineage/expression_moment_refs/0
+    non_interview_omission_of_interview_refs: valid
+  wrong_reading_lock_inheritance:
+    applies_to: [deterministic_derivative, non_semantic_derivative, semantic_transformative_derivative]
+    relationship_contract: derivative-lock-inheritance@1.0
+    mapping: contracts/integration/DERIVATIVE_LOCK_INHERITANCE_MAPPING.yaml
+    rule: validate_lock_identity_meaning_scope_and_enforcement_strength_against_authoritative_parent_evidence
+    additions: allowed_when_stricter
+    removals_or_weakening: rejected
+    relaxation_requires: new_authorized_upstream_demand_version
+  feature_contract_boundary:
+    authoritative_intent_owner: CONTENT_HARNESS
+    realization_owner: VISUAL_ASSET_EDITOR
+    references: typed_versioned_and_hash_pinned
+    authoritative_contract_mutation: rejected
+
+compatibility:
+  declaration: contracts/integration/DELEGATION_RC4_COMPATIBILITY.yaml
+  parse_without_enforcement: incompatible
+  shared_schema_fork: prohibited

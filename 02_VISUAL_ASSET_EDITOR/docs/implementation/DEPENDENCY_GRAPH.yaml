@@ -1,0 +1,354 @@
+graph_version: 1.0.0-stage4
+product: CMF Visual Asset Editor
+release: format02_release1
+recorded_at: 2026-07-14
+readiness_verdict: FAIL
+implementation_authorized: false
+current_authorization_state: ARCHITECTURE_IN_PROGRESS
+
+status_semantics:
+  AVAILABLE: Artifact or evidence exists and is locally verifiable.
+  SPECIFIED: Required behavior and tests are designed but not executable evidence.
+  PROVISIONAL: Draft or representative input cannot support production claims.
+  MISSING: Required dependency or evidence is absent.
+  BLOCKED: Work cannot start until dependencies are satisfied.
+
+external_dependencies:
+  - id: EXT-001
+    name: Frozen Atomic Harness Builder runtime and architecture
+    owner: Atomic Harness Builder
+    status: MISSING
+    observed_evidence: Exact SRC-001 frozen PRD and SRC-002 Spec Builder archives are restored; the Spec Builder has 28 passing tests but is not the target runtime.
+    required_identity: tagged read-only checkout plus profile, hashes, symbols, contracts, and extension points
+    blocks: [VS-06, VS-08, VS-22, GATE-IA-002, GATE-IA-003, GATE-IA-010]
+    issue: CR-001
+
+  - id: EXT-002
+    name: Published Delegation contract package
+    owner: Delegation repository
+    status: PROVISIONAL
+    observed_identity: coherent unsigned local RC2 with 26 messages, generated bindings, package validator PASS, 42 tests PASS, and exact schema/authority matrix PASS; amendment-response omits VAE as consumer
+    required_identity: published signed immutable package, corrected consumer registry, generated binding coordinate, passing VAE conformance evidence, result migration, and owner approval
+    blocks: [VS-02, VS-05, VS-07, VS-17, VS-22, GATE-IA-004, GATE-IA-010]
+    issues: [CR-002, CR-003, CR-007]
+
+  - id: EXT-003
+    name: Format 02 Content Harness and Remotion consumer
+    owner: Content Harness and downstream composition runtime
+    status: MISSING
+    required_identity: pinned producer profile, demand fixture, consumer contract, composition fixture, acknowledgement and usage path
+    blocks: [VS-03, VS-07, VS-17, VS-21, GATE-IA-005, GATE-IA-009]
+    issue: CR-004
+
+  - id: EXT-004
+    name: Registered source archives SRC-001 through SRC-010
+    owner: release curator and source owners
+    status: PROVISIONAL
+    observed_identity: Nine sources pass exact registered SHA-256 values after governed path rebase; SRC-009 is missing.
+    required_identity: files at governed paths with registered SHA-256 values or approved source-register rebase
+    blocks: [VS-22, GATE-IA-001, GATE-IA-010]
+    issue: CR-005
+
+  - id: EXT-005
+    name: Local self-hosted GPU release profile
+    owner: VAE compute and platform owners
+    status: MISSING
+    required_identity: OCI digest, ComfyUI commit, custom-node lock, Python lock, CUDA-driver matrix, model mounts, health and recovery evidence
+    blocks: [VS-11, VS-13, VS-21, GATE-IA-006]
+
+  - id: EXT-006
+    name: Cloud GPU release profile
+    owner: VAE compute and platform owners
+    status: MISSING
+    required_identity: provider adapter, OCI digest, capability/region policy, quote/cost mapping, isolation, checkpoint failover and equivalence evidence
+    blocks: [VS-13, VS-21, GATE-IA-006]
+
+  - id: EXT-007
+    name: Independent evaluator release profile and labeled sets
+    owner: VAE evaluation authority
+    status: MISSING
+    required_identity: evaluator/model/prompt/profile digests, distinct credentials, 30-case calibration minimum, protected release set, thresholds, arbitration and rollback evidence
+    blocks: [VS-14, VS-15, VS-21, GATE-IA-007, GATE-IA-009]
+
+  - id: EXT-008
+    name: Transactional metadata store, content-addressed object store, queue and event bindings
+    owner: VAE platform owner aligned with Builder
+    status: SPECIFIED
+    required_identity: selected products/versions, repository adapters, backup/restore, retention, idempotency and failure-injection evidence
+    blocks: [VS-06, VS-07, VS-13, VS-17, VS-21]
+
+  - id: EXT-009
+    name: Product and architecture approvals
+    owner: product and architecture authorities
+    status: MISSING
+    required_identity: PRD_APPROVED and ARCHITECTURE_VALIDATED receipts
+    blocks: [VS-22, GATE-IA-001, GATE-IA-003, GATE-IA-010]
+
+stage_artifacts:
+  - id: ART-001
+    name: Stage 1 codebase and requirement audit
+    status: AVAILABLE
+    evidence:
+      - docs/tech-specs/VAE_CODEBASE_INVENTORY.md
+      - docs/tech-specs/VAE_REQUIREMENT_COVERAGE_MATRIX.csv
+      - docs/tech-specs/ARCHITECTURE_BASELINE_MANIFEST.md
+      - docs/tech-specs/DELTA_ADR_REGISTER.md
+
+  - id: ART-002
+    name: Stage 2 technical specifications
+    status: SPECIFIED
+    evidence:
+      - docs/tech-specs/STAGE2_SPECIFICATION_INDEX.md
+      - docs/tech-specs/STAGE2_VALIDATION_REPORT.md
+      - docs/tech-specs/TS-VAE-01-DEMAND-INTAKE-AND-PRODUCTION-PLAN-IR.md
+      - docs/tech-specs/TS-VAE-10-FORMAT02-RELEASE1-VERTICAL-SLICE.md
+
+  - id: ART-003
+    name: Stage 3 Delegation integration design
+    status: PROVISIONAL
+    evidence:
+      - docs/contracts/DELEGATION_DEPENDENCY.md
+      - docs/contracts/CONTRACT_COMPATIBILITY_MATRIX.yaml
+      - docs/contracts/ADAPTER_TEST_PLAN.md
+    limitation: The 26-message RC2 schema/authority matrix passes mechanically, but one path is incompatible and the package is unsigned/unpublished.
+
+  - id: ART-004
+    name: Format 02 representative VAE fixtures
+    status: PROVISIONAL
+    evidence:
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/contracts
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/registries
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/benchmarks/BENCHMARK_MANIFEST.yaml
+
+readiness_conditions:
+  - id: R4-01
+    condition: all Release 1 requirements are owned
+    status: AVAILABLE
+    result: PASS
+    evidence: 176 FR and 70 NFR primary owners in EPICS_AND_VERTICAL_STORIES.md
+
+  - id: R4-02
+    condition: shared contract version is pinned
+    status: MISSING
+    result: FAIL
+    evidence: Coherent unsigned RC2 and all 42 package tests pass; the matrix covers all 26 schemas and authority arrays, but amendment-response omits VAE as consumer and publication/result migration/VAE conformance remain incomplete.
+    dependency: EXT-002
+
+  - id: R4-03
+    condition: local and cloud runtime strategies are specified
+    status: SPECIFIED
+    result: PASS
+    evidence: TS-VAE-04 and FORMAT02_RELEASE_PLAN.md define both adapters and proof obligations; executable profiles remain missing.
+    dependencies: [EXT-005, EXT-006]
+
+  - id: R4-04
+    condition: evaluator tests are specified
+    status: SPECIFIED
+    result: PASS
+    evidence: TS-VAE-06, TS-VAE-10, ADAPTER_TEST_PLAN.md, and FORMAT02_RELEASE_PLAN.md define deterministic, calibration, protected-set, independence, repair and regression tests.
+    dependency: EXT-007
+
+  - id: R4-05
+    condition: Format 02 fixtures exist
+    status: PROVISIONAL
+    result: CONCERNS
+    evidence: Six VAE contracts, six registries, benchmark seed, and ten Delegation RC scenarios exist; real producer/consumer fixtures do not.
+    dependency: EXT-003
+
+  - id: R4-06
+    condition: recovery and rollback are testable
+    status: MISSING
+    result: FAIL
+    evidence: Tests are specified but there are no selected runtime/storage bindings, executable fault harness, backup/restore proof, or rollback bundle.
+    dependencies: [EXT-001, EXT-005, EXT-006, EXT-008]
+
+epics:
+  - id: E01
+    name: Governed Demand to Feasible Plan
+    depends_on: []
+    stories: [VS-01, VS-02, VS-03, VS-04, VS-05]
+  - id: E02
+    name: Observable Asynchronous Production
+    depends_on: [E01]
+    stories: [VS-06, VS-07, VS-08]
+  - id: E03
+    name: Certified Candidate Portfolio
+    depends_on: [E01, E02]
+    stories: [VS-09, VS-10, VS-11, VS-12, VS-13]
+  - id: E04
+    name: Independent Acceptance and Repair
+    depends_on: [E03]
+    stories: [VS-14, VS-15]
+  - id: E05
+    name: Immutable Result and Reuse
+    depends_on: [E04]
+    stories: [VS-16, VS-17, VS-18, VS-19]
+  - id: E06
+    name: Governed Capability Improvement
+    depends_on: [E05]
+    stories: [VS-20]
+  - id: E07
+    name: Format 02 Certification and Handoff
+    depends_on: [E06]
+    stories: [VS-21, VS-22]
+
+stories:
+  - id: VS-01
+    epic: E01
+    feature: F01
+    fr_range: FR-001..FR-008
+    depends_on: []
+    external_dependencies: [EXT-009]
+  - id: VS-02
+    epic: E01
+    feature: F02
+    fr_range: FR-009..FR-016
+    depends_on: [VS-01]
+    external_dependencies: [EXT-002]
+  - id: VS-03
+    epic: E01
+    feature: F05
+    fr_range: FR-033..FR-040
+    depends_on: [VS-02]
+    external_dependencies: [EXT-003]
+  - id: VS-04
+    epic: E01
+    feature: F09
+    fr_range: FR-065..FR-072
+    depends_on: [VS-03]
+    external_dependencies: []
+  - id: VS-05
+    epic: E01
+    feature: F20
+    fr_range: FR-153..FR-160
+    depends_on: [VS-04]
+    external_dependencies: [EXT-002]
+  - id: VS-06
+    epic: E02
+    feature: F10
+    fr_range: FR-073..FR-080
+    depends_on: [VS-04]
+    external_dependencies: [EXT-001, EXT-008]
+  - id: VS-07
+    epic: E02
+    feature: F19
+    fr_range: FR-145..FR-152
+    depends_on: [VS-02, VS-06]
+    external_dependencies: [EXT-002, EXT-008]
+  - id: VS-08
+    epic: E02
+    feature: F18
+    fr_range: FR-137..FR-144
+    depends_on: [VS-06, VS-07]
+    external_dependencies: [EXT-001]
+  - id: VS-09
+    epic: E03
+    feature: F06
+    fr_range: FR-041..FR-048
+    depends_on: [VS-04]
+    external_dependencies: []
+  - id: VS-10
+    epic: E03
+    feature: F07
+    fr_range: FR-049..FR-056
+    depends_on: [VS-09]
+    external_dependencies: []
+  - id: VS-11
+    epic: E03
+    feature: F08
+    fr_range: FR-057..FR-064
+    depends_on: [VS-09, VS-10]
+    external_dependencies: [EXT-005]
+  - id: VS-12
+    epic: E03
+    feature: F16
+    fr_range: FR-121..FR-128
+    depends_on: [VS-11]
+    external_dependencies: []
+  - id: VS-13
+    epic: E03
+    feature: F12
+    fr_range: FR-089..FR-096
+    depends_on: [VS-06, VS-11, VS-12]
+    external_dependencies: [EXT-005, EXT-006, EXT-008]
+  - id: VS-14
+    epic: E04
+    feature: F14
+    fr_range: FR-105..FR-112
+    depends_on: [VS-13]
+    external_dependencies: [EXT-007]
+  - id: VS-15
+    epic: E04
+    feature: F15
+    fr_range: FR-113..FR-120
+    depends_on: [VS-14]
+    external_dependencies: [EXT-007]
+  - id: VS-16
+    epic: E05
+    feature: F03
+    fr_range: FR-017..FR-024
+    depends_on: [VS-02, VS-14]
+    external_dependencies: []
+  - id: VS-17
+    epic: E05
+    feature: F04
+    fr_range: FR-025..FR-032
+    depends_on: [VS-15, VS-16]
+    external_dependencies: [EXT-002, EXT-008]
+  - id: VS-18
+    epic: E05
+    feature: F11
+    fr_range: FR-081..FR-088
+    depends_on: [VS-17]
+    external_dependencies: [EXT-008]
+  - id: VS-19
+    epic: E05
+    feature: F17
+    fr_range: FR-129..FR-136
+    depends_on: [VS-18]
+    external_dependencies: [EXT-008]
+  - id: VS-20
+    epic: E06
+    feature: F13
+    fr_range: FR-097..FR-104
+    depends_on: [VS-11, VS-15, VS-19]
+    external_dependencies: [EXT-007, EXT-008]
+  - id: VS-21
+    epic: E07
+    feature: F21
+    fr_range: FR-161..FR-168
+    depends_on: [VS-05, VS-08, VS-13, VS-15, VS-17, VS-20]
+    external_dependencies: [EXT-001, EXT-002, EXT-003, EXT-005, EXT-006, EXT-007, EXT-008]
+  - id: VS-22
+    epic: E07
+    feature: F22
+    fr_range: FR-169..FR-176
+    depends_on: [VS-21]
+    external_dependencies: [EXT-001, EXT-002, EXT-004, EXT-009]
+
+implementation_waves:
+  - id: W0
+    name: Close readiness blockers
+    implementation_work: false
+    exit: All R4 conditions PASS and an authorized readiness receipt is issued.
+  - id: W1
+    name: Exact-interface fixture vertical slice
+    implementation_work: true
+    entry: W0 exit plus explicit Stage 5 authorization
+    scope: Minimum production ports with fixture-only ComfyUI and independent evaluator adapters.
+  - id: W2
+    name: Local compute proof
+    implementation_work: true
+    entry: W1 acceptance plus EXT-005
+  - id: W3
+    name: Cloud equivalence and recovery proof
+    implementation_work: true
+    entry: W2 acceptance plus EXT-006 and executable recovery harness
+  - id: W4
+    name: Cross-product Format 02 proof
+    implementation_work: true
+    entry: W3 acceptance plus published Delegation and EXT-003
+  - id: W5
+    name: Benchmark and limited-production certification
+    implementation_work: true
+    entry: W4 acceptance plus approved evaluator/protected sets and rollback evidence

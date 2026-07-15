@@ -1,0 +1,34 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Result Acknowledgement
+type: object
+additionalProperties: false
+required:
+- result_ref
+- acknowledgement
+- verified_against
+- checks
+- authorization
+properties:
+  result_ref:
+    type: string
+    minLength: 1
+  acknowledgement:
+    type: string
+    minLength: 1
+    enum:
+    - accepted
+    - rejected
+  verified_against:
+    type: object
+  checks:
+    type: object
+  authorization:
+    type: object
+  reason:
+    type:
+    - object
+    - 'null'
+  next_action:
+    type:
+    - object
+    - 'null'

@@ -1,0 +1,218 @@
+batch: A_with_approved_C_B_D_execution_followup
+recorded_at: "2026-07-14"
+decisions:
+  - id: H-001
+    title: Delegation release identity and production trust
+    question: >-
+      Which signed immutable Delegation 1.1.0-rc.1 coordinate and digest supersedes the
+      currently observed unsigned 1.0.0-rc.2, and does that release include the VAE
+      amendment-response consumer repair plus the asset-result migration?
+    owner:
+      - delegation_release_authority
+      - vae_product_authority
+    why_human_required: >-
+      The repository cannot promote an unsigned local RC, choose a successor release,
+      or change public producers, consumers, and migration authority.
+    blocking:
+      - canonical_demand_schema
+      - generated_bindings
+      - compatibility_matrix_refresh
+      - adapter_conformance
+      - stage4_readiness_reaudit
+    required_evidence:
+      - signed_package_coordinate
+      - immutable_package_digest
+      - corrected_message_registry
+      - published_migration_and_conformance_fixtures
+    resolution_evidence:
+      observed_package_version: 1.1.0-rc.1
+      observed_release_digest: "sha256:8bf07bd5b51b11d77b6852678967e439f019219d247b4c999877379196fd4e56"
+      observed_release_receipt_hash: "sha256:39250ccc3f148f885b24e0f459ed8139f5695878c151ec6b3371d1c3a477cdbe"
+      observed_source_manifest_hash: "sha256:a323851203841a09ae29fc89f2fe4b6f74206d2cc4964866a3826fe36fec7217"
+      trust_status: local_unsigned_release_candidate
+      integration_disposition: rejected_failed_validation
+    rc2_adoption:
+      package_version: 1.1.0-rc.2
+      release_digest: "sha256:d4958cd3d02f0acef9d66bf245078ea70dab36b727d0c1541031fdceb63f6e41"
+      release_receipt_hash: "sha256:ff97185ec1dfd1c2eaf936beec318e28b583fd2e3da809df9b860f504c7b6cff"
+      release_manifest_hash: "sha256:6e765eeef4ebed71d6e725cf11f49815f9cc0cafbe42ef157c8f189d8c7d582c"
+      source_manifest_hash: "sha256:8a572d086397b4c781eac76fd7d81e4fdd128480de2a283d515634fde230a982"
+      compatibility_profile: cmf-delegation-compatibility@1.1.0-rc.2
+      trust_status: local_unsigned_release_candidate
+      consumer_validation: PASS
+      bounded_integration_pin: adopted
+      production_trust: open_requires_signed_published_release_and_authority_approval
+    status: local_integration_identity_resolved_production_trust_open
+
+  - id: H-002
+    title: Interview-derived lineage applicability
+    question: >-
+      What authoritative discriminator makes Reaction Receipt and Expression Moment
+      references mandatory, and is the Format 02 VAD-F02-0001 demand interview-derived?
+    owner:
+      - activative_intelligence_authority
+      - content_harness_owner
+      - delegation_schema_owner
+    why_human_required: >-
+      The amendment requires conditional provenance, but the draft schema exposes only
+      optional arrays and the current example leaves them empty. VAE may not infer the
+      source class from semantic notes.
+    blocking:
+      - canonical_demand_validation
+      - format02_demand_fixture
+      - selected_asset_lineage_acceptance_test
+    required_evidence:
+      - source_kind_or_applicability_contract
+      - conditional_schema_rule
+      - authoritative_format02_fixture_values_or_not_applicable_receipt
+    resolution:
+      discriminator: source_kind
+      discriminator_type: typed_enum_not_boolean
+      interview_value: interview_expression
+      interview_requirements:
+        - reaction_receipt_ref
+        - expression_moment_ref
+      other_source_kinds: absence_of_interview_refs_explicitly_valid
+      non_inference_rule: VAE_must_not_invent_interview_lineage
+      authority: user_supplied_2026_07_14
+    rc1_conformance:
+      result: FAIL
+      evidence:
+        - visual_asset_demand_schema_has_no_source_kind
+        - empty_reaction_receipt_refs_validate
+        - empty_expression_moment_refs_validate
+        - closed_schema_rejects_source_kind_interview_expression
+        - generated_python_and_typescript_bindings_have_no_source_kind
+      disposition: shared_contract_reissue_required_no_VAE_local_field_allowed
+    rc2_conformance:
+      result: PASS
+      evidence:
+        - canonical_source_provenance_source_kind_is_mandatory_typed_and_closed
+        - interview_expression_requires_non_empty_reaction_receipt_refs
+        - interview_expression_requires_non_empty_expression_moment_refs
+        - non_interview_omission_is_valid_without_synthesis
+        - migrations_require_owner_classification_and_do_not_guess
+        - generated_python_and_typescript_structures_include_SourceKind
+      integration_test: validation/tests/test_delegation_rc2_integration.py
+    status: resolved_and_integrated
+
+  - id: H-003
+    title: Wrong-reading-lock inheritance contract
+    question: >-
+      What canonical RC1 field or union represents deterministic resize or encoding
+      routes that inherit non-empty locks from an accepted master, including the exact
+      master and lock-set reference?
+    owner:
+      - activative_intelligence_authority
+      - delegation_schema_owner
+    why_human_required: >-
+      The amendment permits inheritance by reference, while the draft demand schema
+      only requires an inline non-empty array. Creating a VAE-local reference field
+      would fork the shared contract.
+    blocking:
+      - deterministic_transform_demand_validation
+      - demand_template
+      - adapter_losslessness_tests
+    required_evidence:
+      - canonical_schema_shape
+      - provenance_and_hash_rule
+      - positive_and_negative_fixtures
+    resolution:
+      applies_to:
+        - deterministic_delivery_variants
+        - non_semantic_derivatives
+      inheritance_rule: inherit_all_wrong_reading_locks_from_accepted_parent
+      strengthening_rule: derivative_may_add_stricter_locks
+      prohibition: derivative_may_not_remove_or_weaken_inherited_locks
+      relaxation_authority: new_authorized_upstream_demand_version
+      authority: user_supplied_2026_07_14
+    integration_disposition: implemented_in_VAE_boundary_manifest_fixture_and_tests
+    evidence:
+      - contracts/integration/BOUNDARY_ADAPTER_MANIFEST.yaml
+      - contracts/integration/ASSET_RESULT_MAPPING.yaml
+      - validation/fixtures/delegation-rc2/VAE_BOUNDARY_CASES.json
+      - validation/tests/test_delegation_rc2_integration.py
+    status: resolved_and_integrated
+
+  - id: H-004
+    title: Feature Contract ownership and canonical shape
+    question: >-
+      Which product owns the referenced Feature Contract objects, what typed union or
+      registry identifies gaze, hands, posture, witness, punctum, negative space,
+      contact, distance, crop, motion, light, and sequence contracts, and how is
+      non-applicability declared?
+    owner:
+      - visual_narrative_authority
+      - delegation_schema_owner
+      - vae_architecture_authority
+    why_human_required: >-
+      The constitution requires explicit plans when features change meaning, but the
+      draft demand schema contains only generic references. VAE cannot invent the
+      feature semantics or their owner.
+    blocking:
+      - canonical_feature_contract_mapping
+      - materializer_non_inference_acceptance_test
+      - repair_preservation_rules
+    required_evidence:
+      - ownership_record
+      - typed_reference_or_union_contract
+      - applicability_rule
+      - conformance_fixtures
+    resolution:
+      feature_intent_and_semantic_requirements_owner: CONTENT_HARNESS
+      production_realization_feasibility_and_receipts_owner: VISUAL_ASSET_EDITOR
+      reference_rule: typed_versioned_feature_contract_references
+      mutation_rule: VAE_must_not_rewrite_upstream_feature_contract
+      authority: user_supplied_2026_07_14
+    rc1_conformance:
+      result: PASS_at_schema_authority_level
+      evidence:
+        - feature_contracts_require_contract_ref_feature_and_required_for_meaning
+        - ResourceIdentityRef_carries_resource_id_version_payload_hash_and_canonical_ref
+        - value_owner_is_CONTENT_HARNESS
+    integration_disposition: implemented_in_VAE_request_result_mappings_fixture_and_tests
+    evidence:
+      - contracts/integration/VISUAL_ASSET_DEMAND_REQUEST_MAPPING.yaml
+      - contracts/integration/ASSET_RESULT_MAPPING.yaml
+      - validation/fixtures/delegation-rc2/VAE_BOUNDARY_CASES.json
+      - validation/tests/test_delegation_rc2_integration.py
+    status: resolved_and_integrated
+
+  - id: H-005
+    title: Visual Evaluation Profile applicability and thresholds
+    question: >-
+      Approve the numeric/ordinal thresholds, evaluator and program pins, calibration
+      and protected-set policy, and whether the V1.1 dimension named affinity is
+      equivalent to any previously used human-affinity label.
+    owner:
+      - evaluation_authority
+      - product_authority
+    why_human_required: >-
+      The amendment names dimensions that the draft evaluation schema does not
+      explicitly require. Thresholds and applicability are policy decisions and cannot
+      be derived from generic semantic notes.
+    blocking:
+      - visual_evaluation_profile_registry
+      - evaluation_schema_patch
+      - evaluator_calibration
+      - benchmark_release_gates
+    required_evidence:
+      - hard_gate_and_threshold_policy
+      - labeled_and_protected_fixture_requirements
+      - evaluator_and_program_pin
+      - calibration_arbitration_and_rollback_report
+      - affinity_label_equivalence_decision
+    partial_resolution:
+      authorized_by: approved_alignment_execution_request
+      resolved_scope:
+        - named_V1_1_dimension_dictionary
+        - conditional_delete_caption_no_text_applicability
+        - hard_gate_precedence_design
+        - responsible_layer_and_repair_boundary_design
+      evidence:
+        - governance/VISUAL_EVALUATION_PROFILE_REGISTRY.yaml
+        - contracts/schemas/VISUAL_QUALITY_EVALUATION.schema.yaml
+        - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/benchmarks/BENCHMARK_MANIFEST.yaml
+      limit: specification_only_no_threshold_or_certification_authority_inferred
+    evidence_closure_plan: docs/constitutional-alignment/EVALUATOR_CERTIFICATION_EVIDENCE_CLOSURE_PLAN.md
+    status: partially_resolved_evidence_plan_recorded_certification_open

@@ -1,0 +1,795 @@
+matrix_version: 1.4.0-stage3-history-plus-1.1.0-rc.4-adoption
+recorded_at: 2026-07-15
+scope: vae_delegation_boundary
+status: current_1_1_0_rc_4_bounded_integration_pass_historical_matrix_preserved
+implementation_authorized: false
+
+current_adoption:
+  package_version: 1.1.0-rc.4
+  release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+  release_receipt_sha256: sha256:042ab1ad99a4e5a4f8ff3a08c559b410db9c17cbade48ef05e92d6170dddc25f
+  release_manifest_sha256: sha256:7a23c0896f215c008bd2f9f0f7079cb97c23d05d100ac5a4b60691bb8abb9882
+  compatibility_manifest_sha256: sha256:51667cd6c346c6794c2b648d0369b6961fc9519fd2d5e52ac03589a2a24d32cd
+  compatibility_profile: cmf-delegation-compatibility-profile-1-0@1.0
+  trust_status: local_unsigned_release_candidate
+  local_contract_integration_verdict: PASS
+  derivative_lock_inheritance: PASS_portable_relationship_1_0
+  required_EVALUATE_capability: contract_compatible_specified_not_certified
+  format02_profile_id: format02_minimal_coach_theatre
+  format02_production_certified: false
+  production_trust: false
+  implementation_authorized: false
+  stage5_allowed: false
+  declaration: contracts/integration/DELEGATION_RC4_COMPATIBILITY.yaml
+  boundary_manifest: contracts/integration/BOUNDARY_ADAPTER_MANIFEST.yaml
+  test_evidence: validation/tests/test_delegation_rc4_integration.py
+  historical_messages_scope: >-
+    The messages, registered_authority_snapshot, dependency, supersession and
+    blocking_issues sections below are preserved Stage 3 evidence for the former
+    1.0.0-rc.2/RC2-era analysis. They are not the current RC4 pin declaration.
+
+dependency:
+  package: CMF_CONTENT_HARNESS_VISUAL_ASSET_EDITOR_DELEGATION_SHARDED_PRD_V1
+  package_coordinate: '@cmf/delegation-contracts'
+  package_version: 1.0.0-rc.2
+  protocol_version: '1.0'
+  artifact_status: RELEASE_CANDIDATE_UNSIGNED_LOCAL
+  root_manifest_sha256: 8ca1957c2a7a0dd76231a041ef3f3b2670d3a1e05ce6ee79c92c7102a893cead
+  release_manifest_sha256: 49d4befe0fd90fffbbe7cb00c0a5401eee6858f5493a502da9a1a1ff6df7de19
+  release_manifest_declared_package_version: 1.0.0-rc.2
+  message_registry_sha256: 7941af57b60c307ae077b9944761da844944b0416727b444d04db7ee083ba0a8
+  lifecycle_machine_sha256: 621a745042886a57cff7f31f1d4696ebdaa43c35b8f5cea78bc1a1e90bad51e2
+  authority_registry_sha256: 51929735589119c7afc0015f04f9bbdc4d862251bf5d5fad881309291214f3dc
+  pin_kind: local_unsigned_release_candidate_digest
+  production_pin_available: false
+
+supersession:
+  detected_at_stage: 4
+  current_package_version: 1.0.0-rc.2
+  current_package_status: RELEASE_CANDIDATE_UNSIGNED_LOCAL
+  current_root_manifest_sha256: 8ca1957c2a7a0dd76231a041ef3f3b2670d3a1e05ce6ee79c92c7102a893cead
+  current_release_manifest_sha256: 49d4befe0fd90fffbbe7cb00c0a5401eee6858f5493a502da9a1a1ff6df7de19
+  current_registry_sha256: 7941af57b60c307ae077b9944761da844944b0416727b444d04db7ee083ba0a8
+  current_message_count: 26
+  current_validator_status: PASS
+  current_validator_tests: 42_passed
+  draft_message_replaced: submission_receipt
+  rc_replacement_messages: [submission-validation-receipt, admission-receipt]
+  reconciliation_status: COMPLETE_FOR_RC2_REGISTRY
+  compatibility_summary:
+    COMPATIBLE: 20
+    COMPATIBLE_WITH_ADAPTER: 4
+    COMPATIBLE_WITH_DECLARED_DEGRADATION: 0
+    MIGRATION_REQUIRED: 1
+    INCOMPATIBLE: 1
+  evidence_rule: The current messages list classifies all 26 RC entries. The historical list remains audit evidence for the superseded draft only.
+
+verdict_semantics:
+  source: governance/COMPATIBILITY_POLICY.yaml
+  allowed:
+    - COMPATIBLE
+    - COMPATIBLE_WITH_ADAPTER
+    - COMPATIBLE_WITH_DECLARED_DEGRADATION
+    - MIGRATION_REQUIRED
+    - INCOMPATIBLE
+  evidence_rule: A verdict is a Stage 3 design classification, not an implementation or conformance claim.
+
+adapter_rules:
+  - Canonical schemas and public lifecycle meanings remain Delegation-owned.
+  - Accepted demand content is immutable and cannot be rewritten by VAE.
+  - Required semantics are mapped deterministically and losslessly or the message is rejected.
+  - Exact demand identity is preserved without invention.
+  - Envelope and audit own message metadata, integrity, idempotency, and replay evidence.
+  - VAE internal workflow state cannot leak into public lifecycle state.
+  - VAE production acceptance cannot become downstream composition authorization.
+  - Constraint evidence and amendment proposals remain separate messages.
+  - In-flight delegations retain their negotiated contract versions.
+  - Unknown required features, authority, or migration paths fail closed.
+
+registered_authority_snapshot:
+  delegation-envelope:
+    producers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+    consumers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  visual-asset-demand:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  visual-asset-submission:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, CONTROL_TOWER]
+  submission-validation-receipt:
+    producers: [DELEGATION_PROTOCOL]
+    consumers: [CONTENT_HARNESS, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  admission-receipt:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  visual-asset-event:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  delegation-set:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  budget-authorization:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  budget-escalation-request:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  budget-escalation-response:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  cancellation-request:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  cancellation-receipt:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  constraint-conflict:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  amendment-proposal:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  amendment-response:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  demand-supersession:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  selective-invalidation-receipt:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [CONTENT_HARNESS, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  asset-result-contract:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, CONTENT_HARNESS, CONTROL_TOWER]
+  result-acknowledgement:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  invalidation-notice:
+    producers: [CONTENT_HARNESS]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  revocation-notice:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  replacement-notice:
+    producers: [VISUAL_ASSET_EDITOR]
+    consumers: [DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  delegation-failure:
+    producers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+    consumers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  delegation-audit-receipt:
+    producers: [DELEGATION_PROTOCOL]
+    consumers: [CONTENT_HARNESS, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  compatibility-manifest:
+    producers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+    consumers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+  contract-migration:
+    producers: [DELEGATION_PROTOCOL]
+    consumers: [CONTENT_HARNESS, DELEGATION_PROTOCOL, VISUAL_ASSET_EDITOR, CONTROL_TOWER]
+
+provisional_vae_snapshots:
+  - local_schema: contracts/schemas/VISUAL_ASSET_DEMAND.schema.yaml
+    canonical_schema: contracts/schemas/visual-asset-demand.schema.yaml
+    use: comparison_fixture_only
+  - local_schema: contracts/schemas/VISUAL_ASSET_SUBMISSION.schema.yaml
+    canonical_schema: contracts/schemas/visual-asset-submission.schema.yaml
+    use: comparison_fixture_only
+  - local_schema: contracts/schemas/VISUAL_ASSET_EVENT.schema.yaml
+    canonical_schema: contracts/schemas/visual-asset-event.schema.yaml
+    use: comparison_fixture_only
+  - local_schema: contracts/schemas/ASSET_RESULT_CONTRACT.schema.yaml
+    canonical_schema: contracts/schemas/asset-result-contract.schema.yaml
+    use: comparison_fixture_only
+  - local_schema: contracts/schemas/CONSTRAINT_CONFLICT.schema.yaml
+    canonical_schema: contracts/schemas/constraint-conflict.schema.yaml
+    use: comparison_fixture_only
+
+stage3_draft_messages:
+  - message_type: delegation_envelope
+    schema: contracts/schemas/delegation-envelope.schema.yaml
+    schema_sha256: 2c1c62ab58557232882faa51ece669fc59b1f238ad29a80dba1c2fde22c0a8d1
+    vae_role: produce_and_consume_via_boundary
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Preserve validated metadata and expose only a typed validation receipt to VAE ports.
+    authority_guard: VAE cannot self-validate its principal, signature, authority, or lifecycle transition.
+    lifecycle_effect: none; carries evidence for every transition
+    test_refs: [ADP-PKG-001, ADP-SEC-001, ADP-REP-001]
+    status: provisional_unimplemented
+
+  - message_type: visual_asset_demand
+    schema: contracts/schemas/visual-asset-demand.schema.yaml
+    schema_sha256: da64834ad406e2949ed10d12bf857a371d6717cb9c2cfb3dac54d21543ad40cd
+    vae_role: consume
+    integration_class: local_snapshot_adapter
+    local_snapshot: contracts/schemas/VISUAL_ASSET_DEMAND.schema.yaml
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    adapter_action: Map the validated canonical demand to an immutable VAE demand fact without changing semantic fields.
+    authority_guard: Content Harness exclusively owns demand meaning, versions, sequence, roles, continuity, and budget intent.
+    lifecycle_effect: none; demand is referenced by submission
+    test_refs: [ADP-IN-001, ADP-ID-001, AUTH-01, AUTH-02]
+    status: provisional_unimplemented
+
+  - message_type: visual_asset_submission
+    schema: contracts/schemas/visual-asset-submission.schema.yaml
+    schema_sha256: 3b0004506d5af677694c4debb84843a29a34bb88e4ba1628e586b899680a4901
+    vae_role: consume_validated
+    integration_class: local_snapshot_adapter
+    local_snapshot: contracts/schemas/VISUAL_ASSET_SUBMISSION.schema.yaml
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    adapter_action: Preserve canonical demand_hash; map local contract-version intent to negotiated envelope/profile evidence and reject when exact demand context is absent.
+    authority_guard: Only the owning Content Harness can submit its demand; protocol validation precedes VAE admission.
+    lifecycle_effect: DRAFT to SUBMITTED
+    test_refs: [ADP-IN-002, ADP-ID-001, RES-01, RES-02]
+    status: provisional_unimplemented
+
+  - message_type: submission_receipt
+    schema: contracts/schemas/submission-receipt.schema.yaml
+    schema_sha256: 233fcfdec4271a32ff57cab7df3117f570325cdfca5fa278deffa7a54d4531c4
+    vae_role: contribute_admission_fact_and_observe
+    integration_class: authority_split_blocked
+    local_snapshot: null
+    compatibility_verdict: MIGRATION_REQUIRED
+    adapter_action: Keep protocol rejection separate from VAE admission acceptance until ADR-DLG-004 defines the producer split.
+    authority_guard: VAE cannot issue protocol-level rejection; the protocol cannot claim VAE production admission without a VAE fact.
+    lifecycle_effect: SUBMITTED to REJECTED or ACCEPTED
+    test_refs: [ADP-AUTH-001, ADP-LIFE-001, AUTH-04, AUTH-05]
+    status: blocked_xri_003_adr_dlg_004
+
+  - message_type: visual_asset_event
+    schema: contracts/schemas/visual-asset-event.schema.yaml
+    schema_sha256: 6e0f9eabe9a42466bc85289f0a2442de7add1d2124cd3879baf079c3ed07df2c
+    vae_role: produce
+    integration_class: local_snapshot_adapter
+    local_snapshot: contracts/schemas/VISUAL_ASSET_EVENT.schema.yaml
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    adapter_action: Move event_id, occurred_at, and sequence to envelope/audit and map only approved stable state and event type.
+    authority_guard: Private workflow, candidate, evaluator, and repair states cannot enter the public state vocabulary.
+    lifecycle_effect: stable public progress transitions only
+    test_refs: [ADP-OUT-001, ADP-LIFE-002, RES-03]
+    status: blocked_xri_009_adr_dlg_009
+
+  - message_type: delegation_set
+    schema: contracts/schemas/delegation-set.schema.yaml
+    schema_sha256: af290e0feb47c0277848c061107876d2ed060b8ed3e3adfa1b2857fa54a203d4
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Preserve set identity and each independently versioned member demand; create no merged demand meaning.
+    authority_guard: Content Harness owns set coordination and member demand identity.
+    lifecycle_effect: none
+    test_refs: [ADP-IN-003, ADP-ID-001]
+    status: provisional_unimplemented
+
+  - message_type: budget_authorization
+    schema: contracts/schemas/budget-authorization.schema.yaml
+    schema_sha256: 79909c43dd7090a38963e3780c3d2aa9e8b22c8e21dec2daff678716c3b2a0ff
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Map immutable ceilings and escalation policy to a VAE Budget Program reference without widening authority.
+    authority_guard: VAE may spend within authorization but cannot increase ceilings or approve extensions.
+    lifecycle_effect: none
+    test_refs: [ADP-IN-004, ADP-AUTH-002, AUTH-08]
+    status: provisional_unimplemented
+
+  - message_type: budget_escalation_request
+    schema: contracts/schemas/budget-escalation-request.schema.yaml
+    schema_sha256: 0a72219bc8addf1b0633aedd9040df98749ef494aa782c5bf3a008b234f7072d
+    vae_role: produce
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Emit bounded requested extension, evidence, alternatives, and current spend from VAE facts.
+    authority_guard: A request is non-binding and cannot alter the active authorization.
+    lifecycle_effect: ACCEPTED or IN_PROGRESS to COST_APPROVAL_REQUIRED
+    test_refs: [ADP-OUT-002, ADP-LIFE-001]
+    status: provisional_unimplemented
+
+  - message_type: budget_escalation_response
+    schema: contracts/schemas/budget-escalation-response.schema.yaml
+    schema_sha256: 71d0ef251b066e919b24bca6646539692d1d3f328618ef7b4a9a3f0f522e6b12
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Apply only a validated owner response to the waiting execution and retain authorization lineage.
+    authority_guard: Only the authorized budget owner can approve or deny the extension.
+    lifecycle_effect: COST_APPROVAL_REQUIRED to IN_PROGRESS or CAPABILITY_GAP
+    test_refs: [ADP-IN-005, ADP-LIFE-001]
+    status: provisional_unimplemented
+
+  - message_type: cancellation_request
+    schema: contracts/schemas/cancellation-request.schema.yaml
+    schema_sha256: 0d97310dc2dbf516d2d60eb8c7348acff4e35a8ed472a6bb258b23a803d8206e
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Stop admission of new work, request safe execution stop, and retain completed evidence.
+    authority_guard: Only the owning Content Harness can cancel its delegation.
+    lifecycle_effect: SUBMITTED, ACCEPTED, or IN_PROGRESS to CANCELLATION_REQUESTED
+    test_refs: [ADP-IN-006, AUTH-07, RES-09]
+    status: provisional_unimplemented
+
+  - message_type: cancellation_receipt
+    schema: contracts/schemas/cancellation-receipt.schema.yaml
+    schema_sha256: 7c88951c7fa52c38cdc389da3b56df58b6aa8a1795587bdb5cd787e8e6fc679b
+    vae_role: produce
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Emit safe-stop disposition, retained outputs, and compute evidence after cancellation completes.
+    authority_guard: Receipt cannot erase work, spend, or audit history.
+    lifecycle_effect: CANCELLATION_REQUESTED to CANCELLED
+    test_refs: [ADP-OUT-003, ADP-LIFE-001, RES-09]
+    status: provisional_unimplemented
+
+  - message_type: constraint_conflict
+    schema: contracts/schemas/constraint-conflict.schema.yaml
+    schema_sha256: e648207c731aaee53ff789eea4cf0e3d1c309df19c31a0363ea46fbb15c7aa9a
+    vae_role: produce
+    integration_class: local_snapshot_adapter
+    local_snapshot: contracts/schemas/CONSTRAINT_CONFLICT.schema.yaml
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    adapter_action: Map execution references to evidence and remove local proposed_amendments; emit proposals as amendment_proposal.
+    authority_guard: Conflict reporting cannot mutate demand or smuggle a binding amendment.
+    lifecycle_effect: to AMENDMENT_REQUIRED or CAPABILITY_GAP
+    test_refs: [ADP-OUT-004, ADP-AUTH-003, AUTH-02]
+    status: provisional_unimplemented
+
+  - message_type: amendment_proposal
+    schema: contracts/schemas/amendment-proposal.schema.yaml
+    schema_sha256: 2e82f68f08e84b60d01ba1fce26c7301bafad9d7d3c9c348cd17f680c84b647c
+    vae_role: produce
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Emit typed field-level non-binding options with evidence, predicted effects, reuse, and invalidation impact.
+    authority_guard: VAE cannot rank with protocol authority or apply the proposed change.
+    lifecycle_effect: ACCEPTED or IN_PROGRESS to AMENDMENT_REQUIRED
+    test_refs: [ADP-OUT-005, ADP-AUTH-003, AUTH-03]
+    status: provisional_unimplemented
+
+  - message_type: amendment_response
+    schema: contracts/schemas/amendment-response.schema.yaml
+    schema_sha256: bf242b05f06a45d535a41c047e5ef6872e9959663e3b24e80222d4ca669e637c
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Record owner disposition; continue only against a valid current or superseding demand.
+    authority_guard: Response approval does not permit in-place mutation of accepted demand.
+    lifecycle_effect: remains AMENDMENT_REQUIRED pending authoritative demand action
+    test_refs: [ADP-IN-007, ADP-AUTH-003]
+    status: provisional_unimplemented
+
+  - message_type: demand_supersession
+    schema: contracts/schemas/demand-supersession.schema.yaml
+    schema_sha256: 825f6269b1f612274582fe2ab4230f448f46e1ac6960265879c76ea4855fd240
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Link old and new exact demand identities, block old-result promotion, and initiate selective invalidation analysis.
+    authority_guard: Only Content Harness creates the new immutable demand version and supersession link.
+    lifecycle_effect: prior demand to SUPERSEDED
+    test_refs: [ADP-IN-008, ADP-ID-001, RES-10]
+    status: blocked_xri_010_adr_dlg_006
+
+  - message_type: selective_invalidation_receipt
+    schema: contracts/schemas/selective-invalidation-receipt.schema.yaml
+    schema_sha256: cb4248dd33ca4cfeccdc2935b9bbeda3dee86ec84abb367d8fcc0bdc16daa3a6
+    vae_role: produce
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Emit deterministic reuse, invalidation, and resume evidence linked to old/new demand and plan versions.
+    authority_guard: VAE may decide production reuse but cannot declare unchanged demand meaning.
+    lifecycle_effect: none
+    test_refs: [ADP-OUT-006, ADP-ID-001, RES-10]
+    status: provisional_unimplemented
+
+  - message_type: asset_result_contract
+    schema: contracts/schemas/asset-result-contract.schema.yaml
+    schema_sha256: 32256d250f851311ba9ff4f5e61342cba6966a0451a19602bb8b17c5a28f76f8
+    vae_role: produce
+    integration_class: authority_migration_blocked
+    local_snapshot: contracts/schemas/ASSET_RESULT_CONTRACT.schema.yaml
+    compatibility_verdict: MIGRATION_REQUIRED
+    adapter_action: Build canonical result_id, exact demand, visual_editor, accepted_assets, production authorization, budget receipt, evaluations, geometry, and partial evidence; remove authorized_for_composition.
+    authority_guard: VAE production acceptance is not downstream composition authorization; the production model cannot approve its own output.
+    lifecycle_effect: IN_PROGRESS to RESULT_READY or PARTIAL_RESULT_READY
+    test_refs: [ADP-OUT-007, ADP-AUTH-004, AUTH-04, AUTH-05]
+    status: blocked_xri_004_adr_dlg_005
+
+  - message_type: result_acknowledgement
+    schema: contracts/schemas/result-acknowledgement.schema.yaml
+    schema_sha256: f30d258e7d6452d741f284dca55972b27ee152023bb6b0125c972c8ae16ac842
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Apply validated downstream acceptance/rejection to the exact current result without rewriting production evidence.
+    authority_guard: Only Content Harness/downstream authority acknowledges consumption compatibility.
+    lifecycle_effect: RESULT_READY to COMPLETED or RESULT_REJECTED
+    test_refs: [ADP-IN-009, ADP-AUTH-004, AUTH-06, RES-07]
+    status: provisional_unimplemented
+
+  - message_type: invalidation_notice
+    schema: contracts/schemas/invalidation-notice.schema.yaml
+    schema_sha256: 67879395c760f5aeff6cc3c04f2bfaa4cab52c71e0e33e2d24843e44b28f774b
+    vae_role: produce_and_consume_when_owner
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Map dependency/authority changes to revalidation scope while preserving immutable history.
+    authority_guard: Only the owner of the changed dependency or authority context can invalidate its scope.
+    lifecycle_effect: COMPLETED to INVALIDATED
+    test_refs: [ADP-BI-001, ADP-LIFE-001]
+    status: provisional_unimplemented
+
+  - message_type: revocation_notice
+    schema: contracts/schemas/revocation-notice.schema.yaml
+    schema_sha256: 4fe0b81554e5af8041c8e3593e48b4a5d014561ec706f46dc5a728e347c15bcd
+    vae_role: produce_when_production_or_integrity_owner
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Emit critical production/integrity defect scope and block new or active consumption without deleting history.
+    authority_guard: VAE can revoke only production/integrity scope it owns or is explicitly authorized to govern.
+    lifecycle_effect: COMPLETED to REVOKED
+    test_refs: [ADP-OUT-008, ADP-LIFE-001]
+    status: provisional_unimplemented
+
+  - message_type: replacement_notice
+    schema: contracts/schemas/replacement-notice.schema.yaml
+    schema_sha256: 82fc084033f7f7c7dfff92e8f2682b5a624a759e04133d331a2693260b615dee
+    vae_role: produce_candidate_and_consume_acknowledged_replacement
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Propose or consume an exact replacement link; promotion waits for governed acknowledgement.
+    authority_guard: Producing a replacement asset does not authorize it for downstream use.
+    lifecycle_effect: INVALIDATED or REVOKED to REPLACED after acknowledgement
+    test_refs: [ADP-BI-002, ADP-AUTH-004]
+    status: provisional_unimplemented
+
+  - message_type: delegation_failure
+    schema: contracts/schemas/delegation-failure.schema.yaml
+    schema_sha256: 33b6cc4453b3e1282c1b6a6a01c92c36d83db2e4e1dffbf8bbea81428ee3e321
+    vae_role: produce_and_consume_when_detector_or_decision_owner
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Map stable public failure family, code, responsibility, retry, and invalidation semantics; retain private diagnostics internally.
+    authority_guard: A detecting product cannot assign authority or retry policy outside the registered taxonomy.
+    lifecycle_effect: exception-dependent
+    test_refs: [ADP-BI-003, ADP-LIFE-001]
+    status: provisional_unimplemented
+
+  - message_type: delegation_audit_receipt
+    schema: contracts/schemas/delegation-audit-receipt.schema.yaml
+    schema_sha256: a5603b0ab4ed89083f2a312aff87a107692cb7debb6603cd9c26c9b882deca9e
+    vae_role: consume_for_reconciliation
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Reconcile append-only validation/transition evidence with VAE facts without treating projections as authority.
+    authority_guard: VAE cannot rewrite, backfill, or self-issue protocol audit decisions.
+    lifecycle_effect: none
+    test_refs: [ADP-IN-010, ADP-SEC-001, RES-06]
+    status: provisional_unimplemented
+
+  - message_type: compatibility_manifest
+    schema: contracts/schemas/compatibility-manifest.schema.yaml
+    schema_sha256: 4e1b99750ce1f00eb2d78c1d0a41160c9b1d764e52d8233cee19b487c1fd2ab4
+    vae_role: produce
+    integration_class: local_internal_contract_adapter
+    local_snapshot: contracts/schemas/COMPATIBILITY_MANIFEST.schema.yaml
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    adapter_action: Derive the canonical manifest only from published package support and passing conformance evidence; declare limitations explicitly.
+    authority_guard: VAE cannot claim untested versions, features, profiles, receipts, or adapters.
+    lifecycle_effect: none
+    test_refs: [ADP-OUT-009, COMP-01, COMP-03, COMP-08]
+    status: blocked_until_conformance
+
+  - message_type: contract_migration
+    schema: contracts/schemas/contract-migration.schema.yaml
+    schema_sha256: a054de5807bac3a23c0847028f29945de6155cf2709a187c9f5c61f9b17f6634
+    vae_role: consume
+    integration_class: canonical_direct
+    local_snapshot: null
+    compatibility_verdict: COMPATIBLE
+    adapter_action: Accept only an authorized immutable migration with equivalence evidence; pin the new representation for new work only.
+    authority_guard: VAE is not the authorized migration service and cannot silently migrate in-flight contracts.
+    lifecycle_effect: none
+    test_refs: [ADP-IN-011, ADP-COMP-001, COMP-06]
+    status: provisional_unimplemented
+
+stage3_draft_blocking_issues:
+  - id: CR-002
+    effect: No published Delegation package, canonical binding coordinate, or production pin.
+  - id: CR-003
+    effect: Local snapshots diverge and remain prohibited as production schemas.
+  - id: XRI-003
+    effect: submission_receipt authority split unresolved.
+  - id: XRI-004
+    effect: result production acceptance versus downstream authorization unresolved.
+  - id: XRI-006
+    effect: open nested public objects block safe code generation.
+  - id: XRI-009
+    effect: event state vocabulary may leak product-private state.
+  - id: XRI-010
+    effect: exact demand identity is inconsistent across messages.
+
+messages:
+  - message_type: delegation-envelope
+    message_version: '1.0'
+    schema: packages/contracts/schemas/delegation-envelope.schema.json
+    schema_sha256: 37656f270074b2ff8c5131c05e66d09b2aa5d7ddb990fe4f8fbdf41c59a9a91d
+    vae_role: produce_and_consume
+    compatibility_verdict: COMPATIBLE
+    rationale: RC authority and envelope integrity responsibilities preserve the Stage 3 boundary model.
+    test_refs: [ADP-PKG-001, ADP-SEC-001, ADP-REP-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: visual-asset-demand
+    message_version: '1.0'
+    schema: packages/contracts/schemas/visual-asset-demand.schema.json
+    schema_sha256: b61c33fb05de765a7dd60f6126783f5da3ac56cb3ff9fbaf96830eb52294bc45
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    rationale: A deterministic adapter must replace the local comparison snapshot while preserving exact owner meaning and identity.
+    test_refs: [ADP-IN-001, ADP-ID-001, ADP-AUTH-003]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: visual-asset-submission
+    message_version: '1.0'
+    schema: packages/contracts/schemas/visual-asset-submission.schema.json
+    schema_sha256: a89d19b80987b4b4611841ad7230320d881b117ff985650767a79e5c1dfdf4fc
+    vae_role: protocol_observed_not_direct_consumer
+    compatibility_verdict: COMPATIBLE
+    rationale: RC correctly routes raw submission to the protocol; VAE admission begins from validated demand and validation receipt.
+    test_refs: [ADP-IN-012, ADP-AUTH-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: submission-validation-receipt
+    message_version: '1.0'
+    schema: packages/contracts/schemas/submission-validation-receipt.schema.json
+    schema_sha256: 15a8df51cf3a4c63f646279a5d6032886a15bbe90b73afd8ea70fcf5fc8e2878
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: Protocol validation is now separate from VAE admission and resolves the draft receipt ambiguity.
+    test_refs: [ADP-IN-012, ADP-AUTH-001, ADP-LIFE-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: admission-receipt
+    message_version: '1.0'
+    schema: packages/contracts/schemas/admission-receipt.schema.json
+    schema_sha256: 44d8c3ada71b5bf663e5b194f5a47242573a2929bc879362465fba7a37dd0e0e
+    vae_role: produce
+    compatibility_verdict: COMPATIBLE
+    rationale: RC assigns VAE only the admission decision after protocol validation.
+    test_refs: [ADP-OUT-010, ADP-AUTH-001, ADP-LIFE-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: visual-asset-event
+    message_version: '1.0'
+    schema: packages/contracts/schemas/visual-asset-event.schema.json
+    schema_sha256: 0d1c3b4aacb60fbca3493a2fd923412360d1a624591fb61063269b5279d167cf
+    vae_role: produce
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    rationale: The local snapshot must map to the governed RC vocabulary without leaking private workflow state.
+    test_refs: [ADP-OUT-001, ADP-LIFE-002]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: delegation-set
+    message_version: '1.0'
+    schema: packages/contracts/schemas/delegation-set.schema.json
+    schema_sha256: 1fc32f44432814a9d936bd359d4d605ba7d28dec501b2457c0d3cb82dd848e8d
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: Independent member lineage and atomic policy are directly representable.
+    test_refs: [ADP-IN-003, ADP-ID-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: budget-authorization
+    message_version: '1.0'
+    schema: packages/contracts/schemas/budget-authorization.schema.json
+    schema_sha256: 049712eca99ea52114eb19ea66b4f7cceec16ec430d02f12dd180d93f2b5bfe7
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: Owner-issued ceilings and policy can be consumed without semantic loss.
+    test_refs: [ADP-IN-004, ADP-AUTH-002]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: budget-escalation-request
+    message_version: '1.0'
+    schema: packages/contracts/schemas/budget-escalation-request.schema.json
+    schema_sha256: f71acf71ba78ac8a28313db5ad192a1a00b038e15b3b989c241da2b73db005d0
+    vae_role: produce
+    compatibility_verdict: COMPATIBLE
+    rationale: VAE may request but cannot grant escalation.
+    test_refs: [ADP-OUT-002, ADP-AUTH-002]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: budget-escalation-response
+    message_version: '1.0'
+    schema: packages/contracts/schemas/budget-escalation-response.schema.json
+    schema_sha256: 2aab1043a2997d289264e3a7846c5fb32a77a9434fc1090a86350516755bfdf2
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: VAE can apply the authoritative response to the waiting execution.
+    test_refs: [ADP-IN-005, ADP-AUTH-002]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: cancellation-request
+    message_version: '1.0'
+    schema: packages/contracts/schemas/cancellation-request.schema.json
+    schema_sha256: 134b56f7c326f525383f1a562985aed6d3880ef79a42bb19ee187a0a21c6153d
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: RC request authority and safe-stop semantics match the VAE boundary.
+    test_refs: [ADP-IN-006, ADP-RES-003]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: cancellation-receipt
+    message_version: '1.0'
+    schema: packages/contracts/schemas/cancellation-receipt.schema.json
+    schema_sha256: eac1ce1283784dbf8638df473183c8a8c5b761a663dc2d26a658523f1ea00cf0
+    vae_role: produce
+    compatibility_verdict: COMPATIBLE
+    rationale: VAE can report safe-stop disposition and retained evidence directly.
+    test_refs: [ADP-OUT-003, ADP-RES-003]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: constraint-conflict
+    message_version: '1.0'
+    schema: packages/contracts/schemas/constraint-conflict.schema.json
+    schema_sha256: 6c287ff2ed33ad949b00f7ef36f3ad466354c538a2e47c031cfdc0d928fce263
+    vae_role: produce
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    rationale: RC preserves VAE-owned infeasibility evidence; a deterministic adapter must replace the local comparison snapshot without carrying proposed amendments inside the conflict.
+    test_refs: [ADP-OUT-004, ADP-AUTH-003]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: amendment-proposal
+    message_version: '1.0'
+    schema: packages/contracts/schemas/amendment-proposal.schema.json
+    schema_sha256: 852ec68b4bf5226739a98b2ffddb323d3e29436ae4a1a7cdf32d1fc83a190876
+    vae_role: produce_and_consume_routed_copy
+    compatibility_verdict: COMPATIBLE
+    rationale: RC2 assigns VAE production authority for non-binding demand-level proposals while preserving Content Harness decision authority.
+    test_refs: [ADP-OUT-005, ADP-AUTH-003]
+    status: rc2_registry_validated_adapter_unimplemented
+
+  - message_type: amendment-response
+    message_version: '1.0'
+    schema: packages/contracts/schemas/amendment-response.schema.json
+    schema_sha256: 28753e797afc69718cddd1d2b53631c3246a0a44c56cafb43292b9a26b0847ad
+    vae_role: content_harness_produce_but_vae_not_registered_consumer
+    compatibility_verdict: INCOMPATIBLE
+    rationale: RC2 correctly assigns Content Harness production authority but omits VAE from consumers, so the proposal originator cannot receive accepted, rejected, or alternative-requested disposition.
+    test_refs: [ADP-IN-007, ADP-AUTH-003]
+    status: blocked_owner_reconciliation
+
+  - message_type: demand-supersession
+    message_version: '1.0'
+    schema: packages/contracts/schemas/demand-supersession.schema.json
+    schema_sha256: 1e96149ba570d5d6036bd7c30769fccd2ba1ab3daf9a1223cfdad3825612d475
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: Exact old/new demand identities support immutable supersession and stale-result fencing.
+    test_refs: [ADP-IN-008, ADP-ID-001, ADP-RES-003]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: selective-invalidation-receipt
+    message_version: '1.0'
+    schema: packages/contracts/schemas/selective-invalidation-receipt.schema.json
+    schema_sha256: 490a7f638761ae1201471773425965a70e1222473396c2267bee1ffc7ed873f0
+    vae_role: produce_and_consume_routed_copy
+    compatibility_verdict: COMPATIBLE
+    rationale: RC2 assigns VAE production authority for VAE-owned reuse and invalidation evidence.
+    test_refs: [ADP-OUT-006, ADP-RES-003]
+    status: rc2_registry_validated_adapter_unimplemented
+
+  - message_type: asset-result-contract
+    message_version: '1.0'
+    schema: packages/contracts/schemas/asset-result-contract.schema.json
+    schema_sha256: ab7dc74b92c77e5ccb487f034fea96941f1c7f41fb659e6ee6e99b96bc3fb877
+    vae_role: produce
+    compatibility_verdict: MIGRATION_REQUIRED
+    rationale: The legacy VAE comparison shape must be replaced by a new immutable RC representation; downstream authorization remains outside VAE authority.
+    test_refs: [ADP-OUT-007, ADP-AUTH-004, ADP-ID-001]
+    status: blocked_migration_and_adapter
+
+  - message_type: result-acknowledgement
+    message_version: '1.0'
+    schema: packages/contracts/schemas/result-acknowledgement.schema.json
+    schema_sha256: f1d59cac8c3fc4f4ab3f584460978652f364c84ec8a9c36d422ff1d9161bb88d
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: Downstream disposition remains separate from VAE production acceptance.
+    test_refs: [ADP-IN-009, ADP-AUTH-004]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: invalidation-notice
+    message_version: '1.0'
+    schema: packages/contracts/schemas/invalidation-notice.schema.json
+    schema_sha256: 4b8a9c22b66ca53e0d937975fb1de941fe42e2c46b84e4cc0c942031a0ede0df
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: RC2 uses Content Harness invalidation for owner-scoped result/demand consumption; VAE-owned production defects use revocation instead.
+    test_refs: [ADP-BI-001, ADP-LIFE-001]
+    status: rc2_registry_validated_adapter_unimplemented
+
+  - message_type: revocation-notice
+    message_version: '1.0'
+    schema: packages/contracts/schemas/revocation-notice.schema.json
+    schema_sha256: 433e8eb5aba93753df09bb59f564f185b81d1b9a9dd7c9ce2aab7cb0816b45a8
+    vae_role: produce_and_consume_routed_copy
+    compatibility_verdict: COMPATIBLE
+    rationale: RC2 assigns VAE authority for production revocation while preserving downstream authority separation.
+    test_refs: [ADP-OUT-008, ADP-LIFE-001]
+    status: rc2_registry_validated_adapter_unimplemented
+
+  - message_type: replacement-notice
+    message_version: '1.0'
+    schema: packages/contracts/schemas/replacement-notice.schema.json
+    schema_sha256: c7b2a9671aaf3bb0d973379fe6a8a50eed4dc53410ce2998e7bc550f25ee0829
+    vae_role: produce_and_consume_routed_copy
+    compatibility_verdict: COMPATIBLE
+    rationale: RC2 permits VAE to identify an exact replacement while downstream acknowledgement remains separately governed.
+    test_refs: [ADP-BI-002, ADP-AUTH-004]
+    status: rc2_registry_validated_adapter_unimplemented
+
+  - message_type: delegation-failure
+    message_version: '1.0'
+    schema: packages/contracts/schemas/delegation-failure.schema.json
+    schema_sha256: 3ecbc1169b9bf94e548eff9b1baef106f4a7d8eb0f6bc9a60bb633ed2f80047e
+    vae_role: produce_and_consume
+    compatibility_verdict: COMPATIBLE
+    rationale: Registered detector/decision authority can preserve stable public failures and private diagnostics separation.
+    test_refs: [ADP-BI-003, ADP-LIFE-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: delegation-audit-receipt
+    message_version: '1.0'
+    schema: packages/contracts/schemas/delegation-audit-receipt.schema.json
+    schema_sha256: cfa722c66fac6a551cf68d54a46af7f90cae7238de7bf0511b85feb65ac9df03
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: VAE consumes protocol audit evidence without becoming audit authority.
+    test_refs: [ADP-IN-010, ADP-SEC-001]
+    status: rc_validated_adapter_unimplemented
+
+  - message_type: compatibility-manifest
+    message_version: '1.0'
+    schema: packages/contracts/schemas/compatibility-manifest.schema.json
+    schema_sha256: ca9e1302c8a14551c273cf9a30afa30a608e63b0ba1a8f1b429a733448ca4603
+    vae_role: produce_and_consume
+    compatibility_verdict: COMPATIBLE_WITH_ADAPTER
+    rationale: RC2 permits VAE publication of protocol support; the adapter projects tested Delegation fields from the fuller VAE release manifest required by FR-171.
+    test_refs: [ADP-OUT-009, ADP-COMP-001]
+    status: rc2_registry_validated_adapter_unimplemented
+
+  - message_type: contract-migration
+    message_version: '1.0'
+    schema: packages/contracts/schemas/contract-migration.schema.json
+    schema_sha256: c0fe0c4cfa3c58327603e10ed9709a490a7212a0994a7e6bedc95240f6bc14b5
+    vae_role: consume
+    compatibility_verdict: COMPATIBLE
+    rationale: VAE can consume an authorized immutable migration while retaining the original in-flight pin.
+    test_refs: [ADP-IN-011, ADP-COMP-001]
+    status: rc_validated_adapter_unimplemented
+
+blocking_issues:
+  - id: CR-002
+    effect: The reconciled package remains an unsigned unpublished local RC, so no production dependency pin exists.
+  - id: CR-007
+    effect: RC2 omits VAE from amendment-response consumers despite VAE proposal ownership and the Delegation ownership specification.
+  - id: RC1-MIG-001
+    effect: asset-result-contract requires an explicit immutable migration from the legacy comparison fixture before adapter conformance.

@@ -1,0 +1,768 @@
+{
+  "expected_error": "SEMANTIC_ENFORCEMENT_UNSUPPORTED",
+  "provider": {
+    "adapter_policy": {
+      "lossless_required": true,
+      "prohibited_effects": [
+        "DROP",
+        "WEAKEN",
+        "SYNTHESIZE",
+        "FLATTEN",
+        "REINTERPRET"
+      ]
+    },
+    "derivative_asset_flows": {
+      "evidence_refs": [
+        {
+          "canonical_ref": "cmf-contract://resources/derivative-lock-inheritance-validator/1.0",
+          "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "resource_id": "derivative-lock-inheritance-validator",
+          "version": "1.0"
+        }
+      ],
+      "lock_inheritance_modes": [
+        "PRESERVE",
+        "ENFORCE"
+      ],
+      "supported": true
+    },
+    "legacy_inputs": [
+      "submission-receipt@0.1",
+      "demand_ref:string@0.1",
+      "visual-asset-demand@1.0",
+      "visual-asset-demand@1.1-pre-source-kind"
+    ],
+    "message_versions": [
+      {
+        "accepted_versions": [
+          "1.1"
+        ],
+        "emitted_versions": [
+          "1.1"
+        ],
+        "message_type": "visual-asset-demand"
+      }
+    ],
+    "package": "cmf-delegation-compatibility",
+    "package_version": "1.1.0-rc.4",
+    "protocol_versions": [
+      "1.0"
+    ],
+    "required_features": [
+      "authority.registry",
+      "behavioral.semantic-enforcement",
+      "closed.schemas",
+      "derivative-lock-inheritance.enforcement",
+      "format02.fixtures",
+      "lifecycle.transitions",
+      "rfc8785.safe-integer-profile",
+      "source-provenance.conditional-enforcement"
+    ],
+    "required_semantic_domains": [
+      {
+        "domain": "source_provenance",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activative_semantic_lineage",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activation_contract",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_semantic_pack",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_narrative_program",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "feature_contracts",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "somatic_route_request",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "expression_moment_lineage",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "wrong_reading_locks",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "derivative_lock_inheritance",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      }
+    ],
+    "semantic_capabilities": [
+      {
+        "domain": "source_provenance",
+        "evaluator_profile_refs": [],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-source-provenance/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-source-provenance",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PARSE"
+        ]
+      },
+      {
+        "domain": "activative_semantic_lineage",
+        "evaluator_profile_refs": [],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-activative-semantic-lineage/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-activative-semantic-lineage",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activation_contract",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-activation-contract/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-activation-contract",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-activation-contract/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-activation-contract",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_semantic_pack",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-visual-semantic-pack/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-visual-semantic-pack",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-visual-semantic-pack/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-visual-semantic-pack",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_narrative_program",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-visual-narrative-program/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-visual-narrative-program",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-visual-narrative-program/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-visual-narrative-program",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "feature_contracts",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-feature-contracts/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-feature-contracts",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-feature-contracts/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-feature-contracts",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [
+          "gaze",
+          "expression",
+          "negative_space"
+        ],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "somatic_route_request",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-somatic-route-request/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-somatic-route-request",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-somatic-route-request/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-somatic-route-request",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "expression_moment_lineage",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-expression-moment-lineage/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-expression-moment-lineage",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-expression-moment-lineage/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-expression-moment-lineage",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "wrong_reading_locks",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-wrong-reading-locks/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-wrong-reading-locks",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-wrong-reading-locks/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-wrong-reading-locks",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "derivative_lock_inheritance",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-derivative-lock-inheritance/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-derivative-lock-inheritance",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-derivative-lock-inheritance/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-derivative-lock-inheritance",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      }
+    ],
+    "signature_algorithms": [
+      "Ed25519"
+    ],
+    "status": "RELEASE_CANDIDATE"
+  },
+  "requester": {
+    "adapter_policy": {
+      "lossless_required": true,
+      "prohibited_effects": [
+        "DROP",
+        "WEAKEN",
+        "SYNTHESIZE",
+        "FLATTEN",
+        "REINTERPRET"
+      ]
+    },
+    "derivative_asset_flows": {
+      "evidence_refs": [
+        {
+          "canonical_ref": "cmf-contract://resources/derivative-lock-inheritance-validator/1.0",
+          "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "resource_id": "derivative-lock-inheritance-validator",
+          "version": "1.0"
+        }
+      ],
+      "lock_inheritance_modes": [
+        "PRESERVE",
+        "ENFORCE"
+      ],
+      "supported": true
+    },
+    "legacy_inputs": [
+      "submission-receipt@0.1",
+      "demand_ref:string@0.1",
+      "visual-asset-demand@1.0",
+      "visual-asset-demand@1.1-pre-source-kind"
+    ],
+    "message_versions": [
+      {
+        "accepted_versions": [
+          "1.1"
+        ],
+        "emitted_versions": [
+          "1.1"
+        ],
+        "message_type": "visual-asset-demand"
+      }
+    ],
+    "package": "cmf-delegation-compatibility",
+    "package_version": "1.1.0-rc.4",
+    "protocol_versions": [
+      "1.0"
+    ],
+    "required_features": [
+      "authority.registry",
+      "behavioral.semantic-enforcement",
+      "closed.schemas",
+      "derivative-lock-inheritance.enforcement",
+      "format02.fixtures",
+      "lifecycle.transitions",
+      "rfc8785.safe-integer-profile",
+      "source-provenance.conditional-enforcement"
+    ],
+    "required_semantic_domains": [
+      {
+        "domain": "source_provenance",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activative_semantic_lineage",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activation_contract",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_semantic_pack",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_narrative_program",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "feature_contracts",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "somatic_route_request",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "expression_moment_lineage",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "wrong_reading_locks",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "derivative_lock_inheritance",
+        "required_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      }
+    ],
+    "semantic_capabilities": [
+      {
+        "domain": "source_provenance",
+        "evaluator_profile_refs": [],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-source-provenance/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-source-provenance",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activative_semantic_lineage",
+        "evaluator_profile_refs": [],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-activative-semantic-lineage/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-activative-semantic-lineage",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE"
+        ]
+      },
+      {
+        "domain": "activation_contract",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-activation-contract/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-activation-contract",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-activation-contract/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-activation-contract",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_semantic_pack",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-visual-semantic-pack/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-visual-semantic-pack",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-visual-semantic-pack/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-visual-semantic-pack",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "visual_narrative_program",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-visual-narrative-program/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-visual-narrative-program",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-visual-narrative-program/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-visual-narrative-program",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "feature_contracts",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-feature-contracts/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-feature-contracts",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-feature-contracts/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-feature-contracts",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [
+          "gaze",
+          "expression",
+          "negative_space"
+        ],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "somatic_route_request",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-somatic-route-request/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-somatic-route-request",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-somatic-route-request/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-somatic-route-request",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "expression_moment_lineage",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-expression-moment-lineage/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-expression-moment-lineage",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-expression-moment-lineage/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-expression-moment-lineage",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "wrong_reading_locks",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-wrong-reading-locks/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-wrong-reading-locks",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-wrong-reading-locks/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-wrong-reading-locks",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      },
+      {
+        "domain": "derivative_lock_inheritance",
+        "evaluator_profile_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/evaluator-derivative-lock-inheritance/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "evaluator-derivative-lock-inheritance",
+            "version": "1.0"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "canonical_ref": "cmf-contract://resources/capability-evidence-derivative-lock-inheritance/1.0",
+            "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resource_id": "capability-evidence-derivative-lock-inheritance",
+            "version": "1.0"
+          }
+        ],
+        "feature_contract_families": [],
+        "support_modes": [
+          "PRESERVE",
+          "ENFORCE",
+          "EVALUATE"
+        ]
+      }
+    ],
+    "signature_algorithms": [
+      "Ed25519"
+    ],
+    "status": "RELEASE_CANDIDATE"
+  }
+}

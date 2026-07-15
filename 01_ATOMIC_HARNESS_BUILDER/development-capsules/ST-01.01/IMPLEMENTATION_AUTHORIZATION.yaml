@@ -1,0 +1,85 @@
+schema_version: cmf-builder-bounded-implementation-authorization/v1
+evaluated_on: "2026-07-15"
+story: ST-01.01
+authorization_scope: bounded_non_conversational_format02_story_only
+gate_verdict: PASS_AWAITING_HUMAN_AUTHORIZATION
+capsule_status: PASS
+bounded_implementation_readiness: PASS
+human_authorization_required: true
+implementation_authorized: false
+full_release1_readiness: FAIL
+full_product_readiness: FAIL
+target:
+  compilation_target: atomic_content_harness
+  category: 2d_character_animation
+  profile_id: format02_minimal_coach_theatre
+  profile_state: contract_compatible
+  production_certified: false
+  human_reaction_collection: false
+integrity_bindings:
+  epic_hash_reconciliation:
+    verdict: RECONCILED_NON_SEMANTIC
+    report:
+      path: docs/planning/EPIC_VALIDATION_HASH_RECONCILIATION.md
+      sha256: 3fdb2c59abf3f189ab31b5a8ea978d001f285dd2fe50224ecacefbd38fb24dfb
+    disposition:
+      path: docs/planning/EPIC_VALIDATION_HASH_DISPOSITION.yaml
+      sha256: 4301b6b4445dc13f825be6df8a52fe9c2c4bd214dcb62171deb0fea1c1c18822
+    evidence:
+      path: docs/planning/EPIC_VALIDATION_HASH_EVIDENCE.json
+      sha256: fd244d8d72002e85fd9ff48b0502c8c5864cecddf7612dd6045965757c61e1e5
+  capsule_manifest:
+    path: development-capsules/ST-01.01/CAPSULE_MANIFEST.json
+    sha256: 779c9b6610b07451c37b6ffa773eaeff4ed046058b1d9ebfbe295bbdfd5bc6d9
+    manifested_input_artifacts: 16
+    hash_validation: PASS_16_OF_16
+  capsule_validation:
+    path: development-capsules/ST-01.01/CAPSULE_VALIDATION_REPORT.md
+    sha256: a92b142e2a1470ec19b69127a8839a2eebf6904d5becc8be0dde246a4818c513
+    verdict: PASS
+  allowed_file_scope:
+    path: development-capsules/ST-01.01/ALLOWED_FILE_SCOPE.yaml
+    sha256: a1770807afe37456bdb7ea67fe07141c728a1c4e1fcb57d3f00a4ac339265c6b
+gate_checks:
+  story_status_ready: PASS
+  direct_dependencies_satisfied: PASS_EMPTY_ROOT
+  hash_discrepancy_reconciled: PASS
+  capsule_complete: PASS
+  capsule_hash_valid: PASS
+  acceptance_criteria_executable: PASS
+  deterministic_tests_defined: PASS
+  observability_evidence_defined: PASS
+  failure_and_rollback_defined: PASS
+  exact_file_scope_bounded: PASS
+  external_product_behavior_absorbed: PASS_NONE_ABSORBED
+  unresolved_story_blocker: PASS_NONE
+  later_story_required: PASS_NONE
+  one_focused_context: PASS
+dependency_disposition:
+  direct_story_dependencies: []
+  prior_story_receipts: []
+  semantic_blockers: []
+  HD-006: NOT_APPLICABLE_NON_CONVERSATIONAL_FORMAT02
+  HD-007: NOT_APPLICABLE_NO_CONVERSATIONAL_CERTIFICATION
+  delegation_rc4_direct_dependency: false
+  VAE_direct_dependency: false
+human_gate:
+  exact_authorization_phrase: AUTHORIZE BUILDER ST-01.01 BOUNDED IMPLEMENTATION
+  phrase_must_be_received_after_package_issuance: true
+  authorization_effect: permit only the exact paths and outcome in this hash-bound capsule
+  does_not_authorize:
+    - ST-01.02 or any later Story
+    - full Release 1
+    - full product
+    - production deployment or certification
+    - conversational execution or certification
+    - VAE or Delegation behavior
+invalidation_conditions:
+  - any bound hash changes
+  - Story status changes from READY
+  - a direct dependency or applicable blocker appears
+  - implementation requires a path outside ALLOWED_FILE_SCOPE.yaml
+  - implementation requires a new dependency, schema, external service, or later Story
+  - Format 02 target, category, profile, compatibility, or certification state changes
+  - human authorization phrase differs from the exact required phrase
+stop_rule: do_not_begin_implementation_until_the_exact_human_phrase_is_received_and_all_bound_hashes_revalidate

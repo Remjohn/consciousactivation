@@ -1,0 +1,50 @@
+schema_version: cmf-builder-allowed-file-scope/v1
+story_id: ST-07.02
+active_mode: GENERIC_ATOMIC_CONTENT_HARNESS
+rule: deny_all_except_exact_paths_below
+new_source_files:
+  - {path: src/cmf_builder/domain/atomic_harness_definition.py, allowed_change: add_typed_immutable_definition_receipt_invalidation_and_canonical_identity_contracts}
+  - {path: src/cmf_builder/application/definition_commands.py, allowed_change: add_bounded_deterministic_compile_query_replay_and_observation_service}
+existing_source_files:
+  - {path: src/cmf_builder/domain/run.py, allowed_change: add_definition_reference_event_replay_state_hash_and_descendant_invalidation_support}
+  - {path: src/cmf_builder/application/atomicity_commands.py, allowed_change: include_existing_definition_descendant_in_formal_upstream_invalidation_only}
+  - {path: src/cmf_builder/application/ports.py, allowed_change: add_typed_definition_repository_and_observation_fields}
+  - {path: src/cmf_builder/adapters/in_memory_run_repository.py, allowed_change: add_atomic_development_test_definition_receipt_invalidation_storage_and_failure_injection}
+existing_test_files:
+  - {path: tests/stories/st_01_01/test_architecture_boundary.py, allowed_change: exact_source_set_addition_for_two_ST_07_02_modules_only}
+  - {path: tests/stories/st_01_02/test_architecture_boundary.py, allowed_change: exact_source_set_addition_for_two_ST_07_02_modules_only}
+  - {path: tests/stories/st_02_05/test_architecture_boundary.py, allowed_change: exact_source_set_addition_for_two_ST_07_02_modules_only}
+  - {path: tests/stories/st_03_03/test_architecture_boundary.py, allowed_change: exact_source_set_and_now_authorized_atomic_harness_definition_boundary_update_only}
+new_test_files:
+  - tests/stories/st_07_02/__init__.py
+  - tests/stories/st_07_02/test_acceptance.py
+  - tests/stories/st_07_02/test_definition_integrity.py
+  - tests/stories/st_07_02/test_failure.py
+  - tests/stories/st_07_02/test_replay_invalidation_and_receipt.py
+  - tests/stories/st_07_02/test_architecture_boundary.py
+completion_outputs:
+  - development-capsules/ST-07.02/completion/IMPLEMENTATION_REPORT.md
+  - development-capsules/ST-07.02/completion/TEST_RESULTS.json
+  - development-capsules/ST-07.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  - development-capsules/ST-07.02/completion/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/ST-07.02/completion/ROLLBACK_EVIDENCE.md
+  - development-capsules/ST-07.02/completion/STORY_COMPLETION_RECEIPT.yaml
+prohibited_globs:
+  - development-capsules/ST-03.05/completion/**
+  - development-capsules/ST-04.05/completion/**
+  - development-capsules/ST-05.02/completion/**
+  - docs/**
+  - contracts/**
+  - governance/**
+  - sources/**
+  - reference-corpora/**
+  - PROGRAM_STATUS_EXPORT.yaml
+  - CURRENT_PROJECT_STATUS.md
+  - ../02_VISUAL_ASSET_EDITOR/**
+  - ../03_DELEGATION_PROTOCOL/**
+  - ../CMF_PROGRAM_CONTROL/**
+external_dependency_addition: prohibited
+schema_file_change: prohibited
+database_change: prohibited
+network_or_transport_change: prohibited
+

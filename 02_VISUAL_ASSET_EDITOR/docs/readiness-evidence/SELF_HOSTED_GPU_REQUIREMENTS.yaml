@@ -1,0 +1,133 @@
+package: vae_self_hosted_gpu_readiness_inputs
+version: 1.0.0
+classification: non_production_readiness_proof
+status: awaiting_operator_runtime
+stage5_authorized: false
+
+current_host_assessment:
+  gpu: NVIDIA_GeForce_GTX_960M
+  observed_vram_gib: 2
+  status: not_proof_capable
+  supersession_rule: only_a_new_recorded_execution_preflight_may_change_this_status
+  reasons:
+    - insufficient_observed_vram_for_the_pinned_Format_02_proof_workload
+    - no_successful_Docker_GPU_worker_execution_evidence
+
+proof_admission_sizing:
+  purpose: conservative_single_job_proof_floor_not_production_capacity_planning
+  minimum:
+    accelerator: NVIDIA_GPU_with_supported_container_runtime
+    vram_gib: 12
+    host_ram_gib: 32
+    free_content_addressed_storage_gib: 250
+    concurrent_jobs: 1
+  preferred:
+    vram_gib: 24
+    host_ram_gib: 64
+    free_content_addressed_storage_gib: 500
+  precedence: selected_model_and_workflow_manifest_requirements_may_raise_but_never_lower_the_floor
+
+host:
+  accepted_operating_systems:
+    - pinned_Linux_x86_64_distribution
+    - pinned_Windows_with_WSL2_Linux_engine_when_all_GPU_tests_pass
+  operator_supplied_fields:
+    os_name: null
+    os_version: null
+    kernel_or_wsl_version: null
+    cpu_model: null
+    host_ram_gib: null
+    gpu_model: null
+    gpu_count: null
+    vram_gib_per_gpu: null
+    nvidia_driver_version: null
+    cuda_compatibility_version: null
+
+container_runtime:
+  engine: Docker
+  operator_supplied_fields:
+    docker_engine_version: null
+    docker_compose_version: null
+    nvidia_container_toolkit_version: null
+    runtime_info_digest: null
+  requirements:
+    - Linux_container_engine_is_healthy
+    - docker_GPU_passthrough_test_passes
+    - no_package_installation_at_worker_startup
+    - least_privilege_runtime_identity
+    - deny_network_by_default_with_explicit_allowlist
+
+immutable_runtime_binding:
+  container_image:
+    logical_name: vae-format02-readiness-worker
+    registry: null
+    repository: null
+    oci_digest: null
+    mutable_tags_are_authoritative: false
+  comfyui:
+    repository: null
+    commit_sha: null
+    reported_version: null
+  custom_nodes:
+    lockfile_path: null
+    lockfile_sha256: null
+    entries_require_source_commit_and_content_hash: true
+  python_environment:
+    lockfile_path: null
+    lockfile_sha256: null
+  resources:
+    model_ref: null
+    model_sha256: null
+    vae_ref: null
+    vae_sha256: null
+    lora_refs: []
+    control_resource_refs: []
+    mounts_read_only: true
+    every_resource_requires_hash: true
+  workflow:
+    format: ComfyUI_API_workflow
+    workflow_path: null
+    workflow_sha256: null
+    visual_production_plan_ref: reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/proofs/format02_visual_production_plan.json
+
+storage_mounts:
+  inputs: content_addressed_read_only
+  models: content_addressed_read_only
+  outputs: content_addressed_write_once
+  checkpoints: versioned_and_content_addressed
+  logs: append_only_proof_scope
+  scratch: ephemeral_worker_scope
+
+proof_adapter_ports:
+  note: logical_proof_ports_may_map_to_provider_specific_routes_but_the_mapping_must_be_pinned
+  health: GET /healthz
+  readiness: GET /readyz
+  submit: POST /v1/proof/jobs
+  status: GET /v1/proof/jobs/{job_id}
+  events: GET /v1/proof/jobs/{job_id}/events
+  checkpoint: GET /v1/proof/jobs/{job_id}/checkpoints
+  cancellation: POST /v1/proof/jobs/{job_id}/cancel
+  result: GET /v1/proof/jobs/{job_id}/result
+
+required_health_evidence:
+  - GPU_identity_and_VRAM
+  - container_digest
+  - ComfyUI_commit
+  - custom_node_lock_hash
+  - resource_hash_inventory
+  - workflow_hash
+  - object_storage_connectivity
+  - queue_connectivity
+  - scratch_capacity
+
+required_receipts:
+  - runtime_attestation
+  - API_request_and_response
+  - ordered_execution_events
+  - checkpoint_receipt
+  - output_commit_receipt
+  - deterministic_compute_receipt
+  - latency_receipt
+  - local_cost_accounting_receipt
+  - cancellation_receipt
+

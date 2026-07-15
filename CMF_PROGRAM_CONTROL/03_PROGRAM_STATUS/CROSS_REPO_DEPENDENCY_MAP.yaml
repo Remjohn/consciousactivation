@@ -1,0 +1,51 @@
+schema_version: conscious-activations-cross-repo-dependencies/v2
+updated: "2026-07-15"
+dependencies:
+  - producer: delegation_protocol
+    artifact: delegation-contracts-1.1.0-rc.4
+    exact_identity:
+      release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+      release_receipt_sha256: sha256:042ab1ad99a4e5a4f8ff3a08c559b410db9c17cbade48ef05e92d6170dddc25f
+      release_manifest_sha256: sha256:7a23c0896f215c008bd2f9f0f7079cb97c23d05d100ac5a4b60691bb8abb9882
+      compatibility_manifest_path: compatibility/manifest.json
+      compatibility_manifest_sha256: sha256:51667cd6c346c6794c2b648d0369b6961fc9519fd2d5e52ac03589a2a24d32cd
+      compatibility_profile: cmf-delegation-compatibility-profile-1-0@1.0
+    consumers:
+      atomic_harness_builder: exact_pin_and_bounded_validation_pass
+      visual_asset_editor: exact_pin_and_bounded_validation_pass
+    trust_status: local_unsigned_release_candidate
+    production_eligible: false
+    status: current_pending_fresh_read_only_convergence_audit
+  - producer: atomic_harness_builder
+    artifact: builder_v1.2_target_profiles_and_visual_asset_demand
+    consumers: [visual_asset_editor, delegation_protocol]
+    format02_profile: format02_minimal_coach_theatre
+    alias_registry: FORMAT02_PROFILE_ALIAS_REGISTRY.yaml@1.0.0
+    status: bounded_rc4_mapping_pass
+  - producer: visual_asset_editor
+    artifact: vae_v1.1_intake_result_and_evaluate_contract
+    consumers: [delegation_protocol_convergence_suite]
+    evaluator_status: specified_not_certified
+    production_certified: false
+    status: bounded_rc4_mapping_pass
+historical_release_classification:
+  1.1.0-rc.1: historical_consumer_rejection
+  1.1.0-rc.2: historical_convergence_rejection
+  1.1.0-rc.3: historical_convergence_rejection
+convergence_gate:
+  current_state: remediation_complete_pending_fresh_read_only_audit
+  last_formal_verdict: FAIL
+  audit_rerun_by_this_remediation: false
+  implementation_or_production_authority: false
+  required_checks:
+    - exact_release_identity_match
+    - field_name_and_meaning_match
+    - authority_ownership_match
+    - required_optional_status_match
+    - compatibility_version_match
+    - wrong_reading_lock_enforcement
+    - activative_lineage_preservation
+    - expression_moment_lineage
+    - invalidation_semantics_match
+    - acceptance_acknowledgement_match
+    - no_local_schema_forks

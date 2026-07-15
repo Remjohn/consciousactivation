@@ -1,0 +1,65 @@
+decisions:
+  - id: HD-001
+    title: Version signaling for the constitution-complete demand
+    owner: product_and_contract_governance
+    blocking_batches: [B, C, E]
+    conflict:
+      - The authorized release target is package 1.1.0-rc.1.
+      - V1.1 conformance names an explicit visual_asset_demand 1.0 to 1.1 migration.
+      - Supplied V1.1 compatibility manifests still advertise protocol and demand 1.0.
+      - The existing version policy classifies mandatory required-field changes as major.
+    decision_required: Decide the package version protocol version and per-message demand version and record any pre-publication exception to the version policy.
+    recommendation: Keep the envelope protocol at 1.0; publish package 1.1.0-rc.1 only after all later gates; version visual_asset_demand as 1.1 with an explicit immutable 1.0-to-1.1 migration; document that the unpublished release-candidate line permits this constitutional correction.
+    status: open
+  - id: HD-002
+    title: Reaction Receipt and Expression Moment path and cardinality
+    owner: activative_constitution_owner
+    blocking_batches: [B, C, E]
+    conflict:
+      - The authority matrix names expression_moment_lineage as a protected domain.
+      - The supplied demand schema places reaction_receipt_refs and expression_moment_refs under activative_semantic_lineage.
+      - Those arrays are optional and the example leaves them empty while the Batch A prompt calls out mandatory lineage references.
+    decision_required: Ratify the canonical JSON paths and whether the two arrays are always required non-empty conditionally required or required but empty when no human-reaction lineage exists.
+    recommendation: Keep both arrays under activative_semantic_lineage as exact identity references; require the keys; require non-empty values whenever the source chain includes a captured human reaction or Expression Moment; make any permitted empty case explicit and testable.
+    status: open
+  - id: HD-003
+    title: Exact identity shape for constitutional references
+    owner: contract_governance
+    blocking_batches: [B]
+    conflict:
+      - The Constitution requires stable references and frozen versions and the amendment requires hash/version lineage preservation.
+      - The supplied PRD-level V1.1 demand schema models many references as bare strings.
+      - The local 1.0.0-rc.2 baseline already uses closed ResourceIdentityRef objects with resource_id version payload_hash and canonical_ref.
+    decision_required: Ratify the stronger local exact-reference representation for every constitutional lineage and contract reference.
+    recommendation: Preserve the local exact-reference object and extend it to every new V1.1 reference; do not regress to bare strings.
+    status: open
+  - id: HD-004
+    title: Behavioral and evaluator capability declaration
+    owner: content_harness_vae_and_contract_owners
+    blocking_batches: [B, C, E]
+    conflict:
+      - V1.1 forbids COMPATIBLE when a receiver parses but cannot enforce required behavior.
+      - Compatibility must fail when a declared evaluation profile cannot evaluate the activation or feature contracts.
+      - Current manifests expose only generic feature strings and do not distinguish parse preserve enforce or evaluate support.
+    decision_required: Ratify the capability vocabulary and evidence shape used by product manifests and negotiated profiles.
+    recommendation: Declare per-domain support modes plus supported evaluator profiles and feature-contract families; require enforce/evaluate modes for mandatory fields and pin the resulting profile hash.
+    status: open
+  - id: HD-005
+    title: Canonical V1.1 field names and legacy alias policy
+    owner: contract_governance
+    blocking_batches: [B, E]
+    conflict:
+      - The local active demand uses activative_intent wrongness_locks and composition.
+      - V1.1 authority uses activation_contract wrong_reading_locks and composition_intent.
+      - Closed schemas cannot accept both sets silently and adapters may rename only when lossless.
+    decision_required: Choose the canonical V1.1 wire names and whether aliases are rejected or accepted only through a separately versioned adapter.
+    recommendation: Use the V1.1 authority names in the 1.1 demand; reject aliases in the closed schema; provide one explicit deterministic 1.0-to-1.1 migration with equivalence evidence.
+    status: open
+standing_controls:
+  - id: HC-001
+    decision: Maintain the explicit implementation override only for the existing reference engine until alignment closure.
+    status: active
+  - id: HC-002
+    decision: Do not authorize production or publish 1.1.0-rc.1 before B C and E contracts specifications implementation and conformance gates pass.
+    status: active
+

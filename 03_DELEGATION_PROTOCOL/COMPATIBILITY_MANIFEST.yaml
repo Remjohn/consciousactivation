@@ -1,0 +1,93 @@
+schema_version: 1
+manifest_id: cmf-delegation-contracts-1-1-0-rc-4
+owner: CMF_DELEGATION_PROTOCOL
+package_name: cmf-delegation-contract-baseline
+package_version: 1.1.0-rc.4
+compatibility_profile_version: "1.0"
+compatibility_profile: compatibility/profile.json
+protocol_versions:
+  - "1.0"
+message_versions:
+  visual-asset-demand:
+    - "1.1"
+release_status: RELEASE_CANDIDATE
+readiness:
+  local_stage4_gates: PASS
+  overall_stage4_verdict: FAIL
+  stage5_authorized: false
+canonical_registry: contracts/registry.json
+source_registry: packages/contracts/registry.json
+source_manifest: packages/contracts/source-manifest.json
+release_manifest: contracts/release-manifest.json
+compatibility_package: compatibility/manifest.json
+source_compatibility_package: packages/compatibility/manifest.json
+publication:
+  publishable: false
+  git_tag: null
+  immutable_release_uri: null
+  blockers:
+    - DLG-ISSUE-001
+    - DLG-ISSUE-002
+    - XRI-013
+    - XRI-014
+    - XRI-015
+    - XRI-016
+    - XRI-017
+    - LOCAL-NO-VALID-GIT-REPOSITORY
+issue_identity_authority:
+  canonical_xri_registry: ../CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+  canonical_status:
+    XRI-001: resolved
+    XRI-002: resolved
+  local_open_replacements:
+    - DLG-ISSUE-001
+    - DLG-ISSUE-002
+features:
+  - authority.registry
+  - behavioral.semantic-enforcement
+  - canonical-json.rfc8785-safe-integer-profile
+  - closed.schemas
+  - format02.fixtures
+  - lifecycle.transitions
+  - sha256.integrity
+  - source-provenance.conditional-enforcement
+  - derivative-lock-inheritance.enforcement
+required_semantic_domains:
+  - source_provenance
+  - activative_semantic_lineage
+  - activation_contract
+  - visual_semantic_pack
+  - visual_narrative_program
+  - feature_contracts
+  - somatic_route_request
+  - expression_moment_lineage
+  - wrong_reading_locks
+  - derivative_lock_inheritance
+behavioral_compatibility:
+  parse_only: INCOMPATIBLE
+  lossless_adapters_required: true
+  evaluator_evidence_required: true
+  derivative_asset_flows:
+    supported: true
+    lock_inheritance_modes:
+      - PRESERVE
+      - ENFORCE
+    evidence: validators/cmf_delegation_validators/derivative_locks.py
+required_signature_algorithms:
+  - Ed25519
+legacy_inputs:
+  submission-receipt@0.1: EXPLICIT_MIGRATION_REQUIRED
+  demand_ref:string@0.1: LOSSLESS_WITH_PINNED_CONTEXT
+  visual-asset-demand@1.0: EXPLICIT_OWNER_CONTEXT_MIGRATION_REQUIRED
+  visual-asset-demand@1.1-pre-source-kind: EXPLICIT_OWNER_CLASSIFICATION_REQUIRED
+  derivative-lock-inheritance@0.1: EXPLICIT_AUTHORITY_EVIDENCE_REQUIRED
+authority_corrections:
+  submission_validation_receipt_owner: DELEGATION_PROTOCOL
+  admission_receipt_owner: VISUAL_ASSET_EDITOR
+  result_owner: VISUAL_ASSET_EDITOR
+  result_consumption_authority_owner: CONTENT_HARNESS
+integrity:
+  canonicalization: RFC8785_SAFE_INTEGER_PROFILE
+  digest: SHA-256
+  signature_status: UNSIGNED
+  signature_required_for_publication: true

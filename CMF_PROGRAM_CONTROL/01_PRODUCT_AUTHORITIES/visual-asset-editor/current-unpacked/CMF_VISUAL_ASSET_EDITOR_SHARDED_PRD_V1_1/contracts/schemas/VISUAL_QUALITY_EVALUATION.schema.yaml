@@ -1,0 +1,209 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Quality Evaluation
+description: Constitutional visual evaluation combining technical, semantic, activation, narrative, composition, syntax, temporal,
+  feature-contract, and wrong-reading evidence.
+type: object
+additionalProperties: false
+required:
+- evaluation_id
+- candidate_ref
+- demand_ref
+- evaluation_profile
+- deterministic_validation
+- asset_evaluation
+- composition_evaluation
+- activation_evaluation
+- wrong_reading_evaluation
+- verdict
+properties:
+  evaluation_id:
+    type: string
+    pattern: ^VQE-
+  candidate_ref: &id001
+    type: string
+    minLength: 1
+  demand_ref: *id001
+  evaluation_profile: *id001
+  deterministic_validation:
+    type: object
+    required:
+    - verdict
+    properties:
+      verdict:
+        enum:
+        - pass
+        - fail
+      checks:
+        type: object
+  asset_evaluation:
+    type: object
+    required:
+    - verdict
+    - scores
+    properties:
+      verdict:
+        enum:
+        - pass
+        - repair_required
+        - fail
+      scores:
+        type: object
+        additionalProperties: &id002
+          type: number
+          minimum: 0
+          maximum: 1
+  composition_evaluation:
+    type: object
+    required:
+    - verdict
+    - scores
+    - render_ref
+    properties:
+      verdict:
+        enum:
+        - pass
+        - repair_required
+        - fail
+      scores:
+        type: object
+        additionalProperties: *id002
+      render_ref: *id001
+  syntax_context_evaluation:
+    type: object
+  temporal_evaluation:
+    type: object
+  failures:
+    type: array
+    items:
+      type: object
+      required:
+      - failure_code
+      - severity
+      - responsible_layer
+      properties:
+        failure_code: &id003
+          type: string
+        severity: *id003
+        responsible_layer: *id003
+        evidence_bbox:
+          type: array
+          minItems: 4
+          maxItems: 4
+          items:
+            type: number
+            minimum: 0
+            maximum: 1
+        evidence_time_range:
+          type: array
+          items:
+            type: number
+        explanation: *id003
+  repair_contract_ref:
+    type:
+    - string
+    - 'null'
+  verdict:
+    enum:
+    - accepted
+    - repair_required
+    - rejected
+    - human_review_required
+  evaluator_identity:
+    type: object
+  activation_evaluation:
+    type: object
+    required:
+    - verdict
+    - scores
+    properties:
+      verdict:
+        enum:
+        - pass
+        - repair_required
+        - fail
+      scores:
+        type: object
+        required:
+        - zero_second_hook
+        - pattern_match_strength
+        - pattern_interrupt_strength
+        - viewer_role_clarity
+        - prediction_gap
+        - payoff
+        - affinity
+        - anticipation_residue
+        - anti_cliche_strength
+        properties:
+          zero_second_hook:
+            type: number
+            minimum: 0
+            maximum: 1
+          pattern_match_strength:
+            type: number
+            minimum: 0
+            maximum: 1
+          pattern_interrupt_strength:
+            type: number
+            minimum: 0
+            maximum: 1
+          viewer_role_clarity:
+            type: number
+            minimum: 0
+            maximum: 1
+          prediction_gap:
+            type: number
+            minimum: 0
+            maximum: 1
+          payoff:
+            type: number
+            minimum: 0
+            maximum: 1
+          affinity:
+            type: number
+            minimum: 0
+            maximum: 1
+          anticipation_residue:
+            type: number
+            minimum: 0
+            maximum: 1
+          anti_cliche_strength:
+            type: number
+            minimum: 0
+            maximum: 1
+        additionalProperties:
+          type: number
+          minimum: 0
+          maximum: 1
+      delete_caption_test:
+        type:
+        - object
+        - 'null'
+  wrong_reading_evaluation:
+    type: object
+    required:
+    - verdict
+    - dominant_interpretation
+    - lock_results
+    properties:
+      verdict:
+        enum:
+        - pass
+        - repair_required
+        - fail
+      dominant_interpretation:
+        type: string
+      lock_results:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          required:
+          - lock
+          - triggered
+          properties:
+            lock:
+              type: string
+            triggered:
+              type: boolean
+            evidence:
+              type: string

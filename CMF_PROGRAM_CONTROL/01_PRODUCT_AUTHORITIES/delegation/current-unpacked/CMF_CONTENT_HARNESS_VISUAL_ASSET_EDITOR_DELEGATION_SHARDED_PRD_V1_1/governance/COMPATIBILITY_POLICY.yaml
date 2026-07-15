@@ -1,0 +1,59 @@
+version: 1.1.0-draft
+verdicts:
+  COMPATIBLE: All mandatory behavior is supported directly.
+  COMPATIBLE_WITH_ADAPTER: A governed lossless deterministic adapter preserves all mandatory behavior.
+  COMPATIBLE_WITH_DECLARED_DEGRADATION: Only optional behavior is unavailable and the owner explicitly authorizes omission.
+  MIGRATION_REQUIRED: A new immutable contract representation must be produced through an approved migration.
+  INCOMPATIBLE: A required semantic, authority, lifecycle, evaluation, profile, or failure behavior cannot be preserved.
+negotiation_dimensions:
+- protocol_version
+- message_versions
+- authority_model
+- lifecycle_semantics
+- failure_taxonomy
+- required_features
+- asset_family
+- category_and_format_profile
+- geometry_profile
+- budget_program
+- evaluation_and_receipt_support
+adapter_rules:
+  must_be:
+  - deterministic
+  - versioned
+  - fixture_tested
+  - lossless_for_mandatory_semantics
+  must_not:
+  - drop_semantic_constraints
+  - drop_wrong_reading_locks
+  - weaken_quality_gates
+  - invent_identity
+  - silently_reduce_budget
+  - reinterpret_activative_meaning
+version_policy:
+  patch: Non-semantic corrections only.
+  minor: Backward-compatible optional additions.
+  major: Breaking authority, lifecycle, required-field, acceptance, or hard-gate changes.
+deprecation_states:
+- active
+- discouraged
+- deprecated
+- read_only_support
+- retired
+constitution_complete_fields:
+- activative_semantic_lineage
+- activation_contract
+- visual_semantic_pack
+- visual_narrative_program
+- feature_contracts
+- somatic_route_request
+- wrong_reading_locks
+lossy_adapter_prohibitions:
+- drop_identity_or_context_references
+- drop_expression_moment_lineage
+- drop_roles_stance_or_identity_urges
+- drop_recognition_carrier
+- drop_attention_state_program
+- drop_feature_contracts
+- drop_or_weaken_wrong_reading_locks
+- synthesize_missing_activative_fields

@@ -1,0 +1,64 @@
+schema_version: cmf-builder-source-provenance-mapping/v1
+mapping_id: builder-source-provenance-to-delegation-rc4
+status: ACTIVE
+contract_pin: DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+external_field: /source_provenance/source_kind
+governed_source_kinds:
+  - interview_expression
+  - public_comment
+  - direct_message_reply
+  - authored_source
+  - live_premise
+  - research_synthesis
+  - operator_supplied
+  - legacy_migrated
+mappings:
+  - builder_source: Interview Expression
+    delegation_source_kind: interview_expression
+    evidence_rule: source is an authoritative interview-expression record
+  - builder_source: ReelCast
+    delegation_source_kind: interview_expression
+    evidence_rule: source is an authoritative ReelCast interview-expression record
+  - builder_source: Public Comment
+    delegation_source_kind: public_comment
+    evidence_rule: source is an authoritative public-comment record
+  - builder_source: Reply / DM
+    delegation_source_kind: direct_message_reply
+    evidence_rule: source is an authoritative direct-message or reply record
+  - builder_source: Operator-authored source
+    delegation_source_kind_options: [authored_source, operator_supplied]
+    resolution:
+      authored_source: authoritative record identifies the operator as the source author
+      operator_supplied: authoritative record identifies the operator as supplier of another source
+    ambiguity_behavior: reject_and_request_authoritative_classification
+  - builder_source: Live premise
+    delegation_source_kind: live_premise
+    evidence_rule: authoritative source record classifies the premise as live
+  - builder_source: Research-derived synthesis
+    delegation_source_kind: research_synthesis
+    evidence_rule: authoritative source record and research lineage are present
+  - builder_source: Legacy migration
+    delegation_source_kind: legacy_migrated
+    evidence_rule: a traceable lossless migration receipt and source identity are present
+global_rules:
+  guess_when_ambiguous: prohibited
+  unknown_source_kind: reject
+  missing_authoritative_evidence: reject
+  free_text_substitution: prohibited
+interview_provenance:
+  applies_to_source_kind: interview_expression
+  required_non_empty_fields:
+    - /activative_semantic_lineage/reaction_receipt_refs
+    - /activative_semantic_lineage/expression_moment_refs
+  missing_behavior: reject
+non_interview_provenance:
+  reaction_receipt_refs_required: false
+  expression_moment_refs_required: false
+  validation_when_present: required
+migration:
+  pre_source_kind_input: explicit_owner_classification_required
+  legacy_migrated_input: traceable_migration_receipt_required
+  lossy_or_guessed_classification: reject
+planning_traceability:
+  obligations: [CONST-004, FR-145, FR-146, FR-147, NFR-TRACE-001, NFR-COMPAT-002]
+  stories: [ST-01.02, ST-03.03, ST-06.03, ST-06.05, ST-08.02, ST-08.07]

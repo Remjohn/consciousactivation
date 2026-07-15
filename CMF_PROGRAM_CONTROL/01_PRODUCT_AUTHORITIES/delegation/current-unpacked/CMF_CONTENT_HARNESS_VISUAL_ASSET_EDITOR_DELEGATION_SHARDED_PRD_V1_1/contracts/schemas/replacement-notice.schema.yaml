@@ -1,0 +1,31 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Replacement Notice
+type: object
+additionalProperties: false
+required:
+- notice_id
+- affected_result
+- replacement_result
+- compatibility_status
+properties:
+  notice_id:
+    type: string
+    minLength: 1
+    pattern: ^REP-
+  affected_result:
+    type: string
+    minLength: 1
+  replacement_result:
+    type: string
+    minLength: 1
+  compatibility_status:
+    type: string
+    minLength: 1
+    enum:
+    - pending_validation
+    - validated
+    - rejected
+  impact_ref:
+    type:
+    - string
+    - 'null'

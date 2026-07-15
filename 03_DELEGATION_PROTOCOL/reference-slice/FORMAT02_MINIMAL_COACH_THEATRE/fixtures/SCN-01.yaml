@@ -1,0 +1,28 @@
+scenario_id: SCN-01
+title: Successful single character asset
+purpose: Proves ordinary autonomous demand-to-composition handoff.
+contracts:
+- type: visual-asset-demand
+  example_ref: ../../../contracts/examples/visual-asset-demand.example.yaml
+- type: visual-asset-submission
+  example_ref: ../../../contracts/examples/visual-asset-submission.example.yaml
+- type: submission-receipt
+  example_ref: ../../../contracts/examples/submission-receipt.example.yaml
+- type: visual-asset-event
+  example_ref: ../../../contracts/examples/visual-asset-event.example.yaml
+- type: asset-result-contract
+  example_ref: ../../../contracts/examples/asset-result-contract.example.yaml
+- type: result-acknowledgement
+  example_ref: ../../../contracts/examples/result-acknowledgement.example.yaml
+expected_shared_states:
+- DRAFT
+- SUBMITTED
+- ACCEPTED
+- IN_PROGRESS
+- RESULT_READY
+- COMPLETED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

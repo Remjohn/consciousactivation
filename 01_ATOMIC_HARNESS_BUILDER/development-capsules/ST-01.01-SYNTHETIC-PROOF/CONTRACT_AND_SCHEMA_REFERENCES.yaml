@@ -1,0 +1,39 @@
+schema_version: cmf-builder-contract-and-schema-references/v1
+branch_id: ST-01.01-SYNTHETIC-PROOF
+local_authoritative_inputs:
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml
+    role: exact_synthetic_profile_fixture
+  - path: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+    role: approved_limited_skill_policy
+    sha256: 260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c
+  - path: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+    role: canonical_empty_registry_fixture
+    sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  - path: governance/schemas/empty-skill-registry.schema.json
+    role: registry_validation_schema
+    sha256: e76be265d96df3c902a26989fa2c08309f6964bf96e4ac17ce850684de44f1c7
+existing_implementation_contracts:
+  - symbol: cmf_builder.domain.target_profile.TargetProfile
+    path: src/cmf_builder/domain/target_profile.py
+    use: additive_generalization_with_Format02_regression
+  - symbol: cmf_builder.application.ports.TargetProfileRepository
+    path: src/cmf_builder/application/ports.py
+    use: implement_existing_repository_port
+  - symbol: cmf_builder.domain.run_aggregate.BuilderRun
+    path: src/cmf_builder/domain/run_aggregate.py
+    use: unchanged_run_lifecycle_consumer
+external_contracts:
+  Delegation_1_1_0_rc_4:
+    direct_story_dependency: false
+    runtime_required: false
+    schema_fork_allowed: false
+    rationale: branch admits a local Builder proof profile and emits no Delegation handoff
+  VAE:
+    direct_story_dependency: false
+    runtime_required: false
+ownership:
+  Builder_profile_admission: Builder
+  Delegation_shared_contracts: external_Delegation_owner
+  VAE_realization_behavior: external_VAE_owner
+schema_change_authorized: false
+unlisted_dependency_behavior: stop_and_request_new_authority

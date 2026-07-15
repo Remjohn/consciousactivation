@@ -1,0 +1,73 @@
+schema_version: cmf-builder-category-profile-compatibility/v1
+mapping_id: builder-category-profile-to-delegation-rc4
+status: ACTIVE
+contract_pin: DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+alias_registry:
+  path: ../../../CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/FORMAT02_PROFILE_ALIAS_REGISTRY.yaml
+  registry_id: conscious-activations-format02-profile-aliases
+  version: "1.0.0"
+  sha256: sha256:21ad1a618361a14ec62576ce4e1d7ce3c7267e3bd77a1004aa8b996d51c87d57
+compatibility_dimensions:
+  - reference_profile
+  - structurally_supported
+  - contract_compatible
+  - benchmarked
+  - limited_production_certified
+  - production_certified
+certification_rules:
+  dimensions_are_independent: true
+  reference_status_does_not_imply_certification: true
+  structural_support_does_not_imply_certification: true
+  contract_compatibility_does_not_imply_certification: true
+  format_02_certification_inheritance_allowed: false
+  builder_implementation_authorized_by_profile_state: false
+categories:
+  - category_id: short_form_edited_video
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+  - category_id: 2d_character_animation
+    compatibility: {reference_profile: true, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+    release_1_reference_profile: format02_minimal_coach_theatre
+  - category_id: carousels
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+  - category_id: supervisuals
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+  - category_id: conversational_activation_expression
+    canonical_name: Conversational Activation / Human Expression
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+profiles:
+  - profile_id: format02_minimal_coach_theatre
+    category_id: 2d_character_animation
+    canonical_path: 2d_character_animation/format02_minimal_coach_theatre
+    accepted_historical_aliases: [minimal_coach_theatre]
+    alias_behavior: resolve_through_program_control_registry_and_emit_canonical_only
+    source_kind_resolution: governed_by_authoritative_source
+    compatibility: {reference_profile: true, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+    strongest_current_state: contract_compatible
+    evaluator_status: specified_not_certified
+  - profile_id: public_comment
+    category_id: conversational_activation_expression
+    source_kind: public_comment
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+  - profile_id: reply_dm
+    category_id: conversational_activation_expression
+    source_kind: direct_message_reply
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+  - profile_id: reelcast_expression
+    category_id: conversational_activation_expression
+    source_kind: interview_expression
+    final_product_prd_required_for_production: true
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+  - profile_id: interview_expression
+    category_id: conversational_activation_expression
+    source_kind: interview_expression
+    final_product_prd_required_for_production: true
+    compatibility: {reference_profile: false, structurally_supported: true, contract_compatible: true, benchmarked: false, limited_production_certified: false, production_certified: false}
+failure_behavior:
+  unknown_or_ambiguous_profile_alias: reject
+  false_certification: reject
+  format_02_certification_inheritance: reject
+  conversational_profile_outside_fifth_category: reject
+  interview_or_reelcast_without_interview_provenance: reject
+planning_traceability:
+  obligations: [FR-137, FR-139, FR-140, FR-141, FR-143, FR-168, FR-169, NFR-CAT-001, NFR-CAT-002, NFR-CAT-003]
+  stories: [ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-06.05, ST-12.03, ST-12.04]

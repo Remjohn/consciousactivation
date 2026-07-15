@@ -1,0 +1,38 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Budget Escalation Request
+type: object
+additionalProperties: false
+required:
+- escalation_id
+- demand_ref
+- execution_ref
+- current_authorization
+- requested_extension
+- justification
+- alternatives
+properties:
+  escalation_id:
+    type: string
+    minLength: 1
+    pattern: ^BER-
+  demand_ref:
+    type: string
+    minLength: 1
+  execution_ref:
+    type: string
+    minLength: 1
+  current_authorization:
+    type: object
+  consumption:
+    type: object
+  requested_extension:
+    type: object
+  justification:
+    type: object
+  predicted_outcome:
+    type: object
+  alternatives:
+    type: array
+    items:
+      type: string
+      minLength: 1

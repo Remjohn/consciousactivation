@@ -1,0 +1,90 @@
+mapping_type: vae_inbound_request_mapping
+mapping_id: visual-asset-demand-1.1-to-immutable-vae-demand-snapshot@1.0.0
+source_contract: visual-asset-demand@1.1
+source_release: delegation-contracts@1.1.0-rc.4
+destination: VaeDemandSnapshot
+mapping_policy: exact_name_exact_value_deep_copy_then_immutable
+implicit_defaults: prohibited
+
+preserved_top_level_fields:
+  - request_id
+  - version
+  - supersedes
+  - content_harness_ref
+  - category_profile
+  - format_profile
+  - asset_classification
+  - source_provenance
+  - activative_semantic_lineage
+  - activation_contract
+  - semantic_intent
+  - visual_semantic_pack
+  - visual_narrative_program
+  - feature_contracts
+  - somatic_route_request
+  - activative_function
+  - wrong_reading_locks
+  - composition_intent
+  - identity_continuity
+  - reference_evidence
+  - delivery
+  - evaluation_policy
+  - execution_policy
+  - notes
+
+protected_semantic_paths:
+  source:
+    - /source_provenance/source_kind
+  activative_lineage:
+    - /activative_semantic_lineage/activative_intelligence_pack_ref
+    - /activative_semantic_lineage/identity_dna_ref
+    - /activative_semantic_lineage/context_premise_ref
+    - /activative_semantic_lineage/resonance_map_ref
+    - /activative_semantic_lineage/matrix_edge_product_ref
+    - /activative_semantic_lineage/activative_call_refs
+    - /activative_semantic_lineage/reaction_receipt_refs
+    - /activative_semantic_lineage/expression_moment_refs
+    - /activative_semantic_lineage/source_evidence_refs
+  activation_and_narrative:
+    - /activation_contract
+    - /visual_semantic_pack
+    - /visual_semantic_pack/semiotic_mcda_receipt_ref
+    - /visual_narrative_program
+    - /feature_contracts
+    - /somatic_route_request/t_codes
+    - /somatic_route_request/v_codes
+  realization_constraints:
+    - /wrong_reading_locks
+    - /composition_intent
+
+conditional_rules:
+  - when: /source_provenance/source_kind == interview_expression
+    require_non_empty:
+      - /activative_semantic_lineage/reaction_receipt_refs
+      - /activative_semantic_lineage/expression_moment_refs
+  - when: /source_provenance/source_kind != interview_expression
+    absence_is_valid:
+      - /activative_semantic_lineage/reaction_receipt_refs
+      - /activative_semantic_lineage/expression_moment_refs
+    synthesis_is_prohibited: true
+
+feature_contract_rule:
+  preserve_each:
+    - feature
+    - required_for_meaning
+    - contract_ref/resource_id
+    - contract_ref/version
+    - contract_ref/payload_hash
+    - contract_ref/canonical_ref
+  owner: CONTENT_HARNESS
+  VAE_may_mutate: false
+
+rejection_policy:
+  - missing_or_unknown_source_kind
+  - missing_interview_reaction_receipt_ref
+  - missing_interview_expression_moment_ref
+  - empty_wrong_reading_locks
+  - unpreserved_protected_semantic_path
+  - parse_only_semantic_capability
+  - missing_required_evaluate_capability
+  - unsupported_evaluation_profile_requirement

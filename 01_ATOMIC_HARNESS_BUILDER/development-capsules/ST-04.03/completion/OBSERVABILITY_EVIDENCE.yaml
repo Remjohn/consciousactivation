@@ -1,0 +1,41 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-04.03
+verdict: PASS
+deterministic_sample:
+  phase_graph_id: phase-graph_9036da2201dbbdf608d557067e119c7986338e12f68369aeefb5bfafa35f3f3b
+  phase_graph_hash: sha256:9036da2201dbbdf608d557067e119c7986338e12f68369aeefb5bfafa35f3f3b
+  phase_graph_canonical_bytes: 5764
+  receipt_id: phase-graph-receipt_dd40cb79f4278f224477512081c4dd8828e1fed4e4128f15c253199dcd451daa
+  receipt_hash: sha256:dd40cb79f4278f224477512081c4dd8828e1fed4e4128f15c253199dcd451daa
+  completed_run_state_hash: sha256:819b727b147f89185755a8dbc659459b420ea95990042acab4e24f0ee37b117b
+topology:
+  phases: 2
+  modules_covered: 2
+  upstream_capabilities_preserved: 3
+  dependencies: 1
+  gates: 4
+  initially_runnable: 1
+  blocked: 1
+  parallel_pairs: 0
+  topological_order: [ratified_boundary_ready, governed_contract_ready]
+success_events:
+  - ST-04.03:PhaseGraphCompiled
+  - ST-04.03:TopologyValidated
+  - ST-04.03:RunnableStateDerived
+  - ST-04.03:ParallelismValidated
+  - ST-04.03:OutcomeVerified
+replay_event: ST-04.03:CompilationReplayReturned
+invalidation_event: ST-04.03:PhaseGraphInvalidated
+failure_event: ST-04.03:OutcomeRejected
+required_fields_validated:
+  - run_story_command_correlation_causation_and_stream
+  - source_lock_boundary_model_harness_ir_artifact_and_constitutional_lineage
+  - capability_and_responsibility_module_graph_identity
+  - phase_graph_and_receipt_identity
+  - phase_module_dependency_gate_runnable_blocked_and_parallel_counts
+  - authority_provenance_outcome_invalidation_and_typed_failure_context
+payload_safety:
+  source_or_contract_payload_values_logged: false
+  artifact_bytes_logged: false
+  personal_data_secrets_or_prompts_logged: false
+  external_telemetry_added: false

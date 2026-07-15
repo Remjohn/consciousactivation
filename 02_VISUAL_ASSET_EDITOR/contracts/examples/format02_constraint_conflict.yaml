@@ -1,0 +1,39 @@
+conflict_id: VDC-F02-0002
+execution_id: VAE-RUN-F02-0002
+demand_ref: VAD-F02-0002-v1
+status: amendment_required
+conflict:
+  code: COMPOSITION_CONSTRAINT_CONFLICT
+  severity: blocking
+  explanation: Full-body gesture, protected hands, and the reserved text field cannot
+    coexist inside the requested right-side BBOX at the required camera distance.
+  evidence_refs:
+  - COMP-SIM-F02-0002-v3
+  - VQE-F02-0002-R3
+  failed_quality_rounds: 3
+preserved_authority:
+  semantic_intent: unchanged
+  activative_function: unchanged
+  sequence_role: unchanged
+  requesting_harness_owns_decision: true
+proposed_amendments:
+- amendment_id: OPTION-A
+  type: geometry_tolerance
+  proposed_change:
+    bbox_norm:
+    - 0.49
+    - 0.12
+    - 0.43
+    - 0.68
+  expected_effect:
+    composition_fit: likely_pass
+    semantic_effect: none
+    additional_cost: minimal
+- amendment_id: OPTION-B
+  type: production_strategy
+  proposed_change:
+    route: generated_subject_plus_deterministic_composite
+  expected_effect:
+    composition_fit: likely_pass
+    semantic_effect: none
+    additional_cost_usd: 0.64

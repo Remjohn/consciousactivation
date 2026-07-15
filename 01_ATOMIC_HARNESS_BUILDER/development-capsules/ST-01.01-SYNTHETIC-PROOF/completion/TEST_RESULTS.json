@@ -1,0 +1,100 @@
+{
+  "schema_version": "cmf-builder-supplemental-test-results/v1",
+  "branch_id": "ST-01.01-SYNTHETIC-PROOF",
+  "executed_on": "2026-07-15",
+  "environment": {
+    "python": "3.12",
+    "test_runner": "pytest",
+    "pythonpath": "src",
+    "network_used": false,
+    "external_runtime_used": false,
+    "dependency_added": false
+  },
+  "test_first_evidence": {
+    "preimplementation_command": "python -m pytest tests/stories/st_01_01_synthetic_proof -q",
+    "expected_result": "RED",
+    "observed_result": "5 collection errors because the synthetic adapter contract did not yet exist",
+    "result": "PASS"
+  },
+  "suites": {
+    "supplemental_branch": {
+      "command": "python -m pytest tests/stories/st_01_01_synthetic_proof -q",
+      "collected": 18,
+      "passed": 18,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    "original_ST_01_01": {
+      "command": "python -m pytest tests/stories/st_01_01 -q",
+      "collected": 20,
+      "passed": 20,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    "full_regression_final_run_1": {
+      "command": "python -m pytest -q",
+      "collected": 38,
+      "passed": 38,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 1.29,
+      "result": "PASS"
+    },
+    "full_regression_final_run_2": {
+      "command": "python -m pytest -q",
+      "collected": 38,
+      "passed": 38,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 1.24,
+      "result": "PASS"
+    }
+  },
+  "acceptance_criteria": {
+    "AC-SP-01": "PASS",
+    "AC-SP-02": "PASS",
+    "AC-SP-03": "PASS",
+    "AC-SP-04": "PASS",
+    "AC-SP-05": "PASS",
+    "AC-SP-06": "PASS",
+    "AC-SP-07": "PASS",
+    "AC-SP-08": "PASS",
+    "AC-SP-09": "PASS",
+    "AC-SP-10": "PASS"
+  },
+  "contract_validation": {
+    "capsule_manifest_entries": "PASS_20_OF_20",
+    "capsule_bundle_digest": "2e15bb0d795813e927bc60190a79978c675e0abae3037b7529f914d4e6f70ff3",
+    "authorization_gate": "PASS",
+    "empty_registry_schema": "PASS",
+    "empty_registry_hash": "PASS",
+    "synthetic_profile_hash": "PASS",
+    "original_completion_receipt_hash": "PASS",
+    "Format02_profile_hash_unchanged": "PASS",
+    "source_file_set_unchanged": "PASS_12_OF_12",
+    "file_scope": "PASS",
+    "external_dependency_imports": "PASS_NONE",
+    "prohibited_files_modified": "PASS_NONE"
+  },
+  "empty_registry": {
+    "registry_id": "builder-core-synthetic-empty-skill-registry",
+    "version": "1.0.0",
+    "sha256": "a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114",
+    "skills": 0,
+    "external_skills_required": false,
+    "dynamic_skill_discovery_allowed": false,
+    "undeclared_skill_use": "FAIL_CLOSED",
+    "same_version_skill_addition": "REJECTED",
+    "result": "PASS"
+  },
+  "notices": [
+    "pytest-asyncio reported a non-failing deprecation warning for an unset default fixture loop scope; this branch has no asynchronous tests."
+  ],
+  "overall_result": "PASS"
+}

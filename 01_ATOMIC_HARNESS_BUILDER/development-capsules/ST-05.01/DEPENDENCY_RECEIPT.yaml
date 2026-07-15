@@ -1,0 +1,28 @@
+schema_version: cmf-builder-capsule-dependency-receipt/v1
+story_id: ST-05.01
+direct_dependency:
+  story_id: ST-04.05
+  receipt_path: development-capsules/ST-04.05/completion/STORY_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+  canonical_payload_sha256: 0904a65269b872c2a46b0fce11f80d5a003c638612f5189bdf1946682f251eb8
+  file_manifest_path: development-capsules/ST-04.05/completion/FILE_CHANGE_MANIFEST.yaml
+  file_manifest_sha256: c87673020e39df539e1b8b7296e385ca65119d97a028bf3accab0057bd3e70ce
+  completion_verdict: PASS
+  repository_regression: PASS_356_OF_356_NO_SKIPS
+builder_first_conditional_gate:
+  amendment_id: BF-AM-006
+  mode: SYNTHETIC_CORE
+  BD_010: CLOSED_BY_GOVERNED_EMPTY_SKILL_REGISTRY_FOR_THIS_MODE_ONLY
+empty_skill_registry:
+  policy: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  fixture: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  schema: governance/schemas/empty-skill-registry.schema.json
+  validation_receipt: governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json
+  effect: exact_immutable_empty_registry_consumption_only
+cross_repository_authority:
+  dependency_id: XDEP-001
+  effect: GOVERNING_READ_ONLY_AUTHORITY_INPUT
+  runtime_blocker: false
+applicable_blockers: []
+excluded_later_dependencies: [Format02, VAE_runtime, Delegation_runtime, GPU, evaluator_certification, conversational_policy, real_skill_registry_seed, skill_discovery, Workflow_IR, Control_Tower, production_certification]
+verdict: PASS_READY_FOR_BOUNDED_CAPSULE_AUTHORIZATION_GATE

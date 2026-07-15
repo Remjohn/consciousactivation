@@ -1,0 +1,82 @@
+schema_version: conscious-activations-status-truth/v1
+reconciled_at: "2026-07-15"
+current_shared_release:
+  package_version: 1.1.0-rc.4
+  status: current_local_unsigned_release_candidate
+  release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+  locally_validated: true
+  production_authorized: false
+release_history:
+  1.1.0-rc.1: historical_consumer_rejection
+  1.1.0-rc.2: historical_convergence_rejection
+  1.1.0-rc.3: historical_convergence_rejection
+  1.1.0-rc.4: current_local_unsigned_release_candidate
+prior_reference_classification:
+  historical_and_valid:
+    - immutable_release_directories_and_changelogs
+    - explicit_release_history_blocks
+    - prior_formal_audit_outputs
+  migration_or_rejection_evidence:
+    - CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI-001.yaml
+    - historical_consumer_validation_reports
+    - migration_declarations
+  stale_current_dependency_corrected:
+    - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_REPO_DEPENDENCY_MAP.yaml
+    - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+    - 02_VISUAL_ASSET_EDITOR/contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+  stale_current_status_corrected:
+    - CMF_PROGRAM_CONTROL/02_CROSS_REPO_CONTRACTS/README.md
+    - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/REPOSITORY_STAGE_REGISTRY.yaml
+    - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/HUMAN_DECISION_QUEUE.yaml
+    - CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CONVERGENCE_CHECKLIST.md
+repositories:
+  builder:
+    planning_step: step_3_complete
+    step_4: not_started
+    implementation_readiness: false
+    implementation_authorized: false
+    format02:
+      canonical_profile_id: format02_minimal_coach_theatre
+      role: reference_profile
+      strongest_state: contract_compatible
+      production_certified: false
+  visual_asset_editor:
+    rc4_adoption: bounded_consumer_validation_pass
+    evaluator_status: specified_not_certified
+    compute_proof: open_fail
+    recovery_and_rollback_executable_proof: open_fail
+    readiness: fail
+    stage_5: not_started_unauthorized
+  delegation_protocol:
+    rc4_local_validation: PASS
+    tests_passing: 118
+    feature_development: frozen
+    signing: pending
+    publication: pending
+    production_authorized: false
+program_control:
+  last_formal_audit:
+    release: 1.1.0-rc.4
+    verdict: FAIL
+    counts: {pass: 59, concerns: 3, fail: 2}
+    recorded_failures:
+      - CRF-401_delegation_xri_identity_and_state_conflict
+      - CRF-402_program_control_xri_registry_conflict
+  bounded_remediation:
+    prior_failures_addressed: 11
+    audit_rerun: true
+    result: FAIL_due_only_to_xri_identity_and_status_conflicts
+  bounded_xri_reconciliation:
+    performed: true
+    full_convergence_audit_rerun: false
+    canonical_registry: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+    canonical_status:
+      XRI-001: resolved
+      XRI-002: resolved
+    delegation_local_replacements:
+      DLG-ISSUE-001: open
+      DLG-ISSUE-002: open
+    validation: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/XRI_RECONCILIATION_VALIDATION.json
+    validation_result: PASS
+    prerequisites_for_fresh_audit: satisfied
+  authorization_effect: none

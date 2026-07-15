@@ -1,0 +1,98 @@
+schema_version: conscious-activations-xri-namespace-policy/v1
+policy_status: active
+effective_date: '2026-07-15'
+authority: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+authority_rule: Program Control is the sole authority for XRI identity, meaning, scope, owner, severity, state and resolution criteria.
+
+reserved_namespaces:
+  program_cross_repository: XRI-
+  delegation_local: DLG-ISSUE-
+
+classification_vocabulary:
+  - PROGRAM_XRI
+  - DELEGATION_LOCAL
+  - HISTORICAL_ONLY
+  - DUPLICATE_OR_ALIAS
+  - INVALID_OR_UNUSED
+
+program_status_vocabulary:
+  - open
+  - in_remediation
+  - resolved
+  - closed
+  - superseded
+  - accepted_risk
+
+classification_rules:
+  PROGRAM_XRI:
+    requires:
+      - impact on at least two product repositories or Program Control
+      - coordinated ownership or shared resolution evidence
+      - shared contract, authority, compatibility, release or cross-product dependency scope
+    caution: Mentioning another repository in passing is insufficient.
+  DELEGATION_LOCAL:
+    applies_to:
+      - Delegation implementation
+      - Delegation documentation
+      - Delegation-local infrastructure or tests
+      - Delegation-local release preparation or operational readiness
+    identifier_rule: Use DLG-ISSUE-* and preserve any former XRI identifier as historical traceability.
+  HISTORICAL_ONLY:
+    applies_when: No active state remains and the record exists only as rejection, migration, supersession or audit history.
+  DUPLICATE_OR_ALIAS:
+    applies_when: The condition is substantively identical to another canonical issue.
+  INVALID_OR_UNUSED:
+    applies_when: Evidence shows the identifier was created but never meaningfully used.
+
+repository_reference_rules:
+  - repositories may store exact XRI identifier references and the canonical registry path
+  - repositories must not define or cache canonical XRI title, owner, severity, state or resolution criteria as independent authority
+  - current status exports may reference only canonical XRIs or repository-local namespaced issues
+  - historical snapshots may retain former identifiers when their historical status is explicit
+  - resolved issues must not be listed as active blockers
+  - open local readiness conditions must not be presented as program XRIs
+
+renaming_rules:
+  preserve_fields:
+    - historical_identifiers
+    - renamed_because
+    - originating_evidence
+  mandatory_reason_for_local_replacement: reserved_program_namespace
+  deletion_of_historical_evidence: prohibited
+
+current_reconciliation:
+  program_xri:
+    - XRI-003
+    - XRI-004
+    - XRI-005
+    - XRI-006
+    - XRI-007
+    - XRI-008
+    - XRI-009
+    - XRI-010
+    - XRI-011
+    - XRI-012
+    - XRI-013
+    - XRI-014
+    - XRI-015
+    - XRI-016
+    - XRI-017
+    - XRI-019
+    - XRI-020
+    - XRI-021
+  delegation_local:
+    XRI-018: DLG-ISSUE-018
+  historical_only: []
+  duplicate_or_alias: []
+  invalid_or_unused: []
+
+validation_rules:
+  - every active XRI reference resolves to exactly one Program Control issue record
+  - every program XRI has exactly one controlled status
+  - no repository-local issue register independently defines a program XRI
+  - no two active identifiers describe the same issue
+  - local replacements retain their former identifiers
+  - immutable releases are never rewritten to update issue namespace references
+  - namespace reconciliation does not authorize implementation or production
+
+last_verified_timestamp: '2026-07-15T03:46:27+02:00'

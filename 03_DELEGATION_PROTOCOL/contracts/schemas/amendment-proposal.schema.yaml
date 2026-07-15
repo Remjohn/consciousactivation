@@ -1,0 +1,29 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Amendment Proposal
+type: object
+additionalProperties: false
+required:
+- proposal_id
+- demand_ref
+- trigger
+- options
+properties:
+  proposal_id:
+    type: string
+    minLength: 1
+    pattern: ^AMP-
+  demand_ref:
+    type: string
+    minLength: 1
+  trigger:
+    type: object
+  options:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+      - option_id
+      - authority_class
+      - proposed_changes
+      - predicted_effect

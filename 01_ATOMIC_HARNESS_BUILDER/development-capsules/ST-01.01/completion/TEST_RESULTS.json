@@ -1,0 +1,20 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-01.01",
+  "generated_on": "2026-07-15",
+  "runtime": {"language": "Python", "version": "3.12.0", "third_party_dependencies": []},
+  "authoritative_command": "python -B -c \"import sys, unittest; sys.path.insert(0, 'src'); suite=unittest.defaultTestLoader.discover('tests'); result=unittest.TextTestRunner(verbosity=1).run(suite); raise SystemExit(0 if result.wasSuccessful() else 1)\"",
+  "test_first_evidence": {"preimplementation_result": "EXPECTED_FAIL", "reason": "Five test modules failed import because cmf_builder did not yet exist.", "production_files_present_at_failure": 0},
+  "runs": [
+    {"name": "story_suite_verbose", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.275, "result": "PASS"},
+    {"name": "full_regression_run_1", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.294, "result": "PASS"},
+    {"name": "full_regression_run_2", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.243, "result": "PASS"},
+    {"name": "final_receipt_validation", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.288, "result": "PASS"}
+  ],
+  "required_test_ids": {"ST-01.01-acceptance": "PASS", "ST-01.01-failure": "PASS", "ST-01.01-authority": "PASS", "ST-01.01-receipt": "PASS"},
+  "acceptance_criteria": {"AC-01": "PASS", "AC-02": "PASS", "AC-03": "PASS", "AC-04": "PASS", "AC-05": "PASS", "AC-06": "PASS", "AC-07": "PASS", "AC-08": "PASS", "AC-09": "PASS"},
+  "schema_and_contract_validation": {"constitutional_evaluation_schema_json_parse": "PASS", "ConstitutionalReadinessReceipt_definition_present": true, "governed_input_hashes": "PASS_4_OF_4", "format02_profile_contract": "PASS", "format02_compatibility_state": "contract_compatible", "format02_production_certified": false, "delegation_rc4_bound": false, "capsule_manifest_hashes": "PASS_16_OF_16"},
+  "determinism": {"two_clean_regression_runs_passed": true, "fresh_context_receipts_equal": true, "fresh_context_event_payloads_equal": true, "replay_state_equal": true},
+  "rollback_probes": {"src_disabled_import_probe": "PASS_MODULE_ABSENT", "src_reenabled_import_probe": "PASS_VERSION_1.2.0-st01.01", "destructive_rollback_executed": false, "reason": "Capsule prohibits automatic deletion; rollback was demonstrated non-destructively by removing src from the import boundary."},
+  "overall_result": "PASS"
+}

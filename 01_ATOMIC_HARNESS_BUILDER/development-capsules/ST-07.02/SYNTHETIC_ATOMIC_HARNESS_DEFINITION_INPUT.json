@@ -1,0 +1,73 @@
+{
+  "schema_version": "cmf-builder-synthetic-atomic-harness-definition-input/v1",
+  "scope": "ST-07.02_GENERIC_ATOMIC_CONTENT_HARNESS_ONLY",
+  "target": {
+    "target_kind": "atomic_content_harness",
+    "profile_id": "synthetic_text_normalization_v1",
+    "profile_version": "1.0.0",
+    "source_authority": "repository_owned_test_fixture",
+    "category_binding": "none",
+    "category_adapter_ref": "NOT_APPLICABLE_SYNTHETIC_PROOF",
+    "synthetic": true,
+    "production_eligible": false,
+    "certified": false,
+    "synthetic_not_certifiable": true
+  },
+  "atomic_task": {
+    "task_id": "synthetic_utf8_line_ending_normalization",
+    "purpose": "prove Builder compilation only",
+    "input_contract": "UTF-8 text bytes accepted under the governed Source Lock",
+    "output_contract": "UTF-8 text with LF line endings and exactly one terminal newline",
+    "execution_owned_by_this_story": false
+  },
+  "required_definition_sections": [
+    "identity_and_version",
+    "target_and_source_profile",
+    "source_lock",
+    "atomic_boundary_and_ratification",
+    "draft_harness_model",
+    "harness_ir",
+    "deterministic_artifact_set",
+    "constitutional_precedence",
+    "capability_ownership",
+    "responsibility_modules",
+    "phase_graph_execution_plan",
+    "accepted_internal_handoff",
+    "minimum_complete_context",
+    "skill_registry_snapshot",
+    "skill_necessity_decision",
+    "input_output_contract",
+    "acceptance_test_contracts",
+    "authority_and_provenance",
+    "compatibility_and_certification",
+    "invalidation_and_history"
+  ],
+  "skill_expectation": {
+    "external_skills_required": 0,
+    "missing_required_skills": 0,
+    "adaptations_required": 0,
+    "experiments_required": 0,
+    "jit_capsules_required": 0,
+    "skill_execution_required": false
+  },
+  "acceptance_test_declarations": [
+    "normalizes_CRLF_and_CR_to_LF",
+    "emits_exactly_one_terminal_newline",
+    "preserves_non_line_ending_UTF8_content",
+    "same_input_produces_same_output_contract_result",
+    "invalid_UTF8_fails_closed"
+  ],
+  "forbidden_dependencies": [
+    "Format02",
+    "category_adapter",
+    "VAE_runtime",
+    "Delegation_runtime",
+    "GPU_or_ComfyUI",
+    "external_provider",
+    "conversational_activation",
+    "production_certification"
+  ],
+  "expected_outcome": "SYNTHETIC_ATOMIC_HARNESS_DEFINITION_COMPILED",
+  "execution_performed": false,
+  "development_capsule_generated": false
+}

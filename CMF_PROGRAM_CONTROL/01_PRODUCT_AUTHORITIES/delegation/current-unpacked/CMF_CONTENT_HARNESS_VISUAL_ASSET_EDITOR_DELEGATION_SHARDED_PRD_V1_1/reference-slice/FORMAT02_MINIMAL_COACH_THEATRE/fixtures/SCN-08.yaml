@@ -1,0 +1,20 @@
+scenario_id: SCN-08
+title: Authority violation rejection
+purpose: Proves a Visual Asset Editor cannot author or mutate demand-owned authority.
+contracts:
+- type: visual-asset-submission
+  example_ref: ../../../contracts/examples/visual-asset-submission.example.yaml
+- type: delegation-failure
+  example_ref: ../../../contracts/examples/delegation-failure.example.yaml
+- type: delegation-audit-receipt
+  example_ref: ../../../contracts/examples/delegation-audit-receipt.example.yaml
+expected_shared_states:
+- DRAFT
+- REJECTED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation
+- unauthorized_action_rejected
+- no_production_execution_started

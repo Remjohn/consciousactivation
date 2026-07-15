@@ -1,0 +1,53 @@
+version: 1.0.0-draft
+principal_types:
+- type: content_harness
+  typical_actions:
+  - create_visual_asset_demand
+  - supersede_owned_demand
+  - authorize_budget
+  - request_cancellation
+  - respond_to_amendment
+  - acknowledge_result
+  - issue_dependency_invalidation
+  prohibited_actions:
+  - emit_production_acceptance
+  - mutate_vae_receipts
+  - select_internal_visual_workflows
+- type: visual_asset_editor
+  typical_actions:
+  - accept_submission
+  - emit_progress
+  - request_budget
+  - propose_amendment
+  - emit_failure
+  - emit_asset_result
+  - issue_production_revocation
+  prohibited_actions:
+  - mutate_visual_asset_demand
+  - acknowledge_downstream_consumption
+  - change_sequence_role
+- type: composition_runtime
+  typical_actions:
+  - acknowledge_result_when_authorized
+  - record_asset_consumption
+  prohibited_actions:
+  - create_semantic_demand
+  - emit_production_acceptance
+- type: delegation_boundary_service
+  typical_actions:
+  - validate
+  - negotiate
+  - project_lifecycle
+  - route
+  - audit
+  prohibited_actions:
+  - invent_demand_fields
+  - rank_visual_candidates
+  - authorize_semantic_changes
+- type: operator_policy
+  typical_actions:
+  - approve_budget_extension
+  - resolve_human_exception
+  - authorize_declared_degradation
+  prohibited_actions:
+  - bypass_constitutional_hard_gates

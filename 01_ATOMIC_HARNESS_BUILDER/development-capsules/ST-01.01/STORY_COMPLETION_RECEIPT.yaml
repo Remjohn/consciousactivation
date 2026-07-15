@@ -1,0 +1,133 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+receipt_type: StoryCompletionReceipt
+story_id: ST-01.01
+primary_epic: EP-01
+issued_on: "2026-07-15"
+implemented_outcome: the run has stable identity, explicit authority, replay-safe state, and target-specific required work
+bounded_target:
+  compilation_target: atomic_content_harness
+  category: 2d_character_animation
+  profile_id: format02_minimal_coach_theatre
+  compatibility_state: contract_compatible
+  production_certified: false
+authorization:
+  authority_identity: current_thread_human_authority
+  capsule_manifest_sha256: 779c9b6610b07451c37b6ffa773eaeff4ed046058b1d9ebfbe295bbdfd5bc6d9
+  preimplementation_authorization_receipt_sha256: cb6016e2b547eaa7879dbb4e73e1026f30057cc3a5063dbe6e530859a440acb5
+  receipt_was_rewritten: false
+  canonical_authorization_phrase_sha256: 72f3848e884fe93f044d6019cd203fe2ea9cf8fd7715b81c3e1cad79eea1b62a
+  current_human_authorization_statement: The human has explicitly authorized this bounded Story implementation.
+  current_human_authorization_statement_sha256: 0e63ff47d9e5f15568e474bfef80f02426c4a9c7d51856e05245ed8e1dd3d2ba
+  authorization_effect: GRANTED_FOR_ST-01.01_ONLY
+requirements_satisfied:
+  ADR-001: PASS
+  AG-001: PASS
+  AG-002: PASS
+  D001: PASS
+  D006: PASS
+  FR-001: PASS
+  FR-002: PASS
+  FR-003: PASS
+  FR-004: PASS
+  FR-005: PASS
+  FR-006: PASS
+  FR-007: PASS
+  FR-008: PASS
+  NFR-REL-002: PASS
+  NFR-SEC-003: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+files_changed:
+  created: 30
+  modified_preexisting: 0
+  deleted: 0
+  production_code: 12
+  tests: 8
+  completion_evidence: 10
+  root_manifest:
+    path: development-capsules/ST-01.01/FILE_CHANGE_MANIFEST.yaml
+    sha256: 5ef0480e11e26363f918049bad584b69e43428b620e6086e435faea7460990d2
+  capsule_completion_manifest:
+    path: development-capsules/ST-01.01/completion/FILE_CHANGE_MANIFEST.json
+    sha256: ebb707fde6d2453e93ce9420e52788040045d66e21263967bde44607f22dc2c4
+  prohibited_files_modified: []
+tests_executed:
+  framework: Python 3.12.0 standard-library unittest
+  story_suite: {tests: 20, passed: 20, failed: 0, errors: 0, result: PASS}
+  full_regression_run_1: {tests: 20, passed: 20, failed: 0, errors: 0, result: PASS}
+  full_regression_run_2: {tests: 20, passed: 20, failed: 0, errors: 0, result: PASS}
+  final_receipt_validation: {tests: 20, passed: 20, failed: 0, errors: 0, result: PASS}
+  required_test_ids:
+    ST-01.01-acceptance: PASS
+    ST-01.01-failure: PASS
+    ST-01.01-authority: PASS
+    ST-01.01-receipt: PASS
+  deterministic_fresh_context: PASS
+  event_replay: PASS
+  results:
+    path: development-capsules/ST-01.01/TEST_RESULTS.json
+    sha256: 004ac3b2dd7e0b6ec1de115b21ae0d6ef4cf7cfe1b128daad847f6a68fd3e2f0
+schema_and_contract_validation:
+  result: PASS
+  governed_input_hashes: PASS_4_OF_4
+  constitutional_evaluation_schema_json_parse: PASS
+  ConstitutionalReadinessReceipt_definition_present: true
+  format02_profile_contract: PASS
+  format02_compatibility_state: contract_compatible
+  format02_production_certified: false
+  delegation_package_version_in_program_context: 1.1.0-rc.4
+  delegation_direct_dependency: false
+  local_schema_change: false
+  local_schema_fork: false
+observability_evidence:
+  result: PASS
+  path: development-capsules/ST-01.01/OBSERVABILITY_EVIDENCE.yaml
+  sha256: 3533008af2d8c14c2559fa7dd643c8d2d43a7d8685cb66796525d045374c506a
+  required_fields_complete: true
+  success_event: ST-01.01:OutcomeVerified
+  failure_event: ST-01.01:OutcomeRejected
+  rejected_command_mutated_authoritative_state: false
+rollback_evidence:
+  result: PASS_NON_DESTRUCTIVE
+  path: development-capsules/ST-01.01/completion/ROLLBACK_EVIDENCE.md
+  sha256: 1d01a56df85580e91a07153f0fef19cc297bb8ca26ce2cb3d40796caff0d96a9
+  destructive_rollback_executed: false
+  data_migration_required: false
+  external_compensation_required: false
+unresolved_limitations:
+  - Persistence is a deterministic in-memory development/test adapter, not production PostgreSQL or CAS.
+  - The application command seam is implemented; API, CLI and Control Tower adapters are outside ST-01.01.
+  - Format 02 remains contract_compatible, unbenchmarked and uncertified.
+  - Conversational, VAE and Delegation execution remain fail-closed and externally owned.
+  - ST-01.02 remains outside this receipt and must be separately re-evaluated against BD-004.
+newly_discovered_blockers: []
+readiness_effect:
+  ST-01.01: COMPLETE
+  ST-01.02: REEVALUATION_REQUIRED
+  full_release1_readiness: FAIL
+  full_product_readiness: FAIL
+hashes:
+  source_bundle_sha256: dc2a922a20a654fc5f6e00cd26a76fb0315007bc3eda9f178e0490f21c485356
+  test_bundle_sha256: 32384b321989b1733398c403c40792e9ad8a5a1827319187ad5ce18a8812b947
+  implementation_workspace_identity_sha256: 77f95351b298f48d2c5e84e0d9b369eee71dc34d649872e710e3c7e1249e36c4
+  implementation_report_sha256: c108ec7da252a492551e59745968ed1bcf83758ddffe359a919734910ceed26c
+receipt_identity:
+  algorithm: SHA-256
+  canonicalization: sorted-key JSON of this receipt with receipt_payload_sha256 omitted
+  receipt_payload_sha256: d82529f484971ef80bbd94ea29f685c9adfe3e50969aaf78367472695ea8add9
+completion_verdict: PASS
+downstream_effect:
+  satisfies_only_explicit_ST-01.01_dependencies: true
+  authorizes_ST-01.02: false
+  authorizes_full_release1: false
+  authorizes_full_product: false
+  authorizes_production_deployment: false
+  authorizes_VAE_or_Delegation_behavior: false

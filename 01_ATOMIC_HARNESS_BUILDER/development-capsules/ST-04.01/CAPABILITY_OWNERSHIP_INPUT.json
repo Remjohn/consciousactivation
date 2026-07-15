@@ -1,0 +1,40 @@
+{
+  "schema_version": "cmf-builder-synthetic-capability-ownership-input/v1",
+  "scope": "ST-04.01_SYNTHETIC_CORE_ONLY",
+  "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+  "source_harness_ir_path": "skills.capabilities",
+  "implicit_owner_defaults_allowed": false,
+  "decisions": [
+    {
+      "capability_id": "atomic_boundary_declaration",
+      "owner_kind": "CODE",
+      "owner_id": "cmf_builder.atomicity",
+      "reliability_evidence": ["ST-02.05:StoryCompletionReceipt", "deterministic", "fail_closed", "replay_safe"],
+      "cost_evidence": ["repository_local", "no_external_provider", "no_dynamic_skill"],
+      "authority_boundary": "human_ratifies_boundary_code_validates_and_freezes",
+      "handoff_responsibility": null
+    },
+    {
+      "capability_id": "deterministic_validation_and_receipt_generation",
+      "owner_kind": "CODE",
+      "owner_id": "cmf_builder.constitutional_validation",
+      "reliability_evidence": ["ST-03.05:StoryCompletionReceipt", "deterministic", "atomic_commit", "payload_safe_idempotency"],
+      "cost_evidence": ["repository_local", "standard_library", "no_external_provider"],
+      "authority_boundary": "code_validates_human_and_constitutional_authority_without_replacing_it",
+      "handoff_responsibility": null
+    },
+    {
+      "capability_id": "target_and_output_contract_definition",
+      "owner_kind": "CODE",
+      "owner_id": "cmf_builder.harness_ir",
+      "reliability_evidence": ["ST-03.03:StoryCompletionReceipt", "immutable", "content_addressed", "provenance_complete"],
+      "cost_evidence": ["repository_local", "no_external_provider", "bounded_synthetic_fixture"],
+      "authority_boundary": "code_compiles_only_ratified_and_source_locked_contract_values",
+      "handoff_responsibility": null
+    }
+  ],
+  "external_skills_required": false,
+  "dynamic_skill_discovery_allowed": false,
+  "production_eligible": false,
+  "certified": false
+}

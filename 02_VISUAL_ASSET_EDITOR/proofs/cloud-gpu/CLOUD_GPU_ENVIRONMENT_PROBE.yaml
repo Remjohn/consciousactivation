@@ -1,0 +1,25 @@
+classification: non_production_readiness_proof
+proof_id: VAE-CLOUD-GPU-PROBE-2026-07-15
+status: FAIL_no_authorized_worker_identity
+available_client:
+  name: aws_cli
+  executable_present: true
+credential_probe:
+  operation: read_only_get_caller_identity
+  result: aws_cli_reported_unable_to_locate_credentials
+  recognized_cloud_environment_variables_present: false
+  secrets_recorded: false
+provisioning:
+  worker_created: false
+  paid_resource_authorized_or_created: false
+required_evidence:
+  provider_profile: null
+  immutable_container_digest: null
+  local_plan_compatibility: not_tested
+  object_storage_handoff: not_tested
+  queue_and_status: not_tested
+  timeout_and_cancellation: not_tested
+  cost_receipt: null
+  result_retrieval: not_tested
+execution_cost_usd: 0.0
+conclusion: No cloud Docker GPU execution occurred and no cloud-equivalence claim is made.

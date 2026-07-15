@@ -1,0 +1,94 @@
+schema_version: conscious-activations-xri-status-conformance/v1
+validated_at: "2026-07-15"
+scope:
+  identifiers:
+    - XRI-001
+    - XRI-002
+  convergence_concerns:
+    - CRC-401
+    - CRC-402
+    - CRC-403
+  full_convergence_audit_rerun: false
+overall_status: PASS
+canonical_authority:
+  path: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+  program_control_is_sole_xri_identity_and_status_authority: true
+  controlled_status_vocabulary:
+    - open
+    - in_remediation
+    - resolved
+    - closed
+    - superseded
+    - accepted_risk
+canonical_records:
+  XRI-001:
+    canonical_title: Delegation RC1 source-kind and interview-provenance consumer-conformance failure
+    current_owner: 03_DELEGATION_PROTOCOL
+    severity: blocking
+    current_status: resolved
+    active_canonical_record_count: 1
+    resolved_defect_marked_open_on_active_surface: false
+  XRI-002:
+    canonical_title: Conversational Activation category adoption in Builder governance
+    current_owner: 01_ATOMIC_HARNESS_BUILDER
+    severity: high
+    current_status: resolved
+    active_canonical_record_count: 1
+    resolved_defect_marked_open_on_active_surface: false
+crc_status_authority:
+  path: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CRC_STATUS_REGISTRY.yaml
+  program_control_is_sole_crc_identity_and_status_authority: true
+  CRC-401:
+    current_status: resolved
+    repository_evidence_hash_validated: true
+  CRC-402:
+    current_status: resolved
+    all_40_governed_pair_statuses_validated: true
+    unsupported_production_certification_claims: 0
+  CRC-403:
+    current_status: open
+    readiness_verdicts_unchanged: true
+delegation_local_replacements:
+  DLG-ISSUE-001:
+    status: open
+    meaning: missing_pinned_upstream_source_coordinates_for_reproducible_exact_diffs
+    historical_mistaken_alias: XRI-001
+    redefines_canonical_xri: false
+  DLG-ISSUE-002:
+    status: open
+    meaning: missing_pinned_product_adapter_executable_and_owner_ratification_evidence
+    historical_mistaken_alias: XRI-002
+    redefines_canonical_xri: false
+conformance_checks:
+  unique_active_meaning_per_identifier: PASS
+  unique_canonical_status_per_identifier: PASS
+  repository_local_records_do_not_redefine_program_xri: PASS
+  historical_rejected_releases_traceable: PASS
+  rc4_current_and_unchanged: PASS
+  resolved_defects_not_open: PASS
+  production_trust_and_signing_separate: PASS
+  builder_status_export_agrees: PASS
+  vae_status_export_agrees: PASS
+  delegation_status_export_agrees: PASS
+  program_control_status_agrees: PASS
+  crc_registry_status_agrees: PASS
+  crc_401_evidence_hashes_validate: PASS
+  crc_402_evidence_hashes_validate: PASS
+historical_release_truth:
+  1.1.0-rc.1: historical_consumer_rejection
+  1.1.0-rc.2: historical_convergence_rejection
+  1.1.0-rc.3: historical_convergence_rejection
+  1.1.0-rc.4: current_local_unsigned_release_candidate
+production_trust_and_signing:
+  status: open
+  distinct_concern_identity: CRC-403
+  conflated_with_xri_001_or_xri_002: false
+  production_authorized: false
+historical_reference_policy:
+  immutable_release_candidates_modified: false
+  technical_specifications_modified: false
+  epics_or_stories_modified: false
+  last_formal_audit_outputs_rewritten_as_new_verdict: false
+  every_observed_source_reference_classified_in: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REFERENCE_MAP.csv
+prerequisites_for_fresh_read_only_convergence_audit: satisfied
+authorization_effect: none

@@ -1,0 +1,57 @@
+cases:
+- case_id: COMP-01
+  title: Same protocol and message versions
+  expected_verdict: COMPATIBLE
+- case_id: COMP-02
+  title: Backward-compatible minor demand version
+  expected_verdict: COMPATIBLE
+- case_id: COMP-03
+  title: Lossless field relocation adapter
+  expected_verdict: COMPATIBLE_WITH_ADAPTER
+- case_id: COMP-04
+  title: Optional unsupported telemetry field with declared omission
+  expected_verdict: COMPATIBLE_WITH_DECLARED_DEGRADATION
+- case_id: COMP-05
+  title: Mandatory wrong-reading-lock field unsupported
+  expected_verdict: INCOMPATIBLE
+  input_fixture: packages/fixtures/compatibility/constitutional/wrong-reading-unsupported.invalid.json
+  failure_code: SEMANTIC_ENFORCEMENT_UNSUPPORTED
+  state_effect: NONE
+  audit_evidence: compatibility_rejection_receipt
+- case_id: COMP-06
+  title: Demand v1.0 requires explicit migration to v1.1
+  expected_verdict: MIGRATION_REQUIRED
+  migration: packages/compatibility/migrations/visual-asset-demand-v1-to-v1.1.json
+- case_id: COMP-07
+  title: Deprecated but accepted in-flight version
+  expected_verdict: COMPATIBLE
+- case_id: COMP-08
+  title: Uncertified category profile
+  expected_verdict: INCOMPATIBLE
+- case_id: COMP-09
+  title: Result version unsupported by Content Harness
+  expected_verdict: INCOMPATIBLE
+- case_id: COMP-10
+  title: Adapter drops continuity requirement
+  expected_verdict: INCOMPATIBLE
+- case_id: COMP-CONSTITUTION-001
+  title: Adapter drops Expression Moment lineage
+  input_fixture: packages/fixtures/compatibility/constitutional/expression-moment-drop.invalid.json
+  expected_verdict: INCOMPATIBLE
+  failure_code: LOSSY_ADAPTER
+  state_effect: NONE
+  audit_evidence: adapter_rejection_receipt_with_protected_path
+- case_id: COMP-CONSTITUTION-002
+  title: Parse-only support does not satisfy behavioral compatibility
+  input_fixture: packages/fixtures/compatibility/constitutional/wrong-reading-unsupported.invalid.json
+  expected_verdict: INCOMPATIBLE
+  failure_code: SEMANTIC_ENFORCEMENT_UNSUPPORTED
+  state_effect: NONE
+  audit_evidence: capability_gap_receipt
+- case_id: COMP-CONSTITUTION-003
+  title: Evaluated domain lacks evaluator evidence
+  input_fixture: packages/fixtures/compatibility/constitutional/evaluator-gap.invalid.json
+  expected_verdict: INCOMPATIBLE
+  failure_code: EVALUATOR_EVIDENCE_MISSING
+  state_effect: NONE
+  audit_evidence: evaluator_gap_receipt

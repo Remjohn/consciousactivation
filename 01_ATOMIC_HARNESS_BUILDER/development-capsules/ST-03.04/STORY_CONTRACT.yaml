@@ -1,0 +1,57 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-03.04
+primary_epic: EP-03
+title: Compile Human and Machine Artifacts Deterministically
+active_mode: DETERMINISTIC_ARTIFACT_SET
+readiness_status: READY
+implementation_authorized: false
+primary_outcome: maintainers_receive_reproducible_hash_bound_outputs_without_duplicated_authority
+bounded_outcome: >-
+  Deterministic Builder code consumes the exact active immutable HarnessIR
+  snapshot and atomically compiles one complete human, OpenSpec, and machine
+  artifact set. Every generated view declares its source IR nodes and remains
+  subordinate to the IR; canonical bytes, hashes, manifest, drift validation,
+  idempotency, replay, and a receipt make the result independently reproducible.
+owned_obligations:
+  - ADR-004
+  - AG-018
+  - FR-054
+  - FR-055
+  - FR-056
+  - FR-057
+  - FR-058
+  - NFR-MAINT-001
+  - NFR-REL-001
+  - NFR-REL-003
+direct_dependency:
+  story_id: ST-03.03
+  required_receipt: ST-03.03:StoryCompletionReceipt
+  status: SATISFIED
+applicable_blockers: []
+cross_repository_inputs:
+  XDEP-001: governing_read_only_authority_not_runtime_dependency
+  XDEP-006: synthetic_frozen_lineage_already_preserved_in_HarnessIR_no_runtime_dependency
+component_boundary: >-
+  Builder-owned deterministic projection compilers, immutable artifact value
+  contracts, compiler/config identity, atomic artifact manifest, drift report,
+  persistence port, replay, descendant invalidation, observations, and receipt.
+authority_split:
+  human: prior_upstream_ratification_only
+  code: validate_render_canonicalize_hash_commit_replay_detect_drift_and_emit_receipt
+  agent: no_authoritative_generated_view_write_or_manual_promotion
+failure_behavior:
+  - missing_stale_invalidated_or_hash_mismatched_HarnessIR_fails_closed
+  - incomplete_artifact_inventory_or_unresolved_source_node_fails_closed
+  - undeclared_IR_path_read_or_cross_artifact_conflict_fails_closed
+  - nondeterministic_render_or_changed_idempotency_payload_fails_closed
+  - manual_drift_is_quarantined_and_never_mutates_IR
+  - atomic_commit_failure_leaves_no_partial_artifact_or_manifest
+compatibility:
+  input_schema: cmf-builder-harness-ir/v1@1.0.0
+  artifact_manifest_schema: cmf-builder-artifact-manifest/v1@1.0.0
+  compiler_id: cmf-builder/deterministic-artifact-compiler
+  compiler_version: 1.0.0
+  nondeterminism_exceptions: []
+  production_eligible: false
+  certified: false
+completion_receipt_identity_rule: ST-03.04:StoryCompletionReceipt:sha256_of_canonical_receipt_payload

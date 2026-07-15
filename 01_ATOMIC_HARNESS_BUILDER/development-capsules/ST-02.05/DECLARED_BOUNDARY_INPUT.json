@@ -1,0 +1,49 @@
+{
+  "schema_version": "cmf-builder-declared-boundary-input/v1",
+  "input_id": "synthetic_text_normalization_declared_boundary",
+  "version": "1.0.0",
+  "active_mode": "DECLARED_BOUNDARY",
+  "classification": {
+    "synthetic": true,
+    "repository_owned": true,
+    "category_binding": "none",
+    "production_eligible": false,
+    "certified": false,
+    "purpose": "Builder_Core_validation_only"
+  },
+  "source_lock_constraints": {
+    "source_profile_ref": "synthetic_task_definition_source_v1@1.0.0",
+    "source_profile_sha256": "cf036f38d26b37624c10e24094401e93c4f74e512d11613182a29cb859fbcd3d",
+    "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+    "target_candidate_ref": "repo://development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml",
+    "target_candidate_sha256": "82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b"
+  },
+  "candidate": {
+    "candidate_id": "synthetic_text_normalization_atomic_definition",
+    "boundary": "Define, but do not execute, a deterministic task that normalizes UTF-8 line endings to LF and ensures exactly one terminal newline.",
+    "production_promise": "Compile governance artifacts for one deterministic UTF-8 text-normalization definition without executing the task.",
+    "inputs": [{"media_type": "text/plain", "encoding": "UTF-8", "cardinality": "one_document"}],
+    "outputs": [{"media_type": "text/plain", "encoding": "UTF-8", "cardinality": "one_normalized_document"}],
+    "invariants": ["definition_only", "no_task_execution", "no_side_effects", "category_neutral", "deterministic_contract"],
+    "legal_variation": ["input_line_ending_mix", "terminal_newline_count_before_normalization"],
+    "capabilities": ["atomic_boundary_declaration", "target_and_output_contract_definition", "deterministic_validation_and_receipt_generation"],
+    "category_ownership": "none_test_only",
+    "critical_contradictions": []
+  },
+  "alternative_candidates": [
+    {"candidate_id": "general_text_transformation_engine", "disposition_before_human_decision": "PROPOSED_REJECTION", "reason": "broader_than_one_atomic_task"},
+    {"candidate_id": "execute_text_normalization", "disposition_before_human_decision": "PROPOSED_REJECTION", "reason": "execution_is_outside_the_definition_only_proof"}
+  ],
+  "draft_field_policy": {
+    "locked_evidence_fields": ["identity", "production_promise", "inputs", "outputs", "invariants", "legal_variation", "capabilities", "category_ownership"],
+    "explicit_not_applicable_fields": ["visual_syntax", "composition_variables", "sequence_grammar", "draft_activative_intelligence", "category_native_evaluation", "production_repair_policy"],
+    "explicit_hypothesis_fields": ["phase_hypotheses", "runtime_hypotheses", "evaluation_hypotheses", "repair_hypotheses"],
+    "initial_model_status": "UNRATIFIED_CONSTITUTIONAL_FIELDS",
+    "boundary_status_before_human_decision": "DECLARED_UNRATIFIED"
+  },
+  "human_decision_required": {
+    "allowed_actions": ["APPROVE", "REVISE", "REJECT"],
+    "approval_requires": ["selected_candidate", "rejected_alternatives", "evidence_refs", "rationale", "accepted_risks", "human_identity", "decision_time"]
+  },
+  "amendment_rule": "any_boundary_content_change_requires_human_reopen_invalidation_and_a_new_immutable_version"
+}

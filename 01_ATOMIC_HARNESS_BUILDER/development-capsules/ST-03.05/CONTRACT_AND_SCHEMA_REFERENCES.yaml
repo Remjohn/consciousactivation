@@ -1,0 +1,30 @@
+schema_version: cmf-builder-capsule-contract-references/v1
+story_id: ST-03.05
+inputs:
+  HarnessIR: cmf-builder-harness-ir/v1@1.0.0
+  ArtifactManifest: cmf-builder-artifact-manifest/v1@1.0.0
+  GeneratedArtifact: in_memory_immutable_value_contract_from_ST_03_04
+  ConstitutionalPrecedenceContract:
+    path: governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml
+    sha256: 328c2ec7a57de1bcc892631a2190a38d8f8e61972cbcb397c867a312f993b4ff
+outputs:
+  ConstitutionalValidationReport:
+    schema_id: cmf-builder-constitutional-validation/v1
+    schema_version: 1.0.0
+    required_identity: [report_id, report_hash, run_id, ir_id, ir_hash, artifact_set_id, manifest_id, manifest_hash, policy_hash, findings, coverage, outcome]
+  ConstitutionalValidationReceipt:
+    schema_id: cmf-builder-constitutional-validation-receipt/v1
+    required_identity: [receipt_id, receipt_hash, command_id, report_id, report_hash, artifact_set_id, authority_identity, event_ids, stream_version, outcome]
+  ConstitutionalValidationInvalidation:
+    relation: linked_descendant_of_artifact_set_invalidation
+authority_order:
+  - explicit_current_human_direction
+  - activative_intelligence_constitution_v1_1
+  - builder_prd_v1_2_and_binding_amendment
+  - accepted_builder_decisions_with_current_effect_metadata
+  - builder_governance_registries_and_contract_schemas
+  - accepted_adrs_and_technical_specifications
+  - planning_inventory_epics_stories_and_implementation
+local_schema_files_added: []
+external_contracts_required: []
+external_runtime_required: false

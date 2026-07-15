@@ -1,0 +1,68 @@
+mapping_type: vae_derivative_lock_inheritance_mapping
+mapping_id: derivative-lock-inheritance-1.0-to-immutable-vae-derivative-snapshot@1.0.0
+status: ACTIVE
+source_contract: derivative-lock-inheritance@1.0
+source_release: delegation-contracts@1.1.0-rc.4
+source_schema: contracts/schemas/derivative-lock-inheritance.schema.json
+source_schema_sha256: sha256:a1b8ca8c2fdcc67719b141c4feca93527553f821dc62cc9648f62f295d440d08
+destination: VaeDerivativeLockSnapshot
+mapping_policy: exact_name_exact_value_deep_copy_then_immutable
+implicit_defaults: prohibited
+classification_inference: prohibited
+preserved_fields:
+  - inheritance_id
+  - authoritative_parent_ref
+  - parent_contract_version
+  - governing_authoritative_demand_ref
+  - parent_lock_evidence
+  - derivative_ref
+  - derivative_wrong_reading_locks
+  - derivation_type
+  - derivative_semantics
+  - authoritative_lock_authorization
+  - declared_at
+parent_lock_evidence:
+  require_parent_lock_set_hash: true
+  require_inline_locks_or_immutable_ref: true
+  preserve_inline_locks_exactly: true
+  preserve_reference_exactly: true
+  compare_lock_identity: true
+  compare_meaning_hash: true
+  compare_scope_paths: true
+  compare_enforcement_level: true
+admission_enforcement:
+  validate_external_schema: true
+  invoke_RC4_portable_validator: true
+  exact_and_stricter_outcomes_accepted: [LOCK_INHERITANCE_VALID]
+  rejected_outcomes:
+    - PARENT_LOCK_REMOVED
+    - PARENT_LOCK_WEAKENED
+    - PARENT_LOCK_EVIDENCE_REQUIRED
+    - DERIVATION_CLASSIFICATION_REQUIRED
+    - UNAUTHORIZED_LOCK_RELAXATION
+  parse_without_enforcement: rejected
+production_realization:
+  VAE_owner: true
+  Builder_policy_mutation: prohibited
+  upstream_demand_mutation: prohibited
+  inherited_lock_weakening: prohibited
+evaluation:
+  contract_EVALUATE_capability: specified_and_contract_tested
+  deterministic_inheritance_evaluation: RC4_portable_validator
+  visual_wrong_reading_evaluation: character-scene-composition@1.1.0-draft
+  evaluation_profile_registry: governance/VISUAL_EVALUATION_PROFILE_REGISTRY.yaml
+  evaluator_certification: specified_not_certified
+  production_certification: false
+realization_evidence:
+  - RC4_validator_outcome
+  - parent_lock_set_hash
+  - inherited_lock_identity_meaning_scope_and_strength_comparison
+  - derivative_evaluation_finding
+  - authoritative_relaxation_evidence_when_applicable
+rejection_policy:
+  - missing_parent_evidence
+  - ambiguous_derivation
+  - lock_removal
+  - lock_weakening
+  - unauthorized_relaxation
+  - unsupported_evaluation_profile_requirement

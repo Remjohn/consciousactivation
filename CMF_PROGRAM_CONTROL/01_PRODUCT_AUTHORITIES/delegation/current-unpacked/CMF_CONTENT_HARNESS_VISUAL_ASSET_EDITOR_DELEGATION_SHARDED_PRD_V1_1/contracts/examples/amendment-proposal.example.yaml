@@ -1,0 +1,34 @@
+proposal_id: AMP-F02-0042
+demand_ref: VAD-F02-0042-v1
+trigger:
+  failure_code: COMPOSITION_CONSTRAINT_CONFLICT
+  evidence_ref: VQE-0042-R3
+options:
+- option_id: A
+  authority_class: composition_authority
+  proposed_changes:
+  - path: composition_intent.intended_region
+    current:
+    - 0.56
+    - 0.14
+    - 0.36
+    - 0.62
+    proposed:
+    - 0.49
+    - 0.12
+    - 0.43
+    - 0.68
+  predicted_effect:
+    semantic_change: false
+    activative_change: false
+    composition_pass_probability: 0.91
+    additional_cost_usd: 0.12
+- option_id: B
+  authority_class: demand_execution_policy
+  proposed_changes:
+  - path: authorized_budget.program
+    current: standard
+    proposed: premium
+  predicted_effect:
+    composition_pass_probability: 0.74
+    additional_cost_usd: 2.1
