@@ -21,6 +21,18 @@ from cmf_builder.domain.evidence_index import (
     EvidenceIndexReceipt,
     Specimen,
 )
+from cmf_builder.domain.evidence_saturation import (
+    SaturationContract,
+    SaturationEvaluation,
+    SaturationInvalidation,
+    SaturationReceipt,
+)
+from cmf_builder.domain.genesis_questions import (
+    DecisionGraph,
+    GenesisQuestionInvalidation,
+    GenesisQuestionPackage,
+    GenesisQuestionReceipt,
+)
 from cmf_builder.domain.atomicity import (
     AtomicityDecision,
     AtomicityDecisionReceipt,
@@ -138,6 +150,19 @@ class InMemoryRunRepository:
             str, EvidenceIndexInvalidation
         ] = {}
         self._invalidated_evidence_indexes: dict[str, str] = {}
+        self._saturation_contracts: dict[str, SaturationContract] = {}
+        self._saturation_evaluations: dict[str, SaturationEvaluation] = {}
+        self._run_saturation_evaluations: dict[str, tuple[str, ...]] = {}
+        self._saturation_receipts: dict[str, SaturationReceipt] = {}
+        self._run_saturation_receipts: dict[str, tuple[str, ...]] = {}
+        self._saturation_invalidations: dict[str, SaturationInvalidation] = {}
+        self._invalidated_saturation_evaluations: dict[str, str] = {}
+        self._decision_graphs: dict[str, DecisionGraph] = {}
+        self._genesis_question_packages: dict[str, GenesisQuestionPackage] = {}
+        self._run_genesis_question_packages: dict[str, tuple[str, ...]] = {}
+        self._genesis_question_receipts: dict[str, GenesisQuestionReceipt] = {}
+        self._genesis_question_invalidations: dict[str, GenesisQuestionInvalidation] = {}
+        self._invalidated_genesis_questions: dict[str, str] = {}
         self._atomic_boundaries: dict[str, DeclaredAtomicBoundary] = {}
         self._atomicity_ratifications: dict[str, AtomicityRatification] = {}
         self._draft_harness_models: dict[str, DraftHarnessModel] = {}
@@ -550,6 +575,277 @@ class InMemoryRunRepository:
         self._invalidated_evidence_indexes[
             index.index_id
         ] = invalidation.invalidation_id
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_saturation_evaluation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        contract: SaturationContract,
+        evaluation: SaturationEvaluation,
+        receipt: SaturationReceipt,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        source_lock = self._source_locks.get(evaluation.source_lock_ref)
+        index = self._evidence_indexes.get(evaluation.evidence_index_ref)
+        if (
+            source_lock is None
+            or index is None
+            or source_lock.run_id != run_id
+            or index.run_id != run_id
+            or index.index_id in self._invalidated_evidence_indexes
+        ):
+            raise ConcurrencyConflict(
+                "Saturation requires the active immutable Source Lock and Evidence Index."
+            )
+        evaluation.validate(source_lock=source_lock, index=index, contract=contract)
+        receipt.validate(evaluation)
+        if (
+            evaluation.run_id != run_id
+            or command_record.result != receipt
+            or receipt.command_id != command_id
+            or len(events) != 1
+            or events[0].event_type != "SaturationEvaluationAttached"
+            or events[0].command_id != command_id
+            or events[0].actor_id != evaluation.authority_identity
+            or events[0].value("evaluation_ref") != evaluation.evaluation_id
+            or events[0].value("evaluation_hash") != evaluation.evaluation_hash
+            or events[0].value("contract_ref") != contract.contract_id
+            or events[0].value("contract_hash") != contract.contract_hash
+            or events[0].value("source_lock_ref") != source_lock.lock_id
+            or events[0].value("evidence_index_ref") != index.index_id
+            or events[0].value("outcome") != evaluation.outcome.value
+            or events[0].value("downstream_consequence")
+            != evaluation.downstream_consequence.value
+            or receipt.event_ids != (events[0].event_id,)
+            or receipt.stream_version != events[0].stream_version
+        ):
+            raise ConcurrencyConflict(
+                "Saturation contract, evaluation, event, receipt, authority and command must agree."
+            )
+        self._assert_same_or_absent(
+            self._saturation_contracts, contract.contract_id, contract, "saturation contract"
+        )
+        self._assert_same_or_absent(
+            self._saturation_evaluations,
+            evaluation.evaluation_id,
+            evaluation,
+            "saturation evaluation",
+        )
+        self._assert_same_or_absent(
+            self._saturation_receipts,
+            receipt.receipt_id,
+            receipt,
+            "saturation receipt",
+        )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected saturation-evaluation transaction failure.",
+                run_id=run_id,
+                evaluation_id=evaluation.evaluation_id,
+            )
+        self._streams[run_id] = (*current, *events)
+        self._saturation_contracts[contract.contract_id] = contract
+        self._saturation_evaluations[evaluation.evaluation_id] = evaluation
+        self._run_saturation_evaluations[run_id] = (
+            *self._run_saturation_evaluations.get(run_id, ()),
+            evaluation.evaluation_id,
+        )
+        self._saturation_receipts[receipt.receipt_id] = receipt
+        self._run_saturation_receipts[run_id] = (
+            *self._run_saturation_receipts.get(run_id, ()),
+            receipt.receipt_id,
+        )
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_saturation_invalidation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        invalidation: SaturationInvalidation,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        evaluation = self._saturation_evaluations.get(invalidation.evaluation_id)
+        if evaluation is None or evaluation.run_id != run_id:
+            raise ConcurrencyConflict(
+                "Saturation invalidation requires an immutable historical evaluation."
+            )
+        invalidation.validate(evaluation)
+        if (
+            command_record.result != invalidation
+            or invalidation.command_id != command_id
+            or len(events) != 1
+            or events[0].event_type != "SaturationEvaluationInvalidated"
+            or events[0].command_id != command_id
+            or events[0].actor_id != invalidation.authority_identity
+            or events[0].value("evaluation_ref") != evaluation.evaluation_id
+            or events[0].value("invalidation_ref") != invalidation.invalidation_id
+            or invalidation.event_ids != (events[0].event_id,)
+            or invalidation.stream_version != events[0].stream_version
+            or evaluation.evaluation_id in self._invalidated_saturation_evaluations
+        ):
+            raise ConcurrencyConflict(
+                "Saturation invalidation, event, authority and command must agree."
+            )
+        self._assert_same_or_absent(
+            self._saturation_invalidations,
+            invalidation.invalidation_id,
+            invalidation,
+            "saturation invalidation",
+        )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected saturation-invalidation transaction failure.",
+                run_id=run_id,
+                evaluation_id=evaluation.evaluation_id,
+            )
+        self._streams[run_id] = (*current, *events)
+        self._saturation_invalidations[invalidation.invalidation_id] = invalidation
+        self._invalidated_saturation_evaluations[
+            evaluation.evaluation_id
+        ] = invalidation.invalidation_id
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_genesis_question(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        graph: DecisionGraph,
+        package: GenesisQuestionPackage,
+        receipt: GenesisQuestionReceipt,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        run = Run.replay(current)
+        saturation = self._saturation_evaluations.get(graph.saturation_ref)
+        model = self._draft_harness_models.get(graph.model_ref)
+        if (
+            saturation is None or model is None
+            or saturation.evaluation_hash != graph.saturation_hash
+            or model.model_hash != graph.model_hash
+            or run.saturation_evaluation_ref != graph.saturation_ref
+            or run.draft_harness_model_ref != graph.model_ref
+            or run.atomic_boundary_ref != graph.boundary_ref
+            or run.atomicity_ratification_ref != graph.ratification_ref
+            or run.saturation_evaluation_invalidation_ref is not None
+            or run.boundary_invalidation_ref is not None
+            or graph.run_id != run_id or package.run_id != run_id
+            or package.graph_ref != graph.graph_id or package.graph_hash != graph.graph_hash
+            or package.selected_decision_id != graph.selected_decision_id
+            or receipt.run_id != run_id or receipt.command_id != command_id
+            or receipt.graph_id != graph.graph_id or receipt.graph_hash != graph.graph_hash
+            or receipt.package_id != package.package_id or receipt.package_hash != package.package_hash
+            or receipt.selected_decision_id != graph.selected_decision_id
+            or receipt.authority_identity != package.authority_identity
+            or command_record.result != receipt
+            or len(events) != 1 or events[0].event_type != "GenesisQuestionPackageAttached"
+            or events[0].command_id != command_id or events[0].actor_id != package.authority_identity
+            or events[0].value("package_ref") != package.package_id
+            or events[0].value("package_hash") != package.package_hash
+            or events[0].value("graph_ref") != graph.graph_id
+            or events[0].value("graph_hash") != graph.graph_hash
+            or events[0].value("model_ref") != model.model_id
+            or events[0].value("saturation_ref") != saturation.evaluation_id
+            or receipt.event_ids != (events[0].event_id,)
+            or receipt.stream_version != events[0].stream_version
+        ):
+            raise ConcurrencyConflict("Genesis graph, package, event, receipt and active authority must agree.")
+        graph.selected_node()
+        package.validate(graph)
+        receipt.validate(graph, package)
+        self._assert_same_or_absent(self._decision_graphs, graph.graph_id, graph, "decision graph")
+        self._assert_same_or_absent(self._genesis_question_packages, package.package_id, package, "Genesis question package")
+        self._assert_same_or_absent(self._genesis_question_receipts, receipt.receipt_id, receipt, "Genesis question receipt")
+        existing = self._command_records.get(command_id)
+        if existing is not None and existing != command_record:
+            raise IdempotencyPayloadMismatch("A command record cannot be overwritten.", command_id=command_id)
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed("Injected Genesis-question transaction failure.", run_id=run_id)
+        self._streams[run_id] = (*current, *events)
+        self._decision_graphs[graph.graph_id] = graph
+        self._genesis_question_packages[package.package_id] = package
+        self._run_genesis_question_packages[run_id] = (*self._run_genesis_question_packages.get(run_id, ()), package.package_id)
+        self._genesis_question_receipts[receipt.receipt_id] = receipt
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_genesis_question_invalidation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        invalidation: GenesisQuestionInvalidation,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        package = self._genesis_question_packages.get(invalidation.package_id)
+        if (
+            package is None or package.run_id != run_id
+            or package.package_hash != invalidation.package_hash
+            or package.package_id in self._invalidated_genesis_questions
+            or command_record.result != invalidation
+            or invalidation.command_id != command_id
+            or len(events) != 1 or events[0].event_type != "GenesisQuestionPackageInvalidated"
+            or events[0].actor_id != invalidation.authority_identity
+            or events[0].value("package_ref") != package.package_id
+            or events[0].value("package_hash") != package.package_hash
+            or events[0].value("invalidation_ref") != invalidation.invalidation_id
+            or invalidation.event_ids != (events[0].event_id,)
+            or invalidation.stream_version != events[0].stream_version
+        ):
+            raise ConcurrencyConflict("Genesis-question invalidation must target exactly one active package.")
+        self._assert_same_or_absent(self._genesis_question_invalidations, invalidation.invalidation_id, invalidation, "Genesis question invalidation")
+        invalidation.validate(package)
+        existing = self._command_records.get(command_id)
+        if existing is not None and existing != command_record:
+            raise IdempotencyPayloadMismatch("A command record cannot be overwritten.", command_id=command_id)
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed("Injected Genesis-question invalidation failure.", run_id=run_id)
+        self._streams[run_id] = (*current, *events)
+        self._genesis_question_invalidations[invalidation.invalidation_id] = invalidation
+        self._invalidated_genesis_questions[package.package_id] = invalidation.invalidation_id
         self._command_records[command_id] = command_record
         self._pending_observation_outbox[command_id] = observations
         self._delivered_observation_outbox[command_id] = ()
@@ -2946,6 +3242,100 @@ class InMemoryRunRepository:
         ):
             return None
         return self._evidence_indexes.get(run.evidence_index_ref)
+
+    @_synchronized
+    def get_saturation_contract(self, contract_id: str) -> SaturationContract | None:
+        return self._saturation_contracts.get(contract_id)
+
+    @_synchronized
+    def get_saturation_evaluation(
+        self, evaluation_id: str
+    ) -> SaturationEvaluation | None:
+        return self._saturation_evaluations.get(evaluation_id)
+
+    @_synchronized
+    def saturation_evaluations(
+        self, run_id: str
+    ) -> tuple[SaturationEvaluation, ...]:
+        return tuple(
+            self._saturation_evaluations[evaluation_id]
+            for evaluation_id in self._run_saturation_evaluations.get(run_id, ())
+        )
+
+    @_synchronized
+    def get_saturation_receipt(self, receipt_id: str) -> SaturationReceipt | None:
+        return self._saturation_receipts.get(receipt_id)
+
+    @_synchronized
+    def get_saturation_invalidation(
+        self, invalidation_id: str
+    ) -> SaturationInvalidation | None:
+        return self._saturation_invalidations.get(invalidation_id)
+
+    @_synchronized
+    def is_saturation_evaluation_invalidated(self, evaluation_id: str) -> bool:
+        return evaluation_id in self._invalidated_saturation_evaluations
+
+    @_synchronized
+    def active_saturation_evaluation(
+        self, run_id: str
+    ) -> SaturationEvaluation | None:
+        run = self.load_run(run_id)
+        if (
+            not run.saturation_evaluation_ref
+            or run.saturation_evaluation_invalidation_ref is not None
+            or run.saturation_evaluation_ref
+            in self._invalidated_saturation_evaluations
+        ):
+            return None
+        return self._saturation_evaluations.get(run.saturation_evaluation_ref)
+
+    @_synchronized
+    def get_decision_graph(self, graph_id: str) -> DecisionGraph | None:
+        return self._decision_graphs.get(graph_id)
+
+    @_synchronized
+    def get_genesis_question_package(self, package_id: str) -> GenesisQuestionPackage | None:
+        return self._genesis_question_packages.get(package_id)
+
+    @_synchronized
+    def get_genesis_question_receipt(self, receipt_id: str) -> GenesisQuestionReceipt | None:
+        return self._genesis_question_receipts.get(receipt_id)
+
+    @_synchronized
+    def get_genesis_question_invalidation(self, invalidation_id: str) -> GenesisQuestionInvalidation | None:
+        return self._genesis_question_invalidations.get(invalidation_id)
+
+    @_synchronized
+    def active_genesis_question(self, run_id: str) -> GenesisQuestionPackage | None:
+        run = self.load_run(run_id)
+        if (
+            not run.genesis_question_ref
+            or run.genesis_question_invalidation_ref is not None
+            or run.genesis_question_ref in self._invalidated_genesis_questions
+        ):
+            return None
+        return self._genesis_question_packages.get(run.genesis_question_ref)
+
+    @property
+    @_synchronized
+    def genesis_question_count(self) -> int:
+        return len(self._genesis_question_packages)
+
+    @property
+    @_synchronized
+    def genesis_question_receipt_count(self) -> int:
+        return len(self._genesis_question_receipts)
+
+    @property
+    @_synchronized
+    def saturation_evaluation_count(self) -> int:
+        return len(self._saturation_evaluations)
+
+    @property
+    @_synchronized
+    def saturation_receipt_count(self) -> int:
+        return len(self._saturation_receipts)
 
     @_synchronized
     def query_evidence_index(

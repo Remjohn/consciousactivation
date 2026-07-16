@@ -1,0 +1,24 @@
+schema_version: cmf-builder-contract-reference-set/v1
+story_id: ST-01.04
+existing_contracts:
+  - {name: Run, source: src/cmf_builder/domain/run.py, use: active_run_identity_and_saturation_attachment}
+  - {name: SourceLock, source: src/cmf_builder/domain/evidence_workspace.py, use: source_profile_and_lineage}
+  - {name: EvidenceIndex, source: src/cmf_builder/domain/evidence_index.py, use: complete_queryable_evidence_input}
+  - {name: CommandRecord, source: src/cmf_builder/application/ports.py, use: payload_safe_idempotency}
+new_local_typed_contracts:
+  - SaturationContract
+  - EvidenceGap
+  - AuthorityConflict
+  - SaturationEvaluation
+  - SaturationReceipt
+  - SaturationInvalidation
+contract_fixture: development-capsules/ST-01.04/SATURATION_CONTRACT.yaml
+external_contracts:
+  Delegation_1_1_0_rc_4: not_used_by_this_story
+  Visual_Asset_Editor: not_used_by_this_story
+schema_changes: []
+database_changes: []
+compatibility:
+  existing_SourceLock_and_EvidenceIndex_identity: preserved
+  historical_evaluations: immutable_and_reproducible
+  changed_governed_input: new_evaluation_identity_and_prior_active_evaluation_invalidation

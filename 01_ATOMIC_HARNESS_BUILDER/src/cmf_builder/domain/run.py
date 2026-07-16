@@ -145,6 +145,12 @@ class Run:
     evidence_index_ref: str | None = None
     evidence_index_hash: str | None = None
     evidence_index_invalidation_ref: str | None = None
+    saturation_evaluation_ref: str | None = None
+    saturation_evaluation_hash: str | None = None
+    saturation_evaluation_invalidation_ref: str | None = None
+    genesis_question_ref: str | None = None
+    genesis_question_hash: str | None = None
+    genesis_question_invalidation_ref: str | None = None
     atomic_boundary_ref: str | None = None
     atomicity_ratification_ref: str | None = None
     draft_harness_model_ref: str | None = None
@@ -556,6 +562,217 @@ class Run:
                 "source_lock_ref": source_lock_ref,
                 "invalidation_ref": invalidation_ref,
                 "reason": reason,
+                "new_version_required": True,
+            },
+        )
+        return self._apply(event), event
+
+    def attach_saturation_evaluation(
+        self,
+        *,
+        evaluation_ref: str,
+        evaluation_hash: str,
+        contract_ref: str,
+        contract_hash: str,
+        source_lock_ref: str,
+        evidence_index_ref: str,
+        outcome: str,
+        downstream_consequence: str,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.lifecycle_state is not LifecycleState.SOURCE_LOCKED
+            or self.source_lock_ref != source_lock_ref
+            or self.evidence_index_ref != evidence_index_ref
+            or self.evidence_index_invalidation_ref is not None
+            or (
+                self.saturation_evaluation_ref is not None
+                and self.saturation_evaluation_invalidation_ref is None
+            )
+        ):
+            raise TransitionRejected(
+                "Saturation evaluation requires the active Source Lock and Evidence Index.",
+                source_lock_ref=self.source_lock_ref,
+                evidence_index_ref=self.evidence_index_ref,
+            )
+        if not all(
+            value.strip()
+            for value in (
+                evaluation_ref,
+                evaluation_hash,
+                contract_ref,
+                contract_hash,
+                source_lock_ref,
+                evidence_index_ref,
+                outcome,
+                downstream_consequence,
+                actor_id,
+            )
+        ):
+            raise RunContractError("Saturation-evaluation attachment identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id,
+            event_type="SaturationEvaluationAttached",
+            run_id=self.run_id,
+            stream_version=self.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            payload={
+                "evaluation_ref": evaluation_ref,
+                "evaluation_hash": evaluation_hash,
+                "contract_ref": contract_ref,
+                "contract_hash": contract_hash,
+                "source_lock_ref": source_lock_ref,
+                "evidence_index_ref": evidence_index_ref,
+                "outcome": outcome,
+                "downstream_consequence": downstream_consequence,
+            },
+        )
+        return self._apply(event), event
+
+    def invalidate_saturation_evaluation(
+        self,
+        *,
+        evaluation_ref: str,
+        evaluation_hash: str,
+        invalidation_ref: str,
+        reason: str,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.saturation_evaluation_ref != evaluation_ref
+            or self.saturation_evaluation_hash != evaluation_hash
+            or self.saturation_evaluation_invalidation_ref is not None
+        ):
+            raise TransitionRejected(
+                "Only the active saturation evaluation may be invalidated.",
+                evaluation_ref=self.saturation_evaluation_ref,
+            )
+        if not all(
+            value.strip()
+            for value in (
+                evaluation_ref,
+                evaluation_hash,
+                invalidation_ref,
+                reason,
+                actor_id,
+            )
+        ):
+            raise RunContractError("Saturation invalidation identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id,
+            event_type="SaturationEvaluationInvalidated",
+            run_id=self.run_id,
+            stream_version=self.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            payload={
+                "evaluation_ref": evaluation_ref,
+                "evaluation_hash": evaluation_hash,
+                "invalidation_ref": invalidation_ref,
+                "reason": reason,
+                "new_version_required": True,
+            },
+        )
+        return self._apply(event), event
+
+    def attach_genesis_question(
+        self,
+        *,
+        package_ref: str,
+        package_hash: str,
+        graph_ref: str,
+        graph_hash: str,
+        model_ref: str,
+        saturation_ref: str,
+        selected_decision_id: str,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.lifecycle_state is not LifecycleState.ATOMICITY_RATIFICATION
+            or self.draft_harness_model_ref != model_ref
+            or self.saturation_evaluation_ref != saturation_ref
+            or self.boundary_invalidation_ref is not None
+            or self.saturation_evaluation_invalidation_ref is not None
+            or self.genesis_question_ref is not None
+            and self.genesis_question_invalidation_ref is None
+        ):
+            raise TransitionRejected(
+                "Genesis question requires active saturation, ratified boundary and unratified model."
+            )
+        if not all(
+            value.strip()
+            for value in (
+                package_ref, package_hash, graph_ref, graph_hash, model_ref,
+                saturation_ref, selected_decision_id, actor_id,
+            )
+        ):
+            raise RunContractError("Genesis-question attachment identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id, event_type="GenesisQuestionPackageAttached",
+            run_id=self.run_id, stream_version=self.stream_version + 1,
+            command_id=command_id, actor_id=actor_id, timestamp=timestamp,
+            correlation_id=correlation_id, causation_id=causation_id,
+            payload={
+                "package_ref": package_ref, "package_hash": package_hash,
+                "graph_ref": graph_ref, "graph_hash": graph_hash,
+                "model_ref": model_ref, "saturation_ref": saturation_ref,
+                "selected_decision_id": selected_decision_id,
+            },
+        )
+        return self._apply(event), event
+
+    def invalidate_genesis_question(
+        self,
+        *,
+        package_ref: str,
+        package_hash: str,
+        invalidation_ref: str,
+        reason: str,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.genesis_question_ref != package_ref
+            or self.genesis_question_hash != package_hash
+            or self.genesis_question_invalidation_ref is not None
+        ):
+            raise TransitionRejected("Only the active Genesis question may be invalidated.")
+        if not all(value.strip() for value in (package_ref, package_hash, invalidation_ref, reason, actor_id)):
+            raise RunContractError("Genesis-question invalidation identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id, event_type="GenesisQuestionPackageInvalidated",
+            run_id=self.run_id, stream_version=self.stream_version + 1,
+            command_id=command_id, actor_id=actor_id, timestamp=timestamp,
+            correlation_id=correlation_id, causation_id=causation_id,
+            payload={
+                "package_ref": package_ref, "package_hash": package_hash,
+                "invalidation_ref": invalidation_ref, "reason": reason,
                 "new_version_required": True,
             },
         )
@@ -2257,6 +2474,24 @@ class Run:
                     "evidence_index_invalidation_ref": self.evidence_index_invalidation_ref,
                 }
             )
+        if any(
+            value is not None
+            for value in (
+                self.saturation_evaluation_ref,
+                self.saturation_evaluation_hash,
+                self.saturation_evaluation_invalidation_ref,
+            )
+        ):
+            payload.update(
+                {
+                    "saturation_evaluation_ref": self.saturation_evaluation_ref,
+                    "saturation_evaluation_hash": self.saturation_evaluation_hash,
+            "saturation_evaluation_invalidation_ref": self.saturation_evaluation_invalidation_ref,
+            "genesis_question_ref": self.genesis_question_ref,
+            "genesis_question_hash": self.genesis_question_hash,
+            "genesis_question_invalidation_ref": self.genesis_question_invalidation_ref,
+                }
+            )
         return f"sha256:{sha256(_canonical_json(payload)).hexdigest()}"
 
     def state_hash_at(self, stream_version: int) -> str:
@@ -2296,6 +2531,14 @@ class Run:
         evidence_index_ref = self.evidence_index_ref
         evidence_index_hash = self.evidence_index_hash
         evidence_index_invalidation_ref = self.evidence_index_invalidation_ref
+        saturation_evaluation_ref = self.saturation_evaluation_ref
+        saturation_evaluation_hash = self.saturation_evaluation_hash
+        saturation_evaluation_invalidation_ref = (
+            self.saturation_evaluation_invalidation_ref
+        )
+        genesis_question_ref = self.genesis_question_ref
+        genesis_question_hash = self.genesis_question_hash
+        genesis_question_invalidation_ref = self.genesis_question_invalidation_ref
         atomic_boundary_ref = self.atomic_boundary_ref
         atomicity_ratification_ref = self.atomicity_ratification_ref
         draft_harness_model_ref = self.draft_harness_model_ref
@@ -2375,6 +2618,20 @@ class Run:
             evidence_index_invalidation_ref = str(
                 event.value("invalidation_ref")
             )
+        elif event.event_type == "SaturationEvaluationAttached":
+            saturation_evaluation_ref = str(event.value("evaluation_ref"))
+            saturation_evaluation_hash = str(event.value("evaluation_hash"))
+            saturation_evaluation_invalidation_ref = None
+        elif event.event_type == "SaturationEvaluationInvalidated":
+            saturation_evaluation_invalidation_ref = str(
+                event.value("invalidation_ref")
+            )
+        elif event.event_type == "GenesisQuestionPackageAttached":
+            genesis_question_ref = str(event.value("package_ref"))
+            genesis_question_hash = str(event.value("package_hash"))
+            genesis_question_invalidation_ref = None
+        elif event.event_type == "GenesisQuestionPackageInvalidated":
+            genesis_question_invalidation_ref = str(event.value("invalidation_ref"))
         elif event.event_type == "AtomicityRatificationRecorded":
             receipt_id = str(event.value("human_receipt_id"))
             atomicity_ratification_ref = str(event.value("ratification_ref"))
@@ -2503,6 +2760,12 @@ class Run:
             evidence_index_ref=evidence_index_ref,
             evidence_index_hash=evidence_index_hash,
             evidence_index_invalidation_ref=evidence_index_invalidation_ref,
+            saturation_evaluation_ref=saturation_evaluation_ref,
+            saturation_evaluation_hash=saturation_evaluation_hash,
+            saturation_evaluation_invalidation_ref=saturation_evaluation_invalidation_ref,
+            genesis_question_ref=genesis_question_ref,
+            genesis_question_hash=genesis_question_hash,
+            genesis_question_invalidation_ref=genesis_question_invalidation_ref,
             atomic_boundary_ref=atomic_boundary_ref,
             atomicity_ratification_ref=atomicity_ratification_ref,
             draft_harness_model_ref=draft_harness_model_ref,

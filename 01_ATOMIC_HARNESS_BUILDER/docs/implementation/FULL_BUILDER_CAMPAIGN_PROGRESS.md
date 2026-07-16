@@ -1,51 +1,53 @@
 # Full Atomic Harness Builder Implementation Campaign
 
 Updated: 2026-07-16  
-State: **ACTIVE — trust-correction gate passed; ST-01.03 selected**
+State: **ACTIVE - ST-01.04 complete; ST-03.01 selected**
 
-## Authority and stop clearance
+## Authority and trust
 
 The standing `AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN`
-authority remains active. The bounded override and correction authority was received
-and consumed. `BQA-P0-001` and `BQA-P1-003` through `BQA-P1-006` are `CLOSED_PASS`.
+authority is active. The bounded BQA correction remains `PASS`; all five P0/P1
+findings are closed and the constitutional-incompatibility stop remains cleared.
 
-Correction receipt SHA-256:
-`0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a`.
+`ST-01.03` and `ST-01.04` completed under independently hash-valid 18-input
+capsules. Their immutable receipt hashes are respectively
+`f1111552cd01be92302e87ae19ac707926880b6f0d931df03df26f4842687d4c` and
+`1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a`.
 
-The former constitutional-incompatibility stop is cleared. Constitution V1.1,
-Builder PRD V1.2, the 410 obligations, 12 Epics and 69 Story IDs remain unchanged.
+The Builder now owns a category-neutral immutable Evidence Index and a deterministic
+Saturation Contract evaluator. It preserves missing, unreadable, sparse,
+contradictory-source, contradictory-authority, unresolved-provenance and critical
+unsupported-claim distinctions without semantic invention.
 
 ## Current evidence
 
-- Correction suite: `125/125 PASS` twice in fresh processes.
-- Unchanged affected predecessor suites: `128/128 PASS`.
-- Full repository regression: `600/600 PASS` twice, zero mandatory skips.
-- Python compilation: `178/178 PASS`, including `45/45` source files.
-- Original affected Story receipts: `4/4` byte-identical.
-- Final synthetic demonstration trust gate: `PASS`.
+- `ST-01.04` Story suite: `26/26 PASS` twice.
+- Affected predecessor architecture and correction suite: `140/140 PASS`.
+- Story plus correction trust suite: `151/151 PASS`.
+- Full repository regression: `646/646 PASS`, zero mandatory skips.
+- Python compilation: `194/194 PASS`, including `49/49` source files.
+- Atomic rollback, outbox retry, replay, fresh-context determinism and historical
+  reproduction: `PASS`.
 - Production readiness: `false`; full-product readiness: `false`.
 
 ## Queue
 
 | Classification | Count |
 |---|---:|
-| `COMPLETE_PASS` | 16 |
+| `COMPLETE_PASS` | 18 |
 | `READY` | 2 |
-| `BLOCKED_EVIDENCE` | 2 |
+| `BLOCKED_EVIDENCE` | 3 |
 | `BLOCKED_EXTERNAL_DEPENDENCY` | 1 |
-| `BLOCKED_PRIOR_STORY` | 48 |
+| `BLOCKED_PRIOR_STORY` | 45 |
 
-`ST-01.03` is the highest-priority READY Builder-owned Story and is automatically
-selected. `ST-11.02` is also READY but remains behind the active higher-priority
-selection. Capsule validation remains mandatory before ST-01.03 production edits.
+`ST-03.01` is the highest-priority READY Builder-owned Story and is automatically
+selected for generic operator-facing Genesis question selection. Its direct
+dependencies are complete; `BD-004` remains real-profile-only and `BD-008` remains
+production-certification-only. `ST-11.02` remains independently READY behind the
+active selection.
 
-## Remaining non-global blockers
+## Remaining boundaries
 
-- `ST-05.03`: real-skill `BD-010` scope and `HD-007`.
-- `ST-06.01`: `BD-004`, `BD-007`, `BD-008` and real-skill `BD-010` scope.
-- `ST-07.03`: `BD-014`, `XRI-016` and `XRI-019` external integration evidence.
-- Productization ownership gaps remain for early durable persistence, early operator
-  command surface and generic compilation beyond the fixed synthetic fixture; these
-  require governed Story amendments before implementation.
-
-Deferred P2/P3 findings remain recorded and do not block the resumed queue.
+Format 02, Human Reaction policy, VAE and Delegation runtime, real skills, external
+providers and production certification remain conditional or external and are not
+generic Builder prerequisites. Deferred P2/P3 QA findings remain non-blocking.

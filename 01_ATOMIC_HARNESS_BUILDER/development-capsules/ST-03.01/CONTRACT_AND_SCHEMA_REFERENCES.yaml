@@ -1,0 +1,15 @@
+schema_version: cmf-builder-contract-reference-set/v1
+story_id: ST-03.01
+existing_contracts:
+  - {name: Run, source: src/cmf_builder/domain/run.py, use: run_identity_and_question_attachment}
+  - {name: DraftHarnessModel, source: src/cmf_builder/domain/atomicity.py, use: unratified_entry_state_and_supported_paths}
+  - {name: SaturationEvaluation, source: src/cmf_builder/domain/evidence_saturation.py, use: active_evidence_gate}
+  - {name: CommandRecord, source: src/cmf_builder/application/ports.py, use: payload_safe_idempotency}
+new_local_typed_contracts: [DecisionDefinition, DecisionGraph, EvidenceBackedRecommendation, GenesisQuestionPackage, GenesisQuestionReceipt, GenesisQuestionInvalidation]
+contract_fixture: development-capsules/ST-03.01/GENESIS_QUESTION_CONTRACT.yaml
+external_contracts:
+  Delegation_1_1_0_rc_4: not_used
+  Visual_Asset_Editor: not_used
+schema_changes: []
+database_changes: []
+compatibility: {DraftHarnessModel_identity: preserved, Human_decision_authority: reserved_for_ST_03_02, historical_question_packages: immutable_and_reproducible}

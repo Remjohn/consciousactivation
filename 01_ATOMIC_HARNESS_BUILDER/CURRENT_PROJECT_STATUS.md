@@ -27,8 +27,11 @@ Updated: 2026-07-16
 - Production readiness and full-product readiness remain `false`.
 - The constitutional-incompatibility campaign stop is cleared under the human-authorized bounded correction.
 - The standing `AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN` authority is active again.
-- The canonical queue currently contains `16 COMPLETE_PASS`, `2 READY`, `2 BLOCKED_EVIDENCE`, `1 BLOCKED_EXTERNAL_DEPENDENCY` and `48 BLOCKED_PRIOR_STORY` Stories.
-- The highest-priority READY Builder-owned Story selected for automatic progression is `ST-01.03`.
+- `ST-01.03` is `COMPLETE_PASS`; its receipt SHA-256 is `f1111552cd01be92302e87ae19ac707926880b6f0d931df03df26f4842687d4c`.
+- `ST-01.04` is `COMPLETE_PASS`; its receipt SHA-256 is `1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a`.
+- The current repository regression is `646/646 PASS` with no mandatory skips; `194/194` Python files compile, including `49/49` source files.
+- The canonical queue currently contains `18 COMPLETE_PASS`, `2 READY`, `3 BLOCKED_EVIDENCE`, `1 BLOCKED_EXTERNAL_DEPENDENCY` and `45 BLOCKED_PRIOR_STORY` Stories.
+- The highest-priority READY Builder-owned Story selected for automatic progression is `ST-03.01`; `ST-11.02` remains independently READY.
 
 ## Remaining boundaries and risks
 
@@ -38,4 +41,4 @@ Updated: 2026-07-16
 
 ## Next action
 
-Prepare and validate the bounded `ST-01.03` Development Capsule, then implement it under the active standing campaign authority if its genuine blocker cut remains empty.
+Prepare and validate the bounded `ST-03.01` Development Capsule, then implement it under the active standing campaign authority if its genuine blocker cut remains empty.

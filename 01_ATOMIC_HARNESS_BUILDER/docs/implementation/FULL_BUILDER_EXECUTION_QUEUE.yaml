@@ -15,15 +15,15 @@ canonical_state:
   historical_story_receipts: VALID_PASS
   structural_synthetic_execution: PASS
   final_engineering_trust: PASS
-  current_full_regression: PASS_600_OF_600_TWICE_NO_SKIPS
-  product_code_changed_by_this_campaign: true_bounded_correction_only
+  current_full_regression: PASS_646_OF_646_NO_MANDATORY_SKIPS
+  product_code_changed_by_this_campaign: true_bounded_correction_ST_01_03_and_ST_01_04
 classification_counts:
-  COMPLETE_PASS: 16
+  COMPLETE_PASS: 18
   READY: 2
   BLOCKED_HUMAN_DECISION: 0
-  BLOCKED_EVIDENCE: 2
+  BLOCKED_EVIDENCE: 3
   BLOCKED_EXTERNAL_DEPENDENCY: 1
-  BLOCKED_PRIOR_STORY: 48
+  BLOCKED_PRIOR_STORY: 45
   DEFERRED_EXTERNAL_PRODUCT: 0
   NOT_BUILDER_OWNED: 0
 supplemental_units:
@@ -44,7 +44,7 @@ queue_rules:
   Builder_owned_external_ports_do_not_transfer_external_product_ownership: true
   Format_02_is_not_a_generic_core_prerequisite: true
 active_selection:
-  story_id: ST-01.03
+  story_id: ST-03.01
   reason: highest_priority_READY_Builder_owned_story
   campaign_authority: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
   capsule_state: PREPARATION_REQUIRED_BEFORE_CODE
@@ -75,26 +75,26 @@ stories:
     current_blockers: []
     builder_ownership: BUILDER_OWNED
     implementation_priority: 1_GENERIC_OPERATOR_TASK_INGESTION
-    capsule_state: NOT_PREPARED
-    implementation_state: READY
-    receipt_state: NOT_ISSUED
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED_f1111552cd01be92302e87ae19ac707926880b6f0d931df03df26f4842687d4c
   - story_id: ST-01.04
     primary_outcome: "Decide evidence saturation through an evidence-backed proceed, pause or block outcome."
     dependencies: [ST-01.03]
-    current_blockers: ["PRIOR:ST-01.03"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
     implementation_priority: 1_GENERIC_OPERATOR_TASK_INGESTION
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
-    receipt_state: NOT_ISSUED
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED_1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a
   - story_id: ST-02.01
     primary_outcome: "Normalize evidence into typed syntax observations."
     dependencies: [ST-01.04]
-    current_blockers: ["PRIOR:ST-01.04", BD-004, BD-007, HD-006]
+    current_blockers: [BD-004, BD-007, HD-006]
     builder_ownership: BUILDER_OWNED
     implementation_priority: 12_REFERENCE_PROFILE_VALIDATION
     capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
+    implementation_state: BLOCKED_EVIDENCE
     receipt_state: NOT_ISSUED
   - story_id: ST-02.02
     primary_outcome: "Build substrate-specific spatial, temporal and reading-order graphs."
@@ -135,11 +135,11 @@ stories:
   - story_id: ST-03.01
     primary_outcome: "Ask only dependency-ready constitutional questions with complete rationale."
     dependencies: [ST-01.04, ST-02.05]
-    current_blockers: ["PRIOR:ST-01.04"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
-    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_PLANNING
+    implementation_priority: 1_GENERIC_OPERATOR_TASK_INGESTION
     capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
+    implementation_state: READY
     receipt_state: NOT_ISSUED
   - story_id: ST-03.02
     primary_outcome: "Record human authority and resume Genesis safely across sessions."

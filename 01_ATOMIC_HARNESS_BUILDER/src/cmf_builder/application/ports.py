@@ -25,6 +25,18 @@ if TYPE_CHECKING:
         EvidenceIndexReceipt,
         Specimen,
     )
+    from cmf_builder.domain.evidence_saturation import (
+        SaturationContract,
+        SaturationEvaluation,
+        SaturationInvalidation,
+        SaturationReceipt,
+    )
+    from cmf_builder.domain.genesis_questions import (
+        DecisionGraph,
+        GenesisQuestionInvalidation,
+        GenesisQuestionPackage,
+        GenesisQuestionReceipt,
+    )
     from cmf_builder.domain.harness_ir import (
         HarnessIR,
         HarnessIRCompilationReceipt,
@@ -497,6 +509,118 @@ class EvidenceIndexRepository(EvidenceWorkspaceRepository, Protocol):
     def pending_observations(self, command_id: str) -> tuple[Observation, ...]: ...
 
     def delivered_observations(self, command_id: str) -> tuple[Observation, ...]: ...
+
+
+class SaturationRepository(EvidenceIndexRepository, Protocol):
+    def commit_saturation_evaluation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        contract: "SaturationContract",
+        evaluation: "SaturationEvaluation",
+        receipt: "SaturationReceipt",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def commit_saturation_invalidation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        invalidation: "SaturationInvalidation",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def get_saturation_contract(
+        self, contract_id: str
+    ) -> "SaturationContract | None": ...
+
+    def get_saturation_evaluation(
+        self, evaluation_id: str
+    ) -> "SaturationEvaluation | None": ...
+
+    def saturation_evaluations(
+        self, run_id: str
+    ) -> tuple["SaturationEvaluation", ...]: ...
+
+    def get_saturation_receipt(
+        self, receipt_id: str
+    ) -> "SaturationReceipt | None": ...
+
+    def get_saturation_invalidation(
+        self, invalidation_id: str
+    ) -> "SaturationInvalidation | None": ...
+
+    def is_saturation_evaluation_invalidated(self, evaluation_id: str) -> bool: ...
+
+    def active_saturation_evaluation(
+        self, run_id: str
+    ) -> "SaturationEvaluation | None": ...
+
+
+class GenesisQuestionRepository(SaturationRepository, Protocol):
+    def commit_genesis_question(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        graph: "DecisionGraph",
+        package: "GenesisQuestionPackage",
+        receipt: "GenesisQuestionReceipt",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def commit_genesis_question_invalidation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        invalidation: "GenesisQuestionInvalidation",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def get_decision_graph(self, graph_id: str) -> "DecisionGraph | None": ...
+
+    def get_genesis_question_package(
+        self, package_id: str
+    ) -> "GenesisQuestionPackage | None": ...
+
+    def get_genesis_question_receipt(
+        self, receipt_id: str
+    ) -> "GenesisQuestionReceipt | None": ...
+
+    def get_genesis_question_invalidation(
+        self, invalidation_id: str
+    ) -> "GenesisQuestionInvalidation | None": ...
+
+    def active_genesis_question(
+        self, run_id: str
+    ) -> "GenesisQuestionPackage | None": ...
+
+    def get_draft_harness_model(
+        self, model_id: str
+    ) -> "DraftHarnessModel | None": ...
+
+    def get_atomic_boundary(
+        self, boundary_id: str
+    ) -> "DeclaredAtomicBoundary | None": ...
+
+    def get_atomicity_ratification(
+        self, ratification_id: str
+    ) -> "AtomicityRatification | None": ...
 
 
 class AtomicityRepository(EvidenceWorkspaceRepository, Protocol):

@@ -1,0 +1,32 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-01.04
+verdict: PASS
+sample:
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  contract_id: synthetic_category_neutral_saturation_v1
+  contract_hash: sha256:b8bcc807e1ff5b87e3370179d41a4ac41a6321ec6408819d789f45b3865b4fa7
+  evaluation_id: saturation-evaluation_547928ca1fb29b930af299a5c33a86c5a69105ebc1429f0b6a7ee9293e4f5d91
+  evaluation_hash: sha256:547928ca1fb29b930af299a5c33a86c5a69105ebc1429f0b6a7ee9293e4f5d91
+  receipt_id: saturation-receipt_ce6906e58e92c6a387606a7041f028c9c6cab2fa04e47d47f693e854b0b6afa3
+  receipt_hash: sha256:ce6906e58e92c6a387606a7041f028c9c6cab2fa04e47d47f693e854b0b6afa3
+  outcome: PASS
+  downstream_consequence: PROCEED
+committed_observation_intents:
+  - ST-01.04:SaturationEvaluated
+  - ST-01.04:OutcomeVerified
+failure_and_lifecycle_observations:
+  - ST-01.04:OutcomeRejected
+  - ST-01.04:SaturationReplayReturned
+  - ST-01.04:SaturationInvalidated
+required_fields: [run_id, story_id, artifact_identity, authority_identity, version, provenance, outcome, failure_context]
+durable_outbox:
+  committed_with_authoritative_state: true
+  delivery_failure_retains_pending_intent: true
+  replay_drains_without_duplicate_acknowledgement: true
+  false_uncommitted_result_after_commit: false
+typed_evidence:
+  role_coverage_count: 1
+  gap_count: 0
+  authority_conflict_count: 0
+  production_eligible: false
+  certified: false

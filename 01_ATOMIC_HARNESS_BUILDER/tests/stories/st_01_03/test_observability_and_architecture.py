@@ -35,7 +35,9 @@ def test_new_source_modules_are_layered_standard_library_only() -> None:
     prohibited = {"requests", "sqlalchemy", "fastapi", "temporalio", "boto3", "delegation", "visual_asset_editor"}
     for relative in (
         "src/cmf_builder/domain/evidence_index.py",
+        "src/cmf_builder/domain/evidence_saturation.py",
         "src/cmf_builder/application/evidence_index_commands.py",
+        "src/cmf_builder/application/evidence_saturation_commands.py",
     ):
         path = ROOT / relative
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
@@ -55,7 +57,9 @@ def test_no_external_product_or_production_surface_is_added() -> None:
         (ROOT / relative).read_text(encoding="utf-8").lower()
         for relative in (
             "src/cmf_builder/domain/evidence_index.py",
+            "src/cmf_builder/domain/evidence_saturation.py",
             "src/cmf_builder/application/evidence_index_commands.py",
+            "src/cmf_builder/application/evidence_saturation_commands.py",
         )
     )
     for prohibited in ("format02", "comfyui", "gpu", "image_generation", "delegation runtime", "production_ready = true"):

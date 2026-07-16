@@ -1,0 +1,85 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-01.03
+primary_epic: EP-01
+active_mode: CATEGORY_NEUTRAL_EVIDENCE_INDEX
+completed_on: "2026-07-16"
+implemented_outcome: >-
+  Later Builder decisions can query a complete immutable inventory of every specimen
+  in the active Source Lock while distinguishing observation, governed status,
+  knowledge status and provenance.
+owned_obligations:
+  FR-014: PASS
+  FR-015: PASS
+  NFR-SCALE-001: PASS
+  NFR-TRACE-004: PASS
+acceptance_criteria:
+  AC-01_complete_descriptor_coverage: PASS
+  AC-02_typed_evidence_facets_and_provenance: PASS
+  AC-03_fresh_context_determinism: PASS
+  AC-04_changed_input_new_identity: PASS
+  AC-05_incomplete_collision_or_provenance_rejection: PASS
+  AC-06_authority_stale_and_invalidated_rejection: PASS
+  AC-07_payload_safe_idempotency: PASS
+  AC-08_atomic_commit_and_observation_outbox: PASS
+  AC-09_non_destructive_invalidation: PASS
+  AC-10_corpus_scale_100000_descriptors: PASS
+  AC-11_observability_and_receipt_link: PASS
+  AC-12_architecture_and_product_boundaries: PASS
+dependencies:
+  ST_01_02_completion_receipt_sha256: 47706d905e3dbebf967a1a2124aa0f678f398f1826fe3fb0900ef878977526f6
+  ST_01_02_file_manifest_sha256: c4a1f73b391b884edf2086c05920c25eae3a91b482114075b59c54fedfde2ad2
+  BQA_correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+  BQA_integration_gate_sha256: 4c43175b1872c1b2055d6772b0294d0e2a5152a90921be70d2d9403867f38313
+  validation: PASS
+capsule:
+  manifest_sha256: e18e07a758fe4d6672281f445ea2cf71acedbe6142e333023e4b9d09ea6f14e7
+  bundle_digest: 457ce102e1eee99200f178fda3615399890bbe68851e9dd57d374bb5ffe3cb8a
+  immutable_inputs: PASS_18_OF_18
+  implementation_authorization_sha256: 562bf47c3e9c40d5cee5bcef52dcb733298b6a253b7f415ff5eb464f021dba5b
+  standing_campaign_authority: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+files_changed:
+  manifest_path: development-capsules/ST-01.03/completion/FILE_CHANGE_MANIFEST.yaml
+  manifest_sha256: 44a13925321e94fcefd65b0c338f645d1162723ecd052aed5bca066446306e9c
+  implementation_and_test_path_count: 17
+  file_scope_validation: PASS_EXACT_ALLOWLIST
+  prohibited_paths_modified: []
+tests:
+  preimplementation_regression: PASS_600_OF_600
+  Story_clean_run_1: PASS_20_OF_20
+  Story_clean_run_2: PASS_20_OF_20
+  affected_architecture_and_BQA: PASS_137_OF_137
+  full_repository_regression: PASS_620_OF_620
+  mandatory_skips: 0
+  python_compilation: PASS_186_OF_186_SOURCE_47_OF_47
+  results_path: development-capsules/ST-01.03/completion/TEST_RESULTS.json
+  results_sha256: 2700ea05b8e5c1b387da67f9b812454895a4d6cc2c6b06eac6060f040759e6f1
+contract_and_architecture_validation:
+  SourceLock_lineage: PASS
+  Specimen_coverage_and_identity: PASS
+  observation_status_knowledge_and_provenance_separation: PASS
+  EvidenceIndex_and_receipt_determinism: PASS
+  authority_binding: PASS_CODE_ONLY
+  atomic_commit: PASS
+  durable_observation_outbox: PASS
+  exact_source_sets: PASS
+  external_dependency_added: false
+  schema_or_registry_change: false
+observability_evidence:
+  path: development-capsules/ST-01.03/completion/OBSERVABILITY_EVIDENCE.yaml
+  sha256: dd2bb7959b2c96f4f553bbea8afa80a8d6456f06eafee0a59dd19fe989ded2cd
+  verdict: PASS
+rollback_and_invalidation_evidence:
+  path: development-capsules/ST-01.03/completion/ROLLBACK_EVIDENCE.md
+  sha256: dfed861380fc9686a16d8cd2f027665b0d3d56bd3bd28b86201b33f6a7e18cec
+  atomic_failure_zero_partial_state: PASS
+  historical_reproduction_after_invalidation: PASS
+unresolved_limitations:
+  - current_repository_adapter_is_development_test_only
+  - no_saturation_or_semantic_inference
+  - real_profile_corpora_remain_evidence_gated
+  - BQA-P3-010_pytest_asyncio_configuration_warning_remains_non_blocking
+production_ready: false
+certified: false
+full_product_ready: false
+newly_discovered_blockers: []
+completion_verdict: PASS

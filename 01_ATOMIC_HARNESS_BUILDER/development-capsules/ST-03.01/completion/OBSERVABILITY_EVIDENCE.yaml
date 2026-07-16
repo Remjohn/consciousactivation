@@ -1,0 +1,29 @@
+schema_version: cmf-builder-observability-evidence/v1
+story_id: ST-03.01
+verdict: PASS
+deterministic_reference:
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  graph_id: decision-graph_efd241d92576fe75343d652095b982161273309b44ada588419e5db014d83da7
+  graph_hash: sha256:efd241d92576fe75343d652095b982161273309b44ada588419e5db014d83da7
+  package_id: genesis-question_3cf33edd4f200a344dbd6f87506a7ed8bccc04ec0e0e6cd15d514ed910955c5f
+  package_hash: sha256:3cf33edd4f200a344dbd6f87506a7ed8bccc04ec0e0e6cd15d514ed910955c5f
+  recommendation_id: recommendation_6697eebe5a224c56eb8ba796e3662286594629e2294ebdd91542872b18f1006f
+  recommendation_hash: sha256:6697eebe5a224c56eb8ba796e3662286594629e2294ebdd91542872b18f1006f
+  receipt_id: genesis-question-receipt_019bb6e4-b300-7342-9137-720a33591874
+  receipt_hash: sha256:7fd688b09fd8605a0b2dd4c338c2edbc80f50536c64f90f0b433e4122fe70fd3
+  event_id: event_019bb6e4-b300-7a1d-a53c-65298d1cc6e8
+  stream_version: 12
+required_success_observations:
+  - ST-03.01:QuestionPackageCompiled
+  - ST-03.01:OutcomeVerified
+required_failure_and_lifecycle_observations:
+  - ST-03.01:QuestionPackageRejected
+  - ST-03.01:QuestionPackageReplayReturned
+  - ST-03.01:QuestionPackageInvalidated
+evidence:
+  atomic_outbox_commit_and_retry: PASS
+  typed_rejection_context: PASS
+  replay_observation: PASS
+  invalidation_observation: PASS
+  exact_run_story_artifact_authority_and_provenance: PASS
+  no_false_uncommitted_success: PASS
