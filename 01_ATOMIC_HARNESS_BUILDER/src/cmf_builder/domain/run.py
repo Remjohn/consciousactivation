@@ -142,6 +142,9 @@ class Run:
     human_decision_receipt_ids: tuple[str, ...] = ()
     active_checkpoint_id: str | None = None
     source_lock_ref: str | None = None
+    evidence_index_ref: str | None = None
+    evidence_index_hash: str | None = None
+    evidence_index_invalidation_ref: str | None = None
     atomic_boundary_ref: str | None = None
     atomicity_ratification_ref: str | None = None
     draft_harness_model_ref: str | None = None
@@ -179,6 +182,12 @@ class Run:
     atomic_harness_definition_ref: str | None = None
     atomic_harness_definition_hash: str | None = None
     atomic_harness_definition_invalidation_ref: str | None = None
+    atomic_content_harness_validation_ref: str | None = None
+    atomic_content_harness_validation_hash: str | None = None
+    atomic_content_harness_validation_invalidation_ref: str | None = None
+    development_capsule_ref: str | None = None
+    development_capsule_hash: str | None = None
+    development_capsule_invalidation_ref: str | None = None
 
     @property
     def required_work(self) -> tuple[str, ...]:
@@ -431,6 +440,127 @@ class Run:
         )
         return self._apply(event), event
 
+    def attach_evidence_index(
+        self,
+        *,
+        index_ref: str,
+        index_hash: str,
+        source_lock_ref: str,
+        source_lock_hash: str,
+        specimen_count: int,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.lifecycle_state is not LifecycleState.SOURCE_LOCKED
+            or not self.source_lock_ref
+            or self.source_lock_ref != source_lock_ref
+            or (
+                self.evidence_index_ref is not None
+                and self.evidence_index_invalidation_ref is None
+            )
+        ):
+            raise TransitionRejected(
+                "Evidence indexing requires one active Source Lock and no active index.",
+                source_lock_ref=self.source_lock_ref,
+                evidence_index_ref=self.evidence_index_ref,
+            )
+        if (
+            not all(
+                value.strip()
+                for value in (
+                    index_ref,
+                    index_hash,
+                    source_lock_ref,
+                    source_lock_hash,
+                    actor_id,
+                )
+            )
+            or specimen_count <= 0
+        ):
+            raise RunContractError("Evidence-index attachment identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id,
+            event_type="EvidenceIndexAttached",
+            run_id=self.run_id,
+            stream_version=self.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            payload={
+                "index_ref": index_ref,
+                "index_hash": index_hash,
+                "source_lock_ref": source_lock_ref,
+                "source_lock_hash": source_lock_hash,
+                "specimen_count": specimen_count,
+            },
+        )
+        return self._apply(event), event
+
+    def invalidate_evidence_index(
+        self,
+        *,
+        index_ref: str,
+        index_hash: str,
+        source_lock_ref: str,
+        invalidation_ref: str,
+        reason: str,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.evidence_index_ref != index_ref
+            or self.evidence_index_hash != index_hash
+            or self.source_lock_ref != source_lock_ref
+            or self.evidence_index_invalidation_ref is not None
+        ):
+            raise TransitionRejected(
+                "Only the active evidence index may be invalidated.",
+                evidence_index_ref=self.evidence_index_ref,
+            )
+        if not all(
+            value.strip()
+            for value in (
+                index_ref,
+                index_hash,
+                source_lock_ref,
+                invalidation_ref,
+                reason,
+                actor_id,
+            )
+        ):
+            raise RunContractError("Evidence-index invalidation identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id,
+            event_type="EvidenceIndexInvalidated",
+            run_id=self.run_id,
+            stream_version=self.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            payload={
+                "index_ref": index_ref,
+                "index_hash": index_hash,
+                "source_lock_ref": source_lock_ref,
+                "invalidation_ref": invalidation_ref,
+                "reason": reason,
+                "new_version_required": True,
+            },
+        )
+        return self._apply(event), event
+
     def resume(
         self,
         *,
@@ -677,33 +807,41 @@ class Run:
                 invalidation_ref=self.boundary_invalidation_ref,
             )
         expected_event_count = (
-            13
-            if self.atomic_harness_definition_ref
+            15
+            if self.development_capsule_ref
             else (
-                12
-                if self.skill_necessity_ref
+                14
+                if self.atomic_content_harness_validation_ref
                 else (
-                    11
-                    if self.skill_registry_snapshot_ref
+                    13
+                    if self.atomic_harness_definition_ref
                     else (
-                        10
-                        if self.minimum_context_ref
+                        12
+                        if self.skill_necessity_ref
                         else (
-                            9
-                            if self.phase_handoff_ref
+                            11
+                            if self.skill_registry_snapshot_ref
                             else (
-                                8
-                                if self.phase_graph_ref
+                                10
+                                if self.minimum_context_ref
                                 else (
-                                    7
-                                    if self.responsibility_module_ref
+                                    9
+                                    if self.phase_handoff_ref
                                     else (
-                                        6
-                                        if self.capability_ownership_ref
+                                        8
+                                        if self.phase_graph_ref
                                         else (
-                                            5
-                                            if self.constitutional_validation_ref
-                                            else (4 if self.artifact_set_ref else (3 if self.harness_ir_ref else 2))
+                                            7
+                                            if self.responsibility_module_ref
+                                            else (
+                                                6
+                                                if self.capability_ownership_ref
+                                                else (
+                                                    5
+                                                    if self.constitutional_validation_ref
+                                                    else (4 if self.artifact_set_ref else (3 if self.harness_ir_ref else 2))
+                                                )
+                                            )
                                         )
                                     )
                                 )
@@ -1071,7 +1209,80 @@ class Run:
                 "new_version_required": True,
             },
         )
-        return after_skill_necessity._apply(definition_invalidated), (
+        after_definition = after_skill_necessity._apply(definition_invalidated)
+        if not self.atomic_content_harness_validation_ref:
+            return after_definition, (
+                reopened,
+                invalidated,
+                harness_ir_invalidated,
+                artifact_set_invalidated,
+                constitutional_validation_invalidated,
+                capability_ownership_invalidated,
+                responsibility_modules_invalidated,
+                phase_graph_invalidated,
+                phase_handoffs_invalidated,
+                minimum_context_invalidated,
+                skill_registry_invalidated,
+                skill_necessity_invalidated,
+                definition_invalidated,
+            )
+        target_validation_invalidated = RunEvent.create(
+            event_id=event_ids[13],
+            event_type="AtomicContentHarnessValidationInvalidated",
+            run_id=self.run_id,
+            stream_version=after_definition.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=definition_invalidated.event_id,
+            payload={
+                "validation_ref": self.atomic_content_harness_validation_ref,
+                "definition_ref": self.atomic_harness_definition_ref,
+                "invalidation_ref": invalidation_ref,
+                "reason": reason,
+                "new_version_required": True,
+            },
+        )
+        after_target_validation = after_definition._apply(
+            target_validation_invalidated
+        )
+        if not self.development_capsule_ref:
+            return after_target_validation, (
+                reopened,
+                invalidated,
+                harness_ir_invalidated,
+                artifact_set_invalidated,
+                constitutional_validation_invalidated,
+                capability_ownership_invalidated,
+                responsibility_modules_invalidated,
+                phase_graph_invalidated,
+                phase_handoffs_invalidated,
+                minimum_context_invalidated,
+                skill_registry_invalidated,
+                skill_necessity_invalidated,
+                definition_invalidated,
+                target_validation_invalidated,
+            )
+        development_capsule_invalidated = RunEvent.create(
+            event_id=event_ids[14],
+            event_type="DevelopmentCapsuleInvalidated",
+            run_id=self.run_id,
+            stream_version=after_target_validation.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=target_validation_invalidated.event_id,
+            payload={
+                "capsule_ref": self.development_capsule_ref,
+                "validation_ref": self.atomic_content_harness_validation_ref,
+                "invalidation_ref": invalidation_ref,
+                "reason": reason,
+                "new_version_required": True,
+            },
+        )
+        return after_target_validation._apply(development_capsule_invalidated), (
             reopened,
             invalidated,
             harness_ir_invalidated,
@@ -1085,6 +1296,8 @@ class Run:
             skill_registry_invalidated,
             skill_necessity_invalidated,
             definition_invalidated,
+            target_validation_invalidated,
+            development_capsule_invalidated,
         )
 
     def attach_artifact_manifest(
@@ -1827,6 +2040,151 @@ class Run:
         )
         return self._apply(event), event
 
+    def attach_atomic_content_harness_validation(
+        self,
+        *,
+        validation_ref: str,
+        validation_hash: str,
+        definition_ref: str,
+        definition_hash: str,
+        dimension_count: int,
+        section_count: int,
+        internal_compatibility: str,
+        external_target_compatibility: str,
+        synthetic_not_certifiable: bool,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.lifecycle_state is not LifecycleState.GENESIS
+            or not self.atomic_harness_definition_ref
+            or self.atomic_harness_definition_ref != definition_ref
+            or self.atomic_harness_definition_hash != definition_hash
+            or self.atomic_harness_definition_invalidation_ref is not None
+            or self.atomic_content_harness_validation_ref is not None
+            or self.atomic_content_harness_validation_invalidation_ref is not None
+            or not all(value.strip() for value in (
+                validation_ref,
+                validation_hash,
+                definition_ref,
+                definition_hash,
+            ))
+            or dimension_count != 8
+            or section_count != 20
+            or internal_compatibility != "PASS"
+            or external_target_compatibility
+            != "NOT_EVALUATED_EXTERNAL_TARGET_BRANCH"
+            or not synthetic_not_certifiable
+        ):
+            raise TransitionRejected(
+                "Target validation requires the exact active synthetic Atomic Harness Definition.",
+                lifecycle_state=self.lifecycle_state.value,
+                definition_ref=self.atomic_harness_definition_ref,
+                validation_ref=self.atomic_content_harness_validation_ref,
+            )
+        event = RunEvent.create(
+            event_id=event_id,
+            event_type="AtomicContentHarnessValidationAttached",
+            run_id=self.run_id,
+            stream_version=self.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            payload={
+                "validation_ref": validation_ref,
+                "validation_hash": validation_hash,
+                "definition_ref": definition_ref,
+                "definition_hash": definition_hash,
+                "dimension_count": dimension_count,
+                "section_count": section_count,
+                "internal_compatibility": internal_compatibility,
+                "external_target_compatibility": external_target_compatibility,
+                "synthetic_not_certifiable": synthetic_not_certifiable,
+            },
+        )
+        return self._apply(event), event
+
+    def attach_development_capsule(
+        self,
+        *,
+        capsule_ref: str,
+        capsule_hash: str,
+        validation_ref: str,
+        validation_hash: str,
+        section_count: int,
+        reference_count: int,
+        obligation_count: int,
+        production_eligible: bool,
+        certified: bool,
+        synthetic_not_certifiable: bool,
+        event_id: str,
+        command_id: str,
+        actor_id: str,
+        timestamp: datetime,
+        correlation_id: str,
+        causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.lifecycle_state is not LifecycleState.GENESIS
+            or not self.atomic_content_harness_validation_ref
+            or self.atomic_content_harness_validation_ref != validation_ref
+            or self.atomic_content_harness_validation_hash != validation_hash
+            or self.atomic_content_harness_validation_invalidation_ref is not None
+            or self.development_capsule_ref is not None
+            or self.development_capsule_invalidation_ref is not None
+            or not all(
+                value.strip()
+                for value in (
+                    capsule_ref,
+                    capsule_hash,
+                    validation_ref,
+                    validation_hash,
+                )
+            )
+            or section_count != 15
+            or reference_count < 20
+            or obligation_count != 6
+            or production_eligible
+            or certified
+            or not synthetic_not_certifiable
+        ):
+            raise TransitionRejected(
+                "Development Capsule generation requires the exact active validated synthetic Harness.",
+                lifecycle_state=self.lifecycle_state.value,
+                validation_ref=self.atomic_content_harness_validation_ref,
+                capsule_ref=self.development_capsule_ref,
+            )
+        event = RunEvent.create(
+            event_id=event_id,
+            event_type="DevelopmentCapsuleAttached",
+            run_id=self.run_id,
+            stream_version=self.stream_version + 1,
+            command_id=command_id,
+            actor_id=actor_id,
+            timestamp=timestamp,
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            payload={
+                "capsule_ref": capsule_ref,
+                "capsule_hash": capsule_hash,
+                "validation_ref": validation_ref,
+                "validation_hash": validation_hash,
+                "section_count": section_count,
+                "reference_count": reference_count,
+                "obligation_count": obligation_count,
+                "production_eligible": production_eligible,
+                "certified": certified,
+                "synthetic_not_certifiable": synthetic_not_certifiable,
+            },
+        )
+        return self._apply(event), event
+
     def state_hash(self) -> str:
         payload = {
             "run_id": self.run_id,
@@ -1876,8 +2234,29 @@ class Run:
             "atomic_harness_definition_ref": self.atomic_harness_definition_ref,
             "atomic_harness_definition_hash": self.atomic_harness_definition_hash,
             "atomic_harness_definition_invalidation_ref": self.atomic_harness_definition_invalidation_ref,
+            "atomic_content_harness_validation_ref": self.atomic_content_harness_validation_ref,
+            "atomic_content_harness_validation_hash": self.atomic_content_harness_validation_hash,
+            "atomic_content_harness_validation_invalidation_ref": self.atomic_content_harness_validation_invalidation_ref,
+            "development_capsule_ref": self.development_capsule_ref,
+            "development_capsule_hash": self.development_capsule_hash,
+            "development_capsule_invalidation_ref": self.development_capsule_invalidation_ref,
             "event_prefix_hash": self.event_prefix_hash(self.stream_version),
         }
+        if any(
+            value is not None
+            for value in (
+                self.evidence_index_ref,
+                self.evidence_index_hash,
+                self.evidence_index_invalidation_ref,
+            )
+        ):
+            payload.update(
+                {
+                    "evidence_index_ref": self.evidence_index_ref,
+                    "evidence_index_hash": self.evidence_index_hash,
+                    "evidence_index_invalidation_ref": self.evidence_index_invalidation_ref,
+                }
+            )
         return f"sha256:{sha256(_canonical_json(payload)).hexdigest()}"
 
     def state_hash_at(self, stream_version: int) -> str:
@@ -1914,6 +2293,9 @@ class Run:
         human_receipts = self.human_decision_receipt_ids
         checkpoint_id = self.active_checkpoint_id
         source_lock_ref = self.source_lock_ref
+        evidence_index_ref = self.evidence_index_ref
+        evidence_index_hash = self.evidence_index_hash
+        evidence_index_invalidation_ref = self.evidence_index_invalidation_ref
         atomic_boundary_ref = self.atomic_boundary_ref
         atomicity_ratification_ref = self.atomicity_ratification_ref
         draft_harness_model_ref = self.draft_harness_model_ref
@@ -1961,6 +2343,20 @@ class Run:
         atomic_harness_definition_invalidation_ref = (
             self.atomic_harness_definition_invalidation_ref
         )
+        atomic_content_harness_validation_ref = (
+            self.atomic_content_harness_validation_ref
+        )
+        atomic_content_harness_validation_hash = (
+            self.atomic_content_harness_validation_hash
+        )
+        atomic_content_harness_validation_invalidation_ref = (
+            self.atomic_content_harness_validation_invalidation_ref
+        )
+        development_capsule_ref = self.development_capsule_ref
+        development_capsule_hash = self.development_capsule_hash
+        development_capsule_invalidation_ref = (
+            self.development_capsule_invalidation_ref
+        )
         if event.event_type == "LifecycleTransitioned":
             state = LifecycleState(str(event.value("to_state")))
         elif event.event_type == "LifecycleWaiverGranted":
@@ -1971,6 +2367,14 @@ class Run:
             checkpoint_id = str(event.value("checkpoint_id"))
         elif event.event_type == "SourceLockAttached":
             source_lock_ref = str(event.value("source_lock_ref"))
+        elif event.event_type == "EvidenceIndexAttached":
+            evidence_index_ref = str(event.value("index_ref"))
+            evidence_index_hash = str(event.value("index_hash"))
+            evidence_index_invalidation_ref = None
+        elif event.event_type == "EvidenceIndexInvalidated":
+            evidence_index_invalidation_ref = str(
+                event.value("invalidation_ref")
+            )
         elif event.event_type == "AtomicityRatificationRecorded":
             receipt_id = str(event.value("human_receipt_id"))
             atomicity_ratification_ref = str(event.value("ratification_ref"))
@@ -2050,6 +2454,24 @@ class Run:
             atomic_harness_definition_invalidation_ref = str(
                 event.value("invalidation_ref")
             )
+        elif event.event_type == "AtomicContentHarnessValidationAttached":
+            atomic_content_harness_validation_ref = str(
+                event.value("validation_ref")
+            )
+            atomic_content_harness_validation_hash = str(
+                event.value("validation_hash")
+            )
+        elif event.event_type == "AtomicContentHarnessValidationInvalidated":
+            atomic_content_harness_validation_invalidation_ref = str(
+                event.value("invalidation_ref")
+            )
+        elif event.event_type == "DevelopmentCapsuleAttached":
+            development_capsule_ref = str(event.value("capsule_ref"))
+            development_capsule_hash = str(event.value("capsule_hash"))
+        elif event.event_type == "DevelopmentCapsuleInvalidated":
+            development_capsule_invalidation_ref = str(
+                event.value("invalidation_ref")
+            )
         elif event.event_type == "AtomicityDecisionRecorded":
             decision_hash = str(event.value("decision_hash"))
             if decision_hash not in human_receipts:
@@ -2078,6 +2500,9 @@ class Run:
             human_decision_receipt_ids=human_receipts,
             active_checkpoint_id=checkpoint_id,
             source_lock_ref=source_lock_ref,
+            evidence_index_ref=evidence_index_ref,
+            evidence_index_hash=evidence_index_hash,
+            evidence_index_invalidation_ref=evidence_index_invalidation_ref,
             atomic_boundary_ref=atomic_boundary_ref,
             atomicity_ratification_ref=atomicity_ratification_ref,
             draft_harness_model_ref=draft_harness_model_ref,
@@ -2115,6 +2540,12 @@ class Run:
             atomic_harness_definition_ref=atomic_harness_definition_ref,
             atomic_harness_definition_hash=atomic_harness_definition_hash,
             atomic_harness_definition_invalidation_ref=atomic_harness_definition_invalidation_ref,
+            atomic_content_harness_validation_ref=atomic_content_harness_validation_ref,
+            atomic_content_harness_validation_hash=atomic_content_harness_validation_hash,
+            atomic_content_harness_validation_invalidation_ref=atomic_content_harness_validation_invalidation_ref,
+            development_capsule_ref=development_capsule_ref,
+            development_capsule_hash=development_capsule_hash,
+            development_capsule_invalidation_ref=development_capsule_invalidation_ref,
         )
 
 

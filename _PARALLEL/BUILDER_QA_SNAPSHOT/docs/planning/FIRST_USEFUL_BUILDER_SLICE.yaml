@@ -1,0 +1,75 @@
+schema_version: cmf-builder-first-useful-slice/v1
+evaluated_on: "2026-07-15"
+authority:
+  confirmed_obligations: 410
+  confirmed_epics: 12
+  confirmed_stories: 69
+  story_inventory_changed: false
+starting_state:
+  story_id: ST-01.01
+  readiness: COMPLETE
+  dependency_receipt: development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+  receipt_payload_sha256: d82529f484971ef80bbd94ea29f685c9adfe3e50969aaf78367472695ea8add9
+target_demonstrable_outcome:
+  terminal_story_id: ST-03.04
+  title: Compile Human and Machine Artifacts Deterministically
+  outcome: >-
+    Compile one reproducible, hash-bound human-readable and machine-readable
+    Atomic Harness artifact set from the same provenance-rich canonical Harness IR,
+    without duplicated authority.
+  why_this_is_first: >-
+    ST-01.02 through ST-02.05 establish governed evidence and ratified boundaries;
+    ST-03.01 through ST-03.03 establish human-ratified Genesis and the canonical
+    Harness IR. ST-03.04 is the first confirmed Story whose outcome exposes
+    deterministic compiled artifacts to maintainers rather than only governance
+    infrastructure or an internal source-of-truth record.
+required_stories_in_order:
+  - {order: 1, story_id: ST-01.01, readiness: COMPLETE, blocking_frontier: none}
+  - {order: 2, story_id: ST-01.02, readiness: BLOCKED_EVIDENCE, blocking_frontier: "BD-004[format02_corpus]"}
+  - {order: 3, story_id: ST-01.03, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-01.02 receipt and BD-004[format02_corpus]"}
+  - {order: 4, story_id: ST-01.04, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-01.03 receipt and BD-004[format02_corpus]"}
+  - {order: 5, story_id: ST-02.01, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-01.04 receipt, BD-004[format02_corpus], and BD-007[format02]"}
+  - {order: 6, story_id: ST-02.02, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-02.01 receipt and BD-007[format02]"}
+  - {order: 7, story_id: ST-02.03, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-02.02 receipt; BD-008 certification claims remain fail-closed"}
+  - {order: 8, story_id: ST-02.04, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-02.03 receipt; BD-008 certification claims remain fail-closed"}
+  - {order: 9, story_id: ST-02.05, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-02.04 receipt and story-local human ratification"}
+  - {order: 10, story_id: ST-03.01, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-01.04 and ST-02.05 receipts"}
+  - {order: 11, story_id: ST-03.02, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-03.01 receipt and story-local human authority"}
+  - {order: 12, story_id: ST-03.03, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-03.02 receipt; external-target BD-014 branch excluded"}
+  - {order: 13, story_id: ST-03.04, readiness: BLOCKED_EVIDENCE, blocking_frontier: "ST-03.03 receipt"}
+minimum_external_blocker_cut:
+  - blocker_id: BD-004
+    subscope: format02_minimal_coach_theatre
+    owner: product_lead_and_evidence_steward
+    closure_evidence: governed accessible hash-locked corpus and approved portable source profile
+    earliest_story_released: ST-01.02
+  - blocker_id: BD-007
+    subscope: format02_visual_syntax_provider_baseline
+    owner: architecture_and_benchmark_team
+    closure_evidence: accepted comparison of at least two adapter-compatible providers and deterministic Format 02 baselines
+    earliest_story_released: ST-02.01
+not_in_external_cut:
+  - item: predecessor_StoryCompletionReceipts
+    reason: normal dependency gates produced by completing each Story in order
+  - item: story_local_human_ratifications
+    reason: acceptance actions inside ST-02.05 and ST-03.02, not missing external product evidence
+  - item: BD-008
+    reason: production-certification-only; component implementation must preserve fail-closed certification claims
+explicitly_deferred:
+  - conversational Human Reaction collection and HD-006/HD-007 policies
+  - Interview Expression and ReelCast live product behavior and certification
+  - VAE production realization and runtime behavior
+  - Delegation production runtime and shared-contract ownership
+  - three-target external handoff activation under BD-014
+  - production benchmarks, thresholds, promotion, and certification under BD-008
+  - capability/skill-registry frontier under BD-010
+  - RC4 production trust, signing, and publication
+  - Workflow Runtime and Control Tower implementation
+  - downstream Content Harness implementation and production deployment
+current_execution_frontier:
+  completed: [ST-01.01]
+  next_story: ST-01.02
+  next_story_readiness: BLOCKED_EVIDENCE
+  runnable_sequence_after_completed_story: []
+implementation_authorized: false
+

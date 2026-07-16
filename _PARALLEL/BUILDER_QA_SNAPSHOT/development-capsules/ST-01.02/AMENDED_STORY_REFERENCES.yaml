@@ -1,0 +1,31 @@
+schema_version: cmf-builder-amended-story-reference/v1
+story_id: ST-01.02
+active_mode: SYNTHETIC_DEFINITION
+authority_chain:
+  - path: docs/planning/STORY_INVENTORY.yaml
+    sha256: ee2f53a443b36977bd3ec352c45dbf485cef5c005fdc07d1fc6fafbff37c24fe
+    role: confirmed_69_story_inventory_with_active_conditional_overlay
+  - path: docs/planning/BUILDER_FIRST_STORY_AMENDMENT_RECEIPT.yaml
+    sha256: 8c03c818ab39a8b0056a2e12766aeffd902192c67f3b5e6a0b7d5c93e9a093d8
+    role: human_confirmed_amendment_authority
+  - path: docs/planning/BUILDER_FIRST_STORY_AMENDMENT_VALIDATION.json
+    sha256: f0404231db3bef2cbf152cd1d1ef7f453f5a0b7ca8515a19b0612cb085c510fd
+    role: amendment_validation
+amendment:
+  amendment_id: BF-AM-002
+  confirmed_phrase: CONFIRM BUILDER-FIRST CORE TRACK AND STORY AMENDMENTS
+  preserved_obligation_count: 10
+  primary_obligation_ownership_changes: []
+  synthetic_definition_mode:
+    dependency: ST-01.01-SYNTHETIC-PROOF:SupplementalStoryCompletionReceipt
+    source: repository-owned synthetic task definition
+    applicable_blockers: []
+  retained_other_modes:
+    real_profile:
+      dependency: ST-01.01:StoryCompletionReceipt
+      applicable_blockers: [BD-004]
+    external_or_conversational:
+      dependency: ST-01.01:StoryCompletionReceipt
+      applicable_blockers: [BD-014, HD-006]
+historical_story_definition_preserved: true
+confirmed_story_id_added_or_removed: false

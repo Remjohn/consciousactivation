@@ -1,0 +1,60 @@
+schema_version: cmf-builder-contract-reference-set/v1
+story_id: ST-03.03
+active_mode: PRE_RATIFIED_SYNTHETIC_INPUT
+upstream_implemented_contracts:
+  - {contract: SourceLock, owner: Builder, module: src/cmf_builder/domain/evidence_workspace.py, use: immutable_evidence_identity}
+  - {contract: DeclaredAtomicBoundary, owner: Builder, module: src/cmf_builder/domain/atomicity.py, use: frozen_product_boundary}
+  - {contract: AtomicityRatification, owner: human_decision_plus_Builder_validation, module: src/cmf_builder/domain/atomicity.py, use: attributable_boundary_authority}
+  - {contract: DraftHarnessModel, owner: Builder, module: src/cmf_builder/domain/atomicity.py, use: governed_input_values_and_statuses}
+new_builder_owned_contracts:
+  - HarnessIR
+  - GovernedValue
+  - HarnessIRIdentity
+  - HarnessIRCompatibilityPolicy
+  - HarnessIRDeprecation
+  - HarnessIRSnapshot
+  - HarnessIRCompilationReceipt
+  - HarnessIRInvalidation
+schema_contract:
+  schema_id: cmf-builder-harness-ir/v1
+  version: 1.0.0
+  representation: typed_Python_contract_plus_canonical_JSON
+  local_JSON_schema_added: false
+  rationale: schema_file_generation_belongs_to_later_compiler_work_and_is_not_required_for_this_typed_vertical_slice
+required_sections:
+  - identity
+  - evidence
+  - syntax
+  - activative_semantics
+  - phases
+  - contexts
+  - contracts
+  - modules
+  - skills
+  - references
+  - evaluators
+  - repairs
+  - budgets
+  - implementation_units
+  - authorization
+required_activative_lineage_keys:
+  - identity_dna_ref
+  - context_premise_ref
+  - resonance_ref
+  - matrix_of_edging_ref
+  - activative_intelligence_pack_ref
+synthetic_lineage_rule: explicit_NOT_APPLICABLE_with_provenance_never_generic_notes
+separate_aggregate_boundary:
+  WorkflowIR_owner: later_Builder_workflow_Story
+  WorkflowIR_may_reference_HarnessIR: true
+  WorkflowIR_may_own_or_rewrite_HarnessIR_values: false
+  HarnessIR_forbidden_fields: [worker, queue, retry, sandbox, deployment]
+external_contracts:
+  Delegation_RC4_required: false
+  VAE_contract_required: false
+  shared_schema_fork_allowed: false
+  external_runtime_required: false
+read_only_planned_reference:
+  path: docs/contracts/schemas/shared-activative-core.schema.json
+  use: key_names_and_lineage_boundary_only
+  implementation_or_ownership_absorbed: false

@@ -1,0 +1,22 @@
+schema_version: cmf-builder-capsule-contract-references/v1
+story_id: ST-04.04
+consumed_contracts:
+  - id: PhaseGraph
+    contract: cmf-builder-phase-graph/v1@1.0.0
+    authority: ST-04.03
+    mutation: prohibited
+  - id: PhaseGraphReceipt
+    contract: cmf-builder-phase-graph-receipt/v1
+    authority: ST-04.03
+    mutation: prohibited
+produced_typed_contracts: [PhaseContextContract, PhaseHandoffContract, PhaseHandoffGraph, PhaseHandoffReceipt, PhaseHandoffInvalidation, CompilePhaseHandoffsCommand]
+governed_input:
+  path: development-capsules/ST-04.04/PHASE_HANDOFF_INPUT.json
+  schema: cmf-builder-synthetic-phase-handoff-input/v1
+schema_file_change: prohibited
+database_schema_change: prohibited
+external_contract_ownership: unchanged
+Delegation_pin_required: false
+VAE_contract_required: false
+compatibility_rule: changed_context_field_handoff_authority_mutation_or_invalidation_semantics_requires_new_immutable_version
+external_handoff_rule: BD_014_remains_required_and_out_of_scope

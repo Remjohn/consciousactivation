@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cmf.local/builder/schemas/empty-skill-registry.schema.json",
+  "title": "Builder Core Synthetic Empty Skill Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "version",
+    "status",
+    "scope",
+    "authority",
+    "capabilities",
+    "skills",
+    "declarations",
+    "hash_contract"
+  ],
+  "properties": {
+    "schema_version": {"const": "cmf-builder-empty-skill-registry/v1"},
+    "registry_id": {"const": "builder-core-synthetic-empty-skill-registry"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "status": {"const": "ACTIVE_SYNTHETIC_PROOF_ONLY"},
+    "scope": {"const": "ST-01.01-SYNTHETIC-PROOF"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_id", "owner", "approval_source", "approved_on"],
+      "properties": {
+        "policy_id": {"const": "builder-core-empty-skill-registry-policy-v1"},
+        "owner": {"const": "skill_architecture"},
+        "approval_source": {"const": "current_thread_human_product_authority"},
+        "approved_on": {"const": "2026-07-15"}
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capability_id", "owner_kind", "skill_required", "determinism"],
+        "properties": {
+          "capability_id": {"type": "string", "minLength": 1},
+          "owner_kind": {"const": "builder_code"},
+          "skill_required": {"const": false},
+          "determinism": {"const": "deterministic"}
+        }
+      }
+    },
+    "skills": {"type": "array", "maxItems": 0},
+    "declarations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_skills_required",
+        "dynamic_skill_discovery_allowed",
+        "undeclared_skill_use",
+        "later_external_skill_effect",
+        "production_inference"
+      ],
+      "properties": {
+        "external_skills_required": {"const": false},
+        "dynamic_skill_discovery_allowed": {"const": false},
+        "undeclared_skill_use": {"const": "FAIL_CLOSED"},
+        "later_external_skill_effect": {"const": "NEW_IMMUTABLE_HARNESS_VERSION_REQUIRED"},
+        "production_inference": {"const": "PROHIBITED"}
+      }
+    },
+    "hash_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "canonical_bytes", "hash_carrier"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "canonical_bytes": {"const": "repository_file_bytes_utf8"},
+        "hash_carrier": {"const": "governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json"}
+      }
+    }
+  }
+}

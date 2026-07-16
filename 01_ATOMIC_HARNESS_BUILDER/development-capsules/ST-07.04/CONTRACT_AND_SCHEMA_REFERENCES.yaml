@@ -1,0 +1,24 @@
+schema_version: cmf-builder-contract-schema-reference/v1
+story_id: ST-07.04
+owned_typed_contracts_to_implement:
+  - TargetArtifactValidationDimension
+  - AtomicContentHarnessValidationReport
+  - AtomicContentHarnessValidationReceipt
+  - AtomicContentHarnessValidationInvalidation
+  - ValidateAtomicContentHarnessCommand
+governed_inputs:
+  - {contract: AtomicHarnessDefinition, source: src/cmf_builder/domain/atomic_harness_definition.py, ownership: Builder}
+  - {contract: AtomicHarnessDefinitionReceipt, source: development-capsules/ST-07.02/completion/STORY_COMPLETION_RECEIPT.yaml, ownership: Builder_completion_evidence}
+  - {contract: ST_07_04_validation_policy, source: development-capsules/ST-07.04/SYNTHETIC_TARGET_VALIDATION_POLICY.json, ownership: capsule_governance}
+contract_rules:
+  target_kind: atomic_content_harness
+  profile_id: synthetic_text_normalization_v1
+  definition_certification: synthetic_not_certifiable
+  internal_compatibility: REQUIRED_PASS
+  external_target_compatibility: NOT_EVALUATED_EXTERNAL_TARGET_BRANCH
+  external_target_packages_compiled: false
+external_contracts:
+  Delegation_1_1_0_rc_4: NOT_DEPENDED_ON_BY_THIS_MODE
+  VAE_contracts: NOT_DEPENDED_ON_BY_THIS_MODE
+schema_files_to_add_or_modify: []
+local_external_schema_fork_allowed: false

@@ -1,0 +1,55 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-11.01
+verdict: PASS
+deterministic_success_observations:
+  count: 17
+  events:
+    - development_capsule_generation_started
+    - development_capsule_section_accepted_requirements
+    - development_capsule_section_authority
+    - development_capsule_section_atomic_harness_definition
+    - development_capsule_section_upstream_lineage
+    - development_capsule_section_architecture_and_responsibility_boundaries
+    - development_capsule_section_contracts_and_compatibility
+    - development_capsule_section_justified_scaffolding
+    - development_capsule_section_examples_and_fixtures
+    - development_capsule_section_acceptance_criteria_and_tests
+    - development_capsule_section_observability
+    - development_capsule_section_rollback_and_invalidation
+    - development_capsule_section_implementation_scope
+    - development_capsule_section_prohibited_scope
+    - development_capsule_section_dependency_order
+    - development_capsule_section_completion_receipt_contract
+    - development_capsule_generation_committed
+replay_observation: development_capsule_generation_replayed
+rejection_observation: development_capsule_generation_rejected
+invalidation_observation: development_capsule_invalidated
+required_fields:
+  - run_command_and_authority_identity
+  - definition_identity_and_hash
+  - ST_07_04_validation_identity_and_hash
+  - capsule_identity_and_hash
+  - capsule_receipt_identity_and_hash
+  - section_reference_and_obligation_counts
+  - compatibility_and_certification_scope
+  - outcome_failure_context_and_replay_state
+representative_evidence:
+  capsule_id: development-capsule_b08be1af6e06aeef59b9fb65fbadf42819f5821e39448f8f04207392afac0e58
+  capsule_hash: sha256:b08be1af6e06aeef59b9fb65fbadf42819f5821e39448f8f04207392afac0e58
+  receipt_id: development-capsule-receipt_f9d41574239c4a38119acc5634b287256eab40f9b24e64398d34768eb77da9f9
+  receipt_hash: sha256:f9d41574239c4a38119acc5634b287256eab40f9b24e64398d34768eb77da9f9
+  capsule_sections: 15
+  immutable_references: 25
+  owned_obligations: 6
+  complete_lineage_values: 60
+  internal_compatibility: PASS
+  external_target_compatibility: NOT_EVALUATED_EXTERNAL_TARGET_BRANCH
+  production_eligible: false
+  certified: false
+  certification_state: synthetic_not_certifiable
+failure_observation_rules:
+  typed_context_without_secrets_or_local_paths: PASS
+  injected_atomic_commit_failure_emits_no_partial_observation: PASS
+  failed_commit_persists_no_events_or_command_records: PASS
+portable_path_free_payloads: PASS
+external_runtime_or_product_data_emitted: false

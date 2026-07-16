@@ -1,0 +1,182 @@
+schema_version: cmf-builder-constitutional-alignment-patch-batches/v1
+batches:
+  A:
+    name: authority_and_requirements_impact_analysis
+    status: COMPLETE_WITH_CONCERNS
+    verdict: CONCERNS
+    permitted_outputs:
+      - docs/constitutional-alignment/
+      - PROGRAM_STATUS_EXPORT.yaml
+    stop_condition: satisfied
+
+  B:
+    name: authority_prd_governance_and_contract_schemas
+    status: COMPLETE
+    completed_on: '2026-07-14'
+    validation: PASS
+    authorization: explicit_user_direction_2026_07_14
+    entry_requirements: [HD-001, HD-002, HD-003, HD-005, explicit_batch_authorization]
+    scope:
+      - Pin the constitution source and constitutional precedence contract.
+      - Synchronize F14 and the registries for FR-137 FR-139 FR-145 FR-146 and FR-147.
+      - Resolve stale category-count language in PRD governance glossary assumptions anti-goals release planning and addenda.
+      - Resolve FR-169 certification portfolio wording.
+      - Add HG-015 and update source and package validation records.
+      - Define but do not implement Shared Activative Core semantic-lineage conversational-receipt expression visual-semantic visual-narrative composition T/V evaluation readiness workflow projection and asset-demand schema contracts.
+      - Regenerate PRD_COMBINED manifest and validation outputs.
+    prohibited:
+      - Production implementation
+      - Interview or visual production execution
+      - Epic Step 2
+
+  C:
+    name: architecture_adrs_technical_specs_and_ux_traceability
+    status: COMPLETE
+    completed_on: '2026-07-14'
+    validation: PASS
+    execution_scope_note: Direct Batch C instruction limited changes to technical specifications, affected ADRs, and their architecture/traceability validation; approved Control Tower UX artifacts were preserved unchanged.
+    entry_requirements: [Batch_B_complete, HD-005, HD-007, explicit_batch_authorization]
+    scope:
+      - Add constitutional applicability and precedence references to TS-00 through TS-15.
+      - Apply substantive bounded patches to TS-02 TS-03 TS-05 TS-06 TS-07 and TS-10 through TS-15.
+      - Amend architecture and ADR-007 ADR-008 ADR-010 ADR-011 ADR-013 and ADR-018 without changing their accepted decisions.
+      - Preserve ADR-014 Format 02 scope and all original ratification records.
+      - Add supplemental architecture and UX alignment receipts.
+      - Extend Control Tower traceability for category profile semantic lineage Reaction Receipts Expression Moments wrong-reading locks evaluation dimensions and HG-015 without redesigning approved routes or authority.
+      - Regenerate architecture tech-spec and UX matrices and validators.
+    prohibited:
+      - Production implementation
+      - New external product runtime
+      - Epic Step 2
+
+  D:
+    name: planning_step_1_delta_merge_and_readiness
+    status: COMPLETE_CONFIRMED
+    completed_on: '2026-07-14'
+    validation: PASS
+    inventory_rows: 410
+    v1_1_rows_preserved: 401
+    additions: 9
+    removals: 0
+    epic_assignments: 0
+    story_assignments: 0
+    inventory_confirmed_on: '2026-07-14'
+    confirmation_receipt: docs/planning/V1_2_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    entry_requirements: [Batch_C_complete, HD-004, explicit_batch_authorization]
+    scope:
+      - Preserve the original 401-row V1.1 snapshot as historical evidence.
+      - Update affected existing planning rows.
+      - Add the ratified constitutional amendment rows and HG-015.
+      - Regenerate blocker exposure requirement coverage and validation.
+      - Keep epic_ids and story_ids empty.
+      - Request human confirmation of the revised V1.2 inventory.
+    prohibited:
+      - Epic design
+      - Story design
+      - Production implementation
+
+  E:
+    name: epic_step_2_outcome_design
+    status: COMPLETE_PENDING_HUMAN_CONFIRMATION
+    completed_on: '2026-07-14'
+    authorization: docs/planning/EPIC_STEP_2_AUTHORIZATION_RECEIPT.yaml
+    validation: PASS
+    proposed_epics: 12
+    primary_assignments: 410
+    secondary_traceability_links: 361
+    story_authoring_started: false
+    production_implementation_started: false
+    blocked_by: []
+    entry_requirements: [Batch_D_inventory_confirmed_by_human, explicit_epic_step_2_authorization]
+    scope_reference:
+      - constitutional_lineage_and_readiness
+      - conversational_activation_expression_compilation
+      - reaction_receipt_expression_moment_recompilation
+      - activation_first_visual_semantic_chain
+      - constitutional_evaluation_and_control_tower_evidence
+      - existing_four_category_migration_non_regression
+    outputs:
+      - docs/planning/EPIC_INVENTORY.yaml
+      - docs/planning/EPIC_REQUIREMENT_COVERAGE.csv
+      - docs/planning/EPIC_DESIGN_PROPOSAL.md
+      - docs/planning/EPIC_DESIGN_VALIDATION_REPORT.json
+    next_gate: human_confirmation_before_step_3_vertical_story_authoring
+
+  STEP_3:
+    name: vertical_story_authoring
+    status: COMPLETE_PENDING_HUMAN_CONFIRMATION
+    completed_on: '2026-07-14'
+    authorization: docs/planning/EPIC_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    validation: PASS
+    proposed_stories: 69
+    primary_story_assignments: 410
+    dependency_edges: 103
+    maximum_primary_obligations_per_story: 15
+    primary_outcomes: 69
+    testable_acceptance_sets: 69
+    completion_receipts_issued: 0
+    blocked_or_conditional_entries: 67
+    release_1_story_subset: 69
+    cross_repository_dependencies: 6
+    production_implementation_started: false
+    outputs:
+      - docs/planning/STORY_INVENTORY.yaml
+      - docs/planning/STORY_INVENTORY_BY_EPIC.md
+      - docs/planning/STORY_REQUIREMENT_COVERAGE.csv
+      - docs/planning/STORY_DEPENDENCY_GRAPH.csv
+      - docs/planning/STORY_BLOCKED_CONDITIONAL_REGISTER.yaml
+      - docs/planning/RELEASE_1_STORY_SUBSET.yaml
+      - docs/planning/STORY_CROSS_REPOSITORY_DEPENDENCIES.yaml
+      - docs/planning/STORY_DESIGN_PROPOSAL.md
+      - docs/planning/STORY_DESIGN_VALIDATION_REPORT.json
+    next_gate: human_confirmation_before_step_4_coverage_and_readiness_validation
+
+  STEP_4:
+    name: full_coverage_and_implementation_readiness_validation
+    status: COMPLETE
+    completed_on: '2026-07-14'
+    authorization: docs/planning/STORY_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    coverage_validation: PASS
+    planning_completeness: CONCERNS
+    artifact_integrity: CONCERNS
+    implementation_readiness: FAIL
+    confirmed_obligations: 410
+    confirmed_epics: 12
+    confirmed_stories: 69
+    feature_technical_spec_assignments: 69
+    dependency_edges: 103
+    forward_dependency_edges: 0
+    production_implementation_started: false
+    outputs:
+      - docs/planning/STORY_INVENTORY_CONFIRMATION_RECEIPT.yaml
+      - docs/planning/FEATURE_TECH_SPEC_ASSIGNMENTS.csv
+      - docs/planning/FILE_CHURN_RISK_BOUNDARY_REVIEW.md
+      - docs/planning/IMPLEMENTATION_READINESS_REPORT.md
+      - docs/planning/STEP_4_COVERAGE_AND_READINESS_VALIDATION_REPORT.json
+      - docs/planning/STEP4_PLANNING_COVERAGE_REPORT.md
+      - docs/planning/STEP4_REQUIREMENT_TRACEABILITY.csv
+      - docs/planning/STEP4_STORY_READINESS_MATRIX.csv
+      - docs/planning/STEP4_BLOCKER_IMPACT_REPORT.md
+      - docs/planning/STEP4_RELEASE1_EXECUTION_SEQUENCE.yaml
+      - docs/planning/STEP4_CROSS_REPO_DEPENDENCY_VALIDATION.yaml
+      - docs/planning/IMPLEMENTATION_READINESS_FINAL.md
+      - docs/planning/STEP4_VALIDATION_REPORT.json
+      - docs/planning/STEP_4_FILE_MANIFEST.yaml
+    open_gates:
+      human_decisions: [HD-006, HD-007]
+      blockers: [BD-004, BD-007, BD-008, BD-010, BD-014]
+      artifact_integrity: confirmed_epic_validation_artifact_hash_reconciliation
+      story_artifact_integrity: confirmed_story_validation_artifact_hash_reconciliation
+      release_1_dependency_independence: Format_02_transitively_depends_on_ST_06_05_and_ST_08_07
+      cross_repository_baseline: XDEP_003_RC1_vs_validated_unsigned_RC2
+    next_gate: implementation_readiness_closure_and_explicit_production_authorization
+
+  F:
+    name: implementation_and_tests
+    status: NOT_AUTHORIZED
+    entry_requirements:
+      - approved_epics_and_stories
+      - implementation_readiness_pass
+      - required_external_and_empirical_inputs
+      - explicit_production_implementation_authorization
+    scope: governed_by_future_authorization

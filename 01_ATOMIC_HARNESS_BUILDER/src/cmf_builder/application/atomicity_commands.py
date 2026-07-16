@@ -55,6 +55,10 @@ from cmf_builder.domain.skill_registry import (
 from cmf_builder.domain.atomic_harness_definition import (
     AtomicHarnessDefinitionInvalidation,
 )
+from cmf_builder.domain.target_package_validation import (
+    AtomicContentHarnessValidationInvalidation,
+)
+from cmf_builder.domain.development_capsule import DevelopmentCapsuleInvalidation
 
 
 DECLARED_INPUT_PATH = "development-capsules/ST-02.05/DECLARED_BOUNDARY_INPUT.json"
@@ -420,41 +424,97 @@ class AtomicityCommandService:
                 and active_atomic_harness_definition is not None
                 else None
             )
+            active_target_validation = (
+                self._repository.get_atomic_content_harness_validation_report(
+                    run.atomic_content_harness_validation_ref
+                )
+                if run.atomic_content_harness_validation_ref
+                else None
+            )
+            atomic_content_harness_validation_invalidation = (
+                AtomicContentHarnessValidationInvalidation.create(
+                    invalidation_id=invalidation.invalidation_id,
+                    report_ref=run.atomic_content_harness_validation_ref,
+                    definition_ref=run.atomic_harness_definition_ref,
+                    upstream_invalidation_ref=(
+                        atomic_harness_definition_invalidation.invalidation_id
+                    ),
+                    reason=command.reason,
+                    authority_identity=command.actor_id,
+                )
+                if run.atomic_content_harness_validation_ref
+                and run.atomic_harness_definition_ref
+                and atomic_harness_definition_invalidation is not None
+                and active_target_validation is not None
+                else None
+            )
+            active_development_capsule = (
+                self._repository.get_development_capsule(
+                    run.development_capsule_ref
+                )
+                if run.development_capsule_ref
+                else None
+            )
+            development_capsule_invalidation = (
+                DevelopmentCapsuleInvalidation.create(
+                    invalidation_id=invalidation.invalidation_id,
+                    capsule_ref=run.development_capsule_ref,
+                    validation_ref=run.atomic_content_harness_validation_ref,
+                    upstream_invalidation_ref=(
+                        atomic_content_harness_validation_invalidation.invalidation_id
+                    ),
+                    reason=command.reason,
+                    authority_identity=command.actor_id,
+                )
+                if run.development_capsule_ref
+                and run.atomic_content_harness_validation_ref
+                and atomic_content_harness_validation_invalidation is not None
+                and active_development_capsule is not None
+                else None
+            )
             final_run, events = run.reopen_atomic_boundary(
                 invalidation_ref=invalidation.invalidation_id,
                 reason=command.reason,
                 event_ids=tuple(
                     self._ids.new_id("event")
                     for _ in range(
-                        13
-                        if run.atomic_harness_definition_ref
+                        15
+                        if run.development_capsule_ref
                         else (
-                            12
-                            if run.skill_necessity_ref
+                            14
+                            if run.atomic_content_harness_validation_ref
                             else (
-                                11
-                                if run.skill_registry_snapshot_ref
+                                13
+                                if run.atomic_harness_definition_ref
                                 else (
-                                    10
-                                    if run.minimum_context_ref
+                                    12
+                                    if run.skill_necessity_ref
                                     else (
-                                        9
-                                        if run.phase_handoff_ref
+                                        11
+                                        if run.skill_registry_snapshot_ref
                                         else (
-                                            8
-                                            if run.phase_graph_ref
+                                            10
+                                            if run.minimum_context_ref
                                             else (
-                                                7
-                                                if run.responsibility_module_ref
+                                                9
+                                                if run.phase_handoff_ref
                                                 else (
-                                                    6
-                                                    if run.capability_ownership_ref
+                                                    8
+                                                    if run.phase_graph_ref
                                                     else (
-                                                        5
-                                                        if run.constitutional_validation_ref
-                                                        else 4
-                                                        if run.artifact_set_ref
-                                                        else (3 if run.harness_ir_ref else 2)
+                                                        7
+                                                        if run.responsibility_module_ref
+                                                        else (
+                                                            6
+                                                            if run.capability_ownership_ref
+                                                            else (
+                                                                5
+                                                                if run.constitutional_validation_ref
+                                                                else 4
+                                                                if run.artifact_set_ref
+                                                                else (3 if run.harness_ir_ref else 2)
+                                                            )
+                                                        )
                                                     )
                                                 )
                                             )
@@ -511,6 +571,8 @@ class AtomicityCommandService:
                 skill_registry_snapshot_invalidation=skill_registry_snapshot_invalidation,
                 skill_necessity_invalidation=skill_necessity_invalidation,
                 atomic_harness_definition_invalidation=atomic_harness_definition_invalidation,
+                atomic_content_harness_validation_invalidation=atomic_content_harness_validation_invalidation,
+                development_capsule_invalidation=development_capsule_invalidation,
             )
             invalidated_artifacts = (
                 invalidation.boundary_ref,
@@ -527,6 +589,8 @@ class AtomicityCommandService:
                 *((run.skill_registry_snapshot_ref,) if run.skill_registry_snapshot_ref else ()),
                 *((run.skill_necessity_ref,) if run.skill_necessity_ref else ()),
                 *((run.atomic_harness_definition_ref,) if run.atomic_harness_definition_ref else ()),
+                *((run.atomic_content_harness_validation_ref,) if run.atomic_content_harness_validation_ref else ()),
+                *((run.development_capsule_ref,) if run.development_capsule_ref else ()),
                 *(
                     tuple(item.manifest_id for item in active_context_graph.manifests)
                     if active_context_graph is not None
@@ -1130,6 +1194,134 @@ class AtomicityCommandService:
                             atomic_harness_definition_invalidation.invalidation_id
                         ),
                         skill_replay_status="HISTORICAL_REPRODUCTION_PRESERVED",
+                    )
+                )
+            if atomic_content_harness_validation_invalidation is not None:
+                report = active_target_validation
+                self._observations.emit(
+                    Observation(
+                        event_name="atomic_content_harness_validation_invalidated",
+                        run_id=run.run_id,
+                        story_id="ST-07.04",
+                        artifact_identity=(
+                            atomic_content_harness_validation_invalidation.invalidation_hash
+                        ),
+                        authority_identity=command.actor_id,
+                        version="cmf-builder-atomic-content-harness-validation/v1@1.0.0",
+                        provenance=(
+                            atomic_content_harness_validation_invalidation.upstream_invalidation_ref
+                        ),
+                        outcome="PASS",
+                        failure_context={},
+                        correlation_id=command.correlation_id,
+                        causation_id=command.causation_id,
+                        command_id=command.command_id,
+                        target_id=run.target_profile.target_id,
+                        category_id=run.target_profile.category_id,
+                        profile_id=run.target_profile.profile_id,
+                        stream_version=final_run.stream_version,
+                        invalidated_artifact_ids=invalidated_artifacts,
+                        atomic_harness_definition_id=(
+                            report.definition_id if report else "unassigned"
+                        ),
+                        atomic_harness_definition_hash=(
+                            report.definition_hash if report else "unassigned"
+                        ),
+                        atomic_content_harness_validation_id=(
+                            report.report_id if report else "unassigned"
+                        ),
+                        atomic_content_harness_validation_hash=(
+                            report.report_hash if report else "unassigned"
+                        ),
+                        atomic_content_harness_validation_dimension_count=(
+                            len(report.dimensions) if report else 0
+                        ),
+                        atomic_content_harness_internal_compatibility=(
+                            report.internal_compatibility if report else "unassigned"
+                        ),
+                        atomic_content_harness_external_compatibility=(
+                            report.external_target_compatibility
+                            if report else "unassigned"
+                        ),
+                        atomic_content_harness_certification=(
+                            "synthetic_not_certifiable" if report else "unassigned"
+                        ),
+                        atomic_content_harness_invalidation_ref=(
+                            atomic_content_harness_validation_invalidation.invalidation_id
+                        ),
+                        atomic_content_harness_replay_status=(
+                            "HISTORICAL_REPRODUCTION_PRESERVED"
+                        ),
+                    )
+                )
+            if development_capsule_invalidation is not None:
+                capsule = active_development_capsule
+                self._observations.emit(
+                    Observation(
+                        event_name="development_capsule_invalidated",
+                        run_id=run.run_id,
+                        story_id="ST-11.01",
+                        artifact_identity=(
+                            development_capsule_invalidation.invalidation_hash
+                        ),
+                        authority_identity=command.actor_id,
+                        version="cmf-builder-versioned-traceable-development-capsule/v1@1.0.0",
+                        provenance=(
+                            development_capsule_invalidation.upstream_invalidation_ref
+                        ),
+                        outcome="PASS",
+                        failure_context={},
+                        correlation_id=command.correlation_id,
+                        causation_id=command.causation_id,
+                        command_id=command.command_id,
+                        target_id=run.target_profile.target_id,
+                        category_id=run.target_profile.category_id,
+                        profile_id=run.target_profile.profile_id,
+                        stream_version=final_run.stream_version,
+                        invalidated_artifact_ids=invalidated_artifacts,
+                        atomic_harness_definition_id=(
+                            capsule.definition_id if capsule else "unassigned"
+                        ),
+                        atomic_harness_definition_hash=(
+                            capsule.definition_hash if capsule else "unassigned"
+                        ),
+                        atomic_content_harness_validation_id=(
+                            capsule.validation_id if capsule else "unassigned"
+                        ),
+                        atomic_content_harness_validation_hash=(
+                            capsule.validation_hash if capsule else "unassigned"
+                        ),
+                        development_capsule_id=(
+                            capsule.capsule_id if capsule else "unassigned"
+                        ),
+                        development_capsule_hash=(
+                            capsule.capsule_hash if capsule else "unassigned"
+                        ),
+                        development_capsule_section_count=(
+                            len(capsule.sections) if capsule else 0
+                        ),
+                        development_capsule_reference_count=(
+                            len(capsule.references) if capsule else 0
+                        ),
+                        development_capsule_obligation_count=(
+                            len(capsule.obligation_ids) if capsule else 0
+                        ),
+                        development_capsule_compatibility=(
+                            capsule.internal_compatibility
+                            if capsule
+                            else "unassigned"
+                        ),
+                        development_capsule_certification=(
+                            capsule.certification_state
+                            if capsule
+                            else "unassigned"
+                        ),
+                        development_capsule_invalidation_ref=(
+                            development_capsule_invalidation.invalidation_id
+                        ),
+                        development_capsule_replay_status=(
+                            "HISTORICAL_REPRODUCTION_PRESERVED"
+                        ),
                     )
                 )
             return receipt

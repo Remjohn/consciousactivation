@@ -1,0 +1,206 @@
+{
+  "schema_version": "builder-qa-test-results/v1",
+  "audit_date": "2026-07-16",
+  "snapshot": {
+    "path": "D:\\Work\\CONSCIOUS_ACTIVATIONS\\_PARALLEL\\BUILDER_QA_SNAPSHOT",
+    "copied_before_audit": true,
+    "copy_source_file_count": 997,
+    "copy_target_file_count": 997,
+    "audited_text_and_binary_file_count_excluding_git_and_cache": 847,
+    "aggregate_algorithm": "sha256 of sorted relative-path NUL file-sha256 newline records",
+    "aggregate_sha256": "599a3233dbfb8ffb8955f50d382498b81380f075ab840df818232443961181b9",
+    "canonical_repository_written": false,
+    "snapshot_product_code_written": false
+  },
+  "environment": {
+    "python": "3.12.0",
+    "python_executable": "C:\\Python312\\python.exe",
+    "pytest": "8.3.4",
+    "governed_pythonpath": "src;.",
+    "imported_cmf_builder_from": "D:\\Work\\CONSCIOUS_ACTIVATIONS\\_PARALLEL\\BUILDER_QA_SNAPSHOT\\src\\cmf_builder\\__init__.py"
+  },
+  "full_suite": {
+    "command": "$env:PYTHONPATH='src;.'; $env:PYTHONDONTWRITEBYTECODE='1'; python -B -m pytest -q -p no:cacheprovider",
+    "fresh_process_runs": [
+      {
+        "run": 1,
+        "exit_code": 1,
+        "passed": 422,
+        "failed": 5,
+        "warnings": 1,
+        "duration_seconds": 58.87
+      },
+      {
+        "run": 2,
+        "exit_code": 1,
+        "passed": 422,
+        "failed": 5,
+        "warnings": 1,
+        "duration_seconds": 51.36
+      }
+    ],
+    "same_failure_set": true,
+    "failing_tests": [
+      "tests/stories/st_01_01/test_architecture_boundary.py::ArchitectureAndContractBoundaryTests::test_source_files_import_no_external_product_or_runtime_dependency",
+      "tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py::FailureBoundaryTests::test_architecture_boundary_keeps_original_source_set_and_no_external_imports",
+      "tests/stories/st_01_02/test_architecture_boundary.py::ArchitectureBoundaryTests::test_ac_10_source_tree_is_internal_standard_library_only_and_layered",
+      "tests/stories/st_02_05/test_architecture_boundary.py::ArchitectureBoundaryTests::test_ac_10_source_tree_is_layered_standard_library_only_and_exact",
+      "tests/stories/st_03_03/test_architecture_boundary.py::ArchitectureBoundaryTests::test_ac_12_source_tree_is_exact_layered_and_standard_library_only"
+    ],
+    "unexpected_files_reported_by_each_failure": [
+      "src/cmf_builder/application/target_validation_commands.py",
+      "src/cmf_builder/domain/target_package_validation.py"
+    ],
+    "warning": "pytest-asyncio asyncio_default_fixture_loop_scope is unset"
+  },
+  "python_compile": {
+    "method": "compile(source_text, filename, 'exec') in memory for every Python source file under the snapshot",
+    "python_files": 158,
+    "failures": 0,
+    "status": "PASS"
+  },
+  "determinism": {
+    "cross_process_environment_variation": {
+      "processes": 2,
+      "varied": [
+        "PYTHONHASHSEED",
+        "TZ",
+        "HOME",
+        "TEMP"
+      ],
+      "outputs_equal": true,
+      "report_id": "atomic-content-harness-validation_7cc93b8fcf30ad19aa0476b7a20bf6a897229e7bf59ea04c3fd222709aa1dee3",
+      "report_hash": "sha256:7cc93b8fcf30ad19aa0476b7a20bf6a897229e7bf59ea04c3fd222709aa1dee3",
+      "receipt_id": "atomic-content-harness-validation-receipt_36834498359bd61e8c888f59640b312ebdf542f239a953676239ce0f243c1bea",
+      "receipt_hash": "sha256:36834498359bd61e8c888f59640b312ebdf542f239a953676239ce0f243c1bea"
+    },
+    "direct_source_calls": {
+      "current_time": 0,
+      "random_or_uuid4": 0,
+      "process_environment": 0,
+      "current_working_directory": 0
+    },
+    "canonical_json_sort_keys": true,
+    "filesystem_traversal_sorted_in_active_source": true,
+    "target_validation_canonical_bytes_contain_absolute_workspace_path": false,
+    "status": "PASS_WITH_PORTABILITY_FINDING_BQA-P2-009"
+  },
+  "static_analysis": {
+    "cmf_builder_source_files": 43,
+    "external_imports": 0,
+    "architecture_layer_violations": 0,
+    "mutable_literal_defaults": 0,
+    "simple_unreachable_statements_after_unconditional_top_level_return_or_raise": 0,
+    "status": "PASS"
+  },
+  "absolute_path_scan": {
+    "scope": "text files excluding .git, .git_backup, caches, bytecode and binary media/archive formats",
+    "files_with_windows_absolute_paths": 16,
+    "matching_lines": 57,
+    "occurrences": 58,
+    "active_or_generated_files": [
+      "contracts/integration/DELEGATION_CONTRACT_PIN.yaml",
+      "stage1/generate_stage1_evidence.py",
+      "stage1/STAGE1_EVIDENCE_SUMMARY.json",
+      "stage1/ARCHITECTURE_BASELINE_MANIFEST.yaml"
+    ],
+    "historical_or_discovery_evidence_examples": [
+      "development-capsules/ST-02.05/completion/TEST_RESULTS.json",
+      "development-capsules/ST-03.03/completion/TEST_RESULTS.json",
+      "docs/planning/FORMAT02_ARCHIVE_CANDIDATES.csv",
+      "docs/planning/FORMAT02_ARCHIVE_RECOVERY_REPORT.md"
+    ],
+    "test_only_rejection_literal": "tests/stories/st_07_02/test_definition_integrity.py",
+    "status": "CONCERN"
+  },
+  "invariant_probes": {
+    "definition_authority_tamper": {
+      "status": "FAIL",
+      "domain_validation": "ACCEPTED",
+      "receipt_creation": "ACCEPTED",
+      "finding": "BQA-P0-001"
+    },
+    "target_validation_happy_path_determinism": {
+      "status": "PASS",
+      "equivalent_builds_equal": true,
+      "stream_version": 24
+    },
+    "target_validation_replay": {
+      "status": "PASS",
+      "identical_payload_returns_same_receipt": true,
+      "stream_version_after_first": 24,
+      "stream_version_after_replay": 24,
+      "same_command_id_different_payload": "IdempotencyPayloadMismatch"
+    },
+    "target_validation_post_commit_observation_failure": {
+      "status": "FAIL",
+      "caller_received_failure": true,
+      "committed_report_receipt_and_command_record": true,
+      "finding": "BQA-P1-003"
+    },
+    "optimistic_concurrency": {
+      "status": "FAIL",
+      "writers_accepted": 2,
+      "writer_events_stored": 1,
+      "finding": "BQA-P1-004"
+    },
+    "run_command_atomicity": {
+      "status": "FAIL",
+      "events_persisted_after_command_record_failure": 2,
+      "command_records_persisted": 0,
+      "finding": "BQA-P1-005"
+    },
+    "target_repository_injected_atomic_failure": {
+      "status": "PASS_BY_CODE_PATH_AND_EXISTING_FAILURE_INJECTION_GUARD",
+      "note": "The target-validation repository validates all parts and checks its fail-next guard before any of its stream/report/receipt/record assignments."
+    },
+    "full_descendant_invalidation": {
+      "status": "PASS",
+      "before_version": 24,
+      "after_version": 38,
+      "invalidation_events": 14,
+      "all_checked_descendants_invalidated": true,
+      "historical_target_validation_preserved": true
+    },
+    "archive_same_bytes_binding": {
+      "status": "FAIL",
+      "reported_archive_hash_differs_from_member_scan_archive_hash": true,
+      "finding": "BQA-P1-006"
+    },
+    "checkpoint_immutability": {
+      "status": "FAIL",
+      "same_identity_overwrite_accepted": true,
+      "finding": "BQA-P2-007"
+    },
+    "atomic_harness_definition_section_shape": {
+      "status": "PASS_SHAPE_FAIL_MEANING_ENFORCEMENT",
+      "section_count": 20,
+      "unique_section_count": 20,
+      "all_required": true,
+      "meaning_enforcement_finding": "BQA-P0-001"
+    },
+    "bounded_activative_lineage": {
+      "status": "PASS_FOR_GOVERNED_SYNTHETIC_SCOPE",
+      "separate_not_applicable_keys": 5,
+      "keys": [
+        "identity_dna_ref",
+        "context_premise_ref",
+        "resonance_ref",
+        "matrix_of_edging_ref",
+        "activative_intelligence_pack_ref"
+      ],
+      "note": "The category-neutral synthetic Story contract expressly governs these five keys; later category/conversational/visual fields were not treated as implemented."
+    },
+    "skill_registry_and_necessity": {
+      "status": "PASS",
+      "registry_skill_count": 0,
+      "required_external_skill_count": 0,
+      "dynamic_skill_discovery_allowed": false,
+      "necessity_outcome": "NO_NEW_SKILL_REQUIRED",
+      "capability_evidence_count": 5,
+      "definition_capability_count": 5,
+      "brief_disposition": "NOT_APPLICABLE_NO_GAP"
+    }
+  },
+  "final_verdict": "FAIL_P0_OR_P1"
+}

@@ -1,0 +1,25 @@
+schema_version: cmf-builder-contract-reference-set/v1
+story_id: ST-01.03
+existing_contracts:
+  - {name: Run, source: src/cmf_builder/domain/run.py, use: active_run_identity_and_index_attachment}
+  - {name: SourceLock, source: src/cmf_builder/domain/evidence_workspace.py, use: complete_immutable_input_inventory}
+  - {name: SourceDescriptor, source: src/cmf_builder/domain/evidence_workspace.py, use: specimen_and_provenance_input}
+  - {name: CommandRecord, source: src/cmf_builder/application/ports.py, use: payload_safe_idempotency}
+new_local_typed_contracts:
+  - Specimen
+  - EvidenceProvenance
+  - EvidenceIndex
+  - EvidenceIndexReceipt
+  - EvidenceIndexInvalidation
+  - EvidenceIndexQuery
+contract_fixture: development-capsules/ST-01.03/EVIDENCE_INDEX_CONTRACT.yaml
+external_contracts:
+  Delegation_1_1_0_rc_4: not_used_by_this_story
+  Visual_Asset_Editor: not_used_by_this_story
+schema_changes: []
+database_changes: []
+compatibility:
+  existing_SourceLock_identity: preserved
+  existing_synthetic_path: preserved
+  historical_indexes: immutable_and_reproducible
+  changed_SourceLock: new_index_identity_and_prior_active_index_invalidation

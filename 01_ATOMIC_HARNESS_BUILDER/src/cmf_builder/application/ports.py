@@ -19,6 +19,12 @@ if TYPE_CHECKING:
         DraftHarnessModel,
     )
     from cmf_builder.domain.evidence_workspace import SourceLock, SourceProfile
+    from cmf_builder.domain.evidence_index import (
+        EvidenceIndex,
+        EvidenceIndexInvalidation,
+        EvidenceIndexReceipt,
+        Specimen,
+    )
     from cmf_builder.domain.harness_ir import (
         HarnessIR,
         HarnessIRCompilationReceipt,
@@ -77,6 +83,16 @@ if TYPE_CHECKING:
         AtomicHarnessDefinition,
         AtomicHarnessDefinitionInvalidation,
         AtomicHarnessDefinitionReceipt,
+    )
+    from cmf_builder.domain.target_package_validation import (
+        AtomicContentHarnessValidationInvalidation,
+        AtomicContentHarnessValidationReceipt,
+        AtomicContentHarnessValidationReport,
+    )
+    from cmf_builder.domain.development_capsule import (
+        DevelopmentCapsuleInvalidation,
+        DevelopmentCapsuleReceipt,
+        VersionedTraceableDevelopmentCapsule,
     )
 
 
@@ -296,6 +312,27 @@ class Observation:
     atomic_harness_definition_certification: str = "unassigned"
     atomic_harness_definition_milestone: str = "unassigned"
     atomic_harness_definition_invalidation_ref: str = "unassigned"
+    atomic_content_harness_validation_id: str = "unassigned"
+    atomic_content_harness_validation_hash: str = "unassigned"
+    atomic_content_harness_validation_receipt_id: str = "unassigned"
+    atomic_content_harness_validation_receipt_hash: str = "unassigned"
+    atomic_content_harness_validation_dimension_count: int = 0
+    atomic_content_harness_internal_compatibility: str = "unassigned"
+    atomic_content_harness_external_compatibility: str = "unassigned"
+    atomic_content_harness_certification: str = "unassigned"
+    atomic_content_harness_invalidation_ref: str = "unassigned"
+    atomic_content_harness_replay_status: str = "unassigned"
+    development_capsule_id: str = "unassigned"
+    development_capsule_hash: str = "unassigned"
+    development_capsule_receipt_id: str = "unassigned"
+    development_capsule_receipt_hash: str = "unassigned"
+    development_capsule_section_count: int = 0
+    development_capsule_reference_count: int = 0
+    development_capsule_obligation_count: int = 0
+    development_capsule_compatibility: str = "unassigned"
+    development_capsule_certification: str = "unassigned"
+    development_capsule_invalidation_ref: str = "unassigned"
+    development_capsule_replay_status: str = "unassigned"
 
 
 class Clock(Protocol):
@@ -351,6 +388,17 @@ class RunRepository(Protocol):
         events: tuple[RunEvent, ...],
     ) -> None: ...
 
+    def commit_run_command(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        checkpoint: "Checkpoint | None",
+    ) -> None: ...
+
     def load_run(self, run_id: str) -> Run: ...
 
     def events(self, run_id: str) -> tuple[RunEvent, ...]: ...
@@ -383,6 +431,74 @@ class EvidenceWorkspaceRepository(RunRepository, Protocol):
     def source_locks(self, run_id: str) -> tuple["SourceLock", ...]: ...
 
 
+class EvidenceIndexRepository(EvidenceWorkspaceRepository, Protocol):
+    def commit_evidence_index(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        index: "EvidenceIndex",
+        receipt: "EvidenceIndexReceipt",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def commit_evidence_index_invalidation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        invalidation: "EvidenceIndexInvalidation",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def get_evidence_index(self, index_id: str) -> "EvidenceIndex | None": ...
+
+    def evidence_indexes(self, run_id: str) -> tuple["EvidenceIndex", ...]: ...
+
+    def get_evidence_index_receipt(
+        self, receipt_id: str
+    ) -> "EvidenceIndexReceipt | None": ...
+
+    def get_evidence_index_invalidation(
+        self, invalidation_id: str
+    ) -> "EvidenceIndexInvalidation | None": ...
+
+    def is_evidence_index_invalidated(self, index_id: str) -> bool: ...
+
+    def active_evidence_index(self, run_id: str) -> "EvidenceIndex | None": ...
+
+    def query_evidence_index(
+        self,
+        index_id: str,
+        *,
+        specimen_id: str | None = None,
+        source_id: str | None = None,
+        role: str | None = None,
+        governed_status: str | None = None,
+        knowledge_status: str | None = None,
+    ) -> tuple["Specimen", ...]: ...
+
+    def claim_pending_observation(self, command_id: str) -> Observation | None: ...
+
+    def complete_observation_delivery(
+        self, command_id: str, observation: Observation
+    ) -> None: ...
+
+    def release_observation_delivery(
+        self, command_id: str, observation: Observation
+    ) -> None: ...
+
+    def pending_observations(self, command_id: str) -> tuple[Observation, ...]: ...
+
+    def delivered_observations(self, command_id: str) -> tuple[Observation, ...]: ...
+
+
 class AtomicityRepository(EvidenceWorkspaceRepository, Protocol):
     def commit_atomicity(
         self,
@@ -409,6 +525,8 @@ class AtomicityRepository(EvidenceWorkspaceRepository, Protocol):
         skill_registry_snapshot_invalidation: "SkillRegistrySnapshotInvalidation | None" = None,
         skill_necessity_invalidation: "SkillNecessityInvalidation | None" = None,
         atomic_harness_definition_invalidation: "AtomicHarnessDefinitionInvalidation | None" = None,
+        atomic_content_harness_validation_invalidation: "AtomicContentHarnessValidationInvalidation | None" = None,
+        development_capsule_invalidation: "DevelopmentCapsuleInvalidation | None" = None,
     ) -> None: ...
 
     def get_atomic_boundary(
@@ -852,3 +970,96 @@ class AtomicHarnessDefinitionRepository(SkillNecessityRepository, Protocol):
     def is_atomic_harness_definition_invalidated(
         self, definition_id: str
     ) -> bool: ...
+
+
+class AtomicContentHarnessValidationRepository(
+    AtomicHarnessDefinitionRepository, Protocol
+):
+    def commit_atomic_content_harness_validation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        report: "AtomicContentHarnessValidationReport",
+        receipt: "AtomicContentHarnessValidationReceipt",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def claim_pending_observation(self, command_id: str) -> Observation | None: ...
+
+    def complete_observation_delivery(
+        self, command_id: str, observation: Observation
+    ) -> None: ...
+
+    def release_observation_delivery(
+        self, command_id: str, observation: Observation
+    ) -> None: ...
+
+    def pending_observations(self, command_id: str) -> tuple[Observation, ...]: ...
+
+    def delivered_observations(self, command_id: str) -> tuple[Observation, ...]: ...
+
+    def get_atomic_content_harness_validation_report(
+        self, report_id: str
+    ) -> "AtomicContentHarnessValidationReport | None": ...
+
+    def atomic_content_harness_validation_reports(
+        self, run_id: str
+    ) -> tuple["AtomicContentHarnessValidationReport", ...]: ...
+
+    def get_atomic_content_harness_validation_receipt(
+        self, receipt_id: str
+    ) -> "AtomicContentHarnessValidationReceipt | None": ...
+
+    def atomic_content_harness_validation_receipts(
+        self, run_id: str
+    ) -> tuple["AtomicContentHarnessValidationReceipt", ...]: ...
+
+    def get_atomic_content_harness_validation_invalidation(
+        self, invalidation_id: str
+    ) -> "AtomicContentHarnessValidationInvalidation | None": ...
+
+    def is_atomic_content_harness_validation_invalidated(
+        self, report_id: str
+    ) -> bool: ...
+
+
+class DevelopmentCapsuleRepository(
+    AtomicContentHarnessValidationRepository, Protocol
+):
+    def commit_development_capsule(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        capsule: "VersionedTraceableDevelopmentCapsule",
+        receipt: "DevelopmentCapsuleReceipt",
+    ) -> None: ...
+
+    def get_development_capsule(
+        self, capsule_id: str
+    ) -> "VersionedTraceableDevelopmentCapsule | None": ...
+
+    def development_capsules(
+        self, run_id: str
+    ) -> tuple["VersionedTraceableDevelopmentCapsule", ...]: ...
+
+    def get_development_capsule_receipt(
+        self, receipt_id: str
+    ) -> "DevelopmentCapsuleReceipt | None": ...
+
+    def development_capsule_receipts(
+        self, run_id: str
+    ) -> tuple["DevelopmentCapsuleReceipt", ...]: ...
+
+    def get_development_capsule_invalidation(
+        self, invalidation_id: str
+    ) -> "DevelopmentCapsuleInvalidation | None": ...
+
+    def is_development_capsule_invalidated(self, capsule_id: str) -> bool: ...

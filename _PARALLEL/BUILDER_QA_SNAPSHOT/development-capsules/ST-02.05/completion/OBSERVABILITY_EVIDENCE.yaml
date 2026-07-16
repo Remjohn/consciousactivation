@@ -1,0 +1,96 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-02.05
+active_mode: DECLARED_BOUNDARY
+captured_on: "2026-07-15"
+data_classification: synthetic_non_personal_non_production
+approval_trace:
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  source_lock_id: source-lock_ea63e2bdfa902fd9034d62fa1a5b2d4bc6d598d9474d06809c4cd8a86e21ba60
+  receipt_id: receipt_019ba504-96a0-757d-a315-ea3a3967e57b
+  receipt_sha256: sha256:0900d15d4ac9e241b8ff3b20cbd13249c224de20efddec66b105c052467a2fa2
+  boundary_ref: synthetic_text_normalization_declared_boundary@1.0.0
+  boundary_sha256: sha256:f3f04cbe8fb11bf7f2303d21d5d2b2c0a351e87de8e133aa3535ac6933a7b47d
+  model_id: draft-model_019ba504-96a0-7e9d-8976-3745f80e955f
+  model_sha256: sha256:a7917a5aac99e156d459f59c57341e819fc3c528b6340b20fa570ac8e8bddaf0
+  ratification_id: ratification_019ba504-96a0-7ef9-bb88-9a9ba1f4f1a0
+  ratification_sha256: sha256:0d5c63d72a648361e8b77c84d92b65e8baf8e2c389c71c2d2ae32ccf1c0e695b
+  stream_version: 9
+  HG_003: PASS
+  model_field_count: 19
+  authoritative_events:
+    - event_019ba504-96a0-719e-a147-288caac73e10
+    - event_019ba504-96a0-7a1b-84f3-5b1761ce55c9
+    - event_019ba504-96a0-78aa-96ba-9a8b7856867f
+    - event_019ba504-96a0-7ef6-99f5-4edb53514aae
+  observations:
+    - ST-02.05:BoundaryRatified
+    - ST-02.05:DraftModelCompiled
+    - ST-02.05:BoundaryFrozen
+    - ST-02.05:OutcomeVerified
+replay_trace:
+  identical_receipt: true
+  authoritative_event_count_before: 9
+  authoritative_event_count_after: 9
+  duplicate_authoritative_events: 0
+  reconstructed_boundary_refs_match: true
+  reconstructed_state_hash_match: true
+  observation: ST-02.05:DecisionReplayReturned
+revision_and_rejection_trace:
+  revision_status: REVISION_REQUIRED
+  revision_HG_003: FAIL
+  revision_event_count: 6
+  frozen_boundary_count: 0
+  compiled_model_count: 0
+  rejection_is_attributable: true
+  downstream_use_blocked: true
+unauthorized_trace:
+  typed_failure: AuthorityDenied
+  event_count_before: 5
+  event_count_after: 5
+  boundary_count: 0
+  model_count: 0
+  command_record_count: 0
+  success_receipt_count: 0
+  rejection_observations:
+    - ST-02.05:BoundaryDecisionRejected
+    - ST-02.05:OutcomeRejected
+contradiction_trace:
+  typed_failure: CriticalBoundaryContradiction
+  boundary_count: 0
+  model_count: 0
+  command_record_count: 0
+  success_receipt_count: 0
+  HG_003: FAIL
+atomic_commit_failure_trace:
+  typed_failure: AtomicCommitFailed
+  baseline_event_count: 5
+  event_count_after_failure: 5
+  boundary_count_after_failure: 0
+  model_count_after_failure: 0
+  receipt_count_after_failure: 0
+  command_record_count_after_failure: 0
+  retry_committed_exactly_once: true
+  retry_stream_version: 9
+reopen_and_invalidation_trace:
+  receipt_id: receipt_019ba504-96a0-7d80-ab8b-b1cff76155b9
+  receipt_sha256: sha256:a03363c4d343e530bbc4f46d212b81d89be37810b4bc287525256b2678491c13
+  invalidation_id: invalidation_019ba504-96a0-75b7-b0b4-bf2e8ac2a53b
+  invalidation_sha256: sha256:70c19587e5daa21d228a8c6c518d2c900622548834612de8ee7928e51ff2b4cb
+  final_stream_version: 11
+  boundary_invalidated: true
+  model_invalidated: true
+  new_immutable_version_required: true
+  HG_003: FAIL
+  observations:
+    - ST-02.05:BoundaryReopened
+    - ST-02.05:DraftModelInvalidated
+    - ST-02.05:OutcomeVerified
+required_identity_fields:
+  story_run_artifact_authority_version_provenance_outcome_failure: PASS
+  correlation_causation_command_stream: PASS
+  target_profile_source_lock_declared_input: PASS
+  boundary_model_ratification_receipt: PASS
+  HG_003_and_invalidated_artifacts: PASS
+prohibited_data_logged: []
+external_telemetry_emitted: false
+verdict: PASS

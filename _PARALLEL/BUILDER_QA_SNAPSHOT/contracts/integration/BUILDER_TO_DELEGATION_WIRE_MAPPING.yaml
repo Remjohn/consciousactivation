@@ -1,0 +1,87 @@
+schema_version: cmf-builder-to-delegation-wire-mapping/v1
+mapping_id: builder-to-delegation-rc4-visual-asset-demand-and-derivative-locks
+status: ACTIVE
+contract_pin: DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+external_contract_owner: CMF_DELEGATION_PROTOCOL
+builder_owner: builder_target_compiler
+ownership_boundary:
+  builder_may:
+    - compile Builder-owned target specifications and constraints
+    - populate Delegation-owned messages through pinned generated types
+    - validate outputs against pinned external schemas and compatibility policy
+    - emit versioned hashes compatibility evidence and handoff receipts
+  builder_must_not:
+    - copy or modify Delegation schemas as local truth
+    - implement Delegation runtime behavior
+    - implement Visual Asset Editor production realization
+    - flatten required semantic lineage into notes
+    - infer missing provenance source kind parent evidence or derivation classification
+wire_contracts:
+  visual_asset_demand:
+    external_schema: contracts/schemas/visual-asset-demand.schema.json
+    external_message_version: "1.1"
+    builder_output_kind: delegation_compatible_visual_asset_demand_specification
+  derivative_lock_inheritance:
+    external_schema: contracts/schemas/derivative-lock-inheritance.schema.json
+    external_message_version: "1.0"
+    builder_output_kind: authoritative_derivative_lock_inheritance_specification
+    mapping: WRONG_READING_LOCK_INHERITANCE.yaml
+  external_generated_types:
+    python: contracts/generated/python/cmf_delegation_contracts/types.py
+    typescript: contracts/generated/typescript/index.ts
+required_mapping_documents:
+  - SOURCE_PROVENANCE_MAPPING.yaml
+  - CATEGORY_PROFILE_COMPATIBILITY.yaml
+  - WRONG_READING_LOCK_INHERITANCE.yaml
+  - ACTIVATIVE_LINEAGE_MAPPING.yaml
+compilation_flow:
+  - order: 1
+    outcome: select_exact_contract_pin
+    failure: reject_missing_or_non_exact_rc4_pin
+  - order: 2
+    outcome: resolve_authoritative_source_kind
+    failure: reject_ambiguous_or_unsupported_source_kind
+  - order: 3
+    outcome: preserve_activative_semantic_lineage
+    failure: reject_missing_required_lineage_or_generic_notes_flattening
+  - order: 4
+    outcome: compile_portable_derivative_lock_inheritance_evidence_when_derivative
+    failure: reject_missing_parent_evidence_ambiguous_derivation_empty_removed_or_weakened_locks
+  - order: 5
+    outcome: resolve_canonical_category_profile_and_certification_scope
+    failure: reject_unknown_alias_false_certification_or_profile_category_mismatch
+  - order: 6
+    outcome: validate_against_external_rc4_schemas_and_compatibility_policy
+    failure: reject_schema_or_behavioral_incompatibility
+  - order: 7
+    outcome: emit_hashed_specification_and_handoff_receipt
+    failure: no_handoff_on_partial_validation
+delegation_field_constraints:
+  source_provenance: governed_by_SOURCE_PROVENANCE_MAPPING
+  activative_semantic_lineage: governed_by_ACTIVATIVE_LINEAGE_MAPPING
+  reaction_receipt: preserved_typed_reference
+  expression_moment: preserved_typed_reference
+  activation_contract: required_structured_field
+  visual_semantic_pack: required_structured_field
+  visual_narrative_program: required_structured_field
+  feature_contracts: required_structured_field
+  somatic_route_request: required_structured_field
+  composition_intent: required_structured_field
+  wrong_reading_locks: governed_by_WRONG_READING_LOCK_INHERITANCE
+  derivative_parent_lock_evidence: governed_by_WRONG_READING_LOCK_INHERITANCE
+compatibility_effect:
+  current: rc4_exact_active_pin
+  rc1: historical_consumer_rejection_only
+  rc2: historical_convergence_rejection_only
+  rc3: historical_convergence_rejection_only
+  production_use: prohibited_until_signed_authorized_release_and_builder_readiness_PASS
+acceptance:
+  - exact RC4 identity is present in every emitted handoff receipt
+  - every required semantic domain remains structured and lossless
+  - every derivative relationship validates through derivative-lock-inheritance@1.0
+  - no local Delegation schema exists under contracts/integration
+  - schema ownership remains external
+planning_traceability:
+  obligations: [D004, FR-170, FR-173, FR-175, FR-177, FR-179, FR-180, CONST-005, CONST-007, CONST-008]
+  stories: [ST-07.01, ST-07.02, ST-07.03, ST-07.04, ST-08.02, ST-08.03, ST-12.03]
+

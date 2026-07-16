@@ -1,6 +1,6 @@
 schema_version: cmf-builder-core-implementation-sequence/v1
 generated_on: "2026-07-16"
-status: CONFIRMED_ACTIVE_NOT_IMPLEMENTATION_AUTHORITY
+status: FULL_BUILDER_CAMPAIGN_ACTIVE_AFTER_TRUST_CORRECTION
 authority:
   builder_prd: "1.2"
   activative_intelligence_constitution: "1.1"
@@ -8,13 +8,33 @@ authority:
   confirmed_stories: 69
   confirmed_epics: 12
   confirmed_obligations: 410
+full_builder_campaign_overlay:
+  authority_phrase: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+  standing_authority_received: true
+  activation_state: ACTIVE
+  triggering_finding: null
+  ready_story_count: 2
+  queue: docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
+  blocker_register: docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
+  correction_capsule: development-capsules/BQA-P0-P1-TRUST-CORRECTION
+  correction_capsule_manifest_sha256: 89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7
+  correction_capsule_bundle_digest: 84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f
+  correction_receipt: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/STORY_SUPPLEMENTAL_CORRECTION_RECEIPTS.yaml
+  correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+  resume_requires_explicit_stop_override: false
 track:
   track_id: BUILDER_CORE
   mission: >-
     Compile, validate, and package one minimal category-neutral synthetic Atomic
     Harness without making any category adapter or reference profile a prerequisite.
-  implementation_authorized: false
+  implementation_authorized: true
   certification_scope: none
+  synthetic_demonstration: PASS
+  story_completion_receipts: PASS
+  structural_proof_execution: PASS
+  final_engineering_trust_gate: PASS
+  production_ready: false
+  full_product_ready: false
 foundation:
   story_id: ST-01.01
   state: COMPLETE_PASS
@@ -138,34 +158,41 @@ sequence:
     contribution: consume the governed, hash-pinned empty skill registry
   - order: 12
     story_id: ST-05.02
-    state: READY_AWAITING_HUMAN_IMPLEMENTATION_AUTHORIZATION
+    state: COMPLETE_PASS
     depends_on: [ST-05.01:StoryCompletionReceipt]
     mode: SYNTHETIC_NO_SKILL_NECESSITY
     applicable_blockers: []
     capsule: development-capsules/ST-05.02
     capsule_manifest_sha256: 603e84be622f57757f9c8d594ee431c7f4a5246281c9f6643a98f5b19732c6d7
     capsule_bundle_digest: 1778420e3747b74f3ad18da4bb19fc74921f311ccf0086f01d543d17b4107272
+    completion_receipt: development-capsules/ST-05.02/completion/STORY_COMPLETION_RECEIPT.yaml
+    completion_receipt_sha256: ecd99a7c241e6aba03295f3c96bd3854e2ca0a7211b3157920ba5c4cad3dccd9
     contribution: prove no external or dynamically discovered skill is required
   - order: 13
     story_id: ST-07.02
-    state: BLOCKED_PRIOR_STORY_RECEIPTS
+    state: COMPLETE_PASS
     depends_on:
       - ST-03.05:StoryCompletionReceipt
       - ST-04.05:StoryCompletionReceipt
       - ST-05.02:StoryCompletionReceipt
     mode: GENERIC_ATOMIC_CONTENT_HARNESS
     applicable_blockers: []
+    completion_receipt: development-capsules/ST-07.02/completion/STORY_COMPLETION_RECEIPT.yaml
+    completion_receipt_sha256: ee13f9b6601ab1b166f16d2d30fb043f1441745d9e8146248d2d6d7d08caa681
+    initial_atomic_harness_definition_milestone: PASS
     contribution: compile the synthetic AtomicHarnessDefinition
   - order: 14
     story_id: ST-07.04
-    state: BLOCKED_PRIOR_STORY_RECEIPT
+    state: COMPLETE_PASS
     depends_on: [ST-07.02:StoryCompletionReceipt]
     mode: ATOMIC_CONTENT_HARNESS_ONLY
     applicable_blockers: []
+    completion_receipt: development-capsules/ST-07.04/completion/STORY_COMPLETION_RECEIPT.yaml
+    completion_receipt_sha256: e944032fe369e11c274e2d868bec6168d18124587cc09c9a328e58e33463fe2a
     contribution: validate Builder-owned artifacts, gates, and non-certification scope
   - order: 15
     story_id: ST-11.01
-    state: BLOCKED_PRIOR_STORY_RECEIPTS
+    state: COMPLETE_PASS
     depends_on:
       - ST-03.05:StoryCompletionReceipt
       - ST-04.05:StoryCompletionReceipt
@@ -173,6 +200,11 @@ sequence:
       - ST-07.04:StoryCompletionReceipt
     mode: SYNTHETIC_BUILDER_PROOF
     applicable_blockers: []
+    capsule: development-capsules/ST-11.01
+    capsule_manifest_sha256: 456a9e1a968e4688779641aa93d2cfe06272241b556071cca0a82acd6178952f
+    capsule_bundle_digest: 6660f11adb513c06753cae1167ac3d740c07a4f28c21589c9237aa7073aa8f4a
+    completion_receipt: development-capsules/ST-11.01/completion/STORY_COMPLETION_RECEIPT.yaml
+    completion_receipt_sha256: 5863ef2fa3a5eca00d76234fea4c1067d132743a3ffc3b51e4acb9f0dd4480d3
     contribution: emit the versioned, traceable Development Capsule
 dependency_validation:
   supplemental_branch_precedes_ST_01_02: true
@@ -190,6 +222,23 @@ dependency_validation:
   ST_05_01_completion_receipt_valid: true
   ST_05_01_completion_evidence_and_380_test_regression_valid: true
   ST_05_02_capsule_valid: true
+  ST_05_02_completion_receipt_valid: true
+  ST_07_02_completion_receipt_valid: true
+  ST_07_04_completion_receipt_valid: true
+  ST_11_01_capsule_valid: true
+  ST_11_01_completion_receipt_valid: true
+  final_integration_gate_passed: true
+  independent_QA_P1_002_resolved: true
+  independent_QA_open_blocking_findings: []
+  independent_QA_closed_by_bounded_correction:
+    - BQA-P0-001
+    - BQA-P1-003
+    - BQA-P1-004
+    - BQA-P1-005
+    - BQA-P1-006
+  correction_specific_regression_twice: PASS_125_OF_125
+  full_repository_regression_twice: PASS_600_OF_600_NO_MANDATORY_SKIPS
+  synthetic_end_to_end_fresh_context_byte_equality: true
   original_and_supplemental_receipts_independently_reproducible: true
   supplemental_source_lineage_bridge: PASS_NO_GAP
   active_edges_backward_only: true
@@ -218,38 +267,28 @@ blocker_scope:
     - evaluator_certification
     - production_certification
 progress:
-  completed_confirmed_stories: [ST-01.01, ST-01.02, ST-02.05, ST-03.03, ST-03.04, ST-03.05, ST-04.01, ST-04.02, ST-04.03, ST-04.04, ST-04.05, ST-05.01]
+  completed_confirmed_stories: [ST-01.01, ST-01.02, ST-02.05, ST-03.03, ST-03.04, ST-03.05, ST-04.01, ST-04.02, ST-04.03, ST-04.04, ST-04.05, ST-05.01, ST-05.02, ST-07.02, ST-07.04, ST-11.01]
   completed_supplemental_units: [ST-01.01-SYNTHETIC-PROOF]
-  ready_next_story: ST-05.02
-  ready_next_mode: SYNTHETIC_NO_SKILL_NECESSITY
-  remaining_through_synthetic_AtomicHarnessDefinition_compilation_count: 2
-  remaining_through_synthetic_AtomicHarnessDefinition_compilation:
-    - ST-05.02
-    - ST-07.02
-  remaining_confirmed_stories_before_first_demonstration: 4
-  post_compilation_validation_and_capsule_stories: [ST-07.04, ST-11.01]
+  ready_next_story: ST-01.03
+  ready_next_mode: FULL_BUILDER_CAMPAIGN_STANDING_AUTHORITY
+  remaining_through_synthetic_AtomicHarnessDefinition_compilation_count: 0
+  remaining_through_synthetic_AtomicHarnessDefinition_compilation: []
+  remaining_confirmed_stories_before_first_demonstration: 0
+  post_compilation_validation_and_capsule_stories_complete: [ST-07.04, ST-11.01]
   first_demonstration_terminal_story: ST-11.01
+  first_demonstration_verdict: PASS
   first_demonstration_outcome: >-
-    a governed category-neutral task definition produces a validated Atomic
-    Harness Definition and Development Capsule without executing the Harness
+    the governed category-neutral proof produces an Atomic Harness Definition
+    and Development Capsule without executing the Harness; the bounded trust
+    correction closes all five reproduced P0 or P1 findings and restores the
+    final engineering trust gate
 current_minimum_blocker_cut:
   semantic_or_evidence_blockers: []
-  implementation_gate:
-    id: HUMAN_AUTHORIZATION_ST_05_02_SYNTHETIC_SKILL_NECESSITY
-    owner: human_product_authority
-    closes_for: ST-05.02_only
-    phrase: AUTHORIZE BUILDER ST-05.02 SYNTHETIC-SKILL-NECESSITY BOUNDED IMPLEMENTATION
-  subsequent_track_gates:
-    - prior_Story_PASS_completion_receipt
-    - separately_validated_bounded_Development_Capsule
-    - explicit_human_authorization_for_each_Story
+  implementation_gate: OPEN_UNDER_STANDING_FULL_BUILDER_CAMPAIGN_AUTHORITY
+  campaign_authorization: ACTIVE
 next_gate:
-  unit: ST-05.02
-  mode: SYNTHETIC_NO_SKILL_NECESSITY
-  human_authorization_required: true
-  phrase: AUTHORIZE BUILDER ST-05.02 SYNTHETIC-SKILL-NECESSITY BOUNDED IMPLEMENTATION
-next_story_after_current:
-  story_id: ST-07.02
-  state: BLOCKED_PRIOR_STORY_RECEIPT
-  depends_on: [ST-05.02:StoryCompletionReceipt]
-  capsule_created: false
+  unit: ST-01.03
+  mode: BOUNDED_STORY_CAPSULE_THEN_IMPLEMENTATION
+  human_authorization_required: false
+  state: SELECTED_FOR_AUTOMATIC_CAMPAIGN_EXECUTION
+next_story_after_current: ST-01.03

@@ -1,0 +1,174 @@
+schema_version: cmf-builder-supplemental-story-completion-receipt/v1
+receipt_type: SupplementalStoryCompletionReceipt
+branch_id: ST-01.01-SYNTHETIC-PROOF
+supplemental_to_story: ST-01.01
+primary_epic: EP-01
+issued_on: "2026-07-15"
+implemented_outcome: >-
+  The completed ST-01.01 run-governance foundation admits the exact
+  repository-owned category-neutral synthetic Builder proof profile while
+  preserving stable identity, authority, lifecycle, checkpoint, replay,
+  idempotency, observability, and fail-closed external boundaries.
+bounded_profile:
+  compilation_target: atomic_content_harness
+  category_binding: none_test_only
+  canonical_category_registry_membership: false
+  profile_id: synthetic_text_normalization_v1
+  profile_version: 1.0.0
+  profile_hash: sha256:3f88934152082e2447dd94ae998bfc62d0a73f354c10352ab7460ac24e4ad9c8
+  profile_source_sha256: 82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b
+  synthetic: true
+  repository_owned: true
+  non_production: true
+  non_certified: true
+  builder_core_validation_only: true
+authorization:
+  authority_identity: current_thread_human_authority
+  authorization_phrase: AUTHORIZE BUILDER ST-01.01-SYNTHETIC-PROOF BOUNDED IMPLEMENTATION
+  authorization_phrase_sha256: 6a553594b9ad8cb4b09e5bb2d8a643ea2aa63e89db37ae9406bf025b361f3b71
+  capsule_manifest_sha256: 4917fbce9295255f8a71f61eb9031679cd2d9dd1729cf15a771f3da24be6174f
+  capsule_bundle_digest: 2e15bb0d795813e927bc60190a79978c675e0abae3037b7529f914d4e6f70ff3
+  authorization_effect: GRANTED_FOR_ST-01.01-SYNTHETIC-PROOF_ONLY
+requirements_verified:
+  ADR-001: PASS
+  AG-001: PASS
+  AG-002: PASS
+  D001: PASS
+  D006: PASS
+  FR-001: PASS
+  FR-002: PASS
+  FR-003: PASS
+  FR-004: PASS
+  FR-005: PASS
+  FR-006: PASS
+  FR-007: PASS
+  FR-008: PASS
+  NFR-REL-002: PASS
+  NFR-SEC-003: PASS
+  primary_obligation_ownership_changed: false
+acceptance_criteria:
+  AC-SP-01: PASS
+  AC-SP-02: PASS
+  AC-SP-03: PASS
+  AC-SP-04: PASS
+  AC-SP-05: PASS
+  AC-SP-06: PASS
+  AC-SP-07: PASS
+  AC-SP-08: PASS
+  AC-SP-09: PASS
+  AC-SP-10: PASS
+files_changed:
+  modified_source_files: 2
+  created_source_files: 0
+  created_test_files: 6
+  created_completion_evidence_files: 5
+  total_files_changed: 13
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  manifest:
+    path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/FILE_CHANGE_MANIFEST.yaml
+    sha256: 4d64b9ba8552b0e8e6757928fca9136582236f8365f800d229037ae75aea3f3d
+tests_executed:
+  test_first_red_state:
+    result: PASS_EXPECTED_RED
+    observation: 5_collection_errors_before_adapter_contract_existed
+  supplemental_branch:
+    tests: 18
+    passed: 18
+    failed: 0
+    errors: 0
+    skipped: 0
+    result: PASS
+  original_ST_01_01:
+    tests: 20
+    passed: 20
+    failed: 0
+    errors: 0
+    skipped: 0
+    result: PASS
+  full_regression_final_run_1:
+    tests: 38
+    passed: 38
+    failed: 0
+    errors: 0
+    skipped: 0
+    result: PASS
+  full_regression_final_run_2:
+    tests: 38
+    passed: 38
+    failed: 0
+    errors: 0
+    skipped: 0
+    result: PASS
+  results:
+    path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/TEST_RESULTS.json
+    sha256: 6be22163f260ea66358106bcd534091a1447b9904d9035c922f6e80cdce55cfd
+schema_and_contract_validation:
+  result: PASS
+  capsule_manifest: PASS_20_OF_20
+  empty_registry_json_schema: PASS
+  empty_registry_id: builder-core-synthetic-empty-skill-registry
+  empty_registry_version: 1.0.0
+  empty_registry_sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  empty_registry_skills: 0
+  external_skills_required: false
+  dynamic_skill_discovery_allowed: false
+  undeclared_skill_use: FAIL_CLOSED
+  same_version_skill_addition: REJECTED
+  Format02_profile_hash_unchanged: true
+  Format02_profile_hash: sha256:3ad28b4f622e975ff7943f89a533544469b3e81f7348fa67fa368e833e9fbfed
+  source_file_set_unchanged: PASS_12_OF_12
+  external_product_or_runtime_imports: []
+  local_schema_change: false
+  local_schema_fork: false
+observability_evidence:
+  result: PASS
+  path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/OBSERVABILITY_EVIDENCE.yaml
+  sha256: 164c52f42fd9cc13082b32f373b296c2d3231f9cb66ef4907a64cbf171ad8903
+  successful_run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  event_stream_sha256: ead0edb854a62bf3fe1aca70c6be10a646eb00ba657645411995e4327dd574b0
+  replay_without_duplicate_authoritative_event: true
+  unauthorized_actor_failed_without_mutation: true
+  fixture_drift_failed_without_mutation: true
+  undeclared_skill_failed_closed: true
+rollback_evidence:
+  result: PASS_NON_DESTRUCTIVE
+  data_migration_required: false
+  persistent_state_created: false
+  external_compensation_required: false
+  temporary_test_data_cleaned: true
+  original_source_file_count: 12
+  current_source_file_count: 12
+  original_Format02_behavior_preserved: true
+  original_ST_01_01_tests: PASS_20_OF_20
+  original_ST_01_01_completion_receipt:
+    path: development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+    sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+unresolved_limitations:
+  - The supplemental profile is non-production and non-certified.
+  - ST-01.02 is not implemented or authorized by this receipt.
+  - No external runtime, VAE, Delegation, GPU, provider, or publication behavior is included.
+  - The branch admits a synthetic proof run but does not compile or execute the synthetic Atomic Harness.
+newly_discovered_blockers: []
+hashes:
+  source_bundle_sha256: 70ea7c85c5551656df1d9e3797ace15c8c86536f08cafdf0229a28a90c43839c
+  test_bundle_sha256: 477af18a8c626afea856b7dbced90f859f18c21d10972a291c24edd0cb527024
+  implementation_bundle_sha256: 308157bcd5ced03ccdcca8daa1bb1b4f901c0ac4fbb1a65c398d4827383d85cd
+  implementation_report_sha256: 93136462dd11155a0b722e33c5d1a045917e4fa143d1c5a0878977efb31ec112
+  test_results_sha256: 6be22163f260ea66358106bcd534091a1447b9904d9035c922f6e80cdce55cfd
+  observability_evidence_sha256: 164c52f42fd9cc13082b32f373b296c2d3231f9cb66ef4907a64cbf171ad8903
+  file_change_manifest_sha256: 4d64b9ba8552b0e8e6757928fca9136582236f8365f800d229037ae75aea3f3d
+receipt_identity:
+  algorithm: SHA-256
+  canonicalization: sorted-key JSON of this receipt with receipt_payload_sha256 omitted
+  receipt_payload_sha256: 62bec99526a72fe83cefbd5dd30bab77f29b8d45556bfa83feaf73486314bdf9
+completion_verdict: PASS
+downstream_effect:
+  ST_01_01_SYNTHETIC_PROOF: COMPLETE
+  ST_01_02: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION
+  authorizes_ST_01_02_implementation: false
+  authorizes_remaining_Builder_Core_track: false
+  authorizes_full_release1: false
+  authorizes_full_product: false
+  authorizes_production_deployment: false
+  authorizes_VAE_or_Delegation_behavior: false

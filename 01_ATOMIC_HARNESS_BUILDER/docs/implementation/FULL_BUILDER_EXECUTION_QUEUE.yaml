@@ -1,0 +1,674 @@
+schema_version: cmf-builder-full-execution-queue/v1
+generated_on: "2026-07-16"
+authority:
+  phrase: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+  authority_type: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
+  confirmed_stories: 69
+  confirmed_obligations: 410
+campaign_state: ACTIVE_STANDING_AUTHORITY
+stop_condition_triggered: null
+cleared_stop_condition:
+  prior_trigger: BQA-P0-001
+  disposition: CLOSED_BY_BOUNDED_TRUST_CORRECTION_PASS
+  correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+canonical_state:
+  historical_story_receipts: VALID_PASS
+  structural_synthetic_execution: PASS
+  final_engineering_trust: PASS
+  current_full_regression: PASS_600_OF_600_TWICE_NO_SKIPS
+  product_code_changed_by_this_campaign: true_bounded_correction_only
+classification_counts:
+  COMPLETE_PASS: 16
+  READY: 2
+  BLOCKED_HUMAN_DECISION: 0
+  BLOCKED_EVIDENCE: 2
+  BLOCKED_EXTERNAL_DEPENDENCY: 1
+  BLOCKED_PRIOR_STORY: 48
+  DEFERRED_EXTERNAL_PRODUCT: 0
+  NOT_BUILDER_OWNED: 0
+supplemental_units:
+  - story_id: ST-01.01-SYNTHETIC-PROOF
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+global_blockers: []
+trust_correction_capsule:
+  path: development-capsules/BQA-P0-P1-TRUST-CORRECTION
+  validation: PASS_18_OF_18
+  manifest_sha256: 89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7
+  bundle_digest: 84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f
+  implementation_authorization: PASS_COMPLETED
+  completion_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+queue_rules:
+  ready_requires_global_trust_gate_pass: true
+  original_receipts_are_immutable: true
+  Builder_owned_external_ports_do_not_transfer_external_product_ownership: true
+  Format_02_is_not_a_generic_core_prerequisite: true
+active_selection:
+  story_id: ST-01.03
+  reason: highest_priority_READY_Builder_owned_story
+  campaign_authority: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
+  capsule_state: PREPARATION_REQUIRED_BEFORE_CODE
+ready_after_active_selection:
+  - ST-11.02
+stories:
+  - story_id: ST-01.01
+    primary_outcome: "Stable, authority-bound, replay-safe target-profiled Builder run."
+    dependencies: []
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-01.02
+    primary_outcome: "Portable immutable evidence source lock with safe archive handling."
+    dependencies: [ST-01.01]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-01.03
+    primary_outcome: "Index every evidence specimen with provenance and distinguish observation, status and provenance."
+    dependencies: [ST-01.02]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 1_GENERIC_OPERATOR_TASK_INGESTION
+    capsule_state: NOT_PREPARED
+    implementation_state: READY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-01.04
+    primary_outcome: "Decide evidence saturation through an evidence-backed proceed, pause or block outcome."
+    dependencies: [ST-01.03]
+    current_blockers: ["PRIOR:ST-01.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 1_GENERIC_OPERATOR_TASK_INGESTION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-02.01
+    primary_outcome: "Normalize evidence into typed syntax observations."
+    dependencies: [ST-01.04]
+    current_blockers: ["PRIOR:ST-01.04", BD-004, BD-007, HD-006]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_REFERENCE_PROFILE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-02.02
+    primary_outcome: "Build substrate-specific spatial, temporal and reading-order graphs."
+    dependencies: [ST-02.01]
+    current_blockers: ["PRIOR:ST-02.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_REFERENCE_PROFILE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-02.03
+    primary_outcome: "Induce grammar only after syntax evidence while unsupported meaning remains provisional."
+    dependencies: [ST-02.02]
+    current_blockers: ["PRIOR:ST-02.02"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_REFERENCE_PROFILE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-02.04
+    primary_outcome: "Compare candidate atomic product boundaries with visible consequences."
+    dependencies: [ST-02.03]
+    current_blockers: ["PRIOR:ST-02.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_REFERENCE_PROFILE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-02.05
+    primary_outcome: "Ratify and freeze an explicit reviewable Draft Harness boundary."
+    dependencies: [ST-01.02]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-03.01
+    primary_outcome: "Ask only dependency-ready constitutional questions with complete rationale."
+    dependencies: [ST-01.04, ST-02.05]
+    current_blockers: ["PRIOR:ST-01.04"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_PLANNING
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-03.02
+    primary_outcome: "Record human authority and resume Genesis safely across sessions."
+    dependencies: [ST-03.01]
+    current_blockers: ["PRIOR:ST-03.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_PLANNING
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-03.03
+    primary_outcome: "Maintain one provenance-rich canonical Harness IR."
+    dependencies: [ST-02.05]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-03.04
+    primary_outcome: "Compile deterministic human and machine artifacts from canonical IR."
+    dependencies: [ST-03.03]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-03.05
+    primary_outcome: "Enforce constitutional precedence and semantic lineage across compiled artifacts."
+    dependencies: [ST-03.04]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-04.01
+    primary_outcome: "Assign explicit ownership to every required capability."
+    dependencies: [ST-03.05]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-04.02
+    primary_outcome: "Compile responsibility-centered modules with governed test seams."
+    dependencies: [ST-04.01]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-04.03
+    primary_outcome: "Compile deterministic dependency-safe Phase Graphs without executing them."
+    dependencies: [ST-04.02]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-04.04
+    primary_outcome: "Protect typed Builder-internal phase and context handoffs."
+    dependencies: [ST-04.03]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-04.05
+    primary_outcome: "Compile Minimum Complete Context without silent truncation or excess context."
+    dependencies: [ST-04.04]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-05.01
+    primary_outcome: "Consume a governed versioned empty skill registry for the synthetic proof."
+    dependencies: [ST-04.05]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-05.02
+    primary_outcome: "Prove skill necessity or non-necessity capability by capability."
+    dependencies: [ST-05.01]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-05.03
+    primary_outcome: "Package portable skills with behavioral anchors when governed evidence proves a skill is required."
+    dependencies: [ST-05.02]
+    current_blockers: [BD-010_REAL_SKILL_SCOPE, HD-007]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_GENERIC_COMPILATION_SUPPORT
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_EVIDENCE
+    receipt_state: NOT_ISSUED
+  - story_id: ST-05.04
+    primary_outcome: "Assemble deterministic phase-local JIT capsules."
+    dependencies: [ST-05.03]
+    current_blockers: ["PRIOR:ST-05.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_GENERIC_COMPILATION_SUPPORT
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-05.05
+    primary_outcome: "Pin and dispose of runtime capsules reproducibly."
+    dependencies: [ST-05.04]
+    current_blockers: ["PRIOR:ST-05.04"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_GENERIC_COMPILATION_SUPPORT
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-06.01
+    primary_outcome: "Bind each Harness to exactly one of five canonical categories."
+    dependencies: [ST-02.05, ST-03.05, ST-04.05]
+    current_blockers: [BD-004, BD-007, BD-008, BD-010_REAL_SKILL_SCOPE]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_EVIDENCE
+    receipt_state: NOT_ISSUED
+  - story_id: ST-06.02
+    primary_outcome: "Compile category-local format and performance profiles."
+    dependencies: [ST-06.01]
+    current_blockers: ["PRIOR:ST-06.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-06.03
+    primary_outcome: "Compile category-native syntax and Activative sequencing."
+    dependencies: [ST-06.02]
+    current_blockers: ["PRIOR:ST-06.02"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-06.04
+    primary_outcome: "Own category runtime, evaluation, repair and migration rules at the Builder boundary."
+    dependencies: [ST-06.03]
+    current_blockers: ["PRIOR:ST-06.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-06.05
+    primary_outcome: "Compile the conversational expression feedback chain structurally."
+    dependencies: [ST-06.04]
+    current_blockers: ["PRIOR:ST-06.04", HD-006, HD-007]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_CONVERSATIONAL_FUTURE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-07.01
+    primary_outcome: "Register three distinct compilation targets without flattening ownership."
+    dependencies: [ST-03.05, ST-04.05, ST-06.05]
+    current_blockers: ["PRIOR:ST-06.05", BD-014]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 5_GENERIC_COMPILATION_BEYOND_FIXED_FIXTURE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-07.02
+    primary_outcome: "Compile one immutable target-specific Atomic Harness Definition."
+    dependencies: [ST-03.05, ST-04.05, ST-05.02]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-07.03
+    primary_outcome: "Compile Builder-owned VAE and Delegation handoff mappings without implementing external behavior."
+    dependencies: [ST-07.02]
+    current_blockers: [BD-014, XRI-016, XRI-019]
+    builder_ownership: BUILDER_OWNED_INTEGRATION_PORTS_ONLY
+    implementation_priority: 4_PORTABLE_EXTERNAL_HANDOFF_PACKAGES
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_EXTERNAL_DEPENDENCY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-07.04
+    primary_outcome: "Independently validate target artifacts, gates, compatibility and non-certification."
+    dependencies: [ST-07.02]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-08.01
+    primary_outcome: "Measure behavior against controls in fresh contexts."
+    dependencies: [ST-02.05, ST-03.05, ST-04.05, ST-05.05, ST-06.05, ST-07.04]
+    current_blockers: ["PRIOR:ST-05.05", "PRIOR:ST-06.05"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 7_EVALUATION_AND_BEHAVIORAL_PROOF
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-08.02
+    primary_outcome: "Promote maturity only through protected evidence receipts."
+    dependencies: [ST-08.01]
+    current_blockers: ["PRIOR:ST-08.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 7_EVALUATION_AND_BEHAVIORAL_PROOF
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-08.03
+    primary_outcome: "Score independent dimensions and controlled mutations."
+    dependencies: [ST-08.02]
+    current_blockers: ["PRIOR:ST-08.02"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 7_EVALUATION_AND_BEHAVIORAL_PROOF
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-08.04
+    primary_outcome: "Diagnose root cause before selecting repair."
+    dependencies: [ST-08.03]
+    current_blockers: ["PRIOR:ST-08.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 8_REPAIR_AND_REENTRY
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-08.05
+    primary_outcome: "Repair selectively and rerun only affected regressions."
+    dependencies: [ST-08.04]
+    current_blockers: ["PRIOR:ST-08.04"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 8_REPAIR_AND_REENTRY
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-08.06
+    primary_outcome: "Issue evidence-backed readiness and authorization receipts."
+    dependencies: [ST-08.05]
+    current_blockers: ["PRIOR:ST-08.05"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 7_EVALUATION_AND_BEHAVIORAL_PROOF
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-08.07
+    primary_outcome: "Reject wrong readings and evaluate conversational expression."
+    dependencies: [ST-08.06]
+    current_blockers: ["PRIOR:ST-08.06", HD-006, HD-007]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_CONVERSATIONAL_FUTURE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.01
+    primary_outcome: "Compile an actor-explicit Builder workflow."
+    dependencies: [ST-01.04, ST-03.05, ST-04.05, ST-05.05, ST-06.05, ST-07.04, ST-08.07]
+    current_blockers: ["PRIOR:ST-01.04", "PRIOR:ST-05.05", "PRIOR:ST-06.05", "PRIOR:ST-08.07"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 6_WORKFLOW_COMPILATION_AND_RUNTIME
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.02
+    primary_outcome: "Route through a manual shadow before automation."
+    dependencies: [ST-09.01]
+    current_blockers: ["PRIOR:ST-09.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 6_WORKFLOW_COMPILATION_AND_RUNTIME
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.03
+    primary_outcome: "Validate node outputs and contain failure feedback."
+    dependencies: [ST-09.02]
+    current_blockers: ["PRIOR:ST-09.02"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 6_WORKFLOW_COMPILATION_AND_RUNTIME
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.04
+    primary_outcome: "Checkpoint, isolate and resume workflow work safely."
+    dependencies: [ST-09.03]
+    current_blockers: ["PRIOR:ST-09.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 6_WORKFLOW_COMPILATION_AND_RUNTIME
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.05
+    primary_outcome: "Race candidates and route compute under human authority."
+    dependencies: [ST-09.04]
+    current_blockers: ["PRIOR:ST-09.04"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 6_WORKFLOW_COMPILATION_AND_RUNTIME
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.06
+    primary_outcome: "Observe queues and prove workflow recovery."
+    dependencies: [ST-09.05]
+    current_blockers: ["PRIOR:ST-09.05"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 6_WORKFLOW_COMPILATION_AND_RUNTIME
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.07
+    primary_outcome: "Promote, migrate, roll back and hotfix workflow profiles."
+    dependencies: [ST-09.06]
+    current_blockers: ["PRIOR:ST-09.06"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 10_BUILDER_WORKFLOW_FACTORY
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-09.08
+    primary_outcome: "Measure workflow outcomes and reject monolithic orchestration."
+    dependencies: [ST-09.07]
+    current_blockers: ["PRIOR:ST-09.07"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 10_BUILDER_WORKFLOW_FACTORY
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.01
+    primary_outcome: "Open a trustworthy evidence-derived run index and overview."
+    dependencies: [ST-01.04, ST-03.05, ST-04.05, ST-05.05, ST-06.05, ST-07.04, ST-08.07, ST-09.08]
+    current_blockers: ["PRIOR:ST-01.04", "PRIOR:ST-05.05", "PRIOR:ST-06.05", "PRIOR:ST-08.07", "PRIOR:ST-09.08"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.02
+    primary_outcome: "Explore phase, context and dependency graphs."
+    dependencies: [ST-10.01]
+    current_blockers: ["PRIOR:ST-10.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.03
+    primary_outcome: "Inspect evidence and syntax behind decisions."
+    dependencies: [ST-10.02]
+    current_blockers: ["PRIOR:ST-10.02"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.04
+    primary_outcome: "Review Genesis decisions and human authority."
+    dependencies: [ST-10.03]
+    current_blockers: ["PRIOR:ST-10.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.05
+    primary_outcome: "Trace skills, recipes and runtime capsules."
+    dependencies: [ST-10.04]
+    current_blockers: ["PRIOR:ST-10.04"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.06
+    primary_outcome: "Inspect ownership, modules and contracts."
+    dependencies: [ST-10.05]
+    current_blockers: ["PRIOR:ST-10.05"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.07
+    primary_outcome: "Judge evaluations, repairs and authorization trajectory."
+    dependencies: [ST-10.06]
+    current_blockers: ["PRIOR:ST-10.06"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.08
+    primary_outcome: "Monitor workflow, incidents, cost and context."
+    dependencies: [ST-10.07]
+    current_blockers: ["PRIOR:ST-10.07"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.09
+    primary_outcome: "Execute governed Builder commands and export receipts."
+    dependencies: [ST-10.08]
+    current_blockers: ["PRIOR:ST-10.08"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 3_OPERATOR_COMMAND_SURFACE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.10
+    primary_outcome: "Use a stable accessible evidence-backed operator shell."
+    dependencies: [ST-10.09]
+    current_blockers: ["PRIOR:ST-10.09"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 3_OPERATOR_COMMAND_SURFACE
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.11
+    primary_outcome: "Preserve workspace context across inspectors and layouts."
+    dependencies: [ST-10.10]
+    current_blockers: ["PRIOR:ST-10.10"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.12
+    primary_outcome: "Represent loading, empty, stale and disconnected state honestly."
+    dependencies: [ST-10.11]
+    current_blockers: ["PRIOR:ST-10.11"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.13
+    primary_outcome: "Contain partial, redacted, failed and invalidated projections."
+    dependencies: [ST-10.12]
+    current_blockers: ["PRIOR:ST-10.12"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-10.14
+    primary_outcome: "Operate large collections within governed interaction budgets."
+    dependencies: [ST-10.13]
+    current_blockers: ["PRIOR:ST-10.13"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 11_EVIDENCE_DERIVED_CONTROL_TOWER
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-11.01
+    primary_outcome: "Generate a versioned traceable Development Capsule."
+    dependencies: [ST-03.05, ST-04.05, ST-05.02, ST-07.04]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: COMPLETED_BASELINE
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+  - story_id: ST-11.02
+    primary_outcome: "Plan dependency-ordered vertical implementation increments."
+    dependencies: [ST-11.01]
+    current_blockers: []
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_EXECUTION_PLANNING
+    capsule_state: NOT_PREPARED
+    implementation_state: READY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-11.03
+    primary_outcome: "Govern implementation deltas and certification feedback."
+    dependencies: [ST-11.02]
+    current_blockers: ["PRIOR:ST-11.02"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_EXECUTION_PLANNING
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-12.01
+    primary_outcome: "Inventory and map proven V2.1 behavior."
+    dependencies: [ST-06.05, ST-07.04, ST-08.07, ST-09.08, ST-10.14, ST-11.03]
+    current_blockers: ["PRIOR:ST-06.05", "PRIOR:ST-08.07", "PRIOR:ST-09.08", "PRIOR:ST-10.14", "PRIOR:ST-11.03"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_BROWNFIELD_REFERENCE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-12.02
+    primary_outcome: "Dual-compile and migrate through regression receipts."
+    dependencies: [ST-12.01]
+    current_blockers: ["PRIOR:ST-12.01"]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_BROWNFIELD_REFERENCE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-12.03
+    primary_outcome: "Prove the complete Builder spine through Format 02."
+    dependencies: [ST-12.02]
+    current_blockers: ["PRIOR:ST-12.02", BD-004, BD-008]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_BROWNFIELD_REFERENCE_VALIDATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED
+  - story_id: ST-12.04
+    primary_outcome: "Publish only bounded evidence-backed certification claims."
+    dependencies: [ST-12.03]
+    current_blockers: ["PRIOR:ST-12.03", PRODUCTION_CERTIFICATION_EVIDENCE]
+    builder_ownership: BUILDER_OWNED
+    implementation_priority: 12_PRODUCTION_CERTIFICATION
+    capsule_state: NOT_PREPARED
+    implementation_state: BLOCKED_PRIOR_STORY
+    receipt_state: NOT_ISSUED

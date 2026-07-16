@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
+from io import BytesIO
 import os
 from pathlib import Path, PurePosixPath
 import stat
@@ -108,7 +109,7 @@ class FileEvidenceWorkspace:
             archive_bytes = self._read_unchanged(path)
             candidate_hash = sha256(archive_bytes).hexdigest()
             self._verify_candidate_hash(profile, candidate_hash)
-            descriptors = self._scan_zip(profile, path)
+            descriptors = self._scan_zip(profile, archive_bytes)
             archive_count = 1
 
         diagnostics = (
@@ -223,13 +224,13 @@ class FileEvidenceWorkspace:
         return tuple(descriptors), deterministic_tree_hash(tuple(identities))
 
     def _scan_zip(
-        self, profile: SourceProfile, archive_path: Path
+        self, profile: SourceProfile, archive_bytes: bytes
     ) -> tuple[SourceDescriptor, ...]:
         descriptors: list[SourceDescriptor] = []
         seen_casefold: dict[str, str] = {}
         total_bytes = 0
         try:
-            with ZipFile(archive_path, "r") as archive:
+            with ZipFile(BytesIO(archive_bytes), "r") as archive:
                 infos = sorted(archive.infolist(), key=lambda item: item.filename)
                 for info in infos:
                     if info.is_dir():

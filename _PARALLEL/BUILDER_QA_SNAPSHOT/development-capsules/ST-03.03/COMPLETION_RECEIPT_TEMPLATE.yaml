@@ -1,0 +1,66 @@
+schema_version: cmf-builder-story-completion-receipt-template/v1
+story_id: ST-03.03
+primary_epic: EP-03
+active_mode: PRE_RATIFIED_SYNTHETIC_INPUT
+receipt_type: StoryCompletionReceipt
+issuance_state: PENDING_STORY_COMPLETION
+implemented_outcome_required: true
+owned_obligations_required:
+  ADR-002: PASS_REQUIRED
+  D011: PASS_REQUIRED
+  FR-051: PASS_REQUIRED
+  FR-052: PASS_REQUIRED
+  FR-053: PASS_REQUIRED
+  NFR-COMPAT-002: PASS_REQUIRED
+  NFR-COMPAT-003: PASS_REQUIRED
+  NFR-TRACE-001: PASS_REQUIRED
+acceptance_criteria_required:
+  AC-01: PASS_REQUIRED
+  AC-02: PASS_REQUIRED
+  AC-03: PASS_REQUIRED
+  AC-04: PASS_REQUIRED
+  AC-05: PASS_REQUIRED
+  AC-06: PASS_REQUIRED
+  AC-07: PASS_REQUIRED
+  AC-08: PASS_REQUIRED
+  AC-09: PASS_REQUIRED
+  AC-10: PASS_REQUIRED
+  AC-11: PASS_REQUIRED
+  AC-12: PASS_REQUIRED
+required_sections:
+  - authorization_and_capsule_identity
+  - implemented_outcome
+  - requirements_satisfied
+  - canonical_IR_and_lineage_evidence
+  - compatibility_and_migration_evidence
+  - files_changed_with_hashes
+  - tests_executed_and_results
+  - contract_and_architecture_validation
+  - observability_evidence
+  - rollback_and_cleanup_evidence
+  - unresolved_limitations
+  - newly_discovered_blockers
+  - canonical_receipt_hash
+required_validations:
+  prior_regression: PASS_84_OF_84
+  story_tests: PASS_ALL_MINIMUM_24
+  full_regression: PASS_ALL_NO_SKIPS
+  architecture_boundaries: PASS
+  deterministic_rerun: PASS_TWICE
+  file_scope: PASS_EXACT_ALLOWLIST
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  schema_file_changes: []
+  external_product_behavior: false
+  task_execution: false
+  generated_artifact_set: false
+  production_claim: false
+downstream_effect:
+  ST_03_03: COMPLETE_ONLY_ON_PASS
+  ST_03_04: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_ONLY
+  authorizes_ST_03_04_implementation: false
+  authorizes_full_release1: false
+  authorizes_full_product: false
+  authorizes_production: false
+completion_verdict_allowed: [PASS, FAIL]
+canonicalization: sha256_of_canonical_JSON_with_receipt_hash_field_omitted

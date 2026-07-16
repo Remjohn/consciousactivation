@@ -1,0 +1,169 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-04.01
+primary_epic: EP-04
+active_mode: SYNTHETIC_CAPABILITY_OWNERSHIP
+completed_on: "2026-07-15"
+implemented_outcome: >-
+  Deterministic Builder code inventories the exact three capabilities declared
+  by the active synthetic Harness IR and atomically emits an immutable,
+  content-addressed capability-ownership graph and receipt with explicit CODE
+  owners, authority boundaries, reliability evidence, bounded cost evidence,
+  complete upstream lineage, replay, and descendant invalidation behavior.
+owned_obligations:
+  D012: PASS
+  FR-060: PASS
+  FR-061: PASS
+  FR-062: PASS
+  FR-063: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+  AC-10: PASS
+  AC-11: PASS
+  AC-12: PASS
+authorization:
+  exact_phrase: AUTHORIZE BUILDER ST-04.01 SYNTHETIC-CAPABILITY-OWNERSHIP BOUNDED IMPLEMENTATION
+  phrase_match: EXACT
+  scope: ST_04_01_ONLY
+  implementation_authorization_sha256: de5b893f5132b3bfa597e3e75daf78f272555becefd944d42c45a77ef8654779
+capsule:
+  manifest_sha256: 1c672badc3b9f8fa570bb5d8df2694f9aa14201938534046dd9f74da2f777253
+  bundle_digest: 41a8dbc87ef3e92e5632b0a8c98227ddc218122a809bd1cfc8500c8765df31f5
+  immutable_inputs: PASS_18_OF_18
+dependencies:
+  original_ST_01_01_completion_receipt_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+  supplemental_completion_receipt_sha256: 58ae069c277e4256633db258a639e4901b44cdeb3d5e36b06464aa80d2700418
+  ST_01_02_completion_receipt_sha256: 47706d905e3dbebf967a1a2124aa0f678f398f1826fe3fb0900ef878977526f6
+  ST_02_05_completion_receipt_sha256: ca2f3557b07048b766bd49a8bf550891c63ce9955cccada02bd320a59dc8564e
+  ST_03_03_completion_receipt_sha256: 332675cc8878c9f168942a8ed6b33d04e27341953f591a172a22e6a5fd4df418
+  ST_03_04_completion_receipt_sha256: 11dc4e8caf90f05fe1fa3c7ec259daad90bb046a6e07e65f04da04e2362cc467
+  ST_03_05_completion_receipt_sha256: 12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+  ST_03_05_completion_payload_sha256: f8ed72215c5594830225432929073fc5b94c62c8341a31637bb7738c31067c5f
+  validation: PASS_7_OF_7_INDEPENDENT_AND_HASH_VALID
+bd_010_limited_evidence:
+  disposition_sha256: 0c6a639a904991280460d2aecf00f609edf7ffac7fd5bf31e7fe5b5514ecc651
+  policy_sha256: 260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c
+  fixture_sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  validation_receipt_sha256: 79164fa7418d3750ffefee116264b1ca44533c8073afb5485b84089ebd945ee1
+  applicable_subscope: CLOSED_SYNTHETIC_CODE_OWNED_PROOF_ONLY
+  all_other_subscopes: OPEN_NOT_APPLICABLE
+capability_ownership_evidence:
+  schema_id: cmf-builder-capability-ownership/v1
+  schema_version: 1.0.0
+  input_sha256: c6c8429f7eabeea6b11a62c1a2698becaeec747797264ab187e0cb05227afc18
+  deterministic_evidence_run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  deterministic_evidence_run_state_hash: sha256:1d9e5d38ad0fb0fc752d5b4f6bede15d02c62d7368faf4d1ccd2000623bf2a67
+  deterministic_evidence_ir_id: harness-ir_5198142a9f47254a36cbeb1d8e1e3201ae9cb80491867c95f0876ba905cca54d
+  deterministic_evidence_ir_hash: sha256:5198142a9f47254a36cbeb1d8e1e3201ae9cb80491867c95f0876ba905cca54d
+  deterministic_evidence_constitutional_report_id: constitutional-report_3cb0bc141a76bc426c1911ed880391aa083b8ae45812a8d367391c6234c3f587
+  deterministic_evidence_constitutional_report_hash: sha256:3cb0bc141a76bc426c1911ed880391aa083b8ae45812a8d367391c6234c3f587
+  deterministic_evidence_graph_id: capability-ownership-graph_b32656f1abf0e8cc6c544979cf0209632f099a914139de835aacea384d786635
+  deterministic_evidence_graph_hash: sha256:b32656f1abf0e8cc6c544979cf0209632f099a914139de835aacea384d786635
+  deterministic_evidence_receipt_id: capability-ownership-receipt_435df00b529c0dcdc77fd2e790ade519bfb0a3e5752b79797d64dcd06297047d
+  deterministic_evidence_receipt_hash: sha256:435df00b529c0dcdc77fd2e790ade519bfb0a3e5752b79797d64dcd06297047d
+  exact_capabilities:
+    - atomic_boundary_declaration
+    - deterministic_validation_and_receipt_generation
+    - target_and_output_contract_definition
+  coverage: PASS_3_OF_3
+  owner_kind_counts: {CODE: 3}
+  implicit_owner_defaults: 0
+  reliability_evidence: PASS_3_OF_3
+  cost_evidence: PASS_3_OF_3
+  non_code_and_hybrid_contract_validation: PASS
+  empty_registry_policy_separation: PASS
+atomicity_idempotency_invalidation_and_history:
+  duplicate_command: PASS_SAME_RECEIPT_NO_DUPLICATE_EVENT
+  conflicting_command: PASS_FAIL_CLOSED
+  injected_atomic_failure: PASS_ZERO_PARTIAL_STATE
+  run_replay_and_state_hash: PASS
+  upstream_reopen_descendant_invalidation: PASS_LINKED_SIX_EVENTS
+  active_consumption_after_invalidation: BLOCKED_AS_REQUIRED
+  immutable_history: PASS
+files_changed:
+  manifest_path: development-capsules/ST-04.01/completion/FILE_CHANGE_MANIFEST.yaml
+  manifest_sha256: 870ad1377f6b29df2e2bb85263671f8eedf87cfa9f3aa66cd919ad39456074f0
+  source_file_count: 6
+  test_file_count: 13
+  implementation_path_count: 19
+  source_bundle_sha256: 8a42d2d474adc88c9af295c8b8a63dccf1ecbb23a66c0b4c248aaba303c60dbe
+  test_bundle_sha256: ae149421673304407ef8401c57d6f3c2e38ae7c40b6255e8025f7b87f9a54a02
+  implementation_bundle_sha256: 27d3eaa7060a773fe310cac64a1534c9d6d48781d5add5ad10e107f259ef4554
+  exact_allowlist: PASS
+  prohibited_paths_modified: []
+tests:
+  preimplementation_regression: PASS_186_OF_186
+  ST_04_01_final_run_1: PASS_33_OF_33
+  ST_04_01_final_run_2: PASS_33_OF_33
+  original_predecessor_regression_after_implementation: PASS_186_OF_186
+  updated_predecessor_tree: PASS_188_OF_188
+  architecture_failure_replay_subset: PASS_41_OF_41
+  repository_regression: PASS_221_OF_221
+  skipped_mandatory_tests: 0
+  results_path: development-capsules/ST-04.01/completion/TEST_RESULTS.json
+  results_sha256: 4b47f4955a7121e2d2074af6ebbf66cdcde8ef6ae82a110fc2f13e65685dd98c
+contract_and_architecture_validation:
+  CapabilityOwnerKind: PASS
+  CapabilityOwnershipDecision: PASS
+  CapabilityOwnershipGraph: PASS
+  CapabilityOwnershipReceipt: PASS
+  CapabilityOwnershipInvalidation: PASS
+  CompileCapabilityOwnershipCommand: PASS
+  standard_library_only: true
+  local_schema_file_change: false
+  database_schema_change: false
+  external_dependency_added: false
+  external_product_behavior_added: false
+  skill_resolution_or_execution_added: false
+  workflow_execution_added: false
+  later_story_behavior_added: false
+observability_evidence:
+  path: development-capsules/ST-04.01/completion/OBSERVABILITY_EVIDENCE.yaml
+  sha256: bdb9fb95169a4fa87212e7ecfb3a275a46893b243a6f202146bd4a3110621e34
+  required_success_replay_rejection_and_invalidation_events: PASS_7_OF_7
+  sensitive_or_payload_logging: false
+rollback_and_cleanup_evidence:
+  path: development-capsules/ST-04.01/completion/ROLLBACK_EVIDENCE.md
+  sha256: a30274252f5c74c50a778e43cceb8c2e5decd5c10924806c29ab504a37884feb
+  injected_atomic_failure_zero_partial_state: PASS
+  governed_invalidation_preserves_history: PASS
+  migration_or_external_cleanup_required: false
+unresolved_limitations:
+  - synthetic_non_production_non_certified
+  - in_memory_development_test_persistence_only
+  - empty_registry_policy_not_generalized_beyond_synthetic_proof
+  - no_responsibility_centered_modules_or_phase_context_assignment
+  - no_Workflow_IR_Atomic_Harness_Definition_or_compiled_Harness_Development_Capsule
+newly_discovered_blockers: []
+boundary_validation:
+  Format02_behavior_implemented: false
+  VAE_behavior_implemented: false
+  Delegation_runtime_behavior_implemented: false
+  conversational_behavior_implemented: false
+  GPU_provider_or_evaluator_behavior_implemented: false
+  Control_Tower_behavior_implemented: false
+  production_certification_behavior_implemented: false
+  later_Story_behavior_implemented: false
+completion_artifacts:
+  implementation_report_sha256: 8a3940cd6e38e0ec4cc41d46ac60383ab245ea515b41d2a95d14c83bed812660
+  test_results_sha256: 4b47f4955a7121e2d2074af6ebbf66cdcde8ef6ae82a110fc2f13e65685dd98c
+  observability_evidence_sha256: bdb9fb95169a4fa87212e7ecfb3a275a46893b243a6f202146bd4a3110621e34
+  file_change_manifest_sha256: 870ad1377f6b29df2e2bb85263671f8eedf87cfa9f3aa66cd919ad39456074f0
+  rollback_evidence_sha256: a30274252f5c74c50a778e43cceb8c2e5decd5c10924806c29ab504a37884feb
+hashes:
+  canonicalization: sha256_of_canonical_JSON_with_hashes.canonical_payload_sha256_omitted
+  canonical_payload_sha256: 89ff6a28ef2fbd4df1e07fa0486c1a3120c914724984348ced0ea45644650606
+completion_verdict: PASS
+downstream_effect:
+  ST_04_02_readiness_reevaluation_eligible: true
+  ST_04_02_implementation_authorized: false
+  full_release1_readiness: FAIL
+  full_product_readiness: FAIL
+  production_authorized: false

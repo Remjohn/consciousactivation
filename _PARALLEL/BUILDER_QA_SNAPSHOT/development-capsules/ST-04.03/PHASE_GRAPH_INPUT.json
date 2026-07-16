@@ -1,0 +1,36 @@
+{
+  "schema_version": "cmf-builder-synthetic-phase-graph-input/v1",
+  "scope": "ST-04.03_SYNTHETIC_CORE_ONLY",
+  "source_contract": "cmf-builder-responsibility-module-graph/v1@1.0.0",
+  "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+  "implicit_phases_allowed": false,
+  "default_parallelism_allowed": false,
+  "phases": [
+    {
+      "phase_id": "ratified_boundary_ready",
+      "responsibility": "establish_the_validated_ratified_atomic_boundary_contract",
+      "module_refs": ["atomic_boundary_module"],
+      "dependencies": [],
+      "parallel_with": [],
+      "entry_conditions": ["source_lock_active", "human_ratification_attributable"],
+      "exit_evidence": ["frozen_atomic_boundary_ref", "boundary_validation_receipt_ref"],
+      "failure_owner": "cmf_builder.atomicity",
+      "required_gates": ["source_lock_valid", "ratification_valid"],
+      "execution_kind": "DETERMINISTIC_CODE"
+    },
+    {
+      "phase_id": "governed_contract_ready",
+      "responsibility": "establish_the_validated_governed_target_and_output_contract",
+      "module_refs": ["governed_contract_module"],
+      "dependencies": ["ratified_boundary_ready"],
+      "parallel_with": [],
+      "entry_conditions": ["frozen_atomic_boundary_ref_available", "constitutional_precedence_valid"],
+      "exit_evidence": ["validated_target_contract_ref", "validation_receipt_ref"],
+      "failure_owner": "cmf_builder.constitutional_validation",
+      "required_gates": ["boundary_active", "constitutional_authority_valid"],
+      "execution_kind": "DETERMINISTIC_CODE"
+    }
+  ],
+  "production_eligible": false,
+  "certified": false
+}

@@ -1,0 +1,31 @@
+schema_version: cmf-builder-bqa-finding-input/v1
+source_report:
+  path: docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_REPORT.md
+  sha256: 2fba40004d25598b7184d44863af48df8a95fb39454e49fcbf493432cd59dd8e
+source_verdict:
+  path: docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_VERDICT.yaml
+  sha256: cb34e839fd4d24ed23c49c1e88edb8b2b14c109897840f97e22fd6c4fbd29483
+findings:
+  BQA-P0-001:
+    severity: P0
+    reproduced: true
+    invariant: governed_meaning_must_be_reconstructed_from_authority_not_self_consistent_bytes
+  BQA-P1-003:
+    severity: P1
+    reproduced: true
+    invariant: committed_command_must_not_be_reported_as_not_committed_when_observation_delivery_fails
+  BQA-P1-004:
+    severity: P1
+    reproduced: true
+    invariant: compare_and_append_must_admit_exactly_one_same_version_writer
+  BQA-P1-005:
+    severity: P1
+    reproduced: true
+    invariant: lifecycle_event_checkpoint_receipt_and_command_record_commit_atomically
+  BQA-P1-006:
+    severity: P1
+    reproduced: true
+    invariant: archive_hash_and_descriptors_must_derive_from_the_same_immutable_bytes
+resolved_snapshot_finding: BQA-P1-002
+deferred_nonblocking_findings: [BQA-P2-007, BQA-P2-008, BQA-P2-009, BQA-P3-010]
+

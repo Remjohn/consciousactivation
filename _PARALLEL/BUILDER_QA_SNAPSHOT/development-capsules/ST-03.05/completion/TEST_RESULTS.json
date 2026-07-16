@@ -1,0 +1,115 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-03.05",
+  "active_mode": "CONSTITUTIONAL_PRECEDENCE_VALIDATION",
+  "executed_on": "2026-07-15",
+  "environment": {
+    "python": "C:\\Python312\\python.exe",
+    "pythonpath": "src",
+    "network_used": false,
+    "external_runtime_used": false
+  },
+  "authority_hash_reconciliation": {
+    "human_confirmed_amendment_sha256": "11445848904b61a72fbe500f6a184084e153419a2844243c0bca5f31ef87506c",
+    "local_amendment_match": true,
+    "program_control_current_amendment_match": true,
+    "reconciled_precedence_contract_sha256": "328c2ec7a57de1bcc892631a2190a38d8f8e61972cbcb397c867a312f993b4ff",
+    "semantic_scope_changed": false,
+    "verdict": "PASS"
+  },
+  "capsule_validation": {
+    "manifest_sha256": "c9ec4852a64b406f5fc94b9ce84a3c1fcf6721f78abfa161d2d883f1ef773008",
+    "immutable_inputs": "PASS_17_OF_17",
+    "bundle_digest_expected": "c897f886e4cadd78f0941500ae935048b8f2dea5015d7e7894f6209ff1c8b588",
+    "bundle_digest_observed": "c897f886e4cadd78f0941500ae935048b8f2dea5015d7e7894f6209ff1c8b588",
+    "dependency_receipts": "PASS_6_OF_6",
+    "authorization": "PASS_BOUNDED_ST_03_05_ONLY",
+    "verdict": "PASS"
+  },
+  "runs": [
+    {
+      "name": "preimplementation_repository_regression",
+      "command": "$env:PYTHONPATH='src'; python -m pytest -q",
+      "result": "PASS",
+      "passed": 147,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "story_suite_final_run_1",
+      "command": "$env:PYTHONPATH='src'; python -m pytest -q tests/stories/st_03_05",
+      "result": "PASS",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "story_suite_final_run_2",
+      "command": "$env:PYTHONPATH='src'; python -m pytest -q tests/stories/st_03_05",
+      "result": "PASS",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "predecessor_regression_after_implementation",
+      "result": "PASS",
+      "passed": 147,
+      "failed": 0,
+      "skipped": 0,
+      "deselected": 1,
+      "deselected_reason": "new ST-03.05 source-presence assertion is not a predecessor test"
+    },
+    {
+      "name": "architecture_boundary_subset",
+      "result": "PASS",
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "full_repository_regression",
+      "command": "$env:PYTHONPATH='src'; python -m pytest -q",
+      "result": "PASS",
+      "passed": 186,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "acceptance_criteria": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "PASS",
+    "AC-09": "PASS",
+    "AC-10": "PASS",
+    "AC-11": "PASS",
+    "AC-12": "PASS"
+  },
+  "determinism_and_contract_validation": {
+    "policy_path_and_hash": "PASS",
+    "canonical_authority_source_hashes": "PASS",
+    "authority_order": "PASS",
+    "artifact_inventory": "PASS_21_OF_21",
+    "governed_node_count": 43,
+    "projection_byte_reproduction": "PASS",
+    "fresh_context_report_equality": "PASS",
+    "fresh_context_receipt_equality": "PASS",
+    "rich_lineage": "PASS_5_OF_5_SEPARATE",
+    "explicit_not_applicable": "PASS",
+    "conflict_fail_closed": "PASS_ZERO_PARTIAL_STATE",
+    "historical_reproducibility": "PASS",
+    "external_dependencies_added": [],
+    "schemas_changed": [],
+    "verdict": "PASS"
+  },
+  "mandatory_test_skips": 0,
+  "warnings": [
+    "Pre-existing pytest-asyncio default fixture loop scope deprecation warning; no test or behavior impact."
+  ],
+  "verdict": "PASS"
+}

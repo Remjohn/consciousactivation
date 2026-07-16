@@ -1,0 +1,46 @@
+schema_version: cmf-builder-bqa-trust-correction-file-manifest/v1
+capsule_id: BQA-P0-P1-TRUST-CORRECTION
+verdict: PASS
+rule: exact_allowlist_only
+production_files:
+  - {path: src/cmf_builder/domain/atomic_harness_definition.py, sha256: 8d4d174eb3c54f152a099053302dd631f686c27b070b7dde989c4901afd8e4c6}
+  - {path: src/cmf_builder/domain/target_package_validation.py, sha256: 86848b6383e3878ee1016ae324bb669fa6cbe87da3c9d2ae2339e756097c8d03}
+  - {path: src/cmf_builder/application/target_validation_commands.py, sha256: 0b2a978c0c0195bc27faf7109e49a5ac69b2831ed227343d280294e5e34f8ba3}
+  - {path: src/cmf_builder/application/ports.py, sha256: 4b03dd9f4fb3b12380032de20508ebcadba319a94720d75e06c1d2963f656b0e}
+  - {path: src/cmf_builder/application/run_commands.py, sha256: ce398a5d91d18df62e528dc552fa4e87617e72469066442b3e4da869f9dbd330}
+  - {path: src/cmf_builder/adapters/in_memory_run_repository.py, sha256: 3fee99ae89884ff16af0aae3fc34f0161dccbde594499d94e9c6f64254311a2a}
+  - {path: src/cmf_builder/adapters/file_evidence_workspace.py, sha256: 4dc820f82a46be2137467db47d96197ad6a7076cf3356a3b7bbcb2d49e696561}
+test_files:
+  - {path: tests/corrections/__init__.py, sha256: 98184dd6ac8159ac435f5ace2ac09cba29f30ad7f52e0b702452a5804f5ab64a}
+  - {path: tests/corrections/test_bqa_p0_001_authority_binding.py, sha256: 228b8efe154cb91c21f3cfefaf4e42e4f60f23a4b12b28c6fe157c74b43d2251}
+  - {path: tests/corrections/test_bqa_p1_003_observation_outbox.py, sha256: bd55ca452de49f3c7c08c679e56e66da998a30548dfdc6de953659828c9bf210}
+  - {path: tests/corrections/test_bqa_p1_004_atomic_concurrency.py, sha256: fb23b7c5f49631113f7a071f081b37a0ad72f6578831d8caaf0d50da6307cb6f}
+  - {path: tests/corrections/test_bqa_p1_005_run_command_atomicity.py, sha256: 4379bd2dca5971bc0810da54aa98610185b6d0857d9469f82b2994d564e2008c}
+  - {path: tests/corrections/test_bqa_p1_006_zip_byte_binding.py, sha256: a500eaf8c15bcf0d38881ca5172eb5f352fc6e7f93919ab613e84f961a53113d}
+  - {path: tests/corrections/test_bqa_integration_gate.py, sha256: 6387e0977a126856ee22a165d37b781291329007e36f26c855fcc7080ffd4543}
+authorization_control_evidence:
+  - {path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/IMPLEMENTATION_AUTHORIZATION.yaml, sha256: d64fd6e1607086398ccb860cfe72c76c2e3d8b38429b0feffcd8d3184dc1cfa7}
+  - {path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/IMPLEMENTATION_AUTHORIZATION_REPORT.md, sha256: 05e636229b744044f5e41701c3cda9d97b80c1cf1c2c2003e6787b103451caee}
+completion_evidence:
+  - {path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/IMPLEMENTATION_REPORT.md, sha256: d9c1b78111e2ce75686f961182321aadf11e8477c978794984e3bdcb9eec44f1}
+  - {path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/TEST_RESULTS.json, sha256: 644eafe7d17309ecf4db980bb8a86ab28255681bbc940f8523104adc87a519e7}
+  - {path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/OBSERVABILITY_EVIDENCE.yaml, sha256: ea4fde593cd5979e6bdd51da38d41be45e27a20aaad441240ea1a7b026bb314d}
+  - {path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/ROLLBACK_EVIDENCE.md, sha256: d06d30da368d441bc2c6679e26b8506f63d83aeb3a2a193c7bc7104bfbab7d3b}
+post_pass_status_reconciliation:
+  rule: separately_hashed_by_INTEGRATION_GATE_RECEIPT
+  paths:
+    - docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_REPORT.md
+    - docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_VERDICT.yaml
+    - docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_HASH_MATRIX.csv
+    - docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
+    - docs/implementation/FULL_BUILDER_CAMPAIGN_PROGRESS.md
+    - docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
+    - docs/implementation/FULL_BUILDER_RECEIPT_INDEX.yaml
+    - docs/planning/BUILDER_CORE_IMPLEMENTATION_SEQUENCE.yaml
+    - CURRENT_PROJECT_STATUS.md
+    - PROGRAM_STATUS_EXPORT.yaml
+prohibited_files_modified_by_correction: []
+new_external_dependencies: []
+schema_changes: []
+external_repository_changes: []
+original_story_receipts_modified: []

@@ -1,0 +1,28 @@
+schema_version: cmf-builder-capsule-contract-references/v1
+story_id: ST-04.02
+consumed_contracts:
+  - id: CapabilityOwnershipGraph
+    contract: cmf-builder-capability-ownership/v1@1.0.0
+    authority: ST-04.01
+    mutation: prohibited
+  - id: CapabilityOwnershipReceipt
+    contract: cmf-builder-capability-ownership-receipt/v1
+    authority: ST-04.01
+    mutation: prohibited
+produced_typed_contracts:
+  - ResponsibilityModule
+  - ModulePublicContract
+  - ModuleTestSeam
+  - ResponsibilityModuleGraph
+  - ResponsibilityModuleReceipt
+  - ResponsibilityModuleInvalidation
+  - CompileResponsibilityModulesCommand
+governed_input:
+  path: development-capsules/ST-04.02/MODULE_COMPILATION_INPUT.json
+  schema: cmf-builder-synthetic-module-compilation-input/v1
+schema_file_change: prohibited
+database_schema_change: prohibited
+external_contract_ownership: unchanged
+Delegation_pin_required: false
+VAE_contract_required: false
+compatibility_rule: changed_module_boundary_or_contract_requires_new_immutable_graph_version

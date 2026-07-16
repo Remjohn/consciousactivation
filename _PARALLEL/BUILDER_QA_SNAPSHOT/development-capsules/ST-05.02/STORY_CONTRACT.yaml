@@ -1,0 +1,43 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-05.02
+primary_epic: EP-05
+title: Prove a Skill Is Needed Before Designing It
+active_mode: SYNTHETIC_NO_SKILL_NECESSITY
+readiness_status: READY
+outcome: >-
+  Run the formal necessity and capability-gap test over the exact active
+  ST-05.01 zero-skill snapshot, prove that all five synthetic requirements are
+  already satisfied by deterministic Builder-owned code, and emit an immutable
+  NO_NEW_SKILL_REQUIRED decision and receipt without creating a skill.
+primary_owner: skill_registry_owner
+component_boundary: >-
+  Builder-owned deterministic contracts and commands for necessity evidence,
+  ordered alternative evaluation, no-skill decisions, typed Skill Design Brief
+  disposition, immutable storage, observations, receipts, replay, idempotency,
+  and invalidation. Skill design, packaging, evaluation, and execution remain outside.
+owned_obligations: [AG-008, FR-084, FR-085, FR-086]
+governing_specs: [TS-00, TS-07, TS-08]
+governing_adrs: [ADR-009]
+direct_dependencies:
+  - story_id: ST-05.01
+    artifact: StoryCompletionReceipt
+    receipt_sha256: 5f8728257926b7ab1ba6ef73bec73d2c89f0214e0152ba510076d6158e38a7ef
+    canonical_payload_sha256: 06d44fcdc40d0120c9c737c8f85b5632367be7683c7ee4a8107bceb4b47ee5d6
+conditional_authority:
+  amendment: BF-AM-006
+  BD_010: CLOSED_FOR_SYNTHETIC_CORE_EMPTY_REGISTRY_ONLY
+  HD_007: NOT_APPLICABLE_CONVERSATIONAL_OR_REAL_PROFILE_ONLY
+  XDEP_001: GOVERNING_READ_ONLY_NOT_RUNTIME
+failure_behavior:
+  - reject a necessity decision without the exact active zero-skill snapshot and context lineage
+  - reject an asserted gap without target-failure evidence and exhaustion of governed alternatives
+  - reject new-skill or adaptation authorization in the synthetic no-gap mode
+  - reject hidden workflow ownership, dynamic discovery, external skill use, or implicit capability ownership
+  - reject a required Skill Design Brief omission when a future governed gap branch is authorized
+  - commit no partial decision, receipt, event, command record, or run reference on failure
+compatibility: >-
+  Preserve the empty registry, five code-owned capability classifications, and
+  immutable Harness version. A later real gap requires a new governed upstream
+  input, human authority, and immutable Harness version.
+completion_receipt: development-capsules/ST-05.02/completion/STORY_COMPLETION_RECEIPT.yaml
+implementation_authorized: false

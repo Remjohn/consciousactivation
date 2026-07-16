@@ -1,0 +1,341 @@
+schema_version: cmf-builder-story-cross-repository-dependencies/v1
+status: REGISTERED_NOT_IMPLEMENTED
+dependency_count: 6
+active_contract_pins:
+  XDEP-003: contracts/integration/DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+dependencies:
+- id: XDEP-001
+  repository_or_product: CMF_PROGRAM_CONTROL
+  relationship: Supplies constitutional and product authority, cross-repository decision governance, release pins, and convergence status.
+  current_constraint: Program records must be synchronized separately; Builder does not mutate program control during this Epic proposal.
+  consuming_epic_ids:
+  - EP-01
+  - EP-02
+  - EP-03
+  - EP-04
+  - EP-05
+  - EP-06
+  - EP-07
+  - EP-08
+  - EP-09
+  - EP-10
+  - EP-11
+  - EP-12
+  consuming_story_ids:
+  - ST-01.01
+  - ST-01.02
+  - ST-01.03
+  - ST-01.04
+  - ST-02.01
+  - ST-02.02
+  - ST-02.03
+  - ST-02.04
+  - ST-02.05
+  - ST-03.01
+  - ST-03.02
+  - ST-03.03
+  - ST-03.04
+  - ST-03.05
+  - ST-04.01
+  - ST-04.02
+  - ST-04.03
+  - ST-04.04
+  - ST-04.05
+  - ST-05.01
+  - ST-05.02
+  - ST-05.03
+  - ST-05.04
+  - ST-05.05
+  - ST-06.01
+  - ST-06.02
+  - ST-06.03
+  - ST-06.04
+  - ST-06.05
+  - ST-07.01
+  - ST-07.02
+  - ST-07.03
+  - ST-07.04
+  - ST-08.01
+  - ST-08.02
+  - ST-08.03
+  - ST-08.04
+  - ST-08.05
+  - ST-08.06
+  - ST-08.07
+  - ST-09.01
+  - ST-09.02
+  - ST-09.03
+  - ST-09.04
+  - ST-09.05
+  - ST-09.06
+  - ST-09.07
+  - ST-09.08
+  - ST-10.01
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+  - ST-10.05
+  - ST-10.06
+  - ST-10.07
+  - ST-10.08
+  - ST-10.09
+  - ST-10.10
+  - ST-10.11
+  - ST-10.12
+  - ST-10.13
+  - ST-10.14
+  - ST-11.01
+  - ST-11.02
+  - ST-11.03
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+  builder_boundary: Builder consumes pinned program authority; it does not mutate program-control truth from Story implementation.
+  implementation_effect: CONDITIONAL_OR_EVIDENCE_GATED; planning may continue but no external product behavior is implemented here.
+- id: XDEP-002
+  repository_or_product: 02_VISUAL_ASSET_EDITOR
+  relationship: Consumes the Builder Visual Asset Editor target profile and visual-semantic or Asset Demand handoff contracts.
+  current_constraint: VAE implementation readiness is FAIL; Builder defines and validates the target profile but does not implement editor behavior.
+  consuming_epic_ids:
+  - EP-07
+  - EP-08
+  - EP-10
+  - EP-11
+  - EP-12
+  consuming_story_ids:
+  - ST-07.01
+  - ST-07.02
+  - ST-07.03
+  - ST-07.04
+  - ST-08.01
+  - ST-08.02
+  - ST-08.03
+  - ST-08.04
+  - ST-08.05
+  - ST-08.06
+  - ST-08.07
+  - ST-10.01
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+  - ST-10.05
+  - ST-10.06
+  - ST-10.07
+  - ST-10.08
+  - ST-10.09
+  - ST-10.10
+  - ST-10.11
+  - ST-10.12
+  - ST-10.13
+  - ST-10.14
+  - ST-11.01
+  - ST-11.02
+  - ST-11.03
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+  builder_boundary: Builder may compile and contract-test the VAE target profile and handoff; VAE owns production editor behavior.
+  implementation_effect: CONDITIONAL_OR_EVIDENCE_GATED; planning may continue but no external product behavior is implemented here.
+- id: XDEP-003
+  repository_or_product: 03_DELEGATION_PROTOCOL
+  relationship: Owns the external Content-to-Asset Delegation runtime and shared contract release consumed by Builder target compilation.
+  current_constraint: Exact 1.1.0-rc.4 is validated and pinned as a local unsigned release candidate; it is not production-eligible or production-authorized, and Builder consumes mappings without owning shared schemas or runtime.
+  active_contract_pin: contracts/integration/DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+  compatibility_profile: cmf-delegation-compatibility-profile-1-0
+  trust_status: local_unsigned_release_candidate
+  production_eligibility: false
+  story_dependency_metadata:
+    source_kind_mapping: contracts/integration/SOURCE_PROVENANCE_MAPPING.yaml
+    category_profile_compatibility: contracts/integration/CATEGORY_PROFILE_COMPATIBILITY.yaml
+    wrong_reading_lock_inheritance: contracts/integration/WRONG_READING_LOCK_INHERITANCE.yaml
+    derivative_parent_lock_evidence: contracts/integration/WRONG_READING_LOCK_INHERITANCE.yaml#compiled_relationship_fields
+    activative_lineage_mapping: contracts/integration/ACTIVATIVE_LINEAGE_MAPPING.yaml
+    wire_mapping: contracts/integration/BUILDER_TO_DELEGATION_WIRE_MAPPING.yaml
+    format02_alias_registry: ../CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/FORMAT02_PROFILE_ALIAS_REGISTRY.yaml
+  consuming_epic_ids:
+  - EP-07
+  - EP-08
+  - EP-10
+  - EP-11
+  - EP-12
+  consuming_story_ids:
+  - ST-07.01
+  - ST-07.02
+  - ST-07.03
+  - ST-07.04
+  - ST-08.01
+  - ST-08.02
+  - ST-08.03
+  - ST-08.04
+  - ST-08.05
+  - ST-08.06
+  - ST-08.07
+  - ST-10.01
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+  - ST-10.05
+  - ST-10.06
+  - ST-10.07
+  - ST-10.08
+  - ST-10.09
+  - ST-10.10
+  - ST-10.11
+  - ST-10.12
+  - ST-10.13
+  - ST-10.14
+  - ST-11.01
+  - ST-11.02
+  - ST-11.03
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+  builder_boundary: Delegation owns shared contracts and runtime; Builder consumes a pinned snapshot and emits a compatible handoff only.
+  implementation_effect: CONDITIONAL_OR_EVIDENCE_GATED; RC4 contract mapping may be planned and validated, but no external product behavior or Builder production implementation is authorized.
+- id: XDEP-004
+  repository_or_product: 05_FUTURE_PRODUCTS/INTERVIEW_EXPRESSION_HARNESS
+  relationship: Future owner of Interview Expression and ReelCast live execution, Reaction Receipt capture, Expression Moment extraction, and
+    final content-type contracts.
+  current_constraint: Planning is paused after one locked atomic-boundary decision; Builder must not pre-write the final product PRD.
+  consuming_epic_ids:
+  - EP-01
+  - EP-02
+  - EP-06
+  - EP-07
+  - EP-08
+  - EP-10
+  - EP-11
+  - EP-12
+  consuming_story_ids:
+  - ST-01.01
+  - ST-01.02
+  - ST-01.03
+  - ST-01.04
+  - ST-02.01
+  - ST-02.02
+  - ST-02.03
+  - ST-02.04
+  - ST-02.05
+  - ST-06.01
+  - ST-06.02
+  - ST-06.03
+  - ST-06.04
+  - ST-06.05
+  - ST-07.01
+  - ST-07.02
+  - ST-07.03
+  - ST-07.04
+  - ST-08.01
+  - ST-08.02
+  - ST-08.03
+  - ST-08.04
+  - ST-08.05
+  - ST-08.06
+  - ST-08.07
+  - ST-10.01
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+  - ST-10.05
+  - ST-10.06
+  - ST-10.07
+  - ST-10.08
+  - ST-10.09
+  - ST-10.10
+  - ST-10.11
+  - ST-10.12
+  - ST-10.13
+  - ST-10.14
+  - ST-11.01
+  - ST-11.02
+  - ST-11.03
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+  builder_boundary: Builder supplies structural Interview Expression and ReelCast profiles only; the future product owns its PRD and live behavior.
+  implementation_effect: CONDITIONAL_OR_EVIDENCE_GATED; planning may continue but no external product behavior is implemented here.
+- id: XDEP-005
+  repository_or_product: 04_OPERATOR_MANUAL
+  relationship: Future consumer of approved Control Tower, workflow, incident, and authorization operating procedures.
+  current_constraint: Operational documentation follows stable Builder behavior and cannot substitute for implementation evidence.
+  consuming_epic_ids:
+  - EP-09
+  - EP-10
+  - EP-11
+  - EP-12
+  consuming_story_ids:
+  - ST-09.01
+  - ST-09.02
+  - ST-09.03
+  - ST-09.04
+  - ST-09.05
+  - ST-09.06
+  - ST-09.07
+  - ST-09.08
+  - ST-10.01
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+  - ST-10.05
+  - ST-10.06
+  - ST-10.07
+  - ST-10.08
+  - ST-10.09
+  - ST-10.10
+  - ST-10.11
+  - ST-10.12
+  - ST-10.13
+  - ST-10.14
+  - ST-11.01
+  - ST-11.02
+  - ST-11.03
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+  builder_boundary: The Operator Manual consumes stable behavior later; documentation cannot substitute for Builder acceptance evidence.
+  implementation_effect: CONDITIONAL_OR_EVIDENCE_GATED; planning may continue but no external product behavior is implemented here.
+- id: XDEP-006
+  repository_or_product: Activation Compiler Harness
+  relationship: Upstream semantic authority that produces the rich Activative Intelligence Pack referenced by Builder contracts.
+  current_constraint: Builder preserves frozen lineage and sparse references; it does not replace or implement the Activation Compiler.
+  consuming_epic_ids:
+  - EP-01
+  - EP-03
+  - EP-06
+  - EP-08
+  - EP-12
+  consuming_story_ids:
+  - ST-01.01
+  - ST-01.02
+  - ST-01.03
+  - ST-01.04
+  - ST-03.01
+  - ST-03.02
+  - ST-03.03
+  - ST-03.04
+  - ST-03.05
+  - ST-06.01
+  - ST-06.02
+  - ST-06.03
+  - ST-06.04
+  - ST-06.05
+  - ST-08.01
+  - ST-08.02
+  - ST-08.03
+  - ST-08.04
+  - ST-08.05
+  - ST-08.06
+  - ST-08.07
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+  builder_boundary: Builder preserves Activative Intelligence Pack lineage; the Activation Compiler owns upstream semantic truth.
+  implementation_effect: CONDITIONAL_OR_EVIDENCE_GATED; planning may continue but no external product behavior is implemented here.
+external_product_implementation_stories: []
+boundary_validation: PASS

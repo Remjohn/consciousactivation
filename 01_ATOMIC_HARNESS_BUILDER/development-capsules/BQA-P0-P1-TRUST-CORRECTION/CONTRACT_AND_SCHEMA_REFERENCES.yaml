@@ -1,0 +1,27 @@
+schema_version: cmf-builder-bqa-contract-reference-set/v1
+contracts:
+  - AtomicHarnessDefinition
+  - AtomicHarnessDefinitionReceipt
+  - AtomicContentHarnessValidationReport
+  - AtomicContentHarnessValidationReceipt
+  - ValidateAtomicContentHarnessCommand
+  - CommandRecord
+  - Observation
+  - RunRepository
+  - AtomicContentHarnessValidationRepository
+  - SourceProfile
+  - SourceDescriptor
+  - SourceLock
+contract_changes:
+  RunRepository:
+    change: add_atomic_run_command_commit_with_optional_checkpoint
+    compatibility: additive_internal_port_method_current_adapter_only
+  AtomicContentHarnessValidationRepository:
+    change: add_transactional_observation_outbox_commit_and_retry_query_seam
+    compatibility: additive_internal_port_method_current_adapter_only
+schema_files_changed: []
+shared_contracts_changed: []
+external_contract_versions_changed: []
+external_target_compatibility: NOT_EVALUATED_EXTERNAL_TARGET_BRANCH
+production_certification: false
+

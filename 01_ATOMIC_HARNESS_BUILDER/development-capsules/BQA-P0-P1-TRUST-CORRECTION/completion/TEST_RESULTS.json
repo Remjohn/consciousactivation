@@ -1,0 +1,57 @@
+{
+  "schema_version": "cmf-builder-bqa-trust-correction-test-results/v1",
+  "capsule_id": "BQA-P0-P1-TRUST-CORRECTION",
+  "verdict": "PASS",
+  "mandatory_skips": 0,
+  "preimplementation": {
+    "capsule_inputs": "PASS_18_OF_18",
+    "manifest_sha256": "89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7",
+    "bundle_digest": "84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f",
+    "affected_receipts": "PASS_4_OF_4",
+    "full_regression": "PASS_475_OF_475"
+  },
+  "red_reproduction": {
+    "command": "PYTHONPATH=src;. pytest tests/corrections -q",
+    "result": "109_FAILED_3_PASSED",
+    "expected_red_state": true,
+    "findings_reproduced": [
+      "BQA-P0-001",
+      "BQA-P1-003",
+      "BQA-P1-004",
+      "BQA-P1-005",
+      "BQA-P1-006"
+    ]
+  },
+  "correction_specific": [
+    {"process": 1, "result": "PASS", "passed": 125, "failed": 0, "skipped": 0, "seconds": 3.69},
+    {"process": 2, "result": "PASS", "passed": 125, "failed": 0, "skipped": 0, "seconds": 3.33}
+  ],
+  "unchanged_affected_predecessor_suites": {
+    "result": "PASS",
+    "passed": 128,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 24.29
+  },
+  "complete_repository_regression": [
+    {"process": 1, "result": "PASS", "passed": 600, "failed": 0, "skipped": 0, "seconds": 54.27},
+    {"process": 2, "result": "PASS", "passed": 600, "failed": 0, "skipped": 0, "seconds": 49.95}
+  ],
+  "python_compilation": {
+    "result": "PASS",
+    "files": 178,
+    "bytecode_written": false
+  },
+  "independent_bqa_recheck": {
+    "result": "PASS",
+    "method": "dedicated tests/corrections probes matching each original independent reproduction",
+    "closed_findings": [
+      "BQA-P0-001",
+      "BQA-P1-003",
+      "BQA-P1-004",
+      "BQA-P1-005",
+      "BQA-P1-006"
+    ]
+  },
+  "known_nonblocking_warning": "pytest-asyncio default loop scope is unset; retained as deferred BQA-P3-010"
+}

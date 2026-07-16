@@ -505,7 +505,9 @@ class AtomicHarnessDefinition:
         snapshot: SyntheticSkillRegistrySnapshot,
         necessity: SkillNecessityDecision,
         verify_identity: bool = True,
+        expected_authority_identity: str | None = None,
     ) -> None:
+        self.validate_compiler_contract()
         for section in self.sections:
             section.validate()
         supplemental = run.target_profile.supplemental_proof
@@ -583,6 +585,10 @@ class AtomicHarnessDefinition:
             or self.context_manifest_ids != tuple(sorted(item.manifest_id for item in context.manifests))
             or self.acceptance_test_declarations != ACCEPTANCE_TEST_DECLARATIONS
             or not self.authority_identity.strip()
+            or (
+                expected_authority_identity is not None
+                and self.authority_identity != expected_authority_identity
+            )
             or self.authority_boundaries != AUTHORITY_BOUNDARIES
             or self.failure_stop_conditions != FAILURE_STOP_CONDITIONS
             or self.validation_requirements != VALIDATION_REQUIREMENTS
@@ -616,6 +622,110 @@ class AtomicHarnessDefinition:
                 or self.definition_hash != f"sha256:{digest}"
             ):
                 raise DefinitionLineageInvalid("Definition identity is not reproducible.")
+
+    def validate_compiler_contract(self) -> None:
+        """Validate semantics that are fixed by the governed ST-07.02 compiler contract.
+
+        This check intentionally derives section projections from independently named
+        definition fields. Full ``validate`` additionally binds those fields to the
+        authoritative upstream objects.
+        """
+
+        source_map: Mapping[str, tuple[str, ...]] = {
+            "identity_and_version": (self.run_id, self.ir_id),
+            "target_and_source_profile": (
+                self.profile_id,
+                "synthetic_task_definition_source_v1@1.0.0",
+            ),
+            "source_lock": (self.source_lock_ref, self.source_lock_hash),
+            "atomic_boundary_and_ratification": (
+                self.boundary_ref,
+                self.ratification_ref,
+            ),
+            "draft_harness_model": (self.model_ref, self.model_hash),
+            "harness_ir": (self.ir_id, self.ir_hash),
+            "deterministic_artifact_set": (
+                self.artifact_set_id,
+                self.artifact_manifest_hash,
+            ),
+            "constitutional_precedence": (
+                self.constitutional_report_id,
+                self.constitutional_report_hash,
+            ),
+            "capability_ownership": (
+                self.capability_graph_id,
+                self.capability_graph_hash,
+            ),
+            "responsibility_modules": (
+                self.module_graph_id,
+                self.module_graph_hash,
+            ),
+            "phase_graph_execution_plan": (
+                self.phase_graph_id,
+                self.phase_graph_hash,
+            ),
+            "accepted_internal_handoff": (
+                self.accepted_handoff_id,
+                self.accepted_handoff_hash,
+            ),
+            "minimum_complete_context": (
+                self.minimum_context_graph_id,
+                self.minimum_context_graph_hash,
+            ),
+            "skill_registry_snapshot": (
+                self.skill_snapshot_id,
+                self.skill_snapshot_hash,
+            ),
+            "skill_necessity_decision": (
+                self.skill_necessity_decision_id,
+                self.skill_necessity_decision_hash,
+            ),
+            "input_output_contract": (self.boundary_ref, self.model_ref),
+            "acceptance_test_contracts": (self.ir_id, self.phase_graph_id),
+            "authority_and_provenance": (
+                self.ratification_ref,
+                self.constitutional_report_id,
+            ),
+            "compatibility_and_certification": (
+                self.profile_id,
+                self.skill_necessity_decision_id,
+            ),
+            "invalidation_and_history": (
+                self.run_id,
+                self.skill_necessity_decision_id,
+            ),
+        }
+        expected_sections = tuple(
+            GovernedDefinitionSection(
+                section_id=name,
+                applicability="REQUIRED",
+                source_refs=tuple(sorted(source_map[name])),
+                basis="governed_upstream_evidence",
+            )
+            for name in REQUIRED_SECTIONS
+        )
+        if (
+            self.task_id != "synthetic_utf8_line_ending_normalization"
+            or self.goal
+            != "compile a governed deterministic text-normalization Harness definition"
+            or self.success_condition
+            != "definition is complete deterministic portable and explicitly non-certifiable"
+            or self.input_contract
+            != "UTF-8 text bytes accepted under the governed Source Lock"
+            or self.output_contract
+            != "UTF-8 text with LF line endings and exactly one terminal newline"
+            or self.evaluation_requirements
+            != ("ST-07.04_post_compilation_validation_required",)
+            or self.repair_retry_policy
+            != "typed_failure_clean_retry_new_version_on_governed_change"
+            or self.compatibility_status
+            != "synthetic_builder_core_contract_compatible_only"
+            or not self.authority_identity.strip()
+            or self.sections != expected_sections
+        ):
+            raise DefinitionLineageInvalid(
+                "Definition semantics or governed section projections differ from compiler authority."
+            )
 
     def canonical_dict(self) -> dict[str, object]:
         return {
@@ -741,6 +851,7 @@ class AtomicHarnessDefinitionReceipt:
         event_ids: tuple[str, ...],
         stream_version: int,
     ) -> "AtomicHarnessDefinitionReceipt":
+        definition.validate_compiler_contract()
         candidate = cls(
             receipt_id="pending",
             receipt_hash="pending",
@@ -773,6 +884,7 @@ class AtomicHarnessDefinitionReceipt:
         return result
 
     def validate(self, definition: AtomicHarnessDefinition) -> None:
+        definition.validate_compiler_contract()
         digest = sha256(self.canonical_bytes()).hexdigest()
         if (
             self.schema_id != DEFINITION_RECEIPT_SCHEMA_ID
@@ -780,6 +892,7 @@ class AtomicHarnessDefinitionReceipt:
             or self.definition_id != definition.definition_id
             or self.definition_hash != definition.definition_hash
             or not self.authority_identity.strip()
+            or self.authority_identity != definition.authority_identity
             or len(self.event_ids) != 1
             or self.section_count != len(definition.sections)
             or self.capability_count != len(definition.capability_ids)

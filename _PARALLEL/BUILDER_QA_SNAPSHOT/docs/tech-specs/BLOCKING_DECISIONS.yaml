@@ -1,0 +1,144 @@
+schema_version: cmf-builder-next-blocking-decisions/v1
+generated_on: '2026-07-14'
+implementation_gate: FAIL
+allowed_statuses:
+  - RESOLVED_BY_USER_DIRECTIVE
+  - RESOLVED_BY_REPOSITORY_EVIDENCE
+  - BLOCKING_RATIFICATION
+  - BLOCKING_EXTERNAL_INPUT
+  - BLOCKING_EMPIRICAL
+decisions:
+  - id: BD-001
+    question: Where is the authoritative Architecture Preservation Contract?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: product_lead
+    resolution: The human product authority ratified docs/tech-specs/ARCHITECTURE_PRESERVATION_CONTRACT.md on 2026-07-14.
+    evidence:
+      - docs/tech-specs/REPOSITORY_INVENTORY.md#architecture-preservation-source-gap
+      - governance/PRODUCT_CONSTITUTION.yaml
+      - governance/ARCHITECTURAL_PROHIBITIONS.json
+      - governance/READINESS_HARD_GATES.yaml
+    recommendation: Ratify docs/tech-specs/ARCHITECTURE_PRESERVATION_CONTRACT.md as the derived contract or supply the missing authoritative artifact.
+    blocks: []
+
+  - id: BD-002
+    question: Which harness and category form the Release 1 reference slice?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: product_lead
+    resolution: Format 02 Minimal Coach Theatre under 2D Character Animation.
+    evidence:
+      - prd/05-features/F14-format-categories-sequencing.md
+      - docs/tech-specs/specs/TS-15-FORMAT-02-RELEASE-1-VERTICAL-SLICE.md
+    closes_open_questions: [OQ-001, OQ-002]
+    blocks: []
+
+  - id: BD-003
+    question: Is there authoritative V2.1 implementation to migrate?
+    status: RESOLVED_BY_REPOSITORY_EVIDENCE
+    owner: architecture
+    resolution: No. V2.1 migration requirements are not applicable to this repository unless artifacts are later supplied.
+    evidence:
+      - docs/tech-specs/REPOSITORY_INVENTORY.md#v21-determination
+      - governance/SOURCE_REGISTER.json
+    closes_open_questions: [OQ-009]
+    invalidation_trigger: Authoritative V2.1 source, schemas, tests, or package added inside the repository.
+    blocks: []
+
+  - id: BD-004
+    question: Which authoritative Format 02 and conversational human-reaction evidence corpora, consent policies, and source licenses may Builder use?
+    status: BLOCKING_EXTERNAL_INPUT
+    owner: product_lead_and_evidence_steward
+    recommendation: Supply a hash-locked Format 02 corpus and human-reaction policy/corpus with authority, consent, purpose, retention, redaction, withdrawal, license, privacy, and benchmark-eligibility metadata; resolve HD-006 before conversational production use.
+    evidence: [governance/SOURCE_REGISTER.json, prd/12-assumptions-open-questions.md, docs/contracts/CONTRACT_REGISTRY.yaml]
+    blocks: [TS-02, TS-03, TS-04, TS-10, TS-11, TS-14, TS-15]
+    constitutional_alignment: expanded_for_reaction_receipts_and_expression_moments
+
+  - id: BD-005
+    question: Which storage technologies own events, IR snapshots, artifacts, and benchmark receipts?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: architecture
+    resolution: PostgreSQL owns authoritative events, snapshots, registries, command receipts, and projections; SHA-256 content-addressed storage owns immutable artifacts.
+    recommendation: PostgreSQL for authoritative events/projections and a SHA-256 content-addressed object store for immutable artifacts; keep both behind ports.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-003]
+    blocks: []
+
+  - id: BD-006
+    question: Which runtime executes Builder Workflow IR?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: architecture
+    resolution: Temporal is the production workflow adapter and the deterministic in-memory adapter is used for conformance tests.
+    recommendation: Compile governed Workflow IR to a Temporal adapter for durable execution and use an in-memory deterministic adapter for tests.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-011, prd/05-features/F18-builder-workflow-runtime.md]
+    blocks: []
+
+  - id: BD-007
+    question: Which multimodal model policy implements first-pass Visual Syntactic Parsing?
+    status: BLOCKING_EMPIRICAL
+    owner: architecture_and_benchmark_team
+    recommendation: Benchmark at least two adapter-compatible providers plus deterministic baselines for category-native visual and conversational syntax evidence; preserve Visual Syntax First as development order and prohibit runtime semantic invention.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-004]
+    blocks: [TS-03, TS-04, TS-10, TS-11, TS-15]
+    constitutional_alignment: expanded_for_category_native_syntax_and_dual_order
+
+  - id: BD-008
+    question: Who controls protected visual and conversational benchmark labels, and what thresholds authorize production?
+    status: BLOCKING_EMPIRICAL
+    owner: evaluation_governance
+    recommendation: Separate label custody from generator access; calibrate non-compensable activation, role, reaction, expression, visual, narrative, wrong-reading, lineage, and boundary thresholds from repeated fresh-context runs; resolve HD-007 before conversational certification.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-005, prd/12-assumptions-open-questions.md#OQ-006]
+    blocks: [TS-10, TS-11, TS-13, TS-15]
+    constitutional_alignment: expanded_for_complete_constitutional_evaluation
+
+  - id: BD-009
+    question: What Pi UI and deployment surface hosts the Control Tower?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: ux_and_architecture
+    resolution: FastAPI command/query API plus React/TypeScript Control Tower launched or linked from Pi.
+    recommendation: FastAPI command/query API with a React/TypeScript local web surface launched from Pi; no UI-owned state.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-007]
+    blocks: []
+
+  - id: BD-010
+    question: Which capabilities seed the Canonical Skill Capability Registry?
+    status: BLOCKING_EXTERNAL_INPUT
+    owner: skill_architecture
+    recommendation: Supply evaluated seed-skill packages or begin with an empty registry and implement only ratified capability-gap decisions, including bounded Activative Call, Reaction Receipt, Expression Moment, conversational parsing, and recompilation capabilities.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-008, governance/SOURCE_REGISTER.json]
+    blocks: [TS-08, TS-09, TS-11, TS-14, TS-15]
+    constitutional_alignment: expanded_for_conversational_capability_gaps
+
+  - id: BD-011
+    question: Does Format 02 use a real editor, a stubbed demand boundary, or no asset delegation?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: product_lead
+    resolution: Format 02 uses a contract-tested stub Asset Demand port backed by approved fixtures; no Visual Asset Editor production runtime is required.
+    recommendation: Use a contract-tested stubbed Asset Demand port backed by approved fixtures; do not require or implement Visual Asset Editor production behavior in Release 1.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-010]
+    blocks: []
+
+  - id: BD-012
+    question: Which isolation profiles apply to agent nodes and implementation tasks?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: architecture_and_security
+    resolution: Deny-by-default grants with deterministic-process, provider-call, and implementation-task isolation profiles.
+    recommendation: Deny-by-default grants; read-only evidence mounts; per-node worktree or container; ephemeral credentials; explicit network allowlist; no protected-label access for generators.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-012]
+    blocks: []
+
+  - id: BD-013
+    question: Which Workflow Profiles are mandatory in Release 1?
+    status: RESOLVED_BY_USER_DIRECTIVE
+    owner: product_lead_and_builder_maintainer
+    resolution: New harness compilation, evidence refresh, benchmark regression, repair and re-certification, and constrained incident hotfix.
+    recommendation: New harness compilation, evidence refresh, benchmark regression, repair and re-certification, plus constrained incident hotfix.
+    evidence: [prd/12-assumptions-open-questions.md#OQ-013]
+    blocks: []
+
+  - id: BD-014
+    question: Which versioned interfaces define the external Visual Asset Editor and Delegation targets?
+    status: BLOCKING_EXTERNAL_INPUT
+    owner: cross_product_architecture
+    recommendation: Import read-only interface snapshots from the owning repositories and validate the full Visual Semantic Pack, Visual Narrative Program, feature contract, Composition Asset Pack, Visual Syntax handoff, T/V route request, and Delegation handoff chain against fixtures only.
+    evidence: [governance/COMPILATION_TARGET_REGISTRY.yaml, docs/tech-specs/REPOSITORY_INVENTORY.md#frozen-cross-product-boundaries]
+    blocks: [TS-11, TS-13, TS-14, TS-15]
+    constitutional_alignment: expanded_for_visual_semantic_and_delegation_lineage

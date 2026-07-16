@@ -1,0 +1,259 @@
+{
+  "schema_version": "builder-qa-findings/v1",
+  "audit_date": "2026-07-16",
+  "audited_snapshot": "D:\\Work\\CONSCIOUS_ACTIVATIONS\\_PARALLEL\\BUILDER_QA_SNAPSHOT",
+  "verdict": "FAIL_P0_OR_P1",
+  "summary": {
+    "total": 10,
+    "P0": 1,
+    "P1": 5,
+    "P2": 3,
+    "P3": 1
+  },
+  "findings": [
+    {
+      "finding_id": "BQA-P0-001",
+      "severity": "P0",
+      "title": "AtomicHarnessDefinition can be semantically rewritten, rehashed, validated, and receipted without governed authority",
+      "file_and_symbol": [
+        "src/cmf_builder/domain/atomic_harness_definition.py:AtomicHarnessDefinition.validate",
+        "src/cmf_builder/domain/atomic_harness_definition.py:AtomicHarnessDefinitionReceipt.create",
+        "src/cmf_builder/domain/target_package_validation.py:AtomicContentHarnessValidationReport.create",
+        "src/cmf_builder/domain/target_package_validation.py:AtomicContentHarnessValidationReport.validate",
+        "src/cmf_builder/application/target_validation_commands.py:AtomicContentHarnessValidationCommandService._load_active_definition"
+      ],
+      "reproduction_evidence": {
+        "method": "Compile the governed definition, replace semantic and authority fields plus one section's source_refs and basis, recompute the canonical definition identity, call the production validator, then create a receipt.",
+        "mutated_fields": [
+          "task_id",
+          "goal",
+          "success_condition",
+          "input_contract",
+          "output_contract",
+          "evaluation_requirements",
+          "repair_retry_policy",
+          "compatibility_status",
+          "authority_identity",
+          "sections[0].source_refs",
+          "sections[0].basis"
+        ],
+        "result": "domain_validation=ACCEPTED; receipt_creation=ACCEPTED",
+        "original_definition_id": "atomic-harness-definition_ab53bc2abc40514949a804a29f2dad29e050896ff11640936e333b1a275cd2f1",
+        "forged_definition_id": "atomic-harness-definition_f36dbd1c9336400d87ae398ecdf2fab1b619ea97846765db87a243d7cf7d81e2",
+        "forged_receipt_id": "atomic-harness-definition-receipt_d2c0b9c30ad222df70be9a1ff0589a95dddc92eb80545decb399004c6cf27fa7",
+        "cause": "validate() checks many upstream identities but does not bind the listed semantic fields to the governed definition input, checks authority_identity only for non-blank text, and derives expected section IDs from the candidate itself without checking each governed source mapping. Target validation then validates self-consistency and hashes rather than revalidating those meanings against upstream authority."
+      },
+      "affected_invariant": "Only governed semantic authority may define the Atomic Harness Definition; a receipt must attest to governed meaning, not merely a self-consistent hash.",
+      "recommended_correction": "In ST-07.04, independently reconstruct and compare every governed semantic field and every section source mapping from hash-pinned upstream inputs; verify the authority identity against the ratification/authorized actor; make target validation invoke that independent validation before emitting PASS. Add mutation tests for each governed semantic and section field.",
+      "correction_owner": "ST-07.04"
+    },
+    {
+      "finding_id": "BQA-P1-002",
+      "severity": "P1",
+      "title": "The governed full suite fails twice and ST-07.04 has source without its governed tests or completion evidence",
+      "file_and_symbol": [
+        "development-capsules/ST-07.04/ALLOWED_FILE_SCOPE.yaml:new_test_files",
+        "tests/stories/st_07_04",
+        "tests/stories/st_01_01/test_architecture_boundary.py:ArchitectureAndContractBoundaryTests.EXPECTED_SOURCE_FILES",
+        "tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py:test_architecture_boundary_keeps_original_source_set_and_no_external_imports",
+        "tests/stories/st_01_02/test_architecture_boundary.py:test_ac_10_source_tree_is_internal_standard_library_only_and_layered",
+        "tests/stories/st_02_05/test_architecture_boundary.py:ArchitectureBoundaryTests.EXPECTED_SOURCE_FILES",
+        "tests/stories/st_03_03/test_architecture_boundary.py:ArchitectureBoundaryTests.EXPECTED_SOURCE_FILES"
+      ],
+      "reproduction_evidence": {
+        "governed_pythonpath": "src;.",
+        "run_1": "5 failed, 422 passed in 58.87s",
+        "run_2": "5 failed, 422 passed in 51.36s",
+        "same_failures_both_runs": true,
+        "unexpected_source_files": [
+          "src/cmf_builder/application/target_validation_commands.py",
+          "src/cmf_builder/domain/target_package_validation.py"
+        ],
+        "expected_st_07_04_test_modules": 5,
+        "present_st_07_04_test_modules": 0,
+        "present_only": "tests/stories/st_07_04/__init__.py",
+        "completion_directory_present": false
+      },
+      "affected_invariant": "The synthetic demonstration cannot be called complete while its governed regression suite is red and its new validator path has no Story acceptance, integrity, failure, replay/invalidation, or architecture tests.",
+      "recommended_correction": "Complete only the already governed ST-07.04 test and completion scope, update the five authorized source inventories, then run the full suite twice. Do not infer completion from source presence.",
+      "correction_owner": "ST-07.04"
+    },
+    {
+      "finding_id": "BQA-P1-003",
+      "severity": "P1",
+      "title": "A post-commit observation failure reports command failure after target validation is durably committed",
+      "file_and_symbol": [
+        "src/cmf_builder/application/target_validation_commands.py:AtomicContentHarnessValidationCommandService.validate"
+      ],
+      "reproduction_evidence": {
+        "injection": "ObservationSink.emit raises RuntimeError('observation_sink_unavailable') on every call.",
+        "raised_to_caller": "RuntimeError: observation_sink_unavailable",
+        "observation_emit_attempts": 2,
+        "stored_stream_version": 24,
+        "validation_ref_present": true,
+        "stored_report_count": 1,
+        "stored_receipt_count": 1,
+        "command_record_present": true,
+        "cause": "The atomic repository commit occurs before success observations. The broad catch treats the later observation error as NOT_COMMITTED and attempts another failing observation."
+      },
+      "affected_invariant": "A command must have one unambiguous outcome; observability failure must not turn a committed command into a caller-visible failure or falsely label it uncommitted.",
+      "recommended_correction": "Use a transactional outbox or store observation intents in the atomic commit. At minimum, distinguish post-commit telemetry failure from command failure, return the committed receipt, and expose typed degraded-observability evidence without emitting NOT_COMMITTED.",
+      "correction_owner": "ST-07.04"
+    },
+    {
+      "finding_id": "BQA-P1-004",
+      "severity": "P1",
+      "title": "InMemoryRunRepository optimistic concurrency uses an unlocked check-then-write and can accept two writers while losing one event",
+      "file_and_symbol": [
+        "src/cmf_builder/adapters/in_memory_run_repository.py:InMemoryRunRepository._validated_append",
+        "src/cmf_builder/adapters/in_memory_run_repository.py:InMemoryRunRepository.append"
+      ],
+      "reproduction_evidence": {
+        "method": "A barrier was inserted between _validated_append's version check and append's stream assignment; two threads submitted different version-3 events against expected_version=2.",
+        "writer_a": "accepted",
+        "writer_b": "accepted",
+        "initial_version": 2,
+        "final_event_count": 3,
+        "accepted_event_ids_stored": [
+          "evt-a"
+        ],
+        "lost_event_id": "evt-b"
+      },
+      "affected_invariant": "Optimistic concurrency must permit exactly one writer for a stream version; every accepted write must be durable and replayable.",
+      "recommended_correction": "Make compare-and-append a single synchronized operation. Use a per-run lock or an atomic persistent-store compare-and-swap, and add a real concurrent-writer regression test that requires one success and one ConcurrencyConflict.",
+      "correction_owner": "later productization"
+    },
+    {
+      "finding_id": "BQA-P1-005",
+      "severity": "P1",
+      "title": "Run lifecycle commands persist events, checkpoints, receipts, and command records through separate non-atomic calls",
+      "file_and_symbol": [
+        "src/cmf_builder/application/run_commands.py:BuilderRunCommandService.create_run",
+        "src/cmf_builder/application/run_commands.py:BuilderRunCommandService.create_checkpoint",
+        "src/cmf_builder/application/run_commands.py:BuilderRunCommandService._run_mutation",
+        "src/cmf_builder/application/run_commands.py:BuilderRunCommandService._save",
+        "src/cmf_builder/adapters/in_memory_run_repository.py:InMemoryRunRepository.save_command_record",
+        "src/cmf_builder/adapters/in_memory_run_repository.py:InMemoryRunRepository.add_checkpoint"
+      ],
+      "reproduction_evidence": {
+        "injection": "InMemoryRunRepository.save_command_record raises RuntimeError('injected_command_record_storage_failure') after create_run appends events.",
+        "raised_to_caller": "RuntimeError: injected_command_record_storage_failure",
+        "stream_count": 1,
+        "stored_event_count": 2,
+        "stored_event_types": [
+          "RunCreated",
+          "TargetProfileSelected"
+        ],
+        "stored_command_record_count": 0
+      },
+      "affected_invariant": "Authoritative state, the command result receipt, checkpoint state when applicable, and the idempotency record must commit or roll back together.",
+      "recommended_correction": "Replace append/add_checkpoint/save_command_record choreography with repository transaction methods that prevalidate and atomically commit the event stream, receipt-bearing command record, and checkpoint. Add failure injection at every boundary and assert zero partial state.",
+      "correction_owner": "later productization"
+    },
+    {
+      "finding_id": "BQA-P1-006",
+      "severity": "P1",
+      "title": "ZIP candidate identity and ZIP member descriptors are read from separate archive states",
+      "file_and_symbol": [
+        "src/cmf_builder/adapters/file_evidence_workspace.py:FileEvidenceWorkspace.diagnose",
+        "src/cmf_builder/adapters/file_evidence_workspace.py:FileEvidenceWorkspace._scan_zip"
+      ],
+      "reproduction_evidence": {
+        "method": "A controlled workspace swapped candidate.zip after _read_unchanged returned archive A but before _scan_zip reopened the path.",
+        "diagnosis_accepted": true,
+        "reported_candidate_sha256": "f10cc78059771ac6a5b009bb49304a8500bec88bb4a1e0ae98b203ed407cd696",
+        "actual_file_sha256_at_member_scan": "6640e61d78a602cc3e999b463e3907f95b87e00239fe21f8ce034d4c29268141",
+        "accepted_descriptor_path": "second.txt",
+        "meaning": "The returned candidate hash identifies archive A while the accepted descriptors identify archive B."
+      },
+      "affected_invariant": "A Source Lock must bind descriptors to the exact bytes whose candidate hash was verified; archive mutation cannot cross that boundary.",
+      "recommended_correction": "Parse the verified in-memory archive bytes, or open one immutable handle and hash plus inspect that same handle while checking stable file identity. Add a deterministic archive-swap test.",
+      "correction_owner": "later productization"
+    },
+    {
+      "finding_id": "BQA-P2-007",
+      "severity": "P2",
+      "title": "Checkpoint identities are mutable in the in-memory repository",
+      "file_and_symbol": [
+        "src/cmf_builder/adapters/in_memory_run_repository.py:InMemoryRunRepository.add_checkpoint"
+      ],
+      "reproduction_evidence": {
+        "method": "Store a valid checkpoint, then call add_checkpoint with the same checkpoint_id and changed state_hash/input_hash.",
+        "overwrite_rejected": false,
+        "checkpoint_count_after_overwrite": 1,
+        "original_state_hash": "sha256:2c4c598368e700e36f17e2b18e7ffbd9d4266a713c27525fbfc7d2aa63d494aa",
+        "stored_state_hash": "corrupt-replacement",
+        "original_checkpoint_lost": true
+      },
+      "affected_invariant": "Historical checkpoint identities should be immutable even when corrupt checkpoints can be detected and bypassed.",
+      "recommended_correction": "Apply same-or-absent identity enforcement to checkpoints and provide an explicit test-only corruption injection seam instead of using the production repository method as an overwrite primitive.",
+      "correction_owner": "later productization"
+    },
+    {
+      "finding_id": "BQA-P2-008",
+      "severity": "P2",
+      "title": "Five repeated exact-source inventories turn legitimate additions into unrelated regression failures",
+      "file_and_symbol": [
+        "tests/stories/st_01_01/test_architecture_boundary.py:ArchitectureAndContractBoundaryTests.EXPECTED_SOURCE_FILES",
+        "tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py:test_architecture_boundary_keeps_original_source_set_and_no_external_imports",
+        "tests/stories/st_01_02/test_architecture_boundary.py:test_ac_10_source_tree_is_internal_standard_library_only_and_layered",
+        "tests/stories/st_02_05/test_architecture_boundary.py:ArchitectureBoundaryTests.EXPECTED_SOURCE_FILES",
+        "tests/stories/st_03_03/test_architecture_boundary.py:ArchitectureBoundaryTests.EXPECTED_SOURCE_FILES"
+      ],
+      "reproduction_evidence": {
+        "maintenance_stops": 5,
+        "new_internal_modules": 2,
+        "independent_ast_boundary_scan": {
+          "source_files": 43,
+          "external_imports": 0,
+          "layer_violations": 0
+        },
+        "assessment": "The import and layering assertions protect architecture; the duplicated closed filename lists are maintenance tripwires and caused all five current suite failures."
+      },
+      "affected_invariant": "Architecture tests should fail on boundary violations, not require repetitive edits to several historical Stories for every governed internal module addition.",
+      "recommended_correction": "Centralize the governed source inventory in one architecture contract/manifest and have historical tests assert the stable import/layering rules. Keep one owner test for unexpected-file policy.",
+      "correction_owner": "later productization"
+    },
+    {
+      "finding_id": "BQA-P2-009",
+      "severity": "P2",
+      "title": "Active configuration and generated evidence contain machine-specific absolute paths",
+      "file_and_symbol": [
+        "contracts/integration/DELEGATION_CONTRACT_PIN.yaml:release.path",
+        "stage1/generate_stage1_evidence.py:DEFAULT_SOURCE_ROOT",
+        "stage1/STAGE1_EVIDENCE_SUMMARY.json:prd_root",
+        "stage1/STAGE1_EVIDENCE_SUMMARY.json:repository_inventory.source_root"
+      ],
+      "reproduction_evidence": {
+        "workspace_scan_files_with_windows_absolute_paths": 16,
+        "workspace_scan_occurrences": 58,
+        "active_or_generated_examples": [
+          "D:/Work/CONSCIOUS_ACTIVATIONS/CMF_PROGRAM_CONTROL/02_CROSS_REPO_CONTRACTS/delegation-contracts/1.1.0-rc.4",
+          "D:\\Work\\CCP_CMF_ATOMIC_HARNESS_SPEC_BUILDER_V2_1",
+          "D:\\Work\\Conscious Activations\\CMF_ATOMIC_HARNESS_BUILDER_NEXT_SHARDED_PRD_V1_1\\CMF_ATOMIC_HARNESS_BUILDER_NEXT_SHARDED_PRD_V1_1"
+        ],
+        "classification": "Several other hits are explicitly historical discovery records, rejection evidence, or captured interpreter commands and do not corrupt current canonical output identities.",
+        "canonical_target_validation_contains_workspace_path": false
+      },
+      "affected_invariant": "Active dependency configuration and reproducible generated evidence should relocate without editing machine paths.",
+      "recommended_correction": "Use repository-relative release coordinates and required CLI inputs or logical source IDs in generators. Keep absolute paths only in clearly historical, non-portable audit evidence and never in deterministic identity payloads.",
+      "correction_owner": "later productization"
+    },
+    {
+      "finding_id": "BQA-P3-010",
+      "severity": "P3",
+      "title": "The full suite emits an unset pytest-asyncio loop-scope deprecation warning",
+      "file_and_symbol": [
+        "pytest configuration:asyncio_default_fixture_loop_scope"
+      ],
+      "reproduction_evidence": {
+        "run_1_warning": true,
+        "run_2_warning": true,
+        "message": "asyncio_default_fixture_loop_scope is unset and future pytest-asyncio behavior will change"
+      },
+      "affected_invariant": "Test behavior should remain explicit across dependency upgrades.",
+      "recommended_correction": "Pin the intended asyncio fixture loop scope in governed pytest configuration before upgrading pytest-asyncio.",
+      "correction_owner": "later productization"
+    }
+  ]
+}

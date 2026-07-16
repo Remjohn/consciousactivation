@@ -155,9 +155,14 @@ class RunCommandService:
                 correlation_id=command.correlation_id,
                 causation_id=command.causation_id,
             )
-            self._repository.append(run_id, 0, events)
             receipt = self._receipt(command, run, events)
-            self._save(command, receipt)
+            self._commit(
+                command,
+                run_id=run_id,
+                expected_version=0,
+                events=events,
+                receipt=receipt,
+            )
             self._emit(command, run, "ST-01.01:OutcomeVerified", "PASS", {})
             return receipt
         except Exception as error:
@@ -214,14 +219,19 @@ class RunCommandService:
                 correlation_id=command.correlation_id,
                 causation_id=command.causation_id,
             )
-            self._repository.append(command.run_id, command.expected_version, (event,))
             receipt = self._receipt(
                 command,
                 updated,
                 (event,),
                 details={"human_receipt_id": human_receipt_id},
             )
-            self._save(command, receipt)
+            self._commit(
+                command,
+                run_id=command.run_id,
+                expected_version=command.expected_version,
+                events=(event,),
+                receipt=receipt,
+            )
             self._emit(command, updated, "LifecycleWaiverGranted", "PASS", {})
             return receipt
         except Exception as error:
@@ -252,7 +262,6 @@ class RunCommandService:
                 correlation_id=command.correlation_id,
                 causation_id=command.causation_id,
             )
-            self._repository.append(command.run_id, command.expected_version, (event,))
             checkpoint = Checkpoint.from_run(
                 updated,
                 checkpoint_id=checkpoint_id,
@@ -260,14 +269,20 @@ class RunCommandService:
                 policy_hash=command.policy_hash,
                 created_at=now,
             )
-            self._repository.add_checkpoint(checkpoint)
             receipt = self._receipt(
                 command,
                 updated,
                 (event,),
                 details={"checkpoint_id": checkpoint_id},
             )
-            self._save(command, receipt)
+            self._commit(
+                command,
+                run_id=command.run_id,
+                expected_version=command.expected_version,
+                events=(event,),
+                receipt=receipt,
+                checkpoint=checkpoint,
+            )
             self._emit(command, updated, "CheckpointCreated", "PASS", {})
             return receipt
         except Exception as error:
@@ -312,7 +327,6 @@ class RunCommandService:
                 correlation_id=command.correlation_id,
                 causation_id=command.causation_id,
             )
-            self._repository.append(command.run_id, command.expected_version, (event,))
             receipt = self._receipt(
                 command,
                 updated,
@@ -325,7 +339,13 @@ class RunCommandService:
                     ),
                 },
             )
-            self._save(command, receipt)
+            self._commit(
+                command,
+                run_id=command.run_id,
+                expected_version=command.expected_version,
+                events=(event,),
+                receipt=receipt,
+            )
             self._emit(command, updated, "RunResumed", "PASS", {})
             self._emit(command, updated, "ST-01.01:OutcomeVerified", "PASS", {})
             return receipt
@@ -355,9 +375,14 @@ class RunCommandService:
                 now=now,
             )
             updated, event = mutate(run, now)
-            self._repository.append(command.run_id, command.expected_version, (event,))
             receipt = self._receipt(command, updated, (event,))
-            self._save(command, receipt)
+            self._commit(
+                command,
+                run_id=command.run_id,
+                expected_version=command.expected_version,
+                events=(event,),
+                receipt=receipt,
+            )
             self._emit(command, updated, success_event, "PASS", {})
             return receipt
         except Exception as error:
@@ -390,10 +415,25 @@ class RunCommandService:
         self._emit(command, run, "DuplicateCommandObserved", "PASS", {})
         return receipt
 
-    def _save(self, command: object, receipt: CommandReceipt) -> None:
-        self._repository.save_command_record(
-            str(getattr(command, "command_id")),
-            CommandRecord(payload_hash=_command_hash(command), result=receipt),
+    def _commit(
+        self,
+        command: object,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[object, ...],
+        receipt: CommandReceipt,
+        checkpoint: Checkpoint | None = None,
+    ) -> None:
+        self._repository.commit_run_command(
+            run_id=run_id,
+            expected_version=expected_version,
+            events=events,
+            command_id=str(getattr(command, "command_id")),
+            command_record=CommandRecord(
+                payload_hash=_command_hash(command), result=receipt
+            ),
+            checkpoint=checkpoint,
         )
 
     def _receipt(

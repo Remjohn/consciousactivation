@@ -1,0 +1,140 @@
+{
+  "schema_version": "cmf-builder-step4-readiness-correction/v1",
+  "generated_on": "2026-07-15",
+  "authority": {
+    "builder_prd": "1.2",
+    "activative_intelligence_constitution": "1.1"
+  },
+  "scope": "bounded Release 1 blocker-scope and readiness correction",
+  "result": "PASS_CORRECTION_VALIDATED",
+  "finding": {
+    "HD_006_global_treatment": "INCORRECT",
+    "HD_007_global_treatment": "INCORRECT",
+    "corrected_rule": "Target and category conditions activate policy gates; non-conversational profiles do not collect Human Reaction data.",
+    "ST_01_01_split_required": false,
+    "ST_01_01_correction_method": "conditional readiness and acceptance by target profile"
+  },
+  "preservation": {
+    "obligations": 410,
+    "epics": 12,
+    "stories": 69,
+    "dependency_edges": 103,
+    "obligation_assignments_changed": 0,
+    "epic_or_story_identities_changed": 0,
+    "production_code_changed": false
+  },
+  "corrected_story_counts": {
+    "READY": 1,
+    "BLOCKED_HUMAN_DECISION": 2,
+    "BLOCKED_EVIDENCE": 62,
+    "BLOCKED_EXTERNAL_DEPENDENCY": 4,
+    "DEFERRED": 0,
+    "NOT_RELEASE1": 0
+  },
+  "earliest_dependency_safe_format02_sequence": [
+    "ST-01.01"
+  ],
+  "first_sequence_semantic_minimum_cut": [],
+  "authorization": {
+    "bounded_format02_story_readiness": "PASS",
+    "can_be_authorized_after_controls": true,
+    "currently_authorized": false,
+    "remaining_controls": [
+      "EG-EPIC-HASH",
+      "EG-DEVELOPMENT-CAPSULE",
+      "explicit_human_implementation_authority"
+    ]
+  },
+  "verdicts": {
+    "planning_completeness": "CONCERNS",
+    "bounded_format02_story_readiness": "PASS",
+    "full_release1_implementation_readiness": "FAIL",
+    "full_product_implementation_readiness": "FAIL"
+  },
+  "invariants": {
+    "delegation_active_release": "1.1.0-rc.4",
+    "delegation_trust": "local_unsigned_release_candidate",
+    "delegation_production_eligible": false,
+    "format02_state": "contract_compatible",
+    "format02_benchmarked": false,
+    "format02_production_certified": false,
+    "conversational_profiles": "structural_uncertified",
+    "interview_and_reelcast": "structural_pending_own_prds",
+    "implementation_started": false
+  },
+  "validation_checks": [
+    {
+      "id": "COR-001",
+      "check": "410 obligations unchanged",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-002",
+      "check": "12 Epics and 69 Stories unchanged",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-003",
+      "check": "103 dependency edges unchanged and backward-only",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-004",
+      "check": "HD-006 scoped to conversational execution",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-005",
+      "check": "HD-007 scoped to conversational certification",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-006",
+      "check": "ST-01.01 remains one outcome and needs no split",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-007",
+      "check": "ST-01.01 is READY for Format 02 only",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-008",
+      "check": "blocked Stories excluded from corrected sequence",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-009",
+      "check": "all active XRI records classified",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-010",
+      "check": "no VAE or Delegation behavior moved into Builder",
+      "result": "PASS"
+    },
+    {
+      "id": "COR-011",
+      "check": "implementation authorization remains false",
+      "result": "PASS"
+    }
+  ],
+  "files_created": [
+    "docs/planning/RELEASE1_BLOCKER_SCOPE_AUDIT.md",
+    "docs/planning/BLOCKER_SCOPE_REGISTRY.yaml",
+    "docs/planning/RELEASE1_MINIMUM_BLOCKER_CUT.yaml",
+    "docs/planning/STORY_READINESS_MATRIX_CORRECTED.csv",
+    "docs/planning/RELEASE1_EXECUTION_SEQUENCE_CORRECTED.yaml",
+    "docs/planning/STEP4_READINESS_CORRECTION_REPORT.json"
+  ],
+  "files_updated": [
+    "docs/planning/STEP4_PLANNING_COVERAGE_REPORT.md",
+    "docs/planning/STEP4_STORY_READINESS_MATRIX.csv",
+    "docs/planning/STEP4_RELEASE1_EXECUTION_SEQUENCE.yaml",
+    "docs/planning/STEP4_BLOCKER_IMPACT_REPORT.md",
+    "docs/planning/IMPLEMENTATION_READINESS_FINAL.md",
+    "docs/planning/STEP4_VALIDATION_REPORT.json",
+    "CURRENT_PROJECT_STATUS.md",
+    "PROGRAM_STATUS_EXPORT.yaml"
+  ]
+}

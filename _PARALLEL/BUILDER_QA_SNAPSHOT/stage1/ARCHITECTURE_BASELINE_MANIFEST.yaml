@@ -1,0 +1,158 @@
+schema_version: stage1-architecture-baseline/v1
+generated_on: "2026-07-14"
+product: CMF Atomic Harness Builder Next
+audit_mode: brownfield_read_only
+production_code_changed: false
+
+roots:
+  prd_package: 'D:\Work\Conscious Activations\CMF_ATOMIC_HARNESS_BUILDER_NEXT_SHARDED_PRD_V1_1\CMF_ATOMIC_HARNESS_BUILDER_NEXT_SHARDED_PRD_V1_1'
+  brownfield_source: 'D:\Work\CCP_CMF_ATOMIC_HARNESS_SPEC_BUILDER_V2_1'
+  git_identity_available: false
+
+governance:
+  prd_version: 0.2.0-draft
+  prd_validation: PASS
+  prd_manifest_files: 70
+  primary_prd_lines: 4297
+  locked_decisions: 33
+  functional_requirements: 210
+  non_functional_requirements: 53
+  anti_goals: 22
+  hard_gates: 14
+  applicable_agents_file: 'D:\Work\CCP_CMF_ATOMIC_HARNESS_SPEC_BUILDER_V2_1\AGENTS.md'
+  agents_file_in_prd_root: false
+  stage1_coverage_verdict_taxonomy_defined: false
+
+source_baseline:
+  file_count: 401
+  size_bytes: 1575769
+  aggregate_evidence_sha256: f6b1bca3ec1072913b3e63c983a77aa56a3bc651e0bcb3b3d9911ace1c26c571
+  observed_working_copy_files: 406
+  excluded_generated_pytest_cache_files: 5
+  parse_or_read_errors: 0
+  python_files: 19
+  python_lines: 3754
+  package_python_modules: 16
+  test_modules: 1
+
+runtime:
+  language: Python
+  minimum_version: '3.11'
+  build_backend: setuptools
+  cli_entrypoint: cmf-harness-spec
+  dependencies:
+    - pydantic>=2.8
+    - PyYAML>=6.0
+    - Pillow>=10.0
+  persistence: local JSON and Markdown files
+  api: absent
+  user_interface: absent
+  event_store: absent
+  scheduler: absent
+  workflow_runtime: absent
+
+components:
+  - id: module_registry
+    paths: [src/cmf_harness_spec_builder/module_registry.py, src/cmf_harness_spec_builder/cli.py]
+    observed_behavior: exposes content_harness, vae, and delegation modules
+    tested: true
+    limitation: CLI defaults omitted module selection to content_harness
+  - id: source_workspace
+    paths: [src/cmf_harness_spec_builder/source_index.py, src/cmf_harness_spec_builder/saturation.py]
+    observed_behavior: hashes files and ZIPs, searches text keywords, records image dimensions
+    tested: partially
+    limitation: no target profiles, visual parser, stable specimen IDs, conflicts, or saturation contract
+  - id: genesis
+    paths: [src/cmf_harness_spec_builder/decision_tree.py, src/cmf_harness_spec_builder/grill_me.py]
+    observed_behavior: static dependency graph and file-mediated question/ratification protocol
+    tested: partially
+    limitation: no transaction, descendant invalidation, or canonical IR commit
+  - id: contract_models
+    paths: [src/cmf_harness_spec_builder/models.py]
+    observed_behavior: Pydantic models for state, decisions, plans, and VAE/delegation contracts
+    tested: partially
+    limitation: no canonical Harness IR or Workflow IR root
+  - id: openspec_compiler
+    paths: [src/cmf_harness_spec_builder/spec_compiler.py]
+    observed_behavior: template substitution into module-local OpenSpec artifacts
+    tested: true
+    limitation: no IR compiler boundary, deterministic receipt, migration, or integrity manifest
+  - id: readiness
+    paths: [src/cmf_harness_spec_builder/readiness.py]
+    observed_behavior: checks decision states, file presence, markers, and rough trace counts
+    tested: structurally
+    limitation: can PASS with empty evidence indexes; no benchmark, hard-gate, repair, or authorization proof
+  - id: operator_workflow
+    paths: [.pi/skills/cmf-atomic-harness-spec-builder]
+    observed_behavior: 15-step human-operated Markdown workflow
+    tested: false
+    limitation: not executable typed workflow infrastructure
+
+schemas:
+  json_schema_files: 40
+  pydantic_correspondence:
+    schema_titles_matching_models: 39
+    exact_generated_schema_matches: 38
+    metadata_or_detail_mismatches: [question_packet]
+    schema_without_model: [harness_spec_artifact_manifest]
+  openspec:
+    deprecated_v1_artifacts: 14
+    content_v2_artifacts: 36
+    content_v2_1_artifacts: 46
+    vae_artifacts: 35
+    delegation_artifacts: 19
+    missing_declared_templates: 0
+  absent_contracts:
+    - canonical Harness IR
+    - Builder Workflow IR
+    - event and ledger envelope
+    - benchmark corpus and receipt
+    - category constitution runtime model
+    - deployment and runtime adapter contract
+
+tests:
+  command: "python -B -c \"import sys; sys.path.insert(0, 'src'); import pytest; raise SystemExit(pytest.main(['-q', '-p', 'no:cacheprovider']))\""
+  result: PASS
+  passed: 28
+  failed: 0
+  duration_seconds: 13.35
+  warnings:
+    - pytest-asyncio default fixture loop scope is unset and has a future default change
+  installed_package_tested: false
+  evidence_semantics_tested: false
+  workflow_runtime_tested: false
+  deployment_tested: false
+
+deployment:
+  ci_assets: 0
+  container_assets: 0
+  infrastructure_as_code_assets: 0
+  service_manifests: 0
+  persistence_backend_selected: false
+  hosting_target_selected: false
+  observability_backend_selected: false
+
+version_drift:
+  pyproject_version: 2.1.0
+  package_dunder_version: 2.0.0
+  manifest_open_spec_schema: cmf-atomic-harness-spec-v2
+  active_content_schema: cmf-atomic-content-harness-spec-v2.1
+  source_register_archive_file_count: 401
+  observed_baseline_file_count: 401
+
+external_inputs:
+  locally_verified:
+    - SRC-001 extracted brownfield bundle
+    - SRC-012 decision register embodied in PRD package
+  unavailable:
+    - SRC-002 through SRC-010 registered files
+    - SRC-011 BMAD repository at registered commit
+    - reference harness
+    - three target repositories
+
+requirement_matrix:
+  path: stage1/REQUIREMENT_COVERAGE_MATRIX.csv
+  rows: 332
+  applicable_rows: 332
+  rows_with_allowed_verdict: 0
+  classification_blocker: applicable AGENTS.md defines no Stage 1 coverage-verdict vocabulary

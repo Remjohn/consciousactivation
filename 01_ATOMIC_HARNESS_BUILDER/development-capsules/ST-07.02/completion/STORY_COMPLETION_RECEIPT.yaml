@@ -1,0 +1,153 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-07.02
+primary_epic: EP-07
+active_mode: GENERIC_ATOMIC_CONTENT_HARNESS
+receipt_type: StoryCompletionReceipt
+implemented_outcome: >-
+  The category-neutral Builder Core compiles the exact active governed synthetic
+  lineage into one immutable deterministic portable AtomicHarnessDefinition for
+  synthetic_text_normalization_v1, attaches it atomically to the Builder run,
+  and emits an attributable deterministic receipt without executing the Harness.
+requirements_satisfied:
+  FR-171: PASS
+  FR-174: PASS
+  FR-175: PASS
+  FR-176: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+  AC-10: PASS
+  AC-11: PASS
+  AC-12: PASS
+dependency_evidence:
+  ST_03_05_receipt_sha256: 12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+  ST_04_05_receipt_sha256: 28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+  ST_05_02_receipt_sha256: ecd99a7c241e6aba03295f3c96bd3854e2ca0a7211b3157920ba5c4cad3dccd9
+  all_predecessor_receipts_independently_validated: PASS_14_OF_14
+  direct_dependencies: PASS_ALL_SATISFIED
+  builder_first_amendment: BF-AM-007
+authorization_evidence:
+  implementation_phrase: AUTHORIZE BUILDER ST-07.02 SYNTHETIC-ATOMIC-HARNESS-DEFINITION BOUNDED IMPLEMENTATION
+  capsule_amendment_phrase: AUTHORIZE BUILDER ST-07.02 CAPSULE AMENDMENT TO ADD tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py, tests/stories/st_03_05/test_architecture_boundary.py, AND tests/stories/st_04_01/test_architecture_boundary.py FOR EXACT SOURCE-SET UPDATE ONLY, REVALIDATE THE CAPSULE, AND RESUME THE BOUNDED IMPLEMENTATION
+  amended_capsule_manifest_sha256: 3f3e183d9b1b510d03b4b41ab17e4a8605f0cdbb2b3cd13f9f209cc64446f3a7
+  amended_capsule_bundle_digest: 007a284d6c8d446103410fe18afcb0c772273f68ff29383968c65f82132296f3
+  immutable_inputs: PASS_18_OF_18
+  exact_source_set_amendment: PASS_3_OF_3_PATHS_ONLY
+files_changed:
+  source_files: 6
+  test_files: 13
+  authorized_capsule_amendment_files: 5
+  completion_files: 6
+  exact_manifest: development-capsules/ST-07.02/completion/FILE_CHANGE_MANIFEST.yaml
+tests_executed:
+  preimplementation_regression: PASS_404_OF_404_NO_SKIPS
+  amended_boundary_and_story_suite: PASS_38_OF_38
+  story_suite_first: PASS_23_OF_23
+  story_suite_reproduction: PASS_23_OF_23
+  full_regression_first: PASS_427_OF_427_NO_SKIPS
+  full_regression_reproduction: PASS_427_OF_427_NO_SKIPS
+  source_compilation: PASS_6_OF_6
+test_results: development-capsules/ST-07.02/completion/TEST_RESULTS.json
+schema_and_contract_validation:
+  schema_files_changed: []
+  typed_contracts:
+    GovernedDefinitionSection: PASS
+    AtomicHarnessDefinition: PASS
+    AtomicHarnessDefinitionReceipt: PASS
+    AtomicHarnessDefinitionInvalidation: PASS
+    CompileAtomicHarnessDefinitionCommand: PASS
+  complete_required_sections: PASS_20_OF_20
+  capability_module_phase_context_and_skill_consistency: PASS
+  exact_authority_and_upstream_lineage: PASS
+  deterministic_identity_and_canonical_serialization: PASS
+  portable_machine_path_free_definition: PASS
+  external_contract_or_schema_fork: false
+definition_validation:
+  harness: synthetic_text_normalization_v1
+  target_kind: atomic_content_harness
+  category_binding: none
+  category_adapter_ref: NOT_APPLICABLE_SYNTHETIC_PROOF
+  repository_owned: true
+  synthetic: true
+  builder_core_validation_only: true
+  production_eligible: false
+  certified: false
+  synthetic_not_certifiable: true
+  execution_performed: false
+  Development_Capsule_generated: false
+  external_skills_required: 0
+  external_runtime_dependencies: 0
+  dynamic_skill_discovery_allowed: false
+  capabilities: 5
+  responsibility_modules: 2
+  phases: 2
+  context_manifests: 2
+  required_sections: 20
+  representative_deterministic_validation_artifact:
+    definition_id: atomic-harness-definition_086b1273b9a5cdb60c84f2bd3694c21e2af356646a2b918ecefb8c22ff441adc
+    definition_hash: sha256:086b1273b9a5cdb60c84f2bd3694c21e2af356646a2b918ecefb8c22ff441adc
+    receipt_id: atomic-harness-definition-receipt_cc7c85739cf7bb256b7f19646bac1d7026520c9a4833f3e969ecfa1c6119bca5
+    receipt_hash: sha256:cc7c85739cf7bb256b7f19646bac1d7026520c9a4833f3e969ecfa1c6119bca5
+observability_evidence:
+  path: development-capsules/ST-07.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  success_validation_commit_replay_rejection_and_invalidation_events: PASS
+  deterministic_path_free_secret_free_payloads: PASS
+rollback_evidence:
+  path: development-capsules/ST-07.02/completion/ROLLBACK_EVIDENCE.md
+  injected_atomic_failure_zero_partial_state: PASS
+  clean_retry_after_failure: PASS
+  descendant_invalidation_history_preserved: PASS
+  source_rollback_defined: PASS
+scope_validation:
+  exact_amended_allowlist: PASS
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  schema_files_changed: []
+  database_changes: []
+  transport_or_network_added: false
+  external_repository_changes: []
+  VAE_or_Delegation_behavior_implemented: false
+  Format_02_or_conversational_behavior_implemented: false
+  GPU_ComfyUI_evaluator_or_external_provider_invoked: false
+  real_skill_registration_discovery_packaging_or_execution_implemented: false
+  workflow_execution_implemented: false
+  ST_07_04_validation_implemented: false
+  ST_11_01_Development_Capsule_generation_implemented: false
+  production_claim: false
+milestone_evidence:
+  initial_atomic_harness_definition_milestone: PASS
+  harness: synthetic_text_normalization_v1
+  production_ready: false
+  certified: false
+  remaining_demonstration_stories:
+    - ST-07.04
+    - ST-11.01
+unresolved_limitations:
+  - ST_07_04_post_compilation_validation_remains_unimplemented
+  - ST_11_01_compiled_Harness_Development_Capsule_generation_remains_unimplemented
+  - category_native_Format_02_external_product_runtime_and_production_tracks_remain_deferred
+  - full_Release_1_and_full_product_readiness_remain_FAIL
+newly_discovered_blockers: []
+downstream_effect:
+  ST_07_04: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_AFTER_RECEIPT_VALIDATION
+  implementation_authorized: false
+hashes:
+  source_bundle_sha256: 3a257d31ffcd20643ba4d38e374cb41d74f09aad86c5862fe2876aead3bc32d9
+  test_bundle_sha256: 9dc5d06a403181f0f9ec0174cc6e5ff0c58ccbcc464c583df94cc66c735e0da9
+  implementation_bundle_sha256: dc9b376c59270170e6c1583db16552ae2fe4d8045e214330e8125187e43cb9db
+  amended_capsule_control_bundle_sha256: f7247e1e4c6da7fbbf41fb07de7267fbb026b5e9309f4898c41cca3a7d80dd90
+  file_change_manifest_sha256: eaec4791158ef6894f2cbcf357da12336e21eb1b059e55184ea714ee1ec28c05
+  implementation_report_sha256: 24b06a4bfdcc90842d755aa7a9e27334c22abdf65284cd2a34089c3feada379c
+  test_results_sha256: 612c829b62c7d19a5a8d34803e0792cbd645ac0b2f79645856ed0ead18b02406
+  observability_evidence_sha256: 833fc36e813c9525239f1b476096304f48456f84ce85210d7867f8f2032ffcc7
+  rollback_evidence_sha256: 7e695dd15dcfa5e1ee56d414557e4b2fe8989678a84083413bebfbc4c59233b1
+  canonical_payload_algorithm: sha256_of_UTF8_JSON_sorted_keys_compact_without_hashes
+  canonical_payload_sha256: 3b8da24eeff431c26c3c5087d624ba4b03a23631082fa3fdfc44242f900a6768
+completion_verdict: PASS

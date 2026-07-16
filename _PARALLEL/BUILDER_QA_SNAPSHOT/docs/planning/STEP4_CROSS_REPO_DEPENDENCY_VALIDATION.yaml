@@ -1,0 +1,95 @@
+schema_version: cmf-builder-step4-cross-repo-dependency-validation/v1
+validated_on: '2026-07-14'
+source_register: docs/planning/STORY_CROSS_REPOSITORY_DEPENDENCIES.yaml
+source_register_preserved: true
+overall_result: CONCERNS
+reason: XDEP-003 in the confirmed register still names Delegation 1.1.0-rc.1; the current independently validated candidate is 1.1.0-rc.2.
+delegation_current_baseline:
+  dependency_id: XDEP-003
+  package: delegation-contracts
+  package_version: "1.1.0-rc.2"
+  release_digest: "sha256:d4958cd3d02f0acef9d66bf245078ea70dab36b727d0c1541031fdceb63f6e41"
+  release_receipt_sha256: "sha256:ff97185ec1dfd1c2eaf936beec318e28b583fd2e3da809df9b860f504c7b6cff"
+  release_manifest_sha256: "sha256:6e765eeef4ebed71d6e725cf11f49815f9cc0cafbe42ef157c8f189d8c7d582c"
+  compatibility_profile: visual_asset_demand_1_1_protocol_1_0
+  trust_status: local_unsigned_release_candidate
+  signature_status: UNSIGNED
+  production_authorized: false
+  validation:
+    released_layout_validator: PASS
+    examples: 26
+    closed_schemas: PASS
+    generated_types: PASS
+    fixture_json: 36
+    migration_declarations: 3
+    compatibility_and_migrations: PASS
+    release_manifest_files: 144
+    release_receipt_files: 145
+    transient_files: 0
+    validator_tests: 61
+    protocol_tests: 33
+    clean_room_evidence: PASS
+  consumer_boundary:
+    - Builder may consume a pinned read-only contract snapshot.
+    - Builder may emit and contract-test compatible handoffs.
+    - Builder must not fork shared Delegation schemas.
+    - Builder must not implement Delegation runtime behavior.
+    - This unsigned release candidate is not production authorization.
+confirmed_register_discrepancy:
+  confirmed_text_names: 1.1.0-rc.1
+  required_current_reference: 1.1.0-rc.2
+  result: CONCERNS
+  implementation_effect: Fail closed until an authorized planning-baseline patch updates XDEP-003 and dependent version pins.
+dependencies:
+  - id: XDEP-001
+    repository_or_product: "CMF_PROGRAM_CONTROL"
+    relationship: "Supplies constitutional and product authority, cross-repository decision governance, release pins, and convergence status."
+    consuming_story_count: 69
+    boundary_result: PASS
+    baseline_result: PASS
+    builder_boundary: "Builder consumes pinned program authority; it does not mutate program-control truth from Story implementation."
+  - id: XDEP-002
+    repository_or_product: "02_VISUAL_ASSET_EDITOR"
+    relationship: "Consumes the Builder Visual Asset Editor target profile and visual-semantic or Asset Demand handoff contracts."
+    consuming_story_count: 32
+    boundary_result: PASS
+    baseline_result: PASS
+    builder_boundary: "Builder may compile and contract-test the VAE target profile and handoff; VAE owns production editor behavior."
+  - id: XDEP-003
+    repository_or_product: "03_DELEGATION_PROTOCOL"
+    relationship: "Owns the external Content-to-Asset Delegation runtime and shared contract release consumed by Builder target compilation."
+    consuming_story_count: 32
+    boundary_result: PASS
+    baseline_result: CONCERNS
+    builder_boundary: "Delegation owns shared contracts and runtime; Builder consumes a pinned snapshot and emits a compatible handoff only."
+    effective_step4_reference: 1.1.0-rc.2
+    confirmed_register_reference: 1.1.0-rc.1
+  - id: XDEP-004
+    repository_or_product: "05_FUTURE_PRODUCTS/INTERVIEW_EXPRESSION_HARNESS"
+    relationship: "Future owner of Interview Expression and ReelCast live execution, Reaction Receipt capture, Expression Moment extraction, and final content-type contracts."
+    consuming_story_count: 46
+    boundary_result: PASS
+    baseline_result: PASS
+    builder_boundary: "Builder supplies structural Interview Expression and ReelCast profiles only; the future product owns its PRD and live behavior."
+  - id: XDEP-005
+    repository_or_product: "04_OPERATOR_MANUAL"
+    relationship: "Future consumer of approved Control Tower, workflow, incident, and authorization operating procedures."
+    consuming_story_count: 29
+    boundary_result: PASS
+    baseline_result: PASS
+    builder_boundary: "The Operator Manual consumes stable behavior later; documentation cannot substitute for Builder acceptance evidence."
+  - id: XDEP-006
+    repository_or_product: "Activation Compiler Harness"
+    relationship: "Upstream semantic authority that produces the rich Activative Intelligence Pack referenced by Builder contracts."
+    consuming_story_count: 25
+    boundary_result: PASS
+    baseline_result: PASS
+    builder_boundary: "Builder preserves Activative Intelligence Pack lineage; the Activation Compiler owns upstream semantic truth."
+blocker_effect:
+  BD-014: remains_open
+  rationale: RC2 supplies the current Delegation candidate, but Builder still lacks a fully authorized set of read-only VAE and other owning-repository interface snapshots and production authorization.
+required_follow_up:
+  - Authorize a bounded planning-baseline patch replacing only the stale XDEP-003 RC1 reference with the validated RC2 identity.
+  - Preserve Delegation ownership and unsigned release-candidate trust status.
+  - Rerun Step 4 after the baseline patch; do not infer implementation authority.
+

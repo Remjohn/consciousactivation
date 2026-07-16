@@ -1,0 +1,45 @@
+schema_version: cmf-builder-bounded-implementation-authorization/v1
+story_id: ST-04.03
+active_mode: PHASE_GRAPH
+authorization_state: AUTHORIZED_FOR_BOUNDED_IMPLEMENTATION
+capsule:
+  manifest_path: development-capsules/ST-04.03/CAPSULE_MANIFEST.json
+  manifest_sha256: 3eeca298f253bdedd71b9a3b75e97140f17dd9578bd465c1daecf4bbe7fed98d
+  immutable_inputs: PASS_18_OF_18
+  bundle_digest: 443ab727cf9c9247d98e210ef02b9065f6b4da8a47b8bb29c245ae65d220d96b
+dependency_gate:
+  ST_04_02_completion_receipt: PASS
+  receipt_sha256: 8352f4b2470e9c0c2c78b93da266d13198b2c65f594c19c75b4332de689b48a3
+  canonical_payload_sha256: 4e27273ab3af4b97cf9338c9bc4d77a3c927903356a655342a354b4914857988
+  predecessor_regression: PASS_256_OF_256_REVALIDATED_PREIMPLEMENTATION
+  BD_001: RESOLVED_BY_USER_DIRECTIVE
+  XDEP_001_runtime_blocker: false
+readiness_gate:
+  story_status: READY
+  direct_dependencies_satisfied: true
+  applicable_blockers: []
+  acceptance_criteria_executable: PASS_12_OF_12
+  tests_defined: PASS
+  observability_defined: PASS
+  rollback_defined: PASS
+  file_scope_bounded: PASS
+  external_product_behavior_absorbed: false
+  later_story_required: false
+  one_focused_context: true
+bounded_implementation_readiness: PASS
+implementation_authorized: true
+human_authorization_required: false
+human_authorization:
+  phrase: AUTHORIZE BUILDER ST-04.03 PHASE-GRAPH BOUNDED IMPLEMENTATION
+  supplied_on: '2026-07-15'
+  scope: ST_04_03_CAPSULE_ALLOWLIST_ONLY
+required_exact_phrase: AUTHORIZE BUILDER ST-04.03 PHASE-GRAPH BOUNDED IMPLEMENTATION
+authorization_scope_if_granted:
+  - exact_ST_04_03_capsule_allowlist_only
+  - synthetic_declarative_phase_graph_only
+  - no_phase_execution_context_handoff_workflow_Control_Tower_or_external_runtime_behavior
+  - no_ST_04_04_or_later_story
+  - no_production_claim
+full_release1_readiness: FAIL
+full_product_readiness: FAIL
+production_authorized: false

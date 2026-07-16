@@ -1,0 +1,24 @@
+schema_version: cmf-builder-evidence-index-contract/v1
+contract_id: category_neutral_evidence_index_v1
+index_version: 1.0.0
+input:
+  exact_active_SourceLock_required: true
+  descriptor_coverage: every_ordered_descriptor_exactly_once
+specimen:
+  required_fields: [specimen_id, source_id, source_content_hash, role, media_type, observation, governed_status, knowledge_status, provenance]
+  allowed_governed_status: [ACTIVE, QUARANTINED, INVALIDATED]
+  allowed_knowledge_status: [OBSERVED, REPORTED, INFERRED, PROPOSED, UNKNOWN, NOT_APPLICABLE]
+  synthetic_default_knowledge_status: OBSERVED
+relationships:
+  required_per_specimen: [DERIVED_FROM_SOURCE, MEMBER_OF_SOURCE_LOCK]
+query_keys: [specimen_id, source_id, role, governed_status, knowledge_status]
+identity:
+  algorithm: sha256_of_canonical_UTF8_JSON
+  ordering: [source_precedence, canonical_uri, source_sha256, specimen_id]
+  timestamps_in_identity: false
+  absolute_paths_allowed: false
+invalidation:
+  SourceLock_change: invalidate_active_index_and_create_new_immutable_version
+external_runtime_required: false
+production_eligible: false
+certified: false

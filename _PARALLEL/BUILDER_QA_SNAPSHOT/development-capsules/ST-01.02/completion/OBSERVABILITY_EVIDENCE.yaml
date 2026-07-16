@@ -1,0 +1,55 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-01.02
+active_mode: SYNTHETIC_DEFINITION
+verdict: PASS
+deterministic_success_sample:
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  command_id: source-lock-command-1
+  receipt_id: receipt_019ba503-1000-7204-95e5-979614dfb6e3
+  receipt_hash: sha256:4ddba11cb305cb7a226763982413859f0d4bac557d6af1558fd424215a3d16b5
+  source_lock_id: source-lock_ea63e2bdfa902fd9034d62fa1a5b2d4bc6d598d9474d06809c4cd8a86e21ba60
+  aggregate_hash: sha256:ea63e2bdfa902fd9034d62fa1a5b2d4bc6d598d9474d06809c4cd8a86e21ba60
+  source_profile_ref: synthetic_task_definition_source_v1@1.0.0
+  source_profile_sha256: cf036f38d26b37624c10e24094401e93c4f74e512d11613182a29cb859fbcd3d
+  target_candidate: repo://development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml
+  descriptor_sha256: 82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b
+  lifecycle_state: SOURCE_LOCKED
+  stream_version: 5
+  file_count: 1
+  total_bytes: 2518
+  archive_count: 0
+  event_ids:
+    - event_019ba503-1000-7252-b1b1-2b5c8de628d6
+    - event_019ba503-1000-7951-8d5f-5bcb26f71057
+    - event_019ba503-1000-7c4d-9dc8-949281df34b8
+  observation_events:
+    - ST-01.02:SourceDiagnosticAccepted
+    - ST-01.02:SourceLockCreated
+    - ST-01.02:OutcomeVerified
+required_field_validation:
+  run_and_story_identity: PASS
+  command_correlation_and_causation: PASS
+  authority_identity: PASS
+  target_category_and_profile_identity: PASS
+  source_profile_id_version_and_hash: PASS
+  portable_target_candidate: PASS
+  source_lock_identity: PASS
+  stream_version_and_outcome: PASS
+  typed_failure_context: PASS
+rejection_evidence:
+  observations:
+    - ST-01.02:SourceDiagnosticRejected
+    - ST-01.02:OutcomeRejected
+  zero_authoritative_event_mutation: PASS
+  zero_source_lock_mutation: PASS
+  zero_command_record_mutation: PASS
+replay_evidence:
+  observation: ST-01.02:SourceLockReplayReturned
+  receipt_identity_preserved: PASS
+  duplicate_events: 0
+claims_not_made:
+  - production_readiness
+  - certification
+  - semantic_knowledge
+  - Harness_compilation_or_execution
+  - external_runtime_execution

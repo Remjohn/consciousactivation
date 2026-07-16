@@ -1,0 +1,265 @@
+schema_version: cmf-builder-outcome-epic-inventory/v1
+status: PROPOSED_AWAITING_HUMAN_CONFIRMATION
+step: 2
+created_on: '2026-07-14'
+authority:
+  builder_prd: '1.2'
+  activative_intelligence_constitution: '1.1'
+  precedence_contract: governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml
+authorization_receipt: docs/planning/EPIC_STEP_2_AUTHORIZATION_RECEIPT.yaml
+confirmed_inventory:
+  rows: 410
+  sha256: d3db32a78f4acce25e5448ff7c6ecb765ba814c0bdbf1bb44d6b49de00c55923
+  mutated_by_step_2: false
+planning_boundary:
+  planning_may_continue: true
+  vertical_story_authoring_authorized: false
+  production_implementation_authorized: false
+  implementation_readiness: FAIL
+  next_gate: human_confirmation_of_epic_inventory_and_primary_coverage
+canonical_categories:
+  - {category_id: short_form_edited_video, canonical_name: Short-Form Edited Video}
+  - {category_id: 2d_character_animation, canonical_name: 2D Character Animation}
+  - {category_id: carousels, canonical_name: Carousels}
+  - {category_id: supervisuals, canonical_name: Supervisuals}
+  - {category_id: conversational_activation_expression, canonical_name: Conversational Activation / Human Expression}
+conversational_profiles:
+  - {profile_id: public_comment, boundary: builder_compile_validate_and_handoff}
+  - {profile_id: reply_dm, boundary: builder_compile_validate_and_handoff}
+  - {profile_id: reelcast_expression, boundary: builder_compile_validate_and_handoff_only_external_execution}
+  - {profile_id: interview_expression, boundary: builder_compile_validate_and_handoff_only_external_execution}
+compilation_targets:
+  - {target_id: atomic_content_harness, canonical_name: Atomic Content Harness}
+  - {target_id: visual_asset_editor, canonical_name: Visual Asset Editor}
+  - {target_id: content_asset_delegation_contract, canonical_name: Content Asset Delegation Contract}
+unresolved_decisions_and_blockers:
+  - HD-006
+  - HD-007
+  - BD-004
+  - BD-007
+  - BD-008
+  - BD-010
+  - BD-014
+cross_repository_dependencies:
+  - id: XDEP-001
+    repository_or_product: CMF_PROGRAM_CONTROL
+    relationship: Supplies constitutional and product authority, cross-repository decision governance, release pins, and convergence status.
+    current_constraint: Program records must be synchronized separately; Builder does not mutate program control during this Epic proposal.
+  - id: XDEP-002
+    repository_or_product: 02_VISUAL_ASSET_EDITOR
+    relationship: Consumes the Builder Visual Asset Editor target profile and visual-semantic or Asset Demand handoff contracts.
+    current_constraint: VAE implementation readiness is FAIL; Builder defines and validates the target profile but does not implement editor behavior.
+  - id: XDEP-003
+    repository_or_product: 03_DELEGATION_PROTOCOL
+    relationship: Owns the external Content-to-Asset Delegation runtime and shared contract release consumed by Builder target compilation.
+    current_constraint: The 1.1.0-rc.1 candidate is not production-authorized and cross-repository adoption or convergence remains gated.
+  - id: XDEP-004
+    repository_or_product: 05_FUTURE_PRODUCTS/INTERVIEW_EXPRESSION_HARNESS
+    relationship: Future owner of Interview Expression and ReelCast live execution, Reaction Receipt capture, Expression Moment extraction, and final content-type contracts.
+    current_constraint: Planning is paused after one locked atomic-boundary decision; Builder must not pre-write the final product PRD.
+  - id: XDEP-005
+    repository_or_product: 04_OPERATOR_MANUAL
+    relationship: Future consumer of approved Control Tower, workflow, incident, and authorization operating procedures.
+    current_constraint: Operational documentation follows stable Builder behavior and cannot substitute for implementation evidence.
+  - id: XDEP-006
+    repository_or_product: Activation Compiler Harness
+    relationship: Upstream semantic authority that produces the rich Activative Intelligence Pack referenced by Builder contracts.
+    current_constraint: Builder preserves frozen lineage and sparse references; it does not replace or implement the Activation Compiler.
+epics:
+  - id: EP-01
+    order: 1
+    title: Governed Run Intake and Evidence Readiness
+    primary_actor: Harness Architect
+    outcome: A Harness Architect can select exactly one compilation target, start or resume a constitutionally bounded run, lock target-specific evidence without source mutation, and receive an explicit readiness or saturation outcome before design decisions begin.
+    release_1_disposition: RELEASE_1_INCLUDED
+    dependencies: []
+    cross_repository_dependencies: [XDEP-001, XDEP-004, XDEP-006]
+    decision_and_blocker_obligations: [HD-006, BD-004, BD-014]
+    scope_in:
+      - Governed lifecycle, run identity, target selection, source profiles, immutable source lock, evidence index, gap classification, and saturation.
+      - Consent-aware structural intake for conversational sources without authorizing their production use.
+    scope_out:
+      - Final product execution, semantic invention from missing evidence, and mutation of source repositories.
+    completion_evidence: A target-profiled run can fail closed or proceed with immutable evidence identity, complete provenance, and resumable lifecycle receipts.
+    blocked_outcomes: Production use of human-reaction evidence remains blocked by HD-006 and BD-004; external target source and interface proof remains constrained by BD-014.
+
+  - id: EP-02
+    order: 2
+    title: Syntax-Grounded Understanding and Atomic Boundary
+    primary_actor: Harness Architect and constitutional reviewer
+    outcome: A reviewer can derive typed visual or conversational syntax evidence before meaning, distinguish observation from hypothesis, compare candidate product boundaries, and ratify one atomic Draft Harness Model with explicit uncertainty and wrong-boundary risk.
+    release_1_disposition: RELEASE_1_INCLUDED
+    dependencies: [EP-01]
+    cross_repository_dependencies: [XDEP-001, XDEP-004]
+    decision_and_blocker_obligations: [HD-006, BD-004, BD-007, BD-008]
+    scope_in:
+      - Visual Syntax First for harness-development discovery, category-adapted conversational parsing evidence, knowledge status, spatial or temporal graphs, and atomicity ratification.
+      - Structural evidence seams for Activative Calls, turns, Reaction Receipts, Expression Moments, and micro-commitments where applicable.
+    scope_out:
+      - Runtime semantic invention, live Interview or ReelCast execution, and unratified boundary promotion.
+    completion_evidence: One ratified atomic boundary is backed by reproducible syntax evidence, alternatives, confidence, and a frozen Genesis entry state.
+    blocked_outcomes: Parser reliability and protected boundary thresholds cannot be certified until BD-004, BD-007, BD-008, and applicable HD-006 governance are resolved.
+
+  - id: EP-03
+    order: 3
+    title: Human-Ratified Genesis and Canonical Harness Definition
+    primary_actor: Harness Architect and product authority
+    outcome: Human authority can answer only dependency-ready constitutional questions, preserve the evidence and recommendation trail, freeze ratified decisions, and compile one provenance-rich canonical Harness IR into consistent human and machine artifacts.
+    release_1_disposition: RELEASE_1_INCLUDED
+    dependencies: [EP-01, EP-02]
+    cross_repository_dependencies: [XDEP-001, XDEP-006]
+    decision_and_blocker_obligations: [BD-004, BD-008, BD-014]
+    scope_in:
+      - Constitutional precedence, dependency-driven Genesis, transactionally updated Harness IR, schema evolution, deterministic compilation, drift detection, and decision receipts.
+      - Frozen references to rich Activative Intelligence Pack objects without lower-authority semantic rewrite.
+    scope_out:
+      - Replacing the Activation Compiler, bypassing human authority, or treating generated documents as independent sources of truth.
+    completion_evidence: The same canonical IR deterministically produces complete sharded specifications and machine artifacts with hashes, migrations, provenance, and contradiction handling.
+    blocked_outcomes: Full readiness remains unavailable where evidence or external interface authority is unresolved under BD-004, BD-008, or BD-014.
+
+  - id: EP-04
+    order: 4
+    title: Owned Capability Graphs and Minimum Complete Context
+    primary_actor: Harness Architect and maintainer
+    outcome: A maintainer can see who or what owns every capability, how responsibility-centered modules and phases connect, what each handoff may change, and the minimum complete context required for reliable work.
+    release_1_disposition: RELEASE_1_INCLUDED
+    dependencies: [EP-03]
+    cross_repository_dependencies: [XDEP-001]
+    decision_and_blocker_obligations: [BD-010, BD-014]
+    scope_in:
+      - Capability ownership, module test seams, phase and context graphs, versioned handoffs, reference registry, SPR, progressive disclosure, and context budgets.
+    scope_out:
+      - Horizontal infrastructure epics, silent downstream rewriting, conversation-history-as-interface, or universal context loading.
+    completion_evidence: Every required capability has an owner, module boundary, dependency path, typed contract, context manifest, and impact-analysis seam.
+    blocked_outcomes: Final capability placement and external handoff closure remain conditional on BD-010 and BD-014.
+
+  - id: EP-05
+    order: 5
+    title: Reusable Evaluated Skills and Deterministic JIT Capsules
+    primary_actor: Skill maintainer and Harness Architect
+    outcome: A maintainer can reuse, adapt, or justify new skills through capability-gap evidence, bind them to behavioral evaluation, and assemble deterministic phase-local capsules containing only the authority and context needed for the current task.
+    release_1_disposition: RELEASE_1_INCLUDED
+    dependencies: [EP-04]
+    cross_repository_dependencies: [XDEP-001]
+    decision_and_blocker_obligations: [HD-007, BD-004, BD-008, BD-010]
+    scope_in:
+      - Canonical skill ecology, authority lanes, maturity, design briefs, composition recipes, bindings, degradation, hashes, and ephemeral JIT capsules.
+    scope_out:
+      - Turning every capability into a skill, hiding workflows inside skills, or shipping required skills without behavioral lift.
+    completion_evidence: A required capability resolves to a tested reusable skill or justified gap, and its capsule is reproducible, bounded, version-pinned, and behaviorally attributable.
+    blocked_outcomes: Production skill maturity and conversational evaluators remain uncertifiable until HD-007, BD-004, BD-008, and BD-010 are resolved.
+
+  - id: EP-06
+    order: 6
+    title: Five-Category Activative Intelligence and Expression Compilation
+    primary_actor: Category steward and Harness Architect
+    outcome: A category steward can preserve one Shared Activative Core and compile category-native syntax, sequence, runtime, evaluation, and repair contracts for all five canonical categories, including first-class Conversational Activation / Human Expression profiles.
+    release_1_disposition: RELEASE_1_FORMAT02_PRODUCTION_OTHER_CATEGORIES_STRUCTURAL_UNCERTIFIED
+    dependencies: [EP-02, EP-03, EP-04]
+    cross_repository_dependencies: [XDEP-001, XDEP-004, XDEP-006]
+    decision_and_blocker_obligations: [HD-006, HD-007, BD-004, BD-007, BD-008, BD-010, BD-014]
+    scope_in:
+      - Short-Form Edited Video, 2D Character Animation, Carousels, Supervisuals, and Conversational Activation / Human Expression.
+      - Public Comment, Reply or DM, ReelCast Expression, and Interview Expression structural profiles.
+      - Activative Intelligence Pack lineage, Activative Calls, Reaction Receipts, Expression Moments, post-expression recompilation, wrong-reading locks, Activation First runtime ordering, and Visual Syntax First development ordering.
+    scope_out:
+      - Live Interview or ReelCast execution, final Interview Expression PRD authoring, Identity DNA merge authority, and certification inheritance from Format 02.
+    completion_evidence: Each category and profile compiles distinct contracts without flattening shared meaning, and HG-015 fails closed when the semantic stack or conversational category is absent.
+    blocked_outcomes: Conversational production use and general category certification remain blocked by HD-006, HD-007, BD-004, BD-007, BD-008, BD-010, and BD-014.
+
+  - id: EP-07
+    order: 7
+    title: Three-Target Product Compilation and Cross-Product Handoff
+    primary_actor: Cross-product architect and Harness Architect
+    outcome: A cross-product architect can compile distinct Atomic Content Harness, Visual Asset Editor, and Content Asset Delegation Contract profiles from shared governance while preserving target-specific evidence, ownership, artifacts, evaluation, compatibility, and frozen semantic handoffs.
+    release_1_disposition: RELEASE_1_THREE_TARGET_STRUCTURAL_FORMAT02_STUBBED_EXTERNAL_HANDOFF
+    dependencies: [EP-03, EP-04, EP-06]
+    cross_repository_dependencies: [XDEP-001, XDEP-002, XDEP-003, XDEP-004]
+    decision_and_blocker_obligations: [BD-004, BD-008, BD-014]
+    scope_in:
+      - Three versioned target profiles, target-specific source and IR profiles, artifact sets, evaluation gates, compatibility, visual-semantic and Delegation handoffs, Composition Asset Pack and T or V route request lineage.
+    scope_out:
+      - Visual Asset Editor runtime behavior, Delegation Protocol runtime behavior, or a universal target profile.
+    completion_evidence: Target compilation proves profile separation, lossless lineage, explicit ownership, compatibility behavior, and stubbed Release 1 external ports.
+    blocked_outcomes: Production cross-repository convergence and certification remain blocked by BD-004, BD-008, BD-014, and the external products' own readiness gates.
+
+  - id: EP-08
+    order: 8
+    title: Behavioral Proof, Repair, and Readiness Authorization
+    primary_actor: Evaluator, reviewer, and product authority
+    outcome: Independent reviewers can measure whether the Builder, its skills, categories, profiles, and target artifacts improve behavior, reject wrong readings, repair only responsible layers, and issue immutable readiness or blocked authorization receipts.
+    release_1_disposition: RELEASE_1_INCLUDED_CERTIFICATION_BLOCKED
+    dependencies: [EP-02, EP-03, EP-04, EP-05, EP-06, EP-07]
+    cross_repository_dependencies: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    decision_and_blocker_obligations: [HD-006, HD-007, BD-004, BD-007, BD-008, BD-010, BD-014]
+    scope_in:
+      - No-guidance controls, fresh-context trials, protected benchmark portfolios, category-appropriate dimensions, evaluator isolation, non-compensable gates, repair and invalidation graphs, regressions, and authorization receipts.
+      - Role clarity, pattern match and interruption, prediction, payoff, affinity, anticipation, residue, anti-cliche, no-text survival, and wrong-reading rejection.
+    scope_out:
+      - Readiness from document completeness, benchmark leakage, silent threshold invention, or repair outside the responsible layer.
+    completion_evidence: Every readiness outcome is traceable to protected evidence, evaluated artifact identity, threshold authority, targeted repair, and regression results.
+    blocked_outcomes: Implementation readiness and conversational or general certification remain FAIL until both human decisions and all five blocker records are closed with evidence.
+
+  - id: EP-09
+    order: 9
+    title: Governed Builder Workflow Factory
+    primary_actor: Builder operator and workflow maintainer
+    outcome: An operator can route a Builder request through a versioned, actor-explicit workflow; run deterministic and agent work at isolated public seams; recover from bounded failures; and promote only workflows that pass end-to-end and fault tests.
+    release_1_disposition: RELEASE_1_INCLUDED_MANUAL_SHADOW_BEFORE_AUTOMATION
+    dependencies: [EP-01, EP-03, EP-04, EP-05, EP-06, EP-07, EP-08]
+    cross_repository_dependencies: [XDEP-001, XDEP-005]
+    decision_and_blocker_obligations: [BD-008, BD-010, BD-014]
+    scope_in:
+      - Builder Workflow IR, routing, manual shadow workflow, actor ownership, node validation, bounded retries, checkpoint resume, least privilege, safe parallelism, independent evaluation, telemetry, fault tests, CI promotion, migration, rollback, and incident workflows.
+    scope_out:
+      - Monolithic agent sessions, production workflows hidden in skills, unbounded self-correction, or default parallelization.
+    completion_evidence: One complete Builder workflow can be replayed, observed, fault-injected, resumed, and rejected or promoted through explicit gates.
+    blocked_outcomes: Production promotion remains prohibited while readiness is FAIL and benchmark, skill, or external interface dependencies remain open.
+
+  - id: EP-10
+    order: 10
+    title: Evidence-Derived Human Control Tower
+    primary_actor: Harness Architect, reviewer, and operator
+    outcome: A human can supervise the full Builder run from one approved Control Tower, understand evidence and authority behind every status, inspect category or profile lineage and workflow state, and issue only governed commands without creating a second source of truth.
+    release_1_disposition: RELEASE_1_INCLUDED
+    dependencies: [EP-01, EP-03, EP-04, EP-05, EP-06, EP-07, EP-08, EP-09]
+    cross_repository_dependencies: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-005]
+    decision_and_blocker_obligations: [BD-004, BD-008, BD-010, BD-014]
+    scope_in:
+      - Approved Control Tower routes, projections, graphs, evidence, Genesis, skills, contracts, evaluation, repair, cost, queues, incidents, governed actions, accessibility, and export.
+    scope_out:
+      - UI-owned authoritative state, hidden operational state, route redesign, or external product consoles.
+    completion_evidence: Every visible state is event-derived and provenance-linked, stale or unavailable projections fail explicitly, and all human actions produce typed command receipts.
+    blocked_outcomes: Cross-product and certification views remain non-authoritative or blocked until their source evidence and external contracts close the relevant decisions.
+
+  - id: EP-11
+    order: 11
+    title: Traceable Development Capsule and Implementation Handoff
+    primary_actor: Implementation lead and Harness Architect
+    outcome: An implementation team can receive one versioned Development Capsule containing only justified scaffolding, typed contracts, fixtures, dependency ordering, acceptance evidence, and frozen authority needed to implement a complete vertical slice without inventing product decisions.
+    release_1_disposition: RELEASE_1_INCLUDED_HANDOFF_ONLY_NO_IMPLEMENTATION_AUTHORIZATION
+    dependencies: [EP-03, EP-04, EP-05, EP-06, EP-07, EP-08, EP-09, EP-10]
+    cross_repository_dependencies: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-005]
+    decision_and_blocker_obligations: [HD-006, HD-007, BD-004, BD-008, BD-010, BD-014]
+    scope_in:
+      - Development Capsule generation, requirement traceability, contract examples, fixtures, first vertical-slice plan, implementation delta governance, and feedback ingestion.
+    scope_out:
+      - Production implementation in this planning step, Story authoring before Step 3 confirmation, or external product runtime code.
+    completion_evidence: The capsule is complete, hash-bound, dependency-ordered, evidence-backed, and explicitly marked authorized, prototype-only, or blocked.
+    blocked_outcomes: No implementation authorization may be issued while readiness is FAIL or any required human decision and blocker remains open.
+
+  - id: EP-12
+    order: 12
+    title: Brownfield Migration and Release 1 Reference Proof
+    primary_actor: Product lead, maintainer, and release reviewer
+    outcome: The team can preserve proven V2.1 behavior, migrate only with evidence and receipts, dual-compile eligible targets, and prove the complete Builder spine through one Format 02 reference path without overstating category or target certification.
+    release_1_disposition: RELEASE_1_FORMAT02_REFERENCE_PROOF_GENERAL_CERTIFICATION_DEFERRED
+    dependencies: [EP-06, EP-07, EP-08, EP-09, EP-10, EP-11]
+    cross_repository_dependencies: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-005, XDEP-006]
+    decision_and_blocker_obligations: [HD-006, HD-007, BD-004, BD-007, BD-008, BD-010, BD-014]
+    scope_in:
+      - V2.1 inventory and concept mapping, dual compilation, incremental regression, compatibility aliases, migration receipts, Format 02 Release 1 proof, structural support for other categories and targets, and bounded certification claims.
+    scope_out:
+      - General Builder certification from one harness, production certification of Interview or ReelCast profiles, or production VAE and Delegation implementation.
+    completion_evidence: Release 1 proves one complete Format 02 vertical path and publishes an explicit certification matrix that leaves all unproven categories, profiles, and targets uncertified.
+    blocked_outcomes: Release certification and production authorization remain blocked until HD-006, HD-007, BD-004, BD-007, BD-008, BD-010, BD-014, and cross-repository gates are resolved.

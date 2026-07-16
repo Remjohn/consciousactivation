@@ -1,0 +1,88 @@
+schema_version: cmf-builder-wrong-reading-lock-inheritance/v1
+mapping_id: builder-wrong-reading-locks-to-delegation-rc4
+status: ACTIVE
+contract_pin: DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+visual_asset_demand_field: /wrong_reading_locks
+portable_relationship_contract:
+  message_type: derivative-lock-inheritance
+  message_version: "1.0"
+  schema: contracts/schemas/derivative-lock-inheritance.schema.json
+  schema_sha256: sha256:a1b8ca8c2fdcc67719b141c4feca93527553f821dc62cc9648f62f295d440d08
+owners:
+  authoritative_inheritance_policy: Builder
+  parent_and_demand_semantic_values: Content Harness or authorized signing principal
+  realization_enforcer: Visual Asset Editor
+  shared_contract_and_validator: CMF_DELEGATION_PROTOCOL
+compiled_relationship_fields:
+  inheritance_id: required
+  authoritative_parent_ref: required_typed_versioned_hash_pinned_resource
+  parent_contract_version: required
+  governing_authoritative_demand_ref: required_typed_immutable_demand_identity
+  parent_lock_evidence:
+    required: true
+    parent_wrong_reading_locks: inline_or_null_when_immutable_ref_present
+    parent_lock_set_ref: immutable_ref_or_null_when_inline_locks_present
+    parent_lock_set_hash: required_sha256
+    at_least_one_inline_or_ref: true
+  derivative_ref: required_typed_versioned_hash_pinned_resource
+  derivative_wrong_reading_locks: required_non_empty
+  derivation_type: required_governed_enum
+  derivative_semantics: required_governed_enum
+  authoritative_lock_authorization: nullable_unless_authorized_relaxation
+  declared_at: required_date_time
+lock_evidence_fields:
+  - lock_id
+  - statement
+  - meaning_hash
+  - scope_paths
+  - enforcement_level
+rules:
+  - id: WRL-001
+    condition: visual_asset_demand_is_semantically_generative_or_transformative
+    requirement: wrong_reading_locks_must_be_non_empty
+    failure: reject_demand
+  - id: WRL-002
+    condition: derivative_is_deterministic_or_non_semantic
+    requirement: inherit_every_parent_lock_identity_meaning_scope_and_strength
+    failure: reject_derivative
+  - id: WRL-003
+    condition: derivative_adds_constraints
+    requirement: additions_may_only_be_stricter
+    failure: reject_weakened_derivative
+  - id: WRL-004
+    condition: any_derivative
+    requirement: no_inherited_lock_may_be_removed_or_weakened
+    failure: reject_derivative
+  - id: WRL-005
+    condition: relaxation_is_requested
+    requirement: require_new_authoritative_demand_that_supersedes_governing_demand_and_authorizes_applicable_lock_set
+    failure: reject_unauthorized_or_in_place_relaxation
+  - id: WRL-006
+    condition: legacy_derivative_lacks_classification_or_parent_evidence
+    requirement: fail_closed_without_guessing
+    failure: DERIVATION_CLASSIFICATION_REQUIRED_or_PARENT_LOCK_EVIDENCE_REQUIRED
+set_semantics:
+  parent_lock_ids_must_be_subset_of_derivative_lock_ids: true
+  meaning_hash_must_match_for_inherited_lock: true
+  parent_scope_paths_must_be_subset_of_derivative_scope_paths: true
+  enforcement_level_must_not_decrease: true
+  equality_allowed_for_deterministic_delivery_variant: true
+  additive_stricter_locks_allowed: true
+builder_boundary:
+  emits_machine_readable_policy_and_relationship: true
+  validates_external_contract_shape: true
+  realizes_visual_behavior: false
+vae_boundary:
+  enforces_realization_behavior: true
+  may_weaken_builder_locks: false
+required_validation_evidence:
+  - RC4_schema_validation
+  - RC4_portable_inheritance_validator_outcome
+  - authoritative_parent_and_demand_refs
+  - parent_lock_set_hash_and_evidence
+  - derivative_lock_set_and_derivation_classification
+  - authoritative_relaxation_evidence_when_applicable
+planning_traceability:
+  obligations: [CONST-005, CONST-007, CONST-008, FR-177, FR-180, NFR-TRACE-003, NFR-EVAL-004]
+  stories: [ST-05.03, ST-07.03, ST-07.04, ST-08.02, ST-08.03, ST-08.07]
+

@@ -1,0 +1,46 @@
+schema_version: cmf-builder-development-story-contract/v1
+story_id: ST-04.04
+primary_epic: EP-04
+title: Protect Typed Phase and Context Handoffs
+active_mode: BUILDER_INTERNAL_HANDOFF
+primary_outcome: >-
+  A maintainer can compile and inspect immutable, versioned Builder-internal
+  phase-context and handoff contracts so each downstream phase receives its
+  declared inputs without silently rewriting authoritative upstream truth.
+owned_obligations: [D014, FR-068, FR-069, FR-070, FR-071, HG-004, HG-005, HG-007, NFR-ARCH-001]
+relevant_frs: [FR-068, FR-069, FR-070, FR-071]
+relevant_nfrs: [NFR-ARCH-001]
+direct_dependency: ST-04.03:StoryCompletionReceipt
+intrinsic_dependencies:
+  - active_hash_valid_phase_graph
+  - explicit_phase_inputs_outputs_dependencies_authority_and_failure_owners
+  - resolved_architecture_preservation_contract_BD_001
+conditional_dependency_disposition:
+  BD_014: NOT_APPLICABLE_TO_BUILDER_INTERNAL_HANDOFF_RETAINED_FOR_EXTERNAL_PRODUCT_BRANCHES
+  XDEP_001: GOVERNING_READ_ONLY_AUTHORITY_INPUT_NOT_RUNTIME_DEPENDENCY
+applicable_blockers: []
+implementation_owner: graph_and_contract_owner
+component_boundary: >-
+  Builder domain and application contracts for deterministic internal context
+  declarations, typed handoffs, ownership, compatibility, mutation limits and
+  impact analysis only; no context-completeness selection, phase execution,
+  external handoff, Workflow IR, Control Tower or production persistence.
+typed_contracts:
+  - PhaseContextContract
+  - PhaseHandoffContract
+  - PhaseHandoffGraph
+  - PhaseHandoffReceipt
+  - PhaseHandoffInvalidation
+  - CompilePhaseHandoffsCommand
+failure_behavior: >-
+  Fail closed on contradictions, missing authority or dependencies, unowned or
+  multiply owned fields, silent upstream mutation, incompatible versions,
+  dangling phases, stale lineage, invalid provenance, payload conflicts, or
+  partial atomic commit. Invalidation must not rerun unaffected state.
+migration_or_compatibility: >-
+  Initial synthetic internal-handoff contract version. Any field, ownership,
+  authority, compatibility, mutation, exposure, invalidation or phase-link
+  change produces a new immutable contract and graph identity.
+completion_receipt: ST-04.04:StoryCompletionReceipt
+implementation_authorized: false
+production_authorized: false

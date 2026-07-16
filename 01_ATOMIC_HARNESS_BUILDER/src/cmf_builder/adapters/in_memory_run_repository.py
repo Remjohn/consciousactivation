@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime
+from functools import wraps
 from hashlib import sha256
+from threading import RLock
 from uuid import UUID
 
 from cmf_builder.application.checkpoints import Checkpoint
@@ -13,6 +15,12 @@ from cmf_builder.application.ports import (
     Observation,
 )
 from cmf_builder.domain.evidence_workspace import SourceLock
+from cmf_builder.domain.evidence_index import (
+    EvidenceIndex,
+    EvidenceIndexInvalidation,
+    EvidenceIndexReceipt,
+    Specimen,
+)
 from cmf_builder.domain.atomicity import (
     AtomicityDecision,
     AtomicityDecisionReceipt,
@@ -81,6 +89,16 @@ from cmf_builder.domain.atomic_harness_definition import (
     AtomicHarnessDefinitionInvalidation,
     AtomicHarnessDefinitionReceipt,
 )
+from cmf_builder.domain.target_package_validation import (
+    AtomicContentHarnessValidationInvalidation,
+    AtomicContentHarnessValidationReceipt,
+    AtomicContentHarnessValidationReport,
+)
+from cmf_builder.domain.development_capsule import (
+    DevelopmentCapsuleInvalidation,
+    DevelopmentCapsuleReceipt,
+    VersionedTraceableDevelopmentCapsule,
+)
 
 __all__ = [
     "AtomicCommitFailed",
@@ -93,15 +111,33 @@ __all__ = [
 ]
 
 
+def _synchronized(method):
+    @wraps(method)
+    def guarded(self, *args, **kwargs):
+        with self._lock:
+            return method(self, *args, **kwargs)
+
+    return guarded
+
+
 class InMemoryRunRepository:
     """Deterministic test/development adapter; never a production persistence claim."""
 
     def __init__(self) -> None:
+        self._lock = RLock()
         self._streams: dict[str, tuple[RunEvent, ...]] = {}
         self._command_records: dict[str, CommandRecord] = {}
         self._checkpoints: dict[str, dict[str, Checkpoint]] = {}
         self._source_locks: dict[str, SourceLock] = {}
         self._run_source_locks: dict[str, tuple[str, ...]] = {}
+        self._evidence_indexes: dict[str, EvidenceIndex] = {}
+        self._run_evidence_indexes: dict[str, tuple[str, ...]] = {}
+        self._evidence_index_receipts: dict[str, EvidenceIndexReceipt] = {}
+        self._run_evidence_index_receipts: dict[str, tuple[str, ...]] = {}
+        self._evidence_index_invalidations: dict[
+            str, EvidenceIndexInvalidation
+        ] = {}
+        self._invalidated_evidence_indexes: dict[str, str] = {}
         self._atomic_boundaries: dict[str, DeclaredAtomicBoundary] = {}
         self._atomicity_ratifications: dict[str, AtomicityRatification] = {}
         self._draft_harness_models: dict[str, DraftHarnessModel] = {}
@@ -205,12 +241,46 @@ class InMemoryRunRepository:
             str, AtomicHarnessDefinitionInvalidation
         ] = {}
         self._invalidated_atomic_harness_definitions: dict[str, str] = {}
+        self._atomic_content_harness_validation_reports: dict[
+            str, AtomicContentHarnessValidationReport
+        ] = {}
+        self._run_atomic_content_harness_validation_reports: dict[
+            str, tuple[str, ...]
+        ] = {}
+        self._atomic_content_harness_validation_receipts: dict[
+            str, AtomicContentHarnessValidationReceipt
+        ] = {}
+        self._run_atomic_content_harness_validation_receipts: dict[
+            str, tuple[str, ...]
+        ] = {}
+        self._atomic_content_harness_validation_invalidations: dict[
+            str, AtomicContentHarnessValidationInvalidation
+        ] = {}
+        self._invalidated_atomic_content_harness_validations: dict[str, str] = {}
+        self._development_capsules: dict[
+            str, VersionedTraceableDevelopmentCapsule
+        ] = {}
+        self._run_development_capsules: dict[str, tuple[str, ...]] = {}
+        self._development_capsule_receipts: dict[
+            str, DevelopmentCapsuleReceipt
+        ] = {}
+        self._run_development_capsule_receipts: dict[str, tuple[str, ...]] = {}
+        self._development_capsule_invalidations: dict[
+            str, DevelopmentCapsuleInvalidation
+        ] = {}
+        self._invalidated_development_capsules: dict[str, str] = {}
         self._fail_next_atomic_commit = False
+        self._fail_next_run_command_boundary: str | None = None
+        self._pending_observation_outbox: dict[str, tuple[Observation, ...]] = {}
+        self._inflight_observation_outbox: dict[str, Observation] = {}
+        self._delivered_observation_outbox: dict[str, tuple[Observation, ...]] = {}
 
     @property
+    @_synchronized
     def stream_count(self) -> int:
         return len(self._streams)
 
+    @_synchronized
     def append(
         self,
         run_id: str,
@@ -220,6 +290,79 @@ class InMemoryRunRepository:
         current = self._validated_append(run_id, expected_version, events)
         self._streams[run_id] = (*current, *events)
 
+    @_synchronized
+    def commit_run_command(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        checkpoint: Checkpoint | None,
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        result = command_record.result
+        result_event_ids = tuple(getattr(result, "event_ids", ()))
+        event_ids = tuple(event.event_id for event in events)
+        if (
+            not events
+            or any(event.command_id != command_id for event in events)
+            or getattr(result, "command_id", None) != command_id
+            or getattr(result, "run_id", None) != run_id
+            or result_event_ids != event_ids
+        ):
+            raise ConcurrencyConflict(
+                "Run command receipt, events and command identity must agree.",
+                run_id=run_id,
+                command_id=command_id,
+            )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        checkpoint_store = self._checkpoints.get(run_id, {})
+        if checkpoint is not None:
+            if (
+                checkpoint.run_id != run_id
+                or getattr(result, "detail")("checkpoint_id")
+                != checkpoint.checkpoint_id
+            ):
+                raise ConcurrencyConflict(
+                    "Checkpoint and command receipt identities differ.",
+                    run_id=run_id,
+                    command_id=command_id,
+                )
+            existing_checkpoint = checkpoint_store.get(checkpoint.checkpoint_id)
+            if existing_checkpoint is not None and existing_checkpoint != checkpoint:
+                raise ConcurrencyConflict(
+                    "A checkpoint identity cannot be overwritten.",
+                    checkpoint_id=checkpoint.checkpoint_id,
+                )
+        for boundary in ("events", "checkpoint", "command_record"):
+            if self._fail_next_run_command_boundary == boundary:
+                self._fail_next_run_command_boundary = None
+                raise AtomicCommitFailed(
+                    "Injected run-command transaction failure.",
+                    run_id=run_id,
+                    command_id=command_id,
+                    boundary=boundary,
+                )
+        self._streams[run_id] = (*current, *events)
+        if checkpoint is not None:
+            self._checkpoints.setdefault(run_id, {})[
+                checkpoint.checkpoint_id
+            ] = checkpoint
+        self._command_records[command_id] = command_record
+
+    @_synchronized
+    def inject_next_run_command_commit_failure(self, boundary: str) -> None:
+        if boundary not in {"events", "checkpoint", "command_record"}:
+            raise ValueError(f"Unsupported run-command failure boundary: {boundary}")
+        self._fail_next_run_command_boundary = boundary
+
+    @_synchronized
     def commit_evidence_workspace(
         self,
         *,
@@ -263,9 +406,155 @@ class InMemoryRunRepository:
             self._run_source_locks[run_id] = (*prior, source_lock.lock_id)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def inject_next_atomic_commit_failure(self) -> None:
         self._fail_next_atomic_commit = True
 
+    @_synchronized
+    def commit_evidence_index(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        index: EvidenceIndex,
+        receipt: EvidenceIndexReceipt,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        source_lock = self._source_locks.get(index.source_lock_ref)
+        if source_lock is None or source_lock.run_id != run_id:
+            raise ConcurrencyConflict(
+                "Evidence indexing requires the run's authoritative Source Lock.",
+                run_id=run_id,
+                source_lock_ref=index.source_lock_ref,
+            )
+        index.validate(source_lock)
+        receipt.validate(index)
+        if (
+            index.run_id != run_id
+            or command_record.result != receipt
+            or receipt.command_id != command_id
+            or len(events) != 1
+            or events[0].event_type != "EvidenceIndexAttached"
+            or events[0].command_id != command_id
+            or events[0].actor_id != index.authority_identity
+            or events[0].value("index_ref") != index.index_id
+            or events[0].value("index_hash") != index.index_hash
+            or events[0].value("source_lock_ref") != index.source_lock_ref
+            or receipt.event_ids != (events[0].event_id,)
+            or receipt.stream_version != events[0].stream_version
+        ):
+            raise ConcurrencyConflict(
+                "Evidence index, event, receipt, authority and command must agree.",
+                run_id=run_id,
+                command_id=command_id,
+            )
+        self._assert_same_or_absent(
+            self._evidence_indexes, index.index_id, index, "evidence index"
+        )
+        self._assert_same_or_absent(
+            self._evidence_index_receipts,
+            receipt.receipt_id,
+            receipt,
+            "evidence index receipt",
+        )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected evidence-index transaction failure.",
+                run_id=run_id,
+                index_id=index.index_id,
+            )
+        self._streams[run_id] = (*current, *events)
+        self._evidence_indexes[index.index_id] = index
+        self._run_evidence_indexes[run_id] = (
+            *self._run_evidence_indexes.get(run_id, ()),
+            index.index_id,
+        )
+        self._evidence_index_receipts[receipt.receipt_id] = receipt
+        self._run_evidence_index_receipts[run_id] = (
+            *self._run_evidence_index_receipts.get(run_id, ()),
+            receipt.receipt_id,
+        )
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_evidence_index_invalidation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        invalidation: EvidenceIndexInvalidation,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        index = self._evidence_indexes.get(invalidation.index_id)
+        if index is None or index.run_id != run_id:
+            raise ConcurrencyConflict(
+                "Evidence-index invalidation requires an immutable historical index."
+            )
+        invalidation.validate(index)
+        if (
+            command_record.result != invalidation
+            or invalidation.command_id != command_id
+            or invalidation.index_hash != index.index_hash
+            or invalidation.source_lock_ref != index.source_lock_ref
+            or len(events) != 1
+            or events[0].event_type != "EvidenceIndexInvalidated"
+            or events[0].command_id != command_id
+            or events[0].actor_id != invalidation.authority_identity
+            or events[0].value("index_ref") != index.index_id
+            or events[0].value("invalidation_ref") != invalidation.invalidation_id
+            or invalidation.event_ids != (events[0].event_id,)
+            or invalidation.stream_version != events[0].stream_version
+            or index.index_id in self._invalidated_evidence_indexes
+        ):
+            raise ConcurrencyConflict(
+                "Evidence-index invalidation, event, authority and command must agree."
+            )
+        self._assert_same_or_absent(
+            self._evidence_index_invalidations,
+            invalidation.invalidation_id,
+            invalidation,
+            "evidence index invalidation",
+        )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected evidence-index invalidation transaction failure.",
+                run_id=run_id,
+                index_id=index.index_id,
+            )
+        self._streams[run_id] = (*current, *events)
+        self._evidence_index_invalidations[
+            invalidation.invalidation_id
+        ] = invalidation
+        self._invalidated_evidence_indexes[
+            index.index_id
+        ] = invalidation.invalidation_id
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
     def commit_atomicity(
         self,
         *,
@@ -295,6 +584,10 @@ class InMemoryRunRepository:
         | None = None,
         skill_necessity_invalidation: SkillNecessityInvalidation | None = None,
         atomic_harness_definition_invalidation: AtomicHarnessDefinitionInvalidation
+        | None = None,
+        atomic_content_harness_validation_invalidation: AtomicContentHarnessValidationInvalidation
+        | None = None,
+        development_capsule_invalidation: DevelopmentCapsuleInvalidation
         | None = None,
     ) -> None:
         current = self._validated_append(run_id, expected_version, events)
@@ -610,6 +903,53 @@ class InMemoryRunRepository:
                     "Definition invalidation requires the exact active definition and necessity invalidation.",
                     definition_ref=atomic_harness_definition_invalidation.definition_ref,
                 )
+        if atomic_content_harness_validation_invalidation is not None:
+            self._assert_same_or_absent(
+                self._atomic_content_harness_validation_invalidations,
+                atomic_content_harness_validation_invalidation.invalidation_id,
+                atomic_content_harness_validation_invalidation,
+                "Atomic Content Harness validation invalidation",
+            )
+            report = self._atomic_content_harness_validation_reports.get(
+                atomic_content_harness_validation_invalidation.report_ref
+            )
+            if (
+                report is None
+                or report.definition_id
+                != atomic_content_harness_validation_invalidation.definition_ref
+                or report.report_id
+                in self._invalidated_atomic_content_harness_validations
+                or atomic_harness_definition_invalidation is None
+                or atomic_content_harness_validation_invalidation.upstream_invalidation_ref
+                != atomic_harness_definition_invalidation.invalidation_id
+            ):
+                raise ConcurrencyConflict(
+                    "Target-validation invalidation requires the active report and definition invalidation.",
+                    report_ref=atomic_content_harness_validation_invalidation.report_ref,
+                )
+        if development_capsule_invalidation is not None:
+            self._assert_same_or_absent(
+                self._development_capsule_invalidations,
+                development_capsule_invalidation.invalidation_id,
+                development_capsule_invalidation,
+                "Development Capsule invalidation",
+            )
+            capsule = self._development_capsules.get(
+                development_capsule_invalidation.capsule_ref
+            )
+            if (
+                capsule is None
+                or capsule.validation_id
+                != development_capsule_invalidation.validation_ref
+                or capsule.capsule_id in self._invalidated_development_capsules
+                or atomic_content_harness_validation_invalidation is None
+                or development_capsule_invalidation.upstream_invalidation_ref
+                != atomic_content_harness_validation_invalidation.invalidation_id
+            ):
+                raise ConcurrencyConflict(
+                    "Development Capsule invalidation requires the active capsule and target-validation invalidation.",
+                    capsule_ref=development_capsule_invalidation.capsule_ref,
+                )
         if self._fail_next_atomic_commit:
             self._fail_next_atomic_commit = False
             raise AtomicCommitFailed(
@@ -713,9 +1053,24 @@ class InMemoryRunRepository:
             self._invalidated_atomic_harness_definitions[
                 atomic_harness_definition_invalidation.definition_ref
             ] = atomic_harness_definition_invalidation.invalidation_id
+        if atomic_content_harness_validation_invalidation is not None:
+            self._atomic_content_harness_validation_invalidations[
+                atomic_content_harness_validation_invalidation.invalidation_id
+            ] = atomic_content_harness_validation_invalidation
+            self._invalidated_atomic_content_harness_validations[
+                atomic_content_harness_validation_invalidation.report_ref
+            ] = atomic_content_harness_validation_invalidation.invalidation_id
+        if development_capsule_invalidation is not None:
+            self._development_capsule_invalidations[
+                development_capsule_invalidation.invalidation_id
+            ] = development_capsule_invalidation
+            self._invalidated_development_capsules[
+                development_capsule_invalidation.capsule_ref
+            ] = development_capsule_invalidation.invalidation_id
         self._atomicity_receipts[receipt.receipt_id] = receipt
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_artifact_set(
         self,
         *,
@@ -776,6 +1131,7 @@ class InMemoryRunRepository:
         self._artifact_receipts[receipt.receipt_id] = receipt
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_harness_ir(
         self,
         *,
@@ -833,6 +1189,7 @@ class InMemoryRunRepository:
         self._harness_ir_receipts[receipt.receipt_id] = receipt
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_constitutional_validation(
         self,
         *,
@@ -899,6 +1256,7 @@ class InMemoryRunRepository:
         self._run_constitutional_validation_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_capability_ownership(
         self,
         *,
@@ -976,6 +1334,7 @@ class InMemoryRunRepository:
         self._run_capability_ownership_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_responsibility_modules(
         self,
         *,
@@ -1050,6 +1409,7 @@ class InMemoryRunRepository:
         self._run_responsibility_module_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_phase_graph(
         self,
         *,
@@ -1123,6 +1483,7 @@ class InMemoryRunRepository:
         self._run_phase_graph_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_phase_handoffs(
         self,
         *,
@@ -1192,6 +1553,7 @@ class InMemoryRunRepository:
         self._run_phase_handoff_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_internal_handoff(
         self,
         *,
@@ -1244,6 +1606,7 @@ class InMemoryRunRepository:
         self._run_internal_handoff_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_internal_handoff_decision(
         self,
         *,
@@ -1304,6 +1667,7 @@ class InMemoryRunRepository:
         )
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_minimum_context(
         self,
         *,
@@ -1366,6 +1730,7 @@ class InMemoryRunRepository:
         self._run_context_compilation_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_skill_registry_snapshot(
         self,
         *,
@@ -1429,6 +1794,7 @@ class InMemoryRunRepository:
         self._run_skill_registry_consumption_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_skill_necessity(
         self,
         *,
@@ -1492,6 +1858,7 @@ class InMemoryRunRepository:
         self._run_skill_necessity_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
     def commit_atomic_harness_definition(
         self,
         *,
@@ -1618,6 +1985,216 @@ class InMemoryRunRepository:
         self._run_atomic_harness_definitions[run_id] = (definition.definition_id,)
         self._atomic_harness_definition_receipts[receipt.receipt_id] = receipt
         self._run_atomic_harness_definition_receipts[run_id] = (receipt.receipt_id,)
+        self._command_records[command_id] = command_record
+
+    @_synchronized
+    def commit_atomic_content_harness_validation(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        report: AtomicContentHarnessValidationReport,
+        receipt: AtomicContentHarnessValidationReceipt,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        run = Run.replay(current)
+        definition = self._atomic_harness_definitions.get(report.definition_id)
+        if definition is None:
+            raise ConcurrencyConflict(
+                "Target validation requires the exact stored Atomic Harness Definition.",
+                run_id=run_id,
+                definition_id=report.definition_id,
+            )
+        self._validate_definition_authority(run, definition)
+        report.validate(definition)
+        receipt.validate(report)
+        if (
+            len(observations) != 10
+            or any(item.command_id != command_id for item in observations)
+            or any(
+                item.atomic_content_harness_validation_receipt_id
+                != receipt.receipt_id
+                for item in observations
+            )
+        ):
+            raise ConcurrencyConflict(
+                "Target-validation observation intents are incomplete or mismatched.",
+                run_id=run_id,
+                command_id=command_id,
+            )
+        if (
+            report.run_id != run_id
+            or run.atomic_harness_definition_ref != definition.definition_id
+            or run.atomic_harness_definition_hash != definition.definition_hash
+            or definition.definition_id in self._invalidated_atomic_harness_definitions
+            or self._run_atomic_content_harness_validation_reports.get(run_id)
+        ):
+            raise ConcurrencyConflict(
+                "Target validation requires one active immutable definition parent.",
+                run_id=run_id,
+                report_id=report.report_id,
+            )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        self._assert_same_or_absent(
+            self._atomic_content_harness_validation_reports,
+            report.report_id,
+            report,
+            "Atomic Content Harness validation report",
+        )
+        self._assert_same_or_absent(
+            self._atomic_content_harness_validation_receipts,
+            receipt.receipt_id,
+            receipt,
+            "Atomic Content Harness validation receipt",
+        )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected development/test failure rejected target validation.",
+                run_id=run_id,
+                report_id=report.report_id,
+            )
+        self._streams[run_id] = (*current, *events)
+        self._atomic_content_harness_validation_reports[report.report_id] = report
+        self._run_atomic_content_harness_validation_reports[run_id] = (
+            report.report_id,
+        )
+        self._atomic_content_harness_validation_receipts[receipt.receipt_id] = receipt
+        self._run_atomic_content_harness_validation_receipts[run_id] = (
+            receipt.receipt_id,
+        )
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def claim_pending_observation(self, command_id: str) -> Observation | None:
+        if command_id in self._inflight_observation_outbox:
+            return None
+        pending = self._pending_observation_outbox.get(command_id, ())
+        if not pending:
+            return None
+        observation = pending[0]
+        self._inflight_observation_outbox[command_id] = observation
+        return observation
+
+    @_synchronized
+    def complete_observation_delivery(
+        self, command_id: str, observation: Observation
+    ) -> None:
+        inflight = self._inflight_observation_outbox.get(command_id)
+        pending = self._pending_observation_outbox.get(command_id, ())
+        if inflight != observation or not pending or pending[0] != observation:
+            raise ConcurrencyConflict(
+                "Observation delivery acknowledgement does not match the claimed intent.",
+                command_id=command_id,
+            )
+        delivered = self._delivered_observation_outbox.get(command_id, ())
+        if observation in delivered:
+            raise ConcurrencyConflict(
+                "An observation intent cannot be acknowledged twice.",
+                command_id=command_id,
+            )
+        self._pending_observation_outbox[command_id] = pending[1:]
+        self._delivered_observation_outbox[command_id] = (*delivered, observation)
+        del self._inflight_observation_outbox[command_id]
+
+    @_synchronized
+    def release_observation_delivery(
+        self, command_id: str, observation: Observation
+    ) -> None:
+        if self._inflight_observation_outbox.get(command_id) != observation:
+            raise ConcurrencyConflict(
+                "Only the claimed observation intent may be released.",
+                command_id=command_id,
+            )
+        del self._inflight_observation_outbox[command_id]
+
+    @_synchronized
+    def pending_observations(self, command_id: str) -> tuple[Observation, ...]:
+        return self._pending_observation_outbox.get(command_id, ())
+
+    @_synchronized
+    def delivered_observations(self, command_id: str) -> tuple[Observation, ...]:
+        return self._delivered_observation_outbox.get(command_id, ())
+
+    @_synchronized
+    def commit_development_capsule(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        events: tuple[RunEvent, ...],
+        command_id: str,
+        command_record: CommandRecord,
+        capsule: VersionedTraceableDevelopmentCapsule,
+        receipt: DevelopmentCapsuleReceipt,
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        run = Run.replay(current)
+        definition = self._atomic_harness_definitions.get(capsule.definition_id)
+        validation = self._atomic_content_harness_validation_reports.get(
+            capsule.validation_id
+        )
+        if definition is None or validation is None:
+            raise ConcurrencyConflict(
+                "Development Capsule requires the exact stored definition and validation.",
+                run_id=run_id,
+                capsule_id=capsule.capsule_id,
+            )
+        capsule.validate(definition, validation)
+        receipt.validate(capsule)
+        if (
+            capsule.run_id != run_id
+            or run.atomic_content_harness_validation_ref != validation.report_id
+            or run.atomic_content_harness_validation_hash != validation.report_hash
+            or definition.definition_id in self._invalidated_atomic_harness_definitions
+            or validation.report_id
+            in self._invalidated_atomic_content_harness_validations
+            or self._run_development_capsules.get(run_id)
+        ):
+            raise ConcurrencyConflict(
+                "Development Capsule requires one active immutable validated parent chain.",
+                run_id=run_id,
+                capsule_id=capsule.capsule_id,
+            )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        self._assert_same_or_absent(
+            self._development_capsules,
+            capsule.capsule_id,
+            capsule,
+            "Development Capsule",
+        )
+        self._assert_same_or_absent(
+            self._development_capsule_receipts,
+            receipt.receipt_id,
+            receipt,
+            "Development Capsule receipt",
+        )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected development/test failure rejected Development Capsule generation.",
+                run_id=run_id,
+                capsule_id=capsule.capsule_id,
+            )
+        self._streams[run_id] = (*current, *events)
+        self._development_capsules[capsule.capsule_id] = capsule
+        self._run_development_capsules[run_id] = (capsule.capsule_id,)
+        self._development_capsule_receipts[receipt.receipt_id] = receipt
+        self._run_development_capsule_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
     @staticmethod
@@ -2013,6 +2590,7 @@ class InMemoryRunRepository:
     def is_skill_necessity_invalidated(self, decision_id: str) -> bool:
         return decision_id in self._invalidated_skill_necessity_decisions
 
+    @_synchronized
     def get_atomic_harness_definition(
         self, definition_id: str
     ) -> AtomicHarnessDefinition | None:
@@ -2031,6 +2609,7 @@ class InMemoryRunRepository:
     ) -> AtomicHarnessDefinitionReceipt | None:
         return self._atomic_harness_definition_receipts.get(receipt_id)
 
+    @_synchronized
     def atomic_harness_definition_receipts(
         self, run_id: str
     ) -> tuple[AtomicHarnessDefinitionReceipt, ...]:
@@ -2048,6 +2627,98 @@ class InMemoryRunRepository:
 
     def is_atomic_harness_definition_invalidated(self, definition_id: str) -> bool:
         return definition_id in self._invalidated_atomic_harness_definitions
+
+    @_synchronized
+    def get_atomic_content_harness_validation_report(
+        self, report_id: str
+    ) -> AtomicContentHarnessValidationReport | None:
+        return self._atomic_content_harness_validation_reports.get(report_id)
+
+    @_synchronized
+    def atomic_content_harness_validation_reports(
+        self, run_id: str
+    ) -> tuple[AtomicContentHarnessValidationReport, ...]:
+        return tuple(
+            self._atomic_content_harness_validation_reports[report_id]
+            for report_id in self._run_atomic_content_harness_validation_reports.get(
+                run_id, ()
+            )
+        )
+
+    @_synchronized
+    def get_atomic_content_harness_validation_receipt(
+        self, receipt_id: str
+    ) -> AtomicContentHarnessValidationReceipt | None:
+        return self._atomic_content_harness_validation_receipts.get(receipt_id)
+
+    @_synchronized
+    def atomic_content_harness_validation_receipts(
+        self, run_id: str
+    ) -> tuple[AtomicContentHarnessValidationReceipt, ...]:
+        return tuple(
+            self._atomic_content_harness_validation_receipts[receipt_id]
+            for receipt_id in self._run_atomic_content_harness_validation_receipts.get(
+                run_id, ()
+            )
+        )
+
+    def get_atomic_content_harness_validation_invalidation(
+        self, invalidation_id: str
+    ) -> AtomicContentHarnessValidationInvalidation | None:
+        return self._atomic_content_harness_validation_invalidations.get(
+            invalidation_id
+        )
+
+    def is_atomic_content_harness_validation_invalidated(
+        self, report_id: str
+    ) -> bool:
+        return report_id in self._invalidated_atomic_content_harness_validations
+
+    def get_development_capsule(
+        self, capsule_id: str
+    ) -> VersionedTraceableDevelopmentCapsule | None:
+        return self._development_capsules.get(capsule_id)
+
+    def development_capsules(
+        self, run_id: str
+    ) -> tuple[VersionedTraceableDevelopmentCapsule, ...]:
+        return tuple(
+            self._development_capsules[capsule_id]
+            for capsule_id in self._run_development_capsules.get(run_id, ())
+        )
+
+    def get_development_capsule_receipt(
+        self, receipt_id: str
+    ) -> DevelopmentCapsuleReceipt | None:
+        return self._development_capsule_receipts.get(receipt_id)
+
+    def development_capsule_receipts(
+        self, run_id: str
+    ) -> tuple[DevelopmentCapsuleReceipt, ...]:
+        return tuple(
+            self._development_capsule_receipts[receipt_id]
+            for receipt_id in self._run_development_capsule_receipts.get(run_id, ())
+        )
+
+    def get_development_capsule_invalidation(
+        self, invalidation_id: str
+    ) -> DevelopmentCapsuleInvalidation | None:
+        return self._development_capsule_invalidations.get(invalidation_id)
+
+    def is_development_capsule_invalidated(self, capsule_id: str) -> bool:
+        return capsule_id in self._invalidated_development_capsules
+
+    @property
+    def development_capsule_count(self) -> int:
+        return len(self._development_capsules)
+
+    @property
+    def development_capsule_receipt_count(self) -> int:
+        return len(self._development_capsule_receipts)
+
+    @property
+    def development_capsule_invalidation_count(self) -> int:
+        return len(self._development_capsule_invalidations)
 
     @property
     def capability_ownership_graph_count(self) -> int:
@@ -2158,6 +2829,18 @@ class InMemoryRunRepository:
         return len(self._atomic_harness_definition_invalidations)
 
     @property
+    def atomic_content_harness_validation_report_count(self) -> int:
+        return len(self._atomic_content_harness_validation_reports)
+
+    @property
+    def atomic_content_harness_validation_receipt_count(self) -> int:
+        return len(self._atomic_content_harness_validation_receipts)
+
+    @property
+    def atomic_content_harness_validation_invalidation_count(self) -> int:
+        return len(self._atomic_content_harness_validation_invalidations)
+
+    @property
     def constitutional_validation_report_count(self) -> int:
         return len(self._constitutional_validation_reports)
 
@@ -2217,9 +2900,90 @@ class InMemoryRunRepository:
     def boundary_invalidation_count(self) -> int:
         return len(self._boundary_invalidations)
 
+    @_synchronized
+    def get_evidence_index(self, index_id: str) -> EvidenceIndex | None:
+        return self._evidence_indexes.get(index_id)
+
+    @_synchronized
+    def evidence_indexes(self, run_id: str) -> tuple[EvidenceIndex, ...]:
+        return tuple(
+            self._evidence_indexes[index_id]
+            for index_id in self._run_evidence_indexes.get(run_id, ())
+        )
+
+    @_synchronized
+    def get_evidence_index_receipt(
+        self, receipt_id: str
+    ) -> EvidenceIndexReceipt | None:
+        return self._evidence_index_receipts.get(receipt_id)
+
+    @_synchronized
+    def evidence_index_receipts(
+        self, run_id: str
+    ) -> tuple[EvidenceIndexReceipt, ...]:
+        return tuple(
+            self._evidence_index_receipts[receipt_id]
+            for receipt_id in self._run_evidence_index_receipts.get(run_id, ())
+        )
+
+    @_synchronized
+    def get_evidence_index_invalidation(
+        self, invalidation_id: str
+    ) -> EvidenceIndexInvalidation | None:
+        return self._evidence_index_invalidations.get(invalidation_id)
+
+    @_synchronized
+    def is_evidence_index_invalidated(self, index_id: str) -> bool:
+        return index_id in self._invalidated_evidence_indexes
+
+    @_synchronized
+    def active_evidence_index(self, run_id: str) -> EvidenceIndex | None:
+        run = self.load_run(run_id)
+        if (
+            not run.evidence_index_ref
+            or run.evidence_index_invalidation_ref is not None
+            or run.evidence_index_ref in self._invalidated_evidence_indexes
+        ):
+            return None
+        return self._evidence_indexes.get(run.evidence_index_ref)
+
+    @_synchronized
+    def query_evidence_index(
+        self,
+        index_id: str,
+        *,
+        specimen_id: str | None = None,
+        source_id: str | None = None,
+        role: str | None = None,
+        governed_status: str | None = None,
+        knowledge_status: str | None = None,
+    ) -> tuple[Specimen, ...]:
+        index = self._evidence_indexes.get(index_id)
+        if index is None:
+            raise KeyError(index_id)
+        return index.query(
+            specimen_id=specimen_id,
+            source_id=source_id,
+            role=role,
+            governed_status=governed_status,
+            knowledge_status=knowledge_status,
+        )
+
+    @property
+    @_synchronized
+    def evidence_index_count(self) -> int:
+        return len(self._evidence_indexes)
+
+    @property
+    @_synchronized
+    def evidence_index_receipt_count(self) -> int:
+        return len(self._evidence_index_receipts)
+
+    @_synchronized
     def get_source_lock(self, lock_id: str) -> SourceLock | None:
         return self._source_locks.get(lock_id)
 
+    @_synchronized
     def source_locks(self, run_id: str) -> tuple[SourceLock, ...]:
         return tuple(
             self._source_locks[lock_id]
@@ -2230,20 +2994,25 @@ class InMemoryRunRepository:
     def source_lock_count(self) -> int:
         return len(self._source_locks)
 
+    @_synchronized
     def load_run(self, run_id: str) -> Run:
         if run_id not in self._streams:
             raise KeyError(run_id)
         return Run.replay(self._streams[run_id])
 
+    @_synchronized
     def events(self, run_id: str) -> tuple[RunEvent, ...]:
         return self._streams.get(run_id, ())
 
+    @_synchronized
     def event_count(self, run_id: str) -> int:
         return len(self._streams.get(run_id, ()))
 
+    @_synchronized
     def get_command_record(self, command_id: str) -> CommandRecord | None:
         return self._command_records.get(command_id)
 
+    @_synchronized
     def save_command_record(self, command_id: str, record: CommandRecord) -> None:
         existing = self._command_records.get(command_id)
         if existing is not None and existing != record:
@@ -2252,11 +3021,13 @@ class InMemoryRunRepository:
             )
         self._command_records[command_id] = record
 
+    @_synchronized
     def add_checkpoint(self, checkpoint: Checkpoint) -> None:
         self._checkpoints.setdefault(checkpoint.run_id, {})[
             checkpoint.checkpoint_id
         ] = checkpoint
 
+    @_synchronized
     def list_checkpoints(self, run_id: str) -> tuple[Checkpoint, ...]:
         return tuple(self._checkpoints.get(run_id, {}).values())
 
@@ -2285,6 +3056,112 @@ class InMemoryRunRepository:
                 )
             next_version += 1
         return current
+
+    def _validate_definition_authority(
+        self, run: Run, definition: AtomicHarnessDefinition
+    ) -> None:
+        attachments = tuple(
+            event
+            for event in self._streams.get(run.run_id, ())
+            if event.event_type == "AtomicHarnessDefinitionAttached"
+            and event.value("definition_ref") == definition.definition_id
+        )
+        receipt_ids = self._run_atomic_harness_definition_receipts.get(
+            run.run_id, ()
+        )
+        receipts = tuple(
+            self._atomic_harness_definition_receipts[receipt_id]
+            for receipt_id in receipt_ids
+            if self._atomic_harness_definition_receipts[
+                receipt_id
+            ].definition_id
+            == definition.definition_id
+        )
+        context = self._minimum_context_graphs.get(
+            run.minimum_context_ref or ""
+        )
+        if len(attachments) != 1 or len(receipts) != 1 or context is None:
+            raise ConcurrencyConflict(
+                "Definition compiler authority evidence is missing or ambiguous.",
+                run_id=run.run_id,
+                definition_id=definition.definition_id,
+            )
+        attachment = attachments[0]
+        definition_receipt = receipts[0]
+        if (
+            attachment.actor_id != definition.authority_identity
+            or attachment.value("definition_hash") != definition.definition_hash
+            or attachment.command_id != definition_receipt.command_id
+            or definition_receipt.event_ids != (attachment.event_id,)
+            or definition_receipt.stream_version != attachment.stream_version
+            or definition_receipt.authority_identity != attachment.actor_id
+        ):
+            raise ConcurrencyConflict(
+                "Definition attachment, receipt and compiler authority differ.",
+                run_id=run.run_id,
+                definition_id=definition.definition_id,
+            )
+        accepted_handoff = self._internal_handoffs.get(
+            context.accepted_handoff_id
+        )
+        handoff_decision = self._internal_handoff_decisions.get(
+            context.accepted_handoff_id
+        )
+        values = {
+            "run": run,
+            "source_lock": self._source_locks.get(run.source_lock_ref or ""),
+            "boundary": self._atomic_boundaries.get(run.atomic_boundary_ref or ""),
+            "ratification": self._atomicity_ratifications.get(
+                run.atomicity_ratification_ref or ""
+            ),
+            "model": self._draft_harness_models.get(
+                run.draft_harness_model_ref or ""
+            ),
+            "ir": self._harness_irs.get(run.harness_ir_ref or ""),
+            "manifest": self._artifact_manifests.get(
+                run.artifact_manifest_ref or ""
+            ),
+            "constitutional": self._constitutional_validation_reports.get(
+                run.constitutional_validation_ref or ""
+            ),
+            "capability": self._capability_ownership_graphs.get(
+                run.capability_ownership_ref or ""
+            ),
+            "modules": self._responsibility_module_graphs.get(
+                run.responsibility_module_ref or ""
+            ),
+            "phases": self._phase_graphs.get(run.phase_graph_ref or ""),
+            "handoff_graph": self._phase_handoff_graphs.get(
+                run.phase_handoff_ref or ""
+            ),
+            "accepted_handoff": accepted_handoff,
+            "handoff_decision": handoff_decision,
+            "context": context,
+            "snapshot": self._skill_registry_snapshots.get(
+                run.skill_registry_snapshot_ref or ""
+            ),
+            "necessity": self._skill_necessity_decisions.get(
+                run.skill_necessity_ref or ""
+            ),
+        }
+        if any(value is None for value in values.values()):
+            raise ConcurrencyConflict(
+                "Definition upstream authority cannot be reconstructed.",
+                run_id=run.run_id,
+                definition_id=definition.definition_id,
+            )
+        try:
+            definition_receipt.validate(definition)
+            definition.validate(
+                **values,
+                expected_authority_identity=attachment.actor_id,
+            )
+        except Exception as error:
+            raise ConcurrencyConflict(
+                "Definition meaning does not match stored governed authority.",
+                run_id=run.run_id,
+                definition_id=definition.definition_id,
+            ) from error
 
 
 class FixedClock:

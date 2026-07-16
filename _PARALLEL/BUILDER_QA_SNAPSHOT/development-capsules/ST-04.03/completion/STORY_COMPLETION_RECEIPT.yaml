@@ -1,0 +1,101 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-04.03
+primary_epic: EP-04
+active_mode: PHASE_GRAPH
+receipt_type: StoryCompletionReceipt
+implemented_outcome: >-
+  The Builder deterministically compiles the exact active responsibility-centered
+  module graph into an immutable two-phase Phase Graph with exact 2/2 module and
+  responsibility coverage, explicit governed gates, canonical dependency order,
+  authority and failure ownership, complete lineage, and no workflow execution.
+requirements_satisfied:
+  D013: PASS
+  FR-066: PASS
+  FR-067: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+  AC-10: PASS
+  AC-11: PASS
+  AC-12: PASS
+dependency_evidence:
+  ST_04_02_receipt_sha256: 8352f4b2470e9c0c2c78b93da266d13198b2c65f594c19c75b4332de689b48a3
+  ST_04_02_canonical_payload_sha256: 4e27273ab3af4b97cf9338c9bc4d77a3c927903356a655342a354b4914857988
+  predecessor_receipts_independently_validated: PASS_9_OF_9
+authorization_evidence:
+  human_phrase: AUTHORIZE BUILDER ST-04.03 PHASE-GRAPH BOUNDED IMPLEMENTATION
+  capsule_manifest_sha256: 3eeca298f253bdedd71b9a3b75e97140f17dd9578bd465c1daecf4bbe7fed98d
+  capsule_bundle_digest: 443ab727cf9c9247d98e210ef02b9065f6b4da8a47b8bb29c245ae65d220d96b
+  immutable_inputs: PASS_18_OF_18
+files_changed:
+  source_files: 6
+  test_files: 15
+  authorization_files: 2
+  completion_files: 6
+  exact_manifest: development-capsules/ST-04.03/completion/FILE_CHANGE_MANIFEST.yaml
+tests_executed:
+  preimplementation_regression: PASS_256_OF_256
+  story_suite_first: PASS_36_OF_36
+  story_suite_second: PASS_36_OF_36
+  full_regression: PASS_292_OF_292_NO_SKIPS
+test_results: development-capsules/ST-04.03/completion/TEST_RESULTS.json
+schema_and_contract_validation:
+  schema_files_changed: []
+  typed_contracts:
+    PhaseNode: PASS
+    PhaseExecutionPlan: PASS
+    PhaseGraph: PASS
+    PhaseGraphReceipt: PASS
+    PhaseGraphInvalidation: PASS
+    CompilePhaseGraphCommand: PASS
+  module_and_responsibility_coverage: PASS_2_OF_2_EXACTLY_ONCE
+  phase_coverage: PASS_2_OF_2
+  dependency_and_cycle_validation: PASS
+  deterministic_identity_and_canonical_serialization: PASS
+  external_contract_or_schema_fork: false
+observability_evidence:
+  path: development-capsules/ST-04.03/completion/OBSERVABILITY_EVIDENCE.yaml
+  success_replay_invalidation_and_failure_events: PASS
+  payload_safety: PASS
+rollback_evidence:
+  path: development-capsules/ST-04.03/completion/ROLLBACK_EVIDENCE.md
+  injected_atomic_failure_zero_partial_state: PASS
+  eight_event_descendant_invalidation: PASS
+  active_consumption_blocked_history_preserved: PASS
+  source_rollback_defined: PASS
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  database_changes: []
+  external_repository_changes: []
+  workflow_execution_implemented: false
+  later_story_behavior_implemented: false
+  production_claim: false
+unresolved_limitations:
+  - synthetic_Builder_Core_validation_only
+  - nonproduction_and_noncertified
+  - phase_execution_context_completeness_handoffs_workflow_and_capsule_generation_remain_later_Stories
+  - full_Release_1_and_full_product_readiness_remain_FAIL
+newly_discovered_blockers: []
+downstream_effect:
+  ST_04_04: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_AFTER_RECEIPT_VALIDATION
+  implementation_authorized: false
+hashes:
+  source_bundle_sha256: 2fb7fb0744d9928f9356308d8a753833230fc13c8577393e60fbecf470eaf7e8
+  test_bundle_sha256: d655f03327f175e5ce84dd74f7eb97acf5c943cdf7973d6185e53909fcb36699
+  implementation_bundle_sha256: 3c6e38ad960c145329c848f3e56b3a39d46d2a45fca4d11f539fac4785588eda
+  file_change_manifest_sha256: 68ad38e1c062b4f4d94465dac6687f5df8fdf1f33970f283cc6ac65eb4946428
+  implementation_report_sha256: eac71f57580a3acdda1ef8d74b31a2b4c22d79397b318d1751f291cd2707ec1a
+  test_results_sha256: 1ca40d8dd54b565b9a833d6a874e22608801650cf5b746d139a8a3056e26b2ff
+  observability_evidence_sha256: 4cb0e466f1437707e1c59e6c4f9119560d31565137bc2dca6a7dd4183652baa5
+  rollback_evidence_sha256: d2fe1855219a6ea99007fc6d6df46d9e65d956c3a4212467e4f2c00ef1300f4e
+  canonical_payload_sha256: bd8f7256d977433ab030b161052e23fada5987a72df75b4c5471000da353a074
+completion_verdict: PASS

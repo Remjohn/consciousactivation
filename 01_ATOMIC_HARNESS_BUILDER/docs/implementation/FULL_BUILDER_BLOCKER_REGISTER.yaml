@@ -1,0 +1,122 @@
+schema_version: cmf-builder-full-campaign-blocker-register/v1
+updated_on: "2026-07-16"
+campaign: FULL_ATOMIC_HARNESS_BUILDER_IMPLEMENTATION_CAMPAIGN
+campaign_state: ACTIVE_STANDING_AUTHORITY
+correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+blocking_findings:
+  - blocker_id: BQA-P0-001
+    blocker_type: CONSTITUTIONAL_AUTHORITY_INCOMPATIBILITY
+    severity: P0
+    status: CLOSED_PASS
+    scope: GLOBAL_BUILDER_TRUST_GATE
+    affected_story_owners: [ST-07.02, ST-07.04]
+    affected_obligations: [FR-171, FR-174, FR-175, FR-176, FR-177, FR-178, FR-179, FR-180]
+    evidence: >-
+      A semantically forged AtomicHarnessDefinition can be completely rehashed,
+      validated and receipted because validation proves self-consistency rather
+      than reconstructing meaning from hash-pinned authority.
+    closure_required: >-
+      Reconstruct and compare every governed semantic and section field from
+      immutable authority, validate authorized actor identity, and add per-field
+      forged-and-rehashed mutation tests.
+    correction_owner: ST-07.04_WITH_ST-07.02_DEFINITION_COOWNERSHIP
+    closure_evidence: PASS_88_AUTHORITY_BOUND_SEMANTIC_AND_SECTION_MUTATIONS_PLUS_3_ACTOR_CASES
+  - blocker_id: BQA-P1-003
+    blocker_type: STORY_LOCAL_TRANSACTIONAL_OBSERVABILITY
+    severity: P1
+    status: CLOSED_PASS
+    scope: ST-07.04
+    affected_story_owners: [ST-07.04]
+    affected_obligations: [FR-177, FR-178, FR-179, FR-180]
+    evidence: >-
+      An observation-sink failure after commit raises caller-visible failure and
+      reports NOT_COMMITTED although report, receipt, event and command record exist.
+    closure_required: >-
+      Return the committed receipt with typed degraded-observability state, or use
+      an in-scope atomic outbox; never describe committed work as not committed.
+    correction_owner: ST-07.04
+    closure_evidence: PASS_ATOMIC_10_INTENT_OUTBOX_AND_PENDING_ONLY_RETRY
+  - blocker_id: BQA-P1-004
+    blocker_type: STORY_LOCAL_CONCURRENCY
+    severity: P1
+    status: CLOSED_PASS
+    scope: CURRENT_RUN_REPOSITORY_TRANSACTION_BOUNDARY
+    affected_story_owners: [ST-01.01]
+    affected_obligations: [FR-002, FR-003, FR-006, FR-007, NFR-REL-002]
+    evidence: >-
+      Two writers can validate the same expected stream version and both return
+      accepted while only one event remains in the final stream.
+    closure_required: >-
+      Make compare-and-append atomic with per-run synchronization or compare-and-swap
+      behavior and prove exactly one accepted writer under a barrier-controlled test.
+    correction_owner: ST-01.01
+    closure_evidence: PASS_10_REPEATED_ATOMIC_RACES_ONE_WINNER_ONE_CONFLICT
+  - blocker_id: BQA-P1-005
+    blocker_type: STORY_LOCAL_ATOMICITY
+    severity: P1
+    status: CLOSED_PASS
+    scope: RUN_LIFECYCLE_COMMAND_TRANSACTION
+    affected_story_owners: [ST-01.01]
+    affected_obligations: [FR-006, FR-007, NFR-REL-002]
+    evidence: >-
+      Run lifecycle events can persist before command-record storage fails, leaving
+      committed events without the replay/idempotency record.
+    closure_required: >-
+      Commit events, checkpoints where applicable, receipts and command records in
+      one atomic operation and inject failures at every boundary.
+    correction_owner: ST-01.01
+    closure_evidence: PASS_15_OF_15_OPERATION_AND_FAILURE_BOUNDARY_CASES
+  - blocker_id: BQA-P1-006
+    blocker_type: STORY_LOCAL_EVIDENCE_TOCTOU
+    severity: P1
+    status: CLOSED_PASS
+    scope: EVIDENCE_WORKSPACE_ARCHIVE_IDENTITY
+    affected_story_owners: [ST-01.02]
+    affected_obligations: [FR-010, FR-011, FR-013, NFR-SEC-001, NFR-SEC-002]
+    evidence: >-
+      ZIP candidate hashing reads archive A while later member scanning can reopen
+      the path after a swap and return descriptors from archive B.
+    closure_required: >-
+      Scan the already verified bytes or one immutable open handle and prove an
+      archive swap cannot separate candidate identity from descriptors.
+    correction_owner: ST-01.02
+    closure_evidence: PASS_HASH_AND_MEMBERS_FROM_EXACT_IMMUTABLE_ZIP_BYTES
+frontier_blockers:
+  ST-01.03:
+    type: READY_SELECTED
+    blockers: []
+  ST-05.03:
+    type: BLOCKED_EVIDENCE
+    blockers: [BD-010_REAL_SKILL_SCOPE, HD-007]
+  ST-06.01:
+    type: BLOCKED_EVIDENCE
+    blockers: [BD-004, BD-007, BD-008, BD-010_REAL_SKILL_SCOPE]
+  ST-07.03:
+    type: BLOCKED_EXTERNAL_DEPENDENCY
+    blockers: [BD-014, XRI-016, XRI-019]
+  ST-11.02:
+    type: READY
+    blockers: []
+productization_ownership_gaps:
+  status: GOVERNED_AMENDMENT_REQUIRED_BEFORE_IMPLEMENTATION
+  gaps:
+    - durable_governed_persistence_as_an_early_independent_product_outcome
+    - early_operator_CLI_or_manifest_surface_before_Control_Tower_ST-10.09
+    - generic_compilation_beyond_the_fixed_synthetic_fixture
+  rule: >-
+    Prove each gap against the 410-obligation inventory and govern a bounded Story
+    amendment or supplemental mode before implementation. Do not rewrite completed receipts.
+authorization_disposition:
+  standing_campaign_authority_received: true
+  correction_is_within_existing_story_ownership: true
+  new_story_or_obligation_required: false
+  correction_capsule: development-capsules/BQA-P0-P1-TRUST-CORRECTION
+  capsule_validation: PASS_18_OF_18
+  capsule_manifest_sha256: 89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7
+  capsule_bundle_digest: 84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f
+  activation_state: ACTIVE_AFTER_AUTHORIZED_CORRECTION_PASS
+  reason: all_reproduced_P0_and_P1_findings_closed_by_correction_receipt
+required_resume_authority: RECEIVED_AND_CONSUMED
+remaining_open_blockers:
+  p0_or_p1: []
+  deferred_nonblocking: [BQA-P2-007, BQA-P2-008, BQA-P2-009, BQA-P3-010]

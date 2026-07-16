@@ -1,0 +1,134 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-04.05
+primary_epic: EP-04
+active_mode: MINIMUM_COMPLETE_CONTEXT
+receipt_type: StoryCompletionReceipt
+implemented_outcome: >-
+  The category-neutral Builder Core deterministically compiles the smallest
+  governed complete context for both synthetic phases from the exact accepted
+  Builder-internal handoff, classifies all six immutable references without
+  silent truncation or runtime loading, and emits two reproducible manifests
+  plus one attributable compilation receipt.
+requirements_satisfied:
+  AG-012: PASS
+  AG-013: PASS
+  D016: PASS
+  D020: PASS
+  FR-072: PASS
+  FR-073: PASS
+  FR-074: PASS
+  FR-075: PASS
+  FR-076: PASS
+  FR-077: PASS
+  FR-078: PASS
+  FR-079: PASS
+  FR-080: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+  AC-10: PASS
+  AC-11: PASS
+  AC-12: PASS
+dependency_evidence:
+  ST_04_04_receipt_sha256: 110d26709b63185f6ec57b5c1a1ab9bce3ecd52b151a8925dbcedbb37852aeea
+  ST_04_04_canonical_payload_sha256: 9bddc1bcdcd5df402dbababe6a0379856da01beab397ddd49b4ca9c3f5d16c7b
+  predecessor_receipts_independently_validated: PASS_11_OF_11
+  accepted_internal_handoff_required: true
+  builder_first_amendment: BF-AM-006
+  empty_skill_registry_policy_effect: INPUT_ONLY_NO_SKILL_IMPLEMENTATION
+authorization_evidence:
+  human_phrase: AUTHORIZE BUILDER ST-04.05 MINIMUM-COMPLETE-CONTEXT BOUNDED IMPLEMENTATION
+  capsule_manifest_sha256: 2e490a81d068c8bca09c66b6faf5388a99ad4080e37391cd7b3bad93cf12f948
+  capsule_bundle_digest: d7b1f47334f5110822faa0f82ef6e9664a23592e57595b91c71a0f5e89369af1
+  immutable_inputs: PASS_18_OF_18
+files_changed:
+  source_files: 6
+  test_files: 11
+  authorization_files: 2
+  completion_files: 6
+  exact_manifest: development-capsules/ST-04.05/completion/FILE_CHANGE_MANIFEST.yaml
+tests_executed:
+  preimplementation_regression: PASS_328_OF_328
+  story_suite_first: PASS_28_OF_28
+  story_suite_second: PASS_28_OF_28
+  full_regression: PASS_356_OF_356_NO_SKIPS
+test_results: development-capsules/ST-04.05/completion/TEST_RESULTS.json
+schema_and_contract_validation:
+  schema_files_changed: []
+  typed_contracts:
+    ReferenceDeclaration: PASS
+    BudgetLimit: PASS
+    ContextBudgetPolicy: PASS
+    ResolvedContextItem: PASS
+    PhaseContextManifest: PASS
+    MinimumCompleteContextGraph: PASS
+    ContextCompilationReceipt: PASS
+    ContextGraphInvalidation: PASS
+    CompileMinimumContextCommand: PASS
+  phase_manifest_coverage: PASS_2_OF_2
+  reference_registry_coverage: PASS_6_OF_6_EACH_PHASE_CLASSIFIED_EXACTLY_ONCE
+  mandatory_context_coverage: PASS_5_OF_5
+  manifest_categories: PASS_INCLUDED_EXCLUDED_SUMMARIZED_RETRIEVED_COMPRESSED
+  semantic_context_classes: PASS_REQUIRED_CONDITIONAL_OPTIONAL_FORBIDDEN_UNAVAILABLE_NOT_APPLICABLE
+  budget_and_overflow_behavior: PASS_BLOCKS_WITHOUT_TRUNCATION
+  loading_and_influence_boundaries: PASS
+  progressive_disclosure_pointer: PASS_NO_RUNTIME_FETCH
+  deterministic_identity_and_canonical_serialization: PASS
+  external_contract_or_schema_fork: false
+observability_evidence:
+  path: development-capsules/ST-04.05/completion/OBSERVABILITY_EVIDENCE.yaml
+  success_replay_overflow_invalidation_and_failure_events: PASS
+  graph_receipt_manifest_reference_loading_budget_and_count_fields: PASS
+  payload_safety: PASS
+rollback_evidence:
+  path: development-capsules/ST-04.05/completion/ROLLBACK_EVIDENCE.md
+  injected_atomic_failure_zero_partial_state: PASS
+  required_overflow_zero_truncation_and_zero_commit: PASS
+  ten_event_descendant_invalidation: PASS
+  affected_manifests_invalidated_history_preserved: PASS
+  source_rollback_defined: PASS
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  database_changes: []
+  transport_or_network_added: false
+  external_repository_changes: []
+  VAE_or_Delegation_behavior_implemented: false
+  model_provider_tokenizer_or_GPU_invoked: false
+  phase_or_workflow_execution_implemented: false
+  skill_discovery_or_packaging_implemented: false
+  atomic_harness_definition_compilation_implemented: false
+  compiled_harness_capsule_generation_implemented: false
+  later_story_behavior_implemented: false
+  production_claim: false
+unresolved_limitations:
+  - synthetic_Builder_Core_validation_only
+  - category_neutral_nonproduction_and_noncertified
+  - context_declarations_are_repository_local_and_no_runtime_loading_is_authorized
+  - conditional_optional_and_forbidden_class_sets_are_explicit_but_empty_in_this_fixture
+  - BD_010_remains_open_outside_the_governed_synthetic_empty_registry_subscope
+  - Format_02_VAE_Delegation_runtime_GPU_conversational_and_production_tracks_remain_deferred
+  - full_Release_1_and_full_product_readiness_remain_FAIL
+newly_discovered_blockers: []
+downstream_effect:
+  ST_05_01: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_AFTER_RECEIPT_VALIDATION
+  implementation_authorized: false
+hashes:
+  source_bundle_sha256: 4fca0dc2365a29256ff4796f7a239ce504d756b6ce49b5f52dc47952ba38066e
+  test_bundle_sha256: e0d9efea9ef64a846007e72431f2a780c28d673d3f903b95f98dead0e16cb12e
+  implementation_bundle_sha256: 9fd874133668256b9b11ce0b402f4a07e8bd1495723407cbd8b3a869b4529db2
+  file_change_manifest_sha256: c87673020e39df539e1b8b7296e385ca65119d97a028bf3accab0057bd3e70ce
+  implementation_report_sha256: f6f31a380c5d53729b83009e07177a87de4c7a0c81fd7ea56fbb163eac6fed6b
+  test_results_sha256: 775a8b0564e4801dcff7a0b065dbe00a925e29c91edf05adfc03999cdf384560
+  observability_evidence_sha256: 8bae342d5d396b320e8f485368ab6d870b2f66b98bf8ac933c0adff39327a5b2
+  rollback_evidence_sha256: b779929e24d958795c57d24c38212463158518aec182e3dd8f2243f45af6dd71
+  canonical_payload_sha256: 0904a65269b872c2a46b0fce11f80d5a003c638612f5189bdf1946682f251eb8
+completion_verdict: PASS
