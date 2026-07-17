@@ -1,6 +1,6 @@
 schema_version: cmf-builder-core-implementation-sequence/v1
 generated_on: "2026-07-16"
-status: FULL_BUILDER_CAMPAIGN_ACTIVE_AFTER_TRUST_CORRECTION
+status: ST_05_03_THROUGH_ST_05_05_COMPLETE_PASS_NO_ADDITIONAL_READY_CONFIRMED_STORY
 authority:
   builder_prd: "1.2"
   activative_intelligence_constitution: "1.1"
@@ -11,9 +11,9 @@ authority:
 full_builder_campaign_overlay:
   authority_phrase: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
   standing_authority_received: true
-  activation_state: ACTIVE
-  triggering_finding: null
-  ready_story_count: 2
+  activation_state: STOPPED_NO_ADDITIONAL_READY_CONFIRMED_STORY_AFTER_ST_05_03_THROUGH_ST_05_05_PASS
+  triggering_finding: NO_ADDITIONAL_DEPENDENCY_READY_CONFIRMED_STORY
+  ready_story_count: 0
   queue: docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
   blocker_register: docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
   correction_capsule: development-capsules/BQA-P0-P1-TRUST-CORRECTION
@@ -22,6 +22,34 @@ full_builder_campaign_overlay:
   correction_receipt: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/STORY_SUPPLEMENTAL_CORRECTION_RECEIPTS.yaml
   correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
   resume_requires_explicit_stop_override: false
+productization_overlay:
+  amendment: PX-AM-001
+  authority_phrase: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+  state: COMPLETE_PASS
+  confirmed_story_ids_added: 0
+  obligations_added_removed_or_reassigned: 0
+  supplemental_units:
+    - {unit: PZ-01, parent_mode: ST-01.02-GENERIC-TASK-INGESTION, state: COMPLETE_PASS, receipt: development-capsules/PX-AM-001/receipts/PZ-01_RECEIPT.yaml}
+    - {unit: PZ-02, parent_mode: ST-01.01-DURABLE-RUN-PERSISTENCE, state: COMPLETE_PASS, receipt: development-capsules/PX-AM-001/receipts/PZ-02_RECEIPT.yaml}
+    - {unit: PZ-03, parent_mode: ST-10.10-BUILDER-CORE-COMMAND-SURFACE, state: COMPLETE_PASS, receipt: development-capsules/PX-AM-001/receipts/PZ-03_RECEIPT.yaml}
+    - {unit: PZ-04, parent_mode: ST-07.02-GENERIC-TASK-COMPILATION, state: COMPLETE_PASS, receipt: development-capsules/PX-AM-001/receipts/PZ-04_RECEIPT.yaml}
+  dependency_order: [PZ-01, PZ-02, PZ-03, PZ-04]
+  final_regression: PASS_787_OF_787_TWICE_NO_MANDATORY_SKIPS
+  production_ready: false
+  certified: false
+real_skill_campaign_overlay:
+  authority_phrase: AUTHORIZE ACTIVATIVE INTELLIGENCE REAL-SKILL AND JIT-CAPSULE CAMPAIGN
+  state: COMPLETE_PASS
+  dependency_order: [ST-05.03, ST-05.04, ST-05.05]
+  receipts:
+    ST-05.03: {sha256: aced71e7c4bb00c5fefde2e30f89506c906b813fe9638714996f9817ae388e79, path: development-capsules/ST-05.03/completion/STORY_COMPLETION_RECEIPT.yaml}
+    ST-05.04: {sha256: 449d12416dda87782e16f6c48c237520ceb6a150d30081d7baebc2384c64c899, path: development-capsules/ST-05.04/completion/STORY_COMPLETION_RECEIPT.yaml}
+    ST-05.05: {sha256: 57807b3611f107f89787e80ba59f7b17a00dfe855cb60942f98138985e20b818, path: development-capsules/ST-05.05/completion/STORY_COMPLETION_RECEIPT.yaml}
+  package: activative_intelligence_pack_compiler@1.0.0
+  package_hash: 6e9fbf9925a3ccaedf2bc053f4a349e69e3bff80500443c2d22b52ca40c789c6
+  evaluation_status: development_validated
+  production_ready: false
+  certified: false
 track:
   track_id: BUILDER_CORE
   mission: >-
@@ -227,6 +255,10 @@ dependency_validation:
   ST_07_04_completion_receipt_valid: true
   ST_11_01_capsule_valid: true
   ST_11_01_completion_receipt_valid: true
+  ST_11_02_capsule_valid: true
+  ST_11_02_completion_receipt_valid: true
+  ST_11_03_capsule_valid: true
+  ST_11_03_completion_receipt_valid: true
   final_integration_gate_passed: true
   independent_QA_P1_002_resolved: true
   independent_QA_open_blocking_findings: []
@@ -237,7 +269,7 @@ dependency_validation:
     - BQA-P1-005
     - BQA-P1-006
   correction_specific_regression_twice: PASS_125_OF_125
-  full_repository_regression_twice: PASS_600_OF_600_NO_MANDATORY_SKIPS
+  full_repository_regression_twice: PASS_787_OF_787_NO_MANDATORY_SKIPS
   synthetic_end_to_end_fresh_context_byte_equality: true
   original_and_supplemental_receipts_independently_reproducible: true
   supplemental_source_lineage_bridge: PASS_NO_GAP
@@ -253,6 +285,7 @@ blocker_scope:
   BD_010:
     synthetic_core_subscope: CLOSED
     closure: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+    exact_activative_intelligence_pack_compiler_subscope: CLOSED_PASS
     other_subscopes: OPEN
   excluded_from_critical_path:
     - BD-004_Format02_corpus
@@ -267,10 +300,15 @@ blocker_scope:
     - evaluator_certification
     - production_certification
 progress:
-  completed_confirmed_stories: [ST-01.01, ST-01.02, ST-01.03, ST-01.04, ST-02.05, ST-03.03, ST-03.04, ST-03.05, ST-04.01, ST-04.02, ST-04.03, ST-04.04, ST-04.05, ST-05.01, ST-05.02, ST-07.02, ST-07.04, ST-11.01]
-  completed_supplemental_units: [ST-01.01-SYNTHETIC-PROOF]
-  ready_next_story: ST-03.01
-  ready_next_mode: FULL_BUILDER_CAMPAIGN_STANDING_AUTHORITY
+  completed_confirmed_stories: [ST-01.01, ST-01.02, ST-01.03, ST-01.04, ST-02.05, ST-03.01, ST-03.02, ST-03.03, ST-03.04, ST-03.05, ST-04.01, ST-04.02, ST-04.03, ST-04.04, ST-04.05, ST-05.01, ST-05.02, ST-05.03, ST-05.04, ST-05.05, ST-07.02, ST-07.04, ST-11.01, ST-11.02, ST-11.03]
+  completed_supplemental_units:
+    - ST-01.01-SYNTHETIC-PROOF
+    - ST-01.02-GENERIC-TASK-INGESTION
+    - ST-01.01-DURABLE-RUN-PERSISTENCE
+    - ST-10.10-BUILDER-CORE-COMMAND-SURFACE
+    - ST-07.02-GENERIC-TASK-COMPILATION
+  ready_next_story: null
+  ready_next_mode: NONE_REMAINING_CONFIRMED_FRONTIER_BLOCKED_BY_EVIDENCE_OR_EXTERNAL_DEPENDENCY
   remaining_through_synthetic_AtomicHarnessDefinition_compilation_count: 0
   remaining_through_synthetic_AtomicHarnessDefinition_compilation: []
   remaining_confirmed_stories_before_first_demonstration: 0
@@ -283,12 +321,15 @@ progress:
     correction closes all five reproduced P0 or P1 findings and restores the
     final engineering trust gate
 current_minimum_blocker_cut:
-  semantic_or_evidence_blockers: []
-  implementation_gate: OPEN_UNDER_STANDING_FULL_BUILDER_CAMPAIGN_AUTHORITY
-  campaign_authorization: ACTIVE
+  semantic_or_evidence_blockers:
+    - ST-06.01_BD-004_BD-007_BD-008_category_profile_evidence
+  implementation_gate: CLOSED_NO_ADDITIONAL_READY_CONFIRMED_STORY
+  campaign_authorization: STANDING_BUT_NO_CONFIRMED_READY_STORY
 next_gate:
-  unit: ST-03.01
-  mode: BOUNDED_STORY_CAPSULE_THEN_IMPLEMENTATION
-  human_authorization_required: false
-  state: SELECTED_FOR_AUTOMATIC_CAMPAIGN_EXECUTION
-next_story_after_current: ST-03.01
+  proposal: null
+  proposal_id: null
+  mode: EVIDENCE_CLOSURE_FOR_ST_06_01_CATEGORY_PROFILE_SCOPE
+  human_authorization_required: false_until_evidence_creates_a_ready_story
+  exact_phrase: null
+  state: BLOCKED_EVIDENCE
+next_story_after_current: null

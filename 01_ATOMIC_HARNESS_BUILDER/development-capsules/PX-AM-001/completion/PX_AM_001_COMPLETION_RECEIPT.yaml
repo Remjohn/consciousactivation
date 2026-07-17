@@ -1,0 +1,63 @@
+schema_version: cmf-builder-productization-campaign-completion-receipt/v1
+campaign: PX-AM-001
+authority_phrase: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+implemented_outcome: >-
+  A local operator can ingest governed generic or Activative task manifests,
+  persist immutable records and receipts in SQLite, build and inspect through a
+  deterministic CLI, and export portable non-production AtomicHarnessDefinition
+  packages.
+units:
+  PZ_01:
+    verdict: PASS
+    receipt: development-capsules/PX-AM-001/receipts/PZ-01_RECEIPT.yaml
+    receipt_sha256: b0bcc1a383b8ad78d6b9d5166e23deed30c4e24e800309f63d3c57f9ab796b47
+  PZ_02:
+    verdict: PASS
+    receipt: development-capsules/PX-AM-001/receipts/PZ-02_RECEIPT.yaml
+    receipt_sha256: e0e5d15f40f13e1fc1f6aa3e2e98f1ba4852b3d80189e3ee591d06fa080a4982
+  PZ_03:
+    verdict: PASS
+    receipt: development-capsules/PX-AM-001/receipts/PZ-03_RECEIPT.yaml
+    receipt_sha256: 7022221036a29b6289262fbcdde48c67de985d9cd0768f609e30636328e5c915
+  PZ_04:
+    verdict: PASS
+    receipt: development-capsules/PX-AM-001/receipts/PZ-04_RECEIPT.yaml
+    receipt_sha256: ff22b21d5f831e489e68463d25d7b160932e7941a519f24337d6dac7b42c0091
+validation:
+  capsule_manifest_sha256: 4c3acae57026fa78f7b6096273861874f669c49c25aafdc1932b7ee56363121e
+  capsule_bundle_digest: e2de30f3d83c8efb5f54c939dcabfb191bde3516bce12e71c9bd3a81b7b06aa1
+  immutable_capsule_inputs: PASS_6_OF_6
+  lane_tests:
+    MANIFEST_AGENT: PASS_34_OF_34
+    STORAGE_AGENT: PASS_10_OF_10
+    CLI_AGENT: PASS_9_OF_9
+  integrated_regression_gates: [PASS_775_OF_775, PASS_775_OF_775, PASS_778_OF_778]
+  final_full_regression_fresh_1: PASS_787_OF_787_NO_MANDATORY_SKIPS
+  final_full_regression_fresh_2: PASS_787_OF_787_NO_MANDATORY_SKIPS
+  post_status_productization_suite: PASS_65_OF_65
+  Python_source_compilation: PASS_251_OF_251_74_SOURCE_FILES
+  Activative_Intelligence_conformance: PASS_STRUCTURED_NON_FLATTENED_IDENTITY_DNA_REFERENCE_ONLY
+  fresh_context_byte_equality: PASS
+  portable_path_and_secret_scan: PASS
+  atomic_rollback: PASS
+  shared_core_requests: PASS_3_SUBMITTED_3_APPLIED
+  path_ownership: PASS_ZERO_CONFLICTS_ZERO_UNAUTHORIZED_WRITES
+evidence_hashes:
+  implementation_report: bf7c84024187fa2da32279ca5c1665458d3a20560b095fd3be17ea42de20dcc0
+  test_results: a4588db894a4bb0a9f14983d9ba8912903dc1eca80507ac76dedacb1a3074040
+  observability_evidence: 0f12c8215477dac55e77054a597de1434eaf8a93b2c1a55bcb559cc67902059f
+  rollback_evidence: ccb7fdc83d0f88e327a95afafbbc45dd6a1becf49f282661a7acdbd7693aaf0b
+  file_change_manifest: 76d006e1625a76cbc0d8827595e25a845cc33252bf9a6c977134236c3034eafe
+preservation:
+  confirmed_story_ids: 69
+  confirmed_obligations: 410
+  primary_obligation_ownership_changed: false
+  historical_receipts_rewritten: false
+  external_repository_changes: []
+  external_dependencies_added: []
+readiness:
+  locally_usable_development_product: true
+  production_ready: false
+  full_product_ready: false
+  certified: false
+completion_verdict: PASS

@@ -1,0 +1,60 @@
+{
+  "schema_version": "cmf-builder-synthetic-vertical-plan-input/v1",
+  "story_id": "ST-11.02",
+  "active_mode": "SYNTHETIC_BUILDER_PROOF_HANDOFF_ONLY",
+  "profile_id": "synthetic_text_normalization_v1",
+  "plan_version": "1.0.0",
+  "owned_obligations": ["FR-156", "FR-157"],
+  "direct_dependencies": ["ST-11.01"],
+  "first_working_increment_id": "VI-001",
+  "increments": [
+    {
+      "increment_id": "VI-001",
+      "outcome": "A user supplies one governed synthetic text value and receives the canonical normalized value plus a deterministic completion receipt.",
+      "depends_on": [],
+      "requirement_ids": ["FR-157"],
+      "acceptance_evidence": ["given_governed_text_when_normalized_then_exact_output", "completion_receipt_hash_matches_output"],
+      "test_ids": ["acceptance_ascii_whitespace", "negative_ungoverned_input", "deterministic_repeat"],
+      "observability_evidence": ["normalization_started", "normalization_completed", "normalization_rejected"],
+      "rollback_requirements": ["no_partial_output", "remove_only_new_immutable_version"],
+      "file_scope": ["src/synthetic_text_normalization/normalizer.py", "tests/synthetic_text_normalization/test_acceptance.py", "tests/synthetic_text_normalization/fixtures/"],
+      "prohibited_scope": ["external_runtime", "external_skill", "production_claim"],
+      "one_focused_context": true,
+      "user_observable": true
+    },
+    {
+      "increment_id": "VI-002",
+      "outcome": "A user submits malformed or out-of-contract text and receives one typed deterministic rejection with zero output artifacts.",
+      "depends_on": ["VI-001"],
+      "requirement_ids": ["FR-156"],
+      "acceptance_evidence": ["given_invalid_input_when_checked_then_typed_rejection", "no_output_or_receipt_is_committed"],
+      "test_ids": ["negative_contract_matrix", "atomic_failure_cleanup", "replay_rejection"],
+      "observability_evidence": ["input_rejected_with_reason", "atomic_cleanup_confirmed"],
+      "rollback_requirements": ["zero_partial_state", "prior_valid_output_unchanged"],
+      "file_scope": ["src/synthetic_text_normalization/normalizer.py", "tests/synthetic_text_normalization/test_acceptance.py", "tests/synthetic_text_normalization/fixtures/"],
+      "prohibited_scope": ["network_api", "database", "external_provider"],
+      "one_focused_context": true,
+      "user_observable": true
+    },
+    {
+      "increment_id": "VI-003",
+      "outcome": "A user runs the repository-owned fixture package in a fresh process and receives byte-identical normalized outputs and a portable trace receipt.",
+      "depends_on": ["VI-001", "VI-002"],
+      "requirement_ids": ["FR-156", "FR-157"],
+      "acceptance_evidence": ["fresh_process_outputs_are_byte_identical", "portable_receipt_has_no_absolute_path"],
+      "test_ids": ["fresh_context_reproduction", "portable_path_scan", "historical_receipt_replay"],
+      "observability_evidence": ["fixture_package_started", "fixture_package_verified"],
+      "rollback_requirements": ["fixture_package_is_additive", "historical_receipt_remains_reproducible"],
+      "file_scope": ["src/synthetic_text_normalization/normalizer.py", "tests/synthetic_text_normalization/test_acceptance.py", "tests/synthetic_text_normalization/fixtures/"],
+      "prohibited_scope": ["publication", "certification", "Format02"],
+      "one_focused_context": true,
+      "user_observable": true
+    }
+  ],
+  "implementation_authorized": false,
+  "production_eligible": false,
+  "certified": false,
+  "external_target_compatibility": "NOT_EVALUATED_EXTERNAL_TARGET_BRANCH",
+  "completion_receipt_contract": "cmf-builder-story-completion-receipt/v1",
+  "expected_outcome": "DEPENDENCY_ORDERED_VERTICAL_IMPLEMENTATION_PLAN_COMPILED"
+}

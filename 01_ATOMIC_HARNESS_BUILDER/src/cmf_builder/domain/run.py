@@ -151,6 +151,9 @@ class Run:
     genesis_question_ref: str | None = None
     genesis_question_hash: str | None = None
     genesis_question_invalidation_ref: str | None = None
+    genesis_decision_memory_ref: str | None = None
+    genesis_decision_memory_hash: str | None = None
+    genesis_decision_invalidation_ref: str | None = None
     atomic_boundary_ref: str | None = None
     atomicity_ratification_ref: str | None = None
     draft_harness_model_ref: str | None = None
@@ -775,6 +778,56 @@ class Run:
                 "invalidation_ref": invalidation_ref, "reason": reason,
                 "new_version_required": True,
             },
+        )
+        return self._apply(event), event
+
+    def attach_genesis_decision_memory(
+        self, *, memory_ref: str, memory_hash: str, answer_ref: str,
+        final_decision_ref: str, amendment_ref: str, graph_ref: str,
+        package_ref: str, cascade_status: str, event_id: str, command_id: str,
+        actor_id: str, timestamp: datetime, correlation_id: str, causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.genesis_question_ref != package_ref
+            or self.genesis_question_invalidation_ref is not None
+            or self.genesis_decision_memory_ref is not None
+            and self.genesis_decision_invalidation_ref is None
+            or self.boundary_invalidation_ref is not None
+        ):
+            raise TransitionRejected("Genesis decision requires one active question package and model lineage.")
+        if not all(value.strip() for value in (memory_ref, memory_hash, answer_ref, final_decision_ref, amendment_ref, graph_ref, package_ref, cascade_status, actor_id)):
+            raise RunContractError("Genesis decision attachment identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id, event_type="GenesisDecisionMemoryAttached", run_id=self.run_id,
+            stream_version=self.stream_version + 1, command_id=command_id, actor_id=actor_id,
+            timestamp=timestamp, correlation_id=correlation_id, causation_id=causation_id,
+            payload={"memory_ref": memory_ref, "memory_hash": memory_hash,
+                     "answer_ref": answer_ref, "final_decision_ref": final_decision_ref,
+                     "amendment_ref": amendment_ref, "graph_ref": graph_ref,
+                     "package_ref": package_ref, "cascade_status": cascade_status},
+        )
+        return self._apply(event), event
+
+    def invalidate_genesis_decision_memory(
+        self, *, memory_ref: str, memory_hash: str, invalidation_ref: str,
+        reason: str, event_id: str, command_id: str, actor_id: str,
+        timestamp: datetime, correlation_id: str, causation_id: str,
+    ) -> tuple["Run", RunEvent]:
+        if (
+            self.genesis_decision_memory_ref != memory_ref
+            or self.genesis_decision_memory_hash != memory_hash
+            or self.genesis_decision_invalidation_ref is not None
+        ):
+            raise TransitionRejected("Only the active Genesis decision memory may be reopened.")
+        if not all(value.strip() for value in (memory_ref, memory_hash, invalidation_ref, reason, actor_id)):
+            raise RunContractError("Genesis decision invalidation identity is invalid.")
+        event = RunEvent.create(
+            event_id=event_id, event_type="GenesisDecisionMemoryInvalidated", run_id=self.run_id,
+            stream_version=self.stream_version + 1, command_id=command_id, actor_id=actor_id,
+            timestamp=timestamp, correlation_id=correlation_id, causation_id=causation_id,
+            payload={"memory_ref": memory_ref, "memory_hash": memory_hash,
+                     "invalidation_ref": invalidation_ref, "reason": reason,
+                     "new_version_required": True},
         )
         return self._apply(event), event
 
@@ -2490,6 +2543,9 @@ class Run:
             "genesis_question_ref": self.genesis_question_ref,
             "genesis_question_hash": self.genesis_question_hash,
             "genesis_question_invalidation_ref": self.genesis_question_invalidation_ref,
+            "genesis_decision_memory_ref": self.genesis_decision_memory_ref,
+            "genesis_decision_memory_hash": self.genesis_decision_memory_hash,
+            "genesis_decision_invalidation_ref": self.genesis_decision_invalidation_ref,
                 }
             )
         return f"sha256:{sha256(_canonical_json(payload)).hexdigest()}"
@@ -2539,6 +2595,9 @@ class Run:
         genesis_question_ref = self.genesis_question_ref
         genesis_question_hash = self.genesis_question_hash
         genesis_question_invalidation_ref = self.genesis_question_invalidation_ref
+        genesis_decision_memory_ref = self.genesis_decision_memory_ref
+        genesis_decision_memory_hash = self.genesis_decision_memory_hash
+        genesis_decision_invalidation_ref = self.genesis_decision_invalidation_ref
         atomic_boundary_ref = self.atomic_boundary_ref
         atomicity_ratification_ref = self.atomicity_ratification_ref
         draft_harness_model_ref = self.draft_harness_model_ref
@@ -2632,6 +2691,12 @@ class Run:
             genesis_question_invalidation_ref = None
         elif event.event_type == "GenesisQuestionPackageInvalidated":
             genesis_question_invalidation_ref = str(event.value("invalidation_ref"))
+        elif event.event_type == "GenesisDecisionMemoryAttached":
+            genesis_decision_memory_ref = str(event.value("memory_ref"))
+            genesis_decision_memory_hash = str(event.value("memory_hash"))
+            genesis_decision_invalidation_ref = None
+        elif event.event_type == "GenesisDecisionMemoryInvalidated":
+            genesis_decision_invalidation_ref = str(event.value("invalidation_ref"))
         elif event.event_type == "AtomicityRatificationRecorded":
             receipt_id = str(event.value("human_receipt_id"))
             atomicity_ratification_ref = str(event.value("ratification_ref"))
@@ -2766,6 +2831,9 @@ class Run:
             genesis_question_ref=genesis_question_ref,
             genesis_question_hash=genesis_question_hash,
             genesis_question_invalidation_ref=genesis_question_invalidation_ref,
+            genesis_decision_memory_ref=genesis_decision_memory_ref,
+            genesis_decision_memory_hash=genesis_decision_memory_hash,
+            genesis_decision_invalidation_ref=genesis_decision_invalidation_ref,
             atomic_boundary_ref=atomic_boundary_ref,
             atomicity_ratification_ref=atomicity_ratification_ref,
             draft_harness_model_ref=draft_harness_model_ref,

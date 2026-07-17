@@ -1,0 +1,77 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-11.02
+title: Plan Dependency-Ordered Vertical Implementation Increments
+active_mode: SYNTHETIC_BUILDER_PROOF_HANDOFF_ONLY
+completion_verdict: PASS
+implemented_outcome: >-
+  Compiled one immutable dependency-ordered vertical implementation plan from the
+  exact accepted ST-11.01 synthetic Development Capsule, with three independently
+  verifiable outcomes and no downstream implementation authorization.
+requirements_satisfied:
+  FR-156: PASS_EXACT_DEPENDENCY_ORDERED_VERTICAL_INCREMENT_SET
+  FR-157: PASS_FIRST_WORKING_VERTICAL_SLICE_IDENTIFIED
+dependency_evidence:
+  ST-11.01:
+    verdict: PASS
+    receipt_sha256: 5863ef2fa3a5eca00d76234fea4c1067d132743a3ffc3b51e4acb9f0dd4480d3
+  applicable_blocker_cut: []
+  conditional_inactive_gates: [BD-008, HD-006, HD-007]
+campaign_authority:
+  phrase: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+  type: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
+  downstream_plan_implementation_authorized: false
+artifact_evidence:
+  plan_id: vertical-plan_021bed0e92294c0b969107524c0cdb93828eb87f4e0590a6c08fbe4ea8af5bef
+  plan_hash: sha256:021bed0e92294c0b969107524c0cdb93828eb87f4e0590a6c08fbe4ea8af5bef
+  receipt_id: vertical-plan-receipt_e59cadd51a4b89de92906796f9483e1ac3d85d7c33a09368cda43a1ebe7cc91f
+  receipt_hash: sha256:e59cadd51a4b89de92906796f9483e1ac3d85d7c33a09368cda43a1ebe7cc91f
+  increment_count: 3
+  obligation_count: 2
+  implementation_authorized: false
+  production_eligible: false
+  certified: false
+acceptance_criteria:
+  AC_01_exact_parent_and_owned_obligation_binding: PASS
+  AC_02_backward_only_dependency_order: PASS
+  AC_03_vertical_focused_observable_outcomes: PASS
+  AC_04_invalid_increment_rejection: PASS
+  AC_05_no_implementation_production_or_certification_authority: PASS
+  AC_06_parent_invalidation_and_historical_reproduction: PASS
+  AC_07_payload_safe_idempotency: PASS
+  AC_08_atomic_failure_zero_partial_state: PASS
+tests_executed:
+  story_specific_twice: PASS_19_OF_19_AND_19_OF_19
+  affected_predecessor_architecture_and_trust: PASS_181_OF_181
+  full_repository_regression: PASS_707_OF_707_NO_MANDATORY_SKIPS
+  python_source_compilation: PASS_217_OF_217_INCLUDING_55_SOURCE_FILES
+determinism_and_lifecycle:
+  fresh_context_byte_equality: PASS
+  canonical_ordering: PASS
+  repeat_command_original_receipt: PASS
+  conflicting_command_rejection: PASS
+  upstream_invalidation: PASS
+  historical_reproduction: PASS
+observability_evidence:
+  path: development-capsules/ST-11.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  verdict: PASS
+rollback_evidence:
+  path: development-capsules/ST-11.02/completion/ROLLBACK_EVIDENCE.md
+  verdict: PASS
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  external_product_behavior_absorbed: false
+  production_or_certification_claim_added: false
+unresolved_limitations:
+  - The compiled plan is handoff-only and does not authorize or implement its increments.
+  - Durable persistence, operator CLI and generic non-fixture compilation remain unowned early-productization gaps requiring a governed amendment.
+hashes:
+  capsule_manifest_sha256: eba9926171df8b66d624baf7979f38e7278a23561c66bdeaebc886e1ff48b9fc
+  capsule_bundle_digest: 170f8ca2ba8ba168b789da380daf3be7b6f74a2d64026aee1a00c57115edd369
+  implementation_authorization_sha256: 4e0491dc3e4b7fa1bca2ffb9cedae1c2956e3e2ebec9f5e5944be97dfd19901c
+  implementation_report_sha256: 73599d87b009e78c391f9dbb16f261aa4daa38c4c8d9b5e5adcea60356f7129f
+  test_results_sha256: 4db63ea255fd4e79e16a6a4b749cdce391c3cd7701a66086be48b8657f57d348
+  observability_evidence_sha256: 6b7ce5c1c8bc07f0a4c03573521a16597f1db0101abfc700c64763bcc772576b
+  rollback_evidence_sha256: 7dcfc41c9fb977ddcc039af724b956d5c87ced3438a7b0dbba6298d96ea17860
+  file_change_manifest_sha256: 6feb279e9088d647eaf432daeb55c5aa82b83463b9d160bf36be593574a49e63

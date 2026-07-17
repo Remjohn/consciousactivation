@@ -1,0 +1,27 @@
+schema_version: cmf-builder-productization-receipt/v1
+unit: PZ-02
+amendment_unit: ST-01.01-DURABLE-RUN-PERSISTENCE
+outcome: immutable governed records and command receipts survive fresh processes through atomic SQLite commits
+authority: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+requirements: [ADR-001, ADR-005, FR-002, FR-003, FR-006, FR-007, FR-050, NFR-REL-002]
+lane: STORAGE_AGENT
+lane_wall_clock_minutes: 10
+tests:
+  lane_focused: PASS_10_OF_10
+  focused_integration: PASS_65_OF_65
+  canonical_full_regression_gate: PASS_775_OF_775
+storage_evidence:
+  engine: SQLite_standard_library
+  schema_version: 1
+  migration_digest: sha256:80abf18497db19c55f32f3398d823811ec744b12a0e71bd00f4cfb086d2e70b5
+  fresh_process_resume: PASS
+  expected_version_concurrency: PASS
+  payload_safe_idempotency: PASS
+  atomic_record_and_receipt_commit: PASS
+  injected_failure_rollback: PASS
+source_hashes:
+  src/cmf_builder/adapters/sqlite_productization_repository.py: bb373b41ef201e001c89a7904f3ac95b641c6e4d4cb538d9b91c71b8b3b6d055
+  src/cmf_builder/adapters/sqlite_schema.py: e212d3ebcaf718a2c4f45080313f2f51e1860f8f12e74bedeb0b732b4e9e5016
+  src/cmf_builder/adapters/sqlite_transactions.py: 824a1ebd45e357520ff13f9613d0f266fde82ab531c38229b813e632a50e482c
+  src/cmf_builder/adapters/storage_integrity.py: 4ea49283696d32c4af6b0829e0ae7882e073c0e7a8297a8cfab016ce2df8c482
+completion_verdict: PASS

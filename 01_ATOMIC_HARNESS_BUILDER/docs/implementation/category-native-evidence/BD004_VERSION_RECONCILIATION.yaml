@@ -1,0 +1,44 @@
+schema_version: cmf-builder-bd004-version-reconciliation/v1
+reconciliation_id: BD004-ST0603-VERSION-RECONCILIATION-2026-07-16
+recorded_at_utc: 2026-07-16T22:28:32Z
+archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+classification: PASS_WITH_RECORDED_LIMITATIONS
+rules:
+  global_archive_currentness_claim: false
+  no_silent_v1_1_v1_2_combination: true
+  current_product_authority_inherited_from_archive: false
+  archive_members_are_historical_development_evidence_only: true
+selections:
+  - component: CMF_FORMAT_BUILDER_WORKSTREAM_BLUEPRINT
+    selected_version: V1.2_FORMAT06_07_UPDATE
+    selected_scope: Formats 06 and 07 only
+    selected_member_count: 10
+    superseded_or_excluded_version: V1.1
+    rationale: V1.1 is excluded so broad predecessor text cannot silently mix with the V1.2 update.
+  - component: CCP_VISUAL_SONIC_COMPOSITION_SYNTAX_DOCTRINE
+    selected_version: V1
+    selected_member_count: 11
+    scope: historical visual syntax and Format 02 structure
+  - component: CCP_CONSCIOUS_SEQUENCING_AND_EXPRESSION_ACQUISITION_ENGINE
+    selected_version: V1
+    selected_member_count: 13
+    scope: historical sequencing contracts, registries, schemas and examples
+  - component: Content_Formats
+    selected_version: ARCHIVE_MEMBER_VERSION_OR_UNVERSIONED
+    selected_member_count: 14
+    scope: textual and structured descriptors only; original media excluded
+conflict_dispositions:
+  - conflict: V1.1 and V1.2 workstream coexist
+    disposition: V1.2 Format 06/07 update selected; every V1.1 workstream member excluded
+  - conflict: duplicated or reused media
+    disposition: all original media excluded and no repeated item counts as independent evidence
+  - conflict: archive semantic uses of authority and permission
+    disposition: semantic/runtime language only; never legal or Builder product authority
+set_hashes:
+  proposed_admitted_member_set_sha256: 4321a232dee1dc87ac5a97d2b8e9ba115dec52558b7d5abc13cee1f851bfb70a
+  excluded_member_set_sha256: 3947182c54757842bd9be933f50b84ed5454184686cbc711141f5eff6d337141
+limitations:
+  - No archive-wide version-precedence declaration exists.
+  - Item-level creator, license, privacy and provenance metadata is incomplete.
+  - Activation requires the truthful declaration in BD004_OPERATOR_AUTHORITY_DECISION.yaml.
+verdict: PASS_WITH_RECORDED_LIMITATIONS

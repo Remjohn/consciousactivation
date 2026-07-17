@@ -1,0 +1,78 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-11.03
+title: Govern Implementation Deltas and Certification Feedback
+active_mode: SYNTHETIC_BUILDER_PROOF_PROPOSAL_ONLY
+completion_verdict: PASS
+implemented_outcome: >-
+  Governed exact hash-pinned implementation discovery, evaluation result and
+  certification feedback as one immutable unratified authority amendment proposal,
+  without mutating validated authority.
+requirements_satisfied:
+  FR-158: PASS_IMPLEMENTATION_DELTA_GOVERNED_AS_PROPOSAL
+  FR-159: PASS_IMPLEMENTATION_EVALUATION_AND_CERTIFICATION_FEEDBACK_INGESTED
+dependency_evidence:
+  ST-11.02:
+    verdict: PASS
+    receipt_sha256: 644400c17818d96efa16104a43295bca09e9d43593cd91920eb04675770088a8
+  applicable_blocker_cut: []
+  conditional_inactive_gates: [BD-008, HD-006, HD-007]
+campaign_authority:
+  phrase: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+  type: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
+  proposal_application_or_ratification_authorized: false
+artifact_evidence:
+  proposal_id: authority-amendment-proposal_d77ec070fbca3c72c441c1d9c126019a2144d82fdb6d1d1713804a1dbd5d0ff9
+  proposal_hash: sha256:d77ec070fbca3c72c441c1d9c126019a2144d82fdb6d1d1713804a1dbd5d0ff9
+  receipt_id: amendment-proposal-receipt_fe5657ae796e4b4ec1ec0d5190e880e1d94f3dee36df89bd2bdbc84aa9fba904
+  receipt_hash: sha256:fe5657ae796e4b4ec1ec0d5190e880e1d94f3dee36df89bd2bdbc84aa9fba904
+  feedback_item_count: 3
+  proposal_status: PROPOSED_NOT_RATIFIED
+  authority_mutated: false
+  implementation_authorized: false
+  production_eligible: false
+  certified: false
+acceptance_criteria:
+  AC_01_exact_parent_and_obligation_binding: PASS
+  AC_02_three_typed_traceable_feedback_kinds: PASS
+  AC_03_frozen_authority_unchanged: PASS
+  AC_04_untraceable_or_incompatible_feedback_rejected: PASS
+  AC_05_direct_mutation_approval_and_certification_rejected: PASS
+  AC_06_determinism_and_idempotency: PASS
+  AC_07_invalidation_and_historical_reproduction: PASS
+  AC_08_atomic_failure_zero_partial_state: PASS
+tests_executed:
+  story_specific_twice: PASS_15_OF_15_AND_15_OF_15
+  affected_handoff_architecture_and_trust: PASS_196_OF_196
+  full_repository_regression_twice: PASS_722_OF_722_AND_722_OF_722_NO_MANDATORY_SKIPS
+  python_source_compilation: PASS_223_OF_223_INCLUDING_57_SOURCE_FILES
+determinism_and_lifecycle:
+  fresh_context_byte_equality: PASS
+  payload_safe_idempotency: PASS
+  conflicting_command_rejection: PASS
+  upstream_invalidation: PASS
+  historical_reproduction: PASS
+  portable_path_and_secret_scan: PASS
+observability_evidence:
+  path: development-capsules/ST-11.03/completion/OBSERVABILITY_EVIDENCE.yaml
+  verdict: PASS
+rollback_evidence:
+  path: development-capsules/ST-11.03/completion/ROLLBACK_EVIDENCE.md
+  verdict: PASS
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  frozen_authority_modified: false
+  external_product_behavior_absorbed: false
+unresolved_limitations:
+  - The proposal requires human confirmation before it can amend confirmed Story ownership.
+  - Real profile, external product and production certification gates remain open.
+hashes:
+  capsule_manifest_sha256: 48340d2776925bfe29c60eacc0d8ef7639d08567bb4b15f4cb86bf4114c49f26
+  capsule_bundle_digest: 69391443dff3b2e35fff4b7b5cca4429f1667c6cc5236113c73d0e3a9e1f19ab
+  implementation_authorization_sha256: bff19576055254bcbc47821e97d2bda92e1ce9979c1d22f315449ab55b322bd2
+  implementation_report_sha256: caaa80625acae63c8cfbbdfe3603743137cde720b4fb0fb2769ab1e5dd061382
+  test_results_sha256: 62f7a416a7f748db7d462b8e8cc6165a424aa3f259afed2936867938ce877b1b
+  observability_evidence_sha256: 3a3037c1f516b0aaad2384a5fcb40d5539017798237e3f19d8aa4f3d4a91be99
+  rollback_evidence_sha256: 9f9a0819c4b5dcb5fd525d9b5b7faf5cd33582ee26c996d8417f18b730f24a3a
+  file_change_manifest_sha256: a1d78842d553ca8dbad0df5fca6436fc6e9d80fcb44cd48e5affda9c75c97662

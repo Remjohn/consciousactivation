@@ -1,11 +1,11 @@
 schema_version: cmf-builder-full-execution-queue/v1
-generated_on: "2026-07-16"
+generated_on: "2026-07-17"
 authority:
   phrase: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
   authority_type: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
   confirmed_stories: 69
   confirmed_obligations: 410
-campaign_state: ACTIVE_STANDING_AUTHORITY
+campaign_state: CATEGORY_NATIVE_EVIDENCE_QUALIFICATION_STOPPED_ST_06_03_BLOCKED_BD_007
 stop_condition_triggered: null
 cleared_stop_condition:
   prior_trigger: BQA-P0-001
@@ -15,21 +15,42 @@ canonical_state:
   historical_story_receipts: VALID_PASS
   structural_synthetic_execution: PASS
   final_engineering_trust: PASS
-  current_full_regression: PASS_646_OF_646_NO_MANDATORY_SKIPS
-  product_code_changed_by_this_campaign: true_bounded_correction_ST_01_03_and_ST_01_04
+  current_full_regression: PASS_959_OF_959_TWICE_NO_MANDATORY_SKIPS
+  product_code_changed_by_this_campaign: true_including_PX_AM_001_path_owned_productization
+  category_native_campaign_product_or_test_code_changed: true_provider_and_experiment_evidence_infrastructure_only
 classification_counts:
-  COMPLETE_PASS: 18
-  READY: 2
+  COMPLETE_PASS: 27
+  READY: 0
   BLOCKED_HUMAN_DECISION: 0
-  BLOCKED_EVIDENCE: 3
+  BLOCKED_EVIDENCE: 2
   BLOCKED_EXTERNAL_DEPENDENCY: 1
-  BLOCKED_PRIOR_STORY: 45
+  BLOCKED_PRIOR_STORY: 39
   DEFERRED_EXTERNAL_PRODUCT: 0
   NOT_BUILDER_OWNED: 0
 supplemental_units:
   - story_id: ST-01.01-SYNTHETIC-PROOF
     implementation_state: COMPLETE_PASS
     receipt_state: PASS_VALIDATED
+  - story_id: ST-01.02-GENERIC-TASK-INGESTION
+    amendment: PX-AM-001
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+    receipt: development-capsules/PX-AM-001/receipts/PZ-01_RECEIPT.yaml
+  - story_id: ST-01.01-DURABLE-RUN-PERSISTENCE
+    amendment: PX-AM-001
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+    receipt: development-capsules/PX-AM-001/receipts/PZ-02_RECEIPT.yaml
+  - story_id: ST-10.10-BUILDER-CORE-COMMAND-SURFACE
+    amendment: PX-AM-001
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+    receipt: development-capsules/PX-AM-001/receipts/PZ-03_RECEIPT.yaml
+  - story_id: ST-07.02-GENERIC-TASK-COMPILATION
+    amendment: PX-AM-001
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
+    receipt: development-capsules/PX-AM-001/receipts/PZ-04_RECEIPT.yaml
 global_blockers: []
 trust_correction_capsule:
   path: development-capsules/BQA-P0-P1-TRUST-CORRECTION
@@ -44,12 +65,17 @@ queue_rules:
   Builder_owned_external_ports_do_not_transfer_external_product_ownership: true
   Format_02_is_not_a_generic_core_prerequisite: true
 active_selection:
-  story_id: ST-03.01
-  reason: highest_priority_READY_Builder_owned_story
-  campaign_authority: STANDING_HUMAN_IMPLEMENTATION_AUTHORIZATION
-  capsule_state: PREPARATION_REQUIRED_BEFORE_CODE
-ready_after_active_selection:
-  - ST-11.02
+  story_id: null
+  reason: ST_06_03_blocked_by_zero_eligible_authorized_semantic_provider_configurations_and_missing_governed_empirical_trials
+  campaign_authority: AUTHORIZE_BD_004_CORPUS_ADMISSION_BD_007_GOVERNED_PROVIDER_EVIDENCE_AND_ST_06_03_ST_06_04_IMPLEMENTATION_CAMPAIGN
+  capsule_state: VALIDATED_CONDITIONAL_BLOCKED_EVIDENCE
+ready_after_active_selection: []
+next_human_gate:
+  proposal: docs/implementation/category-native-evidence/BD007_SPEND_AND_CREDENTIAL_AUTHORITY_REQUEST.yaml
+  gate_status: docs/implementation/category-native-evidence/BD007_AUTHORIZATION_GATE_STATUS.yaml
+  gate_status_sha256: e44b22d200ba73de241a8479d4ce84c0489ad12d6ad176d1edda97c5eb367ea4
+  status: EXACT_PROVIDER_CONFIGURATION_AND_BOUNDED_CALL_AUTHORITY_REQUIRED_ST_06_03
+  exact_phrase: null
 stories:
   - story_id: ST-01.01
     primary_outcome: "Stable, authority-bound, replay-safe target-profiled Builder run."
@@ -138,18 +164,18 @@ stories:
     current_blockers: []
     builder_ownership: BUILDER_OWNED
     implementation_priority: 1_GENERIC_OPERATOR_TASK_INGESTION
-    capsule_state: NOT_PREPARED
-    implementation_state: READY
-    receipt_state: NOT_ISSUED
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED_fd5cd0a98ed0c20b5afd67cbecbee0f676e9cfaa5d3269377259276f2aa0af71
   - story_id: ST-03.02
     primary_outcome: "Record human authority and resume Genesis safely across sessions."
     dependencies: [ST-03.01]
-    current_blockers: ["PRIOR:ST-03.01"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
     implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_PLANNING
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
-    receipt_state: NOT_ISSUED
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED_62bb0bcdd770fd4aa71532ebf41b92d43db120cc9957e384c0b2290cf08f443c
   - story_id: ST-03.03
     primary_outcome: "Maintain one provenance-rich canonical Harness IR."
     dependencies: [ST-02.05]
@@ -243,56 +269,56 @@ stories:
   - story_id: ST-05.03
     primary_outcome: "Package portable skills with behavioral anchors when governed evidence proves a skill is required."
     dependencies: [ST-05.02]
-    current_blockers: [BD-010_REAL_SKILL_SCOPE, HD-007]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
-    implementation_priority: 5_GENERIC_COMPILATION_SUPPORT
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_EVIDENCE
-    receipt_state: NOT_ISSUED
+    implementation_priority: COMPLETED_REAL_SKILL_CAMPAIGN
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
   - story_id: ST-05.04
     primary_outcome: "Assemble deterministic phase-local JIT capsules."
     dependencies: [ST-05.03]
-    current_blockers: ["PRIOR:ST-05.03"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
-    implementation_priority: 5_GENERIC_COMPILATION_SUPPORT
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
-    receipt_state: NOT_ISSUED
+    implementation_priority: COMPLETED_REAL_SKILL_CAMPAIGN
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
   - story_id: ST-05.05
     primary_outcome: "Pin and dispose of runtime capsules reproducibly."
     dependencies: [ST-05.04]
-    current_blockers: ["PRIOR:ST-05.04"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
-    implementation_priority: 5_GENERIC_COMPILATION_SUPPORT
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
-    receipt_state: NOT_ISSUED
+    implementation_priority: COMPLETED_REAL_SKILL_CAMPAIGN
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
   - story_id: ST-06.01
     primary_outcome: "Bind each Harness to exactly one of five canonical categories."
     dependencies: [ST-02.05, ST-03.05, ST-04.05]
-    current_blockers: [BD-004, BD-007, BD-008, BD-010_REAL_SKILL_SCOPE]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
     implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_EVIDENCE
-    receipt_state: NOT_ISSUED
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
   - story_id: ST-06.02
     primary_outcome: "Compile category-local format and performance profiles."
     dependencies: [ST-06.01]
-    current_blockers: ["PRIOR:ST-06.01"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
     implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
-    receipt_state: NOT_ISSUED
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED
   - story_id: ST-06.03
     primary_outcome: "Compile category-native syntax and Activative sequencing."
     dependencies: [ST-06.02]
-    current_blockers: ["PRIOR:ST-06.02"]
+    current_blockers: [BD-007]
     builder_ownership: BUILDER_OWNED
     implementation_priority: 5_CATEGORY_ADAPTERS_AFTER_GENERIC_CORE
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
+    capsule_state: VALIDATED_CONDITIONAL_BLOCKED_EVIDENCE
+    implementation_state: BLOCKED_EVIDENCE
     receipt_state: NOT_ISSUED
   - story_id: ST-06.04
     primary_outcome: "Own category runtime, evaluation, repair and migration rules at the Builder boundary."
@@ -623,23 +649,23 @@ stories:
     dependencies: [ST-11.01]
     current_blockers: []
     builder_ownership: BUILDER_OWNED
-    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_EXECUTION_PLANNING
-    capsule_state: NOT_PREPARED
-    implementation_state: READY
-    receipt_state: NOT_ISSUED
+    implementation_priority: COMPLETED_CAMPAIGN
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED_SHA256_644400c17818d96efa16104a43295bca09e9d43593cd91920eb04675770088a8
   - story_id: ST-11.03
     primary_outcome: "Govern implementation deltas and certification feedback."
     dependencies: [ST-11.02]
-    current_blockers: ["PRIOR:ST-11.02"]
+    current_blockers: []
     builder_ownership: BUILDER_OWNED
-    implementation_priority: 9_IMPLEMENTATION_HANDOFF_AND_EXECUTION_PLANNING
-    capsule_state: NOT_PREPARED
-    implementation_state: BLOCKED_PRIOR_STORY
-    receipt_state: NOT_ISSUED
+    implementation_priority: COMPLETED_CAMPAIGN
+    capsule_state: VALIDATED_COMPLETED
+    implementation_state: COMPLETE_PASS
+    receipt_state: PASS_VALIDATED_SHA256_6edb80b6fbb2cd28eb0fba2552bd37999131349fceaef2e1db60dd99774b25f5
   - story_id: ST-12.01
     primary_outcome: "Inventory and map proven V2.1 behavior."
     dependencies: [ST-06.05, ST-07.04, ST-08.07, ST-09.08, ST-10.14, ST-11.03]
-    current_blockers: ["PRIOR:ST-06.05", "PRIOR:ST-08.07", "PRIOR:ST-09.08", "PRIOR:ST-10.14", "PRIOR:ST-11.03"]
+    current_blockers: ["PRIOR:ST-06.05", "PRIOR:ST-08.07", "PRIOR:ST-09.08", "PRIOR:ST-10.14"]
     builder_ownership: BUILDER_OWNED
     implementation_priority: 12_BROWNFIELD_REFERENCE_VALIDATION
     capsule_state: NOT_PREPARED

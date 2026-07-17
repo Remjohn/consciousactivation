@@ -1,0 +1,32 @@
+schema_version: cmf-builder-dependency-receipt/v1
+story_id: ST-06.03
+direct_dependency:
+  story_id: ST-06.02
+  receipt_path: development-capsules/ST-06.02/completion/STORY_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 0224d3866dafbcbce2de7202e96c24f9fd3f4fd95bf217dadb22337f79cee151
+  capsule_manifest_path: development-capsules/ST-06.02/CAPSULE_MANIFEST.json
+  capsule_manifest_sha256: ccfc6fca002003bc25d9c16384846c8371efd139f236e6aae5427e71c71de6b0
+  verdict: PASS
+conditional_evidence_dependencies:
+  BD-004:
+    current_state: PENDING_ST0603_EVIDENCE_ADMISSION
+    required_paths:
+      - docs/implementation/category-native/BD004_ST0603_DISPOSITION.yaml
+      - docs/implementation/category-native/BD004_AUTHORITY_RECEIPT.yaml
+      - docs/implementation/category-native/BD004_ARCHIVE_INVENTORY.yaml
+    activation_rule: disposition is development PASS and authority receipt admits the exact immutable corpus for this purpose
+  BD-007:
+    current_state: PENDING_ST0603_EMPIRICAL_ADMISSION
+    required_paths:
+      - docs/implementation/category-native/BD007_ST0603_DISPOSITION.yaml
+      - docs/implementation/category-native/BD007_RESULTS.json
+      - docs/implementation/category-native/BD007_OUTPUT_HASHES.yaml
+    activation_rule: empirical evidence proves category-native preservation over a flattened generic projection using only BD-004-admitted evidence
+cross_evidence_invariants:
+  same_corpus_identity_required: true
+  certification_evidence_allowed: false
+  production_claim_allowed: false
+  provider_results_may_be_invented: false
+applicable_blocker_cut: [BD-004, BD-007]
+verdict: BLOCKED_EVIDENCE
+

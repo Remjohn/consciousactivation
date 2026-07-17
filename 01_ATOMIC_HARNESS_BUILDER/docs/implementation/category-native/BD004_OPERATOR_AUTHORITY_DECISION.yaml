@@ -1,0 +1,63 @@
+schema_version: cmf-builder-bd004-operator-authority-decision/v1
+decision_id: BD004-SRC004-DEVELOPMENT-USE-AUTHORITY
+recorded_on: "2026-07-16"
+status: BLOCKED_OPERATOR_AUTHORITY
+archive:
+  path: D:/Work/Conscious_Rivers/THE CMF STUDIO/VISUAL SYNTAX BUILDER (2).zip
+  sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  size_bytes: 355535097
+requested_purpose: development_only_non_certifying_reference_corpus
+exact_scope:
+  story: ST-06.03
+  branch: category_native_compilation_development_uncertified
+  permitted_if_truthfully_authorized:
+    - local read-only inspection of exact archive bytes
+    - generation of hashes, descriptors, case manifests and development evaluation inputs
+    - development-only comparison of category-native versus flattened generic projections
+  never_implied:
+    - production truth
+    - certification evidence
+    - external-provider authority
+    - Identity DNA adoption
+    - replacement of human decisions
+    - redistribution or publication of original media
+    - provider training or model training
+required_operator_identity_fields:
+  - full_legal_name
+  - authority_role
+  - represented_rights_holder_or_organization
+  - factual_basis_for_authority
+  - adoption_date_utc
+  - signature_or_governed_approval_receipt
+required_exact_declaration: |-
+  I, <FULL LEGAL NAME>, acting as <AUTHORITY ROLE> for <RIGHTS HOLDER OR ORGANIZATION>,
+  truthfully declare that I have authority to permit the Atomic Harness Builder to inspect
+  and use the exact archive SHA-256 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0, size 355535097 bytes,
+  solely as a development-only, non-certifying reference corpus for ST-06.03 category-native
+  compilation and its provider-neutral development validation. This permission covers local
+  analysis of archive members and generation of derived hashes, descriptors, fixtures and
+  evaluation records. It does not grant production use, certification, redistribution or
+  publication of original media, provider or model training, adoption of Identity DNA,
+  invention of human truth, or use beyond this stated purpose. I acknowledge that item-level
+  creator, license, privacy and provenance metadata are incomplete; those limitations must
+  remain attached to every derived record, and any member whose lawful use I cannot support
+  must be explicitly excluded. This decision does not close broader Format 02, benchmark,
+  production or certification scopes. Adoption is effective on <UTC DATE> and is evidenced
+  by <SIGNATURE OR GOVERNED APPROVAL RECEIPT>.
+required_member_selection_decision:
+  rule: operator must explicitly include or exclude member classes whose lawful use is supportable
+  default_when_undeclared: EXCLUDE
+  minimum_exclusions:
+    - generated pytest cache and Python bytecode
+    - any member lacking lawful-use support under the operator authority basis
+activation_gate:
+  current: BLOCKED_OPERATOR_AUTHORITY
+  becomes_eligible_only_when:
+    - every identity field is populated truthfully
+    - the exact declaration is signed or bound to a governed approval receipt
+    - the approval receipt hash and archive hash verify
+    - the CATEGORY_INTEGRATOR records the admitted member selection
+    - BD-007 uses only admitted member identities
+non_certification: true
+production_readiness: false
+

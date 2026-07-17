@@ -1,0 +1,31 @@
+schema_version: cmf-builder-productization-observability/v1
+campaign: PX-AM-001
+verdict: PASS
+evidence:
+  manifest_ingestion:
+    identity: manifest_id_manifest_version_and_canonical_sha256
+    receipt: DurableCommandReceipt
+    modes: [generic, activative]
+  durable_storage:
+    identity: record_kind_record_id_version_payload_hash
+    integrity: PRAGMA_integrity_foreign_keys_and_payload_hashes
+    replay: command_id_and_payload_hash
+  compilation:
+    identity: deterministic_AtomicHarnessDefinition_content_hash
+    lineage: manifest_hash_authority_ref_and_provenance_refs
+    claims: nonproduction_uncertified
+  export:
+    identity: deterministic_archive_hash_and_content_package_hash
+    receipt: portable_export_receipt
+    file_evidence: SHA256SUMS_and_package_manifest
+  CLI:
+    result: ProductizationCommandResult
+    output: deterministic_human_or_canonical_JSON
+    failure: typed_exit_code_and_redacted_internal_error
+proofs:
+  generic_definition_id: atomic-harness-definition_6d66e80fbaacb57bdb5e315223a00d945ff8e0365d72c2a71c1fc51f70a246d0
+  activative_definition_id: atomic-harness-definition_8dff729c8cbb50a3b556fa92eb35177752592a8e5284835d587f1dbfd90834e2
+  identical_inputs_byte_identical: true
+  changed_input_new_identity: true
+  no_absolute_paths_in_portable_members: true
+  no_positive_production_or_certification_claim: true

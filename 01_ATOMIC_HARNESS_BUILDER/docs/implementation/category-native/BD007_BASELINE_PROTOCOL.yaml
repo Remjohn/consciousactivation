@@ -1,0 +1,167 @@
+schema_version: cmf-builder-bd007-category-native-baseline-protocol/v1
+generated_on: "2026-07-16"
+protocol_id: BD007-ST0603-CATEGORY-NATIVE-VS-FLATTENED-v1
+blocker_id: BD-007
+scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_COMPILATION
+authority: AUTHORIZE_BD-004_BD-007_EVIDENCE_QUALIFICATION_AND_CATEGORY_NATIVE_COMPILATION_CAMPAIGN
+protocol_classification: PASS_WITH_RECORDED_LIMITATIONS
+execution_status: BLOCKED_EXTERNAL_PROVIDER
+execution_performed: false
+certification_scope: development_uncertified_only
+governing_order:
+  harness_development: Visual_Syntax_First
+  runtime_meaning: Activation_First
+  conflict_rule: higher_order_Activative_authority_wins
+prerequisites:
+  admitted_BD004_corpus_receipt:
+    required: true
+    current_status: BLOCKED_OPERATOR_AUTHORITY
+    expected_path: docs/implementation/category-native/BD004_AUTHORITY_RECEIPT.yaml
+  immutable_case_manifest:
+    required: true
+    current_status: BLOCKED_OPERATOR_AUTHORITY
+  eligible_provider_or_distinct_configuration:
+    required_for_internal_baseline: 1
+    required_for_broader_provider_comparison: 2
+    current_count: 0
+  governed_provider_adapter_and_runner:
+    required: true
+    current_status: BLOCKED_EXTERNAL_PROVIDER
+  independent_evaluator_and_output_custody:
+    required: true
+    current_status: BLOCKED_OPERATOR_AUTHORITY
+  credential_and_privacy_authority:
+    required_for_remote_calls: true
+    current_status: BLOCKED_OPERATOR_AUTHORITY
+comparison_arms:
+  category_native:
+    purpose: Compile the case through its exact category identity, constitution version, source profile, category syntax, sequence grammar, Shared Activative Core references, and wrong-reading locks.
+    required_controls:
+      - rich_source_objects_remain_immutable_references
+      - category_specific_fields_remain_typed_and_distinct
+      - observations_hypotheses_human_decisions_and_generated_content_remain_distinct
+      - no_provider_output_receives_canonical_write_authority
+  flattened_generic_control:
+    purpose: Negative control that projects the same governed source into a category-agnostic generic document or timeline while preserving source bytes and authority references.
+    restrictions:
+      - may_not_become_an_active_Harness_artifact
+      - may_not_invent_or_remove_source_meaning
+      - may_not_weaken_wrong_reading_locks
+      - exists_only_to_measure_semantic_loss_and_wrong_reading_risk
+fixed_input_rule:
+  same_governed_case_bytes: true
+  same_authority_and_lineage_refs: true
+  same_provider_configuration_within_each_paired_run: true
+  same_output_schema_except_explicit_category_native_extensions: true
+  case_identity_blinded_where_practical: true
+  generator_access_to_reference_labels: prohibited
+repeat_policy:
+  repeats_per_arm_per_configuration: 3
+  fresh_process_each_repeat: true
+  output_order: canonical_by_case_configuration_arm_repeat
+  outliers: retain_and_record_never_silently_drop
+  failures: retain_as_typed_results_never_score_as_missing
+deterministic_controls:
+  prompt_or_instruction_hash_required: true
+  model_or_runtime_version_required: true
+  provider_configuration_hash_required: true
+  seed_required_when_supported: true
+  temperature_or_equivalent_recorded: true
+  unsupported_determinism_controls_recorded_explicitly: true
+  canonical_JSON_serialization_required: true
+  raw_output_hash_required: true
+  normalized_output_hash_required: true
+evaluation_dimensions:
+  - id: visual_hierarchy
+    applicability: visual_profiles_only
+  - id: spatial_ordering
+    applicability: spatial_profiles_only
+  - id: temporal_ordering
+    applicability: sequence_bearing_profiles
+  - id: reading_order
+    applicability: visual_or_slide_profiles
+  - id: sequence_coherence
+    applicability: sequence_bearing_profiles
+  - id: identity_and_audience_context_preservation
+    applicability: activative_profiles
+  - id: edge_pressure_preservation
+    applicability: activative_profiles
+  - id: activative_call_integrity
+    applicability: activative_profiles
+  - id: desired_human_role
+    applicability: activative_profiles
+  - id: desired_reaction
+    applicability: activative_profiles
+  - id: micro_commitment
+    applicability: activative_profiles
+  - id: wrong_reading_resistance
+    applicability: all_applicable_profiles
+  - id: category_native_adaptation
+    applicability: all_category_profiles
+  - id: semantic_lineage
+    applicability: all_cases
+  - id: non_invention_of_human_truth
+    applicability: all_activative_and_conversational_cases
+rubric:
+  serialization: canonical_JSON_UTF8_sorted_keys_no_insignificant_whitespace
+  score_scale:
+    0: contradiction_invention_or_missing_required_evidence
+    1: major_semantic_loss_or_category_flattening
+    2: partial_preservation_with_material_gaps
+    3: complete_development_result_with_recorded_noncritical_limitations
+    4: complete_precise_traceable_development_result
+  not_applicable_rule: explicit_justification_required_and_excluded_from_aggregate
+  independent_dimension_scores_required: true
+  textual_justification_and_evidence_refs_required: true
+non_compensable_failures:
+  - invented_human_truth
+  - altered_identity_or_audience_authority
+  - weakened_or_missing_wrong_reading_lock
+  - flattened_or_missing_semantic_lineage
+  - false_Reaction_Receipt_or_Expression_Moment
+  - unsupported_cross_category_grammar
+  - production_or_certification_claim
+development_decision_rule:
+  classification: BLOCKED_EXTERNAL_PROVIDER
+  threshold_status: NOT_ESTABLISHED_WITHOUT_ADMITTED_PILOT_RESULTS
+  required_empirical_finding: Category-native output must preserve Activative meaning better than the flattened generic control on category-native adaptation and wrong-reading resistance for each applicable governed case, without regression on authority, lineage, human-truth non-invention, Identity, Audience Context, Edge Pressure, Activative Call, desired role, desired reaction, or micro-commitment.
+  numeric_thresholds: NOT_ESTABLISHED_WITHOUT_ADMITTED_PILOT_RESULTS
+  production_thresholds: NOT_AUTHORIZED
+  certification_thresholds: NOT_AUTHORIZED
+execution_contracts:
+  - command_contract: AdmitCorpus
+    inputs: [BD004_archive_inventory, BD004_authority_receipt, BD004_provenance_graph]
+    outputs: [admitted_member_manifest, admission_receipt]
+  - command_contract: MaterializeBlindedCases
+    inputs: [admitted_member_manifest, BD007_case_manifest, redaction_policy]
+    outputs: [immutable_case_set, case_set_hash]
+  - command_contract: RunPairedProjection
+    inputs: [immutable_case_set, provider_configuration_manifest, category_native_contract, flattened_control_contract, repeat_policy]
+    outputs: [raw_outputs, normalized_outputs, invocation_receipts]
+  - command_contract: EvaluatePairedProjection
+    inputs: [normalized_outputs, rubric, protected_labels, evaluator_policy]
+    outputs: [independent_dimension_scores, contradictions, outliers, evaluation_receipt]
+  - command_contract: DecideDevelopmentEvidence
+    inputs: [complete_evaluation_receipts, output_hash_manifest, limitations]
+    outputs: [development_only_disposition]
+operator_execution_package:
+  executable_shell_command_available_now: false
+  reason: No governed Builder provider adapter or comparison runner exists and no eligible provider configuration is available; inventing a command would misrepresent capability.
+  required_artifacts_before_execution:
+    - truthfully_signed_BD004_operator_authority_declaration_bound_to_archive_hash
+    - admitted_BD004_member_manifest_and_receipt
+    - one_eligible_provider_configuration_for_internal_baseline_or_two_for_provider_comparison
+    - provider_privacy_and_usage_authority
+    - typed_provider_adapter_and_hash
+    - immutable_prompt_or_instruction_manifest
+    - independent_evaluator_policy_and_label_custody
+    - executable_runner_receipt_implementing_the_five_command_contracts
+    - output_and_receipt_destination_outside_portable_artifacts_for_credentials
+unsupported_branches:
+  external_provider_selection: BLOCKED_EXTERNAL_PROVIDER
+  production_provider_policy: NOT_APPLICABLE_TO_THIS_BRANCH
+  production_certification: NOT_APPLICABLE_TO_THIS_BRANCH
+  VAE_realization: NOT_APPLICABLE_TO_THIS_BRANCH
+  conversational_product_runtime: NOT_APPLICABLE_TO_THIS_BRANCH
+production_ready: false
+certified: false

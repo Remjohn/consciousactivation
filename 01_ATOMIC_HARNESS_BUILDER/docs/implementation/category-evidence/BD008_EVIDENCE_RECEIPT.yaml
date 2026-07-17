@@ -1,0 +1,77 @@
+schema_version: cmf-builder-bd008-evidence-receipt/v1
+receipt_id: bd008-evidence-receipt-2026-07-16
+issued_on: "2026-07-16"
+lane: BD008_REAL_PROFILE_AGENT
+authority: AUTHORIZE_CATEGORY_EVIDENCE_CLOSURE_AND_ACTIVATIVE_CATEGORY_COMPILATION_CAMPAIGN
+receipt_verdict: PASS_TRUTHFUL_SCOPE_DISPOSITION
+dispositions:
+  ST-06.01_STRUCTURAL_UNCERTIFIED_CATEGORY_BINDING: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+  REAL_PROFILE_DEVELOPMENT_EVIDENCE: REMAINS_BLOCKED_OPERATOR_INPUT
+  PROTECTED_BENCHMARK_LABEL_GOVERNANCE: REMAINS_BLOCKED_OPERATOR_INPUT
+  PRODUCTION_THRESHOLD_CALIBRATION: REMAINS_BLOCKED_EXTERNAL_EVIDENCE
+  CONVERSATIONAL_PRODUCTION_CERTIFICATION: REMAINS_BLOCKED_OPERATOR_INPUT
+authority_validation:
+  constitution:
+    path: sources/CCP_ACTIVATIVE_INTELLIGENCE_VISUAL_NARRATIVE_CONSTITUTION_V1_1.md
+    expected_sha256: 21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b
+    observed_sha256: 21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b
+    result: PASS
+  blocker_scope_registry:
+    path: docs/planning/BLOCKER_SCOPE_REGISTRY.yaml
+    sha256: 515ce6abd224cb50f593aa6de48d6dc849ec0053a8dc10396a713b21007ceba2
+    bd008_scope: PRODUCTION_CERTIFICATION_ONLY
+    result: PASS
+  blocking_decision:
+    path: docs/tech-specs/BLOCKING_DECISIONS.yaml
+    sha256: e4651d62400cece7fae5479578a56bc2834c34fe22d7886ff908bfb137f35548
+    result: PASS
+skill_package_validation:
+  skill_id: activative_intelligence_pack_compiler
+  version: 1.0.0
+  manifest_path: skill-packages/activative_intelligence_pack_compiler/1.0.0/manifest.json
+  manifest_sha256: abb88f0ab6c3797be650de420f7e5b19a66ee3417fba87b557193f87105ea982
+  package_sha256: 6e9fbf9925a3ccaedf2bc053f4a349e69e3bff80500443c2d22b52ca40c789c6
+  package_receipt_path: skill-packages/activative_intelligence_pack_compiler/1.0.0/PACKAGE_RECEIPT.json
+  package_receipt_file_sha256: 81fad8e41f08fcdc01db8ca10f165e7e1718087589bb9eab8ab6c4f6f31f7247
+  development_maturity: development_uncertified
+  current_evaluation_status: development_validated
+  production_eligible: false
+  certified: false
+  result: PASS_EXISTING_DEVELOPMENT_PACKAGE_ONLY
+candidate_validation:
+  screened_candidates: 5
+  eligible_authority_valid_real_profiles: 0
+  real_profile_compiler_runs: 0
+  human_truth_invented: false
+  human_reaction_invented: false
+  reaction_receipts_created: 0
+  expression_moments_created: 0
+  identity_dna_amendments_approved: 0
+  result: REMAINS_BLOCKED_OPERATOR_INPUT
+focused_validation:
+  command: >-
+    $env:PYTHONPATH='src'; python -m pytest -q
+    tests/skills/activative_semantics tests/skills/activative_evaluation
+    tests/stories/st_05_03
+  result: PASS_44_OF_44
+  failures: 0
+  mandatory_skips: 0
+  duration_seconds: 2.09
+  warning: pytest_asyncio_default_fixture_loop_scope_deprecation_only
+artifact_hashes:
+  docs/implementation/category-evidence/BD008_SCOPE_AUDIT.md: 4cf6558d5356147aff5df0f07ad472260822307c46a5cb06652801a8bd5bd06a
+  docs/implementation/category-evidence/BD008_REAL_PROFILE_EVIDENCE.yaml: e8bbcf21ae769eb99d5dc8f1a901906826a23b3f3898bbd96bfab128c046e34e
+  docs/implementation/category-evidence/BD008_EVALUATION_RESULTS.json: 1fdd85b7490440027d76adb5de19d78f4287c12efc418b467e9dac881895867b
+  docs/implementation/category-evidence/BD008_DISPOSITION.yaml: 26f13097041274a4a5920fed9c638f00cdf2d0c5421e92d8c1e1db9f5b295eab
+  docs/implementation/category-evidence/BD008_REQUIRED_OPERATOR_INPUT.yaml: 975c2760aaa7306bc3bef01e5c1e78888e339d77a90f69a2f9338b58bb015a2a
+  docs/implementation/category-evidence/BD008_REAL_PROFILE_INPUT_MANIFEST_TEMPLATE.yaml: 658f104b46e11688ebcfe4c858f8bbb32b229f82ad759f6db066c2b440aae673
+st_06_01_effect:
+  bd008_removed_from_exact_structural_uncertified_cut: true
+  evidence_basis: authoritative_scope_not_empirical_substitution
+  condition: no_real_profile_benchmark_maturity_production_or_certification_claim
+broader_effect:
+  bd008_global_status: OPEN
+  hd007_status: OPEN_FOR_CONVERSATIONAL_PRODUCTION_CERTIFICATION
+  real_profile_evidence_status: REMAINS_BLOCKED_OPERATOR_INPUT
+  production_ready: false
+  certified: false

@@ -33,6 +33,14 @@ from cmf_builder.domain.genesis_questions import (
     GenesisQuestionPackage,
     GenesisQuestionReceipt,
 )
+from cmf_builder.domain.genesis_decisions import (
+    FinalDecision,
+    GenesisDecisionInvalidation,
+    GenesisDecisionMemory,
+    GenesisDecisionReceipt,
+    HarnessIRDecisionAmendment,
+    HumanAnswer,
+)
 from cmf_builder.domain.atomicity import (
     AtomicityDecision,
     AtomicityDecisionReceipt,
@@ -111,6 +119,14 @@ from cmf_builder.domain.development_capsule import (
     DevelopmentCapsuleReceipt,
     VersionedTraceableDevelopmentCapsule,
 )
+from cmf_builder.domain.implementation_plan import (
+    ImplementationPlanReceipt,
+    VerticalImplementationPlan,
+)
+from cmf_builder.domain.implementation_feedback import (
+    AmendmentProposalReceipt,
+    AuthorityAmendmentProposal,
+)
 
 __all__ = [
     "AtomicCommitFailed",
@@ -163,6 +179,13 @@ class InMemoryRunRepository:
         self._genesis_question_receipts: dict[str, GenesisQuestionReceipt] = {}
         self._genesis_question_invalidations: dict[str, GenesisQuestionInvalidation] = {}
         self._invalidated_genesis_questions: dict[str, str] = {}
+        self._human_answers: dict[str, HumanAnswer] = {}
+        self._final_decisions: dict[str, FinalDecision] = {}
+        self._genesis_ir_amendments: dict[str, HarnessIRDecisionAmendment] = {}
+        self._genesis_decision_memories: dict[str, GenesisDecisionMemory] = {}
+        self._genesis_decision_receipts: dict[str, GenesisDecisionReceipt] = {}
+        self._genesis_decision_invalidations: dict[str, GenesisDecisionInvalidation] = {}
+        self._invalidated_genesis_decision_memories: dict[str, str] = {}
         self._atomic_boundaries: dict[str, DeclaredAtomicBoundary] = {}
         self._atomicity_ratifications: dict[str, AtomicityRatification] = {}
         self._draft_harness_models: dict[str, DraftHarnessModel] = {}
@@ -294,6 +317,16 @@ class InMemoryRunRepository:
             str, DevelopmentCapsuleInvalidation
         ] = {}
         self._invalidated_development_capsules: dict[str, str] = {}
+        self._implementation_plans: dict[str, VerticalImplementationPlan] = {}
+        self._run_implementation_plans: dict[str, tuple[str, ...]] = {}
+        self._implementation_plan_receipts: dict[
+            str, ImplementationPlanReceipt
+        ] = {}
+        self._run_implementation_plan_receipts: dict[str, tuple[str, ...]] = {}
+        self._amendment_proposals: dict[str, AuthorityAmendmentProposal] = {}
+        self._run_amendment_proposals: dict[str, tuple[str, ...]] = {}
+        self._amendment_proposal_receipts: dict[str, AmendmentProposalReceipt] = {}
+        self._run_amendment_proposal_receipts: dict[str, tuple[str, ...]] = {}
         self._fail_next_atomic_commit = False
         self._fail_next_run_command_boundary: str | None = None
         self._pending_observation_outbox: dict[str, tuple[Observation, ...]] = {}
@@ -846,6 +879,103 @@ class InMemoryRunRepository:
         self._streams[run_id] = (*current, *events)
         self._genesis_question_invalidations[invalidation.invalidation_id] = invalidation
         self._invalidated_genesis_questions[package.package_id] = invalidation.invalidation_id
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_genesis_decision(
+        self, *, run_id: str, expected_version: int, events: tuple[RunEvent, ...],
+        command_id: str, command_record: CommandRecord, answer: HumanAnswer,
+        decision: FinalDecision, amendment: HarnessIRDecisionAmendment,
+        memory: GenesisDecisionMemory, receipt: GenesisDecisionReceipt,
+        observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        run = Run.replay(current)
+        package = self._genesis_question_packages.get(amendment.package_ref)
+        graph = self._decision_graphs.get(amendment.graph_ref)
+        model = self._draft_harness_models.get(amendment.model_ref)
+        if (
+            package is None or graph is None or model is None
+            or run.genesis_question_ref != package.package_id
+            or run.genesis_question_invalidation_ref is not None
+            or package.package_hash != answer.package_hash
+            or graph.graph_hash != amendment.graph_hash or model.model_hash != amendment.model_hash
+            or answer.run_id != run_id or decision.run_id != run_id
+            or memory.run_id != run_id or memory.graph_ref != graph.graph_id
+            or memory.package_ref != package.package_id
+            or answer.answer_id != decision.answer_ref or answer.answer_hash != decision.answer_hash
+            or decision.final_decision_id != amendment.final_decision_ref
+            or answer.answer_id != amendment.answer_ref
+            or receipt.run_id != run_id or receipt.command_id != command_id
+            or receipt.answer_id != answer.answer_id or receipt.answer_hash != answer.answer_hash
+            or receipt.final_decision_id != decision.final_decision_id
+            or receipt.final_decision_hash != decision.final_decision_hash
+            or receipt.amendment_id != amendment.amendment_id or receipt.amendment_hash != amendment.amendment_hash
+            or receipt.memory_id != memory.memory_id or receipt.memory_hash != memory.memory_hash
+            or receipt.authority_identity != decision.human_id or command_record.result != receipt
+            or len(events) != 1 or events[0].event_type != "GenesisDecisionMemoryAttached"
+            or events[0].actor_id != decision.human_id or events[0].command_id != command_id
+            or events[0].value("memory_ref") != memory.memory_id
+            or events[0].value("memory_hash") != memory.memory_hash
+            or events[0].value("answer_ref") != answer.answer_id
+            or events[0].value("final_decision_ref") != decision.final_decision_id
+            or events[0].value("amendment_ref") != amendment.amendment_id
+            or receipt.event_ids != (events[0].event_id,) or receipt.stream_version != events[0].stream_version
+        ):
+            raise ConcurrencyConflict("Genesis human answer, decision, amendment, memory, receipt and event must agree.")
+        self._assert_same_or_absent(self._human_answers, answer.answer_id, answer, "human answer")
+        self._assert_same_or_absent(self._final_decisions, decision.final_decision_id, decision, "final decision")
+        self._assert_same_or_absent(self._genesis_ir_amendments, amendment.amendment_id, amendment, "Genesis IR amendment")
+        self._assert_same_or_absent(self._genesis_decision_memories, memory.memory_id, memory, "Genesis decision memory")
+        self._assert_same_or_absent(self._genesis_decision_receipts, receipt.receipt_id, receipt, "Genesis decision receipt")
+        existing = self._command_records.get(command_id)
+        if existing is not None and existing != command_record:
+            raise IdempotencyPayloadMismatch("A command record cannot be overwritten.", command_id=command_id)
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed("Injected Genesis-decision transaction failure.", run_id=run_id)
+        self._streams[run_id] = (*current, *events)
+        self._human_answers[answer.answer_id] = answer
+        self._final_decisions[decision.final_decision_id] = decision
+        self._genesis_ir_amendments[amendment.amendment_id] = amendment
+        self._genesis_decision_memories[memory.memory_id] = memory
+        self._genesis_decision_receipts[receipt.receipt_id] = receipt
+        self._command_records[command_id] = command_record
+        self._pending_observation_outbox[command_id] = observations
+        self._delivered_observation_outbox[command_id] = ()
+
+    @_synchronized
+    def commit_genesis_decision_invalidation(
+        self, *, run_id: str, expected_version: int, events: tuple[RunEvent, ...],
+        command_id: str, command_record: CommandRecord,
+        invalidation: GenesisDecisionInvalidation, observations: tuple[Observation, ...],
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, events)
+        memory = self._genesis_decision_memories.get(invalidation.memory_id)
+        if (
+            memory is None or memory.run_id != run_id or memory.memory_hash != invalidation.memory_hash
+            or memory.memory_id in self._invalidated_genesis_decision_memories
+            or command_record.result != invalidation or invalidation.command_id != command_id
+            or len(events) != 1 or events[0].event_type != "GenesisDecisionMemoryInvalidated"
+            or events[0].actor_id != invalidation.authority_identity
+            or events[0].value("memory_ref") != memory.memory_id
+            or events[0].value("memory_hash") != memory.memory_hash
+            or events[0].value("invalidation_ref") != invalidation.invalidation_id
+            or invalidation.event_ids != (events[0].event_id,) or invalidation.stream_version != events[0].stream_version
+        ):
+            raise ConcurrencyConflict("Genesis decision invalidation must target the exact active memory.")
+        self._assert_same_or_absent(self._genesis_decision_invalidations, invalidation.invalidation_id, invalidation, "Genesis decision invalidation")
+        existing = self._command_records.get(command_id)
+        if existing is not None and existing != command_record:
+            raise IdempotencyPayloadMismatch("A command record cannot be overwritten.", command_id=command_id)
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed("Injected Genesis-decision invalidation failure.", run_id=run_id)
+        self._streams[run_id] = (*current, *events)
+        self._genesis_decision_invalidations[invalidation.invalidation_id] = invalidation
+        self._invalidated_genesis_decision_memories[memory.memory_id] = invalidation.invalidation_id
         self._command_records[command_id] = command_record
         self._pending_observation_outbox[command_id] = observations
         self._delivered_observation_outbox[command_id] = ()
@@ -2493,6 +2623,134 @@ class InMemoryRunRepository:
         self._run_development_capsule_receipts[run_id] = (receipt.receipt_id,)
         self._command_records[command_id] = command_record
 
+    @_synchronized
+    def commit_implementation_plan(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        command_id: str,
+        command_record: CommandRecord,
+        plan: VerticalImplementationPlan,
+        receipt: ImplementationPlanReceipt,
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, ())
+        run = Run.replay(current)
+        capsule = self._development_capsules.get(plan.capsule_id)
+        capsule_receipts = self.development_capsule_receipts(run_id)
+        if capsule is None or len(capsule_receipts) != 1:
+            raise ConcurrencyConflict(
+                "Implementation plan requires one accepted Development Capsule.",
+                run_id=run_id,
+                plan_id=plan.plan_id,
+            )
+        capsule_receipts[0].validate(capsule)
+        plan.validate(capsule)
+        receipt.validate(plan)
+        if (
+            plan.run_id != run_id
+            or run.development_capsule_ref != capsule.capsule_id
+            or run.development_capsule_hash != capsule.capsule_hash
+            or run.development_capsule_invalidation_ref is not None
+            or capsule.capsule_id in self._invalidated_development_capsules
+            or self._run_implementation_plans.get(run_id)
+        ):
+            raise ConcurrencyConflict(
+                "Implementation plan requires one active immutable capsule parent.",
+                run_id=run_id,
+                plan_id=plan.plan_id,
+            )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        self._assert_same_or_absent(
+            self._implementation_plans,
+            plan.plan_id,
+            plan,
+            "vertical implementation plan",
+        )
+        self._assert_same_or_absent(
+            self._implementation_plan_receipts,
+            receipt.receipt_id,
+            receipt,
+            "vertical implementation plan receipt",
+        )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected development/test failure rejected implementation plan compilation.",
+                run_id=run_id,
+                plan_id=plan.plan_id,
+            )
+        self._implementation_plans[plan.plan_id] = plan
+        self._run_implementation_plans[run_id] = (plan.plan_id,)
+        self._implementation_plan_receipts[receipt.receipt_id] = receipt
+        self._run_implementation_plan_receipts[run_id] = (receipt.receipt_id,)
+        self._command_records[command_id] = command_record
+
+    @_synchronized
+    def commit_amendment_proposal(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        command_id: str,
+        command_record: CommandRecord,
+        proposal: AuthorityAmendmentProposal,
+        receipt: AmendmentProposalReceipt,
+    ) -> None:
+        current = self._validated_append(run_id, expected_version, ())
+        plan = self._implementation_plans.get(proposal.plan_id)
+        if plan is None:
+            raise ConcurrencyConflict(
+                "Amendment proposal requires one accepted implementation plan.",
+                run_id=run_id,
+                proposal_id=proposal.proposal_id,
+            )
+        proposal.validate(plan)
+        receipt.validate(proposal)
+        if (
+            proposal.run_id != run_id
+            or self.is_implementation_plan_invalidated(plan.plan_id)
+            or self._run_amendment_proposals.get(run_id)
+        ):
+            raise ConcurrencyConflict(
+                "Amendment proposal requires one active immutable plan parent.",
+                run_id=run_id,
+                proposal_id=proposal.proposal_id,
+            )
+        existing_record = self._command_records.get(command_id)
+        if existing_record is not None and existing_record != command_record:
+            raise IdempotencyPayloadMismatch(
+                "A command record cannot be overwritten.", command_id=command_id
+            )
+        self._assert_same_or_absent(
+            self._amendment_proposals,
+            proposal.proposal_id,
+            proposal,
+            "authority amendment proposal",
+        )
+        self._assert_same_or_absent(
+            self._amendment_proposal_receipts,
+            receipt.receipt_id,
+            receipt,
+            "authority amendment proposal receipt",
+        )
+        if self._fail_next_atomic_commit:
+            self._fail_next_atomic_commit = False
+            raise AtomicCommitFailed(
+                "Injected development/test failure rejected amendment proposal commit.",
+                run_id=run_id,
+                proposal_id=proposal.proposal_id,
+            )
+        self._amendment_proposals[proposal.proposal_id] = proposal
+        self._run_amendment_proposals[run_id] = (proposal.proposal_id,)
+        self._amendment_proposal_receipts[receipt.receipt_id] = receipt
+        self._run_amendment_proposal_receipts[run_id] = (receipt.receipt_id,)
+        self._command_records[command_id] = command_record
+
     @staticmethod
     def _assert_same_or_absent(
         values: dict[str, object], key: str, value: object, artifact: str
@@ -3004,6 +3262,72 @@ class InMemoryRunRepository:
     def is_development_capsule_invalidated(self, capsule_id: str) -> bool:
         return capsule_id in self._invalidated_development_capsules
 
+    def get_implementation_plan(
+        self, plan_id: str
+    ) -> VerticalImplementationPlan | None:
+        return self._implementation_plans.get(plan_id)
+
+    def implementation_plans(
+        self, run_id: str
+    ) -> tuple[VerticalImplementationPlan, ...]:
+        return tuple(
+            self._implementation_plans[plan_id]
+            for plan_id in self._run_implementation_plans.get(run_id, ())
+        )
+
+    def get_implementation_plan_receipt(
+        self, receipt_id: str
+    ) -> ImplementationPlanReceipt | None:
+        return self._implementation_plan_receipts.get(receipt_id)
+
+    def implementation_plan_receipts(
+        self, run_id: str
+    ) -> tuple[ImplementationPlanReceipt, ...]:
+        return tuple(
+            self._implementation_plan_receipts[receipt_id]
+            for receipt_id in self._run_implementation_plan_receipts.get(run_id, ())
+        )
+
+    def is_implementation_plan_invalidated(self, plan_id: str) -> bool:
+        plan = self._implementation_plans.get(plan_id)
+        return (
+            plan is None
+            or plan.capsule_id in self._invalidated_development_capsules
+            or self.load_run(plan.run_id).development_capsule_invalidation_ref is not None
+        )
+
+    def get_amendment_proposal(
+        self, proposal_id: str
+    ) -> AuthorityAmendmentProposal | None:
+        return self._amendment_proposals.get(proposal_id)
+
+    def amendment_proposals(
+        self, run_id: str
+    ) -> tuple[AuthorityAmendmentProposal, ...]:
+        return tuple(
+            self._amendment_proposals[proposal_id]
+            for proposal_id in self._run_amendment_proposals.get(run_id, ())
+        )
+
+    def get_amendment_proposal_receipt(
+        self, receipt_id: str
+    ) -> AmendmentProposalReceipt | None:
+        return self._amendment_proposal_receipts.get(receipt_id)
+
+    def amendment_proposal_receipts(
+        self, run_id: str
+    ) -> tuple[AmendmentProposalReceipt, ...]:
+        return tuple(
+            self._amendment_proposal_receipts[receipt_id]
+            for receipt_id in self._run_amendment_proposal_receipts.get(run_id, ())
+        )
+
+    def is_amendment_proposal_invalidated(self, proposal_id: str) -> bool:
+        proposal = self._amendment_proposals.get(proposal_id)
+        return proposal is None or self.is_implementation_plan_invalidated(
+            proposal.plan_id
+        )
+
     @property
     def development_capsule_count(self) -> int:
         return len(self._development_capsules)
@@ -3015,6 +3339,22 @@ class InMemoryRunRepository:
     @property
     def development_capsule_invalidation_count(self) -> int:
         return len(self._development_capsule_invalidations)
+
+    @property
+    def implementation_plan_count(self) -> int:
+        return len(self._implementation_plans)
+
+    @property
+    def implementation_plan_receipt_count(self) -> int:
+        return len(self._implementation_plan_receipts)
+
+    @property
+    def amendment_proposal_count(self) -> int:
+        return len(self._amendment_proposals)
+
+    @property
+    def amendment_proposal_receipt_count(self) -> int:
+        return len(self._amendment_proposal_receipts)
 
     @property
     def capability_ownership_graph_count(self) -> int:
@@ -3316,6 +3656,33 @@ class InMemoryRunRepository:
         ):
             return None
         return self._genesis_question_packages.get(run.genesis_question_ref)
+
+    @_synchronized
+    def active_genesis_decision_memory(self, run_id: str) -> GenesisDecisionMemory | None:
+        run = self.load_run(run_id)
+        if (
+            not run.genesis_decision_memory_ref or run.genesis_decision_invalidation_ref is not None
+            or run.genesis_decision_memory_ref in self._invalidated_genesis_decision_memories
+        ):
+            return None
+        return self._genesis_decision_memories.get(run.genesis_decision_memory_ref)
+
+    @_synchronized
+    def get_genesis_decision_memory(self, memory_id: str) -> GenesisDecisionMemory | None:
+        return self._genesis_decision_memories.get(memory_id)
+
+    @_synchronized
+    def get_genesis_decision_receipt(self, receipt_id: str) -> GenesisDecisionReceipt | None:
+        return self._genesis_decision_receipts.get(receipt_id)
+
+    @_synchronized
+    def get_genesis_decision_invalidation(self, invalidation_id: str) -> GenesisDecisionInvalidation | None:
+        return self._genesis_decision_invalidations.get(invalidation_id)
+
+    @property
+    @_synchronized
+    def genesis_decision_memory_count(self) -> int:
+        return len(self._genesis_decision_memories)
 
     @property
     @_synchronized

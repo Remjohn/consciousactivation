@@ -1,0 +1,63 @@
+schema_version: cmf-builder-productization-path-locks/v1
+campaign: PX-AM-001
+canonical_repository: D:/Work/CONSCIOUS_ACTIVATIONS/01_ATOMIC_HARNESS_BUILDER
+lock_rule: one_active_writer_per_path
+claims:
+  MANIFEST_AGENT:
+    status: RELEASED_COMPLETE_PASS
+    paths:
+      - src/cmf_builder/domain/operator_manifest.py
+      - src/cmf_builder/application/manifest_parser.py
+      - tests/productization/manifest/
+      - tests/fixtures/productization/manifests/
+  STORAGE_AGENT:
+    status: RELEASED_COMPLETE_PASS
+    paths:
+      - src/cmf_builder/adapters/sqlite_productization_repository.py
+      - src/cmf_builder/adapters/sqlite_schema.py
+      - src/cmf_builder/adapters/sqlite_transactions.py
+      - src/cmf_builder/adapters/storage_integrity.py
+      - tests/productization/storage/
+      - tests/fixtures/productization/storage/
+  CLI_AGENT:
+    status: RELEASED_COMPLETE_PASS
+    paths:
+      - src/cmf_builder/cli/parser.py
+      - src/cmf_builder/cli/commands.py
+      - src/cmf_builder/cli/exit_codes.py
+      - src/cmf_builder/cli/output.py
+      - tests/productization/cli/
+      - tests/fixtures/productization/cli/
+  INTEGRATOR:
+    status: RELEASED_COMPLETE_PASS
+    paths:
+      - src/cmf_builder/application/productization_contracts.py
+      - src/cmf_builder/application/productization_service.py
+      - src/cmf_builder/application/export_service.py
+      - src/cmf_builder/domain/portable_export.py
+      - src/cmf_builder/cli/bootstrap.py
+      - src/cmf_builder/cli/__main__.py
+      - src/cmf_builder/domain/run.py
+      - src/cmf_builder/application/ports.py
+      - src/cmf_builder/application/authority.py
+      - src/cmf_builder/application/atomicity_commands.py
+      - src/cmf_builder/adapters/in_memory_run_repository.py
+      - src/cmf_builder/**/__init__.py
+      - tests/productization/integration/
+      - tests/stories/*/test_architecture_boundary.py
+      - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+      - docs/implementation/productization/
+      - docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
+      - docs/implementation/FULL_BUILDER_CAMPAIGN_PROGRESS.md
+      - docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
+      - docs/implementation/FULL_BUILDER_RECEIPT_INDEX.yaml
+      - docs/planning/BUILDER_CORE_IMPLEMENTATION_SEQUENCE.yaml
+      - CURRENT_PROJECT_STATUS.md
+      - PROGRAM_STATUS_EXPORT.yaml
+conflicts: []
+validation: PASS_NO_OVERLAPPING_NON_SHARED_WRITERS
+completion:
+  path_conflicts_detected: 0
+  unauthorized_path_writes: 0
+  shared_core_requests_submitted: 3
+  shared_core_requests_applied: 3

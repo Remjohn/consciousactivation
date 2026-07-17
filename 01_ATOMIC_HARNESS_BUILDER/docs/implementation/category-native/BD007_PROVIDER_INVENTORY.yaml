@@ -1,0 +1,138 @@
+schema_version: cmf-builder-bd007-provider-inventory/v1
+generated_on: "2026-07-16"
+blocker_id: BD-007
+scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_COMPARISON
+authority: AUTHORIZE_BD-004_BD-007_EVIDENCE_QUALIFICATION_AND_CATEGORY_NATIVE_COMPILATION_CAMPAIGN
+inventory_classification: PASS_WITH_RECORDED_LIMITATIONS
+probe_policy:
+  network_calls_performed: 0
+  provider_calls_performed: 0
+  credentials_read: false
+  credential_values_recorded: false
+  credential_presence_only: true
+  repository_provider_adapter_search_performed: true
+  local_command_and_model_runtime_probe_performed: true
+probe_scope_limitations:
+  - Only command surfaces, environment-variable presence, installed Python packages, local model directories, and Builder repository adapters visible to this process were inspected.
+  - Browser sessions, application-managed credentials, and external accounts were not treated as Builder provider configurations.
+  - Presence of a client binary or SDK does not establish an eligible provider without a governed adapter, immutable model policy, authorized credential source, admitted cases, and reproducible output capture.
+available_but_ineligible_provider_surfaces:
+  - candidate_id: OPENAI_PYTHON_CLI_LOCAL_INSTALL
+    provider: OpenAI
+    client_identity: openai-python CLI
+    client_version: 1.59.7
+    command: openai
+    command_binary_sha256: 302ca7147122a64e05b7dd5a349d9eac97a60cb0fa34c3f947ff47d60eff7b3d
+    model_or_runtime_identity: NOT_CONFIGURED
+    invocation_method: LOCAL_CLI_PRESENT_NOT_INVOKED
+    credential_source: OPENAI_API_KEY_environment_variable
+    credential_present: false
+    governed_builder_adapter_present: false
+    immutable_model_policy_present: false
+    admitted_case_access_present: false
+    deterministic_controls:
+      seed_support: NOT_EVALUATED_NO_CALL
+      temperature_or_equivalent: NOT_CONFIGURED
+      repeat_policy: NOT_CONFIGURED
+    output_restrictions: NO_OUTPUT_GENERATED
+    observed_failure_modes:
+      - credential_source_absent
+      - governed_Builder_adapter_absent
+      - immutable_model_configuration_absent
+      - BD004_corpus_not_admitted
+    eligibility: BLOCKED_EXTERNAL_PROVIDER
+  - candidate_id: LITELLM_ROUTER_LOCAL_INSTALL
+    provider: provider_neutral_router_only
+    client_identity: LiteLLM CLI and Python package
+    client_version: 1.58.0
+    command: litellm
+    command_binary_sha256: f1f1be683bd43769785cf444db8ed3304bde434f21e03d6e0188db031a6b93b1
+    model_or_runtime_identity: NO_BACKEND_CONFIGURED
+    invocation_method: LOCAL_ROUTER_CLI_PRESENT_NOT_INVOKED
+    credential_source: provider_specific_environment_variable_or_LITELLM_MASTER_KEY
+    credential_present: false
+    governed_builder_adapter_present: false
+    immutable_model_policy_present: false
+    admitted_case_access_present: false
+    deterministic_controls:
+      seed_support: BACKEND_DEPENDENT_NOT_EVALUATED
+      temperature_or_equivalent: NOT_CONFIGURED
+      repeat_policy: NOT_CONFIGURED
+    output_restrictions: NO_OUTPUT_GENERATED
+    observed_failure_modes:
+      - no_provider_backend_configured
+      - credential_source_absent
+      - governed_Builder_adapter_absent
+      - immutable_backend_policy_absent
+      - BD004_corpus_not_admitted
+    eligibility: BLOCKED_EXTERNAL_PROVIDER
+  - candidate_id: CODEX_DESKTOP_COMMAND_SURFACE
+    provider: OpenAI
+    client_identity: Codex desktop command surface
+    client_version: NOT_RESOLVED_AS_A_BUILDER_PROVIDER_VERSION
+    command: codex
+    command_binary_sha256: 2caacad1f7b8b3e9b2527b9bff9630cfbb30ec25d8d8c018c9d55a2bec348032
+    model_or_runtime_identity: APP_MANAGED_NOT_PINNED_FOR_BUILDER_EVIDENCE
+    invocation_method: EXCLUDED_NON_BUILDER_AGENT_SURFACE
+    credential_source: APP_MANAGED_NOT_AVAILABLE_TO_BUILDER
+    credential_present: NOT_INSPECTED
+    governed_builder_adapter_present: false
+    immutable_model_policy_present: false
+    admitted_case_access_present: false
+    deterministic_controls:
+      seed_support: NOT_AVAILABLE_TO_BUILDER
+      temperature_or_equivalent: NOT_AVAILABLE_TO_BUILDER
+      repeat_policy: NOT_AVAILABLE_TO_BUILDER
+    output_restrictions: MUST_NOT_BE_USED_AS_UNRECEIPTED_BENCHMARK_PROVIDER
+    observed_failure_modes:
+      - no_Builder_owned_adapter_contract
+      - model_and_configuration_not_immutably_pinned
+      - application_managed_authority_not_a_repository_provider_receipt
+    eligibility: BLOCKED_EXTERNAL_PROVIDER
+non_provider_execution_runtimes:
+  - runtime: Python
+    version: 3.12.0
+    command: python
+    command_binary_sha256: 42ac541168e97dedb9aabd8be335539fc41c682e414b9e8d137b164fb68683b0
+    role: deterministic_repository_execution_only
+    eligible_as_semantic_provider: false
+  - runtime: Node.js
+    version: 24.11.0
+    command: node
+    command_binary_sha256: b7d912484d42e7a0d0cb5b26a86410ec973a79ece7d61ad535e2d1a97a9026e1
+    role: deterministic_local_runtime_only
+    eligible_as_semantic_provider: false
+unavailable_local_provider_surfaces:
+  - surface: Ollama
+    command_present: false
+    governed_model_inventory_present: false
+  - surface: LM_Studio
+    command_present: false
+    governed_model_inventory_present: false
+  - surface: llama_cpp_or_vLLM
+    command_present: false
+    governed_model_inventory_present: false
+credential_presence:
+  OPENAI_API_KEY: false
+  ANTHROPIC_API_KEY: false
+  GOOGLE_API_KEY: false
+  GEMINI_API_KEY: false
+  AZURE_OPENAI_API_KEY: false
+  AZURE_API_KEY: false
+  COHERE_API_KEY: false
+  MISTRAL_API_KEY: false
+  LITELLM_MASTER_KEY: false
+repository_adapter_finding:
+  governed_visual_inference_port_implementation_present: false
+  governed_provider_adapter_count: 0
+  governed_comparison_runner_present: false
+  provider_neutral_skill_contract_present: true
+  provider_neutral_skill_contract_is_provider_execution: false
+eligibility_summary:
+  available_provider_client_surfaces: 3
+  eligible_provider_configurations: 0
+  materially_distinct_eligible_configurations: 0
+  provider_comparison_executable_now: false
+  exact_classification: BLOCKED_EXTERNAL_PROVIDER
+production_ready: false
+certified: false

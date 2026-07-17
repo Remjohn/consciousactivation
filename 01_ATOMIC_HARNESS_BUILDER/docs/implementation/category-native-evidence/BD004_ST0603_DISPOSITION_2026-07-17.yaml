@@ -1,0 +1,42 @@
+schema_version: cmf-builder-bd004-st0603-disposition/v1
+disposition_id: BD004-ST0603-BOUNDED-ADMISSION-PASS-2026-07-17
+recorded_at_utc: 2026-07-17T00:36:34.1720040Z
+blocker: BD-004
+story: ST-06.03
+scope: category_native_compilation_development_uncertified
+supersedes_state:
+  path: docs/implementation/category-native-evidence/BD004_ST0603_DISPOSITION.yaml
+  sha256: f3ff7abaf1f1a29cd7b652bb969927ae3f1466398a8600cf7fb658cb43404e1a
+  historical_disposition: BLOCKED_OPERATOR_AUTHORITY
+admission_receipt:
+  path: docs/implementation/category-native-evidence/BD004_ADMISSION_RECEIPT_2026-07-17.yaml
+  sha256: dd56f428be888ef941cf74d5e035b769772baba4cebb4f74bd2c5a4862ff9586
+findings:
+  archive_identity: PASS_DEVELOPMENT_EVIDENCE
+  archive_security: PASS_WITH_RECORDED_LIMITATIONS
+  exact_member_selection: PASS_WITH_RECORDED_LIMITATIONS
+  admitted_member_hashes: PASS_48_OF_48
+  version_reconciliation: PASS_WITH_RECORDED_LIMITATIONS
+  operator_usage_authority: PASS_OPERATOR_ASSERTED_BOUNDED_SCOPE
+  corpus_admission: PASS_BOUNDED_DEVELOPMENT_ONLY
+exact_story_effect:
+  disposition: CLOSED_PASS_BY_NEW_GOVERNED_EVIDENCE
+  may_use_admitted_members_for_BD007_empirical_execution: true
+  separate_BD007_call_authority_required: true
+  may_implement_ST_06_03: false
+  remaining_blocker_cut: [BD-007]
+limitations:
+  - operator authority is accepted as a governed human assertion and was not independently legally audited
+  - item-level creator license privacy and provenance metadata remain incomplete
+  - only the exact 48-member hash-bound set is admitted
+  - all 1386 other members remain excluded
+  - development evidence is non-production and non-certifying
+broader_scopes_remaining_open:
+  - Format_02_reference_profile_adoption
+  - production_benchmarking
+  - provider_selection
+  - protected_evaluation
+  - production_certification
+production_ready: false
+certified: false
+verdict: CLOSED_PASS_BY_NEW_GOVERNED_EVIDENCE

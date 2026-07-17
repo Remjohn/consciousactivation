@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+from cmf_builder.adapters.sqlite_productization_repository import (
+    SQLiteProductizationRepository,
+)
+
+__all__ = ["SQLiteProductizationRepository"]
+
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path

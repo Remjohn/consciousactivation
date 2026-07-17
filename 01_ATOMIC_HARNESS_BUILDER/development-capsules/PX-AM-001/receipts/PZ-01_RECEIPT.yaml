@@ -1,0 +1,23 @@
+schema_version: cmf-builder-productization-receipt/v1
+unit: PZ-01
+amendment_unit: ST-01.02-GENERIC-TASK-INGESTION
+outcome: operator supplied generic and Activative manifests compile to canonical hash-bound governed inputs
+authority: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+requirements: [FR-009, FR-010, FR-011, FR-012, FR-013, FR-014, FR-015, FR-016, FR-017, FR-018, FR-137]
+lane: MANIFEST_AGENT
+lane_wall_clock_minutes: 10
+tests:
+  lane_focused: PASS_34_OF_34
+  focused_integration: PASS_65_OF_65
+  canonical_full_regression_gate: PASS_775_OF_775
+canonical_results:
+  generic_manifest_hash: sha256:e50bb196afd417a05d67d941689bdd6bb386f428d10244511f84764df6ce52ac
+  activative_manifest_hash: sha256:0ed22d9ecfc43cc3b9d4947252a2e661066433f19bf800661012855196a79e0b
+  rich_activative_fields_structured: true
+  identity_dna_mutation_allowed: false
+  production_or_certification_claim_allowed: false
+source_hashes:
+  src/cmf_builder/application/productization_contracts.py: e2a922ea6aa058540fcf185fd0a57cf0c088a4a4ef2238cfe86ba37b98923a9e
+  src/cmf_builder/domain/operator_manifest.py: c2bb1e01a9ccebafa23699fa59d5c21d03942886dd8a66617653a472c8a9cce1
+  src/cmf_builder/application/manifest_parser.py: a5fd66973ac6971debe95b5c6a8722c2544581e20f83858b081f44bd09d94de5
+completion_verdict: PASS

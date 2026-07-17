@@ -1,0 +1,100 @@
+schema_version: cmf-builder-bd007-comparison-method/v1
+generated_on: "2026-07-16"
+blocker_id: BD-007
+method_status: GOVERNED_METHOD_RECORDED_NOT_EXECUTED
+applicability:
+  ST-06.01_structural_uncertified_category_binding: NOT_APPLICABLE
+  category_native_visual_parsing: REQUIRED_BEFORE_EMPIRICAL_CLAIM
+  Format02_reference_validation: REQUIRED
+  provider_selection: REQUIRED
+  production_certification: REQUIRED_WITH_SEPARATE_BD-008_AND_HUMAN_GOVERNANCE
+non_applicability_reason: >-
+  ST-06.01 binds category identity and versioned constitutional references. It does
+  not invoke ParseVisualSyntax, parse specimens, select a provider, or measure quality.
+authority_rules:
+  minimum_provider_adapters: 2
+  deterministic_baseline_required: true
+  protected_Format02_cases_required: true
+  independent_evaluation_required: true
+  provider_has_canonical_write_authority: false
+  deterministic_geometry_precedes_provider_parse: true
+  knowledge_status_separation_required: true
+  production_thresholds_must_be_human_ratified: true
+prerequisites:
+  - governed_BD-004_Format02_corpus_with_usage_authority
+  - immutable_protected_case_manifest_and_hashes
+  - deterministic_normalization_and_geometry_baseline_implementation
+  - at_least_two_provider_neutral_adapter_implementations
+  - provider_credentials_held_outside_portable_artifacts
+  - ratified_ontology_and_Format02_category_adaptation
+  - isolated_evaluator_and_label_custody
+  - repeat_count_and_threshold_protocol_authorized_under_BD-008
+current_executable_command:
+  status: NOT_AVAILABLE
+  reason: >-
+    The repository contains the TS-03 command contract but no implemented
+    VisualInferencePort, provider adapters, protected Format 02 corpus, or benchmark
+    runner. Publishing an executable result command would fabricate capability.
+required_command_sequence_after_governed_implementation:
+  - command_contract: NormalizeSpecimen
+    inputs: [protected_case_manifest_ref, source_lock_ref, normalization_version]
+    outputs: [normalized_specimen_ref, deterministic_geometry_ref, normalization_receipt]
+  - command_contract: ParseVisualSyntax
+    repeat_for: [deterministic_baseline, provider_adapter_A, provider_adapter_B]
+    inputs: [normalized_specimen_ref, ontology_ref, output_schema_ref, immutable_adapter_policy_ref]
+    outputs: [typed_provider_observation_ref, provider_identity, model_or_baseline_version, parse_receipt]
+  - command_contract: ParseTemporalSyntax
+    inputs: [normalized_specimen_ref, Format02_temporal_ontology_ref, immutable_adapter_policy_ref]
+    outputs: [typed_temporal_parse_ref, boundary_observations, parse_receipt]
+  - command_contract: InduceVisualGrammar
+    inputs: [complete_declared_specimen_set_ref, validated_parse_refs]
+    outputs: [draft_visual_grammar_ref, induction_receipt]
+  - command_contract: EvaluateProviderComparison
+    inputs: [protected_labels_ref, parse_refs, deterministic_baseline_ref, rubric_ref, repeat_policy_ref]
+    outputs: [isolated_scorecards, disagreement_report, confidence_calibration, cost_and_latency_report, comparison_receipt]
+provider_inputs_required:
+  provider_adapter_A:
+    identity: OPERATOR_MUST_SUPPLY
+    immutable_version: OPERATOR_MUST_SUPPLY
+    privacy_and_usage_approval: REQUIRED
+  provider_adapter_B:
+    identity: OPERATOR_MUST_SUPPLY
+    immutable_version: OPERATOR_MUST_SUPPLY
+    privacy_and_usage_approval: REQUIRED
+  deterministic_baseline:
+    identity: BUILDER_IMPLEMENTATION_MUST_EXIST_AND_BE_HASH_PINNED
+evaluation_dimensions:
+  - normalized_coordinate_fidelity
+  - component_and_region_recall
+  - spatial_relation_validity
+  - attention_hierarchy_and_reading_order
+  - character_state_and_continuity_for_Format02
+  - temporal_boundary_and_transition_accuracy
+  - BBOX_observation_and_WHY_hypothesis_separation
+  - unknown_and_uncertain_field_honesty
+  - category_native_non_flattening
+  - provenance_and_knowledge_status_completeness
+  - schema_validity_and_repair_rate
+  - latency
+  - cost
+  - privacy_and_redaction_conformance
+comparison_controls:
+  no_guidance_control: REQUIRED
+  fresh_process_repeats: REQUIRED_COUNT_NOT_YET_RATIFIED
+  exact_case_identity: REQUIRED
+  label_isolation: REQUIRED
+  generator_access_to_protected_labels: PROHIBITED
+  deterministic_serialization: REQUIRED
+  failed_or_missing_adapter_results: EXPLICIT_NOT_SILENTLY_DROPPED
+decision_rule:
+  current: NO_PROVIDER_SELECTION_AUTHORIZED
+  future: >-
+    Human benchmark governance may select or reject a provider only from complete,
+    hash-valid, independently evaluated comparison receipts. No dimension or threshold
+    is invented by this method.
+unsupported_branches:
+  non_visual_profile_without_visual_evidence: NOT_EVALUATED
+  conversational_visual_layout: PROFILE_CONDITIONAL_NOT_EVALUATED
+  VAE_realization_quality: EXTERNAL_PRODUCT_NOT_EVALUATED
+  production_certification: NOT_AUTHORIZED
+

@@ -1,0 +1,94 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-03.01
+primary_epic: EP-03
+active_mode: CATEGORY_NEUTRAL_GENESIS_QUESTION_SELECTION
+completed_on: "2026-07-16"
+implemented_outcome: >-
+  The Builder deterministically selects exactly one dependency-ready constitutional
+  question from active saturation and unratified Draft Harness Model evidence and
+  packages a complete advisory recommendation without answering or ratifying it.
+requirements_satisfied:
+  D009: PASS
+  D010: PASS
+  FR-041: PASS
+  FR-042: PASS
+  FR-043: PASS
+  FR-044: PASS
+  HG-001: PASS
+acceptance_criteria:
+  AC-01_one_dependency_ready_question: PASS
+  AC-02_complete_versioned_decision_nodes: PASS
+  AC-03_locked_nodes_visible_and_nonissuable: PASS
+  AC-04_complete_evidence_backed_advisory_recommendation: PASS
+  AC-05_HG_001_and_malformed_input_fail_closed: PASS
+  AC-06_no_answer_ratification_or_Harness_IR_mutation: PASS
+  AC-07_maximum_one_active_question: PASS
+  AC-08_deterministic_immutable_identity: PASS
+  AC-09_payload_safe_idempotency: PASS
+  AC-10_atomic_failure_zero_partial_state: PASS
+  AC-11_non_destructive_invalidation_and_history: PASS
+  AC-12_observability_architecture_and_regression: PASS
+dependencies:
+  ST_01_04_completion_receipt_sha256: 1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a
+  ST_02_05_completion_receipt_sha256: ca2f3557b07048b766bd49a8bf550891c63ce9955cccada02bd320a59dc8564e
+  BQA_correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+  validation: PASS
+capsule:
+  manifest_sha256: 287fa9e8309ebd7c146976d4bcf974739568025abd5d12ea4adf71bcb891eb08
+  bundle_digest: 2f6724e2ff85d72369d07f7dce74b806f28a1f036252831d5d94ee480ab290b0
+  immutable_inputs: PASS_18_OF_18
+  implementation_authorization_sha256: 562ad1a605de59f9c46ddb66b808336a2761be0b6598ebcd421845e0d189ea43
+  standing_campaign_authority: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+files_changed:
+  manifest_path: development-capsules/ST-03.01/completion/FILE_CHANGE_MANIFEST.yaml
+  manifest_sha256: 04a3ad044ccd8e0b89ed53df9a041a3590b014e22fd9bc4b98b1e76c56377b15
+  implementation_and_test_path_count: 17
+  file_scope_validation: PASS_EXACT_ALLOWLIST
+  prohibited_paths_modified: []
+tests:
+  preimplementation_regression: PASS_646_OF_646
+  story_clean_run_1: PASS_20_OF_20
+  story_clean_run_2: PASS_20_OF_20
+  affected_architecture_and_story: PASS_34_OF_34
+  affected_story_architecture_and_correction: PASS_160_OF_160
+  full_repository_regression_fresh_process_1: PASS_666_OF_666
+  full_repository_regression_fresh_process_2: PASS_666_OF_666
+  mandatory_skips: 0
+  python_compilation: PASS_202_OF_202_SOURCE_51_OF_51
+  results_path: development-capsules/ST-03.01/completion/TEST_RESULTS.json
+  results_sha256: 28dd35945c3680b0f04107addeb23f51af78dd354bcd907d0c3901ce980879f0
+contract_and_architecture_validation:
+  active_saturation_and_Draft_Model_lineage: PASS
+  dependency_ready_single_question_selection: PASS
+  locked_node_visibility_and_typed_prerequisites: PASS
+  fact_inference_evidence_alternative_tradeoff_consequence_risk_coverage: PASS
+  advisory_not_human_ratification_boundary: PASS
+  no_answer_final_value_or_Harness_IR_mutation: PASS
+  deterministic_graph_package_recommendation_and_receipt: PASS
+  atomic_commit_and_durable_observation_outbox: PASS
+  exact_source_sets: PASS
+  external_dependency_added: false
+  schema_or_registry_change: false
+observability_evidence:
+  path: development-capsules/ST-03.01/completion/OBSERVABILITY_EVIDENCE.yaml
+  sha256: 94d1113c2a21201a9342ae54e26bf3fb22e97cf911eb84b409ce9c0639dfeaf4
+  verdict: PASS
+rollback_and_invalidation_evidence:
+  path: development-capsules/ST-03.01/completion/ROLLBACK_EVIDENCE.md
+  sha256: 3497415b89f7ee342270b478eff02a8c2860562ba50ed282e276ecbd88ab7339
+  atomic_failure_zero_partial_state: PASS
+  historical_reproduction_after_invalidation: PASS
+implementation_report:
+  path: development-capsules/ST-03.01/completion/IMPLEMENTATION_REPORT.md
+  sha256: ff0dbcb16a315368bdc5c8b1f8753cf13fc7dee2a53f015cdfe29b615d902e4d
+unresolved_limitations:
+  - human_answer_and_ratification_remain_owned_by_ST_03_02
+  - real_profile_BD_004_remains_open
+  - production_certification_BD_008_remains_open
+  - current_repository_adapter_is_development_test_only
+  - BQA-P3-010_pytest_asyncio_configuration_warning_remains_non_blocking
+production_ready: false
+certified: false
+full_product_ready: false
+newly_discovered_blockers: []
+completion_verdict: PASS

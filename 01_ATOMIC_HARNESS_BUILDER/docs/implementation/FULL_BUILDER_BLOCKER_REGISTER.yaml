@@ -1,7 +1,7 @@
 schema_version: cmf-builder-full-campaign-blocker-register/v1
 updated_on: "2026-07-16"
 campaign: FULL_ATOMIC_HARNESS_BUILDER_IMPLEMENTATION_CAMPAIGN
-campaign_state: ACTIVE_STANDING_AUTHORITY
+campaign_state: CATEGORY_NATIVE_EVIDENCE_QUALIFICATION_STOPPED_ST_06_03_BLOCKED_EVIDENCE
 correction_receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
 blocking_findings:
   - blocker_id: BQA-P0-001
@@ -82,33 +82,53 @@ blocking_findings:
     correction_owner: ST-01.02
     closure_evidence: PASS_HASH_AND_MEMBERS_FROM_EXACT_IMMUTABLE_ZIP_BYTES
 frontier_blockers:
-  ST-03.01:
-    type: READY_SELECTED
-    blockers: []
   ST-02.01:
     type: BLOCKED_EVIDENCE_PROFILE_CONDITIONAL
     blockers: [BD-004, BD-007, HD-006]
-  ST-05.03:
-    type: BLOCKED_EVIDENCE
-    blockers: [BD-010_REAL_SKILL_SCOPE, HD-007]
   ST-06.01:
-    type: BLOCKED_EVIDENCE
-    blockers: [BD-004, BD-007, BD-008, BD-010_REAL_SKILL_SCOPE]
+    type: COMPLETE_PASS_STRUCTURAL_UNCERTIFIED
+    blockers: []
+    scoped_disposition_gate: docs/implementation/category-evidence/ST0601_BLOCKER_CLOSURE_GATE.yaml
+    receipt_sha256: 4db4088342b0202f75550e3dc915822d51155edecab7ad060ca550a46239ae51
+  ST-06.02:
+    type: COMPLETE_PASS_STRUCTURAL_UNCERTIFIED
+    blockers: []
+    scoped_disposition_gate: docs/implementation/category-evidence/ST0602_BLOCKER_CLOSURE_GATE.yaml
+    receipt_sha256: 0224d3866dafbcbce2de7202e96c24f9fd3f4fd95bf217dadb22337f79cee151
+  ST-06.03:
+    type: BLOCKED_EVIDENCE_CATEGORY_NATIVE_PARSING
+    blockers: [BD-007]
+    minimum_cut:
+      BD-007: BLOCKED_EVIDENCE_exact_semantic_provider_configuration_call_authority_and_24_complete_hash_bound_trials_required
+    scoped_gates:
+      BD-004: docs/implementation/category-native-evidence/BD004_ST0603_DISPOSITION_CANONICAL.yaml
+      BD-007: docs/implementation/category-native-evidence/BD007_ST0603_DISPOSITION.yaml
+    capsule_state: VALIDATED_CONDITIONAL_BLOCKED_EVIDENCE
+    capsule_manifest_sha256: 0a231d36e38dd505aaf960e98c6aecae27aab727b4646495321d74f4041eeed5
+    capsule_bundle_digest: e6b0e363328f7fb459ed81de2855c94d671f70ae907a3174e1bf38d2ba354bac
   ST-07.03:
     type: BLOCKED_EXTERNAL_DEPENDENCY
     blockers: [BD-014, XRI-016, XRI-019]
-  ST-11.02:
-    type: READY
-    blockers: []
 productization_ownership_gaps:
-  status: GOVERNED_AMENDMENT_REQUIRED_BEFORE_IMPLEMENTATION
+  status: CLOSED_PASS_BY_CONFIRMED_PX_AM_001
+  proposal: docs/implementation/BUILDER_PRODUCTIZATION_STORY_AMENDMENT_PROPOSAL.yaml
+  proposal_id: PX-AM-001
   gaps:
+    - generic_operator_task_ingestion_beyond_repository_owned_fixture
     - durable_governed_persistence_as_an_early_independent_product_outcome
     - early_operator_CLI_or_manifest_surface_before_Control_Tower_ST-10.09
     - generic_compilation_beyond_the_fixed_synthetic_fixture
   rule: >-
-    Prove each gap against the 410-obligation inventory and govern a bounded Story
-    amendment or supplemental mode before implementation. Do not rewrite completed receipts.
+    The four gaps were governed as supplemental modes under existing primary owners.
+    The confirmed 69 Stories, 410 obligations and historical receipts remain unchanged.
+  proof_disposition: PASS_NO_NEW_OBLIGATION_REQUIRED_EXISTING_PRIMARY_OWNERS_PRESERVED
+  required_human_phrase: null
+  completion_receipts:
+    - development-capsules/PX-AM-001/receipts/PZ-01_RECEIPT.yaml
+    - development-capsules/PX-AM-001/receipts/PZ-02_RECEIPT.yaml
+    - development-capsules/PX-AM-001/receipts/PZ-03_RECEIPT.yaml
+    - development-capsules/PX-AM-001/receipts/PZ-04_RECEIPT.yaml
+  completion_verdict: PASS
 authorization_disposition:
   standing_campaign_authority_received: true
   correction_is_within_existing_story_ownership: true
@@ -117,9 +137,94 @@ authorization_disposition:
   capsule_validation: PASS_18_OF_18
   capsule_manifest_sha256: 89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7
   capsule_bundle_digest: 84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f
-  activation_state: ACTIVE_AFTER_AUTHORIZED_CORRECTION_PASS
-  reason: all_reproduced_P0_and_P1_findings_closed_by_correction_receipt
-required_resume_authority: RECEIVED_AND_CONSUMED
+  activation_state: STANDING_VALID_NO_ADDITIONAL_READY_CONFIRMED_STORY
+  reason: ST_06_03_requires_BD_007_eligible_provider_configuration_call_authority_and_empirical_evidence
+required_resume_authority: null
 remaining_open_blockers:
   p0_or_p1: []
   deferred_nonblocking: [BQA-P2-007, BQA-P2-008, BQA-P2-009, BQA-P3-010]
+real_skill_campaign_disposition:
+  authority: AUTHORIZE ACTIVATIVE INTELLIGENCE REAL-SKILL AND JIT-CAPSULE CAMPAIGN
+  HD-007:
+    portable_packaging: NOT_BLOCKING_DEVELOPMENT_UNCERTIFIED
+    development_behavioral_validation: NOT_BLOCKING_MAX_DEVELOPMENT_VALIDATED
+    conversational_production_certification: OPEN
+    final_production_thresholds: OPEN
+  BD-010_REAL_SKILL_SCOPE:
+    activative_intelligence_pack_compiler_1_0_0: CLOSED_PASS
+    other_real_skill_and_production_registry_subscopes: OPEN
+  ST-06.01_remaining_minimum_blocker_cut: []
+  ST-06.02_remaining_minimum_blocker_cut: []
+  ST-06.03_remaining_minimum_blocker_cut: [BD-007]
+  production_ready: false
+  certified: false
+category_native_evidence_qualification:
+  authority: AUTHORIZE BD-004/BD-007 EVIDENCE QUALIFICATION AND CATEGORY-NATIVE COMPILATION CAMPAIGN
+  completion_receipt_sha256: 02cfd2723d3728950c278c7e8e264c46d242b8824e271f63487b0ca859698df7
+  BD-004:
+    disposition: BLOCKED_OPERATOR_AUTHORITY
+    archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+    inventory_members: 1434
+    inventory_sha256: e279ed8e549d205e2a00b4cfd3285bae284c24c1450eec8b49ecd2e60995d263
+    authority_receipt_sha256: 692d9c76cdac59135a3a8a838110a0260f4974ade90e0abe3d0853f1c93730c9
+    corpus_admitted: false
+  BD-007:
+    disposition: BLOCKED_EXTERNAL_PROVIDER
+    eligible_provider_configurations: 0
+    provider_calls: 0
+    cases_executed: 0
+    development_threshold_established: false
+    disposition_sha256: 4587dfb755bc4caab4a2ba15838b38d53ec053e1799c2978ec1d8abb096d6eb9
+  ST-06.03: BLOCKED_EVIDENCE
+  ST-06.04: BLOCKED_PRIOR_STORY
+  ST-06.05: NOT_IMPLEMENTED_READ_ONLY_DECISION_AUDIT_ONLY
+  production_ready: false
+  certified: false
+category_native_corpus_admission_and_provider_evidence:
+  authority: AUTHORIZE BD-004 CORPUS ADMISSION, BD-007 GOVERNED PROVIDER EVIDENCE, AND ST-06.03/ST-06.04 IMPLEMENTATION CAMPAIGN
+  campaign_receipt_sha256: f2f39be4e4e6e678107523aaf1ba830ae197b4da32775f754e0d32b4be39ac65
+  BD-004:
+    disposition: BLOCKED_OPERATOR_AUTHORITY
+    proposed_members: 48
+    excluded_members: 1386
+    proposal_sha256: 4321a232dee1dc87ac5a97d2b8e9ba115dec52558b7d5abc13cee1f851bfb70a
+    corpus_admitted: false
+  BD-007:
+    disposition: BLOCKED_EVIDENCE
+    runner_and_evaluation_tests: PASS_50_OF_50
+    eligible_semantic_provider_configurations: 0
+    authorized_calls: 0
+    live_calls: 0
+    empirical_outputs: 0
+    scorecards: 0
+  ST-06.03: BLOCKED_EVIDENCE
+  ST-06.04: BLOCKED_PRIOR_STORY
+  ST-06.05: EXCLUDED_NOT_IMPLEMENTED
+  production_ready: false
+  certified: false
+BD004_bounded_admission_supersession:
+  recorded_on: "2026-07-17"
+  scope: ST_06_03_category_native_compilation_development_uncertified
+  disposition: CLOSED_PASS_BY_NEW_GOVERNED_EVIDENCE
+  governed_operator_id: emilio-conscious-elite-internal-dev
+  represented_organization: Conscious Elite
+  archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  admitted_member_set_sha256: 4321a232dee1dc87ac5a97d2b8e9ba115dec52558b7d5abc13cee1f851bfb70a
+  admitted_members: 48
+  excluded_members: 1386
+  single_governed_approval_path: docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_APPROVAL.yaml
+  operator_approval_sha256: 870773f10eaa003239916babf317e4862cd2def8a9b00b57ed6243d1595d797e
+  canonical_approval_validation_sha256: 9543724579b359cae9c46f14b13f1b86d97c865231a9605b2072f915059de0af
+  corpus_manifest_sha256: 5e9f20ebfa59dfc570fe3f1cb3ad697fff26ad13a4a2a05a9717572853f4cb38
+  admission_receipt_sha256: 17f772ce86d8082767991455c2968253ca3dcbc185151b9aff48f73f075ba245
+  disposition_sha256: e2073aaee5c98f5a4f287347b9a45082858bb48928cf9de31f796d067ec43b07
+  decision_template_interpretation: HISTORICAL_REQUEST_TEMPLATE_NOT_DECLARATION
+  ST_06_03_remaining_minimum_blocker_cut: [BD-007]
+  provider_call_authority_granted: false
+  BD_007_authorization_gate:
+    path: docs/implementation/category-native-evidence/BD007_AUTHORIZATION_GATE_STATUS.yaml
+    sha256: e44b22d200ba73de241a8479d4ce84c0489ad12d6ad176d1edda97c5eb367ea4
+    verdict: AWAITING_BOUNDED_OPERATOR_AUTHORIZATION
+  broader_BD_004_scopes_closed: false
+  production_ready: false
+  certified: false

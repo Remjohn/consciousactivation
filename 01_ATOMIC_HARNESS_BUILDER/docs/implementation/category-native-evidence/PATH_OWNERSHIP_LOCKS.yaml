@@ -1,0 +1,85 @@
+schema_version: cmf-builder-path-ownership-locks/v1
+campaign: BD-004_CORPUS_ADMISSION_BD-007_PROVIDER_EVIDENCE_ST-06-03_ST-06-04
+recorded_at_utc: 2026-07-16T22:20:50.1492038Z
+canonical_repository: D:/Work/CONSCIOUS_ACTIVATIONS/01_ATOMIC_HARNESS_BUILDER
+rules:
+  one_active_writer_per_path: true
+  shared_existing_files_owned_only_by_category_integrator: true
+  live_provider_calls_require_separate_budget_and_credential_authority: true
+  corpus_admission_requires_truthful_operator_declaration: true
+claims:
+  - owner: CORPUS_ADMISSION_AGENT
+    state: COMPLETE
+    paths:
+      - docs/implementation/category-native-evidence/BD004_*.yaml
+      - docs/implementation/category-native-evidence/BD004_*.md
+    prohibitions:
+      - docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_DECISION.yaml
+      - existing production source
+      - status and queue files
+  - owner: PROVIDER_RUNNER_AGENT
+    state: COMPLETE
+    paths:
+      - src/cmf_builder/category_evidence/provider_*.py
+      - tests/category_native_evidence/provider_runner/**
+      - docs/implementation/category-native-evidence/BD007_PROVIDER_*.yaml
+      - docs/implementation/category-native-evidence/BD007_RUNNER_TEST_RESULTS.json
+      - docs/implementation/category-native-evidence/BD007_SPEND_AND_CREDENTIAL_AUTHORITY_REQUEST.yaml
+      - docs/implementation/category-native-evidence/change-requests/PROVIDER_*.yaml
+    prohibitions:
+      - live credentialed or billable calls
+      - existing shared source
+      - package exports
+      - status and queue files
+  - owner: EXPERIMENT_AND_EVALUATION_AGENT
+    state: COMPLETE
+    paths:
+      - src/cmf_builder/category_evidence/experiment_*.py
+      - tests/category_native_evidence/experiment/**
+      - docs/implementation/category-native-evidence/BD007_CASE_MANIFEST.yaml
+      - docs/implementation/category-native-evidence/BD007_NATIVE_AND_FLATTENED_INPUT_HASHES.yaml
+      - docs/implementation/category-native-evidence/BD007_EVALUATION_RUBRIC.yaml
+      - docs/implementation/category-native-evidence/BD007_NONCOMPENSABLE_FAILURES.yaml
+      - docs/implementation/category-native-evidence/BD007_TRIAL_PLAN.yaml
+      - docs/implementation/category-native-evidence/change-requests/EXPERIMENT_*.yaml
+    prohibitions:
+      - empirical execution before corpus admission and provider authority
+      - existing shared source
+      - package exports
+      - status and queue files
+  - owner: CATEGORY_INTEGRATOR
+    state: COMPLETE
+    paths:
+      - docs/implementation/category-native-evidence/PATH_OWNERSHIP_LOCKS.yaml
+      - docs/implementation/category-native-evidence/CAMPAIGN_BASELINE.yaml
+      - docs/implementation/category-native-evidence/BD007_EXECUTION_MANIFEST.yaml
+      - docs/implementation/category-native-evidence/BD007_OUTPUT_HASHES.yaml
+      - docs/implementation/category-native-evidence/BD007_DIMENSION_SCORECARDS.json
+      - docs/implementation/category-native-evidence/BD007_REPEATABILITY_REPORT.md
+      - docs/implementation/category-native-evidence/BD007_NATIVE_VS_FLATTENED_RESULT.yaml
+      - docs/implementation/category-native-evidence/BD007_LIMITATIONS.md
+      - docs/implementation/category-native-evidence/BD007_ST0603_DISPOSITION.yaml
+      - docs/implementation/category-native-evidence/CAMPAIGN_*.yaml
+      - docs/implementation/category-native-evidence/CAMPAIGN_*.md
+      - tests/category_native_evidence/__init__.py
+      - tests/category_native_evidence/experiment/__init__.py
+      - tests/category_native_evidence/provider_runner/__init__.py
+      - tests/stories/st_01_01/test_architecture_boundary.py
+      - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+      - tests/stories/st_01_02/test_architecture_boundary.py
+      - tests/stories/st_02_05/test_architecture_boundary.py
+      - tests/stories/st_03_03/test_architecture_boundary.py
+      - existing shared domain, application, adapter, package export, architecture-test, queue, and status files
+      - development-capsules/ST-06.03/**
+      - development-capsules/ST-06.04/**
+      - ST-06.03 and ST-06.04 implementation files assigned by validated capsules
+mechanical_integrator_changes:
+  - kind: EXACT_SOURCE_SET_REGISTRATION
+    source_paths_added: 4
+    architecture_tests_updated: 5
+    assertions_weakened: false
+  - kind: TEST_PACKAGE_REGISTRATION
+    package_markers_added: 3
+    reason: prevent duplicate test module basename collision during complete regression collection
+conflicts: []
+closed_at_utc: 2026-07-16T23:00:40.0696313Z

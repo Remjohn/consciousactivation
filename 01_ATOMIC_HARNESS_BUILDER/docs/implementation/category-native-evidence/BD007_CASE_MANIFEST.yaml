@@ -1,0 +1,111 @@
+schema_version: cmf-builder-bd007-case-manifest/v2
+manifest_id: BD007-ST0603-NATIVE-VS-FLATTENED-CASES-v1
+generated_on: "2026-07-17"
+scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_COMPILATION
+authority: AUTHORIZE_BD-004_CORPUS_ADMISSION_BD-007_GOVERNED_PROVIDER_EVIDENCE_AND_ST-06.03_ST-06.04_IMPLEMENTATION_CAMPAIGN
+classification: PREPARED_PENDING_FINAL_CORPUS_ADMISSION
+production_ready: false
+certified: false
+archive:
+  sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  admitted_corpus_manifest: docs/implementation/category-native-evidence/BD004_ADMITTED_CORPUS_MANIFEST.yaml
+  admitted_corpus_manifest_sha256: PENDING_FINAL_ADMISSION
+  admission_receipt: docs/implementation/category-native-evidence/BD004_ADMISSION_RECEIPT.yaml
+  admission_receipt_sha256: PENDING_TRUTHFUL_OPERATOR_DECLARATION
+  binding_rule: >-
+    An executable case must reference one exact member in the final admitted-member
+    set by archive-relative path and SHA-256. A template is not empirical evidence.
+summary:
+  case_template_count: 4
+  paired_arm_template_count: 8
+  minimum_repeats_per_arm_per_configuration: 3
+  planned_minimum_calls_per_configuration_after_admission_and_call_authority: 24
+  executable_case_count: 0
+  live_calls_performed: 0
+  scorecards_created: 0
+  pending_gate: FINAL_BD004_ADMITTED_MEMBER_BINDINGS_AND_GOVERNED_PROVIDER_CALL_AUTHORITY
+case_rules:
+  same_underlying_governed_meaning_between_arms: true
+  only_category_native_structure_changes_between_arms: true
+  flattened_control_may_not_invent_remove_or_corrupt_meaning: true
+  same_source_member: true
+  same_authority_and_lineage: true
+  same_output_contract: true
+  same_execution_budget: true
+  same_deterministic_controls: true
+  protected_labels_hidden_from_generator: true
+  wrong_reading_locks_preserved_in_both_arms_where_applicable: true
+  non_admitted_corpus_member_rejected: true
+templates:
+  - case_id: BD007-CASE-SHORT-FORM-EDITED-VIDEO
+    template_sha256: 0ec3988661261627e5b08fe37fe26adc9a8b130dcc799864ee93499308e1a762
+    category: short_form_edited_video
+    profile: PENDING_FINAL_ADMITTED_SHORT_FORM_PROFILE
+    evidence_role: short_form_category_syntax_and_sequencing_evidence
+    admitted_member_binding: null
+    native_structure:
+      - visual_hierarchy
+      - shot_and_cut_identity
+      - spatial_order
+      - temporal_order
+      - reading_order
+      - edited_video_activative_sequence
+    flattened_structure: [generic_section, generic_item, generic_sequence]
+    flattening_boundary: Remove edited-video-specific structure only; preserve every governed Activative semantic object and lock.
+    status: PENDING_FINAL_CORPUS_ADMISSION
+  - case_id: BD007-CASE-FORMAT02-2D-CHARACTER-ANIMATION
+    template_sha256: 8a452fbd9cd0a662092638dd625d95fb26397afed9a31a1bf9b03fde4878b576
+    category: 2d_character_animation
+    profile: format02_minimal_coach_theatre
+    evidence_role: format02_character_performance_syntax_and_sequencing_evidence
+    admitted_member_binding: null
+    native_structure:
+      - stage_and_scene_identity
+      - character_state
+      - pose_gaze_gesture
+      - spatial_blocking
+      - performance_timing
+      - character_performance_activative_sequence
+    flattened_structure: [generic_video_timeline, generic_shot, generic_transition]
+    flattening_boundary: Replace character-performance grammar with a generic video timeline only; do not alter meaning or pretend edited-video grammar is Format 02 grammar.
+    status: PENDING_FINAL_CORPUS_ADMISSION
+  - case_id: BD007-CASE-STRUCTURAL-CONVERSATIONAL
+    template_sha256: bd3aa959da12be20437e7a5197a49757030e020a7af96019db84b446bc08d8ff
+    category: conversational_activation_expression
+    profile: PENDING_FINAL_ADMITTED_STRUCTURAL_CONVERSATIONAL_PROFILE
+    evidence_role: structural_conversational_turn_syntax_evidence
+    admitted_member_binding: null
+    native_structure:
+      - turn_identity
+      - speaker_authority
+      - reaction_boundary
+      - follow_up_turn
+      - expression_elevation
+      - governed_close
+    flattened_structure: [generic_document, generic_paragraph, generic_timeline]
+    flattening_boundary: Remove turn structure only; do not invent human truth, Reaction Receipts, Expression Moments, Identity DNA, or conversational product behavior.
+    maturity: structurally_supported_uncertified
+    status: PENDING_FINAL_CORPUS_ADMISSION
+  - case_id: BD007-CASE-GENERIC-NON-ACTIVATIVE-CONTROL
+    template_sha256: eb89750ce0fcb5977c77d0241482fc0e8c8f877561ab2d3da8cdb2130eaea3cd
+    category: NOT_APPLICABLE
+    profile: generic_non_activative_control
+    evidence_role: generic_non_activative_negative_control_evidence
+    admitted_member_binding: null
+    native_structure:
+      - explicit_category_not_applicable
+      - atomic_input_contract
+      - deterministic_transformation
+      - atomic_output_contract
+    flattened_structure: [generic_document, generic_section, generic_value]
+    flattening_boundary: Remove the explicit atomic structure only; do not inject an Activative category or semantics.
+    status: PENDING_FINAL_CORPUS_ADMISSION
+binding_validation:
+  exact_archive_sha256_required: true
+  exact_final_admitted_manifest_sha256_required: true
+  exact_admission_receipt_sha256_required: true
+  exact_member_path_and_sha256_required: true
+  exact_usage_authority_receipt_sha256_required: true
+  provenance_status_required: true
+  executable_before_all_bindings: false
+  unadmitted_members_used: false

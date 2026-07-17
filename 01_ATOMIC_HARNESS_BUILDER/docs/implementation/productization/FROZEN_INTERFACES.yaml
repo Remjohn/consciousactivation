@@ -1,0 +1,46 @@
+schema_version: cmf-builder-productization-interface-freeze/v1
+amendment: PX-AM-001
+frozen_on: "2026-07-16"
+authority: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+source_contract: src/cmf_builder/application/productization_contracts.py
+interfaces:
+  operator_manifest:
+    request: OperatorManifestRequest
+    result: OperatorManifestResult
+    modes: [generic, activative]
+    canonicalization: UTF-8 JSON sorted keys compact separators terminal LF
+  activative_input:
+    type: ActivativeInputContract
+    rule: rich constitutional fields are required in activative mode and absent in generic mode
+    human_truth_rule: identity DNA is referenced only and never mutated by Builder ingestion
+  durable_repository:
+    protocol: DurableProductizationRepository
+    atomic_unit: DurableRecord plus DurableCommandReceipt
+    conflict_rule: expected version and command payload must match or fail closed
+  CLI_application_service:
+    protocol: ProductizationApplicationService
+    commands: [ingest, build, inspect, export]
+    output: ProductizationCommandResult
+  export_service:
+    protocol: PortableExportService
+    portability: no absolute paths machine identifiers timestamps or random values in package bytes
+  error_taxonomy:
+    enum: ProductizationErrorCode
+    codes:
+      - INVALID_MANIFEST
+      - INVALID_ACTIVATIVE_INPUT
+      - AUTHORITY_REJECTED
+      - HASH_MISMATCH
+      - NOT_FOUND
+      - CONFLICT
+      - STORAGE_INTEGRITY
+      - EXPORT_REJECTED
+      - INTERNAL_ERROR
+invariants:
+  - no external product behavior
+  - no production or certification claim
+  - deterministic canonical bytes and hashes
+  - immutable receipt-bearing commits
+  - Activative Intelligence fields remain structured and are never flattened into notes
+  - Constitution and Builder PRD remain higher authority than operator input
+validation: FROZEN_FOR_PZ_01_PZ_02_PZ_03_AND_PZ_04

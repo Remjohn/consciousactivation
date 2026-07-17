@@ -1,0 +1,54 @@
+schema_version: cmf-builder-activative-skill-interface-freeze/v1
+campaign: ACTIVATIVE_INTELLIGENCE_REAL_SKILL_AND_JIT_CAPSULE
+frozen_on: "2026-07-16"
+skill:
+  skill_id: activative_intelligence_pack_compiler
+  version: 1.0.0
+  authority_lane: Analyst
+  maturity_ceiling: development_validated
+  production_eligible: false
+interfaces:
+  semantic_input:
+    symbol: ActivativeCompilerInput
+    required:
+      - immutable source and authority references
+      - Identity DNA reference
+      - Audience Context Premise reference
+      - Live Premise evidence
+      - Resonance Map reference
+      - Matrix of Edging reference
+      - Edge Pressure
+      - Format Goal
+      - desired human or viewer role
+      - Activative Call constraints
+      - desired reaction
+      - micro-commitment
+      - wrong-reading locks
+      - explicit downstream applicability decisions
+  semantic_output:
+    symbol: ActivativeIntelligencePack
+    rule: every semantic field has exact lineage and no human-owned truth is invented
+  portable_package:
+    symbol: PortableSkillPackage
+    rule: canonical relative-path members, immutable manifest, package hash and receipt
+  development_evaluation:
+    symbol: SkillEvaluationReceipt
+    maximum_status: development_validated
+    forbidden_statuses: [shadow_ready, certified]
+  JIT_capsule:
+    symbol: PhaseLocalJITCapsule
+    rule: deterministic minimum-complete phase context with exact package and policy pins
+  lifecycle:
+    symbol: CapsuleLifecycleReceipt
+    operations: [pin, load, verify, activate, dispose, invalidate, reproduce]
+invariants:
+  - human truth and reaction remain external
+  - Identity DNA is immutable reference-only input
+  - wrong-reading locks are non-empty
+  - NOT_APPLICABLE requires a reason
+  - contradictory authority fails closed
+  - no external provider execution
+  - no absolute local paths
+  - no production or certification claim
+  - generic synthetic empty-skill behavior remains unchanged
+validation: FROZEN_FOR_ST_05_03_THROUGH_ST_05_05

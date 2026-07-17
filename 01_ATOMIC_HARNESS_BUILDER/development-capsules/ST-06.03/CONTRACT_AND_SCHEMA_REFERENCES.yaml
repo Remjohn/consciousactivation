@@ -1,0 +1,38 @@
+schema_version: cmf-builder-contract-reference-set/v1
+story_id: ST-06.03
+governed_references:
+  - {path: governance/CANONICAL_CATEGORY_REGISTRY.yaml, sha256: 9a836e5cc80371719cce688884ca3f071ee500862d54e6533982266d15b553b1}
+  - {path: governance/CONVERSATIONAL_PROFILE_REGISTRY.yaml, sha256: e849f4217e488c7bf4685c167c69264d2e51e0880a403be01d242b6d5ab4b651}
+  - {path: docs/contracts/schemas/shared-activative-core.schema.json, sha256: 6d06e81806155322ba465b8922c98cfc05c65263ea763ab193340c517931db64}
+  - {path: docs/contracts/schemas/conversational-expression.schema.json, sha256: 5a6582632a38ed275e13f7ea59dd3834d3d61f616478aa8d63a58f4a060aec99}
+  - {path: contracts/integration/CATEGORY_PROFILE_COMPATIBILITY.yaml, sha256: 781a438ef1298c1bc71da6ab54298774f09c0be97becf513510913f98fc97a71}
+  - {path: governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml, sha256: 328c2ec7a57de1bcc892631a2190a38d8f8e61972cbcb397c867a312f993b4ff}
+  - {path: docs/tech-specs/specs/TS-11-CATEGORY-CONSTITUTIONS-AND-TARGET-COMPILERS.md, sha256: f6a269e974ef44dc169790b82effa6b1c00b880e5915fd52df2172eee4d64de3}
+  - {path: docs/architecture/adr/ADR-013-TARGET-COMPILERS-AND-EXTERNAL-BOUNDARIES.md, sha256: 0c9a81262de884a830c484c7cab1e2cc6e543fa21a901fd86ac7b6d0d4d83d86}
+  - {path: docs/architecture/adr/ADR-014-FORMAT-02-RELEASE-1-REFERENCE.md, sha256: 7cd428006efe31f69852fd550b67b0625688e0c265d7ad5b272385bcf178dfc4}
+  - {path: docs/architecture/adr/ADR-018-FORMAT-02-ASSET-DEMAND-BOUNDARY.md, sha256: 1c4b9be8842c20971abd9731e382e1c3759f04a804e8d7772e122b378d1d0e7d}
+required_activation_evidence:
+  - path: docs/implementation/category-native/BD004_ST0603_DISPOSITION.yaml
+    accepted_dispositions: [PASS_DEVELOPMENT_EVIDENCE, PASS_WITH_RECORDED_LIMITATIONS]
+  - path: docs/implementation/category-native/BD004_AUTHORITY_RECEIPT.yaml
+    requirement: admitted development-only corpus authority and immutable archive identity
+  - path: docs/implementation/category-native/BD007_ST0603_DISPOSITION.yaml
+    accepted_dispositions: [PASS_DEVELOPMENT_EVIDENCE, PASS_WITH_RECORDED_LIMITATIONS]
+  - path: docs/implementation/category-native/BD007_RESULTS.json
+    requirement: empirical category-native versus flattened-generic comparison
+  - path: docs/implementation/category-native/BD007_OUTPUT_HASHES.yaml
+    requirement: immutable governed case and output identities
+  - path: docs/implementation/category-native/ST0603_BLOCKER_CLOSURE_GATE.yaml
+    requirement: same admitted corpus identity and empty applicable blocker cut
+data_contracts:
+  CategorySyntaxInput:
+    required_fields: [harness_ref, category_binding_ref, structural_profile_ref, category_constitution_version, shared_activative_core_ref, evidence_refs, rich_source_object_refs, authority_refs]
+  CategoryNativeSyntax:
+    required_fields: [syntax_id, version, category_id, profile_id, spatial_grammar, temporal_grammar, reading_order, conversational_turn_structure, applicability, wrong_reading_locks, semantic_lineage, maturity_status, hash]
+  ActivativeSequenceProgram:
+    required_fields: [sequence_id, version, shared_core_ref, category_syntax_ref, activation_direction, participant_role, states, transitions, pacing, sonic_or_silence_function, payoff, intended_reaction, micro_commitment, wrong_reading_locks, semantic_lineage, maturity_status, hash]
+external_schema_owned_locally: false
+delegation_runtime_required: false
+vae_runtime_required: false
+provider_runtime_required: false
+

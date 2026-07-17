@@ -1,0 +1,40 @@
+schema_version: cmf-builder-productization-change-request/v1
+request_id: STORAGE_AGENT_002
+calling_lane: STORAGE_AGENT
+status: APPLIED
+target_files:
+  - tests/stories/st_01_01/test_architecture_boundary.py
+  - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+  - tests/stories/st_01_02/test_architecture_boundary.py
+  - tests/stories/st_02_05/test_architecture_boundary.py
+  - tests/stories/st_03_03/test_architecture_boundary.py
+exact_symbol: exact Builder source-file set
+required_additive_change: >-
+  Add the four STORAGE_AGENT-owned SQLite source paths to each historical exact
+  source set. Do not modify any import prohibition, layer assertion or expected
+  historical behavior.
+source_paths:
+  - src/cmf_builder/adapters/sqlite_productization_repository.py
+  - src/cmf_builder/adapters/sqlite_schema.py
+  - src/cmf_builder/adapters/sqlite_transactions.py
+  - src/cmf_builder/adapters/storage_integrity.py
+preconditions:
+  - PX-AM-001 path-owned execution is authorized
+  - storage lane tests pass
+postconditions:
+  - exact-source architecture tests recognize only the authorized additive files
+invariants:
+  - no assertion is weakened or removed
+  - no architecture boundary is relaxed
+  - stdlib-only dependency boundary remains enforced
+focused_tests:
+  - tests/stories/st_01_01/test_architecture_boundary.py
+  - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+  - tests/stories/st_01_02/test_architecture_boundary.py
+  - tests/stories/st_02_05/test_architecture_boundary.py
+  - tests/stories/st_03_03/test_architecture_boundary.py
+integrator_disposition:
+  verdict: ACCEPTED_AND_APPLIED
+  assertions_weakened: false
+  architecture_boundaries_relaxed: false
+  full_regression_gate: 775/775 PASS

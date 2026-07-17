@@ -1,0 +1,26 @@
+schema_version: cmf-builder-productization-change-request/v1
+request_id: STORAGE_AGENT_001
+calling_lane: STORAGE_AGENT
+status: APPLIED
+target_file: src/cmf_builder/adapters/__init__.py
+exact_symbol: __all__ and SQLiteProductizationRepository import
+required_additive_change: >-
+  Export SQLiteProductizationRepository from the adapters package without changing
+  any existing adapter export or repository protocol.
+preconditions:
+  - PZ-02 focused storage tests pass
+  - src/cmf_builder/adapters/sqlite_productization_repository.py exists
+postconditions:
+  - integrator-owned composition can import the durable adapter canonically
+  - existing in-memory adapter remains available and unchanged
+invariants:
+  - no production database claim
+  - no external dependency
+  - no domain or application layer imports an adapter
+focused_tests:
+  - tests/productization/storage/
+  - affected exact-source architecture tests
+integrator_disposition:
+  verdict: ACCEPTED_AND_APPLIED
+  focused_storage_tests: 10/10 PASS
+  focused_integration_tests: 65/65 PASS

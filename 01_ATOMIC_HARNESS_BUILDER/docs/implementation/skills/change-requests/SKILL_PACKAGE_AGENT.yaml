@@ -1,0 +1,87 @@
+schema_version: cmf-builder-activative-skill-change-request/v1
+request_id: SKILL_PACKAGE_AGENT_001
+calling_lane: SKILL_PACKAGE_AGENT
+status: ACCEPTED_AND_APPLIED
+summary: Register and consume the immutable activative_intelligence_pack_compiler package without semantic rewriting.
+changes:
+  - target_file: src/cmf_builder/skills/__init__.py
+    exact_symbol: public portable-package exports
+    required_additive_change: >-
+      Export PortableSkillPackage, PackageMember, PackageReceipt,
+      PortablePackageError, PortablePackageErrorCode and validate_portable_member.
+    preconditions:
+      - src/cmf_builder/skills/portable_package.py focused tests pass
+      - no alternative package identity is introduced
+    postconditions:
+      - canonical skill composition can load the exact immutable package
+      - package exports resolve without importing provider implementations
+    invariants:
+      - package identity remains activative_intelligence_pack_compiler@1.0.0
+      - package maturity remains development_uncertified
+      - maturity ceiling remains development_validated
+      - production_eligible and certified remain false
+    focused_tests:
+      - tests/skills/portable_package/test_portable_package.py
+  - target_file: src/cmf_builder/application/activative_skill_commands.py
+    exact_symbol: ST-05.03 package loading and receipt binding
+    required_additive_change: >-
+      Load PortableSkillPackage from the governed repository-relative package
+      location, call verify, and bind the exact manifest, package and package-receipt
+      hashes into the ST-05.03 command receipt. Do not copy or reinterpret package
+      semantic instructions.
+    preconditions:
+      - semantic contract fields align with contracts/input.schema.json
+      - package identity and package receipt validate
+    postconditions:
+      - necessity and evaluation evidence bind the same package hash
+      - missing or altered package content fails closed
+    invariants:
+      - Identity DNA remains reference-only
+      - no human reaction or external product behavior is emitted
+      - no production or certification claim is promoted
+    focused_tests:
+      - tests/skills/portable_package/test_portable_package.py
+      - tests/stories/st_05_03/
+  - target_file: tests/stories/st_01_01/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: Add src/cmf_builder/skills/portable_package.py to the exact authorized source set.
+    preconditions: [portable package focused tests pass]
+    postconditions: [the exact-source guard recognizes the one new authorized module]
+    invariants: [no assertion test or architecture prohibition is weakened]
+    focused_tests: [tests/stories/st_01_01/test_architecture_boundary.py]
+  - target_file: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    exact_symbol: exact Builder source set
+    required_additive_change: Add src/cmf_builder/skills/portable_package.py to the exact authorized source set.
+    preconditions: [portable package focused tests pass]
+    postconditions: [the exact-source guard recognizes the one new authorized module]
+    invariants: [no assertion test or architecture prohibition is weakened]
+    focused_tests: [tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py]
+  - target_file: tests/stories/st_01_02/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: Add src/cmf_builder/skills/portable_package.py to the exact authorized source set.
+    preconditions: [portable package focused tests pass]
+    postconditions: [the exact-source guard recognizes the one new authorized module]
+    invariants: [no assertion test or architecture prohibition is weakened]
+    focused_tests: [tests/stories/st_01_02/test_architecture_boundary.py]
+  - target_file: tests/stories/st_02_05/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: Add src/cmf_builder/skills/portable_package.py to the exact authorized source set.
+    preconditions: [portable package focused tests pass]
+    postconditions: [the exact-source guard recognizes the one new authorized module]
+    invariants: [no assertion test or architecture prohibition is weakened]
+    focused_tests: [tests/stories/st_02_05/test_architecture_boundary.py]
+  - target_file: tests/stories/st_03_03/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: Add src/cmf_builder/skills/portable_package.py to the exact authorized source set.
+    preconditions: [portable package focused tests pass]
+    postconditions: [the exact-source guard recognizes the one new authorized module]
+    invariants: [no assertion test or architecture prohibition is weakened]
+    focused_tests: [tests/stories/st_03_03/test_architecture_boundary.py]
+package_identity:
+  skill_ref: activative_intelligence_pack_compiler@1.0.0
+  manifest_hash: sha256:abb88f0ab6c3797be650de420f7e5b19a66ee3417fba87b557193f87105ea982
+  package_hash: sha256:6e9fbf9925a3ccaedf2bc053f4a349e69e3bff80500443c2d22b52ca40c789c6
+  package_receipt_hash: sha256:5593591c9e8c90fccdc139cd8129a7d072b63e48361bf576404a9df740c1b0a5
+validation:
+  focused_tests: 23/23 PASS
+  portable_members: 12/12 HASH_VALID

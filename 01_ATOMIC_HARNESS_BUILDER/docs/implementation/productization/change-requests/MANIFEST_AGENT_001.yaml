@@ -1,0 +1,109 @@
+schema_version: cmf-builder-productization-change-request/v1
+request_id: MANIFEST_AGENT_001
+calling_lane: MANIFEST_AGENT
+status: APPLIED
+summary: Wire the completed PZ-01 parser through Integrator-owned composition and exact-source guards.
+changes:
+  - target_file: src/cmf_builder/application/productization_service.py
+    exact_symbol: ProductizationApplicationService implementation ingest path
+    required_additive_change: >-
+      Call OperatorManifestParser.parse with OperatorManifestRequest and retain the
+      returned canonical bytes, manifest hash, normalized task, and optional
+      ActivativeInputContract without semantic rewriting.
+    preconditions:
+      - input bytes and source name have entered through the frozen service contract
+      - no lower-authority input has been promoted to product authority
+    postconditions:
+      - generic manifests carry no ActivativeInputContract
+      - activative manifests carry the exact validated rich contract
+      - identity DNA remains an immutable reference
+    invariants:
+      - no production or certification claim
+      - no VAE Delegation or external runtime behavior
+      - manifest canonical bytes and hash are preserved byte-for-byte
+    focused_tests:
+      - tests/productization/manifest/test_manifest_parser.py
+      - tests/productization/integration/
+  - target_file: src/cmf_builder/domain/__init__.py
+    exact_symbol: public productization domain exports
+    required_additive_change: >-
+      Export ManifestMode, OperatorManifestDocument, OperatorTaskDefinition and
+      OperatorManifestInvalid only if package-level imports are required by the
+      canonical composition surface.
+    preconditions:
+      - no lane-owned source is renamed
+    postconditions:
+      - package imports resolve without a local schema fork
+    invariants:
+      - domain does not import application modules
+    focused_tests:
+      - tests/productization/integration/
+  - target_file: src/cmf_builder/application/__init__.py
+    exact_symbol: public productization application exports
+    required_additive_change: >-
+      Export OperatorManifestParser and parse_operator_manifest only if required
+      by the canonical application-service composition surface.
+    preconditions:
+      - frozen OperatorManifestRequest and OperatorManifestResult remain unchanged
+    postconditions:
+      - canonical imports resolve to the lane implementation
+    invariants:
+      - no duplicate parser or manifest contract is introduced
+    focused_tests:
+      - tests/productization/integration/
+  - target_file: tests/stories/st_01_01/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: >-
+      Add src/cmf_builder/domain/operator_manifest.py and
+      src/cmf_builder/application/manifest_parser.py to the exact authorized source set.
+    preconditions: [both source files exist and manifest tests pass]
+    postconditions: [exact source-set guard recognizes only the two new authorized files]
+    invariants: [no existing assertion path or prohibition is weakened]
+    focused_tests:
+      - tests/stories/st_01_01/test_architecture_boundary.py
+  - target_file: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    exact_symbol: exact Builder source set
+    required_additive_change: >-
+      Add src/cmf_builder/domain/operator_manifest.py and
+      src/cmf_builder/application/manifest_parser.py to the exact authorized source set.
+    preconditions: [both source files exist and manifest tests pass]
+    postconditions: [exact source-set guard recognizes only the two new authorized files]
+    invariants: [no existing assertion path or prohibition is weakened]
+    focused_tests:
+      - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+  - target_file: tests/stories/st_01_02/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: >-
+      Add src/cmf_builder/domain/operator_manifest.py and
+      src/cmf_builder/application/manifest_parser.py to the exact authorized source set.
+    preconditions: [both source files exist and manifest tests pass]
+    postconditions: [exact source-set guard recognizes only the two new authorized files]
+    invariants: [no existing assertion path or prohibition is weakened]
+    focused_tests:
+      - tests/stories/st_01_02/test_architecture_boundary.py
+  - target_file: tests/stories/st_02_05/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: >-
+      Add src/cmf_builder/domain/operator_manifest.py and
+      src/cmf_builder/application/manifest_parser.py to the exact authorized source set.
+    preconditions: [both source files exist and manifest tests pass]
+    postconditions: [exact source-set guard recognizes only the two new authorized files]
+    invariants: [no existing assertion path or prohibition is weakened]
+    focused_tests:
+      - tests/stories/st_02_05/test_architecture_boundary.py
+  - target_file: tests/stories/st_03_03/test_architecture_boundary.py
+    exact_symbol: exact Builder source set
+    required_additive_change: >-
+      Add src/cmf_builder/domain/operator_manifest.py and
+      src/cmf_builder/application/manifest_parser.py to the exact authorized source set.
+    preconditions: [both source files exist and manifest tests pass]
+    postconditions: [exact source-set guard recognizes only the two new authorized files]
+    invariants: [no existing assertion path or prohibition is weakened]
+    focused_tests:
+      - tests/stories/st_03_03/test_architecture_boundary.py
+validation:
+  lane_tests: 34/34 PASS
+  python_compile: PASS
+  integrator_disposition: ACCEPTED_AND_APPLIED
+  focused_integration_tests: 65/65 PASS
+  full_regression_gate: 775/775 PASS

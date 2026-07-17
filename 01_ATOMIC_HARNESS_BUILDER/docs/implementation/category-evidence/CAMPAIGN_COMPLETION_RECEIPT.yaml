@@ -1,0 +1,43 @@
+schema_version: cmf-builder-category-evidence-campaign-receipt/v1
+campaign: CATEGORY_EVIDENCE_CLOSURE_AND_ACTIVATIVE_CATEGORY_COMPILATION
+authority: AUTHORIZE CATEGORY EVIDENCE CLOSURE AND ACTIVATIVE CATEGORY COMPILATION CAMPAIGN
+verdict: PASS_BOUNDED_THEN_STOPPED_AT_VALID_BLOCKER
+dispositions:
+  BD-004:
+    ST-06.01: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    ST-06.02: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    broader: REMAINS_BLOCKED_OPERATOR_INPUT
+  BD-007:
+    ST-06.01: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    ST-06.02: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    broader: REMAINS_BLOCKED_EXTERNAL_EVIDENCE
+  BD-008:
+    ST-06.01: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    ST-06.02: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    broader: REMAINS_BLOCKED_OPERATOR_INPUT
+stories:
+  ST-06.01: {verdict: PASS, receipt_sha256: 4db4088342b0202f75550e3dc915822d51155edecab7ad060ca550a46239ae51}
+  ST-06.02: {verdict: PASS, receipt_sha256: 0224d3866dafbcbce2de7202e96c24f9fd3f4fd95bf217dadb22337f79cee151}
+  ST-06.03: {verdict: BLOCKED_EVIDENCE, minimum_cut: [BD-004, BD-007]}
+  ST-06.04: {verdict: BLOCKED_PRIOR_STORY, dependency: ST-06.03}
+  ST-06.05: {verdict: NOT_IMPLEMENTED, blockers: [PRIOR:ST-06.04, HD-006, HD-007]}
+validation:
+  confirmed_story_receipts: PASS_27_OF_27
+  canonical_receipts: PASS_28_OF_28
+  full_regression_fresh_process_1: PASS_909_OF_909_NO_MANDATORY_SKIPS
+  full_regression_fresh_process_2: PASS_909_OF_909_NO_MANDATORY_SKIPS
+  python_compilation: PASS_87_SOURCE_FILES
+  capsule_validation: PASS_ST_06_01_AND_ST_06_02
+  receipt_and_manifest_hashes: PASS
+  portable_path_scan: PASS
+  secret_scan: PASS
+  path_conflicts: 0
+  unauthorized_writes: 0
+hashes:
+  source_tree: sha256:cb4e6fc46905ac1f0154836b0d5ec3e2ace530c58a366845ad701e56e6661e74
+  test_tree: sha256:24fab3503cee383383759884b412ab4bfbfa14c10e2c65ea4a9037483a0c4521
+  receipt_index: sha256:d8e75ea8519225e7f849ddd656ca7042a2b6165fc8c9aff6a1ae9ee54a7dae31
+confirmed_stories_complete: 27
+confirmed_stories_remaining: 42
+production_ready: false
+certified: false

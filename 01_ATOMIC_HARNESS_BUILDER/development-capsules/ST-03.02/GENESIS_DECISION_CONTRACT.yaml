@@ -1,0 +1,14 @@
+schema_version: cmf-builder-genesis-human-decision-contract/v1
+contract_id: category_neutral_human_ratification_v1
+version: 1.0.0
+entry_state: {active_question_package: required, selected_node: required, DraftHarnessModel: UNRATIFIED_CONSTITUTIONAL_FIELDS}
+separate_artifacts: [HumanAnswer, FinalDecision, HarnessIRDecisionAmendment, GenesisDecisionMemory, GenesisDecisionReceipt]
+authority: {answer: HUMAN, final_decision: HUMAN, validation_and_persistence: CODE, recommendation: ADVISORY_ONLY}
+amendment_scope: exact_selected_unratified_model_path_only
+cascade_states: [OPEN, PARTIALLY_RATIFIED, CASCADE_LOCKED]
+replay_rule: identical_command_returns_original_receipt_but_new_approval_command_for_resolved_node_is_rejected
+reopen_rule: human_only_typed_invalidation_preserves_history_and_invalidates_declared_descendants
+canonical_HarnessIR_compilation: NOT_IN_SCOPE_ST_03_03
+production_eligible: false
+certified: false
+amendment_rule: semantic_change_requires_new_immutable_contract_version

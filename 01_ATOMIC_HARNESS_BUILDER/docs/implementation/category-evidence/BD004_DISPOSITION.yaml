@@ -1,0 +1,93 @@
+schema_version: cmf-builder-bd004-disposition/v1
+disposition_id: BD004-CATEGORY-EVIDENCE-2026-07-16
+recorded_on: "2026-07-16"
+blocker_id: BD-004
+authority:
+  constitution:
+    id: activative-intelligence-constitution
+    version: "1.1"
+    path: sources/CCP_ACTIVATIVE_INTELLIGENCE_VISUAL_NARRATIVE_CONSTITUTION_V1_1.md
+    sha256: 21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b
+  builder_prd:
+    version: "1.2"
+    amendment_sha256: 11445848904b61a72fbe500f6a184084e153419a2844243c0bca5f31ef87506c
+  applicable_prd_rule: >-
+    A-006 permits structural support for all target types and categories without
+    claiming production certification.
+allowed_dispositions:
+  - CLOSED_PASS_BY_EXISTING_AUTHORITY
+  - CLOSED_PASS_BY_NEW_GOVERNED_EVIDENCE
+  - SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+  - REMAINS_BLOCKED_OPERATOR_INPUT
+  - REMAINS_BLOCKED_EXTERNAL_EVIDENCE
+scopes:
+  - scope_id: structural_category_registration
+    disposition: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    rationale: >-
+      Category identity is governed by Constitution V1.1, Builder PRD V1.2 and
+      the canonical registries. ST-06.01 does not bind or evaluate a real corpus.
+    applies_to_story: ST-06.01
+    blocking_effect: NONE
+  - scope_id: category_native_development_validation
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: >-
+      Real category-native specimen validation requires an approved corpus,
+      source profile and item-level authority that are not present.
+    applies_to_story: NOT_EXERCISED_BY_ST-06.01
+    blocking_effect: BLOCK_WHEN_REAL_PROFILE_BRANCH_IS_SELECTED
+  - scope_id: format02_reference_profile_validation
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: >-
+      The exact historical archive is recovered, but corpus adoption, portable
+      Source Profile, item selection, provenance and usage authority are absent.
+    applies_to_story: LATER_FORMAT02_REFERENCE_TRACK
+    blocking_effect: BLOCK
+  - scope_id: production_benchmarking
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: >-
+      Benchmark eligibility, protected-example custody and permitted benchmark
+      uses require attributable human governance.
+    applies_to_story: LATER_EVALUATION_AND_CERTIFICATION_TRACK
+    blocking_effect: BLOCK
+  - scope_id: production_certification
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: >-
+      No corpus, profile or example is authorized as production-certification
+      evidence, and structural support cannot inherit certification.
+    applies_to_story: LATER_CERTIFICATION_TRACK
+    blocking_effect: BLOCK
+st_06_01:
+  branch: STRUCTURAL_UNCERTIFIED_CATEGORY_BINDING
+  disposition: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+  applicable_bd004_blocker_cut: []
+  may_use:
+    - constitutional_category_identities
+    - canonical_category_registry
+    - conversational_structural_profile_registry
+    - category_profile_compatibility_dimensions
+  may_not_use_or_claim:
+    - real_profile_behavioral_evidence
+    - format02_corpus_validation
+    - provider_or_benchmark_results
+    - protected_label_results
+    - production_readiness
+    - certification
+  reactivation_triggers:
+    - selecting_or_binding_a_real_profile_corpus
+    - evaluating_category_native_behavior_from_specimens
+    - adopting_the_historical_Format_02_archive
+    - declaring_benchmark_eligibility
+    - making_a_production_or_certification_claim
+broad_blocker_state:
+  BD_004: OPEN_CONDITIONAL
+  operator_owner: product_lead_and_evidence_steward
+  operator_request: docs/implementation/category-evidence/BD004_REQUIRED_OPERATOR_INPUT.yaml
+  no_global_closure_claim: true
+claims:
+  synthetic_reclassified_as_real: false
+  historical_archive_adopted: false
+  benchmarked: false
+  production_ready: false
+  certified: false
+verdict: PASS_SCOPED_DISPOSITION
+

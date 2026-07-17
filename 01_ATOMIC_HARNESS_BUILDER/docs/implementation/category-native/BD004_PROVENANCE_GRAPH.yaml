@@ -1,0 +1,54 @@
+schema_version: cmf-builder-bd004-provenance-graph/v1
+graph_id: BD004-SRC004-PROVENANCE-2026-07-16
+recorded_on: "2026-07-16"
+classification: PASS_WITH_RECORDED_LIMITATIONS
+nodes:
+  - {"id":"AUTH-BUILDER-V1.2-SOURCE-REGISTER","kind":"governed_source_identity_record","path":"governance/SOURCE_REGISTER.md","sha256":"8639c3cff53949837e3af5f185bbfa1cc0c953a9cef21b2181fc2f0309eef39b","authority_scope":"identifies SRC-004 as historical source evidence; does not state legal usage rights"}
+  - {"id":"AUTH-BUILDER-V1.2-SOURCE-REGISTER-JSON","kind":"governed_source_identity_record","path":"governance/SOURCE_REGISTER.json","sha256":"a5a0d5347142ac992a63cdbc16e2641615d02ada5844ad0db4f8b2cca0b9994d","authority_scope":"machine-readable identity and expected hash only"}
+  - {"id":"RECOVERY-REPORT","kind":"read_only_recovery_evidence","path":"docs/planning/FORMAT02_ARCHIVE_RECOVERY_REPORT.md","sha256":"69cecfbde4b07bc639e24e6962d020853cb4fec2762079a2efe0f2c5969885c7","authority_scope":"proves exact archive recovery; explicitly does not adopt corpus"}
+  - {"id":"PRIOR-BD004-INVENTORY","kind":"prior_governed_audit","path":"docs/implementation/category-evidence/BD004_CORPUS_INVENTORY.yaml","sha256":"fcbcf023c8dac611118e730cc30cb4630d639bb5232b63f39b7810e645ab402b","authority_scope":"records missing adoption, source profile, rights and benchmark authority"}
+  - {"id":"SRC-004-ARCHIVE","kind":"immutable_historical_archive","path":"D:/Work/Conscious_Rivers/THE CMF STUDIO/VISUAL SYNTAX BUILDER (2).zip","sha256":"403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0","authority_scope":"historical identity and contents only"}
+  - {"id":"DOCTRINE-V1","kind":"archive_component","member_prefix":"VISUAL SYNTAX BUILDER/CCP_VISUAL_SONIC_COMPOSITION_SYNTAX_DOCTRINE_V1_INTEGRATION_BUNDLE/","authority_scope":"embedded development doctrine; not independent current constitutional authority"}
+  - {"id":"FORMAT02-DOCTRINE","kind":"archive_member","member_path":"VISUAL SYNTAX BUILDER/CCP_VISUAL_SONIC_COMPOSITION_SYNTAX_DOCTRINE_V1_INTEGRATION_BUNDLE/docs/architecture/visual-sonic-composition-syntax/FORMAT02_MINIMAL_COACH_THEATRE.md","sha256":"30475c0f1c5e2118d8baf211a35240093bb2e630b54ddef6e18d7aa094d9f38f","authority_scope":"historical Format 02 syntax evidence"}
+  - {"id":"FORMAT02-SKILL","kind":"archive_member","member_path":"VISUAL SYNTAX BUILDER/CCP_VISUAL_SONIC_COMPOSITION_SYNTAX_DOCTRINE_V1_INTEGRATION_BUNDLE/registries/canonical/skills/format02_scene_syntax.select/SKILL.md","sha256":"dc0c27239bfd0d94035879bb3b0663917547e2cf592c7a1c9095b24fd559efe3","authority_scope":"historical scene-syntax instruction evidence"}
+  - {"id":"FORMAT02-INGREDIENTS","kind":"archive_member","member_path":"VISUAL SYNTAX BUILDER/CCP_VISUAL_SONIC_COMPOSITION_SYNTAX_DOCTRINE_V1_INTEGRATION_BUNDLE/registries/canonical/visual_sonic_composition_syntax/format02_ingredient_identities.json","sha256":"f2451088ca913d3e06582b7274dfffecb0cd36748151d1e020dd31fd9c2b8097","authority_scope":"historical Format 02 ingredient identity evidence"}
+  - {"id":"FORMAT02-MEDIA","kind":"archive_member_set","member_prefix":"VISUAL SYNTAX BUILDER/Content Formats/format02_minimal_coach_theatre/","file_count":73,"authority_scope":"historical visual specimens; item-level creator, license and usage metadata absent"}
+  - {"id":"WORKSTREAM-V1.1","kind":"archive_component","member_prefix":"VISUAL SYNTAX BUILDER/CMF_FORMAT_BUILDER_WORKSTREAM_BLUEPRINT_V1_1/","authority_scope":"historical predecessor"}
+  - {"id":"WORKSTREAM-V1.2-UPDATE","kind":"archive_component","member_prefix":"VISUAL SYNTAX BUILDER/CMF_FORMAT_BUILDER_WORKSTREAM_BLUEPRINT_V1_2_FORMAT06_07_UPDATE/","authority_scope":"historical V1.2 update for Formats 06 and 07"}
+  - {"id":"OPERATOR-USAGE-AUTHORITY","kind":"required_missing_authority","status":"BLOCKED_OPERATOR_AUTHORITY","authority_scope":"must grant exact bounded development use of SRC-004 bytes"}
+  - {"id":"ST0603-ADMITTED-CORPUS","kind":"prospective_governed_evidence","status":"NOT_CREATED","authority_scope":"may exist only after operator authority and evidence-integrator admission"}
+edges:
+  - {"from":"AUTH-BUILDER-V1.2-SOURCE-REGISTER","to":"SRC-004-ARCHIVE","relation":"records_expected_identity"}
+  - {"from":"AUTH-BUILDER-V1.2-SOURCE-REGISTER-JSON","to":"SRC-004-ARCHIVE","relation":"records_expected_hash"}
+  - {"from":"RECOVERY-REPORT","to":"SRC-004-ARCHIVE","relation":"proves_exact_recovery_without_adoption"}
+  - {"from":"PRIOR-BD004-INVENTORY","to":"SRC-004-ARCHIVE","relation":"records_unadopted_rights_gap"}
+  - {"from":"SRC-004-ARCHIVE","to":"DOCTRINE-V1","relation":"contains"}
+  - {"from":"SRC-004-ARCHIVE","to":"FORMAT02-DOCTRINE","relation":"contains"}
+  - {"from":"SRC-004-ARCHIVE","to":"FORMAT02-SKILL","relation":"contains"}
+  - {"from":"SRC-004-ARCHIVE","to":"FORMAT02-INGREDIENTS","relation":"contains"}
+  - {"from":"SRC-004-ARCHIVE","to":"FORMAT02-MEDIA","relation":"contains"}
+  - {"from":"SRC-004-ARCHIVE","to":"WORKSTREAM-V1.1","relation":"contains_historical_version"}
+  - {"from":"SRC-004-ARCHIVE","to":"WORKSTREAM-V1.2-UPDATE","relation":"contains_later_update"}
+  - {"from":"OPERATOR-USAGE-AUTHORITY","to":"ST0603-ADMITTED-CORPUS","relation":"required_before_admission"}
+  - {"from":"SRC-004-ARCHIVE","to":"ST0603-ADMITTED-CORPUS","relation":"candidate_input_not_currently_admitted"}
+provenance_gaps:
+  classification: BLOCKED_OPERATOR_AUTHORITY
+  missing:
+    - attributable operator identity and legal or organizational authority basis
+    - explicit Builder development-use grant bound to the exact archive hash
+    - item-level creator, ownership, license, privacy and redistribution metadata
+    - governed selection of admissible versus excluded members
+    - adoption date and amendment or withdrawal procedure
+conflicts:
+  classification: PASS_WITH_RECORDED_LIMITATIONS
+  findings:
+    - V1.1 and V1.2 update bundles coexist; no archive-level precedence declaration selects one globally.
+    - embedded runtime or semantic authority language does not contradict current authority because it is not admitted as product authority.
+    - no contradictory legal usage grants were found because no legal usage grant was found.
+non_claims:
+  production_truth: false
+  certification_evidence: false
+  authoritative_external_provider_evidence: false
+  identity_dna_adopted: false
+  human_decisions_replaced: false
+

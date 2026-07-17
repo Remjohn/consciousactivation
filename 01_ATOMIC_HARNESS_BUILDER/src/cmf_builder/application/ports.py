@@ -37,6 +37,14 @@ if TYPE_CHECKING:
         GenesisQuestionPackage,
         GenesisQuestionReceipt,
     )
+    from cmf_builder.domain.genesis_decisions import (
+        FinalDecision,
+        GenesisDecisionInvalidation,
+        GenesisDecisionMemory,
+        GenesisDecisionReceipt,
+        HarnessIRDecisionAmendment,
+        HumanAnswer,
+    )
     from cmf_builder.domain.harness_ir import (
         HarnessIR,
         HarnessIRCompilationReceipt,
@@ -105,6 +113,14 @@ if TYPE_CHECKING:
         DevelopmentCapsuleInvalidation,
         DevelopmentCapsuleReceipt,
         VersionedTraceableDevelopmentCapsule,
+    )
+    from cmf_builder.domain.implementation_plan import (
+        ImplementationPlanReceipt,
+        VerticalImplementationPlan,
+    )
+    from cmf_builder.domain.implementation_feedback import (
+        AmendmentProposalReceipt,
+        AuthorityAmendmentProposal,
     )
 
 
@@ -621,6 +637,28 @@ class GenesisQuestionRepository(SaturationRepository, Protocol):
     def get_atomicity_ratification(
         self, ratification_id: str
     ) -> "AtomicityRatification | None": ...
+
+
+class GenesisDecisionRepository(GenesisQuestionRepository, Protocol):
+    def commit_genesis_decision(
+        self, *, run_id: str, expected_version: int, events: tuple[RunEvent, ...],
+        command_id: str, command_record: CommandRecord, answer: "HumanAnswer",
+        decision: "FinalDecision", amendment: "HarnessIRDecisionAmendment",
+        memory: "GenesisDecisionMemory", receipt: "GenesisDecisionReceipt",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def commit_genesis_decision_invalidation(
+        self, *, run_id: str, expected_version: int, events: tuple[RunEvent, ...],
+        command_id: str, command_record: CommandRecord,
+        invalidation: "GenesisDecisionInvalidation",
+        observations: tuple[Observation, ...],
+    ) -> None: ...
+
+    def active_genesis_decision_memory(self, run_id: str) -> "GenesisDecisionMemory | None": ...
+    def get_genesis_decision_memory(self, memory_id: str) -> "GenesisDecisionMemory | None": ...
+    def get_genesis_decision_receipt(self, receipt_id: str) -> "GenesisDecisionReceipt | None": ...
+    def get_genesis_decision_invalidation(self, invalidation_id: str) -> "GenesisDecisionInvalidation | None": ...
 
 
 class AtomicityRepository(EvidenceWorkspaceRepository, Protocol):
@@ -1187,3 +1225,65 @@ class DevelopmentCapsuleRepository(
     ) -> "DevelopmentCapsuleInvalidation | None": ...
 
     def is_development_capsule_invalidated(self, capsule_id: str) -> bool: ...
+
+
+class ImplementationPlanRepository(DevelopmentCapsuleRepository, Protocol):
+    def commit_implementation_plan(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        command_id: str,
+        command_record: CommandRecord,
+        plan: "VerticalImplementationPlan",
+        receipt: "ImplementationPlanReceipt",
+    ) -> None: ...
+
+    def get_implementation_plan(
+        self, plan_id: str
+    ) -> "VerticalImplementationPlan | None": ...
+
+    def implementation_plans(
+        self, run_id: str
+    ) -> tuple["VerticalImplementationPlan", ...]: ...
+
+    def get_implementation_plan_receipt(
+        self, receipt_id: str
+    ) -> "ImplementationPlanReceipt | None": ...
+
+    def implementation_plan_receipts(
+        self, run_id: str
+    ) -> tuple["ImplementationPlanReceipt", ...]: ...
+
+    def is_implementation_plan_invalidated(self, plan_id: str) -> bool: ...
+
+
+class AmendmentProposalRepository(ImplementationPlanRepository, Protocol):
+    def commit_amendment_proposal(
+        self,
+        *,
+        run_id: str,
+        expected_version: int,
+        command_id: str,
+        command_record: CommandRecord,
+        proposal: "AuthorityAmendmentProposal",
+        receipt: "AmendmentProposalReceipt",
+    ) -> None: ...
+
+    def get_amendment_proposal(
+        self, proposal_id: str
+    ) -> "AuthorityAmendmentProposal | None": ...
+
+    def amendment_proposals(
+        self, run_id: str
+    ) -> tuple["AuthorityAmendmentProposal", ...]: ...
+
+    def get_amendment_proposal_receipt(
+        self, receipt_id: str
+    ) -> "AmendmentProposalReceipt | None": ...
+
+    def amendment_proposal_receipts(
+        self, run_id: str
+    ) -> tuple["AmendmentProposalReceipt", ...]: ...
+
+    def is_amendment_proposal_invalidated(self, proposal_id: str) -> bool: ...

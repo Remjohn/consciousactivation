@@ -1,0 +1,70 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-03.02
+primary_epic: EP-03
+active_mode: CATEGORY_NEUTRAL_GENESIS_HUMAN_DECISION
+completed_on: "2026-07-16"
+implemented_outcome: >-
+  Human answers and final decisions are separate attributable immutable artifacts;
+  their governed IR amendment, cascade state, resumable memory and receipt commit
+  atomically and reopen without destroying history.
+requirements_satisfied:
+  ADR-005: PASS
+  D002: PASS
+  FR-045: PASS
+  FR-046: PASS_IR_DECISION_AMENDMENT_TRANSACTION
+  FR-047: PASS
+  FR-048: PASS
+  FR-049: PASS
+  FR-050: PASS
+dependencies:
+  ST_03_01_completion_receipt_sha256: fd5cd0a98ed0c20b5afd67cbecbee0f676e9cfaa5d3269377259276f2aa0af71
+  validation: PASS
+capsule:
+  manifest_sha256: 8ef03672657d4010b3d5af882bcc1cd888e198cbf77248a1e3ff57cc87ea9e51
+  bundle_digest: ce9ab6d14b2d173f0a0e291381c53a01c342b26fdd317960c943131a80847c33
+  immutable_inputs: PASS_18_OF_18
+  implementation_authorization_sha256: 0c87dd1d9649f47aebc87b0928ed49f57070b25d9dd4927a6c1e8b895bd5944e
+  standing_campaign_authority: AUTHORIZE FULL ATOMIC HARNESS BUILDER IMPLEMENTATION CAMPAIGN
+files_changed:
+  manifest_path: development-capsules/ST-03.02/completion/FILE_CHANGE_MANIFEST.yaml
+  manifest_sha256: 78fc6f7d8b215432a5ebc947939176369b36fcfadf10ea027e7741f1577aa257
+  implementation_and_test_path_count: 17
+  file_scope_validation: PASS_EXACT_ALLOWLIST
+tests:
+  preimplementation_regression: PASS_666_OF_666
+  story_clean_run_1: PASS_22_OF_22
+  story_clean_run_2: PASS_22_OF_22
+  affected_story_architecture_and_correction: PASS_159_OF_159
+  full_repository_regression: PASS_688_OF_688
+  mandatory_skips: 0
+  python_compilation: PASS_210_OF_210_SOURCE_53_OF_53
+  results_sha256: b0124b2f0cebd8f33d6c30a5d7b696accbe2c171b1a4a95391314f0858efd64f
+validation:
+  separate_human_answer_and_final_decision: PASS
+  human_only_ratification_and_reopen: PASS
+  transactional_IR_amendment_memory_receipt: PASS
+  provisional_advisory_not_ratification: PASS
+  cascade_unlock_and_terminal_contract: PASS
+  resume_without_replaying_answer: PASS
+  replay_idempotency_and_second_approval_rejection: PASS
+  contradiction_and_descendant_invalidation: PASS
+  deterministic_fresh_context: PASS
+  atomic_outbox_and_zero_partial_rollback: PASS
+  canonical_HarnessIR_not_compiled_or_mutated: PASS
+observability:
+  path: development-capsules/ST-03.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  sha256: 4e5bb8763f20da30b16f549719d131a0e33dee9d255ce2b13fcc1c0a41a8b082
+rollback:
+  path: development-capsules/ST-03.02/completion/ROLLBACK_EVIDENCE.md
+  sha256: 300dacf302f85de88d6745b23ea9501dcba4275934c01b27a3e45bd4ecb3d105
+implementation_report_sha256: 9a3f6902341f327e1dc35b14ce439593ae2dd58f4f80205d9b9fe09b1018af38
+unresolved_limitations:
+  - canonical_HarnessIR_compilation_remains_owned_by_ST_03_03
+  - development_repository_adapter_is_not_production_persistence
+  - production_and_full_product_readiness_remain_false
+  - BQA-P3-010_remains_non_blocking
+newly_discovered_blockers: []
+production_ready: false
+certified: false
+full_product_ready: false
+completion_verdict: PASS
