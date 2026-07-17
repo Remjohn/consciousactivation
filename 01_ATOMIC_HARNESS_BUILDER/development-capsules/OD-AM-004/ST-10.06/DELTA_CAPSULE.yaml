@@ -1,0 +1,14 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-004
+story_id: ST-10.06
+title: OWNERSHIP_MODULES_AND_CONTRACTS_INSPECTION
+outcome: governed_ownership_module_contract_projection
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_004.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files:
+  production: [src/cmf_builder/application/ownership_contract_inspection.py]
+  tests: [tests/stories/st_10_06/test_ownership_contract_inspection.py]
+requirements:
+  - inspect products modules ports adapters contracts stories obligations and authority owners distinctly
+  - reuse exact source ownership registry
+  - reject duplicate obligation ownership, unowned modules, unregistered source, external ownership absorption, adapter-as-authority and prohibited dependencies
+prohibited: [second_source_registry, external_product_behavior_claim, production_or_certification_claims]

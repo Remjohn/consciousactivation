@@ -1,0 +1,21 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0801-001
+story_id: ST-08.01
+calling_lane: EVALUATION_AND_REPAIR_LANE
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: Action.EVALUATE_FRESH_CONTEXTS
+required_additive_change: >-
+  Add the exact Builder-owned action used to authorize immutable offline
+  fresh-context evaluation decisions against one exact trial-plan resource.
+preconditions:
+  - all six ST-08.01 dependency receipts remain valid
+  - evaluation is repository-owned structural development only
+postconditions:
+  - approval requires a registered actor and active exact resource grant
+  - self-asserted approval strings cannot authorize an evaluation receipt
+invariants:
+  - generator and evaluator identities remain separate from approval authority
+  - no provider execution, empirical threshold, maturity promotion, production readiness or certification is authorized
+focused_tests:
+  - tests/stories/st_08_01
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR

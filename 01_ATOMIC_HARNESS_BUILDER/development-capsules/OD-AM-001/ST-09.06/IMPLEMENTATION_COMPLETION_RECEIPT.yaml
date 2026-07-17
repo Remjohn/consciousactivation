@@ -1,0 +1,86 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-09.06:QUEUE_OBSERVABILITY_AND_LOCAL_RECOVERY_PROOF:24bedb0ce76b
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-09.06
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder can project local queue state from canonical events, emit mandatory
+  node telemetry and budget receipts, reconstruct public-seam evidence, run
+  deterministic injected-fault recovery fixtures, and issue immutable recovery,
+  invalidation and rollback receipts without invoking an external engine,
+  provider, model, network, sandbox, process, container or external product.
+primary_obligations_implemented:
+  - FR-202
+  - FR-203
+  - FR-204
+  - FR-205
+  - NFR-PERF-002
+  - NFR-PERF-003
+  - NFR-TEST-001
+  - NFR-WORKFLOW-010
+  - NFR-WORKFLOW-011
+dependency_receipts:
+  satisfied:
+    - ST-09.05:ImplementationCompletionReceipt:5219371c0acccb1928c6ab9f8ac9bd4b10895109f8333817b0bcd493f704be14
+  pending: []
+source_files:
+  - path: src/cmf_builder/workflow/observability_recovery.py
+    sha256: 24bedb0ce76b1b92a9fdef405c22d8d700a2d41bfa743f26539d919ecaed0b7b
+test_files:
+  - path: tests/stories/st_09_06/test_queue_projection_and_telemetry.py
+    sha256: 8c51fa1653ff742bf28751fd9e527199697ddf863fd7ffdd065185fe2e9e1bb0
+  - path: tests/stories/st_09_06/test_budget_and_public_seam_reconstruction.py
+    sha256: 54cfe2ed890feb4582e32fa004b90665008691ff5d9817be5dc0d8ebe2e4f1b6
+  - path: tests/stories/st_09_06/test_fault_injection_and_recovery.py
+    sha256: 110169ebca8dc1f7ae45b7dd4a457dffce94b584b022efb15cefbd33dd7ba5e8
+  - path: tests/stories/st_09_06/test_authority_invalidation_rollback_and_boundaries.py
+    sha256: 3488f3fe9b732217b20ddd1467efd065041a4654e0e87ed914978018ea78b581
+tests:
+  focused: PASS_11_OF_11
+  workflow_batch: PASS_134_OF_134
+  architecture_boundary: PASS_12_OF_12
+  final_repository_regression_fresh_process_1: PASS_1806_OF_1806_NO_MANDATORY_SKIPS
+  final_repository_regression_fresh_process_2: PASS_1806_OF_1806_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  mandatory_skips: 0
+authority_and_boundary_evidence:
+  queue_projection_single_authoritative_state: PASS
+  mandatory_telemetry_and_budget_validation: PASS
+  hard_budget_overflow_blocks_with_gate: PASS
+  public_seam_contract_only_reconstruction: PASS
+  injected_fault_recovery_matrix_local_fixtures: PASS
+  deterministic_repeat_idempotency: PASS
+  invalidation_and_rollback_preserve_history: PASS
+  external_engine_provider_model_network_sandbox_or_product_execution: false
+  production_ready: false
+  certified: false
+rollback_evidence: PASS_PRIOR_ACTIVE_PROJECTION_AND_CHECKPOINT_REFERENCE_RESTORABLE_HISTORY_PRESERVED
+observability_evidence: PASS_DETERMINISTIC_QUEUE_TELEMETRY_PUBLIC_SEAM_FAULT_RECOVERY_AND_TRANSITION_IDENTITIES
+evidence_gate_status: MANUAL_SHADOW_TEMPORAL_PROVIDER_ISOLATION_AND_EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - actual_manual_shadow_parity
+  - XDEP-001
+  - XDEP-005
+  - ADR-006-Temporal-queue-replay-resume-fault-rollback-conformance
+  - ADR-012-isolation-platform-fault-cleanup-conformance
+  - provider_execution_outage_cost_latency_token_and_recovery_evidence
+  - external_product_runtime_public_seam_and_acceptance
+  - production_evidence_thresholds_and_authority
+deterministic_identity_evidence:
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_file_count: 124
+  production_source_tree_sha256: 87616c12cff61f8b18a59d09acc98c6b43ecefdaa9d8fe9b9c0fb001f2ee7797
+equivalent_to_StoryCompletionReceipt: false
+hashes:
+  delta_capsule_sha256: 64335aef070e0d45ea0aeb96a645945d80018543f2ee3452628d956a83be4904
+  test_results_sha256: 482fb81438560f0fb1144b89dd46389275f54149663ea319873d73dfb51c25ea
+  file_change_manifest_sha256: a24775cf47f89146d1e4c85db3f592c53c1b7a9eb6c5b86bfe502ec31b22f66e
+  source_boundary_registry_sha256: a284af807756cddf510095dce2d2a81363bb919d15a6779df5d9cdd245da7623
+unlock_effect:
+  OD_AM_001_lane_D_frontier: TERMINAL
+  may_unlock_within_OD_AM_001: none
+  excluded_successor: ST-09.07
+production_ready: false
+certified: false

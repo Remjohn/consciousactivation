@@ -1,0 +1,95 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-06.05:ImplementationCompletionReceipt:v1
+amendment_id: OD-AM-001
+story_id: ST-06.05
+development_mode: STRUCTURAL_NON_PERSONAL_UNCERTIFIED_DEVELOPMENT_BRANCH
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  Immutable structural conversational contracts and state machines for Activative
+  Calls, attributable payload-free human-response requests, external Reaction Receipt
+  and Expression Moment applicability/references, consent reference, withdrawal,
+  invalidation, reference-only recompile eligibility, replay, resume, and historical
+  reproduction across all four conversational profiles.
+primary_obligations_implemented:
+  CONST-004: PASS_STRUCTURAL_NON_PERSONAL_UNCERTIFIED_CONVERSATIONAL_FEEDBACK_CHAIN
+dependency_receipts:
+  OD_AM_001:
+    sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+    verdict: PASS
+  ST_06_04:
+    path: development-capsules/OD-AM-001/ST-06.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    sha256: c5b67fbd0a2c7a1cc98e1e8d03f9ea6c10ea14369c9f2b61d399cce88cf35021
+    verdict: IMPLEMENTED_DEVELOPMENT_PASS
+source_files:
+  - {path: src/cmf_builder/domain/conversational_feedback.py, sha256: e0b6a99b32778f1186d85f27897edeedeb47bb872e0291bbccd899e9b93cfcdc}
+  - {path: src/cmf_builder/application/conversational_commands.py, sha256: 64d11bc23134e58d2230c648b57022015b504638e3033d2a3d6fdb911af9f39e}
+test_files:
+  - {path: tests/stories/st_06_05/__init__.py, sha256: 904b1276562e87329521b720c7f4a4cd11f66b7bdc348c9aa9ee73f7fc47d142}
+  - {path: tests/stories/st_06_05/conftest.py, sha256: 3a367a168819c25d252905211cf3c5db6bd71301dadde404c143764080ef5b91}
+  - {path: tests/stories/st_06_05/test_structural_feedback_contracts.py, sha256: f15ecf30fcd2c7dd5f7fac11e2764645fe77f167dd70c10ef5b3bf3f115f5633}
+  - {path: tests/stories/st_06_05/test_feedback_state_machine.py, sha256: 106784c0452966c32c12479cb5d5e3a2d52f0121d87fe844adbcb7cf823b3ee4}
+  - {path: tests/stories/st_06_05/test_failure_authority_and_commands.py, sha256: 53b49a8d908476a8d7323a4c01eada34c35fd92688b8541fbbafd9797f95b152}
+  - {path: tests/stories/st_06_05/test_architecture_boundary.py, sha256: 1dafe296f6abeb1e20c1816a482cf9b0f1569918d090df76d79b0fe4a403868f}
+tests:
+  story_focused: PASS_38_OF_38
+  predecessor_and_story: PASS_94_OF_94_ST0603_THROUGH_ST0605
+  offline_category_chain: PASS_94_OF_94
+  Python_source_compilation: PASS_2_OF_2
+  mandatory_skips: 0
+  full_repository_regression: PASS_1152_OF_1152_NO_MANDATORY_SKIPS
+deterministic_identity_evidence:
+  identical_inputs_byte_identical: PASS
+  immutable_version_transition: PASS
+  payload_safe_compile_and_transition_replay: PASS
+  stale_parent_rejection: PASS
+  blank_or_invalid_immutable_version_rejection: PASS
+authority_and_boundary_evidence:
+  authority_action: COMPILE_CONVERSATIONAL_FEEDBACK
+  actual_human_response_capture_action: NOT_CREATED
+  real_reaction_receipt_issuance_action: NOT_CREATED
+  real_expression_moment_issuance_action: NOT_CREATED
+  source_human_authority: EXTERNAL_AND_PRESERVED
+  capture_authority: EXTERNAL_AND_ATTRIBUTABLE
+  response_payload_permitted: false
+  Identity_DNA_approval: HUMAN_AUTHORITY_ONLY
+  external_runtime: PROHIBITED_AND_TESTED
+  transition_actor_authority_binding: PASS_EXACT_ACTOR_TO_GOVERNED_REF_AUTHORITY
+  withdrawal_authority: PASS_EXACT_HUMAN_ONLY_ACTION_AND_SOURCE_HUMAN_REF
+  invalidation_authority: PASS_EXACT_CHAIN_AUTHORITY_NO_ROLE_ONLY_IMPERSONATION
+  shared_core_requests:
+    - CR-ST0605-001_ACCEPTED_AND_APPLIED
+    - CR-ST0605-002_ACCEPTED_AND_APPLIED_HUMAN_ONLY_WITHDRAWAL
+rollback_evidence:
+  injected_atomic_failure: PASS_ZERO_PARTIAL_CHAINS_RECEIPTS_OR_COMMANDS
+  withdrawal: PASS_REFERENCE_USE_REVOKED_HISTORY_PRESERVED
+  invalidation: PASS_ACTIVE_USE_REVOKED_HISTORY_PRESERVED
+  predecessor_mutation: false
+observability_evidence:
+  compile_event: ST-06.05:FeedbackChainCompiled
+  compile_replay_event: ST-06.05:FeedbackChainReplayReturned
+  transition_event: ST-06.05:FeedbackTransitionCommitted
+  transition_replay_event: ST-06.05:FeedbackTransitionReplayReturned
+  failure_events: [ST-06.05:FeedbackChainRejected, ST-06.05:FeedbackTransitionRejected]
+  replay_conflict_rejection: PASS_TYPED_FEEDBACK_TRANSITION_REJECTED
+  stale_parent_rejection: PASS_TYPED_FEEDBACK_TRANSITION_REJECTED
+  attributable_authority_and_provenance: PASS
+evidence_gate_status:
+  implementation_gate: IMPLEMENTED_DEVELOPMENT_PASS
+  HD_006: HUMAN_POLICY_PENDING
+  HD_007: PRODUCTION_CERTIFICATION_PENDING
+  real_human_response_evidence: NOT_COLLECTED
+  real_profile_certification: NOT_CLAIMED
+external_gates_remaining_open: [HD-006, HD-007, BD-004-broader, BD-008, BD-010-broader, external-conversational-products]
+production_ready: false
+certified: false
+hashes:
+  delta_capsule: sha256:4bcb00df73298787d4e46e0b8c9d7d063b5c0d908a19f9c9eb317a907a499439
+  test_results: sha256:1eb10ba894df86a2cd1089b728e60fc35090bee47fe45e18b36e6cd4ac30fded
+  file_change_manifest: sha256:348797cd2936e2cebfb30f425db8eb0e27eed06e449f501d2b42854773a2dcd8
+  source_tree: sha256:c7d0564fe96dbb4658b251686e05e93eabe6db221b5d41d290df4a29bd43aeb4
+trust_correction_status: PASS_ADVERSARIAL_AND_FULL_REGRESSION
+story_completion_receipt_equivalence: false
+evidence_closure_receipt_equivalence: false
+existing_story_artifacts_modified: false
+outside_lane_changes: []
+final_verdict: PASS

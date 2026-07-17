@@ -1,0 +1,70 @@
+schema_version: cmf-builder-offline-development-amendment/v1
+amendment_id: OD-AM-003
+title: CONTROL_TOWER_INSPECTION_AND_AUTHORITY_REVIEW
+created_on: "2026-07-17"
+authority_mode: OFFLINE_DEVELOPMENT_IMPLEMENTATION
+source_authorization: user_supplied_attachment_create_od_am_003_and_execute_control_tower_inspection_campaign
+predecessor_amendment:
+  id: OD-AM-002
+  status: COMPLETE
+  receipt_path: docs/implementation/offline-development/OD_AM_002_RECEIPT.yaml
+  receipt_sha256: 15384ba6254046b177e5be38291493c08f69936422e9faec7584754964a45ada
+  offline_implementation_coverage: 52/69
+  latest_full_regression: 1837/1837_PASS_TWICE
+story_inventory:
+  confirmed_story_ids_changed: false
+  primary_obligation_assignments_changed: false
+  historical_receipts_rewritten: false
+  total_confirmed_stories: 69
+two_gate_model:
+  implementation_gate: offline_development_implementation_receipt
+  evidence_gate: remains_external_evidence_driven
+  implementation_receipt_is_story_completion_receipt: false
+authority_limits:
+  production_authority_granted: false
+  certification_authority_granted: false
+  external_provider_authority_granted: false
+  cloud_execution_authority_granted: false
+  bd_007_status: OPEN_PENDING_CLOUD_AND_COMPLETE_CASE_EVIDENCE
+target_story_ids:
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+prohibited_story_ids:
+  - ST-10.05
+  - later_stories
+architecture_constraint:
+  literal_control_tower_source_package_allowed: false
+  approved_boundaries:
+    - src/cmf_builder/application
+permitted_outputs:
+  - docs/implementation/offline-development/OD_AM_003.yaml
+  - docs/implementation/offline-development/OD_AM_003_RECEIPT.yaml
+  - docs/implementation/offline-development/OD_AM_003_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+  - development-capsules/OD-AM-003/*/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-003/*/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-003/*/TEST_RESULTS.json
+  - development-capsules/OD-AM-003/*/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+forbidden_reinterpretations:
+  - do_not_restart_OD_AM_001_or_OD_AM_002
+  - do_not_reopen_BD_004_or_attempt_BD_007_cloud_execution
+  - do_not_treat_ImplementationCompletionReceipt_as_StoryCompletionReceipt
+  - do_not_claim_production_readiness_or_certification
+  - do_not_start_ST_10_05
+validation_plan:
+  focused_story_tests: required
+  ST_10_01_to_ST_10_04_tests: required
+  architecture_boundary_tests: required
+  full_regression_twice: required_after_ST_10_04
+  python_compilation: required
+  receipt_manifest_validation: required
+  portable_path_and_secret_scan: required
+expected_completion:
+  offline_implementation_coverage: 55/69
+  od_am_003_target_completion: 3/3
+  full_evidence_closure: 27/69
+  next_story: ST-10.05
+  stop_after: ST-10.04
+  production_ready: false
+  certified: false

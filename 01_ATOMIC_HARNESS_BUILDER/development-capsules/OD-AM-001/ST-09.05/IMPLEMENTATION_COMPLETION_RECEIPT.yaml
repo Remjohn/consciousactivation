@@ -1,0 +1,83 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-09.05:CANDIDATE_RACES_AND_HUMAN_GOVERNED_COMPUTE_ROUTING:c9ef8089472a
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-09.05
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder can compile local candidate-race plans, select a winner only after
+  all required quality, contract, cost and latency evaluations pass, route
+  abstract compute from risk and budget evidence, isolate evaluator views and
+  preserve human-owned gates without selecting providers, invoking models,
+  dispatching compute or resolving human authority by automation.
+primary_obligations_implemented:
+  - AG-011
+  - FR-198
+  - FR-199
+  - FR-200
+  - FR-201
+  - NFR-WORKFLOW-009
+dependency_receipts:
+  satisfied:
+    - ST-09.04:ImplementationCompletionReceipt:8855308f108e39b3067ad4f65c6dd40629c682811f6d9be9d3e67b6802c3690f
+  pending: []
+source_files:
+  - path: src/cmf_builder/workflow/candidate_routing.py
+    sha256: c9ef8089472ac2ff63fd987d0de94248f73e885df85547fdd53599ace410b088
+test_files:
+  - path: tests/stories/st_09_05/test_candidate_race_quality_gates.py
+    sha256: 12f3e97f1fefa92f8b000da8528a8dbba9f44e1c2b12e08d52664892bc9634dc
+  - path: tests/stories/st_09_05/test_risk_aware_compute_routing.py
+    sha256: cca39925493e37b1ff876596b2ed9674b8e09ebe8bc408ff383b6820b03a4de1
+  - path: tests/stories/st_09_05/test_evaluator_isolation_and_human_gates.py
+    sha256: 969d8562a254fb40f63dc4b630ad3333b5531153bb6b1d8162ac89a7e801c54e
+  - path: tests/stories/st_09_05/test_failure_authority_invalidation_rollback.py
+    sha256: cc10350d342520ef62c00d5256d34d00d08ab232b85d224632c6ed110a1ecc37
+tests:
+  focused: PASS_11_OF_11
+  workflow_batch: PASS_123_OF_123
+  architecture_boundary: PASS_12_OF_12
+  latest_applicable_complete_repository_regression: PASS_1795_OF_1795_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  mandatory_skips: 0
+authority_and_boundary_evidence:
+  all_candidate_evaluations_required_before_selection: PASS
+  first_completion_not_sufficient: PASS
+  quality_contract_cost_latency_gates: PASS
+  risk_aware_provider_neutral_routing: PASS
+  evaluator_view_excludes_generator_reasoning_preferences_labels_and_secrets: PASS
+  human_gate_automation_prohibited: PASS
+  deterministic_repeat_idempotency: PASS
+  invalidation_and_rollback_preserve_history: PASS
+  provider_model_or_compute_execution: false
+  human_gate_resolved_by_automation: false
+  production_ready: false
+  certified: false
+rollback_evidence: PASS_PRIOR_ACTIVE_POLICY_DECISION_REFERENCE_RESTORABLE_HISTORY_PRESERVED
+observability_evidence: PASS_DETERMINISTIC_RACE_ROUTE_VIEW_GATE_AND_TRANSITION_IDENTITIES
+evidence_gate_status: MANUAL_SHADOW_TEMPORAL_PROVIDER_AND_EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - manual_shadow_expert_behavior_evidence
+  - XDEP-001
+  - XDEP-005
+  - ADR-006-Temporal-routing-signal-replay-fault-conformance
+  - ADR-012-isolation-platform-conformance
+  - provider_model_compute_and_outage_evidence
+  - external_product_runtime_and_acceptance
+  - production_promotion_authority_and_evidence
+deterministic_identity_evidence:
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_file_count: 123
+  production_source_tree_sha256: e765d1964c908b3c4850722c11c8d05651cecfd2cab49d79b4721a826f59a935
+equivalent_to_StoryCompletionReceipt: false
+hashes:
+  delta_capsule_sha256: a82e6d2dd1fa6c40bd421c7738ac2f78ae08ea9f87735026f323ae103c9874ea
+  test_results_sha256: 37b912799deebcebe83974d47245f777b09b265716c5e686388e3ae53d296244
+  file_change_manifest_sha256: 9598e1753f41f096c8c3d21cb5e4bddb748d94a91864d0c6f996833834114174
+  source_boundary_registry_sha256: ec17ee30f8e893a1bab2bdc876341a3378d3fc550d4ecf2dfea07a1ad72af050
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-09.06_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true
+production_ready: false
+certified: false

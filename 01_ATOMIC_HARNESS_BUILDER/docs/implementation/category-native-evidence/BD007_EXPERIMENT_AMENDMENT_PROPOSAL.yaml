@@ -1,0 +1,71 @@
+schema_version: cmf-builder-bd007-experiment-amendment-proposal/v1
+proposal_id: BD007-EXPERIMENT-AMENDMENT-V2-MIXED-GOVERNED-SOURCES
+recorded_on: "2026-07-17"
+status: PENDING_EXPLICIT_GOVERNED_APPROVAL
+supersedes_if_approved:
+  case_manifest_schema: cmf-builder-bd007-case-manifest/v2
+  trial_plan_schema: cmf-builder-bd007-governed-trial-plan/v1
+reason:
+  original_case_count: 4
+  archive_bindable_cases: 2
+  missing_archive_roles:
+    - structural_conversational_turn_syntax_evidence
+    - generic_non_activative_negative_control_evidence
+  statement: >-
+    The original experiment requires every case to bind one BD-004 archive member.
+    Existing governed repository evidence can supply the missing structural and
+    generic controls, but consuming it requires a typed source-binding amendment.
+proposed_change:
+  case_count: 4
+  arms_per_case: 2
+  repeats_per_arm: 3
+  calls_per_configuration: 24
+  rubric_identity: dd5cc9bae8977ea365d4890914364e2a540eb2acdbf363d4ec024aa47ab27381
+  rubric_changes: none
+  noncompensable_failure_changes: none
+  source_binding_union:
+    - BD004ArchiveMemberBinding
+    - GovernedRepositoryGenericFixtureBinding
+    - GovernedRepositorySyntheticStructuralBinding
+  common_binding_requirements:
+    - exact repository-relative source paths
+    - exact source SHA-256 values
+    - exact authority receipt SHA-256 values
+    - explicit evidence classification and provenance limitations
+    - source-specific usage boundary
+    - same governed meaning and evidence binding across paired arms
+    - immutable authority-chain and lineage hashes
+  role_aliases:
+    v1_2_format06_07_update: short_form_category_syntax_and_sequencing_evidence
+    visual_syntax_and_format02_structure: format02_character_performance_syntax_and_sequencing_evidence
+  forbidden_behavior:
+    - label repository evidence as BD-004 archive evidence
+    - label synthetic conversational evidence as real-profile evidence
+    - create or imply a human reaction
+    - create Reaction Receipts or Expression Moments
+    - change prompts or rubric after semantic outputs are observed
+    - infer production readiness or certification
+coverage_effect:
+  semantic_case_breadth: PRESERVED_FOUR_CASES
+  statistical_call_design: UNCHANGED
+  evidence_maturity: HETEROGENEOUS_AND_EXPLICIT
+  rubric_dimensions_remaining_covered: 17_OF_17_ACROSS_APPLICABLE_CASES
+  noncompensable_failures_remaining_enforced: 9_OF_9
+  confidence_effect: >-
+    Development confidence in category-native versus flattened behavior is retained
+    across four structural branches, but the conversational and generic cases prove
+    only repository-owned structural controls rather than external or real-profile
+    generalization.
+sufficiency:
+  bounded_ST_06_03_development_branch: SUFFICIENT_IF_APPROVED_AND_EMPIRICALLY_PASSING
+  broader_multi_provider_comparison: NOT_SUFFICIENT
+  real_conversational_profile_evidence: NOT_SUFFICIENT
+  production_benchmarking: NOT_SUFFICIENT
+  certification: NOT_SUFFICIENT
+approval_gate:
+  human_confirmation_required: true
+  required_phrase: CONFIRM BD-007 EXPERIMENT V2 MIXED GOVERNED SOURCE BINDINGS FOR ST-06.03 DEVELOPMENT ONLY
+  implementation_before_confirmation: prohibited
+  provider_calls_before_confirmation: prohibited
+production_ready: false
+certified: false

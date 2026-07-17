@@ -1,0 +1,9 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-005
+story_id: ST-10.11
+title: WORKSPACE_CONTEXT_PRESERVATION
+outcome: persistent_governed_workspace_context
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_005.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files: {production: [src/cmf_builder/application/workspace_context.py], tests: [tests/stories/st_10_11/test_workspace_context.py]}
+requirements: [operator_isolation, deterministic_reload, stale_reference_detection, redaction_persistence, workspace_context_not_authority_evidence]
+prohibited: [cloud_synchronization, semantic_authority_from_workspace_context]

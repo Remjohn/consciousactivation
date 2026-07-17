@@ -1,0 +1,53 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-09.01:ACTOR_EXPLICIT_WORKFLOW:9dc8aaf8aa20
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-09.01
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder compiles an immutable graph-based WorkflowIR with explicit HUMAN_NODE,
+  GOVERNED_AGENT_NODE, DETERMINISTIC_CODE_NODE and EXTERNAL_BOUNDARY_NODE ownership,
+  typed validated handoffs, attributable authority, traceable stops and deterministic
+  local routing without executing nodes, agents, external products or Temporal.
+primary_obligations_implemented: [ADR-006, FR-181, FR-182, FR-183, FR-184, FR-185, NFR-WORKFLOW-001, NFR-WORKFLOW-002, NFR-WORKFLOW-003]
+dependency_receipts:
+  satisfied:
+    - ST-01.04:StoryCompletionReceipt:1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a
+    - ST-03.05:StoryCompletionReceipt:12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+    - ST-04.05:StoryCompletionReceipt:28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+    - ST-05.05:StoryCompletionReceipt:57807b3611f107f89787e80ba59f7b17a00dfe855cb60942f98138985e20b818
+    - ST-06.05:ImplementationCompletionReceipt:8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9
+    - ST-07.04:StoryCompletionReceipt:e944032fe369e11c274e2d868bec6168d18124587cc09c9a328e58e33463fe2a
+    - ST-08.07:ImplementationCompletionReceipt:98cde5f848b1232f717f3e372dca9635264288453925b9fee70040fc0f797730
+  pending: []
+source_files:
+  - {path: src/cmf_builder/workflow/actor_explicit_contracts.py, sha256: 9dc8aaf8aa2085aff66adda56faf891fc260287e04e0ca0c35681934126e4399}
+  - {path: src/cmf_builder/workflow/deterministic_local_adapter.py, sha256: 6cd74282f33154af6977bba3b277c3af171993562fa67cf9d321a979a42e1a39}
+tests: {focused: PASS_49_OF_49, architecture_boundary: PASS_12_OF_12, latest_applicable_complete_repository_regression: PASS_1683_OF_1683_NO_MANDATORY_SKIPS, Python_source_compilation: PASS_119_SOURCE_FILES, mandatory_skips: 0}
+authority_and_boundary_evidence:
+  explicit_four_actor_kinds: PASS
+  human_decisions_attributable_and_non_replayed: PASS
+  deterministic_code_has_no_semantic_authority: PASS
+  external_boundary_declarative_only: PASS
+  typed_validated_handoffs: PASS
+  monolithic_cycle_hidden_execution_rejection: PASS
+  deterministic_local_adapter_operations: [compile, validate, register_profile, select_profile, query_compiled_contract]
+  workflow_or_agent_execution: false
+  external_engine: false
+  Temporal_conformance: EXTERNAL_VALIDATION_PENDING
+  full_ADR_006_satisfaction: false
+  production_ready: false
+  certified: false
+rollback_evidence: PASS_NON_DESTRUCTIVE_INVALIDATION_HISTORY_PRESERVED_ZERO_PARTIAL_STATE
+equivalent_to_StoryCompletionReceipt: false
+hashes:
+  delta_capsule_sha256: 984e1529d40a97ce0923c3171d6ba3b238f88ea023112f8892514ff7fb9c7c7e
+  test_results_sha256: e81d7ae4997af94a6e54c783d948852a4de47ed9fc69b2989fbb6ce3c801c5e2
+  file_change_manifest_sha256: 258b879f7bef1fe850021d5b226acd8ae7985687a219e5cdb4612071627d44d3
+  source_boundary_registry_sha256: d739bde484c5cfa915a8f09f23dcc5e166537785a14bf51a94e08e9a58356b2f
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_tree_sha256: 9628eeb44cf61e098d0126ad0565fdcda422c7b46828f41cf5b8c5a65ee5fc5e
+unlock_effect: {may_unlock_after_integrator_pass: ST-09.02_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY, unlock_now: true}
+production_ready: false
+certified: false

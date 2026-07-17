@@ -1,0 +1,31 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-003
+story_id: ST-10.04
+title: GENESIS_DECISIONS_AND_HUMAN_AUTHORITY_REVIEW
+outcome: governed_review_projection_for_originating_decisions_and_authority
+authority:
+  amendment_path: docs/implementation/offline-development/OD_AM_003.yaml
+  implementation_gate_only: true
+  production_authority: false
+  certification_authority: false
+allowed_files:
+  production:
+    - src/cmf_builder/application/genesis_review.py
+  tests:
+    - tests/stories/st_10_04/test_genesis_review.py
+  governance:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    - development-capsules/OD-AM-003/ST-10.04/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-003/ST-10.04/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-003/ST-10.04/TEST_RESULTS.json
+    - development-capsules/OD-AM-003/ST-10.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+requirements:
+  - classify Genesis decisions and owner types without substitution
+  - distinguish human, governed-operator, constitution, builder-rule, deterministic-code, agent-proposal and external-authority ownership
+  - issue review dispositions without amending underlying decisions
+  - detect proposal-as-approval, code-as-human-authority, expired approvals, limited scope and false production/certification claims
+prohibited:
+  - identity_management_product
+  - policy_editor
+  - legal_signature_service
+  - production_certification_tooling

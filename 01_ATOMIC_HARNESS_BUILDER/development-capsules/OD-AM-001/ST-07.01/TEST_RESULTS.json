@@ -1,0 +1,52 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-07.01",
+  "status": "IMPLEMENTED_DEVELOPMENT_PASS",
+  "dependency_gate": {
+    "required": 3,
+    "satisfied": 3,
+    "missing": []
+  },
+  "focused_command": "PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -m pytest tests/stories/st_07_01 -q -p no:cacheprovider",
+  "story_tests": {
+    "executed": 32,
+    "passed": 32,
+    "failed": 0,
+    "mandatory_skips": 0
+  },
+  "affected_command": "PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -m pytest tests/stories/st_06_03 tests/stories/st_06_04 tests/stories/st_06_05 tests/stories/st_07_01 -q -p no:cacheprovider",
+  "affected_tests": {
+    "executed": 126,
+    "passed": 126,
+    "failed": 0,
+    "mandatory_skips": 0
+  },
+  "validated_boundaries": [
+    "exact_three_targets",
+    "immutable_registry_revalidation",
+    "payload_safe_replay",
+    "governed_rollback_authority",
+    "atomic_failure",
+    "selection_observability",
+    "atomic_observation_and_state_commit",
+    "active_registry_drift_rejection",
+    "self_validating_selection_artifacts",
+    "replay_observation_degraded_mode_preserves_committed_result",
+    "external_snapshot_owner_authority",
+    "exact_target_extension_and_prohibition_policy",
+    "external_validation_pending",
+    "no_external_runtime_or_schema_ownership"
+  ],
+  "external_validation": "NOT_RUN_EXTERNAL_VALIDATION_PENDING",
+  "full_regression": {
+    "executed": true,
+    "passed": 1269,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "duration_seconds": 171.40,
+    "result": "PASS"
+  },
+  "production_ready": false,
+  "certified": false
+}

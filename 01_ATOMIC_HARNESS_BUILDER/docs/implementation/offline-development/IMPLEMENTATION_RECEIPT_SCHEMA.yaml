@@ -1,0 +1,36 @@
+schema_version: cmf-builder-implementation-completion-receipt-schema/v1
+receipt_type: ImplementationCompletionReceipt
+required_fields:
+  - schema_version
+  - receipt_id
+  - amendment_id
+  - story_id
+  - development_mode
+  - implementation_status
+  - implemented_outcome
+  - primary_obligations_implemented
+  - dependency_receipts
+  - source_files
+  - test_files
+  - tests
+  - deterministic_identity_evidence
+  - authority_and_boundary_evidence
+  - rollback_evidence
+  - observability_evidence
+  - evidence_gate_status
+  - external_gates_remaining_open
+  - production_ready
+  - certified
+  - hashes
+constraints:
+  amendment_id: OD-AM-001
+  implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+  production_ready: false
+  certified: false
+  story_completion_receipt_equivalence: prohibited
+  evidence_closure_receipt_equivalence: prohibited
+  historical_receipt_rewrite: prohibited
+hash_rules:
+  algorithm: SHA256
+  paths: repository_relative_forward_slash
+  serialization: canonical_JSON_for_machine_objects_or_exact_file_bytes

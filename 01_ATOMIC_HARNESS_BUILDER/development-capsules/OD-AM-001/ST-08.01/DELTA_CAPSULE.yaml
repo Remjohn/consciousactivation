@@ -1,0 +1,202 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.01:OFFLINE_FRESH_CONTEXT_CONTROLS
+preparation_status: VALIDATED_IMPLEMENTED_DEVELOPMENT_PASS
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.01
+  title: Measure Behavior Against Controls in Fresh Contexts
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: claimed behavioral improvements are attributable rather than prompt-history artifacts
+  primary_obligations:
+    - FR-103
+    - FR-104
+    - FR-105
+    - FR-106
+    - NFR-EVAL-002
+    - NFR-EVAL-003
+  primary_obligation_count: 6
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependencies:
+  - story_id: ST-02.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-02.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: ca2f3557b07048b766bd49a8bf550891c63ce9955cccada02bd320a59dc8564e
+    current_status: PASS
+  - story_id: ST-03.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-03.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+    current_status: PASS
+  - story_id: ST-04.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-04.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+    current_status: PASS
+  - story_id: ST-05.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-05.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 57807b3611f107f89787e80ba59f7b17a00dfe855cb60942f98138985e20b818
+    current_status: PASS
+  - story_id: ST-06.05
+    receipt_type: ImplementationCompletionReceipt
+    receipt_path: development-capsules/OD-AM-001/ST-06.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9
+    required_status: IMPLEMENTED_DEVELOPMENT_PASS
+    current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  - story_id: ST-07.04
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-07.04/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: e944032fe369e11c274e2d868bec6168d18124587cc09c9a328e58e33463fe2a
+    current_status: PASS
+dependency_gate:
+  satisfied: 6
+  required: 6
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.01
+  - docs/tech-specs/specs/TS-10-EVALUATION-REPAIR-AND-READINESS.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+  - docs/implementation/offline-development/EVIDENCE_GATE_REGISTRY.yaml
+implementation_scope_after_dependency_pass:
+  - immutable offline evaluation-case, control-arm, trial-plan, trial-result, layer-suite and evaluation-receipt contracts
+  - distinct layer suites for Canonical Skills, harness adaptations, composition recipes, JIT capsules and end-to-end phase behavior
+  - deterministic no-guidance control and candidate-arm comparison over the same governed synthetic structural inputs
+  - fresh evaluator context for every trial with no shared prompt, generator history, mutable cache or hidden state
+  - fixed canonical case order, repeat identities, evaluator version and exact input hashes
+  - deterministic mean, minimum, variance, failure-frequency and confidence-estimate calculation from governed supplied trial results
+  - positive, near-miss, counterexample, missing-evidence, contradiction, tempting-irrelevant-context and rule-violation-pressure cases
+  - deterministic rejection of missing controls, reused context, insufficient repetitions and missing governed expected-behavior references
+  - independent-evaluator authority separation so a generator cannot solely approve its own output
+  - deny-by-default AuthorityService authorization for the exact evaluation action, plan resource and evaluation time
+  - immutable structural-isolation evidence binding each case, arm, repeat and evaluator input while proving no runtime-isolation claim
+  - exact semantic receipt revalidation and deterministic rejection evidence derived from governed boundary inputs
+  - exact-resource authorization rejects wildcard-only grants at the evaluation commit boundary
+  - fresh-context construction receipts derive from all declared isolation fields and reject arbitrary digest substitution
+  - receipt and rejection observations are self-validating against exact plan, result, suite and authority identities
+  - complete TrialPlan, LayerSuite, EvaluationCase, TrialResult, FreshContextEvidence and DimensionScore graphs are reconstructed and revalidated before authority or compilation
+  - sealed construction identities reject object-level mutation and stale nested values at the commit boundary
+  - deterministic rejection snapshots remain available for corrupted input without committing partial evaluation state
+  - explicit authority, provenance, artifact, benchmark-version and evaluator-version references
+  - typed success and rejection observations without asserting empirical superiority
+offline_deterministic_fresh_context_controls:
+  input_boundary: repository_owned_synthetic_or_structural_fixtures_only
+  control_arm: no_guidance_control
+  comparison_arm: governed_candidate_behavior
+  same_case_inputs_for_both_arms: required
+  same_output_contract_for_both_arms: required
+  same_evaluation_dimensions_for_both_arms: required
+  fresh_context_per_trial: required
+  mutable_cross_trial_state: prohibited
+  generator_context_reuse: prohibited
+  hidden_prompt_history: prohibited
+  external_model_or_provider_execution: prohibited
+  canonical_case_order: required
+  canonical_repeat_order: required
+  minimum_repeat_count_is_contract_validated: true
+  repetition_count_and_randomization_policy_declared: required
+  required_statistics: [mean, minimum, variance, failure_frequency, confidence_estimate]
+  evaluation_layers:
+    - canonical_skill
+    - harness_adaptation
+    - composition_recipe
+    - jit_capsule
+    - end_to_end_phase
+  required_case_classes:
+    - positive_application
+    - near_miss
+    - counterexample
+    - missing_evidence
+    - contradiction
+    - tempting_irrelevant_context
+    - rule_violation_pressure
+  generator_may_be_sole_approver: false
+  governed_expected_behavior_reference: required
+  byte_identical_reproduction_for_identical_inputs: required
+  synthetic_result_may_close_evidence_gate: false
+evidence_and_blocker_gates_remaining:
+  BD-004:
+    status: EVIDENCE_PENDING
+    boundary: corpus authority outside the exact already-admitted ST-06.03 scope is not inferred
+  BD-008:
+    status: EVIDENCE_PENDING
+    boundary: protected-label custody, real-profile evidence, maturity promotion and thresholds remain open
+  HD-006:
+    status: HUMAN_POLICY_PENDING
+    boundary: real Human Reaction consent, retention, redaction, access, withdrawal and Identity DNA proposal storage remain prohibited
+  HD-007:
+    status: HUMAN_POLICY_PENDING
+    boundary: protected conversational thresholds and certification remain open
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: EXTERNAL_OR_AUTHORITY_EVIDENCE_NOT_CLOSED_BY_THIS_CAPSULE
+future_evaluation_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/fresh_context_controls.py
+  tests:
+    - tests/stories/st_08_01/test_fresh_context_evaluation.py
+    - tests/stories/st_08_01/test_failure_boundaries.py
+    - tests/stories/st_08_01/test_determinism_and_authority.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.01/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.01/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.01/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_evaluation_path_allowlist
+  - shared core files, repositories, ports, run aggregates and authority services
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs or historical receipts
+  - provider adapters, network access, credentials, cloud resources, model execution or external spend
+  - VAE, Delegation, Interview Expression or ReelCast runtime behavior
+  - actual Human Reaction, ReactionReceipt, ExpressionMoment or IdentityDNA approval creation
+prohibited_claims:
+  - empirical_superiority
+  - behavioral_improvement_proven
+  - protected_benchmark_passed
+  - real_profile_validated
+  - provider_validated
+  - maturity_promoted
+  - production_ready
+  - certified
+  - conversational_certified
+  - external_target_compatible
+acceptance_after_dependency_pass:
+  - identical governed inputs produce byte-identical cases, trials, results and receipts
+  - each of the five required skill-system layers has a separate suite and cannot inherit another layer's pass result
+  - every comparison uses a fresh evaluator context and an explicit no-guidance control
+  - both arms use identical governed case inputs, output contracts, budgets and evaluation dimensions
+  - control-arm target-failure absence is surfaced against the skill-necessity claim and improvements are represented only as computed deltas
+  - mean, minimum, variance, failure frequency and confidence estimates are deterministically derived from declared repetitions
+  - all seven required case classes are present and rule-pressure cases test governed action rather than doctrine recitation alone
+  - a generator or reasoning phase cannot be the sole approval authority for its own output
+  - missing controls, reused context, insufficient repetitions and missing governed expected behavior fail closed
+  - authority, provenance, evaluator version, benchmark version and artifact identities are observable
+  - offline synthetic results remain explicitly non-empirical and cannot promote maturity or close evidence gates
+implementation_validation:
+  source:
+    path: src/cmf_builder/evaluation/fresh_context_controls.py
+    sha256: a4bae7b3b86b503dd980b027c4f17855b1d5ace2d6352bcde1c69c56581358f6
+  tests:
+    focused: PASS_43_OF_43
+    affected_predecessor_and_category_evidence: PASS_224_OF_224
+    architecture_boundary: PASS_12_OF_12
+    complete_repository_regression: PASS_1282_OF_1282_NO_MANDATORY_SKIPS
+    Python_source_compilation: PASS
+    mandatory_skips: 0
+  external_provider_model_human_or_product_execution: false
+  empirical_threshold_maturity_production_or_certification_claim: false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  may_unlock: ST-08.02_OD_AM_001_OFFLINE_DEVELOPMENT
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

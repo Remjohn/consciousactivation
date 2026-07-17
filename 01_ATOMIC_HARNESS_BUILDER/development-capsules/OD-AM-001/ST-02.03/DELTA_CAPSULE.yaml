@@ -1,0 +1,65 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-02.03:PROVISIONAL_GRAMMAR
+amendment: {id: OD-AM-001, receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml, receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44}
+story:
+  id: ST-02.03
+  title: Induce Grammar Only After Syntax Evidence
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  primary_obligations: [AG-006, AG-007, D007, FR-028, FR-029, FR-030, FR-031]
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-02.02
+  receipt_path: development-capsules/OD-AM-001/ST-02.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 59ab5dd5dd7feb5e736faa2cd30724afa6653e6816636c72c5688fd0ff07197c
+  status: IMPLEMENTED_DEVELOPMENT_PASS
+authority_sources:
+  story_inventory: {path: docs/planning/STORY_INVENTORY.yaml, sha256: ee2f53a443b36977bd3ec352c45dbf485cef5c005fdc07d1fc6fafbff37c24fe}
+  obligation_coverage: {path: docs/planning/STORY_REQUIREMENT_COVERAGE.csv, sha256: a7311578fdd5a70cf479de5156f842cfac94498f51f1bcbb280833dd5dc1f215}
+  tech_spec: {path: docs/tech-specs/specs/TS-03-VISUAL-SYNTAX-FIRST.md, sha256: d2287b754e24cf7dc9350cf378f825d9a501b16d33b6fafd600f48033a218c27}
+  adr: {path: docs/architecture/adr/ADR-008-VISUAL-INFERENCE-AND-KNOWLEDGE-STATUS.md, sha256: da01278f2a8a615782d82df8cac7c3633481f359f684cb33c84b3fb0079c1bd3}
+implementation_scope:
+  - induce cross-specimen provisional motifs only from hash-valid ST-02.02 graph edges
+  - preserve substrate, graph kind, relation, endpoint ontology, rich source objects, provenance and uncertainty
+  - retain unsupported function, sequence-effect and Activative meaning as explicit provisional hypotheses
+  - reject generic flattening, unsupported promotion, untraceable evidence and unauthorized mutation
+  - derive deterministic immutable grammar identity and a new development version for changed evidence
+  - prove atomic commit, idempotency, historical retention and non-destructive rollback
+blocker_scope:
+  BD-004: {offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, evidence_gate: EVIDENCE_PENDING}
+  BD-007: {offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, empirical_gate: EVIDENCE_PENDING}
+  BD-008: {offline_provisional_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, real_profile_gate: EVIDENCE_PENDING}
+  HD-006: {offline_non_personal_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, human_policy: HUMAN_POLICY_PENDING}
+allowed_files:
+  - src/cmf_builder/visual/grammar_contracts.py
+  - src/cmf_builder/visual/induction.py
+  - tests/stories/st_02_03/fixtures.py
+  - tests/stories/st_02_03/test_st_02_03_grammar.py
+  - tests/stories/st_02_03/test_st_02_03_failures.py
+  - tests/stories/st_02_03/test_st_02_03_determinism.py
+  - tests/stories/st_02_03/test_st_02_03_authority_rollback.py
+  - development-capsules/OD-AM-001/ST-02.03/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-02.03/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-02.03/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-02.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - existing source, shared core, package exports or __init__.py files
+  - architecture tests, source-boundary registry, queues or status files
+  - generic notes or flattened motif representations
+  - hypothesis ratification, human truth, Reaction Receipt or Expression Moment invention
+  - provider, network, external-product, runtime or production behavior
+  - StoryCompletionReceipt or EvidenceClosureReceipt
+acceptance:
+  - only distinct-specimen-supported graph relations become deterministic grammar motifs
+  - all motifs retain substrate, graph kind, endpoint ontology and rich source references
+  - unsupported meaning remains HYPOTHESIS and PROVISIONAL
+  - generic flattening, invalid graphs, untraceable hypotheses and unauthorized actors fail closed
+  - identical inputs produce byte-identical grammar and receipts
+  - changed evidence or hypotheses create a new immutable version within the same series
+  - atomic failure leaves no state and rollback preserves complete version history
+  - production readiness, certification and empirical superiority remain false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: PENDING_INTEGRATOR_FULL_REGRESSION
+  may_unlock: ST-02.04_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false

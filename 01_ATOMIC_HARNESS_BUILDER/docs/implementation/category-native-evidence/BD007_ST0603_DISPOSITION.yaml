@@ -1,37 +1,51 @@
-schema_version: cmf-builder-bd007-st0603-disposition/v1
-disposition_id: BD007-ST0603-EVIDENCE-CAMPAIGN-2026-07-16
-recorded_at_utc: 2026-07-16T22:47:25.7496542Z
+schema_version: cmf-builder-bd007-st0603-disposition/v2
+disposition_id: BD007-ST0603-PRECLOUD-DEFERRED-2026-07-17
+recorded_on: "2026-07-17"
 blocker: BD-007
 story: ST-06.03
-findings:
+disposition: DEFERRED_PENDING_OPERATOR_CLOUD_ENVIRONMENT_AND_COMPLETE_CASE_EVIDENCE
+evidence_state:
+  BD_004_bounded_corpus: PASS
   provider_neutral_runner: PASS_DEVELOPMENT_INFRASTRUCTURE_ONLY
-  immutable_configuration_contract: PASS
-  runner_mechanics_configuration:
-    identity: BD007-LOCAL-NONSEMANTIC-FIXTURE-v1
-    configuration_hash: e21dcdcaf83352abe833e5cf21a46dfce1479f81b20b28765b48e07cff568619
-    eligible_semantic_provider: false
-  primary_semantic_provider_configuration: BLOCKED_OPERATOR_AUTHORITY
-  second_materially_distinct_configuration: BLOCKED_EXTERNAL_PROVIDER
-  admitted_empirical_cases: BLOCKED_OPERATOR_AUTHORITY
+  frozen_rubric: PASS_UNCHANGED
+  short_form_case_source: QUALIFIED_ADMITTED_ARCHIVE_MEMBER
+  format02_case_source: QUALIFIED_ADMITTED_ARCHIVE_MEMBER
+  conversational_case_source: QUALIFIED_SYNTHETIC_STRUCTURAL_PENDING_AMENDMENT
+  generic_control_source: QUALIFIED_REPOSITORY_FIXTURE_PENDING_AMENDMENT
+  experiment_amendment: PENDING_EXPLICIT_GOVERNED_APPROVAL
+  cloud_environment: NOT_CONFIGURED
+  eligible_deployment_configuration: 0
   authorized_provider_calls: 0
   empirical_outputs: 0
   dimension_scorecards: 0
   category_native_advantage: NOT_DEMONSTRATED
 exact_story_effect:
-  disposition: BLOCKED_EVIDENCE
-  applicable_blocker_cut: [BD-004, BD-007]
+  queue_classification: BLOCKED_EVIDENCE
+  applicable_blocker_cut: [BD-007]
   may_use_runner_for_mechanics_tests: true
+  may_authenticate_to_cloud: false
+  may_create_cloud_resources: false
+  may_download_model: false
   may_make_live_calls: false
   may_implement_ST_06_03: false
-closure_requirements:
-  - valid BD004 corpus admission receipt bound to the exact archive and admitted-member-set hashes
-  - one exact eligible semantic-provider configuration for the bounded internal baseline
-  - bounded spend credential transmission network output and retention authority
-  - 24 governed calls for four cases two arms and three repeats
-  - complete request output and scorecard hashes
-  - no native non-compensable failure
-  - governed development advantage over the flattened control for every applicable case
-broader_scopes_remaining_open: [second_provider_comparison, provider_selection, production_benchmarking, protected_evaluation, production_certification]
+activation_conditions:
+  - approved BD-007 v2 mixed governed-source experiment amendment
+  - implemented and hash-valid four-case bindings
+  - configured authenticated AWS account or Google Cloud project
+  - selected region and visible sufficient GPU quota
+  - approved least-privileged cloud identity
+  - current regional cost evidence and bounded budget authorization
+  - revision-pinned locally verified and mirrored model-file manifest
+  - immutable vLLM container and runtime receipt
+  - complete 24-call governed experiment
+  - complete 17-dimension scorecards and nine non-compensable checks
+  - governed native advantage over flattened control
+broader_scopes_remaining_open:
+  - multi_model_or_multi_configuration_comparison
+  - real_conversational_profile_evidence
+  - production_benchmarking
+  - protected_evaluation
+  - production_certification
+verdict: DEFERRED_PENDING_OPERATOR_CLOUD_ENVIRONMENT_AND_COMPLETE_CASE_EVIDENCE
 production_ready: false
 certified: false
-verdict: BLOCKED_EVIDENCE

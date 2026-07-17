@@ -1,0 +1,64 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "story_id": "ST-06.05",
+  "development_mode": "STRUCTURAL_NON_PERSONAL_UNCERTIFIED_DEVELOPMENT_BRANCH",
+  "runs": [
+    {
+      "name": "story_focused",
+      "command": "PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -m pytest tests/stories/st_06_05 -q -p no:cacheprovider",
+      "passed": 38,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 0.52,
+      "verdict": "PASS"
+    },
+    {
+      "name": "offline_category_chain",
+      "command": "PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 python -m pytest tests/stories/st_06_03 tests/stories/st_06_04 tests/stories/st_06_05 -q -p no:cacheprovider",
+      "passed": 94,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 0.88,
+      "verdict": "PASS"
+    },
+    {
+      "name": "source_compilation",
+      "command": "python -m py_compile src/cmf_builder/domain/conversational_feedback.py src/cmf_builder/application/conversational_commands.py",
+      "files": 2,
+      "failed": 0,
+      "verdict": "PASS"
+    }
+  ],
+  "validated_behaviors": [
+    "four_first_class_structural_conversational_profiles",
+    "activative_call_contract_without_actual_reaction",
+    "attributable_payload_free_human_response_request",
+    "reaction_receipt_and_expression_moment_external_reference_applicability",
+    "expression_to_reaction_provenance",
+    "consent_reference_withdrawal_and_invalidation",
+    "recompile_eligibility_reference_only",
+    "wrong_reading_locks_and_lineage",
+    "replay_resume_and_historical_reproduction",
+    "authority_conflict_stale_parent_and_atomic_failure",
+    "exact_transition_actor_to_authority_evidence_binding",
+    "human_only_consent_withdrawal_action",
+    "exact_chain_invalidation_authority_without_role_impersonation",
+    "typed_replay_conflict_and_stale_parent_rejection_observations",
+    "blank_and_invalid_immutable_version_rejection",
+    "no_external_runtime_or_evidence_issuance_surface"
+  ],
+  "full_repository_regression": {
+    "status": "PASS",
+    "passed": 1152,
+    "failed": 0,
+    "skipped": 0,
+    "mandatory_skips": 0,
+    "duration_seconds": 169.43,
+    "source_boundary_registry_sha256": "51da261829e1ca3f87278260c5b0ad90629d7bfcc1e961fea11b8e2c085afde7",
+    "source_tree_sha256": "c7d0564fe96dbb4658b251686e05e93eabe6db221b5d41d290df4a29bd43aeb4",
+    "verdict": "PASS"
+  },
+  "production_ready": false,
+  "certified": false,
+  "verdict": "PASS"
+}

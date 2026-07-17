@@ -1,0 +1,96 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-08.03:INDEPENDENT_SCORING:2a185d0f88bd
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-08.03
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder can issue deterministic, authority-bound development scorecards that
+  preserve all eight governed dimensions independently, enforce all nine
+  non-compensable gates, compile exact one-variable controlled mutations, summarize
+  complete repeated-run distributions, ingest downstream results against exact
+  artifact/origin/Builder-version lineage, and emit non-destructive invalidation,
+  rollback and rejection receipts without closing any external evidence gate.
+primary_obligations_implemented:
+  - D024
+  - FR-111
+  - FR-112
+  - FR-113
+  - FR-114
+  - FR-115
+  - FR-116
+  - HG-008
+  - NFR-EVAL-004
+dependency_receipts:
+  satisfied:
+    - ST-08.02:ImplementationCompletionReceipt:c9438a38beb08a54a55d8f681972786282afc4f9a32756e6f027069bca4cae0b
+  pending: []
+source_files:
+  - path: src/cmf_builder/evaluation/independent_scoring.py
+    sha256: 2a185d0f88bd72e3353c5a92610d83de4b1a88900eaee78a60b20266915ef8e6
+test_files:
+  - path: tests/stories/st_08_03/test_independent_dimension_scoring.py
+    sha256: f7403061d22d3f65575f35c8ea516e2b576d673b1f524354fab24c03b18d8bba
+  - path: tests/stories/st_08_03/test_controlled_mutations.py
+    sha256: ebc14f04deff871be9e85d7d226701bf062f32af7a74b15307a4d3ecc5e2b8f0
+  - path: tests/stories/st_08_03/test_non_compensable_gates.py
+    sha256: e5bc52d56ce0509cc4c14b77e698012ed1c2ce8eab5f1afe59a99b29d8edf4f9
+  - path: tests/stories/st_08_03/test_lineage_determinism_and_rollback.py
+    sha256: 4110907760f7de2064218a320988b240b6bd4935563d4ecf34787c53b5856b57
+tests:
+  status: PASS_ALL_GOVERNED_GATES
+  focused: PASS_95_OF_95
+  affected_ST_08_01_through_ST_08_03: PASS_166_OF_166
+  architecture_boundary: PASS_12_OF_12
+  complete_repository_regression: PASS_1405_OF_1405_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS_113_SOURCE_FILES
+  mandatory_skips: 0
+  results_path: development-capsules/OD-AM-001/ST-08.03/TEST_RESULTS.json
+deterministic_identity_evidence: >-
+  Identical governed inputs produce byte-identical scorecards, mutation identities,
+  scoring receipts, rejection receipts and lifecycle transitions in fresh Python
+  processes; changes to any pinned dimension, lineage, authority, command, case,
+  rubric, result or governed dependency produce a new immutable identity.
+authority_and_boundary_evidence:
+  OD_AM_001_receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  ST_08_02_receipt_sha256: c9438a38beb08a54a55d8f681972786282afc4f9a32756e6f027069bca4cae0b
+  exact_authority_command_resource_and_payload_binding: PASS
+  all_eight_dimensions_independently_visible: PASS
+  all_nine_non_compensable_gates_enforced: PASS
+  category_and_profile_applicability_identity_bound: PASS
+  protected_case_and_label_access_rejected: PASS
+  downstream_artifact_origin_and_Builder_version_bound: PASS
+  external_evaluator_or_provider_used: false
+  real_protected_evidence_created: false
+  real_human_reaction_data_used: false
+  production_threshold_defined: false
+  production_or_certification_authority: false
+rollback_evidence: PASS_SELECTIVE_INVALIDATION_NON_DESTRUCTIVE_ROLLBACK_ZERO_PARTIAL_STATE
+observability_evidence: PASS_OUTCOME_VERIFIED_REJECTED_AND_TRANSITIONED_STORY_SCOPED_OBSERVATIONS
+evidence_gate_status: EVIDENCE_AND_HUMAN_POLICY_GATES_REMAIN_OPEN
+external_gates_remaining_open:
+  - BD-004
+  - BD-008
+  - HD-006
+  - HD-007
+  - XDEP-001
+  - XDEP-002
+  - XDEP-003
+  - XDEP-004
+  - XDEP-006
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: 3e080ebe267cc6f950a1a2ab9715ca2c088471a8b137139705f82c00297f228c
+  test_results_sha256: 2f00553f7960964764f311c0be60e22a29078ede6bc9597c8b1638059b7a69d2
+  file_change_manifest_sha256: 9f36a7b8926ef29a40c54d9b14d1afbede5c9752455e20779b9ffc371a8b072e
+  source_boundary_registry_sha256: 49e369efe9830d70cbf6e7b296bfdb552bf2147c3ee7e4bb5a1ba5e164006a67
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_tree_sha256: a1b73e0867fc9a27d8f358155db97730c80400b71e51b7e0bb62312784f443fb
+issuance_rule: PASS_FRESH_CANONICAL_INTEGRATOR_FULL_REGRESSION_AND_SOURCE_TREE_HASH
+promotion_gate: PASS_CANONICAL_FULL_REGRESSION_SOURCE_BOUNDARY_AND_EVIDENCE_VALIDATION
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-08.04_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true

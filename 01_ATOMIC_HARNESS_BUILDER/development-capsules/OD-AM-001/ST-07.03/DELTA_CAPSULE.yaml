@@ -1,0 +1,205 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-07.03:LOCAL_EXTERNAL_HANDOFF_CONTRACTS
+preparation_status: VALIDATED_STRUCTURE_IMPLEMENTATION_PENDING
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-07.03
+  title: Compile VAE and Delegation Handoffs Without Implementing Them
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: external products receive frozen, typed meaning while Builder stays within compile-validate-handoff ownership
+  primary_obligations:
+    - ADR-018
+    - CONST-005
+    - FR-172
+    - FR-173
+  primary_obligation_count: 4
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EXTERNAL_VALIDATION
+dependency:
+  story_id: ST-07.02
+  receipt_type: StoryCompletionReceipt
+  receipt_path: development-capsules/ST-07.02/completion/STORY_COMPLETION_RECEIPT.yaml
+  receipt_sha256: ee13f9b6601ab1b166f16d2d30fb043f1441745d9e8146248d2d6d7d08caa681
+  current_status: PASS
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS_DIRECT_DEPENDENCY
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-07.03
+  - docs/architecture/adr/ADR-018-FORMAT-02-ASSET-DEMAND-BOUNDARY.md
+  - contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+  - contracts/integration/BUILDER_TO_DELEGATION_WIRE_MAPPING.yaml
+  - contracts/integration/ACTIVATIVE_LINEAGE_MAPPING.yaml
+  - contracts/integration/SOURCE_PROVENANCE_MAPPING.yaml
+  - contracts/integration/WRONG_READING_LOCK_INHERITANCE.yaml
+  - docs/implementation/offline-development/OD_AM_001.yaml
+external_contract_pin:
+  Delegation_version: 1.1.0-rc.4
+  release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+  release_receipt_sha256: sha256:042ab1ad99a4e5a4f8ff3a08c559b410db9c17cbade48ef05e92d6170dddc25f
+  release_manifest_sha256: sha256:7a23c0896f215c008bd2f9f0f7079cb97c23d05d100ac5a4b60691bb8abb9882
+  compatibility_profile: cmf-delegation-compatibility-profile-1-0@1.0
+  compatibility_profile_sha256: sha256:d47cc2688b33a76182186ead1c19158f04318d8de22a08742cc683931fbc44a3
+  trust_status: local_unsigned_release_candidate
+  production_eligible: false
+  Builder_owns_shared_schema: false
+  Builder_owns_Delegation_runtime_or_transport: false
+  Builder_owns_VAE_runtime_or_transport: false
+implementation_scope:
+  Builder_owned_ports:
+    - VisualAssetDemandPort contract with local fixture-backed test double only
+    - DelegationHandoffPort contract with local fixture-backed test double only
+  Builder_owned_contracts:
+    - immutable VisualAssetDemand request and AssetResponse validation boundary
+    - immutable Delegation request, response, partial-result, error and reconciliation boundary
+    - typed request identity, target identity, version, compatibility, idempotency, timeout and retry policy declarations
+    - typed authority, provenance, source-kind, semantic-lineage and wrong-reading-lock references
+    - local HandoffAcknowledgementReceipt that proves only deterministic test-double acknowledgement
+    - local CompatibilityValidationReceipt that proves only validation against pinned local contract fixtures
+  Builder_owned_mappings:
+    - lossless Builder-to-VAE demand mapping without semantic mutation
+    - lossless Builder-to-Delegation RC4 field mapping without shared-schema ownership
+    - explicit three-target profile separation without a flattened universal target
+    - all required Activative and visual-semantic lineage retained as structured fields rather than notes
+    - deterministic source-kind mapping with ambiguous evidence rejected
+    - monotonic inherited wrong-reading locks with only stricter derivative additions
+  local_fixture_and_test_double_behavior:
+    - hash-pinned non-executable request, response, acknowledgement, partial-result and failure fixtures
+    - no credentials, network, subprocess, queue, SDK, provider, VAE or Delegation runtime
+    - deterministic acknowledgement and compatibility identities
+    - repeated identical commands return the original local receipt
+    - conflicting command payloads fail closed
+acknowledgement_and_compatibility_receipts:
+  HandoffAcknowledgementReceipt:
+    authority: LOCAL_TEST_DOUBLE_ONLY
+    external_acceptance: NOT_CLAIMED
+    required_fields:
+      - request_identity
+      - target_identity
+      - acknowledged_contract_version
+      - acknowledged_payload_hash
+      - test_double_identity
+      - authority_identity
+      - outcome
+      - failure_context
+  CompatibilityValidationReceipt:
+    authority: BUILDER_LOCAL_CONTRACT_VALIDATION_ONLY
+    external_compatibility: EXTERNAL_VALIDATION_PENDING
+    required_fields:
+      - request_identity
+      - target_profile_identity
+      - local_contract_pin
+      - mapping_identity
+      - input_hash
+      - output_hash
+      - validation_outcome
+      - limitations
+rejection_cases:
+  - semantic mutation of content-owned intent, sequence role or composition purpose
+  - missing, flattened or notes-only required lineage
+  - empty wrong-reading locks on a semantically generative or transformative demand
+  - removal or weakening of inherited wrong-reading locks
+  - ambiguous or guessed source kind
+  - interview_expression without non-empty Reaction Receipt and Expression Moment references
+  - missing source or rights provenance
+  - incompatible, unpinned, stale, superseded or production-ineligible contract version
+  - mismatched request, target, run, payload hash, acknowledgement or lineage identity
+  - multiple target owners or universal-profile flattening
+  - unauthorized actor, acknowledgement, replacement or compatibility approval
+  - unstubbed external dependency, credential, network, runtime, transport or publication attempt
+  - duplicate command with conflicting payload
+  - local fixture response that invents external acceptance, certification or human truth
+blocker_and_external_gate_scope:
+  BD-007:
+    offline_implementation_status: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    empirical_status: EVIDENCE_PENDING
+  BD-008:
+    offline_implementation_status: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    protected_or_certification_status: EVIDENCE_PENDING
+  BD-014:
+    Builder_owned_local_contract_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    external_adoption_status: EXTERNAL_VALIDATION_PENDING
+  XRI-016:
+    status: EXTERNAL_VALIDATION_PENDING
+  XRI-019:
+    status: EXTERNAL_VALIDATION_PENDING
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+external_ownership_preserved:
+  VAE:
+    owns:
+      - image or asset generation
+      - editing and realization behavior
+      - runtime, credentials, providers, queues and production persistence
+      - external acknowledgement and adoption decisions
+  Delegation:
+    owns:
+      - shared schemas and generated shared types
+      - protocol runtime, transport, retry execution and reconciliation execution
+      - compatibility release and external acknowledgement decisions
+  future_conversational_products:
+    own:
+      - Interview Expression and ReelCast live behavior
+      - real Reaction Receipt capture and Expression Moment extraction
+  Builder:
+    owns_only:
+      - local port contracts
+      - deterministic request and result mapping
+      - local validation and fixtures
+      - failure handling and non-authoritative compatibility declarations
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/domain/external_handoff_contracts.py
+    - src/cmf_builder/application/external_handoff_commands.py
+  tests:
+    - tests/stories/st_07_03/test_external_handoff_contracts.py
+    - tests/stories/st_07_03/test_local_ports_and_acknowledgements.py
+    - tests/stories/st_07_03/test_failure_authority_compatibility.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-07.03/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-07.03/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-07.03/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-07.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregate, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, contract mappings or historical receipts
+  - local fork, copy or redefinition of Delegation-owned schemas
+  - VAE, Delegation, Interview Expression or ReelCast runtime or transport behavior
+  - network APIs, queues, brokers, credentials, cloud resources, external providers or production persistence
+  - actual external acknowledgement, adoption, publication or certification
+prohibited_claims:
+  - external_target_compatible
+  - VAE_validated
+  - Delegation_runtime_validated
+  - external_adoption_complete
+  - external_acknowledgement_received
+  - production_ready
+  - certified
+  - provider_validated
+  - conversational_runtime_ready
+acceptance_after_implementation:
+  - exact governed inputs produce byte-identical requests, mappings, local acknowledgements, compatibility receipts and failure receipts
+  - VAE and Delegation targets remain distinct and all mapped semantic fields preserve exact structured lineage
+  - local ports and test doubles perform no external runtime, transport, provider or publication behavior
+  - source-kind, interview provenance and wrong-reading-lock inheritance rules fail closed
+  - local acknowledgements are attributable only to the exact test double and never represent external acceptance
+  - compatibility receipts remain LOCAL_CONTRACT_VALIDATION_ONLY with EXTERNAL_VALIDATION_PENDING
+  - semantic mutation, missing provenance, incompatible versions, authority violations and conflicting commands leave no partial state
+  - BD-014, XRI-016 and XRI-019 external scopes remain open and production and certification remain false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: "NOT_ISSUED_DEPENDENCY/IMPLEMENTATION_PENDING"
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  external_compatibility: EXTERNAL_VALIDATION_PENDING
+  production_ready: false
+  certified: false

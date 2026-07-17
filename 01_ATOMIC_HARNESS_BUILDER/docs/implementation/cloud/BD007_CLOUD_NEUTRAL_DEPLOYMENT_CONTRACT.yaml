@@ -1,0 +1,198 @@
+schema_version: cmf-builder-bd007-cloud-neutral-deployment-contract/v1
+contract_id: BD007-QWEN36-27B-FP8-PRECLOUD-v1
+recorded_on: "2026-07-17"
+status: PREPARED_NOT_DEPLOYMENT_AUTHORIZED
+scope: BD-007_ST-06.03_DEVELOPMENT_ONLY_NON_CERTIFYING
+authority:
+  campaign: AUTHORIZE PRE-CLOUD GOVERNANCE, INTEGRITY, AND BD-007 READINESS CAMPAIGN
+  cloud_authentication_authorized: false
+  resource_creation_authorized: false
+  model_download_authorized: false
+  provider_calls_authorized: false
+  spend_authorized: false
+model:
+  repository: Qwen/Qwen3.6-27B-FP8
+  revision: e89b16ebf1988b3d6befa7de50abc2d76f26eb09
+  mutable_revision_prohibited: true
+  architecture: DENSE_MULTIMODAL_LANGUAGE_MODEL_WITH_VISION_ENCODER
+  serving_mode: LANGUAGE_MODEL_ONLY
+  quantization: OFFICIAL_FINE_GRAINED_FP8_E4M3_BLOCK_128x128
+  license: Apache-2.0
+  license_sha256: 50cbab8a892c5f2993b8c7351a99182507472def3b1374558308605d99b86b32
+  source_listing:
+    files: 80
+    total_bytes: 30890040900
+    safetensor_files: 66
+    canonical_path_size_sha256_manifest: 7178b826303a9e4c7adc58096cc8e0d19bc3784e18567c46f802f0c0ddc1cd2e
+    canonicalization: UTF8_sorted_path_pipe_size_pipe_sha256_newline
+    qualification: SOURCE_API_LISTING_ONLY_NOT_LOCAL_BYTE_VERIFICATION
+  deployment_prerequisites:
+    - download every revision-pinned file in an authorized bootstrap environment
+    - verify every byte against the official repository identity
+    - issue a complete local model-file manifest and receipt
+    - mirror exact verified bytes to the selected encrypted cloud artifact location
+    - verify the mirrored object manifest
+    - prohibit model downloads during semantic trials
+runtime:
+  server: vLLM
+  exact_version: 0.19.0
+  api_protocol: OpenAI-compatible_chat_completions
+  reasoning_parser: qwen3
+  language_model_only: true
+  tools_enabled: false
+  automatic_tool_choice: false
+  automatic_retries: 0
+  request_timeout_seconds: 300
+  container_build:
+    base_image_repository: vllm/vllm-openai
+    base_image_version_candidate: v0.19.0
+    base_image_digest: REQUIRED_BEFORE_BUILD
+    python_dependency_lock: REQUIRED_BEFORE_BUILD
+    pytorch_cuda_identity: REQUIRED_BEFORE_BUILD
+    os_package_lock: REQUIRED_BEFORE_BUILD
+    final_image_digest: REQUIRED_BEFORE_DEPLOYMENT
+    mutable_tags_as_authority: prohibited
+    network_fetch_during_semantic_trials: prohibited
+  serve_arguments:
+    - vllm
+    - serve
+    - GOVERNED_CLOUD_MODEL_PATH
+    - --reasoning-parser
+    - qwen3
+    - --language-model-only
+    - --max-model-len
+    - "131072"
+    - --tensor-parallel-size
+    - QUALIFIED_GPU_COUNT
+  additional_arguments:
+    rule: >-
+      Only hardware-required documented arguments that do not change model semantics
+      may be added before semantic outputs are observed; each must be hash-bound in the
+      final runtime receipt.
+limits:
+  maximum_model_context_tokens: 131072
+  maximum_experiment_input_tokens_per_call: 50000
+  maximum_output_tokens_per_call: 8192
+  maximum_concurrency: 2
+  input_plus_output_must_fit_context: true
+  required_evidence_may_be_silently_truncated: false
+sampling:
+  thinking_mode: true
+  preserve_thinking: false
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 20
+  min_p: 0.0
+  presence_penalty: 0.0
+  repetition_penalty: 1.0
+  tools: []
+  repeat_seeds: [41, 42, 43]
+  unsupported_seed_rule: GOVERNED_UNSUPPORTED_NOT_SENT
+  changes_after_semantic_output: prohibited
+request_contract:
+  endpoint_path: /v1/chat/completions
+  method: POST
+  content_type: application/json
+  required_fields: [model, messages, max_tokens, temperature, top_p, stream]
+  fixed_fields:
+    model: Qwen/Qwen3.6-27B-FP8
+    max_tokens: 8192
+    temperature: 1.0
+    top_p: 0.95
+    stream: false
+  governed_extra_body: {top_k: 20, min_p: 0.0, repetition_penalty: 1.0}
+  prohibited_fields: [tools, tool_choice]
+  per_request_evidence:
+    - endpoint_configuration_sha256
+    - model_revision
+    - model_file_manifest_sha256
+    - container_digest
+    - case_id
+    - arm
+    - repeat
+    - seed_or_unsupported_status
+    - case_evidence_binding_sha256
+    - request_sha256
+response_contract:
+  required_capture: [http_status, response_body_sha256, duration_ms, input_tokens, output_tokens, finish_reason]
+  semantic_output_storage: ENCRYPTED_CONSCIOUS_ELITE_CONTROLLED_STORAGE_ONLY
+  default_access_log_payloads: prohibited
+  thinking_content_preserved: false
+  raw_output_mutation_before_hash: prohibited
+health_contract:
+  startup_probe: container_process_and_model_load_complete
+  liveness_path: /health
+  readiness_checks:
+    - /v1/models returns the exact governed model identity
+    - one bounded non-semantic health request succeeds
+    - two-concurrent maximum-governed-size qualification succeeds
+    - measured memory remains under the fixed utilization limit
+  theoretical_memory_only_is_sufficient: false
+error_taxonomy:
+  - MODEL_MANIFEST_MISMATCH
+  - CONTAINER_DIGEST_MISMATCH
+  - RUNTIME_CONFIGURATION_DRIFT
+  - CASE_EVIDENCE_BINDING_INVALID
+  - CONTEXT_LIMIT_EXCEEDED
+  - OUTPUT_LIMIT_EXCEEDED
+  - AUTHORITY_MISSING
+  - CREDENTIAL_UNAVAILABLE
+  - CLOUD_QUOTA_UNAVAILABLE
+  - BUDGET_SOFT_STOP
+  - BUDGET_HARD_STOP
+  - STARTUP_TIMEOUT
+  - REQUEST_TIMEOUT
+  - CANCELLATION_REQUESTED
+  - MALFORMED_RESPONSE
+  - PARTIAL_EXPERIMENT
+timeout_and_cancellation:
+  request_timeout_seconds: 300
+  retries: 0
+  cancellation: fail_current_call_and_preserve_redacted_failure_evidence
+  partial_results_may_close_BD_007: false
+artifact_storage_contract:
+  encryption_at_rest: required
+  exact_model_revision_prefix: required
+  immutable_object_versions_or_generation_ids: required
+  serving_identity_access: read_exact_model_prefix_only
+  public_access: prohibited
+evidence_storage_contract:
+  encryption_at_rest: required
+  builder_identity_access: write_exact_experiment_prefix_only
+  permitted_cleartext: [hashes, model_identity, container_identity, timing, token_usage, scorecard, redacted_failure_context]
+  prohibited_cleartext: [corpus_excerpts, complete_prompts, semantic_outputs, credentials, secrets, private_identifiers]
+network_phases:
+  bootstrap:
+    allow_only: [official_Hugging_Face_revision, pinned_runtime_dependencies, selected_cloud_APIs, selected_container_registry, selected_object_storage]
+  semantic_trial:
+    public_internet_egress: prohibited
+    model_download_access: prohibited
+    allow_only: [Builder_to_private_endpoint, selected_cloud_internal_control, required_metrics]
+teardown_contract:
+  maximum_endpoint_lifetime_minutes: 180
+  delete_endpoint_immediately_after_evidence_completion: true
+  delete_unused_endpoint_configurations: true
+  stop_temporary_build_resources: true
+  preserve_only_hash_bound_allowed_artifacts: true
+  final_resource_inventory_required: true
+  actual_uptime_and_cost_receipt_required: true
+hardware_qualification:
+  static_starting_floor: AT_LEAST_80_GIB_AGGREGATE_FP8_CAPABLE_VRAM_OR_VERIFIED_MULTI_GPU_EQUIVALENT
+  this_is_a_certified_minimum: false
+  selection_rule: smallest_available_configuration_passing_real_load_health_max_request_and_concurrency_tests
+  required_measurements: [load_time, idle_memory, maximum_request_memory, concurrency_memory, maximum_proven_request_size]
+deployment_gate:
+  state: CLOSED_PRE_CLOUD
+  activation_conditions:
+    - ST_01_03_integrity_disposition_PASS
+    - BD_007_experiment_source_binding_approved_and_complete
+    - authenticated_selected_cloud_environment
+    - selected_region
+    - visible_sufficient_GPU_quota
+    - approved_least_privileged_identity
+    - current_regional_pricing_bound_to_budget
+    - complete_model_file_byte_manifest
+    - immutable_container_digest
+    - explicit_cloud_execution_authorization
+production_ready: false
+certified: false

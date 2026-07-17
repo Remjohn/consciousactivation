@@ -1,0 +1,82 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_type: ImplementationCompletionReceipt
+receipt_id: OD-AM-001:ST-02.01:OFFLINE_IMPLEMENTATION
+story_id: ST-02.01
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+recorded_on_utc: "2026-07-17"
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+completion_verdict: PASS
+authority:
+  amendment_receipt:
+    path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+    sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  delta_capsule:
+    path: development-capsules/OD-AM-001/ST-02.01/DELTA_CAPSULE.yaml
+    sha256: 0394b341dd053795a7228c0fb465447ab6799cf8c4d372aa02913e847e1649a6
+dependency:
+  story_id: ST-01.04
+  completion_receipt:
+    path: development-capsules/ST-01.04/completion/STORY_COMPLETION_RECEIPT.yaml
+    sha256: 1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a
+implemented_outcome: >-
+  Deterministically normalize governed repository-owned structural fixtures into
+  immutable typed syntax observations with exact geometry, explicit source,
+  provenance, observation, governance, knowledge, uncertainty and applicability
+  distinctions, plus duplicate-safe offline development receipts.
+owned_obligations:
+  - id: ADR-008
+    status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE
+  - id: FR-019
+    status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE
+  - id: FR-020
+    status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE
+  - id: FR-021
+    status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE
+  - id: FR-022
+    status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE
+  - id: FR-023
+    status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE
+verification:
+  focused_tests:
+    result: PASS
+    passed: 34
+    failed: 0
+    skipped: 0
+    mandatory_skips: 0
+  python_syntax_parse:
+    result: PASS
+    passed: 6
+    failed: 0
+  deterministic_reproduction: PASS_FOCUSED
+  duplicate_inflation_control: PASS_FOCUSED
+  contamination_and_provider_only_rejection: PASS_FOCUSED
+  file_scope: PASS_LANE_SCOPE
+  integrator_full_regression: PASS_1020_OF_1020
+  canonical_exact_source_registration: PASS_GOVERNED_SOURCE_BOUNDARY_REGISTRY
+  mandatory_skips: 0
+evidence:
+  test_results:
+    path: development-capsules/OD-AM-001/ST-02.01/TEST_RESULTS.json
+    sha256: 618e50a5973a35c0f0fdf6d2316cf7b9d32c3c07bbcdb6134b15a127cf0da861
+  file_change_manifest:
+    path: development-capsules/OD-AM-001/ST-02.01/FILE_CHANGE_MANIFEST.yaml
+    sha256: 09167072f7337760a0fa7e29afd713a109ff6f5d56c9e54b7d2601339cd4e3c2
+blocker_scope_preserved:
+  BD-004: EVIDENCE_PENDING_OUTSIDE_OFFLINE_BRANCH
+  BD-007: EVIDENCE_PENDING_OUTSIDE_OFFLINE_BRANCH
+  HD-006: HUMAN_POLICY_PENDING_OUTSIDE_NON_PERSONAL_OFFLINE_BRANCH
+claims:
+  story_completion_receipt_issued: false
+  evidence_closure_receipt_issued: false
+  external_evidence_gate_closed: false
+  production_ready: false
+  certified: false
+  empirical_superiority_claimed: false
+integrator_gate:
+  completed_actions:
+    - registered the authorized source paths in the governed source-boundary registry without weakening assertions
+    - passed the canonical full repository regression at 1020/1020
+    - validated this receipt and all referenced hashes
+  transitioned_to: IMPLEMENTED_DEVELOPMENT_PASS
+  may_unlock: ST-02.02_OD_AM_001_OFFLINE_DEVELOPMENT
+  current_unlock_state: ALLOWED_BY_IMPLEMENTATION_GATE_ONLY

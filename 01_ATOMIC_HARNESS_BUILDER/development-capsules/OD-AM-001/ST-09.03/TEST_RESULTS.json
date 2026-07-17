@@ -1,0 +1,43 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-09.03",
+  "status": "PASS",
+  "development_mode": "OD_AM_001_OFFLINE_DEVELOPMENT",
+  "focused_story_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_03 -q",
+    "passed": 16,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "workflow_batch_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_01 tests/stories/st_09_02 tests/stories/st_09_03 --import-mode=importlib -q",
+    "passed": 98,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "architecture_boundary_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/source_boundary_registry.py tests/stories/st_01_01/test_architecture_boundary.py tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py tests/stories/st_01_02/test_architecture_boundary.py tests/stories/st_02_05/test_architecture_boundary.py tests/stories/st_03_03/test_architecture_boundary.py -q",
+    "passed": 12,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "latest_applicable_full_repository_regression": {
+    "status": "PASS_CARRIED_FROM_ST_09_02_CHECKPOINT",
+    "aggregate_passed": 1765,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "next_full_regression_due_after": "ST-09.04"
+  },
+  "python_source_compilation": {
+    "command": "python -m compileall -q src",
+    "status": "PASS"
+  },
+  "external_runtime_calls": 0,
+  "external_evaluator_calls": 0,
+  "production_or_certification_claims": 0,
+  "verdict": "PASS"
+}

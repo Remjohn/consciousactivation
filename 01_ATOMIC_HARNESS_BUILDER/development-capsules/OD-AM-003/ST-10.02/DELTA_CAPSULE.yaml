@@ -1,0 +1,30 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-003
+story_id: ST-10.02
+title: PHASE_CONTEXT_AND_DEPENDENCY_GRAPH_EXPLORATION
+outcome: trustworthy_graph_projections_over_existing_governed_evidence
+authority:
+  amendment_path: docs/implementation/offline-development/OD_AM_003.yaml
+  implementation_gate_only: true
+  production_authority: false
+  certification_authority: false
+allowed_files:
+  production:
+    - src/cmf_builder/application/graph_exploration.py
+  tests:
+    - tests/stories/st_10_02/test_graph_exploration.py
+  governance:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    - development-capsules/OD-AM-003/ST-10.02/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-003/ST-10.02/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-003/ST-10.02/TEST_RESULTS.json
+    - development-capsules/OD-AM-003/ST-10.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+requirements:
+  - preserve PHASE_GRAPH, CONTEXT_GRAPH and DEPENDENCY_GRAPH as distinct graph families
+  - enforce stable node and edge identity, source evidence, provenance and validity state
+  - support traversal, dependency path explanation, filtering, stale detection and invalidated-node representation
+  - reject graph-family flattening, dangling edges, missing provenance, cycles and external dependencies represented as Builder-owned
+prohibited:
+  - graphical_frontend
+  - literal_control_tower_source_package
+  - production_or_certification_claims

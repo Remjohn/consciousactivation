@@ -1,0 +1,36 @@
+schema_version: cmf-builder-offline-implementation-completion-receipt/v1
+amendment_id: OD-AM-003
+story_id: ST-10.04
+receipt_type: ImplementationCompletionReceipt
+verdict: IMPLEMENTED_DEVELOPMENT_PASS
+issued_on: "2026-07-17"
+outcome: genesis_decision_and_human_authority_review_projection_implemented
+implemented_files:
+  - src/cmf_builder/application/genesis_review.py
+test_files:
+  - tests/stories/st_10_04/test_genesis_review.py
+evidence:
+  delta_capsule: development-capsules/OD-AM-003/ST-10.04/DELTA_CAPSULE.yaml
+  file_change_manifest: development-capsules/OD-AM-003/ST-10.04/FILE_CHANGE_MANIFEST.yaml
+  test_results: development-capsules/OD-AM-003/ST-10.04/TEST_RESULTS.json
+validation:
+  focused_tests: PASS_6_OF_6
+  st_10_checkpoint_tests: PASS_22_OF_22
+  full_regression: PASS_1853_OF_1853_TWICE_NO_MANDATORY_SKIPS
+  python_compilation: PASS
+  architecture_boundaries: PASS_32_OF_32
+  source_tree_sha256: 1c1e6bf684db7d69b397e49738518f735011bb4d4569580bf99c5b15ea7a438c
+scope_boundaries:
+  implementation_gate_only: true
+  story_completion_receipt: false
+  evidence_closure_changed: false
+  production_ready: false
+  certified: false
+  provider_validation: pending
+excluded_scope:
+  - identity_management_product
+  - policy_editor
+  - legal_signature_service
+  - production_certification_tooling
+  - provider_execution
+  - ST-10.05_or_later

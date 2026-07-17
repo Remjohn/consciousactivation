@@ -1,0 +1,9 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-005
+story_id: ST-10.12
+title: HONEST_LOADING_EMPTY_STALE_AND_DISCONNECTED_STATES
+outcome: explicit_projection_state_model
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_005.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files: {production: [src/cmf_builder/application/projection_states.py], tests: [tests/stories/st_10_12/test_projection_states.py]}
+requirements: [loading_empty_ready_stale_disconnected_unavailable_distinct, safe_messages, retry_and_fallback_labels, no_cached_authority_fabrication]
+prohibited: [external_connectivity, production_inference_from_connection_state]

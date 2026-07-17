@@ -1,0 +1,23 @@
+schema_version: cmf-builder-od-am-001-shared-core-change-request/v1
+request_id: CR-ST0603-001
+status: APPLIED_BY_CANONICAL_INTEGRATOR
+calling_lane: CATEGORY_AND_TARGET_LANE
+story_id: ST-06.03
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: Action.COMPILE_CATEGORY_SYNTAX
+required_additive_change: add non-human-only governed category-syntax compilation action
+preconditions:
+  - ST-06.02 PASS receipt validated
+  - OD-AM-001 receipt PASS
+  - offline structural implementation mode active
+postconditions:
+  - authority grants may name category syntax compilation explicitly
+  - unregistered actors and missing exact grants still fail closed
+invariants:
+  - HUMAN_ONLY_ACTIONS unchanged
+  - no existing action value changed
+  - no external-product authority added
+  - production and certification remain false
+focused_tests:
+  - ST-06.03 authority acceptance and rejection tests
+integrator_disposition: ACCEPTED_ADDITIVE_NO_BOUNDARY_RELAXATION

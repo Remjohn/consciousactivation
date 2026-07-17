@@ -1,0 +1,51 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+story_id: ST-02.01
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+generated_on_utc: "2026-07-17"
+files:
+  - path: src/cmf_builder/visual/ontology.py
+    change: CREATED
+    sha256: 855ce14697865e4fe2f57d024d0add416d6c9a414f1301d5d368a3d1fa7daa8c
+    role: typed syntax observation ontology and authority-safe evidence vocabulary
+  - path: src/cmf_builder/visual/geometry.py
+    change: CREATED
+    sha256: 8f8dd4acc48284e373b1a709527bd68b9296b8e0282f8f365ad071ba2cad4b2d
+    role: exact rational geometry normalization
+  - path: src/cmf_builder/visual/normalization.py
+    change: CREATED
+    sha256: c9aeef9a38bd44aa5babac6562566294d94dfbe658e7a08f5787fdd028a96b42
+    role: deterministic governed normalization, duplicate control and receipt generation
+  - path: tests/stories/st_02_01/test_st_02_01_observations.py
+    change: CREATED
+    sha256: a7cd9981b15c64b390cf4c9a080a47300a09da86ae79328f585e75c7f52f9ba3
+    role: outcome, geometry, status and duplicate-coverage tests
+  - path: tests/stories/st_02_01/test_st_02_01_failures.py
+    change: CREATED
+    sha256: 2c57888c4adca86ede232c0bc347f90f3c8b246d52bdaa7397b7f2af80cc9b01
+    role: fail-closed boundary and contamination tests
+  - path: tests/stories/st_02_01/test_st_02_01_determinism.py
+    change: CREATED
+    sha256: 1a740e1abd20df14490d0680948dff3a46d4e68b0a3e80edb411fcc4e52e425d
+    role: canonical-byte, identity and input-order determinism tests
+  - path: development-capsules/OD-AM-001/ST-02.01/DELTA_CAPSULE.yaml
+    change: CREATED
+    sha256: 0394b341dd053795a7228c0fb465447ab6799cf8c4d372aa02913e847e1649a6
+    role: bounded offline development authority and file allowlist
+  - path: development-capsules/OD-AM-001/ST-02.01/TEST_RESULTS.json
+    change: CREATED
+    sha256: de185bada1503b7c39f84de4cead92363e7f1d19b6a8b7b2650e80efc7ce6da1
+    role: focused lane verification evidence
+allowlist_validation:
+  changed_paths_within_delta_capsule_allowlist: true
+  shared_core_modified: false
+  package_exports_modified: false
+  exact_source_tests_modified: false
+  planning_or_status_files_modified: false
+  external_product_files_modified: false
+  verdict: PASS_LANE_SCOPE
+pending_integrator_mechanical_change:
+  required: true
+  scope: add the three authorized source paths to predecessor exact-source architecture sets
+  weakens_assertion: false
+  changes_semantics: false
+  lane_authorized_to_apply: false

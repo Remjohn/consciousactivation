@@ -1,0 +1,85 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-07.01:THREE_DISTINCT_COMPILATION_TARGETS:7f1407faa841
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-07.01
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder registers exactly three immutable compilation targets, selects
+  exactly one without flattening ownership, and preserves external targets as
+  Builder-local structural declarations with external validation pending.
+primary_obligations_implemented:
+  - ADR-013
+  - D004
+  - FR-170
+dependency_receipts:
+  satisfied:
+    - ST-03.05:StoryCompletionReceipt:12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+    - ST-04.05:StoryCompletionReceipt:28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+    - ST-06.05:ImplementationCompletionReceipt:8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9
+  pending: []
+source_files:
+  - src/cmf_builder/domain/compilation_targets.py
+  - src/cmf_builder/application/target_registration_commands.py
+test_files:
+  - tests/stories/st_07_01/test_three_target_registry.py
+  - tests/stories/st_07_01/test_selection_and_compatibility.py
+  - tests/stories/st_07_01/test_failure_authority_boundaries.py
+  - tests/stories/st_07_01/test_determinism_migration_rollback.py
+tests:
+  status: PASS_ALL_GOVERNED_GATES
+  focused: 32/32_PASS
+  affected_chain: 126/126_PASS
+  architecture_and_source_boundaries: 12/12_PASS
+  full_repository_regression: 1269/1269_PASS_NO_MANDATORY_SKIPS
+  results_path: development-capsules/OD-AM-001/ST-07.01/TEST_RESULTS.json
+deterministic_identity_evidence: >-
+  Exact inputs produce byte-identical profiles, registry, selections and
+  receipts; altered canonical bytes, hashes or profiles fail at construction.
+authority_and_boundary_evidence:
+  OD_AM_001_receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  exact_target_ids:
+    - atomic_content_harness
+    - visual_asset_editor
+    - content_asset_delegation_contract
+  governed_rollback_authority: PASS
+  external_snapshot_owner_authority: PASS
+  exact_target_policy_enforcement: PASS
+  atomic_observation_and_state_commit: PASS
+  replay_observation_failure_semantics: COMMITTED_RESULT_RETURNED_OBSERVATION_RETRYABLE
+  active_registry_drift_rejection: PASS
+  self_validating_selection_artifacts: PASS
+  combined_target_control_capability_scope: REGISTER_SELECT_ROLLBACK_ONLY_NO_COMPILATION_OR_EXTERNAL_RUNTIME
+  external_product_behavior_absorbed: false
+  external_schema_owned_or_copied: false
+  existing_ST_07_02_receipt_rewritten: false
+rollback_evidence: PASS_NON_DESTRUCTIVE_HISTORY_PRESERVED_AND_UNAUTHORIZED_ROLLBACK_REJECTED
+observability_evidence: PASS_REGISTRATION_SELECTION_REPLAY_REJECTION_AND_ROLLBACK_EVENTS
+evidence_gate_status: EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - BD-014
+  - XDEP-001
+  - XDEP-002
+  - XDEP-003
+  - XDEP-004
+external_compatibility: EXTERNAL_VALIDATION_PENDING
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: 6320a196af4b67df7f812682b78c7741a046288a23b2a73152b029608c420f57
+  compilation_targets_sha256: 7f1407faa8413d81f1548481d846bf3ab3178ed1801377f990577e64ab3c5036
+  target_registration_commands_sha256: da0e9ce476970a4fc009aa1d815ff892d00ecec700a37c78d0b9ff77f2f5c1d1
+  test_three_target_registry_sha256: 0b6e34296201b4311c9a3fa6d0dcb122b0132885bab40e24145cfbf6b3a40598
+  test_selection_and_compatibility_sha256: 564f9878bc5b41018396a413d5d817bfc9131cfc808f2102be044e212d24ad5d
+  test_failure_authority_boundaries_sha256: 1dff1e39800e183c9f5209b4cf1208edff9249aa1b3015341d139428e3142678
+  test_determinism_migration_rollback_sha256: 9c8386407e1545e2cb91e7273729a5d07dda2aadf75d716bad65c9efa07a398a
+  test_results_sha256: 788e7f19d9c2c3c776d66a73657e8f9bd65ed0cb09da07260c7fb9120b4ceb76
+  file_change_manifest_sha256: fc792fe09760add25c0c578679a7871fe5d745d494ed07b900913219460f1da4
+  authority_source_sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+  source_boundary_registry_sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+  CR_ST0701_001_sha256: 4ee31ac64f25b1d7ecdb5d71941b977293fb1513fe209fdb0fd4d52fc11cf594
+  CR_ST0701_002_sha256: 6d7dbcd548d2862978ad2991a1df8b6c4b975d0b9dd745b401991de9bb46d1b5
+  production_source_tree_sha256: 9793ca8ed7c41c12864d2ef59a8bea6bafd542a0ae3ac757c48058e3391b0c0d
+promotion_gate: PASS_CANONICAL_FULL_REGRESSION_SOURCE_BOUNDARY_AND_EVIDENCE_VALIDATION

@@ -188,3 +188,141 @@ The earlier blocked campaign receipt remains immutable historical evidence. BD-0
 closed only for this branch; all broader scopes remain open. No provider call or spend
 was authorized, so ST-06.03 remains blocked solely by `[BD-007]` and ST-06.04 remains
 blocked by ST-06.03.
+
+## Pre-cloud governance, integrity, and BD-007 readiness
+
+The repository operating authority is reconciled: Constitutional Alignment Batch A
+remains completed historical evidence, while current implementation authority now
+requires confirmed Story or amendment ownership, PASS dependency receipts, an empty
+genuine blocker cut, a validated bounded capsule, exact allowlist, and applicable
+human authority. This recovery campaign authorizes no Story implementation or cloud
+operation.
+
+ST-01.03 has a supplemental `PASS` bundle-integrity disposition. All 18 immutable
+inputs remain byte- and hash-identical. The recorded historical aggregate does not
+reproduce under the declared algorithm; the reproducible digest is
+`e54abd34d119e4bc1bb383c9c5df84c18155c2c65267e4dffe0f9375045beb0c`.
+The original receipt is unchanged, and no descendant invalidation is required.
+
+The four BD-007 case sources are now precisely governed. The two admitted archive
+cases remain Short-Form Edited Video and Format 02. The repository-owned PX-AM-001
+generic fixture qualifies as a generic control, and the category/profile/contracts
+plus ReelCast fixture qualify as a synthetic structural conversational control. The
+frozen v1 experiment cannot consume repository evidence, so a v2 mixed-source binding
+amendment awaits explicit human confirmation; it does not reduce the four-case plan.
+
+AWS and GCP deployment checklists, a cloud-neutral contract, unresolved dated cost
+model, teardown plan, and owned-compute migration contract are prepared. No cloud was
+authenticated, no resource was created, no model byte was downloaded, no call was
+made, and no spend was incurred.
+
+BD-007 is `DEFERRED_PENDING_OPERATOR_CLOUD_ENVIRONMENT_AND_COMPLETE_CASE_EVIDENCE`.
+ST-06.03 remains `BLOCKED_EVIDENCE`; ST-06.04 remains `BLOCKED_PRIOR_STORY`. Counts
+remain 27/69 complete, 42 remaining, and zero READY. Production readiness and
+certification remain false.
+
+Pre-cloud reconciliation final validation passed `959/959` repository tests in one
+fresh process with no mandatory skips. Python compilation passed for 280 source and
+test files; 39/39 indexed active receipts and all new authority, integrity, case-source
+and cloud-readiness hashes validate. Portable-path and secret-value scans are clean.
+
+## OD-AM-001 Wave 0 and Wave 1 activation
+
+Wave 0 passed with `959/959` baseline tests, 280 compiled Python files, and 39/39
+active receipts. OD-AM-001 preserves 69 Stories, 410 obligations, 103 historical edges,
+and assigns its exact 22 targets 134 unique obligations without changing primary
+ownership. Amendment receipt:
+`cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44`.
+
+Wave 1 opened ST-02.01 and ST-06.03 concurrently in exclusive paths. The original
+StoryCompletion queue remains unchanged; only the OD-AM-001 implementation overlay may
+advance from separate ImplementationCompletionReceipts. External evidence, human-policy,
+production and certification gates remain open.
+## OD-AM-001 Wave 1 integration checkpoint — 2026-07-17
+
+- ST-02.01: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `7945916c62c480a1a9f9b8205cde987e7a91939922d28176e4f89d00f5c831a2`.
+- ST-06.03: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `89d2f10aca87399e25f0f2115562bd4ac2c1bc2bb1f0c4621540a25e0c15569b`.
+- Canonical full regression: `1020/1020 PASS`, zero mandatory skips.
+- Exact-source enforcement now consumes the governed source-boundary registry; prohibited imports and external-product boundaries remain enforced.
+- Full-evidence Story closure remains `27/69`; BD-007 and all external/certification gates remain open.
+## OD-AM-001 Wave 1 second integration checkpoint — 2026-07-17
+
+- ST-02.02: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `59ab5dd5dd7feb5e736faa2cd30724afa6653e6816636c72c5688fd0ff07197c`.
+- ST-06.04: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `c5b67fbd0a2c7a1cc98e1e8d03f9ea6c10ea14369c9f2b61d399cce88cf35021`.
+- Canonical full regression on the final integrated source state: `1074/1074 PASS`, zero mandatory skips.
+- Implementation coverage: `31/69`; full-evidence Story closure: `27/69`.
+- ST-02.03 and the bounded structural ST-06.05 mode are next; production and certification remain false.
+
+## OD-AM-001 Wave 1 third integration checkpoint — 2026-07-17
+
+- ST-02.03: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `7ee1529a4bd98603c3bf1ea2b16e36a94d2d30749e457dfd56482f1e80674e64`.
+- ST-06.05: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9`.
+- Independent pre-promotion review found and closed one P0 plus two P1 defects in ST-02.03 and one P1 plus two P2 defects in ST-06.05 before either receipt was issued.
+- Adversarial and architecture-focused gate: `90/90 PASS`; canonical full regression: `1152/1152 PASS`, zero mandatory skips.
+- Implementation coverage: `33/69`; full-evidence Story closure remains `27/69`.
+- Next exclusive-path wave: ST-02.04, ST-07.01 and ST-08.01; ST-07.03 remains ready behind the serialized Category and Target lane.
+
+## OD-AM-001 Wave 2 integration checkpoint — 2026-07-17
+
+- ST-02.04: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `e838d9e575b6a21a1576bafd7407d9f7685579b1f5d1c156e651c2fed50bdbf9`.
+- ST-07.01: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `3b6efef817cf134c881ba4b7dc1780acb75c4258c4ad20ba6e14049afce22c15`.
+- ST-07.03: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `84ebb958af4f5b2f508457e7341492b5bf0d9333e5eccf9096875ce7705c9d3f`.
+- ST-08.01: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `e0e3101c43aba7590cc64831620bcfc99907846ef63e3a1f8d4e4ac6bfa30220`.
+- Integrated focused and architecture gate: `152/152 PASS`; canonical full regression: `1269/1269 PASS`, zero mandatory skips.
+- Trust review closed exact parent-tuple, self-asserted authority, fresh-context, receipt-forgery and shared-change provenance defects before promotion.
+- Implementation coverage: `37/69`; full-evidence Story closure remains `27/69`.
+- Next active target: ST-08.02. Production readiness and certification remain false.
+
+### Wave 2 checkpoint correction
+
+Before ST-08.02 activation, a late reconstruction test showed that object-level
+mutation could bypass ST-08.01 nested commit validation. The provisional ST-08.01
+receipt was returned to `PENDING_TRUST_REMEDIATION`; no downstream implementation
+was accepted. ST-02.04, ST-07.01 and ST-07.03 remain promoted. Current progress is
+`9/22` OD targets and `36/69` implementation coverage; full-evidence closure remains
+`27/69`.
+
+## OD-AM-001 Wave 2 ST-08.01 remediation checkpoint - 2026-07-17
+
+- ST-08.01: `IMPLEMENTED_DEVELOPMENT_PASS`; repaired receipt SHA-256 `e8c2c8048720379874405844cfa59b43fc59941496724f36b42ea65ca2cd1466`.
+- Independent remediation review: `PASS_NO_ACTIONABLE_FINDINGS`.
+- Focused story tests: `43/43 PASS`; affected predecessor and OD suites: `224/224 PASS`; architecture boundaries: `12/12 PASS`.
+- Python compilation: `PASS`; canonical full regression: `1282/1282 PASS`, zero mandatory skips.
+- Production source tree SHA-256: `2ac408cbbe4e35bf2134b42cba60c48a837e689c1be7a1e08dbe204c6c2757e7`.
+- Implementation coverage: `37/69` across `10/22` OD targets; full-evidence Story closure remains `27/69`.
+- Next active OD target: ST-08.02. Production readiness and certification remain false.
+
+## OD-AM-001 Wave 2 ST-08.02 checkpoint - 2026-07-17
+
+- ST-08.02: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `c9438a38beb08a54a55d8f681972786282afc4f9a32756e6f027069bca4cae0b`.
+- Focused story tests: `28/28 PASS`; affected ST-08.01/ST-08.02 tests: `71/71 PASS`; architecture boundaries: `12/12 PASS`.
+- Python compilation: `PASS`; canonical full regression: `1310/1310 PASS`, zero mandatory skips.
+- Source-boundary registry mechanical registration SHA-256: `ba705bd5ff8a3b3cc43f83d39fcb02de4f84b26f70148248dc9a6b8fffcbe68a`.
+- Production source tree SHA-256: `022b9eb655bf858d93956778cf73e73c36aa20de87055415f48b9dc99e3639a6`.
+
+## OD-AM-001 Wave 2 ST-08.03 checkpoint - 2026-07-17
+
+- ST-08.03: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `35244ad32a35ba68e66ad86d8bca773e142bc75c944a9bdda125eb394dc2d24b`.
+- Focused story tests: `95/95 PASS`; affected ST-08.01 through ST-08.03 tests: `166/166 PASS`; architecture boundaries: `12/12 PASS`.
+- Python source compilation: `113/113 PASS`; canonical full regression: `1405/1405 PASS`, zero mandatory skips.
+- Source-boundary registry SHA-256: `49e369efe9830d70cbf6e7b296bfdb552bf2147c3ee7e4bb5a1ba5e164006a67`.
+- Canonical path/hash source-tree SHA-256: `a1b73e0867fc9a27d8f358155db97730c80400b71e51b7e0bb62312784f443fb`.
+- Implementation coverage: `39/69` across `12/22` OD targets; full-evidence Story closure remains `27/69`.
+- Next active OD target: ST-08.04. External evidence, production readiness and certification remain open/false.
+
+## OD-AM-001 Wave 2 ST-08.04 checkpoint - 2026-07-17
+
+- ST-08.04: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `e7a068c5f274af7b0d251034d19120ba28d36644213bb82ed759ca3cfc976a6f`.
+- Focused story tests: `84/84 PASS`; affected ST-08.01 through ST-08.04 tests: `250/250 PASS`; architecture boundaries: `12/12 PASS`.
+- Complete regression: `1489/1489 PASS` across two default-import shards, zero mandatory skips; Python source compilation: `114/114 PASS`.
+- Typed diagnosis preserves all fourteen failure classes, eight diagnostic layers, competing-hypothesis evidence, exact authority and ST-08.03 lineage.
+- Repair/invalidation graphs are declarations only, invalidate exactly dependency-proven descendants, freeze unaffected truth, and preserve deterministic replay and rollback.
+- Implementation coverage: `40/69` across `13/22` OD targets; full-evidence Story closure remains `27/69`.
+- Next active OD target: ST-08.05. External evidence, production readiness and certification remain open/false.
+
+## OD-AM-001 Wave 2 ST-08.05 checkpoint - 2026-07-17
+
+- ST-08.05: `IMPLEMENTED_DEVELOPMENT_PASS`; receipt SHA-256 `71d764be9fc498680e6fd6022484fd380ae5cf8aa0dfcc35c5de54430cea9e3a`.
+- Tests: `68/68` focused, `318/318` affected, `12/12` architecture, `1557/1557` complete regression, zero mandatory skips.
+- Selective repair preserves immutable parent history, derives exact descendants and reruns, and commits only complete passing local results.
+- Coverage: `41/69` across `14/22` OD targets; full-evidence closure remains `27/69`. ST-08.06 is active.

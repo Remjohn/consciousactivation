@@ -1,0 +1,236 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.04:ROOT_CAUSE_DIAGNOSIS_BEFORE_REPAIR
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.04
+  title: Diagnose Root Cause Before Selecting Repair
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: repair targets the responsible layer and preserves unaffected upstream truth
+  primary_obligations:
+    - AG-014
+    - D026
+    - FR-127
+    - FR-128
+    - FR-129
+  primary_obligation_count: 5
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_DIAGNOSIS_ONLY_REPAIR_EXECUTION_PENDING
+dependency:
+  story_id: ST-08.03
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-08.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_receipt_sha256: 35244ad32a35ba68e66ad86d8bca773e142bc75c944a9bdda125eb394dc2d24b
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-08.03/DELTA_CAPSULE.yaml
+    sha256: 3e080ebe267cc6f950a1a2ab9715ca2c088471a8b137139705f82c00297f228c
+    validation: PASS_PREPARATION_REFERENCE_ONLY
+  unissued_receipt_shell:
+    sha256: 09dcba88f23fa99dc19f3a8ad27b4d52a755394eefc735a9f807f64a1a6a2ac7
+    satisfies_dependency: false
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.04
+  - docs/tech-specs/specs/TS-13-IMPLEMENTATION-AUTHORIZATION-AND-DEVELOPMENT-CAPSULE.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - EvaluationCase
+    - ConstitutionalEvaluationReceipt
+    - ConstitutionalReadinessReceipt
+    - RepairReceipt
+  schemas:
+    - docs/contracts/schemas/constitutional-evaluation.schema.json
+    - docs/contracts/schemas/conversational-expression.schema.json
+  ownership_rule: existing contracts and schemas are referenced without local fork or authority expansion
+implementation_scope_after_dependency_pass:
+  - stable typed failure classifications and explicit unknown-failure triage
+  - immutable RootCauseDiagnosis records derived from observed symptoms, reproduction evidence, affected boundary, competing hypotheses and confidence
+  - deterministic selection of one smallest supported responsible layer or explicit escalation when evidence cannot localize one
+  - immutable RepairAndInvalidationGraph declarations containing permitted repair fields, frozen state, affected descendants, targeted regression, escalation and required authority
+  - deterministic diagnosis, rejection and invalidation-scope receipts without performing the proposed repair
+  - exact evidence, authority, artifact, graph, rubric, evaluator, version and provenance lineage
+diagnostic_layers:
+  source_and_evidence:
+    includes: [source_identity, provenance, evidence_completeness, evidence_integrity, benchmark_leakage]
+    authority_boundary: source and evidence owners retain factual and custody authority
+  authority:
+    includes: [actor_authority, constitutional_precedence, approval_scope, stale_or_missing_authority]
+    authority_boundary: diagnosis cannot grant or replace missing authority
+  semantic:
+    includes: [meaning_drift, silent_rewrite, wrong_reading_lock, lineage_flattening, human_truth_invention]
+    authority_boundary: rich semantic objects and human-owned truth remain immutable
+  category:
+    includes: [category_identity, profile_compatibility, syntax_grammar, cross_category_substitution]
+    authority_boundary: category constitution and profile declarations govern applicability
+  skill:
+    includes: [capability_ownership, skill_necessity, registry_identity, package_or_capsule_version]
+    authority_boundary: no skill is invented, installed, activated or executed by diagnosis
+  context:
+    includes: [missing_mandatory_context, forbidden_context, unjustified_extra_context, stale_context, not_applicable_misuse]
+    authority_boundary: Minimum Complete Context remains governed and immutable
+  workflow:
+    includes: [phase_or_module_boundary, dependency_order, handoff, retry_replay, checkpoint, observability]
+    authority_boundary: diagnosis does not execute, reroute or repair a workflow
+  external_boundary:
+    includes: [contract_version, request_or_result_mapping, ownership_violation, external_compatibility, unavailable_external_evidence]
+    authority_boundary: external product internals, runtime, transport and acceptance remain externally owned
+stable_failure_taxonomy:
+  required_primary_classes:
+    - evidence
+    - visual_parse
+    - atomicity
+    - authority
+    - contract
+    - module
+    - skill
+    - capsule
+    - benchmark
+    - budget
+    - provider
+    - observability
+    - migration
+    - downstream_implementation
+  localization_layer_required: true
+  exactly_one_primary_class_required: true
+  multiple_contributing_factors_permitted: true
+  unknown_failure:
+    code: UNKNOWN_REQUIRES_TRIAGE
+    repair_route: BLOCKED
+    may_be_forced_into_known_class: false
+typed_root_cause_diagnosis:
+  required_fields:
+    - diagnosis_id
+    - diagnosis_version
+    - failure_id_and_stable_code
+    - observed_symptom
+    - reproduction_or_evidence_refs
+    - affected_boundary
+    - competing_hypotheses
+    - hypothesis_tests_and_results
+    - selected_root_cause_or_unresolved_status
+    - confidence_basis
+    - smallest_supported_responsible_layer
+    - responsible_owner_and_authority_ref
+    - unaffected_frozen_state
+    - exact_lineage
+    - diagnosis_receipt_id
+  selection_rules:
+    - observed symptom alone is never accepted as root cause
+    - every rejected hypothesis retains its evidence and reason
+    - confidence is evidence-qualified and never converted into unsupported certainty
+    - unresolved or ambiguous localization blocks repair selection and triggers typed escalation
+    - repeated guess-and-patch evidence triggers escalation
+repair_and_invalidation_graph_declaration:
+  required_fields:
+    - root_cause_diagnosis_ref
+    - responsible_phase_or_capability
+    - permitted_repair_fields
+    - frozen_upstream_and_unaffected_state
+    - invalidated_descendant_set
+    - targeted_regression_suite
+    - escalation_conditions
+    - required_repair_authority
+    - rollback_requirements
+  rules:
+    - invalidation scope contains only descendants demonstrated to depend on the cause
+    - no upstream or unrelated artifact may be marked mutable
+    - repair fields outside the responsible layer are prohibited
+    - diagnosis and graph compilation do not authorize or execute repair
+    - historical artifacts and diagnoses remain reproducible after later invalidation
+lineage_and_determinism:
+  pinned_inputs:
+    - run_and_command_identity
+    - failure_subject_identity_and_hash
+    - source_and_evidence_refs
+    - authority_and_constitution_refs
+    - semantic_category_skill_context_and_workflow_lineage
+    - external_contract_and_compatibility_refs_where_applicable
+    - ST-08.03_scorecard_mutation_and_gate_receipts
+    - failure_taxonomy_version
+    - diagnosis_policy_version
+    - dependency_and_invalidation_graph_versions
+  canonical_identity_rule: diagnosis, graph declaration and receipts derive only from canonical governed content
+  repeat_command: identical payload returns the original diagnosis and receipt without duplicate state
+  conflicting_command: reject atomically with zero diagnosis, graph, event or command record
+  nondeterministic_identity_inputs_prohibited:
+    - wall_clock_time
+    - random_identifier
+    - absolute_machine_path
+    - environment_specific_value
+failure_and_authority_boundary:
+  reject:
+    - repair_by_symptom
+    - repair_proposal_without_reproduction_or_evidence
+    - unsupported_root_cause_certainty
+    - cross_layer_mutation
+    - invalidation_broader_than_demonstrated_cause
+    - missing_or_stale_authority
+    - lost_or_altered_lineage
+    - unauthorized diagnosis, graph, invalidation or escalation mutation
+    - repair, workflow or external-runtime execution request
+  partial_state_on_failure: prohibited
+  repair_execution: prohibited
+  artifact_mutation: prohibited
+  external_runtime_or_transport: prohibited
+blocker_and_evidence_gates_remaining:
+  BD-004: EVIDENCE_PENDING
+  BD-008: EVIDENCE_PENDING
+  HD-006: HUMAN_POLICY_PENDING_REAL_HUMAN_REACTION_DATA_PROHIBITED
+  HD-007: HUMAN_POLICY_PENDING_CONVERSATIONAL_THRESHOLDS_AND_CERTIFICATION
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/root_cause_diagnosis.py
+  tests:
+    - tests/stories/st_08_04/test_typed_root_cause_diagnosis.py
+    - tests/stories/st_08_04/test_layer_localization_and_graph.py
+    - tests/stories/st_08_04/test_failure_authority_boundaries.py
+    - tests/stories/st_08_04/test_lineage_determinism_and_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.04/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.04/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.04/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  mechanical_integrator_files:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-08.03 implementation or completion evidence
+  - repair execution, workflow execution, artifact mutation or actual rerun behavior
+  - external product behavior, runtime, transport, model, provider, credential or network behavior
+  - real protected labels, real human reactions, production thresholds, production promotion or certification
+acceptance_after_dependency_pass:
+  - every failure maps to one stable primary taxonomy code and one smallest supported responsible layer or explicit unresolved escalation
+  - each diagnosis records symptom, reproduction evidence, boundary, hypotheses, tests, selected cause and confidence basis
+  - graph declarations preserve unaffected upstream truth and prohibit repair fields outside the responsible layer
+  - invalidation scopes contain exactly the demonstrated dependent descendants and targeted regression requirements
+  - exact lineage and authority references remain immutable and independently verifiable
+  - identical governed inputs produce byte-identical diagnoses, graph declarations and receipts
+  - stale inputs, missing evidence, broad invalidation, unauthorized mutation and conflicting commands fail atomically
+  - no repair is executed and no production, certification or external-compatibility claim is made
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-08.05_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  repair_execution_completed: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

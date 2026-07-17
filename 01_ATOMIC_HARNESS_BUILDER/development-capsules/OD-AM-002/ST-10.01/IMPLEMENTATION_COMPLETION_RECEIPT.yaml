@@ -1,0 +1,35 @@
+schema_version: cmf-builder-offline-implementation-completion-receipt/v1
+amendment_id: OD-AM-002
+story_id: ST-10.01
+receipt_type: ImplementationCompletionReceipt
+verdict: IMPLEMENTED_DEVELOPMENT_PASS
+issued_on: "2026-07-17"
+outcome: evidence_derived_run_index_projection_implemented_as_control_tower_entry
+implemented_files:
+  - src/cmf_builder/application/run_index_projection.py
+test_files:
+  - tests/stories/st_10_01/test_run_index_projection.py
+evidence:
+  delta_capsule: development-capsules/OD-AM-002/ST-10.01/DELTA_CAPSULE.yaml
+  file_change_manifest: development-capsules/OD-AM-002/ST-10.01/FILE_CHANGE_MANIFEST.yaml
+  test_results: development-capsules/OD-AM-002/ST-10.01/TEST_RESULTS.json
+validation:
+  focused_tests: PASS_6_OF_6
+  od_am_002_combined_tests: PASS_20_OF_20
+  full_regression: PASS_1837_OF_1837_TWICE_NO_MANDATORY_SKIPS
+  python_compilation: PASS
+  architecture_boundaries: PASS_32_OF_32
+  source_tree_sha256: 93cd6309a79b7574136beb860b355685c500d6b27eecd792c429363f3ac3d7ba
+scope_boundaries:
+  implementation_gate_only: true
+  story_completion_receipt: false
+  evidence_closure_changed: false
+  production_ready: false
+  certified: false
+  provider_validation: pending
+excluded_scope:
+  - dashboard_ui
+  - production_deployment
+  - certification
+  - provider_execution
+  - ST-10.02_or_later

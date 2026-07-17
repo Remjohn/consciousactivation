@@ -1,0 +1,20 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0605-001
+story_id: ST-06.05
+calling_lane: CATEGORY_AND_TARGET_LANE
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: Action.COMPILE_CONVERSATIONAL_FEEDBACK
+required_additive_change: add the structural conversational-feedback compilation action
+preconditions:
+  - ST-06.04 ImplementationCompletionReceipt is IMPLEMENTED_DEVELOPMENT_PASS
+  - actual human-response capture and receipt issuance remain human-owned and absent
+postconditions:
+  - the bounded structural compiler can require an exact authority grant
+  - no authority to manufacture human reaction or issue real human evidence exists
+invariants:
+  - HUMAN_ONLY_ACTIONS remains unchanged
+  - Constitution, PRD and human-truth ownership remain unchanged
+  - production and certification remain false
+focused_tests:
+  - tests/stories/st_06_05
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR

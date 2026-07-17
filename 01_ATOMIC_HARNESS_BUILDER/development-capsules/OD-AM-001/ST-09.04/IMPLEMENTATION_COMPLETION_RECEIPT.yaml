@@ -1,0 +1,90 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-09.04:CHECKPOINT_ISOLATION_AND_SAFE_RESUME:6be4c93bdbf7
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-09.04
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder can commit immutable local checkpoints, resume only exact eligible
+  work without duplicating side effects or replaying ratified human actions,
+  validate deny-by-default sandbox declarations, prove dependency-safe parallel
+  plans and issue deterministic invalidation or rollback receipts without
+  creating an external engine, provider call, process, container or worktree.
+primary_obligations_implemented:
+  - ADR-012
+  - AG-021
+  - FR-194
+  - FR-195
+  - FR-196
+  - FR-197
+  - NFR-PERF-004
+  - NFR-SEC-004
+  - NFR-WORKFLOW-005
+  - NFR-WORKFLOW-006
+  - NFR-WORKFLOW-007
+  - NFR-WORKFLOW-008
+dependency_receipts:
+  satisfied:
+    - ST-09.03:ImplementationCompletionReceipt:33b7313fab743a4fd890a5ea5bc02a29c6f9446946b0a98a9cd0faaa1c82e23b
+  pending: []
+source_files:
+  - path: src/cmf_builder/workflow/checkpoint_isolation.py
+    sha256: 6be4c93bdbf752e5755719aafc6485780b7f1858a5baa0bb3bbe76b0c5ec61ef
+test_files:
+  - path: tests/stories/st_09_04/test_checkpoint_resume_idempotency.py
+    sha256: 8e9112995112e0a9d5d9e34c58b6255f432793ef7cc8483814c9f5bd59ce7a4b
+  - path: tests/stories/st_09_04/test_sandbox_least_privilege.py
+    sha256: 60ff95b5db6181fded06629659a853285d97e83962d05eda341a8bc65a11aed4
+  - path: tests/stories/st_09_04/test_dependency_safe_parallel_plan.py
+    sha256: 52eaf0d6c07f86455c5eb6a3040e1d0a36405806015c356c9d151b08a3ce91bd
+  - path: tests/stories/st_09_04/test_failure_authority_invalidation_rollback.py
+    sha256: 997fe4f0a8d49f3146c994823dc21155c9ccd97ddf6e0079e6f0ba9bf33cf3cc
+tests:
+  focused: PASS_14_OF_14
+  workflow_batch: PASS_112_OF_112
+  architecture_boundary: PASS_12_OF_12
+  complete_repository_regression: PASS_1795_OF_1795_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  mandatory_skips: 0
+authority_and_boundary_evidence:
+  checkpoint_atomic_identity: PASS
+  resume_idempotency_without_duplicate_side_effects: PASS
+  ratified_human_action_replay_prevented: PASS
+  silent_profile_change_rejected: PASS
+  deny_by_default_sandbox_declarations: PASS
+  secret_values_rejected: PASS
+  dependency_safe_parallel_plan: PASS
+  shared_write_parallelism_rejected: PASS
+  invalidation_and_rollback_preserve_history: PASS
+  external_engine_or_scheduler_executed: false
+  provider_or_network_call_executed: false
+  process_container_or_worktree_created: false
+  production_ready: false
+  certified: false
+rollback_evidence: PASS_PRIOR_ACTIVE_CHECKPOINT_REFERENCE_RESTORABLE_HISTORY_PRESERVED
+observability_evidence: PASS_DETERMINISTIC_CHECKPOINT_RESUME_SANDBOX_PARALLEL_AND_TRANSITION_IDENTITIES
+evidence_gate_status: TEMPORAL_PROVIDER_ISOLATION_AND_EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - manual_shadow_expert_behavior_evidence
+  - XDEP-001
+  - XDEP-005
+  - ADR-006-Temporal-public-seam-conformance
+  - ADR-012-isolation-platform-conformance
+  - provider_boundary_fault_and_sandbox_evidence
+  - production_promotion_authority_and_evidence
+deterministic_identity_evidence:
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_file_count: 122
+  production_source_tree_sha256: 5d9d7f06c4dbb211b639c83bb8facaf8231eeffdecb6806b088ef4e52e139429
+equivalent_to_StoryCompletionReceipt: false
+hashes:
+  delta_capsule_sha256: 87141514ec022fef1c5c21d2096b72ea59f19b99338daa8534fb601261467a1b
+  test_results_sha256: 673f85b01afc11336b903c9e6120599f3a15457900685aa96f0d505ba5ea7a8a
+  file_change_manifest_sha256: 90c8b376d33c081234962303d677ce5307e088aaee7434d0975294017277da0f
+  source_boundary_registry_sha256: 460ffe7ae62efd3828efdb78b6de9dd461b76889ef854fa5ee5a34e0bd635ac4
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-09.05_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true
+production_ready: false
+certified: false

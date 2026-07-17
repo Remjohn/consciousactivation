@@ -1,0 +1,200 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-07.01:THREE_DISTINCT_COMPILATION_TARGETS
+preparation_status: VALIDATED_DEPENDENCIES_PASS_IMPLEMENTATION_AUTHORIZED
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-07.01
+  title: Register Three Distinct Compilation Targets
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: one control plane can select the correct product outcome without flattening ownership or evidence needs
+  primary_obligations:
+    - ADR-013
+    - D004
+    - FR-170
+  primary_obligation_count: 3
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EXTERNAL_VALIDATION
+dependencies:
+  - story_id: ST-03.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-03.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+    current_status: PASS
+  - story_id: ST-04.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-04.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+    current_status: PASS
+  - story_id: ST-06.05
+    receipt_type: ImplementationCompletionReceipt
+    receipt_path: development-capsules/OD-AM-001/ST-06.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9
+    required_status: IMPLEMENTED_DEVELOPMENT_PASS
+    current_status: IMPLEMENTED_DEVELOPMENT_PASS
+dependency_gate:
+  satisfied: 3
+  required: 3
+  verdict: PASS_ALL_DIRECT_DEPENDENCIES
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-07.01
+  - docs/architecture/adr/ADR-013-TARGET-COMPILERS-AND-EXTERNAL-BOUNDARIES.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+  - contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+three_target_invariant:
+  exact_target_count: 3
+  exact_target_ids:
+    - atomic_content_harness
+    - visual_asset_editor
+    - content_asset_delegation_contract
+  fourth_target_creation: prohibited
+  category_as_target: prohibited
+  universal_or_merged_target: prohibited
+  conversational_activation_relationship: fifth_category_inside_atomic_content_harness_not_a_compilation_target
+target_profiles:
+  atomic_content_harness:
+    target_id: atomic_content_harness
+    display_name: Atomic Content Harness
+    owner: Atomic Harness Builder
+    execution_owner: compiled_harness_owner_not_ST_07_01
+    external_product: false
+    source_profile_scope: governed evidence, atomicity, Activative semantics, category and format profiles
+    IR_projection_scope: AtomicHarnessDefinition and target-specific Builder artifacts
+    compatibility_state: BUILDER_LOCAL_STRUCTURAL
+    production_ready: false
+    certified: false
+    prohibitions:
+      - borrow Visual Asset Editor authority
+      - borrow Delegation shared-contract ownership
+      - collapse a Canonical Format Category into target identity
+  visual_asset_editor:
+    target_id: visual_asset_editor
+    display_name: Visual Asset Editor
+    owner: Visual Asset Editor product authority
+    execution_owner: external_visual_asset_editor
+    external_product: true
+    Builder_scope: versioned target contract, read-only interface reference, mapping and local validation only
+    compatibility_state: EXTERNAL_VALIDATION_PENDING
+    production_ready: false
+    certified: false
+    prohibitions:
+      - image or asset generation
+      - editing or realization behavior
+      - external provider, credentials, network, persistence or runtime
+      - mutate content-owned semantics
+  content_asset_delegation_contract:
+    target_id: content_asset_delegation_contract
+    display_name: Content Asset Delegation Contract
+    owner: Delegation Protocol product authority
+    execution_owner: external_delegation_protocol
+    external_product: true
+    Builder_scope: versioned target contract, exact RC4 pin, mapping and local validation only
+    compatibility_state: EXTERNAL_VALIDATION_PENDING
+    Delegation_pin: 1.1.0-rc.4
+    Delegation_trust: local_unsigned_release_candidate
+    production_ready: false
+    certified: false
+    prohibitions:
+      - shared-schema ownership or local schema fork
+      - protocol runtime, transport, retry execution or reconciliation execution
+      - external acceptance or release authorization
+required_profile_fields:
+  - target_id
+  - target_version
+  - product_owner
+  - execution_owner
+  - source_profile_ref
+  - IR_projection_ref
+  - Genesis_graph_ref
+  - compiler_ref
+  - artifact_set_ref
+  - evaluation_gate_ref
+  - compatibility_state
+  - certification_scope
+  - required_extensions
+  - explicit_prohibitions
+  - interface_snapshot_ref_or_NOT_APPLICABLE
+  - authority_ref
+  - provenance
+implementation_scope_after_dependency_pass:
+  - immutable versioned CompilationTargetProfile and CompilationTargetRegistry contracts
+  - exact one-of-three target selection with deterministic selection and rejection receipts
+  - distinct target-specific source, IR, Genesis, compiler, artifact, evaluation, compatibility and certification declarations
+  - local Builder-owned structural contracts for Visual Asset Editor and Delegation targets
+  - read-only hash-pinned interface references without external runtime or shared-schema ownership
+  - deterministic target profile, registry, selection, migration, invalidation and rollback identities
+  - lossless additive profile versioning without universal-profile flattening
+  - preservation of existing synthetic Atomic Content Harness behavior without retroactive receipt mutation
+selection_rules:
+  exact_one_target_required: true
+  unknown_target: reject
+  zero_targets: reject
+  multiple_targets: reject
+  alias_or_cosmetic_target: reject
+  universal_profile_fallback: reject
+  missing_required_extension_or_prohibition: reject
+  owner_or_compatibility_substitution: reject
+  identical_input_identity: byte_identical_registry_selection_and_receipt
+  changed_profile: new_immutable_profile_and_registry_version
+BD_014_scope:
+  Builder_owned_local_structural_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+  external_interface_adoption: EXTERNAL_VALIDATION_PENDING
+  external_runtime_or_transport: prohibited
+  external_compatibility_claim: prohibited
+  external_certification: prohibited
+cross_repository_dependencies:
+  XDEP-001: PROGRAM_CONTROL_AUTHORITY_READ_ONLY
+  XDEP-002: VAE_EXTERNAL_OWNER_NO_RUNTIME_IMPLEMENTATION
+  XDEP-003: DELEGATION_RC4_EXTERNAL_OWNER_NO_SCHEMA_OR_RUNTIME_IMPLEMENTATION
+  XDEP-004: FUTURE_CONVERSATIONAL_PRODUCT_EXTERNAL_OWNER_NO_LIVE_BEHAVIOR
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/domain/compilation_targets.py
+    - src/cmf_builder/application/target_registration_commands.py
+  tests:
+    - tests/stories/st_07_01/test_three_target_registry.py
+    - tests/stories/st_07_01/test_selection_and_compatibility.py
+    - tests/stories/st_07_01/test_failure_authority_boundaries.py
+    - tests/stories/st_07_01/test_determinism_migration_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-07.01/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-07.01/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-07.01/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-07.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - existing target_profile.py and completed ST-07.02 implementation or receipts
+  - shared run aggregate, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, contract pins or historical receipts
+  - external product behavior, runtime, transport, credentials, network, providers or production persistence
+  - VAE or Delegation shared contracts and generated shared types
+prohibited_claims:
+  - VAE_compatible
+  - Delegation_runtime_compatible
+  - external_adoption_complete
+  - external_target_certified
+  - universal_target_supported
+  - production_ready
+  - certified
+acceptance_after_dependency_pass:
+  - the registry contains exactly the three governed target IDs and no aliases or fourth target
+  - each profile preserves its distinct product owner, execution owner, evidence needs, extensions, prohibitions and compatibility state
+  - exact one-target selection is deterministic and unknown, missing, multiple or flattened target selection fails closed
+  - changed governed inputs produce new immutable profile and registry identities without mutating history
+  - Visual Asset Editor and Delegation profiles remain local structural declarations with EXTERNAL_VALIDATION_PENDING
+  - no external behavior, runtime, transport, schema ownership, production or certification is introduced or claimed
+  - existing ST-07.02 synthetic Atomic Content Harness evidence and receipt remain unchanged
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: "NOT_ISSUED_DEPENDENCY/IMPLEMENTATION_PENDING"
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  external_compatibility: EXTERNAL_VALIDATION_PENDING
+  production_ready: false
+  certified: false

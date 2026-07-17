@@ -1,0 +1,31 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-002
+story_id: ST-10.01
+title: EVIDENCE_DERIVED_CONTROL_TOWER_RUN_INDEX
+outcome: smallest_builder_owned_control_tower_entry_projection
+authority:
+  amendment_path: docs/implementation/offline-development/OD_AM_002.yaml
+  implementation_gate_only: true
+  production_authority: false
+  certification_authority: false
+allowed_files:
+  production:
+    - src/cmf_builder/application/run_index_projection.py
+  tests:
+    - tests/stories/st_10_01/test_run_index_projection.py
+  governance:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    - development-capsules/OD-AM-002/ST-10.01/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-002/ST-10.01/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-002/ST-10.01/TEST_RESULTS.json
+    - development-capsules/OD-AM-002/ST-10.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+requirements:
+  - project run, workflow, harness, category, target, maturity, implementation, evidence, authority, production and certification gates separately
+  - support deterministic filtering, sorting and pagination
+  - represent partial, redacted, stale and invalidated records explicitly
+  - derive display state only from evidence records and receipts
+prohibited:
+  - dashboard UI
+  - production readiness claim
+  - certification claim
+  - ST-10.02_or_later_behavior

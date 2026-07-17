@@ -1,0 +1,70 @@
+schema_version: cmf-builder-offline-development-amendment/v1
+amendment_id: OD-AM-002
+title: WORKFLOW_CLOSURE_AND_CONTROL_TOWER_ENTRY
+created_on: "2026-07-17"
+authority_mode: OFFLINE_DEVELOPMENT_IMPLEMENTATION
+source_authorization: user_supplied_attachment_create_od_am_002_and_execute_workflow_closure_control_tower_entry_campaign
+predecessor_amendment:
+  id: OD-AM-001
+  status: COMPLETE
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  offline_implementation_coverage: 49/69
+  overnight_target_completion: 22/22
+  latest_full_regression: 1806/1806_PASS_TWICE
+story_inventory:
+  confirmed_story_ids_changed: false
+  primary_obligation_assignments_changed: false
+  total_confirmed_stories: 69
+two_gate_model:
+  implementation_gate: offline_development_implementation_receipt
+  evidence_gate: remains_external_evidence_driven
+  implementation_receipt_is_story_completion_receipt: false
+authority_limits:
+  production_authority_granted: false
+  certification_authority_granted: false
+  external_provider_authority_granted: false
+  cloud_execution_authority_granted: false
+  bd_007_status: OPEN_PENDING_CLOUD_AND_COMPLETE_CASE_EVIDENCE
+targets:
+  mandatory:
+    - ST-09.07
+    - ST-09.08
+  stretch:
+    - ST-10.01
+  prohibited:
+    - ST-10.02
+    - later_stories
+permitted_outputs:
+  - docs/implementation/offline-development/OD_AM_002.yaml
+  - docs/implementation/offline-development/OD_AM_002_RECEIPT.yaml
+  - docs/implementation/offline-development/OD_AM_002_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+  - development-capsules/OD-AM-002/*/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-002/*/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-002/*/TEST_RESULTS.json
+  - development-capsules/OD-AM-002/*/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  - source_and_test_files_within_story_allowlists
+forbidden_reinterpretations:
+  - do_not_duplicate_OD_AM_001
+  - do_not_reopen_BD_004_or_attempt_BD_007_cloud_execution
+  - do_not_claim_evidence_closure_from_offline_implementation
+  - do_not_claim_production_readiness_or_certification
+  - do_not_start_ST_10_02
+  - do_not_create_real_human_reaction_Reaction_Receipt_or_Expression_Moment
+validation_plan:
+  focused_story_tests: required
+  architecture_boundary_tests: required
+  full_regression: required_after_ST_09_07_ST_09_08_and_after_ST_10_01
+  python_compilation: required
+  receipt_manifest_validation: required
+  portable_path_and_secret_scan: required
+expected_completion:
+  after_mandatory_targets:
+    offline_implementation_coverage: 51/69
+    od_am_002_target_completion: 2/3
+    next_story: ST-10.01
+  after_stretch_target:
+    offline_implementation_coverage: 52/69
+    od_am_002_target_completion: 3/3
+    next_story: ST-10.02
+    stop_after: ST-10.01

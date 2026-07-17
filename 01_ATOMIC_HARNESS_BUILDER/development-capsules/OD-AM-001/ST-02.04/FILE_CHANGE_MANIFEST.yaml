@@ -1,0 +1,61 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+story_id: ST-02.04
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+recorded_on_utc: "2026-07-17T06:06:24Z"
+scope_verdict: PASS
+files_created:
+  - path: development-capsules/OD-AM-001/ST-02.04/DELTA_CAPSULE.yaml
+    sha256: 62e9fe4707a15cde12d1c4e0182b985b6a56ffd061174eb96e5380714d58d8f2
+    role: bounded_authority_and_scope
+  - path: src/cmf_builder/visual/atomicity_contracts.py
+    sha256: 81cc8466ec123bccd51edfcdb15d2a8f1df26fa658f25c4d1f8fe2f29ba535df
+    role: typed_provisional_comparison_contracts
+  - path: src/cmf_builder/visual/boundary_comparison.py
+    sha256: 56538f6cefa150c494a68b347831d0606d1d88c217c28da056d692dae8c964cc
+    role: deterministic_evidence_bound_comparison_compiler_and_atomic_workspace
+  - path: tests/stories/st_02_04/fixtures.py
+    sha256: 29a2128d3fdbf3479cc7e83bb7e6f5aa5c3eb3a5751aaa6e83f76eb918afcab6
+    role: governed_test_inputs
+  - path: tests/stories/st_02_04/test_st_02_04_comparison.py
+    sha256: c780311cea84eff537a1f5ffa4e2290aadef8eda170761a8048e44bfe0bcce87
+    role: outcome_and_lineage_tests
+  - path: tests/stories/st_02_04/test_st_02_04_failures.py
+    sha256: 31d187a8465580b6a06abf3288b8a51a4a8839b8e4d4c39f976ff0594cf40fbc
+    role: evidence_authority_and_failure_tests
+  - path: tests/stories/st_02_04/test_st_02_04_determinism.py
+    sha256: 142460d94894976f105940b686eeb08373bd4606d09e8be463445421fcd67b1e
+    role: deterministic_identity_and_portability_tests
+  - path: tests/stories/st_02_04/test_st_02_04_authority_rollback.py
+    sha256: cfb34c72ad320b25cc9c8c05807b1a957d60e2bc2f980756965d853b4e13c97c
+    role: authority_commit_replay_atomicity_and_rollback_tests
+  - path: development-capsules/OD-AM-001/ST-02.04/TEST_RESULTS.json
+    sha256: 1d904d46ca4eefe507c3248be20ad98e930dfbbe65e4b9669da53d1e86a25800
+    role: focused_predecessor_architecture_and_full_regression_evidence
+files_modified:
+  - path: src/cmf_builder/application/authority.py
+    sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+    owner: CANONICAL_INTEGRATOR
+    role: additive COMPARE_ATOMIC_BOUNDARIES action registration
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+    owner: CANONICAL_INTEGRATOR
+    role: additive exact source ownership registration
+prohibited_files_modified: []
+shared_files_modified:
+  - src/cmf_builder/application/authority.py
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+external_repositories_modified: []
+external_dependencies_added: []
+shared_core_integration_observed:
+  target: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+  owner: CANONICAL_INTEGRATOR
+  status: APPLIED_AND_VALIDATED_BY_CANONICAL_INTEGRATOR
+  registry_sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+  authority_source_sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+  accepted_change_request:
+    path: docs/implementation/offline-development/change-requests/CR-ST0204-001.yaml
+    sha256: 4bbad8a695e3c32495f11aa1cac8d90dff48ef846748eb01a5defa847eb7d3b9
+  additive_registration:
+    - add src/cmf_builder/visual/atomicity_contracts.py with owner_package cmf_builder.visual
+    - add src/cmf_builder/visual/boundary_comparison.py with owner_package cmf_builder.visual
+  invariant: additive registration only; no boundary assertion may be weakened

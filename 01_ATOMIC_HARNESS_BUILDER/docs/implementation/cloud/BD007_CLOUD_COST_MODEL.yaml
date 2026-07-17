@@ -1,0 +1,79 @@
+schema_version: cmf-builder-bd007-cloud-cost-model/v1
+cost_model_id: BD007-PRECLOUD-BOUNDED-COST-v1
+recorded_on: "2026-07-17"
+status: UNRESOLVED_PENDING_AUTHENTICATED_REGIONAL_PRICING
+currency: USD
+authority:
+  current_campaign_permits_spend: false
+  future_hard_campaign_cloud_cap: 50.00
+  future_soft_stop_threshold: 40.00
+  maximum_endpoint_lifetime_minutes: 180
+  maximum_model_endpoints: 1
+pricing_evidence:
+  retrieval_date: "2026-07-17"
+  AWS:
+    authenticated_account: false
+    selected_region: null
+    regional_prices_retrieved: false
+    reason: no profile credentials region or authenticated identity
+  GCP:
+    authenticated_project: false
+    selected_region: null
+    regional_prices_retrieved: false
+    reason: gcloud unavailable and no credentials project or region
+components:
+  model_source_transfer:
+    unit: bytes_transferred
+    quantity_basis: 30890040900
+    price: UNRESOLVED
+  object_storage:
+    unit: GB_month
+    quantity_basis: exact_mirrored_model_plus_allowed_evidence
+    price: UNRESOLVED
+  container_build:
+    unit: build_minute_and_machine_class
+    quantity_basis: pinned_reproducible_build
+    price: UNRESOLVED
+  container_registry:
+    unit: GB_month_and_transfer
+    quantity_basis: final_image_digest
+    price: UNRESOLVED
+  endpoint_startup:
+    unit: GPU_instance_time
+    quantity_basis: measured_startup_time
+    price: UNRESOLVED
+  endpoint_runtime:
+    unit: GPU_instance_hour
+    quantity_basis: maximum_3_hours
+    price: UNRESOLVED
+  experiment_execution:
+    unit: endpoint_runtime_for_24_calls
+    quantity_basis: measured_call_durations
+    price: UNRESOLVED
+  logs_metrics_KMS:
+    unit: provider_specific
+    quantity_basis: redacted_minimum_required_evidence
+    price: UNRESOLVED
+calculation:
+  bounded_estimate_formula: >-
+    source_transfer + object_storage + container_build + registry_storage_and_transfer
+    + endpoint_startup + min(endpoint_runtime_for_24_calls, 3_hours)
+    + logs_metrics_and_encryption
+  committed_cost_rule: >-
+    Before each billable action, add its maximum bounded cost to actual accrued cost;
+    do not start when the result can exceed USD 50.00.
+  soft_stop_rule: >-
+    Stop ordinary progression at USD 40.00 and continue only with a documented safe
+    teardown path that cannot exceed the USD 50.00 hard cap.
+selection_rule:
+  prerequisites: [exact_model_support, immutable_custom_container, sufficient_visible_GPU_quota, context_131072_load_test, security_PASS]
+  choose: lower_bounded_total_estimate
+  material_equality_tiebreaker: AWS
+  current_selection: NONE_NOT_QUALIFIED
+non_claims:
+  estimated_total_usd: null
+  authorized_spend_usd: 0
+  actual_spend_usd: 0
+  cloud_selected: false
+  production_ready: false
+  certified: false

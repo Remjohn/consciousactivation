@@ -1,0 +1,37 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+story_id: ST-06.05
+lane: CATEGORY_AND_TARGET_LANE
+files:
+  - {path: development-capsules/OD-AM-001/ST-06.05/DELTA_CAPSULE.yaml, change: created, sha256: 4bcb00df73298787d4e46e0b8c9d7d063b5c0d908a19f9c9eb317a907a499439}
+  - {path: src/cmf_builder/domain/conversational_feedback.py, change: created_and_trust_corrected, sha256: e0b6a99b32778f1186d85f27897edeedeb47bb872e0291bbccd899e9b93cfcdc}
+  - {path: src/cmf_builder/application/conversational_commands.py, change: created_and_trust_corrected, sha256: 64d11bc23134e58d2230c648b57022015b504638e3033d2a3d6fdb911af9f39e}
+  - {path: tests/stories/st_06_05/__init__.py, change: created, sha256: 904b1276562e87329521b720c7f4a4cd11f66b7bdc348c9aa9ee73f7fc47d142}
+  - {path: tests/stories/st_06_05/conftest.py, change: created_and_trust_corrected, sha256: 3a367a168819c25d252905211cf3c5db6bd71301dadde404c143764080ef5b91}
+  - {path: tests/stories/st_06_05/test_structural_feedback_contracts.py, change: created, sha256: f15ecf30fcd2c7dd5f7fac11e2764645fe77f167dd70c10ef5b3bf3f115f5633}
+  - {path: tests/stories/st_06_05/test_feedback_state_machine.py, change: created_and_trust_corrected, sha256: 106784c0452966c32c12479cb5d5e3a2d52f0121d87fe844adbcb7cf823b3ee4}
+  - {path: tests/stories/st_06_05/test_failure_authority_and_commands.py, change: created_and_trust_corrected, sha256: 53b49a8d908476a8d7323a4c01eada34c35fd92688b8541fbbafd9797f95b152}
+  - {path: tests/stories/st_06_05/test_architecture_boundary.py, change: created, sha256: 1dafe296f6abeb1e20c1816a482cf9b0f1569918d090df76d79b0fe4a403868f}
+completion_artifacts_created_after_hash_capture:
+  - development-capsules/OD-AM-001/ST-06.05/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-06.05/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-06.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+shared_files_modified_by_lane: []
+shared_core_change_requests:
+  - {id: CR-ST0605-001, status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR}
+  - {id: CR-ST0605-002, status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR, scope: additive human-only consent-withdrawal action}
+trust_corrections:
+  - transition actor is bound to exact governed authority evidence
+  - consent withdrawal requires the exact shared human-only action
+  - invalidation rejects role-only authority impersonation
+  - replay conflict and stale parent emit typed rejection observations
+  - blank or invalid immutable chain versions fail closed
+existing_story_artifacts_modified: false
+outside_lane_changes: []
+external_dependencies_added: []
+integrator_gate:
+  shared_core_requests: [CR-ST0605-001, CR-ST0605-002]
+  exact_source_registration: PASS_GOVERNED_REGISTRY
+  source_boundary_registry_sha256: 51da261829e1ca3f87278260c5b0ad90629d7bfcc1e961fea11b8e2c085afde7
+  source_tree_sha256: c7d0564fe96dbb4658b251686e05e93eabe6db221b5d41d290df4a29bd43aeb4
+  full_repository_regression: PASS_1152_OF_1152_NO_MANDATORY_SKIPS
+verdict: PASS

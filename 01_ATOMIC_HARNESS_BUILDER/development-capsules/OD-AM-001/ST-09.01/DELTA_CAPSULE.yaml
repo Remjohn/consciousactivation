@@ -1,0 +1,177 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-09.01:ACTOR_EXPLICIT_LOCAL_WORKFLOW
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-09.01
+  title: Compile an Actor-Explicit Builder Workflow
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: every request has reproducible routing and explicit responsibility
+  primary_obligations:
+    - ADR-006
+    - FR-181
+    - FR-182
+    - FR-183
+    - FR-184
+    - FR-185
+    - NFR-WORKFLOW-001
+    - NFR-WORKFLOW-002
+    - NFR-WORKFLOW-003
+  primary_obligation_count: 9
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EXTERNAL_VALIDATION
+dependencies:
+  - story_id: ST-01.04
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-01.04/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a
+    current_status: PASS
+  - story_id: ST-03.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-03.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+    current_status: PASS
+  - story_id: ST-04.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-04.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+    current_status: PASS
+  - story_id: ST-05.05
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-05.05/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 57807b3611f107f89787e80ba59f7b17a00dfe855cb60942f98138985e20b818
+    current_status: PASS
+  - story_id: ST-06.05
+    receipt_type: ImplementationCompletionReceipt
+    receipt_path: development-capsules/OD-AM-001/ST-06.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9
+    required_status: IMPLEMENTED_DEVELOPMENT_PASS
+    current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  - story_id: ST-07.04
+    receipt_type: StoryCompletionReceipt
+    receipt_path: development-capsules/ST-07.04/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: e944032fe369e11c274e2d868bec6168d18124587cc09c9a328e58e33463fe2a
+    current_status: PASS
+  - story_id: ST-08.07
+    receipt_type: ImplementationCompletionReceipt
+    receipt_path: development-capsules/OD-AM-001/ST-08.07/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 98cde5f848b1232f717f3e372dca9635264288453925b9fee70040fc0f797730
+    required_status: IMPLEMENTED_DEVELOPMENT_PASS
+    current_status: IMPLEMENTED_DEVELOPMENT_PASS
+dependency_gate:
+  satisfied: 7
+  required: 7
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-09.01
+  - docs/tech-specs/specs/TS-14-BUILDER-WORKFLOW-RUNTIME.md
+  - docs/architecture/adr/ADR-006-WORKFLOW-ENGINE-ADAPTER.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+implementation_scope_after_dependency_pass:
+  - immutable versioned WorkflowIR, node, edge, condition, profile and typed-handoff contracts
+  - explicit primary actor classification as deterministic code, bounded agent program, human gate or governed hybrid
+  - actor rationale, authority boundary, prerequisites, entry conditions, success and failure exits, routes and terminal states
+  - explicit budgets, isolation declarations, event declarations, retries, human gates, test references and promotion status
+  - compilation from hash-pinned approved lifecycle, target, capability, phase, context, contract, dependency, repair and authorization graphs
+  - versioned structural workflow-profile registry without production promotion
+  - deterministic local adapter for compilation, registration, routing and read-only query conformance only
+  - stable routing from request classification, target profile, risk state and registry version
+  - explicit typed nondeterminism receipt when deterministic routing cannot be established
+  - deterministic canonical bytes, immutable identities, replay-safe duplicate compilation and typed conflict rejection
+local_adapter_boundary:
+  adapter_kind: deterministic_local_development_adapter
+  external_engine: false
+  network_access: false
+  durable_production_scheduler: false
+  workflow_execution: false
+  agent_execution: false
+  external_product_execution: false
+  allowed_operations:
+    - compile
+    - validate
+    - register_profile
+    - select_profile
+    - query_compiled_contract
+  later_story_operations_prohibited:
+    - manual_shadow_automation
+    - node_execution
+    - retry_or_feedback_execution
+    - checkpoint_or_resume_execution
+    - candidate_racing
+    - queue_recovery
+    - production_promotion
+adr_006_disposition:
+  local_deterministic_adapter_contract: IMPLEMENTABLE_OD_AM_001_DEVELOPMENT_SCOPE
+  Temporal_production_adapter: NOT_IMPLEMENTED
+  Temporal_public_seam_conformance: EXTERNAL_VALIDATION_PENDING
+  same_public_seam_suite_against_Temporal: NOT_RUN_EXTERNAL_VALIDATION_PENDING
+  Temporal_worker_loss_engine_restart_and_signal_faults: NOT_EVALUATED
+  full_ADR_006_satisfaction_claim: prohibited
+  production_scheduling_claim: prohibited
+  boundary: >-
+    The OD-AM-001 receipt may prove only the local deterministic adapter and
+    actor-explicit compilation seam. It cannot close or substitute for Temporal
+    adapter implementation, deployment, or public-seam conformance evidence.
+external_and_authority_gates_remaining:
+  XDEP-001:
+    status: AUTHORITY_REMAINS_EXTERNAL
+    boundary: Program Control records are consumed read-only and are not mutated here
+  XDEP-005:
+    status: FUTURE_CONSUMER_NOT_IMPLEMENTATION_EVIDENCE
+    boundary: Operator Manual documentation cannot substitute for Builder behavior or acceptance evidence
+  ADR-006-Temporal:
+    status: EXTERNAL_VALIDATION_PENDING
+future_workflow_path_allowlist:
+  production_source:
+    - src/cmf_builder/workflow/actor_explicit_contracts.py
+    - src/cmf_builder/workflow/deterministic_local_adapter.py
+  tests:
+    - tests/stories/st_09_01/test_actor_explicit_workflow.py
+    - tests/stories/st_09_01/test_deterministic_local_adapter.py
+    - tests/stories/st_09_01/test_failure_authority_determinism.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-09.01/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-09.01/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-09.01/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-09.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_workflow_path_allowlist
+  - shared run aggregates, ports, authority services and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs or historical receipts
+  - Temporal SDK, Temporal adapter, workflow engine deployment or external dependency addition
+  - external product behavior, VAE runtime, Delegation runtime or conversational-product runtime
+  - behavior owned by ST-09.02 through ST-09.06
+  - StoryCompletionReceipt or EvidenceClosureReceipt issuance
+prohibited_claims:
+  - Temporal_conformant
+  - Temporal_validated
+  - durable_production_scheduling
+  - manual_shadow_parity
+  - workflow_runtime_complete
+  - external_product_compatible
+  - production_ready
+  - certified
+acceptance_after_dependency_pass:
+  - identical approved graph inputs produce byte-identical WorkflowIR, routing decisions and receipts
+  - every node has exactly one explicit actor kind, actor rationale, authority boundary and typed input-output contract
+  - the IR represents prerequisites, conditions, success and failure exits, bounded feedback declarations, terminal states and invalidation
+  - missing actors, ambiguous ownership, cycles, undeclared handoffs and unapproved graph sources fail closed
+  - routing is deterministic from exact request classification, target profile, risk state and registry version or emits a typed nondeterminism receipt
+  - workflow profiles and adapters are versioned and cannot be promoted without migration and rollback evidence
+  - the local adapter performs no phase, workflow, agent or external-product execution
+  - Temporal conformance remains explicitly EXTERNAL_VALIDATION_PENDING and no production or certification claim is emitted
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-09.02_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

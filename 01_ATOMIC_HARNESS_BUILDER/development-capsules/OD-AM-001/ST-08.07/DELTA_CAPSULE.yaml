@@ -1,0 +1,255 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.07:STRUCTURAL_CONVERSATIONAL_WRONG_READING_EVALUATION
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.07
+  title: Reject Wrong Readings and Evaluate Conversational Expression
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: role clarity, pattern interruption, prediction, payoff, affinity, anticipation, residue, anti-cliche, no-text survival, and rejection remain independently governed
+  primary_obligations:
+    - CONST-007
+    - CONST-008
+  primary_obligation_count: 2
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_STRUCTURAL_NON_PERSONAL_UNCERTIFIED
+dependency:
+  story_id: ST-08.06
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-08.06/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_receipt_sha256: 53755c6d79e7eb4e69d8e26f014a3abcd28992d462665643962e14c5d066d1bc
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-08.06/DELTA_CAPSULE.yaml
+    sha256: e68f4709b4704b5616041d7a174ad31170eb2b05396cfaa250a13a1c2056c36f
+    validation: PASS_IMPLEMENTED_REFERENCE
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.07
+  - docs/product-authority/BUILDER_V1_2_CONSTITUTIONAL_ALIGNMENT_AMENDMENT.md
+  - governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml
+  - docs/architecture/adr/ADR-010-BENCHMARK-GOVERNANCE-AND-MATURITY.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - EvaluationCase
+    - ConstitutionalEvaluationReceipt
+    - ConstitutionalReadinessReceipt
+    - RepairReceipt
+  schemas:
+    - docs/contracts/schemas/constitutional-evaluation.schema.json
+    - docs/contracts/schemas/conversational-expression.schema.json
+  ownership_rule: schemas are referenced and structurally validated without local fork, human-evidence creation or shared-contract ownership
+branch_boundary:
+  category_id: conversational_activation_expression
+  allowed_profiles:
+    - public_comment
+    - reply_dm
+    - reelcast_expression
+    - interview_expression
+  fixture_classification:
+    repository_owned: true
+    synthetic: true
+    structural_only: true
+    non_personal: true
+    non_production: true
+    uncertified: true
+  prohibited_fixture_inputs:
+    - actual_human_reaction
+    - actual_conversation_or_interview_transcript
+    - personal_data
+    - ReactionReceipt
+    - ExpressionMoment
+    - IdentityDNAAmendmentProposal
+    - adopted_IdentityDNA_change
+    - protected_conversational_case_or_label
+implementation_scope_after_dependency_pass:
+  - validate at least one explicit dominant wrong-reading lock on every applicable synthetic structural evaluation subject
+  - evaluate constitutional conversational dimensions independently without composite compensation
+  - validate structural Activative Call, profile applicability, authority, semantic lineage and wrong-reading rejection declarations
+  - emit deterministic structural evaluation and rejection receipts containing no human reaction evidence
+  - preserve human-owned artifact applicability as explicit external or NOT_APPLICABLE state with justification
+dominant_wrong_reading_lock_rules:
+  minimum_count: 1
+  non_empty_identity_required: true
+  dominant_lock_required: true
+  each_lock_fields:
+    - lock_id
+    - prohibited_reading
+    - protected_meaning_ref
+    - source_and_authority_refs
+    - applicability
+    - rejection_rule
+  failure_behavior:
+    - missing, empty, stale, altered or authorityless lock fails structural readiness
+    - an output matching a prohibited reading is rejected regardless of other dimension results
+    - inherited locks cannot be removed or weakened
+    - additional stricter locks may not contradict the authoritative source
+  repair_or_relaxation: requires a new authoritative upstream version and is outside this Story
+independent_conversational_dimensions:
+  dimension_ids:
+    - role_clarity
+    - pattern_match
+    - pattern_interruption
+    - prediction
+    - payoff
+    - affinity
+    - anticipation
+    - residue
+    - anti_cliche
+    - no_text_survival
+    - wrong_reading_rejection
+  rules:
+    - each applicable dimension has its own result, evidence refs, limitation and failure context
+    - no score, mean, trend or passing dimension may compensate for a failed dimension or wrong-reading lock
+    - NOT_APPLICABLE is explicit, profile-specific and justified by authoritative structure
+    - synthetic expected structure is not represented as actual human behavior
+    - no-text survival evaluates meaning structure without inventing visual or human evidence
+structural_expression_contract:
+  permitted_inputs:
+    - synthetic Activative Call declaration
+    - synthetic intended-reaction constraint clearly marked desired_not_observed
+    - synthetic smallest-useful-commitment declaration
+    - structural conversational-turn declaration
+    - mandatory wrong-reading locks
+    - immutable Activative Intelligence Pack and semantic-lineage references
+    - explicit Reaction Receipt and Expression Moment applicability markers
+  required_applicability_states:
+    - STRUCTURALLY_APPLICABLE_HUMAN_EVIDENCE_NOT_PROVIDED
+    - NOT_APPLICABLE_WITH_JUSTIFICATION
+  prohibited_substitution:
+    - desired_reaction_as_observed_reaction
+    - intended_expression_as_ExpressionMoment
+    - synthetic_fixture_as_human_evidence
+    - empty_reference_as_NOT_APPLICABLE
+human_truth_and_artifact_ownership:
+  human_owned:
+    - original_human_truth
+    - actual_reaction
+    - ReactionReceipt
+    - ExpressionMoment
+    - IdentityDNA_amendment_approval
+  Builder_may_do:
+    - validate structural requirements and applicability
+    - preserve immutable external evidence references when separately supplied and authorized
+    - reject missing human evidence when a real-profile path requires it
+  Builder_must_never_do:
+    - manufacture or infer a human reaction
+    - issue, simulate or backfill a ReactionReceipt
+    - issue, simulate or backfill an ExpressionMoment
+    - create or approve an IdentityDNA amendment from evaluation output
+    - convert synthetic fixture assertions into human truth
+structural_receipt_contract:
+  required_fields:
+    - subject_identity_version_and_hash
+    - synthetic_fixture_identity_and_hash
+    - category_and_profile
+    - constitutional_authority_refs
+    - Activative_Intelligence_and_semantic_lineage_refs
+    - wrong_reading_lock_results
+    - independent_dimension_results
+    - human_owned_artifact_applicability
+    - limitations_and_open_policy_gates
+    - decision_and_failure_context
+  permitted_decisions:
+    - PASS_STRUCTURAL_DEVELOPMENT_ONLY
+    - FAIL_WRONG_READING_LOCK
+    - FAIL_STRUCTURAL_DIMENSION
+    - BLOCKED_HUMAN_EVIDENCE_REQUIRED
+    - BLOCKED_AUTHORITY
+  production_or_certification_decision: prohibited
+lineage_invalidation_and_determinism:
+  pinned_inputs:
+    - category_constitution_and_profile_versions
+    - subject_and_fixture_identity_hashes
+    - Activative_Intelligence_Pack_and_rich_semantic_refs
+    - Activative_Call_and_wrong_reading_lock_versions
+    - dimension_rubric_and_structural_evaluator_versions
+    - human_owned_artifact_applicability_states
+    - authority_policy_and_ST-08.06_receipt_refs
+  invalidate_when_any_pinned_input_changes: true
+  historical_receipt_reproduction: required
+  canonical_identity_rule: results and receipts derive only from canonical governed content
+  repeat_command: identical payload returns the original receipt without duplicate state
+  conflicting_command: reject atomically with zero result, receipt, event or command record
+  nondeterministic_identity_inputs_prohibited:
+    - wall_clock_time
+    - random_identifier
+    - absolute_machine_path
+    - environment_specific_value
+failure_and_authority_boundary:
+  reject:
+    - absent_dominant_wrong_reading_lock
+    - hard_failure_hidden_by_another_dimension
+    - conversational_certification_request_while_HD-006_or_HD-007_open
+    - human_truth_or_reaction_invention
+    - false_ReactionReceipt_or_ExpressionMoment
+    - automatic_IdentityDNA_mutation_or_approval
+    - lost_or_flattened_semantic_lineage
+    - unauthorized result, applicability, lock or receipt mutation
+  partial_state_on_failure: prohibited
+  external_evaluator_runtime_transport_or_provider_calls: prohibited
+blocker_and_evidence_gates_remaining:
+  BD-008:
+    status: EVIDENCE_PENDING
+    boundary: real protected conversational cases, label custody and calibrated thresholds remain open
+  HD-006:
+    status: HUMAN_POLICY_PENDING
+    boundary: consent, retention, redaction, access, withdrawal and Identity DNA proposal storage remain open for real human material
+  HD-007:
+    status: HUMAN_POLICY_PENDING
+    boundary: conversational rubrics, production thresholds and certification remain open
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/structural_conversational_evaluation.py
+  tests:
+    - tests/stories/st_08_07/test_wrong_reading_rejection.py
+    - tests/stories/st_08_07/test_structural_conversational_dimensions.py
+    - tests/stories/st_08_07/test_human_ownership_boundaries.py
+    - tests/stories/st_08_07/test_lineage_determinism_and_invalidation.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.07/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.07/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.07/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.07/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-08.06 implementation or completion evidence
+  - external evaluator, runtime, transport, provider, model, credential, network or external-product behavior
+  - real human data, Reaction Receipts, Expression Moments, Identity DNA amendments or protected labels
+  - production thresholds, production authorization, production promotion, certification or publication
+acceptance_after_dependency_pass:
+  - every applicable subject has at least one explicit dominant wrong-reading lock and matching prohibited readings fail closed
+  - all eleven constitutional conversational dimensions remain independently visible and non-compensable
+  - synthetic desired reactions and expression structure are never represented as observed human reactions or Expression Moments
+  - Reaction Receipt, Expression Moment and Identity amendment applicability preserves human ownership and explicit missing-evidence state
+  - exact authority, semantic lineage, category, profile, lock, rubric and fixture identities are hash-bound
+  - identical governed inputs produce byte-identical structural results, rejections and receipts
+  - changed inputs invalidate affected active receipts while preserving historical reproduction
+  - production thresholds and certification remain absent and false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: NONE_OD_AM_001_LANE_C_TERMINAL_STORY
+  equivalent_to_StoryCompletionReceipt: false
+  real_human_evidence_created: false
+  production_threshold_defined: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

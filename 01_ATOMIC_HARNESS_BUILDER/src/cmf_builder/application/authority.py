@@ -31,6 +31,16 @@ class Action(str, Enum):
     REOPEN_ATOMIC_BOUNDARY = "REOPEN_ATOMIC_BOUNDARY"
     BIND_HARNESS_CATEGORY = "BIND_HARNESS_CATEGORY"
     COMPILE_CATEGORY_PROFILES = "COMPILE_CATEGORY_PROFILES"
+    COMPILE_CATEGORY_SYNTAX = "COMPILE_CATEGORY_SYNTAX"
+    COMPILE_CATEGORY_POLICY = "COMPILE_CATEGORY_POLICY"
+    COMPILE_CONVERSATIONAL_FEEDBACK = "COMPILE_CONVERSATIONAL_FEEDBACK"
+    WITHDRAW_CONVERSATIONAL_FEEDBACK_CONSENT = (
+        "WITHDRAW_CONVERSATIONAL_FEEDBACK_CONSENT"
+    )
+    REGISTER_COMPILATION_TARGETS = "REGISTER_COMPILATION_TARGETS"
+    COMPILE_EXTERNAL_HANDOFFS = "COMPILE_EXTERNAL_HANDOFFS"
+    COMPARE_ATOMIC_BOUNDARIES = "COMPARE_ATOMIC_BOUNDARIES"
+    EVALUATE_FRESH_CONTEXTS = "EVALUATE_FRESH_CONTEXTS"
 
 
 HUMAN_ONLY_ACTIONS = frozenset(
@@ -42,6 +52,7 @@ HUMAN_ONLY_ACTIONS = frozenset(
         Action.REOPEN_ATOMIC_BOUNDARY,
         Action.RATIFY_GENESIS_DECISION,
         Action.REOPEN_GENESIS_DECISION,
+        Action.WITHDRAW_CONVERSATIONAL_FEEDBACK_CONSENT,
     }
 )
 
@@ -116,6 +127,39 @@ class AuthorityService:
         if not matching:
             raise AuthorityDenied(
                 "No active exact authority grant covers this action and resource.",
+                actor_id=actor_id,
+                action=action.value,
+                resource_id=resource_id,
+            )
+        return actor
+
+    def authorize_exact(
+        self,
+        *,
+        actor_id: str,
+        action: Action,
+        resource_id: str,
+        now: datetime,
+    ) -> Actor:
+        """Authorize only an exact resource grant; wildcard grants are insufficient."""
+
+        actor = self.authorize(
+            actor_id=actor_id,
+            action=action,
+            resource_id=resource_id,
+            now=now,
+        )
+        exact_matching = tuple(
+            grant
+            for grant in self._grants
+            if grant.actor_id == actor_id
+            and action in grant.actions
+            and grant.resource_id == resource_id
+            and grant.expires_at > now
+        )
+        if not exact_matching:
+            raise AuthorityDenied(
+                "No active exact authority grant covers this action and resource; wildcard grants are insufficient.",
                 actor_id=actor_id,
                 action=action.value,
                 resource_id=resource_id,

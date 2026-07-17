@@ -1,0 +1,41 @@
+schema_version: cmf-builder-offline-development-amendment/v1
+amendment_id: OD-AM-005
+title: TERMINAL_BUILDER_IMPLEMENTATION_AND_EVIDENCE_GATING
+created_on: "2026-07-17"
+authority_mode: OFFLINE_DEVELOPMENT_IMPLEMENTATION
+source_authorization: user_supplied_attachment_create_od_am_005_terminal_nine_story_builder_campaign
+predecessor_amendment:
+  id: OD-AM-004
+  status: COMPLETE
+  receipt_path: docs/implementation/offline-development/OD_AM_004_RECEIPT.yaml
+  receipt_sha256: 9ef72604c58254674be660a3e892bb3575434c25f1ad632d660b37b4281d703c
+  offline_implementation_coverage: 60/69
+  latest_full_regression: 1868/1868_PASS_TWICE
+story_inventory:
+  confirmed_story_ids_changed: false
+  primary_obligation_assignments_changed: false
+  historical_receipts_rewritten: false
+  total_confirmed_stories: 69
+two_gate_model:
+  implementation_gate: offline_development_implementation_receipt
+  evidence_gate: remains_external_evidence_driven
+  implementation_receipt_is_story_completion_receipt: false
+authority_limits:
+  production_authority_granted: false
+  certification_authority_granted: false
+  external_product_authority_granted: false
+  external_provider_authority_granted: false
+  cloud_execution_authority_granted: false
+  bd_007_status: OPEN_PENDING_CLOUD_AND_COMPLETE_CASE_EVIDENCE
+target_story_ids: [ST-10.10, ST-10.11, ST-10.12, ST-10.13, ST-10.14, ST-12.01, ST-12.02, ST-12.03, ST-12.04]
+prohibited_story_ids: [later_stories]
+architecture_constraint:
+  literal_control_tower_source_package_allowed: false
+  approved_boundaries: [src/cmf_builder/application]
+expected_completion:
+  offline_implementation_coverage: 69/69
+  od_am_005_target_completion: 9/9
+  full_evidence_closure: 27/69_or_higher_only_from_real_evidence
+  next_story: NONE_CONFIRMED_IMPLEMENTATION_STORIES_REMAIN
+  production_ready: false
+  certified: false

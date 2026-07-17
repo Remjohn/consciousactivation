@@ -1,0 +1,52 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-08.04
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/evaluation/root_cause_diagnosis.py
+    role: typed deterministic root-cause diagnosis, repair-scope graph declarations and lifecycle receipts
+    sha256: d7b227615441c00e50f4c0ac343c33d6fb8398c74cd56c743d0219c578378521
+  - path: tests/stories/st_08_04/test_typed_root_cause_diagnosis.py
+    role: taxonomy, hypothesis, triage, identity and claim-ceiling tests
+    sha256: d39fde7e76ab306b8f340f180407b215c7833c5b1d8493841d7d806573164582
+  - path: tests/stories/st_08_04/test_layer_localization_and_graph.py
+    role: eight-layer localization, repair-field and exact descendant-graph tests
+    sha256: 0d986b14c2f86761b623c8760e80d4fb77fce5d978fec164aca589a2dcfaebb0
+  - path: tests/stories/st_08_04/test_failure_authority_boundaries.py
+    role: authority, command, lineage, observation and atomic rejection tests
+    sha256: 81e5c241688b021b4e78b8f18e694efdd554a39ddc33184cda1f1f8d9fa5ae7f
+  - path: tests/stories/st_08_04/test_lineage_determinism_and_rollback.py
+    role: fresh-process, nested tamper, replay, invalidation and rollback tests
+    sha256: b9f8d88cbb24465ed30bfa9879acb9a91a4544565f42d397f5fb631b3e9d819a
+files_modified:
+  - development-capsules/OD-AM-001/ST-08.04/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-08.04/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-08.04/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-08.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+production_files_changed:
+  - src/cmf_builder/evaluation/root_cause_diagnosis.py
+test_files_changed:
+  - tests/stories/st_08_04/test_typed_root_cause_diagnosis.py
+  - tests/stories/st_08_04/test_layer_localization_and_graph.py
+  - tests/stories/st_08_04/test_failure_authority_boundaries.py
+  - tests/stories/st_08_04/test_lineage_determinism_and_rollback.py
+shared_files_changed:
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    sha256: 3564280fb361b2fd590eebe724c18da16048b8098764696273e0b9cf84a983bc
+    role: campaign-authorized mechanical exact-source registration for ST-08.04
+paths_outside_capsule_changed: []
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  path_ownership_conformant: true
+  focused_tests: PASS_84_OF_84
+  affected_tests: PASS_250_OF_250
+  architecture_tests: PASS_12_OF_12
+  complete_repository_regression: PASS_1489_OF_1489_TWO_SHARDS_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS_114_SOURCE_FILES
+  absolute_path_and_secret_scan: PASS
+  external_evaluator_or_provider_used: false
+  repair_or_artifact_mutation_executed: false
+  real_human_evidence_created: false
+  production_or_certification_status_created: false

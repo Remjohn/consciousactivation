@@ -1,0 +1,126 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_type: ImplementationCompletionReceipt
+story_id: ST-02.04
+story_title: Compare Candidate Atomic Product Boundaries
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+recorded_on_utc: "2026-07-17T06:06:24Z"
+status: IMPLEMENTED_DEVELOPMENT_PASS
+equivalent_to_story_completion_receipt: false
+outcome:
+  verdict: IMPLEMENTED_DEVELOPMENT_PASS
+  implemented: >-
+    The Builder can deterministically compare exactly merge, split, variant,
+    and family atomic-product alternatives across all ten governed dimensions,
+    expose typed over-merge and over-split consequences across five risk
+    domains, and issue an immutable unratified packet and exactly bound receipt
+    from a canonical ST-02.03 provisional grammar.
+  human_decision_made: false
+  atomic_boundary_ratified: false
+  genesis_authorized: false
+  external_evidence_gate_closed: false
+obligations:
+  owned: [D008, FR-032, FR-033, FR-034, FR-035]
+  disposition: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-02.03
+  receipt_path: development-capsules/OD-AM-001/ST-02.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 7ee1529a4bd98603c3bf1ea2b16e36a94d2d30749e457dfd56482f1e80674e64
+  validation: PASS
+authority:
+  amendment_receipt:
+    path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+    sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+    validation: PASS
+  delta_capsule:
+    path: development-capsules/OD-AM-001/ST-02.04/DELTA_CAPSULE.yaml
+    sha256: 62e9fe4707a15cde12d1c4e0182b985b6a56ffd061174eb96e5380714d58d8f2
+    validation: PASS
+implementation_evidence:
+  file_change_manifest:
+    path: development-capsules/OD-AM-001/ST-02.04/FILE_CHANGE_MANIFEST.yaml
+    sha256: 880d661bdd507337f4e6acfaff971d5188c581ef24e95b2bada0efe4cb83659b
+    validation: PASS
+  test_results:
+    path: development-capsules/OD-AM-001/ST-02.04/TEST_RESULTS.json
+    sha256: 1d904d46ca4eefe507c3248be20ad98e930dfbbe65e4b9669da53d1e86a25800
+    validation: PASS
+tests:
+  focused:
+    passed: 34
+    failed: 0
+    mandatory_skips: 0
+    verdict: PASS
+  st_02_predecessor_chain:
+    passed: 133
+    failed: 0
+    mandatory_skips: 0
+    verdict: PASS
+  python_source_compile:
+    compiled_files: 7
+    failed: 0
+    verdict: PASS
+  complete_repository_regression:
+    passed: 1269
+    failed: 0
+    mandatory_skips: 0
+    verdict: PASS
+trust_validation:
+  exact_four_alternatives: PASS
+  exact_ten_dimensions_per_alternative: PASS
+  exact_five_risk_domains_per_alternative: PASS
+  over_merge_and_over_split_distinguished: PASS
+  source_grammar_and_receipt_revalidated_at_compile_and_commit: PASS
+  forged_canonical_payload_rejected_at_commit: PASS
+  forged_series_identity_rejected_at_commit: PASS
+  forged_noncanonical_alternative_order_rejected_at_commit: PASS
+  duplicate_evidence_references_rejected: PASS
+  canonical_nested_ordering: PASS
+  provisional_hypotheses_not_promoted: PASS
+  protected_boundary_certainty_fails_closed_without_independently_verifiable_calibration: PASS
+  ratification_production_certification_and_genesis_claims_rejected: PASS
+  authority_idempotency_atomicity_history_and_rollback: PASS
+  portable_output_no_absolute_path: PASS
+observability:
+  receipt_fields:
+    - run_id
+    - story_id
+    - packet_id
+    - packet_version
+    - packet_artifact_sha256
+    - grammar_id
+    - grammar_artifact_sha256
+    - induction_receipt_sha256
+    - comparison_authority_ref
+    - outcome
+    - failure_context
+  verdict: PASS
+rollback:
+  non_destructive_historical_packet_retention: PASS
+  authorized_active_pointer_rollback: PASS
+  injected_failure_zero_partial_state: PASS
+file_scope:
+  allowlist_validation: PASS
+  lane_shared_files_modified: false
+  canonical_integrator_shared_files_modified: true
+  prohibited_files_modified: false
+  external_repositories_modified: false
+  external_dependencies_added: false
+blocker_preservation:
+  BD-004: EVIDENCE_PENDING
+  BD-007: EVIDENCE_PENDING
+  BD-008: EVIDENCE_PENDING
+  HD-006: HUMAN_POLICY_PENDING
+  production_ready: false
+  certified: false
+integrator_gates:
+  source_boundary_registry_additive_registration: APPLIED_BY_CANONICAL_INTEGRATOR
+  source_boundary_registry_sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+  authority_source_sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+  accepted_change_request_sha256: 4bbad8a695e3c32495f11aa1cac8d90dff48ef846748eb01a5defa847eb7d3b9
+  complete_repository_regression: PASS_1269_OF_1269_NO_MANDATORY_SKIPS
+  architecture_and_exact_source_tests: PASS_12_OF_12
+  production_source_tree_sha256: 9793ca8ed7c41c12864d2ef59a8bea6bafd542a0ae3ac757c48058e3391b0c0d
+  canonical_receipt_promotion: PASS
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-02.05_OD_AM_001_DISCOVERED_BOUNDARY_MODE_ONLY
+  unlock_now: true

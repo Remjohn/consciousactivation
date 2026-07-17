@@ -166,10 +166,11 @@ remain open. Admission receipt SHA-256:
 This approval does not authorize provider credentials, spend or calls. ST-06.03
 therefore remains `BLOCKED_EVIDENCE`, now solely by `[BD-007]`. ST-06.04 remains
 blocked by ST-06.03. Story counts remain `27/69` complete and `42` remaining;
-production readiness and certification remain false. The active BD-007 authorization
-gate is `docs/implementation/category-native-evidence/BD007_AUTHORIZATION_GATE_STATUS.yaml`
-with SHA-256
+production readiness and certification remain false. At that historical checkpoint,
+the BD-007 authorization-gate bytes had SHA-256
 `e44b22d200ba73de241a8479d4ce84c0489ad12d6ad176d1edda97c5eb367ea4`.
+That gate is superseded by the current deferred gate recorded in the latest section
+below.
 
 ## Queue and stop condition
 
@@ -193,3 +194,161 @@ Format 02, Human Reaction policy, additional real skills, VAE, Delegation runtim
 external providers and production certification remain later conditional or external
 work. Deferred nonblocking QA remains BQA-P2-007, BQA-P2-008, BQA-P2-009 and
 BQA-P3-010.
+
+## Pre-cloud governance, integrity, and BD-007 readiness reconciliation
+
+This section supersedes earlier current-state descriptions without rewriting their
+historical evidence. Constitutional Alignment Batch A is completed historical
+authority. Current Builder implementation authority is limited to confirmed Stories
+or governed amendments whose dependencies have PASS receipts, genuine blocker cut is
+empty, bounded Development Capsule validates, exact allowlist is honored, and required
+human authority exists. This recovery campaign authorizes no Story implementation.
+
+The ST-01.03 completion receipt remains immutable. Its 18 immutable capsule inputs
+match every recorded SHA-256 and byte count. The historical aggregate digest
+`457ce102e1eee99200f178fda3615399890bbe68851e9dd57d374bb5ffe3cb8a`
+does not reproduce under the declared algorithm or 400 governed canonicalization
+variants; the reproducible declared-algorithm digest is
+`e54abd34d119e4bc1bb383c9c5df84c18155c2c65267e4dffe0f9375045beb0c`.
+This is dispositioned as a historical aggregation-canonicalization recording defect,
+not immutable-input drift. Supplemental integrity receipt SHA-256:
+`e7ed6a1405479df2db4cd337419860282640e154dec5bd8e272ffc825ab96141`.
+
+The four frozen BD-007 cases now have precise evidence-source dispositions:
+
+- Short-Form Edited Video and Format 02 remain bound to admitted BD-004 archive
+  members.
+- The generic non-Activative control is supported by the governed repository-owned
+  PX-AM-001 generic fixture.
+- The conversational case is supported only as a synthetic, structural, non-personal,
+  uncertified ReelCast control using governed category/profile/contracts and wrong-
+  reading locks.
+
+The frozen v1 experiment contract accepts archive-member bindings only. A v2
+mixed-governed-source binding amendment therefore requires explicit approval; the
+four-case, two-arm, three-repeat design and frozen rubric remain unchanged.
+
+The cloud-neutral contract plus AWS and GCP checklists, unresolved date-stamped cost
+model, teardown plan, and future owned-compute migration contract are prepared. No
+cloud account was authenticated, no region or quota selected, no resource created,
+no model byte downloaded, no provider call made, and no spend incurred.
+
+BD-007 is now
+`DEFERRED_PENDING_OPERATOR_CLOUD_ENVIRONMENT_AND_COMPLETE_CASE_EVIDENCE`, not PASS or
+Builder failure. ST-06.03 remains `BLOCKED_EVIDENCE`; ST-06.04 remains
+`BLOCKED_PRIOR_STORY`. Current counts are `27/69` complete, `42` remaining, `0`
+READY. Production readiness and certification remain false.
+
+Final verification for this reconciliation is `959/959 PASS` in one fresh process
+with zero mandatory skips. Non-writing Python compilation passed for 280 source and
+test files; 39/39 indexed active receipts, all changed YAML, cloud-contract section
+validation, admitted-case source hashes, portable-path scan, and secret-value scan
+also pass.
+
+## OD-AM-001 offline development campaign
+
+The governed operator confirmed `OD-AM-001 / OFFLINE_DEVELOPMENT_IMPLEMENTATION_BRANCH`
+for exactly 22 confirmed Story development modes. Wave 0 validates `69/69` Story IDs,
+`410/410` primary obligations, all 103 historical dependency edges, and 134 unique
+target obligations with no reassignment or duplication. Amendment receipt SHA-256:
+`cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44`.
+
+An `ImplementationCompletionReceipt` may unlock only the next offline development
+mode; it is not a StoryCompletionReceipt or EvidenceClosureReceipt. The full-evidence
+count therefore remains `27/69` while separate implementation coverage advances. All
+external evidence, human-policy, provider, cloud, production and certification gates
+remain open at their applicable original scopes.
+
+Wave 1 has integrated ST-02.01 and ST-06.03 as separate
+`IMPLEMENTED_DEVELOPMENT_PASS` units. Their receipt SHA-256 values are
+`7945916c62c480a1a9f9b8205cde987e7a91939922d28176e4f89d00f5c831a2`
+and `89d2f10aca87399e25f0f2115562bd4ac2c1bc2bb1f0c4621540a25e0c15569b`.
+The canonical full regression is `1020/1020 PASS` with zero mandatory skips.
+Implementation coverage is now `31/69`; full-evidence Story closure remains `27/69`.
+ST-02.02 and ST-06.04 also hold `IMPLEMENTED_DEVELOPMENT_PASS` receipts after a
+`1074/1074 PASS` canonical regression. ST-02.03 and the bounded structural,
+non-personal, uncertified ST-06.05 branch are active in exclusive paths, with later compact capsules
+prepared independently. No cloud authentication, model download, provider call,
+external spend, external-product implementation, or real Human Reaction data is
+authorized.
+
+The third OD-AM-001 integration checkpoint adds ST-02.03 and the bounded structural,
+non-personal, uncertified ST-06.05 branch as `IMPLEMENTED_DEVELOPMENT_PASS` units.
+Their receipt SHA-256 values are
+`7ee1529a4bd98603c3bf1ea2b16e36a94d2d30749e457dfd56482f1e80674e64` and
+`8cdafd1cf3b5041f154bbe1a18e1dccffca6adbc6a98ec98e01a7256872cb4a9`.
+The canonical regression is `1152/1152 PASS` with no mandatory skips after closing
+all independent pre-promotion trust findings. Offline implementation coverage is now
+`33/69`; full-evidence closure remains `27/69`. HD-006, HD-007, BD-007 and all real
+human, external-product, production and certification scopes remain open.
+
+The fourth OD-AM-001 integration checkpoint promotes ST-02.04, ST-07.01,
+ST-07.03 and ST-08.01 as separate `IMPLEMENTED_DEVELOPMENT_PASS` units after
+independent adversarial review and a `1269/1269 PASS` canonical regression with
+zero mandatory skips. Their receipt SHA-256 values are
+`e838d9e575b6a21a1576bafd7407d9f7685579b1f5d1c156e651c2fed50bdbf9`,
+`3b6efef817cf134c881ba4b7dc1780acb75c4258c4ad20ba6e14049afce22c15`,
+`84ebb958af4f5b2f508457e7341492b5bf0d9333e5eccf9096875ce7705c9d3f`,
+and `e0e3101c43aba7590cc64831620bcfc99907846ef63e3a1f8d4e4ac6bfa30220`.
+Offline implementation coverage is now `37/69`; full-evidence closure remains
+`27/69`. ST-08.02 is the next active OD target. External validation, real-human
+evidence, maturity promotion, production readiness and certification remain open.
+
+Checkpoint correction before downstream activation: a late adversarial reconstruction
+proved that mutated nested ST-08.01 trial/context objects were not semantically
+revalidated at the commit boundary. The provisional ST-08.01 promotion was withdrawn;
+ST-08.02 did not begin. ST-02.04, ST-07.01 and ST-07.03 remain valid PASS units.
+Current offline implementation coverage is `36/69` across `9/22` OD targets, and
+full-evidence closure remains `27/69`. ST-08.01 is active for bounded trust remediation.
+
+ST-08.01 remediation subsequently passed independent review and fresh integrator
+validation. Its repaired ImplementationCompletionReceipt SHA-256 is
+`e8c2c8048720379874405844cfa59b43fc59941496724f36b42ea65ca2cd1466`, with
+`43/43` focused tests, `224/224` affected tests, `12/12` architecture tests,
+Python compilation PASS, and a fresh `1282/1282 PASS` full regression with zero
+mandatory skips. Offline implementation coverage is now `37/69` across `10/22`
+OD targets; full-evidence closure remains `27/69`. ST-08.02 is the next active
+OD target. Production readiness and certification remain false.
+
+ST-08.02 then completed its OD-AM-001 development-only maturity receipt mechanism.
+Its ImplementationCompletionReceipt SHA-256 is
+`c9438a38beb08a54a55d8f681972786282afc4f9a32756e6f027069bca4cae0b`, with
+`28/28` focused tests, `71/71` affected ST-08.01/ST-08.02 tests, `12/12`
+architecture tests, Python compilation PASS, and a fresh `1310/1310 PASS` full
+regression with zero mandatory skips. Offline implementation coverage is now
+`38/69` across `11/22` OD targets; full-evidence closure remains `27/69`.
+ST-08.03 is the next active OD target. Real protected evidence, production
+readiness and certification remain false.
+
+ST-08.03 now holds an `IMPLEMENTED_DEVELOPMENT_PASS` receipt for deterministic,
+authority-bound independent dimension scoring and controlled mutations. All eight
+dimensions and all nine non-compensable gates remain explicit; incomplete repetitions,
+protected-label access, lineage drift, authority drift and conflicting lifecycle
+commands fail closed. Its receipt SHA-256 is
+`35244ad32a35ba68e66ad86d8bca773e142bc75c944a9bdda125eb394dc2d24b`.
+Validation is `95/95` focused, `166/166` across ST-08.01 through ST-08.03,
+`12/12` architecture, Python source compilation PASS, and `1405/1405` full
+regression with zero mandatory skips. Offline implementation coverage is now `39/69`
+across `12/22` targets; full-evidence closure remains `27/69`. ST-08.04 is active.
+Production readiness and certification remain false.
+
+ST-08.04 now holds an `IMPLEMENTED_DEVELOPMENT_PASS` receipt for typed,
+authority-bound root-cause diagnosis and exact descendant-only repair/invalidation
+graph declarations. Ambiguous causes remain blocked for typed triage; unaffected
+upstream truth is frozen, and no repair or artifact mutation is executed. Its
+receipt SHA-256 is
+`e7a068c5f274af7b0d251034d19120ba28d36644213bb82ed759ca3cfc976a6f`.
+Validation is `84/84` focused, `250/250` across ST-08.01 through ST-08.04,
+`12/12` architecture, Python source compilation PASS, and `1489/1489` complete
+repository regression across two default-import shards with zero mandatory skips.
+Offline implementation coverage is now `40/69` across `13/22` targets;
+full-evidence closure remains `27/69`. ST-08.05 is active. Production readiness
+and certification remain false.
+
+ST-08.05 now holds an `IMPLEMENTED_DEVELOPMENT_PASS` receipt for selective,
+immutable Builder-owned repair candidates and graph-derived local rerun plans.
+Its receipt SHA-256 is `71d764be9fc498680e6fd6022484fd380ae5cf8aa0dfcc35c5de54430cea9e3a`.
+Validation is `68/68` focused, `318/318` affected, `12/12` architecture and
+`1557/1557` complete regression with zero mandatory skips. Offline coverage is
+`41/69` across `14/22` targets; full-evidence closure remains `27/69`.
+ST-08.06 is active. Production readiness and certification remain false.

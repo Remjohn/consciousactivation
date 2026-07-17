@@ -1,0 +1,9 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-005
+story_id: ST-12.02
+title: DUAL_COMPILE_AND_GOVERNED_MIGRATION
+outcome: dual_compile_migration_framework
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_005.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files: {production: [src/cmf_builder/application/dual_compile_migration.py], tests: [tests/stories/st_12_02/test_dual_compile_migration.py]}
+requirements: [immutable_source_artifacts, explicit_differences, semantic_flattening_rejection, rollback, idempotency]
+prohibited: [production_cutover, fixture_as_production_migration]

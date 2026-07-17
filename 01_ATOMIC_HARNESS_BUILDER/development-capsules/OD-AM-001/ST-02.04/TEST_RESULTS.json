@@ -1,0 +1,71 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "story_id": "ST-02.04",
+  "development_mode": "OD_AM_001_OFFLINE_DEVELOPMENT",
+  "recorded_on_utc": "2026-07-17T06:06:24Z",
+  "status": "IMPLEMENTED_DEVELOPMENT_PASS",
+  "environment": {
+    "python": "3.12",
+    "pythonpath": "src",
+    "network_used": false,
+    "external_dependency_added": false
+  },
+  "runs": [
+    {
+      "name": "st_02_04_focused",
+      "command": "$env:PYTHONPATH='src'; python -m pytest -q tests/stories/st_02_04",
+      "passed": 34,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 1.32,
+      "verdict": "PASS"
+    },
+    {
+      "name": "st_02_predecessor_chain",
+      "command": "$env:PYTHONPATH='src'; python -m pytest -q tests/stories/st_02_01 tests/stories/st_02_02 tests/stories/st_02_03 tests/stories/st_02_04",
+      "passed": 133,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 2.55,
+      "verdict": "PASS"
+    },
+    {
+      "name": "authorized_python_source_compile",
+      "command": "python -m py_compile <ST-02.04 authorized source and test files>",
+      "compiled_files": 7,
+      "failed": 0,
+      "verdict": "PASS"
+    },
+    {
+      "name": "canonical_complete_repository_regression",
+      "command": "$env:PYTHONPATH='src;tests/stories/st_07_03'; python -m pytest -q",
+      "passed": 1269,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 171.40,
+      "verdict": "PASS"
+    }
+  ],
+  "trust_review_regressions": {
+    "forged_canonical_packet_rejected_at_commit": "PASS",
+    "forged_noncanonical_alternative_order_rejected": "PASS",
+    "forged_series_identity_rejected": "PASS",
+    "identifier_only_protected_calibration_rejected": "PASS",
+    "equivalent_set_ordering_is_canonical": "PASS",
+    "duplicate_evidence_references_rejected": "PASS",
+    "authority_service_registered_actor_exact_resource_and_time": "PASS",
+    "self_asserted_actor_wrong_resource_and_expired_grant_rejected": "PASS",
+    "normalized_reserved_authority_vocabulary": "PASS",
+    "exact_reported_approval_release_genesis_sentence_rejected": "PASS",
+    "signoff_deployment_synonym_rejected": "PASS",
+    "bidirectional_insufficient_evidence_state": "PASS",
+    "candidate_specific_risk_direction": "PASS",
+    "rollback_expected_active_packet": "PASS"
+  },
+  "integrator_gates": {
+    "source_boundary_registration": "PASS",
+    "architecture_and_exact_source_boundaries": "PASS_12_OF_12",
+    "complete_repository_regression": "PASS_1269_OF_1269_NO_MANDATORY_SKIPS",
+    "canonical_receipt_promotion": "PASS"
+  }
+}

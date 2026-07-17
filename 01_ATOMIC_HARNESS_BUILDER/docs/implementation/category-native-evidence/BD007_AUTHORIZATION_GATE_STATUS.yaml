@@ -1,58 +1,73 @@
-schema_version: cmf-builder-bd007-authorization-gate-status/v1
-gate_id: BD007-ST0603-PROVIDER-AUTHORIZATION-GATE-2026-07-17
-recorded_at_utc: 2026-07-17T00:36:34.1720040Z
+schema_version: cmf-builder-bd007-authorization-gate-status/v2
+gate_id: BD007-ST0603-PRECLOUD-ACTIVATION-GATE-2026-07-17
+recorded_on: "2026-07-17"
 scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_EVIDENCE
-prerequisites:
-  BD_004_canonical_admission:
-    status: PASS
-    receipt_path: docs/implementation/category-native-evidence/BD004_ADMISSION_RECEIPT_CANONICAL.yaml
-    receipt_sha256: 17f772ce86d8082767991455c2968253ca3dcbc185151b9aff48f73f075ba245
+status: DEFERRED_PENDING_OPERATOR_CLOUD_ENVIRONMENT_AND_COMPLETE_CASE_EVIDENCE
+supersedes:
+  prior_gate_sha256: e44b22d200ba73de241a8479d4ce84c0489ad12d6ad176d1edda97c5eb367ea4
+  prior_state: AWAITING_BOUNDED_OPERATOR_AUTHORIZATION
+  reason: >-
+    The old gate targeted an incomplete proprietary API proposal. The current state
+    requires a later operator-configured cloud environment plus an approved mixed
+    governed-source experiment amendment. No cloud execution is presently authorized.
+preserved_evidence:
+  BD_004_admission:
+    status: PASS_BOUNDED_ST0603_DEVELOPMENT_ONLY
     archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
     admitted_set_sha256: 4321a232dee1dc87ac5a97d2b8e9ba115dec52558b7d5abc13cee1f851bfb70a
-authorization_request:
-  path: docs/implementation/category-native-evidence/BD007_SPEND_AND_CREDENTIAL_AUTHORITY_REQUEST.yaml
-  sha256: c44bbfb04548ffbc2ea56604407343029d8124008254c8ae100975eabd0917c0
-requested_provider_surface:
-  provider: OpenAI
-  client: openai-python
-  client_version: 1.59.7
-  executable_sha256: 302ca7147122a64e05b7dd5a349d9eac97a60cb0fa34c3f947ff47d60eff7b3d
-  exact_model_and_configuration: OPERATOR_INPUT_REQUIRED
-requested_bounds:
-  maximum_calls: 24
-  maximum_repeats_per_case_variant: 3
-  hard_spend_cap_requested: USD_10.00
-  maximum_expected_cost: NOT_CALCULABLE_UNTIL_MODEL_AND_OUTPUT_LIMIT_ARE_PINNED
-  timeout_seconds_per_call: 120
-  retry_calls_authorized: 0
-operator_decisions_required:
-  - exact model and immutable configuration identity
-  - exact output token or equivalent limit per call
-  - exact provider network allowlist
-  - account and project credential authority for OPENAI_API_KEY without disclosing its value
-  - acceptance of USD 10.00 hard cap or a lower cap
-  - confirmation of provider retention and data usage within the 30-day maximum
-data_boundary:
-  admitted_BD004_members_only: true
-  excluded_archive_members_prohibited: true
-  secret_values_may_be_recorded: false
-  unnecessary_personal_data_prohibited: true
-  ungoverned_identity_or_human_truth_prohibited: true
-current_state:
-  eligible_semantic_provider_configurations: 0
-  credential_authority_present: false
-  spend_authority_present: false
-  transmission_authority_present: false
-  retention_authority_present: false
-  live_calls_authorized: false
-  live_calls_made: 0
-  cost_incurred_usd: 0
+    receipt_sha256: 17f772ce86d8082767991455c2968253ca3dcbc185151b9aff48f73f075ba245
+  provider_runner: PRESERVED_DEVELOPMENT_INFRASTRUCTURE_ONLY
+  frozen_rubric_sha256: dd5cc9bae8977ea365d4890914364e2a540eb2acdbf363d4ec024aa47ab27381
+  conditional_ST_06_03_capsule:
+    manifest_sha256: 0a231d36e38dd505aaf960e98c6aecae27aab727b4646495321d74f4041eeed5
+    bundle_digest: e6b0e363328f7fb459ed81de2855c94d671f70ae907a3174e1bf38d2ba354bac
+integrity_prerequisite:
+  ST_01_03:
+    disposition: PASS_SUPPLEMENTAL_HISTORICAL_CANONICALIZATION_MISMATCH
+    receipt: development-capsules/ST-01.03/integrity/BUNDLE_INTEGRITY_RECEIPT.yaml
+case_evidence:
+  archive_bound_cases: 2
+  repository_evidence_cases_qualified: 2
+  frozen_v1_experiment_executable: false
+  amendment:
+    path: docs/implementation/category-native-evidence/BD007_EXPERIMENT_AMENDMENT_PROPOSAL.yaml
+    state: PENDING_EXPLICIT_GOVERNED_APPROVAL
+    required_phrase: CONFIRM BD-007 EXPERIMENT V2 MIXED GOVERNED SOURCE BINDINGS FOR ST-06.03 DEVELOPMENT ONLY
+cloud_environment:
+  selected_cloud: null
+  AWS:
+    authenticated_account: false
+    selected_region: null
+    visible_GPU_quota: false
+    approved_IAM_identity: false
+    approved_budget: false
+  GCP:
+    authenticated_project: false
+    selected_region: null
+    visible_GPU_quota: false
+    approved_service_account: false
+    approved_budget: false
+  cloud_resources_created: 0
+  model_bytes_downloaded: 0
+  provider_calls: 0
+  spend_usd: 0
+activation_conditions:
+  - one configured AWS account or Google Cloud project
+  - authenticated CLI or application credentials
+  - selected region
+  - visible sufficient GPU quota
+  - approved least-privileged IAM identity or service account
+  - current regional cost model and approved bounded budget
+  - approved and implemented complete case-evidence binding disposition
+  - ST-01.03 supplemental integrity disposition PASS
+  - complete local and mirrored model-file byte manifest
+  - immutable container and runtime digest
+  - explicit cloud execution authorization
 story_effect:
   ST_06_03_status: BLOCKED_EVIDENCE
-  remaining_blocker_cut: [BD-007]
-  implementation_may_start: false
-non_claims:
-  production_ready: false
-  provider_selected_for_production: false
-  certified: false
-verdict: AWAITING_BOUNDED_OPERATOR_AUTHORIZATION
+  ST_06_03_implementation_may_start: false
+  ST_06_04_status: BLOCKED_PRIOR_STORY
+  ready_stories: 0
+verdict: DEFERRED_PENDING_OPERATOR_CLOUD_ENVIRONMENT_AND_COMPLETE_CASE_EVIDENCE
+production_ready: false
+certified: false

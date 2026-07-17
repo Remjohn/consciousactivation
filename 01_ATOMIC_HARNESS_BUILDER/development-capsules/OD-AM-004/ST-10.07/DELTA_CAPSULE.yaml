@@ -1,0 +1,14 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-004
+story_id: ST-10.07
+title: EVALUATION_REPAIR_AND_AUTHORIZATION_TRAJECTORY
+outcome: evidence_derived_trajectory_projection
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_004.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files:
+  production: [src/cmf_builder/application/authorization_trajectory.py]
+  tests: [tests/stories/st_10_07/test_authorization_trajectory.py]
+requirements:
+  - separate implementation completion, evaluation, diagnosis, repair, evidence closure, maturity, runtime, deployment, production and certification stages
+  - explain blocked gates and invalidated records
+  - reject skipped stages, repair without diagnosis, maturity without evidence, aggregate-hidden failures and production/certification inference
+prohibited: [production_or_certification_claims, global_scope_authorization_substitution]

@@ -1,0 +1,49 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-07.01
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/domain/compilation_targets.py
+    role: immutable three-target registry, selection, migration and canonical identity
+  - path: src/cmf_builder/application/target_registration_commands.py
+    role: governed registration, selection, rollback, replay and observations
+  - path: tests/stories/st_07_01/test_three_target_registry.py
+    role: exact-target and deterministic registry tests
+  - path: tests/stories/st_07_01/test_selection_and_compatibility.py
+    role: exact selection and external-state tests
+  - path: tests/stories/st_07_01/test_failure_authority_boundaries.py
+    role: adversarial authority, forgery and atomicity tests
+  - path: tests/stories/st_07_01/test_determinism_migration_rollback.py
+    role: replay, migration, governed rollback and history tests
+files_modified:
+  - path: development-capsules/OD-AM-001/ST-07.01/DELTA_CAPSULE.yaml
+    role: exact ST-06.05 PASS dependency reconciliation
+  - path: development-capsules/OD-AM-001/ST-07.01/TEST_RESULTS.json
+    role: focused and affected test evidence
+  - path: development-capsules/OD-AM-001/ST-07.01/FILE_CHANGE_MANIFEST.yaml
+    role: allowlist evidence
+  - path: development-capsules/OD-AM-001/ST-07.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    role: pending integrator completion receipt
+shared_files_changed_by_lane: []
+shared_files_changed_by_canonical_integrator:
+  - path: src/cmf_builder/application/authority.py
+    sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+    role: additive REGISTER_COMPILATION_TARGETS action registration
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+    role: additive exact source ownership registration
+shared_change_requests:
+  - id: CR-ST0701-001
+    sha256: 4ee31ac64f25b1d7ecdb5d71941b977293fb1513fe209fdb0fd4d52fc11cf594
+  - id: CR-ST0701-002
+    sha256: 6d7dbcd548d2862978ad2991a1df8b6c4b975d0b9dd745b401991de9bb46d1b5
+paths_outside_capsule_allowlist_changed_by_lane: []
+prohibited_files_changed_by_lane: []
+external_dependencies_added: []
+validation:
+  production_or_test_code_changed: true
+  path_ownership_conformant: true
+  exact_target_count: 3
+  external_runtime_or_transport_added: false
+  external_schema_owned_or_copied: false
+  production_or_certification_claim_added: false

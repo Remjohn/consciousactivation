@@ -1,0 +1,55 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-08.05:SELECTIVE_REPAIR:63d23d21d432
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-08.05
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder accepts only an active hash-valid ST-08.04 diagnosis, compiles one
+  immutable Builder-owned repair candidate limited to diagnosed fields, derives
+  affected descendants and local reruns from exact graph edges, commits only with
+  complete passing local evidence, and emits deterministic escalation, invalidation,
+  rollback and rejection receipts without invoking an external runtime.
+primary_obligations_implemented: [FR-130, FR-131, FR-132]
+dependency_receipts:
+  satisfied: [ST-08.04:ImplementationCompletionReceipt:e7a068c5f274af7b0d251034d19120ba28d36644213bb82ed759ca3cfc976a6f]
+  pending: []
+source_files:
+  - {path: src/cmf_builder/evaluation/selective_repair.py, sha256: 63d23d21d432ccb6c3fca5660bd076be57aab418a9930d0f9f65eea14afe75da}
+test_files:
+  - {path: tests/stories/st_08_05/test_accepted_diagnosis_and_repair_scope.py, sha256: ee077cd1ee8e3c6a9829c49a9928e88eb4aed830369967a72678567207ccfde5}
+  - {path: tests/stories/st_08_05/test_affected_descendants_and_targeted_regression.py, sha256: c14e0372bc7d9aaec5192b801be0b60dc8459fc326903d4063668d91a03c7288}
+  - {path: tests/stories/st_08_05/test_escalation_and_failure_boundaries.py, sha256: 04d6fe3066da4d976b406a4df0afa01b6adf07c37b9e91db87ad2fee68284b7a}
+  - {path: tests/stories/st_08_05/test_determinism_rollback_and_history.py, sha256: 653e20f17032eb0da13af35cbee174d69dd7098fa8679fad8c84c1b1424bc082}
+tests:
+  focused: PASS_68_OF_68
+  affected_ST_08_01_through_ST_08_05: PASS_318_OF_318
+  architecture_boundary: PASS_12_OF_12
+  complete_repository_regression: PASS_1557_OF_1557_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS_115_SOURCE_FILES
+  mandatory_skips: 0
+authority_and_boundary_evidence:
+  ST_08_04_receipt_sha256: e7a068c5f274af7b0d251034d19120ba28d36644213bb82ed759ca3cfc976a6f
+  accepted_diagnosis_and_graph_binding: PASS
+  one_Builder_owned_responsible_unit: PASS
+  exact_descendant_and_regression_scope: PASS
+  protected_case_policy_enforced: PASS
+  external_runtime_executed: false
+  external_product_repair: false
+  production_or_certification_authority: false
+rollback_evidence: PASS_PARENT_RESTORED_HISTORY_PRESERVED_ZERO_PARTIAL_STATE
+observability_evidence: PASS_STORY_SCOPED_TARGETED_REGRESSION_AND_OUTCOME_RECEIPTS
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: edb160eb3fd2f5c1243a72bb75ec39dccbf149ec6090e5e4cb22677aa9862930
+  test_results_sha256: 59cf38ee1d6f27e29ce673a93cf683dc7f7e6afa5e388a66dbe4e5736eb591be
+  file_change_manifest_sha256: 6e36c16baa9639e7dd65631d80cd457e36db2ad66091ba38dd875bc0ed1f41fc
+  source_boundary_registry_sha256: cbf62b7420797d8f4f3ac5b89205143f785aad8beaed0eb3addf6cecccaef3a9
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_tree_sha256: 5a703dc736ce52e70f7aac4aa6d9c9d06eba15b9429386bc02fe507fb6bfceaf
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-08.06_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true

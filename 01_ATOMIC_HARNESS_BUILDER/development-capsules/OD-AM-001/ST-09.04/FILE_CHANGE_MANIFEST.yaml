@@ -1,0 +1,43 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-09.04
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/workflow/checkpoint_isolation.py
+    role: local checkpoint, safe resume, sandbox declaration and parallel-plan contracts
+  - path: tests/stories/st_09_04/test_checkpoint_resume_idempotency.py
+    role: checkpoint commit, resume and idempotency coverage
+  - path: tests/stories/st_09_04/test_sandbox_least_privilege.py
+    role: deny-by-default sandbox declaration coverage
+  - path: tests/stories/st_09_04/test_dependency_safe_parallel_plan.py
+    role: dependency-safe parallel declaration coverage
+  - path: tests/stories/st_09_04/test_failure_authority_invalidation_rollback.py
+    role: failure, authority, invalidation and rollback coverage
+files_modified:
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    role: mechanical exact-source registration for ST-09.04 source
+  - path: development-capsules/OD-AM-001/ST-09.04/TEST_RESULTS.json
+    role: compact test evidence
+  - path: development-capsules/OD-AM-001/ST-09.04/FILE_CHANGE_MANIFEST.yaml
+    role: compact file-scope evidence
+  - path: development-capsules/OD-AM-001/ST-09.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    role: OD-AM-001 implementation completion receipt
+production_files_changed:
+  - src/cmf_builder/workflow/checkpoint_isolation.py
+test_files_changed:
+  - tests/stories/st_09_04/test_checkpoint_resume_idempotency.py
+  - tests/stories/st_09_04/test_sandbox_least_privilege.py
+  - tests/stories/st_09_04/test_dependency_safe_parallel_plan.py
+  - tests/stories/st_09_04/test_failure_authority_invalidation_rollback.py
+shared_files_changed:
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+status_files_changed:
+  - docs/implementation/offline-development/OVERNIGHT_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  path_ownership_conformant: true
+  external_engine_provider_process_container_or_worktree_created: false
+  production_or_certification_status_created: false
+  file_scope_verdict: PASS
