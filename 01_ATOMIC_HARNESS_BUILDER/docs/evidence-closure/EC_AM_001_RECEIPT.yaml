@@ -1,0 +1,36 @@
+schema_version: cmf-builder-ec-am-001-receipt/v1
+campaign_id: EC-AM-001
+issued_on: "2026-07-17"
+verdict: COMPLETE_WITH_RC1_BLOCKED_BY_P1_FINDING
+workstreams:
+  terminal_state_reconciliation: PASS_WITH_RC1_P1_FINDING
+  release_candidate_1_freeze: BLOCKED_P1_RELEASE_PACKAGING_METADATA_MISSING
+  clean_environment_acceptance: BLOCKED_P1_RELEASE_PACKAGING_METADATA_MISSING
+  operator_path_acceptance: PASS_SOURCE_TREE_ACCEPTANCE_NOT_CLEAN_INSTALL
+  persistence_recovery_migration_acceptance: PASS_SOURCE_TREE
+  security_and_supply_chain_audit: PASS_WITH_P1_INSTALLABILITY_FINDING
+  local_performance_baseline: PASS_LOCAL_SYNTHETIC
+  story_evidence_matrix: COMPLETE
+  bd007_readiness_pack: NOT_READY_EXACT_GAPS_RECORDED
+  bd008_readiness: COMPLETE_WITH_EXACT_GAPS
+  external_validation_readiness: COMPLETE_NOT_EXECUTED
+  human_pilot_readiness: COMPLETE_NOT_EXECUTED
+  production_gap_report: COMPLETE
+  certification_claim_ceiling: PASS_CLAIM_CEILING_ENFORCED
+claim_boundary:
+  implementation_coverage: 69/69
+  full_evidence_closure: 27/69_or_higher_only_from_real_evidence
+  production_ready: false
+  certified: false
+  cloud_or_provider_calls: 0
+  human_participants: 0
+  external_product_runtime_execution: 0
+validation:
+  yaml_parse: PASS_39_OF_39
+  python_compilation: PASS
+  full_regression:
+    pass_1: PASS_1890_OF_1890_NO_MANDATORY_SKIPS_74_SHARDS
+    pass_2: PASS_1890_OF_1890_NO_MANDATORY_SKIPS_74_SHARDS
+  source_tree_sha256: e4b199fced4083ab22c62bf38e0eafa2e358284c3c5cb0b49f61b58c4434418a
+  path_and_secret_scan: PASS_ONLY_GOVERNANCE_TERMS_NO_VALUES
+next_campaign: RC1_RELEASE_PACKAGING_METADATA_AND_CLEAN_INSTALL

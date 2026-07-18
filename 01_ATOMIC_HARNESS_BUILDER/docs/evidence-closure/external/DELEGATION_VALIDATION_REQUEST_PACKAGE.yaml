@@ -1,0 +1,14 @@
+schema_version: cmf-builder-delegation-validation-request-package/v1
+status: PREPARED_NOT_EXECUTED
+request_scope:
+  builder_owned: [delegation_port_mapping, request_schema_validation, receipt_return_validation, idempotency_mapping]
+  external_owned: [delegation_runtime_transport, worker_execution, shared_contract_ownership]
+required_return:
+  - Delegation version identity
+  - accepted or rejected request receipt
+  - returned completion or failure receipt
+  - compatibility and drift report
+prohibited:
+  - executing Delegation runtime from EC-AM-001
+  - claiming Delegation production validation
+

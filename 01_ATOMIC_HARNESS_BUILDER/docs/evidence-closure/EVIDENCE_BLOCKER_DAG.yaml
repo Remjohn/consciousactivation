@@ -1,0 +1,28 @@
+schema_version: cmf-builder-evidence-blocker-dag/v1
+campaign_id: EC-AM-001
+nodes:
+  BD-007:
+    status: OPEN_PENDING_CLOUD_AND_COMPLETE_CASE_EVIDENCE
+    blocks: [ST-06.03_evidence_closure, category_native_provider_validation, production_claims]
+    prerequisites: [configured_cloud, immutable_model_manifest, complete_case_bindings, authorized_budget, no_provider_execution_in_ec_am_001]
+  BD-008:
+    status: OPEN_UNLESS_SEPARATELY_CLOSED_BY_REAL_EVIDENCE
+    blocks: [protected_format02_validation, format02_claims, production_claims]
+    prerequisites: [protected_format02_evidence, external_validation, human_review_where_required]
+  EXTERNAL_PRODUCT_VALIDATION:
+    status: OPEN
+    blocks: [vae_runtime_claims, delegation_runtime_claims, external_target_compatibility]
+    prerequisites: [external_product_endpoint_or_harness, version_pins, returned_receipts]
+  REAL_HUMAN_EVIDENCE:
+    status: OPEN
+    blocks: [human_reaction_validation, reaction_receipt_claims, expression_moment_claims]
+    prerequisites: [pilot_authority, participant_consent, privacy_and_withdrawal_controls]
+  RC1-P1-PACKAGING-METADATA-MISSING:
+    status: OPEN
+    blocks: [clean_environment_acceptance, rc1_acceptance]
+    prerequisites: [governed_package_metadata, dependency_lock_or_declared_policy, clean_install_regression]
+  PRODUCTION_CERTIFICATION:
+    status: OPEN
+    blocks: [production_ready, certified]
+    prerequisites: [functional, reliability, recovery, security, privacy, performance, operability, external_integration, human_policy, provider_validation, format02_protection, certification_authority]
+

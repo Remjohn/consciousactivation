@@ -1,0 +1,45 @@
+schema_version: cmf-builder-terminal-state-reconciliation/v1
+campaign_id: EC-AM-001
+reconciled_on: "2026-07-17"
+source_state:
+  od_am_005_status: COMPLETE
+  source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_file_count: 144
+  source_tree_sha256: e4b199fced4083ab22c62bf38e0eafa2e358284c3c5cb0b49f61b58c4434418a
+validated_hashes:
+  od_am_005_amendment: PASS
+  od_am_005_receipt: PASS
+  od_am_005_campaign_state: PASS
+  model_neutral_handoff: PASS
+  terminal_summary: PASS
+derived_counts:
+  confirmed_story_inventory_total: 69
+  obligation_rows: 410
+  unique_obligation_ids: 410
+  unique_primary_story_owners: 69
+  full_story_completion_receipts: 27
+  supplemental_story_receipts: 1
+  offline_implementation_coverage: 69/69
+  confirmed_implementation_stories_remaining: 0
+  full_evidence_closure: 27/69_or_higher_only_from_real_evidence
+open_evidence_gates:
+  - BD-007 cloud/provider empirical evidence
+  - BD-008 protected Format 02 evidence
+  - external VAE validation
+  - external Delegation validation
+  - real human-reaction evidence where applicable
+  - production authorization
+  - certification evidence
+status_projection:
+  production_ready: false
+  certified: false
+  no_story_ids_changed: true
+  no_primary_obligation_assignments_changed: true
+  immutable_historical_receipts_rewritten: false
+discrepancies:
+  - id: RC1-P1-PACKAGING-METADATA-MISSING
+    severity: P1
+    class: INSTALLABILITY
+    finding: No governed pyproject.toml, setup.py, setup.cfg, requirements file, or lockfile exists, so clean-environment package installation cannot be accepted.
+    containment: RC1 acceptance is blocked, while 69/69 offline implementation coverage remains intact.
+

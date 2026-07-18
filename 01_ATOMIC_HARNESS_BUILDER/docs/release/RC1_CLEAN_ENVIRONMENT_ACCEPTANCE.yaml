@@ -1,0 +1,21 @@
+schema_version: cmf-builder-rc1-clean-environment-acceptance/v1
+rc_id: atomic-harness-builder-rc1-offline-69of69
+verdict: BLOCKED_P1_RELEASE_PACKAGING_METADATA_MISSING
+clean_environment_attempt:
+  isolated_environment_created: NOT_EXECUTED_AFTER_PRECHECK_BLOCK
+  install_from_governed_package_source: BLOCKED
+  import_verification: NOT_EXECUTED
+  cli_discovery: NOT_EXECUTED
+precheck_findings:
+  pyproject_toml: false
+  setup_py: false
+  setup_cfg: false
+  requirements_txt: false
+  requirements_dev_txt: false
+  dependency_lock: false
+blocked_steps:
+  - install the Builder from its governed package source
+  - verify console entry point discovery independent of PYTHONPATH
+  - prove clean environment does not rely on editable source imports
+corrective_campaign_required: RC1_RELEASE_PACKAGING_METADATA_AND_CLEAN_INSTALL
+

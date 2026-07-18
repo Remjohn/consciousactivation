@@ -1,0 +1,53 @@
+schema_version: cmf-builder-release-correction-campaign/v1
+campaign_id: RC1-CF-001
+title: RELEASE_PACKAGING_METADATA_AND_CLEAN_INSTALL
+campaign_type: P1_RELEASE_CORRECTION
+created_on_utc: "2026-07-18"
+
+authority:
+  requested_by: bounded_release_correction_request
+  confirmed_story_scope: NONE
+  new_story_receipts: PROHIBITED
+  cloud_execution_authorized: false
+  external_product_execution_authorized: false
+  production_authority_granted: false
+  certification_authority_granted: false
+
+corrected_finding:
+  - RC1-P1-PACKAGING-METADATA-MISSING
+
+baseline_evidence:
+  ec_am_001_sha256: de46b94dd783bfaf50a721ccc3df6178286886dab630d437e105989184788b8d
+  ec_am_001_receipt_sha256: 8911c810ac4d5149878e2430c0ff44e5cf412f747c88477a2209e1c80544d4f7
+  ec_am_001_campaign_state_sha256: bb67ffa1809e5e53ab6df91efe4e8ea2f08ad0c1d74de10741a8fdcca0085f5f
+  blocked_rc1_manifest_sha256: 226595b0bdfc91040bdfaea7958b604d99497c0be79a5b1f46cb65f4d813d21b
+  blocked_rc1_receipt_sha256: 7688af6a38987d60d4863519cc294e679f8c1e80e9ba666058d49bb980c327e4
+  original_blocked_rc1_receipt_preserved: true
+
+scope:
+  package_metadata: IN_SCOPE
+  dependency_classification: IN_SCOPE
+  dependency_locks: IN_SCOPE
+  runtime_package_data: IN_SCOPE
+  wheel_and_sdist_build: IN_SCOPE
+  clean_wheel_install: IN_SCOPE
+  installed_product_acceptance: IN_SCOPE
+  source_distribution_rebuild: IN_SCOPE
+  rc1_superseding_acceptance: CONDITIONAL_ON_ALL_GATES_PASSING
+  cloud_execution: OUT_OF_SCOPE
+  provider_execution: OUT_OF_SCOPE
+  production_authorization: OUT_OF_SCOPE
+  certification: OUT_OF_SCOPE
+
+current_result:
+  rc1_cf_001_status: BLOCKED
+  rc1_packaging_p1: REMAINS_OPEN
+  blocking_gate: RC1-CF-001-P1-SDIST-BUILD-BACKEND-UNAVAILABLE
+  reason: >-
+    The wheel, package metadata, runtime package data, clean wheel install,
+    installed-product smoke acceptance, and byte-identical wheel reproducibility
+    have passing evidence. The clean source-distribution rebuild gate cannot be
+    completed because a fresh isolated virtual environment lacks the pinned build
+    backend setuptools==80.9.0 and no governed local wheelhouse or package-index
+    download authority is available in this execution.
+

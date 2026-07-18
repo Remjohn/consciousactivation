@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from hashlib import sha256
+from importlib.resources import files
 from io import BytesIO
 import json
 import os
@@ -23,9 +24,8 @@ from cmf_builder.domain.portable_export import (
 from cmf_builder.domain.category_binding import CategoryBinding, CategoryBindingError
 
 
-_CATEGORY_REGISTRY = (
-    Path(__file__).resolve().parents[3] / "governance" / "CANONICAL_CATEGORY_REGISTRY.yaml"
-)
+_CATEGORY_REGISTRY_PACKAGE = "cmf_builder.resources.governance"
+_CATEGORY_REGISTRY_NAME = "CANONICAL_CATEGORY_REGISTRY.yaml"
 
 
 class PortableAtomicHarnessCompiler:
@@ -41,7 +41,7 @@ class PortableAtomicHarnessCompiler:
                     if manifest.mode == "activative"
                     else None
                 ),
-                registry_bytes=_CATEGORY_REGISTRY.read_bytes(),
+                registry_bytes=_category_registry_bytes(),
             )
             definition = PortableAtomicHarnessDefinition.create(
                 manifest_id=manifest.manifest_id,
@@ -65,6 +65,10 @@ class PortableAtomicHarnessCompiler:
             payload=definition.payload_bytes,
             payload_hash=payload_hash,
         )
+
+
+def _category_registry_bytes() -> bytes:
+    return files(_CATEGORY_REGISTRY_PACKAGE).joinpath(_CATEGORY_REGISTRY_NAME).read_bytes()
 
 
 class DeterministicPortableExportService:

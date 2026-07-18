@@ -1,0 +1,22 @@
+schema_version: cmf-builder-rc1-dependency-lock-receipt/v1
+preferred_lock_format: pylock.toml
+preferred_lock_status: UNAVAILABLE_IN_CURRENT_TOOLCHAIN
+fallback_lock_format:
+  - requirements.lock
+  - requirements-dev.lock
+fallback_authorized_by_request: true
+runtime_lock:
+  path: requirements.lock
+  sha256: bb5df155b7863016f306462d597951fbb68788b9b61aaeaf47f02247948ccdd3
+  dependency_count: 0
+  status: PASS
+development_lock:
+  path: requirements-dev.lock
+  sha256: c2dd76e3fa8fb9c951169e8160010ab7e73d7f6f0d4f4203f62114afade8ec74
+  dependency_count: 5
+  status: PASS
+limitations:
+  - Hash-pinned wheel artifacts for dev/build dependencies were not generated because no governed local wheelhouse was available.
+  - The missing local setuptools==80.9.0 wheel blocks clean sdist rebuild acceptance.
+lock_verdict: PASS_WITH_SDIST_REBUILD_LIMITATION
+

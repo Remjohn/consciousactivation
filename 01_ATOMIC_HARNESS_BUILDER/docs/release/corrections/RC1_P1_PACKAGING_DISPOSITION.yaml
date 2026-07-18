@@ -1,0 +1,24 @@
+schema_version: cmf-builder-rc1-p1-packaging-disposition/v1
+finding: RC1-P1-PACKAGING-METADATA-MISSING
+disposition: REMAINS_OPEN
+closure_attempt: RC1-CF-001
+closed_pass: false
+passing_gates:
+  pyproject_toml: PASS
+  dependency_metadata: PASS
+  reproducible_lock: PASS_WITH_LIMITATION
+  wheel_build: PASS
+  source_distribution_build: PASS
+  distribution_inspection: PASS
+  clean_wheel_install: PASS
+  installed_product_acceptance: PASS
+  cli_entry_point: PASS
+  package_data_outside_repository: PASS
+  reproducible_wheel_bytes: PASS
+blocked_gates:
+  source_distribution_rebuild: RC1-CF-001-P1-SDIST-BUILD-BACKEND-UNAVAILABLE
+  full_regression_twice_after_all_gates: PARTIAL_ONE_PASS_ONE_NOT_RUN_BECAUSE_P1_GATE_BLOCKED
+regression_evidence:
+  full_regression_after_exact_source_registration: 1893/1893_PASS
+  mandatory_skips: 0
+verdict: BLOCKED_NOT_CLOSED

@@ -1,0 +1,94 @@
+schema_version: cmf-builder-69-story-evidence-closure-matrix/v1
+campaign_id: EC-AM-001
+derived_on: "2026-07-17"
+summary:
+  story_count: 69
+  full_evidence_closure_count: 27
+  offline_implementation_coverage_count: 69
+  evidence_closure_not_inferred_from_offline_implementation: true
+full_evidence_closed_story_ids:
+  - ST-01.01
+  - ST-01.02
+  - ST-01.03
+  - ST-01.04
+  - ST-02.05
+  - ST-03.01
+  - ST-03.02
+  - ST-03.03
+  - ST-03.04
+  - ST-03.05
+  - ST-04.01
+  - ST-04.02
+  - ST-04.03
+  - ST-04.04
+  - ST-04.05
+  - ST-05.01
+  - ST-05.02
+  - ST-05.03
+  - ST-05.04
+  - ST-05.05
+  - ST-06.01
+  - ST-06.02
+  - ST-07.02
+  - ST-07.04
+  - ST-11.01
+  - ST-11.02
+  - ST-11.03
+offline_implementation_only_story_ids:
+  - ST-02.01
+  - ST-02.02
+  - ST-02.03
+  - ST-02.04
+  - ST-06.03
+  - ST-06.04
+  - ST-06.05
+  - ST-07.01
+  - ST-07.03
+  - ST-08.01
+  - ST-08.02
+  - ST-08.03
+  - ST-08.04
+  - ST-08.05
+  - ST-08.06
+  - ST-08.07
+  - ST-09.01
+  - ST-09.02
+  - ST-09.03
+  - ST-09.04
+  - ST-09.05
+  - ST-09.06
+  - ST-09.07
+  - ST-09.08
+  - ST-10.01
+  - ST-10.02
+  - ST-10.03
+  - ST-10.04
+  - ST-10.05
+  - ST-10.06
+  - ST-10.07
+  - ST-10.08
+  - ST-10.09
+  - ST-10.10
+  - ST-10.11
+  - ST-10.12
+  - ST-10.13
+  - ST-10.14
+  - ST-12.01
+  - ST-12.02
+  - ST-12.03
+  - ST-12.04
+matrix_rules:
+  full_evidence_closed:
+    implementation_status: IMPLEMENTED_AND_EVIDENCE_RECEIPTED
+    full_evidence_status: CLOSED_BY_CANONICAL_STORY_COMPLETION_RECEIPT
+    maximum_supported_claim: DEVELOPMENT_OR_SYNTHETIC_SCOPE_RECORDED_IN_RECEIPT
+    invalidation_triggers: [receipt_hash_drift, source_lineage_drift, authority_supersession]
+  offline_implementation_only:
+    implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+    full_evidence_status: OPEN_NOT_CLOSED_BY_OFFLINE_IMPLEMENTATION
+    required_evidence_classes: [DETERMINISTIC_LOCAL, SYNTHETIC_STRUCTURAL]
+    possible_additional_evidence_classes: [ADMITTED_CORPUS, EMPIRICAL_MODEL, PROTECTED_FORMAT02, EXTERNAL_PRODUCT, REAL_HUMAN, PRODUCTION_OPERATION, CERTIFICATION_AUTHORITY]
+    maximum_supported_claim: OFFLINE_IMPLEMENTATION_COMPLETE_FOR_STORY
+    next_evidence_action: derive_story_specific_evidence_cut_before_claim_promotion
+    invalidation_triggers: [offline_receipt_hash_drift, source_lineage_drift, authority_supersession, evidence_gate_failure]
+

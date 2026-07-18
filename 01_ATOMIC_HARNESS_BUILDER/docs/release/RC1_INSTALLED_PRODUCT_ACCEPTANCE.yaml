@@ -1,0 +1,31 @@
+schema_version: cmf-builder-rc1-installed-product-acceptance/v1
+acceptance_scope: clean_installed_wheel_smoke_path
+fixtures:
+  generic_manifest: tests/fixtures/productization/manifests/generic_text_summary.json
+  activative_manifest: tests/fixtures/productization/manifests/activative_expression.json
+commands_exercised:
+  - ingest
+  - build
+  - inspect
+  - export
+process_restart_persistence: PASS
+fresh_sqlite_database: PASS
+generic_export:
+  sha256: f26be73896b0d8bdc2cc003566a39cfbcaf248093b6c229268f508241beac66f
+  size_bytes: 4853
+activative_export:
+  sha256: fbc599ba16ff2b9d5b1ba7d5055ffca42f6b65726113144ecd477ddfec3e8748
+  size_bytes: 8398
+clean_install_invariants:
+  source_tree_dependency: ABSENT
+  hidden_repository_file_dependency: ABSENT
+  absolute_path_leakage: ABSENT
+  secret_leakage: ABSENT
+  deterministic_outputs: PASS
+  stable_exit_codes: PASS
+  production_ready: false
+  certified: false
+limitations:
+  - Acceptance was a clean-installed smoke path covering the governed local CLI and portable export behavior.
+  - Cloud, provider, human-participant, production and certification paths were not executed.
+
