@@ -59,8 +59,8 @@ Evidence is indexed in `docs/readiness-evidence/READINESS_EVIDENCE_INDEX.md`. Th
 
 | Area | New evidence | Verdict | Remaining closure |
 |---|---|---|---|
-| CRC-401 | Repository-local non-forking precedence reference validates all canonical Program Control authority hashes | Local `PASS` | Program Control must ingest the new artifact and update its canonical concern record |
-| CRC-402 | Complete 5 × 8 Feature Contract matrix plus two positive and three negative fixtures | Local `PASS`; zero production-certification claims | Program Control must reconcile the canonical convergence record |
+| CRC-401 | Repository-local non-forking precedence reference validates all canonical Program Control authority hashes | Local `PASS`; Program Control reconciliation `resolved` | No further CRC-401 reconciliation action; readiness remains governed by the other open gates |
+| CRC-402 | Complete 5 × 8 Feature Contract matrix plus two positive and three negative fixtures | Local `PASS`; zero production-certification claims; Program Control reconciliation `resolved` | No further CRC-402 reconciliation action; no production certification is inferred |
 | Evaluator | Proof program and prompt pinned; 12-case calibration seed retained; six disjoint protected candidate slots added; explicit no-threshold and no-confusion-analysis reports | `FAIL` — `specified_not_certified` / `insufficient_evidence` | Bind evaluator identity, adjudicate corpus, seal protected set, calibrate, approve gates/affinity and rehearse rollback |
 | Local GPU | Fresh GPU/Docker probe and bounded Docker Desktop retry | `FAIL` | Docker Linux GPU engine, pinned runtime, weights, workflow and execution receipt |
 | Cloud GPU | Fresh AWS identity probe | `FAIL` | Authorized credentials, worker, immutable runtime, storage/queue/cancel/cost/result evidence |

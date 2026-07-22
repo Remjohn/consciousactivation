@@ -1,43 +1,31 @@
 # Conscious Activations Alignment Dashboard
 
-As of: 2026-07-15  
-Current contract: `delegation-contracts@1.1.0-rc.4`  
-Final convergence verdict: **CONCERNS**  
-Rubric totals: **63 PASS / 1 CONCERN / 0 FAIL**  
-Reconciliation mode: **bounded CRC evidence ingestion; full audit not rerun**
+As of: 2026-07-22
+Current authority: Constitution V1.1 and current product PRDs
+Current contract: `delegation-contracts@1.1.0-rc.4`
+V2.1 candidate convergence: **CONCERNS**
+Audit totals: **28 PASS / 4 CONCERNS / 0 FAIL**
 
-## Audit dashboard
-
-| Audit domain | Status | Evidence summary |
+| Domain | Status | Current truth |
 |---|---|---|
-| Preconditions | PASS | RC4 release, both consumer integrations and namespace reconciliation exist and validate. |
-| Release identity and hashes | PASS | Two 164-file trees and all 163 receipt entries match. |
-| Live validation | PASS | Release validator; 83/83 validator; 35/35 protocol; 16/16 Builder; 14/14 VAE. |
-| Historical release classification | PASS | RC1 consumer-rejected; RC2/RC3 convergence-rejected; RC4 current. |
-| Constitutional precedence | PASS | Constitution V1.1 is byte-identical and cannot be locally overridden. |
-| Dedicated local precedence evidence | PASS | VAE local contract `sha256:35b5…dd0e` validates Constitution `sha256:21c2…d70b`; non-forking and non-overriding; CRC-401 resolved. |
-| Product authority boundaries | PASS | No creative, semantic or production-authority mutation. |
-| Source kind and provenance | PASS | Governed enum, no guessing and interview provenance enforced. |
-| Semantic lineage | PASS | Fourteen lineage elements preserved without flattening. |
-| Derivative locks | PASS | Portable inheritance enforced across Builder, RC4 and VAE. |
-| VAE `EVALUATE` | PASS | Capability declared and enforced without certification inference. |
-| Feature Contract ownership | PASS | Intent, feasibility and receipt boundaries converge. |
-| Feature Contract fixture breadth | PASS | Matrix `sha256:139d…42b6` registers 40/40 governed pairs, 2 positive and 3 rejection fixtures, and zero production-certification claims; CRC-402 resolved. |
-| Categories and profiles | PASS | Five categories and four conversational profiles converge. |
-| Format 02 | PASS | Canonical ID plus governed alias; `contract_compatible`; not certified. |
-| Lifecycle and compatibility | PASS | Acceptance, acknowledgement, fencing, migrations and no-fork rules converge. |
-| XRI sole authority | PASS | Program Control is the only canonical XRI authority. |
-| XRI reference completeness | PASS | Zero undefined active references. |
-| XRI repository redefinitions | PASS | None found; local issues use `DLG-ISSUE-*`. |
-| XRI uniqueness and history | PASS | Zero duplicates; historical aliases labeled; XRI-001/XRI-002 unchanged. |
-| Repository status truth | PASS | All four status surfaces agree on release and authorization state. |
-| Signing, publication and readiness | CONCERNS | RC4 remains unsigned/unpublished and product evidence gates remain open. |
+| Mandatory input bytes | PASS | Four archives opened, hashed, enumerated, and CRC-tested. |
+| Package/source integrity | PASS | AHP declared manifest scope passes; AIR 666/666 manifest and 59/59 source lock pass; Studio/Skills remain limited to verified reference/process roles. |
+| Current authority | PASS | V1.1/V1.2 chain remains current; V2.1 is candidate-only. |
+| Human ratification | CONCERNS | Exact decision is pending; no candidate is current. |
+| Builder status truth | PASS | OD-AM-005 terminal coverage `69/69`; full Story/evidence closure `27/69`; production/certification false. |
+| Builder release/evidence readiness | CONCERNS | Packaging metadata, external proof, BD-007/008 and applicable real evidence remain open. |
+| VAE status truth | PASS | RC4 integration and CRC reconciliation pass; Stage 5 remains unauthorized. |
+| VAE readiness | CONCERNS | Evaluator not certified; compute, recovery/rollback and real Format 02 proof fail. |
+| Delegation status truth | PASS | RC4 frozen, local validation PASS, production authority false. |
+| Delegation trust/publication | CONCERNS | RC4 remains unsigned and unpublished; external operational evidence remains open. |
+| XRI/CRC truth | PASS | Canonical XRI statuses agree; CRC-401/402 resolved; CRC-403 open nonblocking. |
+| Semantic ownership | PASS | One value owner per semantic object; consumers cannot reinterpret upstream meaning. |
+| Product sovereignty | PASS | AIR semantic, Interview evidence, Builder declaration, Pipeline execution, VAE realization, Studio projection, Delegation transport. |
+| Compiler/runtime identity | PASS | Activative Contract Compiler != Activative Intelligence Runtime. |
+| Format 02 | PASS | Current `contract_compatible`; V2.1 activation deferred; no certification inference. |
+| Intended roots | PASS | Four intended paths registered; zero source trees created. |
+| Historical evidence | PASS | No immutable release, receipt, rejection record, or historical snapshot rewritten. |
+| Authorization boundary | PASS | No implementation, production, Stage 5, signing, publication, or certification grant. |
 
-## Authorization boundary
-
-Builder Step 4, VAE Stage 5, RC4 signing/publication and production
-implementation remain unauthorized.
-
-CRC-401 and CRC-402 are resolved in `CRC_STATUS_REGISTRY.yaml`; CRC-403 remains
-open. Next permitted actions are CRC-403 and operational-XRI evidence closure,
-followed only by the affected readiness or certification gates.
+The next procedural input is Prompt 02. An attributable human decision must be
+recorded before Prompt 02 may promote or rely on V2.1 candidates as current authority.

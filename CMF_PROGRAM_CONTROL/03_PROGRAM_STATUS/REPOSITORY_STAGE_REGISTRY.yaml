@@ -1,41 +1,54 @@
 program: conscious_activations
-updated: "2026-07-15"
-status: rc4_remediation_complete_pending_fresh_read_only_convergence_audit
+updated: "2026-07-22"
+status: v2_1_authority_convergence_complete_with_nonblocking_concerns
+current_authority_changed: false
+candidate_ratification_status: pending_attributable_human_decision
 repositories:
   atomic_harness_builder:
     folder: ../../01_ATOMIC_HARNESS_BUILDER
     authority_current: builder_v1.2
-    current_phase: epics_and_stories
-    current_step: step_3_complete
-    step_4_status: not_started
-    rc4_adoption: bounded_validation_pass
-    format02_state: contract_compatible_reference_profile_not_production_certified
-    implementation_readiness: false
-    implementation_authorized: false
+    planning_step_3: complete
+    planning_step_4: complete_on_rc4_remediated_baseline
+    terminal_campaign: OD-AM-005
+    offline_implementation_coverage: 69/69
+    full_story_completion_receipts: 27/69
+    full_evidence_closure: 27/69_or_higher_only_from_real_evidence
+    external_proof: incomplete
+    production_implementation_authorized: false
+    production_ready: false
+    certified: false
   visual_asset_editor:
     folder: ../../02_VISUAL_ASSET_EDITOR
     authority_current: vae_v1.1
-    current_phase: stage_4_blocker_closure
+    current_phase: stage_4_readiness_evidence
     rc4_adoption: bounded_consumer_validation_pass
+    crc_401_and_crc_402_reconciliation: resolved
     evaluator_status: specified_not_certified
     compute_proof: fail
     recovery_and_rollback_executable_proof: fail
+    real_format02_proof: fail
     readiness: fail
-    stage_5_status: not_started
-    implementation_authorized: false
+    stage_5_status: not_started_unauthorized
+    production_authorized: false
+    certified: false
   delegation_protocol:
     folder: ../../03_DELEGATION_PROTOCOL
     authority_current: delegation_v1.1
-    current_phase: rc4_local_candidate_complete
     current_release: 1.1.0-rc.4
-    current_tests_passing: 118
-    local_validation: PASS
-    feature_development: frozen
+    current_phase: rc4_local_candidate_frozen
+    local_validation: PASS_118_TESTS
     signing: pending
     publication: pending
     production_authorized: false
+intended_uncreated_roots:
+  activative_intelligence_runtime: ../../04_ACTIVATIVE_INTELLIGENCE_RUNTIME
+  atomic_harness_pipeline: ../../05_ATOMIC_HARNESS_PIPELINE
+  interview_expression: ../../06_INTERVIEW_EXPRESSION
+  conscious_activations_studio: ../../07_CONSCIOUS_ACTIVATIONS_STUDIO
 program_gate:
-  last_formal_convergence_verdict: FAIL
-  remediation_status: complete_pending_fresh_audit
-  fresh_audit_authorized_next: true
+  v2_1_source_input_gate: PASS
+  v2_1_authority_convergence_verdict: CONCERNS
+  counts: {PASS: 28, CONCERNS: 4, FAIL: 0}
+  candidates_current: false
   implementation_or_production_authorization_granted: false
+  next_procedural_input: PROMPT_02

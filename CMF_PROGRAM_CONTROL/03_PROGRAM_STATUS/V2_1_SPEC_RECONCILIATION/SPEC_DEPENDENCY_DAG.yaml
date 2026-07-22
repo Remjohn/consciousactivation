@@ -1,0 +1,544 @@
+schema_version: conscious-activations-spec-dependency-dag/v1
+node_count: 60
+edge_count: 118
+acyclic: true
+topological_order:
+- TS-AHP-001
+- TS-AIR-001
+- TS-REL-001
+- TS-AHP-002
+- TS-AIR-002
+- TS-AIR-004
+- TS-AIR-003
+- TS-AIR-007
+- TS-AIR-005
+- TS-AIR-008
+- TS-AIR-014
+- TS-AIR-006
+- TS-AIR-013
+- TS-SKL-001
+- TS-AIR-009
+- TS-INT-001
+- TS-INT-007
+- TS-INT-002
+- TS-INT-003
+- TS-INT-006
+- TS-INT-004
+- TS-AIR-011
+- TS-INT-005
+- TS-AIR-015
+- TS-AIR-016
+- TS-AHP-003
+- TS-AIR-017
+- TS-VID-001
+- TS-AIR-019
+- TS-ANI-001
+- TS-DEL-001
+- TS-EVAL-001
+- TS-STA-001
+- TS-VID-002
+- TS-AHP-004
+- TS-RET-001
+- TS-VAE-BOUND-001
+- TS-EVAL-002
+- TS-CAR-001
+- TS-SPV-001
+- TS-VID-003
+- TS-AHP-005
+- TS-VID-004
+- TS-AHP-006
+- TS-EVAL-003
+- TS-VID-005
+- TS-AHP-007
+- TS-CAS-001
+- TS-VID-006
+- TS-CAS-002
+- TS-BATCH-001
+- TS-CAS-003
+- TS-CAS-004
+- TS-AIR-018
+- TS-REL-002
+- TS-CAS-005
+- TS-AIR-020
+- TS-CAS-006
+- TS-PM-001
+- TS-AHP-008
+nodes:
+- spec_id: TS-AHP-001
+  lane: A
+  upstream_spec_ids: []
+  downstream_spec_ids:
+  - TS-AHP-002
+  - TS-REL-002
+- spec_id: TS-AHP-002
+  lane: A
+  upstream_spec_ids:
+  - TS-AHP-001
+  - TS-AIR-001
+  downstream_spec_ids:
+  - TS-AHP-003
+  - TS-AHP-004
+  - TS-DEL-001
+  - TS-EVAL-001
+  - TS-PM-001
+  - TS-RET-001
+  - TS-SKL-001
+- spec_id: TS-AHP-003
+  lane: C
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-INT-005
+  - TS-AIR-015
+  - TS-AIR-016
+  downstream_spec_ids:
+  - TS-ANI-001
+  - TS-CAR-001
+  - TS-CAS-004
+  - TS-SPV-001
+  - TS-STA-001
+  - TS-VID-001
+- spec_id: TS-AHP-004
+  lane: C
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-019
+  downstream_spec_ids:
+  - TS-AHP-005
+- spec_id: TS-AHP-005
+  lane: C
+  upstream_spec_ids:
+  - TS-AHP-004
+  - TS-AIR-019
+  downstream_spec_ids:
+  - TS-AHP-006
+  - TS-CAS-001
+  - TS-EVAL-003
+- spec_id: TS-AHP-006
+  lane: C
+  upstream_spec_ids:
+  - TS-AHP-005
+  - TS-AIR-019
+  downstream_spec_ids:
+  - TS-AHP-007
+  - TS-CAS-004
+- spec_id: TS-AHP-007
+  lane: H
+  upstream_spec_ids:
+  - TS-AHP-006
+  - TS-EVAL-001
+  downstream_spec_ids: []
+- spec_id: TS-AHP-008
+  lane: G
+  upstream_spec_ids:
+  - TS-PM-001
+  - TS-AIR-003
+  - TS-EVAL-001
+  downstream_spec_ids: []
+- spec_id: TS-AIR-001
+  lane: A
+  upstream_spec_ids: []
+  downstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-002
+  - TS-AIR-003
+  - TS-AIR-004
+  - TS-AIR-007
+  - TS-AIR-019
+- spec_id: TS-AIR-002
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-001
+  downstream_spec_ids:
+  - TS-AIR-003
+  - TS-AIR-005
+  - TS-AIR-006
+  - TS-AIR-007
+  - TS-AIR-008
+  - TS-AIR-013
+  - TS-AIR-014
+- spec_id: TS-AIR-003
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-001
+  - TS-AIR-002
+  downstream_spec_ids:
+  - TS-AHP-008
+  - TS-AIR-008
+  - TS-AIR-013
+  - TS-AIR-014
+  - TS-AIR-020
+- spec_id: TS-AIR-004
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-001
+  downstream_spec_ids:
+  - TS-AIR-005
+- spec_id: TS-AIR-005
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-002
+  - TS-AIR-004
+  downstream_spec_ids:
+  - TS-AIR-006
+  - TS-AIR-013
+  - TS-AIR-015
+  - TS-AIR-019
+  - TS-AIR-020
+  - TS-SKL-001
+- spec_id: TS-AIR-006
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-002
+  - TS-AIR-005
+  downstream_spec_ids:
+  - TS-AIR-015
+- spec_id: TS-AIR-007
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-001
+  - TS-AIR-002
+  downstream_spec_ids:
+  - TS-AIR-015
+- spec_id: TS-AIR-008
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-002
+  - TS-AIR-003
+  downstream_spec_ids:
+  - TS-AIR-009
+  - TS-INT-001
+  - TS-INT-007
+- spec_id: TS-AIR-009
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-008
+  downstream_spec_ids:
+  - TS-INT-007
+- spec_id: TS-AIR-011
+  lane: B
+  upstream_spec_ids:
+  - TS-INT-004
+  - TS-INT-006
+  downstream_spec_ids:
+  - TS-AIR-015
+  - TS-AIR-018
+- spec_id: TS-AIR-013
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-002
+  - TS-AIR-003
+  - TS-AIR-005
+  downstream_spec_ids: []
+- spec_id: TS-AIR-014
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-002
+  - TS-AIR-003
+  downstream_spec_ids: []
+- spec_id: TS-AIR-015
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-005
+  - TS-AIR-006
+  - TS-AIR-007
+  - TS-AIR-011
+  downstream_spec_ids:
+  - TS-AHP-003
+  - TS-AIR-016
+  - TS-AIR-017
+  - TS-ANI-001
+  - TS-VID-001
+- spec_id: TS-AIR-016
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-015
+  downstream_spec_ids:
+  - TS-AHP-003
+  - TS-AIR-017
+- spec_id: TS-AIR-017
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-015
+  - TS-AIR-016
+  downstream_spec_ids:
+  - TS-AIR-019
+  - TS-ANI-001
+  - TS-DEL-001
+  - TS-EVAL-001
+  - TS-STA-001
+- spec_id: TS-AIR-018
+  lane: F
+  upstream_spec_ids:
+  - TS-CAS-003
+  - TS-AIR-011
+  downstream_spec_ids:
+  - TS-AIR-020
+- spec_id: TS-AIR-019
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-001
+  - TS-AIR-005
+  - TS-AIR-017
+  downstream_spec_ids:
+  - TS-AHP-004
+  - TS-AHP-005
+  - TS-AHP-006
+  - TS-AIR-020
+  - TS-EVAL-003
+  - TS-RET-001
+- spec_id: TS-AIR-020
+  lane: B
+  upstream_spec_ids:
+  - TS-AIR-003
+  - TS-AIR-005
+  - TS-AIR-018
+  - TS-AIR-019
+  downstream_spec_ids:
+  - TS-PM-001
+- spec_id: TS-ANI-001
+  lane: E
+  upstream_spec_ids:
+  - TS-AHP-003
+  - TS-AIR-015
+  - TS-AIR-017
+  downstream_spec_ids:
+  - TS-BATCH-001
+- spec_id: TS-BATCH-001
+  lane: E
+  upstream_spec_ids:
+  - TS-VID-006
+  - TS-CAR-001
+  - TS-SPV-001
+  - TS-ANI-001
+  downstream_spec_ids:
+  - TS-CAS-004
+- spec_id: TS-CAR-001
+  lane: E
+  upstream_spec_ids:
+  - TS-STA-001
+  - TS-AHP-003
+  downstream_spec_ids:
+  - TS-BATCH-001
+- spec_id: TS-CAS-001
+  lane: F
+  upstream_spec_ids:
+  - TS-EVAL-003
+  - TS-AHP-005
+  downstream_spec_ids:
+  - TS-CAS-002
+- spec_id: TS-CAS-002
+  lane: F
+  upstream_spec_ids:
+  - TS-CAS-001
+  downstream_spec_ids:
+  - TS-CAS-003
+- spec_id: TS-CAS-003
+  lane: F
+  upstream_spec_ids:
+  - TS-CAS-002
+  downstream_spec_ids:
+  - TS-AIR-018
+  - TS-REL-002
+- spec_id: TS-CAS-004
+  lane: F
+  upstream_spec_ids:
+  - TS-AHP-003
+  - TS-AHP-006
+  - TS-BATCH-001
+  downstream_spec_ids:
+  - TS-CAS-005
+- spec_id: TS-CAS-005
+  lane: F
+  upstream_spec_ids:
+  - TS-CAS-004
+  downstream_spec_ids:
+  - TS-CAS-006
+- spec_id: TS-CAS-006
+  lane: F
+  upstream_spec_ids:
+  - TS-CAS-005
+  - TS-EVAL-003
+  downstream_spec_ids: []
+- spec_id: TS-DEL-001
+  lane: H
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-017
+  downstream_spec_ids:
+  - TS-VAE-BOUND-001
+  - TS-VID-003
+- spec_id: TS-EVAL-001
+  lane: G
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-017
+  downstream_spec_ids:
+  - TS-AHP-007
+  - TS-AHP-008
+  - TS-EVAL-002
+  - TS-VID-006
+- spec_id: TS-EVAL-002
+  lane: G
+  upstream_spec_ids:
+  - TS-EVAL-001
+  downstream_spec_ids:
+  - TS-EVAL-003
+  - TS-VID-006
+- spec_id: TS-EVAL-003
+  lane: G
+  upstream_spec_ids:
+  - TS-EVAL-002
+  - TS-AIR-019
+  - TS-AHP-005
+  downstream_spec_ids:
+  - TS-CAS-001
+  - TS-CAS-006
+- spec_id: TS-INT-001
+  lane: D
+  upstream_spec_ids:
+  - TS-AIR-008
+  downstream_spec_ids:
+  - TS-INT-002
+  - TS-INT-003
+- spec_id: TS-INT-002
+  lane: D
+  upstream_spec_ids:
+  - TS-INT-001
+  downstream_spec_ids:
+  - TS-INT-004
+  - TS-VID-001
+- spec_id: TS-INT-003
+  lane: D
+  upstream_spec_ids:
+  - TS-INT-001
+  downstream_spec_ids:
+  - TS-INT-004
+  - TS-VID-001
+- spec_id: TS-INT-004
+  lane: D
+  upstream_spec_ids:
+  - TS-INT-002
+  - TS-INT-003
+  - TS-INT-006
+  downstream_spec_ids:
+  - TS-AIR-011
+  - TS-INT-005
+  - TS-VID-002
+- spec_id: TS-INT-005
+  lane: D
+  upstream_spec_ids:
+  - TS-INT-004
+  downstream_spec_ids:
+  - TS-AHP-003
+- spec_id: TS-INT-006
+  lane: D
+  upstream_spec_ids:
+  - TS-INT-007
+  downstream_spec_ids:
+  - TS-AIR-011
+  - TS-INT-004
+- spec_id: TS-INT-007
+  lane: D
+  upstream_spec_ids:
+  - TS-AIR-008
+  - TS-AIR-009
+  downstream_spec_ids:
+  - TS-INT-006
+- spec_id: TS-PM-001
+  lane: G
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-020
+  downstream_spec_ids:
+  - TS-AHP-008
+- spec_id: TS-REL-001
+  lane: A
+  upstream_spec_ids: []
+  downstream_spec_ids:
+  - TS-REL-002
+- spec_id: TS-REL-002
+  lane: A
+  upstream_spec_ids:
+  - TS-AHP-001
+  - TS-REL-001
+  - TS-CAS-003
+  downstream_spec_ids: []
+- spec_id: TS-RET-001
+  lane: C
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-019
+  downstream_spec_ids: []
+- spec_id: TS-SKL-001
+  lane: C
+  upstream_spec_ids:
+  - TS-AHP-002
+  - TS-AIR-005
+  downstream_spec_ids: []
+- spec_id: TS-SPV-001
+  lane: E
+  upstream_spec_ids:
+  - TS-STA-001
+  - TS-AHP-003
+  downstream_spec_ids:
+  - TS-BATCH-001
+- spec_id: TS-STA-001
+  lane: E
+  upstream_spec_ids:
+  - TS-AHP-003
+  - TS-AIR-017
+  downstream_spec_ids:
+  - TS-CAR-001
+  - TS-SPV-001
+- spec_id: TS-VAE-BOUND-001
+  lane: H
+  upstream_spec_ids:
+  - TS-DEL-001
+  downstream_spec_ids: []
+- spec_id: TS-VID-001
+  lane: E
+  upstream_spec_ids:
+  - TS-AHP-003
+  - TS-INT-002
+  - TS-INT-003
+  - TS-AIR-015
+  downstream_spec_ids:
+  - TS-VID-002
+- spec_id: TS-VID-002
+  lane: E
+  upstream_spec_ids:
+  - TS-VID-001
+  - TS-INT-004
+  downstream_spec_ids:
+  - TS-VID-003
+  - TS-VID-004
+- spec_id: TS-VID-003
+  lane: E
+  upstream_spec_ids:
+  - TS-VID-002
+  - TS-DEL-001
+  downstream_spec_ids:
+  - TS-VID-004
+- spec_id: TS-VID-004
+  lane: E
+  upstream_spec_ids:
+  - TS-VID-002
+  - TS-VID-003
+  downstream_spec_ids:
+  - TS-VID-005
+- spec_id: TS-VID-005
+  lane: E
+  upstream_spec_ids:
+  - TS-VID-004
+  downstream_spec_ids:
+  - TS-VID-006
+- spec_id: TS-VID-006
+  lane: E
+  upstream_spec_ids:
+  - TS-VID-005
+  - TS-EVAL-001
+  - TS-EVAL-002
+  downstream_spec_ids:
+  - TS-BATCH-001
+shared_contract_gate: PROMPT_08_NOT_STARTED
+build_gate: NO_NODE_ACCEPTED_FOR_BUILD

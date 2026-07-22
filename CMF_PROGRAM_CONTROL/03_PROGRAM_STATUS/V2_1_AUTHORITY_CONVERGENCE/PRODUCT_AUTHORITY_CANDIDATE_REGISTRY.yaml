@@ -1,0 +1,73 @@
+schema_version: conscious-activations-product-authority-candidate-registry/v1
+registry_id: CA-PC-V2.1-CANDIDATES-2026-07-22
+status: CANDIDATES_REGISTERED_PENDING_ATTRIBUTABLE_HUMAN_RATIFICATION
+current_authority_unchanged: true
+current_authority_chain:
+  constitution: CCP_Activative_Intelligence_and_Visual_Narrative_Constitution_V1.1
+  builder: Atomic_Harness_Builder_PRD_V1.2
+  visual_asset_editor: Visual_Asset_Editor_PRD_V1.1
+  delegation: Delegation_Protocol_PRD_V1.1
+candidates:
+  - candidate_id: CA-AIR-CONSTITUTION-V2.1
+    title: Conscious Activations Activative Intelligence Lifecycle Constitution V2.1
+    version: 2.1.0-draft
+    status: PENDING_HUMAN_RATIFICATION
+    source_archive_sha256: 985227a8645f050e4789456933ac8845108a070ad44441177601fc7c0e8d7e76
+    source_member: doctrine/00_ACTIVATIVE_INTELLIGENCE_LIFECYCLE_CONSTITUTION_V2_1.md
+    source_member_sha256: abdb79fa6a59b4651332cd86cf51f796a4468110c917c126c62760e3f1d58a85
+    becomes_current_only_if: attributable_human_ratification_receipt_accepts_exact_hash
+
+  - candidate_id: CA-AIR-PRD-V2.1
+    title: Conscious Activations Activative Intelligence Runtime PRD V2.1
+    version: 2.1.0-draft
+    status: PENDING_HUMAN_RATIFICATION
+    source_archive_sha256: 985227a8645f050e4789456933ac8845108a070ad44441177601fc7c0e8d7e76
+    source_member: prd/PRD_COMBINED.md
+    source_member_sha256: f5c54bc408ed243c4c579f9693ecfd085c7b826053a5e3445d350d1317c7d184
+    depends_on: CA-AIR-CONSTITUTION-V2.1
+    becomes_current_only_if: constitution_and_prd_are_separately_ratified_for_exact_hashes
+
+  - candidate_id: CA-AHP-PRD-V1.3
+    title: Atomic Harness Pipeline PRD V1.3
+    version: 1.3.0-candidate
+    status: COMPOSITE_CANDIDATE_PENDING_HUMAN_RATIFICATION
+    composition:
+      base:
+        title: AHP PRD V1.2 Primitive-Archetype Centered
+        archive_sha256: b85a2888e33ec9d41e6a82461ec11f4d136b4b3cd42c06a67d94a470afbf0b9d
+        member: prd/PRD_COMBINED.md
+        member_sha256: 387568731acfe57f022a2fadcd2acfc73baf1287b8a5a1e1d3ed78675ccb067d
+      amendment:
+        archive_sha256: 985227a8645f050e4789456933ac8845108a070ad44441177601fc7c0e8d7e76
+        member: amendments/AHP_PRD_V1_3_ACTIVATIVE_INTELLIGENCE_INTEGRATION_AMENDMENT.md
+        member_sha256: 125fc4a45eef3d1fe4c42f75d9ff1cf38bbbb9c6bf04c05c2a252a049ae404b6
+    merge_or_rewrite_performed: false
+    becomes_current_only_if: exact_composite_authority_is_ratified_and_a_governed_release_is_issued
+
+  - candidate_id: CA-CROSS-PRODUCT-OWNERSHIP-V2.1
+    title: Cross-Product Ownership and Handoff Ledger V2.1
+    version: 2.1.0-candidate
+    status: PENDING_HUMAN_RATIFICATION
+    source_member: amendments/CROSS_PRODUCT_OWNERSHIP_AND_HANDOFF_LEDGER.md
+    source_member_sha256: 04bfd499ffff5f049b2da77aee2e67e400b1c3eabf4ab0f5b6b9ea79897600b6
+    normalized_program_control_artifacts:
+      - CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+      - SEMANTIC_OBJECT_OWNERSHIP_MATRIX.yaml
+
+  - candidate_id: CA-FORMAT02-DEFERRAL-V2.1
+    title: Format 02 activation deferral
+    version: 2.1.0-candidate
+    status: PENDING_HUMAN_RATIFICATION
+    rule: Format_02_remains_deferred_until_its_current_Atomic_Harness_is_built_and_independently_validated
+    current_compatible_state_preserved: contract_compatible_reference_profile_not_production_certified
+    reusable_2d_scene_package_does_not_activate_format02: true
+    source_members:
+      - doctrine/00_ACTIVATIVE_INTELLIGENCE_LIFECYCLE_CONSTITUTION_V2_1.md
+      - prd/PRD_COMBINED.md
+      - amendments/AHP_PRD_V1_3_ACTIVATIVE_INTELLIGENCE_INTEGRATION_AMENDMENT.md
+prohibited_inferences:
+  - candidate_registration_is_not_ratification
+  - ratification_is_not_implementation_authorization
+  - implementation_coverage_is_not_evidence_closure
+  - local_validation_is_not_production_authority
+  - contract_compatibility_is_not_certification

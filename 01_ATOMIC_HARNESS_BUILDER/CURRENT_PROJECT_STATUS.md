@@ -1,6 +1,6 @@
 # Current Project Status - Atomic Harness Builder
 
-Updated: 2026-07-17
+Updated: 2026-07-22
 
 ## Authority and confirmed baseline
 
@@ -352,3 +352,28 @@ Validation is `68/68` focused, `318/318` affected, `12/12` architecture and
 `1557/1557` complete regression with zero mandatory skips. Offline coverage is
 `41/69` across `14/22` targets; full-evidence closure remains `27/69`.
 ST-08.06 is active. Production readiness and certification remain false.
+
+## Terminal offline-development status overlay
+
+This section is the current status overlay and supersedes the checkpoint wording
+above without deleting or rewriting that execution history.
+
+- OD-AM-001 through OD-AM-005 are complete.
+- Offline implementation coverage is `69/69` with zero confirmed implementation
+  Stories remaining. The terminal production-source tree is 144 files with SHA-256
+  `e4b199fced4083ab22c62bf38e0eafa2e358284c3c5cb0b49f61b58c4434418a`.
+- The complete fresh-process regression is `1890/1890 PASS` twice with no mandatory
+  skips; architecture boundaries are `75/75 PASS`; Python compilation passes.
+- Full `StoryCompletionReceipt` and real-evidence closure remains `27/69` or higher
+  only when genuine evidence exists. An `ImplementationCompletionReceipt` is not a
+  `StoryCompletionReceipt` or an evidence-closure receipt.
+- `RC1-P1-PACKAGING-METADATA-MISSING`, BD-007, BD-008, external VAE/Delegation
+  validation, applicable real-human evidence, production authority, and
+  certification remain open at their respective scopes.
+- No additional implementation is authorized by the Program Control V2.1 package.
+  Production readiness and certification remain `false`.
+- The structural `activative_intelligence_pack_compiler` remains an Activative
+  Contract Compiler. It is not the candidate Activative Intelligence Runtime.
+- AIR Constitution V2.1, AIR PRD V2.1, and the AHP V1.3 integration amendment are
+  registered Program Control candidates pending attributable human ratification;
+  Builder authority remains PRD V1.2.

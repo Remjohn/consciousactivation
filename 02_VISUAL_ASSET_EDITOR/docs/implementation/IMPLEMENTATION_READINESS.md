@@ -5,7 +5,7 @@
 This addendum is the current status overlay. The dated RC1/RC2 readiness analyses below remain historical evidence and are not current dependency declarations.
 
 - Delegation dependency: `1.1.0-rc.4`, locally validated and adopted as an unsigned release candidate.
-- Consumer integration: `PASS` for source provenance, semantic lineage, the required `EVALUATE` capability contract, and RC4 portable derivative-lock inheritance.
+- Consumer integration: `PASS` for source provenance, semantic lineage, the required `EVALUATE` capability contract, and RC4 portable derivative-lock inheritance. CRC-401 and CRC-402 Program Control reconciliation is `resolved` without changing readiness.
 - Evaluator: `specified_not_certified`; capability presence does not confer evaluator or production certification.
 - Format 02: `format02_minimal_coach_theatre` is the Release 1 reference profile, structurally supported and contract-compatible; it is not benchmarked or production-certified.
 - Compute proof: `FAIL`; recovery/rollback executable proof: `FAIL`; real producer/consumer evidence: `FAIL`.
@@ -16,7 +16,7 @@ This addendum is the current status overlay. The dated RC1/RC2 readiness analyse
 
 | Readiness area | Verdict | Evidence boundary |
 |---|---|---|
-| Contract readiness | **PASS for bounded local unsigned integration** | RC4 exact pin and 14/14 integration suite remain valid; CRC-401/402 repository evidence validates, but Program Control reconciliation and production trust remain open |
+| Contract readiness | **PASS for bounded local unsigned integration** | RC4 exact pin and 14/14 integration suite remain valid; CRC-401/402 repository evidence and Program Control reconciliation pass, while production trust remains open |
 | Evaluator readiness | **FAIL** | `specified_not_certified`; proof program/prompt pinned, evaluator unbound, provisional labels, unsealed protected candidate, no calibrated thresholds or executed error analysis |
 | Compute readiness | **FAIL** | Local Docker Linux engine did not execute; no authorized cloud identity or worker exists |
 | Recovery readiness | **FAIL** | Ten-event contract simulation passes; no executable worker/queue/storage recovery or rollback rehearsal |

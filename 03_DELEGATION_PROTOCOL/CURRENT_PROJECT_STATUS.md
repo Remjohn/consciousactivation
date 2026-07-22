@@ -1,6 +1,6 @@
 # Current Project Status — Delegation Protocol
 
-Updated: 2026-07-15
+Updated: 2026-07-22
 
 - Current authority: Delegation PRD V1.1 and Activative Intelligence
   Constitution V1.1.
@@ -37,3 +37,7 @@ Updated: 2026-07-15
 - Production authorization remains `false`. External owner ratification,
   product adoption, trust roots, signing, Control Tower integration,
   transport/state ownership, and operational certification remain open.
+- AIR Constitution V2.1, AIR PRD V2.1, AHP PRD V1.3, and the Delegation V1.2
+  object-handoff amendment are registered Program Control candidates pending
+  attributable human ratification. They do not change Delegation PRD V1.1,
+  mutate RC4 bytes, unfreeze feature development, or grant production authority.

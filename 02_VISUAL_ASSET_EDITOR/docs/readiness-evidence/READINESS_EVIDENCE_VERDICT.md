@@ -1,16 +1,16 @@
 # Readiness Evidence Verdict
 
 Classification: `non_production_readiness_proof`  
-Assessment date: 2026-07-15
+Assessment date: 2026-07-22
 
 ## Verdict
 
-**FAIL.** CRC-401 and CRC-402 now have passing repository-local evidence, but their canonical Program Control concern records still await reconciliation. The evaluator foundation, recovery invariants and RC4 controlled Format 02 contract chain validate; empirical evaluator, compute, runtime recovery and real cross-product evidence remain absent.
+**FAIL.** CRC-401 and CRC-402 have passing repository-local evidence and resolved canonical Program Control records. The evaluator foundation, recovery invariants and RC4 controlled Format 02 contract chain validate; empirical evaluator, compute, runtime recovery and real cross-product evidence remain absent.
 
 | Gate | Result |
 |---|---|
-| CRC-401 repository evidence | PASS; Program Control reconciliation pending |
-| CRC-402 repository evidence | PASS; Program Control reconciliation pending |
+| CRC-401 repository evidence | PASS; Program Control reconciliation resolved |
+| CRC-402 repository evidence | PASS; Program Control reconciliation resolved |
 | Evaluator foundation structure | PASS |
 | Evaluator certification | `insufficient_evidence` / FAIL |
 | Local GPU execution | FAIL |

@@ -1,15 +1,15 @@
 # Visual Asset Editor Readiness Evidence Index
 
 Classification: `non_production_readiness_proof`  
-Assessment date: 2026-07-15  
+Assessment date: 2026-07-22
 Authority: Visual Asset Editor PRD V1.1 and Activative Intelligence Constitution V1.1
 
 This package records the authorized non-production Readiness Evidence Sandbox. It does not start Stage 5, authorize implementation, certify an evaluator or confer production trust.
 
 | Proof | Executed evidence | Result |
 |---|---|---|
-| CRC-401 constitutional precedence | Local non-forking reference contract plus Program Control hash validation | Repository evidence `PASS`; canonical Program Control reconciliation pending |
-| CRC-402 Feature Contract breadth | 5 categories × 8 asset families, 40 governed statuses, two positive and three negative fixtures | Repository evidence `PASS`; zero production-certified pair claims; Program Control reconciliation pending |
+| CRC-401 constitutional precedence | Local non-forking reference contract plus Program Control hash validation | Repository evidence `PASS`; canonical Program Control reconciliation resolved |
+| CRC-402 Feature Contract breadth | 5 categories × 8 asset families, 40 governed statuses, two positive and three negative fixtures | Repository evidence `PASS`; zero production-certified pair claims; Program Control reconciliation resolved |
 | Evaluator calibration foundation | Pinned proof program/prompt, provisional 12-case seed, six protected candidate slots, rubric, gate/error/threshold/affinity evidence and validator | Foundation validator `PASS`; evaluator certification `insufficient_evidence` |
 | Local GPU | Fresh host/Docker probe and bounded Docker Desktop retry | `FAIL` — GPU observed; daemon returned HTTP 500 and no container ran |
 | Cloud GPU | Fresh client/identity probe | `FAIL` — AWS CLI has no credentials; no resource provisioned |
