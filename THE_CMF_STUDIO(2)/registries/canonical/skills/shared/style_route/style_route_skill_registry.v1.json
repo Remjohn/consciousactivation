@@ -1,0 +1,169 @@
+{
+  "registry_id": "registry.skills.shared.style_route.v1",
+  "version": "1.0.0",
+  "note": "These are new shared skills; they are not assumed to already exist in the codebase.",
+  "skills": [
+    {
+      "id": "style_route.context.hydrate",
+      "file": "registries/canonical/skills/shared/style_route/01_style_route.context.hydrate.skill.yaml",
+      "skill_type": "deterministic_plus_pydantic",
+      "dspy_program": null
+    },
+    {
+      "id": "style_route.intent.classify",
+      "file": "registries/canonical/skills/shared/style_route/02_style_route.intent.classify.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "StyleRouteIntentClassifierProgram"
+    },
+    {
+      "id": "style_route.preconditions.validate",
+      "file": "registries/canonical/skills/shared/style_route/03_style_route.preconditions.validate.skill.yaml",
+      "skill_type": "deterministic_gate",
+      "dspy_program": null
+    },
+    {
+      "id": "style_route.select",
+      "file": "registries/canonical/skills/shared/style_route/04_style_route.select.skill.yaml",
+      "skill_type": "dspy_plus_deterministic_gate",
+      "dspy_program": "StyleRouteSelectionProgram"
+    },
+    {
+      "id": "style_route.source_packet.compile",
+      "file": "registries/canonical/skills/shared/style_route/05_style_route.source_packet.compile.skill.yaml",
+      "skill_type": "deterministic_plus_pydantic",
+      "dspy_program": null
+    },
+    {
+      "id": "style_route.visual_nouns.extract",
+      "file": "registries/canonical/skills/shared/style_route/06_style_route.visual_nouns.extract.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "StyleRouteVisualNounExtractorProgram"
+    },
+    {
+      "id": "style_route.production_spec.compile",
+      "file": "registries/canonical/skills/shared/style_route/07_style_route.production_spec.compile.skill.yaml",
+      "skill_type": "deterministic_contract_compiler",
+      "dspy_program": null
+    },
+    {
+      "id": "style_route.provider_blueprint.compile",
+      "file": "registries/canonical/skills/shared/style_route/08_style_route.provider_blueprint.compile.skill.yaml",
+      "skill_type": "deterministic_contract_compiler",
+      "dspy_program": null
+    },
+    {
+      "id": "style_route.eval.run",
+      "file": "registries/canonical/skills/shared/style_route/09_style_route.eval.run.skill.yaml",
+      "skill_type": "hybrid_eval_runtime",
+      "dspy_program": "StyleRouteEvalProgram"
+    },
+    {
+      "id": "style_route.repair.compile",
+      "file": "registries/canonical/skills/shared/style_route/10_style_route.repair.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "StyleRouteRepairProgram"
+    },
+    {
+      "id": "style_route.usage.record",
+      "file": "registries/canonical/skills/shared/style_route/11_style_route.usage.record.skill.yaml",
+      "skill_type": "deterministic_receipt",
+      "dspy_program": null
+    },
+    {
+      "id": "cac.reference_grounding.validate",
+      "file": "registries/canonical/skills/shared/style_route/12_cac.reference_grounding.validate.skill.yaml",
+      "skill_type": "deterministic_gate",
+      "dspy_program": null
+    },
+    {
+      "id": "cac.production_spec.compile",
+      "file": "registries/canonical/skills/shared/style_route/13_cac.production_spec.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "CACProductionSpecCompilerProgram"
+    },
+    {
+      "id": "cac.prompt_contract.compile",
+      "file": "registries/canonical/skills/shared/style_route/14_cac.prompt_contract.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "CACPromptContractProgram"
+    },
+    {
+      "id": "cac.eval.run",
+      "file": "registries/canonical/skills/shared/style_route/15_cac.eval.run.skill.yaml",
+      "skill_type": "hybrid_eval_runtime",
+      "dspy_program": "CACEvalProgram"
+    },
+    {
+      "id": "gmg.verbatim_nouns.extract",
+      "file": "registries/canonical/skills/shared/style_route/16_gmg.verbatim_nouns.extract.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGVerbatimNounExtractorProgram"
+    },
+    {
+      "id": "gmg.expert.route",
+      "file": "registries/canonical/skills/shared/style_route/17_gmg.expert.route.skill.yaml",
+      "skill_type": "dspy_plus_deterministic_gate",
+      "dspy_program": "GMGExpertRouterProgram"
+    },
+    {
+      "id": "gmg.expert_01.compile",
+      "file": "registries/canonical/skills/shared/style_route/18_gmg.expert_01.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGExpert01Program"
+    },
+    {
+      "id": "gmg.expert_02.compile",
+      "file": "registries/canonical/skills/shared/style_route/19_gmg.expert_02.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGExpert02Program"
+    },
+    {
+      "id": "gmg.expert_03.compile",
+      "file": "registries/canonical/skills/shared/style_route/20_gmg.expert_03.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGExpert03Program"
+    },
+    {
+      "id": "gmg.expert_04.compile",
+      "file": "registries/canonical/skills/shared/style_route/21_gmg.expert_04.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGExpert04Program"
+    },
+    {
+      "id": "gmg.expert_05.compile",
+      "file": "registries/canonical/skills/shared/style_route/22_gmg.expert_05.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGExpert05Program"
+    },
+    {
+      "id": "gmg.expert_06.compile",
+      "file": "registries/canonical/skills/shared/style_route/23_gmg.expert_06.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "GMGExpert06Program"
+    },
+    {
+      "id": "gmg.eval.run",
+      "file": "registries/canonical/skills/shared/style_route/24_gmg.eval.run.skill.yaml",
+      "skill_type": "hybrid_eval_runtime",
+      "dspy_program": "GMGEvalProgram"
+    },
+    {
+      "id": "paper_cut.artifact_spec.compile",
+      "file": "registries/canonical/skills/shared/style_route/25_paper_cut.artifact_spec.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "PaperCutArtifactProgram"
+    },
+    {
+      "id": "paper_cut.editorial_spec.compile",
+      "file": "registries/canonical/skills/shared/style_route/26_paper_cut.editorial_spec.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "PaperCutEditorialProgram"
+    },
+    {
+      "id": "paper_cut.eval.run",
+      "file": "registries/canonical/skills/shared/style_route/27_paper_cut.eval.run.skill.yaml",
+      "skill_type": "hybrid_eval_runtime",
+      "dspy_program": "PaperCutEvalProgram"
+    }
+  ]
+}

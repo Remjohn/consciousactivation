@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-029",
+  "name": "ISC Quality Scorer",
+  "version": "1.0",
+  "priority_tier": "recall",
+  "research_basis": [
+    "Neurocinematics",
+    "Predictive media-performance research"
+  ],
+  "inputs": [
+    "active_subsystem_outputs",
+    "arc_metadata",
+    "focal_continuity_score",
+    "retention_survival_score",
+    "timing_integrity_score"
+  ],
+  "outputs": [
+    "isc_quality_score",
+    "weakest_dimensions",
+    "verdict"
+  ],
+  "thresholds": {
+    "publish_ready_score": 80,
+    "revise_score_min": 65,
+    "high_risk_score_max": 64
+  },
+  "default_action_on_fail": "REVISE"
+}

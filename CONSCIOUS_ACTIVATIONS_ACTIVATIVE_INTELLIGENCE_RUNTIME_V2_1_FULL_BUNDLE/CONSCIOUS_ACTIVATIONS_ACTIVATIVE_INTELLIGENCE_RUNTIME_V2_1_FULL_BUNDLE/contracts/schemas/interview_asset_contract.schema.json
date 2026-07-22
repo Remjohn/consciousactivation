@@ -1,0 +1,239 @@
+{
+  "$defs": {
+    "FollowUpBranch": {
+      "additionalProperties": false,
+      "properties": {
+        "branch_id": {
+          "title": "Branch Id",
+          "type": "string"
+        },
+        "condition": {
+          "title": "Condition",
+          "type": "string"
+        },
+        "pressure_delta": {
+          "maximum": 2,
+          "minimum": -2,
+          "title": "Pressure Delta",
+          "type": "integer"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "stop_after": {
+          "default": false,
+          "title": "Stop After",
+          "type": "boolean"
+        },
+        "target_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NarrativeState"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "branch_id",
+        "condition",
+        "question",
+        "pressure_delta"
+      ],
+      "title": "FollowUpBranch",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "NarrativeState": {
+      "enum": [
+        "cinematic",
+        "vulnerability",
+        "authority",
+        "teaching",
+        "invitation"
+      ],
+      "title": "NarrativeState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "affinity_resets": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Affinity Resets",
+      "type": "array"
+    },
+    "anticipated_signals": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Anticipated Signals",
+      "type": "array"
+    },
+    "clip_end_hypotheses": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Clip End Hypotheses",
+      "type": "array"
+    },
+    "clip_start_hypotheses": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Clip Start Hypotheses",
+      "type": "array"
+    },
+    "contract_id": {
+      "title": "Contract Id",
+      "type": "string"
+    },
+    "current_state_hypothesis": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NarrativeState"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "depth_anchor": {
+      "title": "Depth Anchor",
+      "type": "string"
+    },
+    "eligible_routes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Eligible Routes",
+      "type": "array"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "expected_material": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Material",
+      "type": "array"
+    },
+    "first_line_anchor": {
+      "title": "First Line Anchor",
+      "type": "string"
+    },
+    "follow_up_branches": {
+      "items": {
+        "$ref": "#/$defs/FollowUpBranch"
+      },
+      "title": "Follow Up Branches",
+      "type": "array"
+    },
+    "hard_negatives": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Hard Negatives",
+      "type": "array"
+    },
+    "hypothesis_id": {
+      "title": "Hypothesis Id",
+      "type": "string"
+    },
+    "landing_criteria": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Landing Criteria",
+      "type": "array"
+    },
+    "main_question": {
+      "title": "Main Question",
+      "type": "string"
+    },
+    "planned_pack_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "pressure_ceiling": {
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Pressure Ceiling",
+      "type": "integer"
+    },
+    "pressure_dose": {
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Pressure Dose",
+      "type": "integer"
+    },
+    "target_state": {
+      "$ref": "#/$defs/NarrativeState"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_id",
+    "planned_pack_ref",
+    "hypothesis_id",
+    "target_state",
+    "first_line_anchor",
+    "depth_anchor",
+    "main_question",
+    "follow_up_branches",
+    "expected_material",
+    "anticipated_signals",
+    "pressure_dose",
+    "pressure_ceiling",
+    "landing_criteria",
+    "wrong_reading_locks",
+    "evaluation_contract_ref"
+  ],
+  "title": "InterviewAssetContract",
+  "type": "object"
+}

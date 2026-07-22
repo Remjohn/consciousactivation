@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-006",
+  "name": "Gaze Continuity Checker",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Eye Tracking",
+    "ATCC",
+    "Edit blindness"
+  ],
+  "inputs": [
+    "pre_cut_focal_coordinates",
+    "post_cut_focal_coordinates",
+    "cut_type",
+    "motion_cues",
+    "shot_scale_delta"
+  ],
+  "outputs": [
+    "gaze_delta_score",
+    "verdict",
+    "layout_correction"
+  ],
+  "thresholds": {
+    "max_focal_shift_pct_frame_width": 15,
+    "allow_large_jump_with_reorientation": true,
+    "prefer_attention_compatible_cuts": true
+  },
+  "default_action_on_fail": "REVISE"
+}

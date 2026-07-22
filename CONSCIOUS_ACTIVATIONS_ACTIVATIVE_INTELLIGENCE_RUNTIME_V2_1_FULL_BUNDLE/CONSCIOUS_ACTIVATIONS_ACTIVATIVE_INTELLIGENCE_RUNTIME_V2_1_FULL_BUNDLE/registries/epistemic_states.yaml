@@ -1,0 +1,27 @@
+schema_version: ai-v2-epistemic-states/v1
+version: 2.0.0
+states:
+- id: planned
+  definition: declared before the event
+  may_drive_action: true
+  may_claim_observation: false
+- id: observed
+  definition: directly supported by accepted source evidence
+  may_drive_action: true
+  may_claim_observation: true
+- id: inferred
+  definition: interpretation awaiting resolution
+  requires_confidence: true
+  requires_evidence: true
+- id: operator_confirmed
+  definition: explicitly resolved by authorized human
+  requires_resolution_ref: true
+- id: rejected
+  definition: considered and denied with reason
+  production_eligible: false
+- id: superseded
+  definition: replaced additively by later version
+  production_eligible: false
+precedence_notes:
+- intent and occurrence remain different authorities
+- inference cannot silently become observation

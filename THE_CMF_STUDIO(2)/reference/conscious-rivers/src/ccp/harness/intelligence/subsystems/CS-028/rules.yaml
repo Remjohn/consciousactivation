@@ -1,0 +1,31 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-028
+enabled: true
+priority:
+  tier: quality
+  rank: 10
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: meaningful_element_count
+    operator: gt
+    value: 3
+route_hints:
+  reduce:
+    - serialize_information
+    - remove_decorative_overlay
+    - collapse_redundant_text

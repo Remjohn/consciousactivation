@@ -1,0 +1,51 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Conscious Activations Recovery One-Spec Writing Packet
+type: object
+required:
+- packet_schema_version
+- packet_id
+- supersedes_packet_id
+- packet_state
+- one_spec_only
+- spec_id
+- writer_lane
+- canonical_or_proposal_output_path
+- allowed_write_paths
+- output_path_class
+- upstream_write_inputs
+- upstream_acceptance_prerequisites
+- upstream_build_prerequisites
+- reference_inputs
+- candidate_authority_state
+- specification_work_authorization
+- draft_dependency_policy
+- writing_wave
+- nearest_agents_file
+- repository_write_authority_result
+properties:
+  output_path_class:
+    enum:
+    - DIRECT_PRODUCT_SPEC_PATH
+    - PROGRAM_CONTROL_CROSS_PRODUCT_PROPOSAL
+    - DEFERRED_UNTIL_PRODUCT_AUTHORIZATION
+  upstream_write_inputs:
+    type: array
+    items:
+      type: object
+      required:
+      - edge_id
+      - spec_id
+      - path
+      - primary_dependency_class
+      - quality_state_at_recovery
+      - required_quality_states_at_dispatch
+      - sha256
+      - sha256_required
+      - sha256_resolution
+      - label
+      - downstream_revision_impact_sections
+  writing_wave:
+    type: integer
+    minimum: 0
+additionalProperties: true
+dispatch_time_condition: Every upstream sha256 must be a lowercase 64-hex digest and the observed quality state must be eligible before dispatch.

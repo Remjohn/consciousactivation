@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-014
+enabled: true
+priority:
+  tier: encoding
+  rank: 5
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: emotional_beat_count
+    operator: gt
+    value: 3
+route_hints:
+  simplify:
+    - collapse_affective_turns
+    - preserve_primary_vector

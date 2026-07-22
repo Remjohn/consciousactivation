@@ -1,0 +1,164 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "NarrativeState": {
+      "enum": [
+        "cinematic",
+        "vulnerability",
+        "authority",
+        "teaching",
+        "invitation"
+      ],
+      "title": "NarrativeState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "active_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "affinity_reserve": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Affinity Reserve",
+      "type": "number"
+    },
+    "anchor_status": {
+      "enum": [
+        "none",
+        "partial",
+        "hit",
+        "unexpected"
+      ],
+      "title": "Anchor Status",
+      "type": "string"
+    },
+    "counteractivation_risk": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Counteractivation Risk",
+      "type": "number"
+    },
+    "current_narrative_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NarrativeState"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "domain": {
+      "const": "source",
+      "default": "source",
+      "title": "Domain",
+      "type": "string"
+    },
+    "emerging_edges": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Emerging Edges",
+      "type": "array"
+    },
+    "next_action_candidates": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Next Action Candidates",
+      "type": "array"
+    },
+    "observed_signals": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Observed Signals",
+      "type": "array"
+    },
+    "pressure_dose": {
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Pressure Dose",
+      "type": "integer"
+    },
+    "recent_call_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Recent Call Refs",
+      "type": "array"
+    },
+    "recent_reaction_receipt_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Recent Reaction Receipt Refs",
+      "type": "array"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "state_id": {
+      "title": "State Id",
+      "type": "string"
+    },
+    "stop_conditions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Stop Conditions",
+      "type": "array"
+    },
+    "target_narrative_state": {
+      "$ref": "#/$defs/NarrativeState"
+    }
+  },
+  "required": [
+    "state_id",
+    "session_id",
+    "active_contract_ref",
+    "target_narrative_state",
+    "pressure_dose",
+    "anchor_status",
+    "counteractivation_risk",
+    "affinity_reserve"
+  ],
+  "title": "LiveActivativeState",
+  "type": "object"
+}

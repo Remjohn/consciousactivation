@@ -1,0 +1,387 @@
+{
+  "$defs": {
+    "ActivationDirection": {
+      "enum": [
+        "mirror",
+        "target",
+        "tribe",
+        "moral",
+        "aspiration",
+        "future_loss",
+        "grief",
+        "nostalgia",
+        "contradiction",
+        "curiosity"
+      ],
+      "title": "ActivationDirection",
+      "type": "string"
+    },
+    "ActivationDomain": {
+      "enum": [
+        "source",
+        "relationship",
+        "audience"
+      ],
+      "title": "ActivationDomain",
+      "type": "string"
+    },
+    "ActivationHypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "counteractivation_hypotheses": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Counteractivation Hypotheses",
+          "type": "array"
+        },
+        "directions": {
+          "items": {
+            "$ref": "#/$defs/ActivationDirection"
+          },
+          "title": "Directions",
+          "type": "array"
+        },
+        "domain": {
+          "$ref": "#/$defs/ActivationDomain"
+        },
+        "edge": {
+          "title": "Edge",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "minItems": 1,
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "expected_signals": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Signals",
+          "type": "array"
+        },
+        "freshness_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Freshness Score",
+          "type": "number"
+        },
+        "hidden_pressure": {
+          "title": "Hidden Pressure",
+          "type": "string"
+        },
+        "hypothesis_id": {
+          "title": "Hypothesis Id",
+          "type": "string"
+        },
+        "identity_urges": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Identity Urges",
+          "type": "array"
+        },
+        "intended_reaction": {
+          "title": "Intended Reaction",
+          "type": "string"
+        },
+        "participation_design": {
+          "title": "Participation Design",
+          "type": "string"
+        },
+        "pressure_dose": {
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Pressure Dose",
+          "type": "integer"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Roles",
+          "type": "array"
+        },
+        "smallest_useful_commitment": {
+          "title": "Smallest Useful Commitment",
+          "type": "string"
+        },
+        "stakes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stakes",
+          "type": "array"
+        },
+        "stance": {
+          "title": "Stance",
+          "type": "string"
+        },
+        "wrong_reading_locks": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Wrong Reading Locks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "hypothesis_id",
+        "domain",
+        "hidden_pressure",
+        "edge",
+        "directions",
+        "roles",
+        "stance",
+        "identity_urges",
+        "stakes",
+        "pressure_dose",
+        "participation_design",
+        "intended_reaction",
+        "smallest_useful_commitment",
+        "wrong_reading_locks",
+        "evidence_refs",
+        "freshness_score",
+        "confidence"
+      ],
+      "title": "ActivationHypothesis",
+      "type": "object"
+    },
+    "ActivationHypothesisPortfolio": {
+      "additionalProperties": false,
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/ActivationHypothesis"
+          },
+          "minItems": 2,
+          "title": "Candidates",
+          "type": "array"
+        },
+        "diversity_axes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Diversity Axes",
+          "type": "array"
+        },
+        "portfolio_id": {
+          "title": "Portfolio Id",
+          "type": "string"
+        },
+        "rejected_hypothesis_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Rejected Hypothesis Ids",
+          "type": "array"
+        },
+        "selected_hypothesis_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Hypothesis Id"
+        },
+        "stopping_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stopping Reason"
+        }
+      },
+      "required": [
+        "portfolio_id",
+        "candidates",
+        "diversity_axes"
+      ],
+      "title": "ActivationHypothesisPortfolio",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "NarrativeState": {
+      "enum": [
+        "cinematic",
+        "vulnerability",
+        "authority",
+        "teaching",
+        "invitation"
+      ],
+      "title": "NarrativeState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audience_context_premise_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "candidate_portfolio": {
+      "$ref": "#/$defs/ActivationHypothesisPortfolio"
+    },
+    "coach_identity_dna_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "domain": {
+      "$ref": "#/$defs/ActivationDomain"
+    },
+    "epistemic_state": {
+      "const": "planned",
+      "default": "planned",
+      "title": "Epistemic State",
+      "type": "string"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "interviewer_resonance_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "lifecycle_state": {
+      "const": "planned",
+      "default": "planned",
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "matrix_of_edging_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "pack_id": {
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "registry_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Registry Refs",
+      "type": "array"
+    },
+    "relationship_state_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "research_requests": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Research Requests",
+      "type": "array"
+    },
+    "resonance_map_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "selected_hypothesis_id": {
+      "title": "Selected Hypothesis Id",
+      "type": "string"
+    },
+    "semantic_runtime_executed": {
+      "default": false,
+      "title": "Semantic Runtime Executed",
+      "type": "boolean"
+    },
+    "source_premise_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "target_narrative_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NarrativeState"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "pack_id",
+    "version",
+    "domain",
+    "source_premise_ref",
+    "coach_identity_dna_ref",
+    "audience_context_premise_ref",
+    "resonance_map_ref",
+    "matrix_of_edging_ref",
+    "candidate_portfolio",
+    "selected_hypothesis_id",
+    "evaluation_contract_ref",
+    "registry_refs"
+  ],
+  "title": "PlannedActivativeIntelligencePack",
+  "type": "object"
+}

@@ -1,0 +1,13 @@
+# Service Plan
+
+```text
+avatar_performance_service.py
+avatar_face_plate_service.py
+avatar_body_rig_service.py
+avatar_clip_library_service.py
+audience_proxy_service.py
+avatar_prop_attachment_service.py
+avatar_performance_eval_service.py
+avatar_render_payload_service.py
+format02_avatar_performance_adapter_service.py
+```

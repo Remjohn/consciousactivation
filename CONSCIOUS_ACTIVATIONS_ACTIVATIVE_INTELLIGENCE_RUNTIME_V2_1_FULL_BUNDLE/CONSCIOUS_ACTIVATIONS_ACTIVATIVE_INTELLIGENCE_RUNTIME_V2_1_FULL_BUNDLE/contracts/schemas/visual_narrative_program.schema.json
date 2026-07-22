@@ -1,0 +1,203 @@
+{
+  "$defs": {
+    "ActivationDirection": {
+      "enum": [
+        "mirror",
+        "target",
+        "tribe",
+        "moral",
+        "aspiration",
+        "future_loss",
+        "grief",
+        "nostalgia",
+        "contradiction",
+        "curiosity"
+      ],
+      "title": "ActivationDirection",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "VisualNarrativeBeat": {
+      "additionalProperties": false,
+      "properties": {
+        "attention_state": {
+          "enum": [
+            "stimulation",
+            "captivation",
+            "prediction",
+            "payoff",
+            "affinity",
+            "anticipation"
+          ],
+          "title": "Attention State",
+          "type": "string"
+        },
+        "beat_id": {
+          "title": "Beat Id",
+          "type": "string"
+        },
+        "feature_contract_refs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "title": "Feature Contract Refs",
+          "type": "array"
+        },
+        "operator_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Operator Ids",
+          "type": "array"
+        },
+        "recognition_carrier": {
+          "title": "Recognition Carrier",
+          "type": "string"
+        },
+        "viewer_action": {
+          "title": "Viewer Action",
+          "type": "string"
+        },
+        "visual_job": {
+          "title": "Visual Job",
+          "type": "string"
+        }
+      },
+      "required": [
+        "beat_id",
+        "attention_state",
+        "visual_job",
+        "operator_ids",
+        "recognition_carrier",
+        "viewer_action"
+      ],
+      "title": "VisualNarrativeBeat",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "activation_directions": {
+      "items": {
+        "$ref": "#/$defs/ActivationDirection"
+      },
+      "title": "Activation Directions",
+      "type": "array"
+    },
+    "affinity_mechanism": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Affinity Mechanism"
+    },
+    "anticipation_gap": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Anticipation Gap"
+    },
+    "beats": {
+      "items": {
+        "$ref": "#/$defs/VisualNarrativeBeat"
+      },
+      "minItems": 1,
+      "title": "Beats",
+      "type": "array"
+    },
+    "format_harness": {
+      "title": "Format Harness",
+      "type": "string"
+    },
+    "no_text_required": {
+      "default": false,
+      "title": "No Text Required",
+      "type": "boolean"
+    },
+    "pattern_interrupt": {
+      "title": "Pattern Interrupt",
+      "type": "string"
+    },
+    "pattern_match": {
+      "title": "Pattern Match",
+      "type": "string"
+    },
+    "payoff": {
+      "title": "Payoff",
+      "type": "string"
+    },
+    "program_id": {
+      "title": "Program Id",
+      "type": "string"
+    },
+    "transfer_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "viewer_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Viewer Roles",
+      "type": "array"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "program_id",
+    "transfer_contract_ref",
+    "format_harness",
+    "activation_directions",
+    "viewer_roles",
+    "pattern_match",
+    "pattern_interrupt",
+    "beats",
+    "payoff",
+    "wrong_reading_locks"
+  ],
+  "title": "VisualNarrativeProgram",
+  "type": "object"
+}

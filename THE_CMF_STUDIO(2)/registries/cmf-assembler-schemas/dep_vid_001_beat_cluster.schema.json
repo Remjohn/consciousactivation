@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-001",
+  "title": "Beat Cluster JSON",
+  "description": "FR-VID-01 §4 — Raw beat cluster from the CMF narrative pipeline. Serves as the Edit Decision List (EDL) for video assembly.",
+  "type": "object",
+  "required": ["beat_cluster_id", "arc_type", "project_id", "beats"],
+  "properties": {
+    "beat_cluster_id": {
+      "type": "string",
+      "description": "Unique identifier for the beat cluster."
+    },
+    "arc_type": {
+      "type": "string",
+      "description": "Narrative arc type (witness, transformation, discovery)."
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "beat_type", "duration_sec", "arc_stage"],
+        "properties": {
+          "beat_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "beat_type": {
+            "type": "string",
+            "description": "Beat type (hook, question, turning_point, revelation, reflection, callback, etc.)."
+          },
+          "duration_sec": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Beat duration in seconds."
+          },
+          "arc_stage": {
+            "type": "string",
+            "description": "Narrative arc stage (opening, hook, rising_action, tension, climax, falling_action, resolution, coda)."
+          },
+          "visual_prompt_ref": {
+            "type": ["string", "null"],
+            "description": "Reference to visual prompt for this beat."
+          },
+          "narration_text": {
+            "type": "string",
+            "description": "Narration/voiceover text for this beat."
+          }
+        }
+      }
+    }
+  }
+}

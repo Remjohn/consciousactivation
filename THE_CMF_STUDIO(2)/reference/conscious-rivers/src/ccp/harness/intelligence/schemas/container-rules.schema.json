@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf.container.rules.schema.v1",
+  "title": "CMF Container Rules",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_id",
+    "container_id",
+    "enabled",
+    "priority",
+    "enforcement",
+    "applies_to",
+    "required_sequence"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string"
+    },
+    "schema_id": {
+      "const": "cmf.container.rules/v1"
+    },
+    "container_id": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "priority": {
+      "type": "object"
+    },
+    "enforcement": {
+      "type": "object"
+    },
+    "applies_to": {
+      "type": "object"
+    },
+    "required_sequence": {
+      "type": "object"
+    },
+    "warn_conditions": {
+      "type": "array"
+    },
+    "route_hints": {
+      "type": "object"
+    }
+  }
+}

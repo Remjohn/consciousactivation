@@ -1,0 +1,455 @@
+{
+  "$defs": {
+    "ExpressionIngredient": {
+      "additionalProperties": false,
+      "properties": {
+        "ingredient_id": {
+          "title": "Ingredient Id",
+          "type": "string"
+        },
+        "ingredient_role": {
+          "title": "Ingredient Role",
+          "type": "string"
+        },
+        "ingredient_class": {
+          "$ref": "#/$defs/IngredientClass"
+        },
+        "source_type": {
+          "$ref": "#/$defs/SourceType"
+        },
+        "source_segment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceSegment"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "external_source_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "External Source Ref"
+        },
+        "expression_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InterviewState"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "primitive_tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Primitive Tags",
+          "type": "array"
+        },
+        "edge_product_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Edge Product Ids",
+          "type": "array"
+        },
+        "archetype_compatibility": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Archetype Compatibility",
+          "type": "array"
+        },
+        "asset_compatibility": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Asset Compatibility",
+          "type": "array"
+        },
+        "quality_scores": {
+          "$ref": "#/$defs/IngredientQualityScores"
+        },
+        "planned_requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Planned Requirement Ids",
+          "type": "array"
+        },
+        "approval_status": {
+          "default": "extracted",
+          "enum": [
+            "extracted",
+            "auto_evaluated",
+            "human_reviewed",
+            "approved",
+            "rejected",
+            "needs_repair"
+          ],
+          "title": "Approval Status",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ingredient_id",
+        "ingredient_role",
+        "ingredient_class",
+        "source_type",
+        "quality_scores",
+        "sha256"
+      ],
+      "title": "ExpressionIngredient",
+      "type": "object"
+    },
+    "IngredientClass": {
+      "enum": [
+        "human_expression",
+        "research_evidence",
+        "audience_reality",
+        "visual",
+        "brand_continuity"
+      ],
+      "title": "IngredientClass",
+      "type": "string"
+    },
+    "IngredientGap": {
+      "additionalProperties": false,
+      "properties": {
+        "ingredient_role": {
+          "title": "Ingredient Role",
+          "type": "string"
+        },
+        "requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "gap_type": {
+          "enum": [
+            "missing",
+            "weak",
+            "source_integrity",
+            "visual_missing",
+            "research_missing"
+          ],
+          "title": "Gap Type",
+          "type": "string"
+        },
+        "recommended_action": {
+          "enum": [
+            "pickup",
+            "research",
+            "visual_request",
+            "substitute",
+            "waive",
+            "abandon_sequence"
+          ],
+          "title": "Recommended Action",
+          "type": "string"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ingredient_role",
+        "requirement_ids",
+        "gap_type",
+        "recommended_action",
+        "notes"
+      ],
+      "title": "IngredientGap",
+      "type": "object"
+    },
+    "IngredientQualityScores": {
+      "additionalProperties": false,
+      "properties": {
+        "specificity": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Specificity",
+          "type": "number"
+        },
+        "emotional_density": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Emotional Density",
+          "type": "number"
+        },
+        "truth_density": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Truth Density",
+          "type": "number"
+        },
+        "audience_relevance": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Audience Relevance",
+          "type": "number"
+        },
+        "clipability": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Clipability",
+          "type": "number"
+        },
+        "explanatory_completeness": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Explanatory Completeness",
+          "type": "number"
+        },
+        "evidence_strength": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Evidence Strength",
+          "type": "number"
+        },
+        "visual_routeability": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Visual Routeability",
+          "type": "number"
+        },
+        "source_integrity": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Source Integrity",
+          "type": "number"
+        },
+        "brand_fit": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Brand Fit",
+          "type": "number"
+        }
+      },
+      "required": [
+        "specificity",
+        "emotional_density",
+        "truth_density",
+        "audience_relevance",
+        "clipability",
+        "explanatory_completeness",
+        "evidence_strength",
+        "visual_routeability",
+        "source_integrity",
+        "brand_fit"
+      ],
+      "title": "IngredientQualityScores",
+      "type": "object"
+    },
+    "IngredientRelation": {
+      "additionalProperties": false,
+      "properties": {
+        "source_ingredient_id": {
+          "title": "Source Ingredient Id",
+          "type": "string"
+        },
+        "target_ingredient_id": {
+          "title": "Target Ingredient Id",
+          "type": "string"
+        },
+        "relation_type": {
+          "enum": [
+            "opens_question",
+            "adds_stake",
+            "provides_clue",
+            "complicates",
+            "contradicts",
+            "reframes",
+            "answers",
+            "provides_proof",
+            "humanizes",
+            "creates_future_value",
+            "transitions"
+          ],
+          "title": "Relation Type",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "source_ingredient_id",
+        "target_ingredient_id",
+        "relation_type",
+        "confidence"
+      ],
+      "title": "IngredientRelation",
+      "type": "object"
+    },
+    "InterviewState": {
+      "enum": [
+        "rapport",
+        "safety",
+        "authority",
+        "cinematic",
+        "vulnerability",
+        "reflection",
+        "teaching",
+        "humor",
+        "invitation",
+        "edge_pressure"
+      ],
+      "title": "InterviewState",
+      "type": "string"
+    },
+    "SourceSegment": {
+      "additionalProperties": false,
+      "properties": {
+        "expression_session_id": {
+          "title": "Expression Session Id",
+          "type": "string"
+        },
+        "recording_artifact_id": {
+          "title": "Recording Artifact Id",
+          "type": "string"
+        },
+        "speaker_id": {
+          "title": "Speaker Id",
+          "type": "string"
+        },
+        "start_tick": {
+          "minimum": 0,
+          "title": "Start Tick",
+          "type": "integer"
+        },
+        "end_tick": {
+          "exclusiveMinimum": 0,
+          "title": "End Tick",
+          "type": "integer"
+        },
+        "transcript_text": {
+          "title": "Transcript Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "expression_session_id",
+        "recording_artifact_id",
+        "speaker_id",
+        "start_tick",
+        "end_tick",
+        "transcript_text"
+      ],
+      "title": "SourceSegment",
+      "type": "object"
+    },
+    "SourceType": {
+      "enum": [
+        "guest_expression",
+        "guest_story",
+        "guest_teaching",
+        "guest_authority",
+        "live_reaction",
+        "audience_research",
+        "guest_dossier",
+        "external_research",
+        "brand_memory",
+        "visual_archive",
+        "pickup"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "ingredient_inventory_id": {
+      "title": "Ingredient Inventory Id",
+      "type": "string"
+    },
+    "expression_session_id": {
+      "title": "Expression Session Id",
+      "type": "string"
+    },
+    "interview_brief_id": {
+      "title": "Interview Brief Id",
+      "type": "string"
+    },
+    "ingredients": {
+      "items": {
+        "$ref": "#/$defs/ExpressionIngredient"
+      },
+      "title": "Ingredients",
+      "type": "array"
+    },
+    "relations": {
+      "items": {
+        "$ref": "#/$defs/IngredientRelation"
+      },
+      "title": "Relations",
+      "type": "array"
+    },
+    "gaps": {
+      "items": {
+        "$ref": "#/$defs/IngredientGap"
+      },
+      "title": "Gaps",
+      "type": "array"
+    },
+    "unexpected_high_value_ingredient_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unexpected High Value Ingredient Ids",
+      "type": "array"
+    },
+    "frozen": {
+      "default": false,
+      "title": "Frozen",
+      "type": "boolean"
+    },
+    "inventory_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inventory Sha256"
+    }
+  },
+  "required": [
+    "ingredient_inventory_id",
+    "expression_session_id",
+    "interview_brief_id",
+    "ingredients"
+  ],
+  "title": "ExpressionIngredientInventory",
+  "type": "object"
+}

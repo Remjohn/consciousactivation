@@ -1,0 +1,81 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "base_model": {
+      "title": "Base Model",
+      "type": "string"
+    },
+    "checkpoint_or_adapter_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "exact_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Exact Hashes",
+      "type": "object"
+    },
+    "runtime_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "supported_contract_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Supported Contract Refs",
+      "type": "array"
+    },
+    "tokenizer_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "training_corpus_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    }
+  },
+  "required": [
+    "artifact_id",
+    "base_model",
+    "tokenizer_ref",
+    "checkpoint_or_adapter_ref",
+    "runtime_ref",
+    "training_corpus_ref",
+    "supported_contract_refs",
+    "exact_hashes"
+  ],
+  "title": "ProgrammedModelArtifact",
+  "type": "object"
+}

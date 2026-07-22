@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-006",
+  "title": "Memory Write Contract",
+  "description": "FR-VID-12 §4 Stage 4 — Canonical rules for writing project/composition/production/review/learning memory objects. Defines the memory domain, object type, schema path, lifecycle trigger, and validation requirement.",
+  "type": "object",
+  "required": ["memory_domain", "object_type", "description", "schema_path", "lifecycle_trigger", "validation_required"],
+  "properties": {
+    "memory_domain": {
+      "type": "string",
+      "enum": ["working", "project", "composition", "production", "review", "learning"],
+      "description": "The .cmf/memory/ subdirectory this object is written to."
+    },
+    "object_type": {
+      "type": "string",
+      "description": "Canonical memory object type name (e.g. project_profile, composition_fingerprint, scene_decision_log, review_packet, pattern_card)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this memory object captures."
+    },
+    "schema_path": {
+      "type": "string",
+      "description": "Relative path to the JSON Schema that validates this memory object."
+    },
+    "lifecycle_trigger": {
+      "type": "string",
+      "enum": [
+        "command_start",
+        "composition_output",
+        "regeneration_output",
+        "review_action",
+        "queue_state_change",
+        "render_state_change",
+        "learning_run",
+        "command_end"
+      ],
+      "description": "The lifecycle event that triggers this memory write."
+    },
+    "validation_required": {
+      "type": "boolean",
+      "description": "Whether the memory object must pass schema validation before persistence. If true and validation fails, the run ends with a warning or block depending on profile."
+    },
+    "written_by": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent types that write this memory object."
+    },
+    "persisted_at_pattern": {
+      "type": "string",
+      "description": "Glob pattern for the filesystem path where this object is persisted (e.g. .cmf/memory/composition/*.json)."
+    }
+  }
+}

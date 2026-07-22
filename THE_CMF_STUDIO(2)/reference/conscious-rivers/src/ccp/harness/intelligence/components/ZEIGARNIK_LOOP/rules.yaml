@@ -1,0 +1,43 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: ZEIGARNIK_LOOP
+enabled: true
+selection_priority:
+  tier: tactical
+  rank: 8
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - HOOK
+    - CHALLENGE
+  stages:
+    - scene_builder
+incompatibilities:
+  - resolved_setup
+  - comfort_only
+warn_conditions:
+  - metric: stakes_clarity_score
+    operator: lt
+    value: 0.6
+route_hints:
+  select:
+    - use_when_curiosity_gap_is_available
+    - use_when_loop_will_close_in_later_beat
+    - prefer_when_retention_over_clarity
+selection_conditions:
+  - if:
+      metric: arc_stage
+      operator: eq
+      value: HOOK
+    then:
+      variant: open_loop_question
+      score_adjustment: 0.1
+  - if:
+      metric: arc_stage
+      operator: eq
+      value: CHALLENGE
+    then:
+      variant: interrupted_revelation
+      score_adjustment: 0.05

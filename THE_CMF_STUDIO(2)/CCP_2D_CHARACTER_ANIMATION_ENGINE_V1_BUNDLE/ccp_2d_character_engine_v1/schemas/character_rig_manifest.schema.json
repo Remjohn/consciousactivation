@@ -1,0 +1,497 @@
+{
+  "$defs": {
+    "AssetRef": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "title": "Uri",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "mime_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mime Type"
+        },
+        "size_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size Bytes"
+        }
+      },
+      "required": [
+        "uri",
+        "sha256"
+      ],
+      "title": "AssetRef",
+      "type": "object"
+    },
+    "AttachmentPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "bone_id": {
+          "title": "Bone Id",
+          "type": "string"
+        },
+        "local_position": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Local Position",
+          "type": "array"
+        },
+        "local_rotation": {
+          "default": 0.0,
+          "title": "Local Rotation",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "bone_id",
+        "local_position"
+      ],
+      "title": "AttachmentPoint",
+      "type": "object"
+    },
+    "BoneNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bone_id": {
+          "title": "Bone Id",
+          "type": "string"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Id"
+        },
+        "x": {
+          "default": 0.0,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "default": 0.0,
+          "title": "Y",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "scale_x": {
+          "default": 1.0,
+          "title": "Scale X",
+          "type": "number"
+        },
+        "scale_y": {
+          "default": 1.0,
+          "title": "Scale Y",
+          "type": "number"
+        },
+        "shear_x_deg": {
+          "default": 0.0,
+          "title": "Shear X Deg",
+          "type": "number"
+        },
+        "shear_y_deg": {
+          "default": 0.0,
+          "title": "Shear Y Deg",
+          "type": "number"
+        },
+        "rotation_min_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rotation Min Deg"
+        },
+        "rotation_max_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rotation Max Deg"
+        },
+        "bend_direction": {
+          "anyOf": [
+            {
+              "enum": [
+                "positive",
+                "negative",
+                "either"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bend Direction"
+        }
+      },
+      "required": [
+        "bone_id"
+      ],
+      "title": "BoneNode",
+      "type": "object"
+    },
+    "ConstraintSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "constraint_id": {
+          "title": "Constraint Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "one_bone_ik",
+            "two_bone_ik",
+            "transform",
+            "path",
+            "gaze"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "bones": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Bones",
+          "type": "array"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "mix": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Mix",
+          "type": "number"
+        },
+        "softness": {
+          "default": 0.0,
+          "title": "Softness",
+          "type": "number"
+        },
+        "bend_direction": {
+          "anyOf": [
+            {
+              "enum": [
+                "positive",
+                "negative"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bend Direction"
+        }
+      },
+      "required": [
+        "constraint_id",
+        "type",
+        "bones",
+        "target"
+      ],
+      "title": "ConstraintSpec",
+      "type": "object"
+    },
+    "CoordinateSystem": {
+      "additionalProperties": false,
+      "properties": {
+        "origin": {
+          "default": "character_root",
+          "title": "Origin",
+          "type": "string"
+        },
+        "x_axis": {
+          "default": "right",
+          "enum": [
+            "right",
+            "left"
+          ],
+          "title": "X Axis",
+          "type": "string"
+        },
+        "y_axis": {
+          "default": "up",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "title": "Y Axis",
+          "type": "string"
+        },
+        "units": {
+          "default": "pixels_at_design_resolution",
+          "title": "Units",
+          "type": "string"
+        }
+      },
+      "title": "CoordinateSystem",
+      "type": "object"
+    },
+    "LayerNode": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "semantic_type": {
+          "title": "Semantic Type",
+          "type": "string"
+        },
+        "side": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "center"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Side"
+        },
+        "source_name": {
+          "title": "Source Name",
+          "type": "string"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Id"
+        },
+        "draw_order": {
+          "title": "Draw Order",
+          "type": "integer"
+        },
+        "canvas_rect": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "title": "Canvas Rect",
+          "type": "array"
+        },
+        "pivot_hint": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pivot Hint"
+        },
+        "texture_ref": {
+          "$ref": "#/$defs/AssetRef"
+        },
+        "mask_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mask Ids",
+          "type": "array"
+        },
+        "material_id": {
+          "title": "Material Id",
+          "type": "string"
+        },
+        "visible": {
+          "default": true,
+          "title": "Visible",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "layer_id",
+        "semantic_type",
+        "source_name",
+        "draw_order",
+        "canvas_rect",
+        "texture_ref",
+        "material_id"
+      ],
+      "title": "LayerNode",
+      "type": "object"
+    },
+    "SidecarRef": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "title": "Uri",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        }
+      },
+      "required": [
+        "uri",
+        "sha256"
+      ],
+      "title": "SidecarRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "rig_id": {
+      "title": "Rig Id",
+      "type": "string"
+    },
+    "coordinate_system": {
+      "$ref": "#/$defs/CoordinateSystem"
+    },
+    "setup_pose_id": {
+      "title": "Setup Pose Id",
+      "type": "string"
+    },
+    "layers": {
+      "items": {
+        "$ref": "#/$defs/LayerNode"
+      },
+      "title": "Layers",
+      "type": "array"
+    },
+    "bones": {
+      "items": {
+        "$ref": "#/$defs/BoneNode"
+      },
+      "title": "Bones",
+      "type": "array"
+    },
+    "mesh_bundle_ref": {
+      "$ref": "#/$defs/SidecarRef"
+    },
+    "shape_key_bundle_ref": {
+      "$ref": "#/$defs/SidecarRef"
+    },
+    "masks_ref": {
+      "$ref": "#/$defs/SidecarRef"
+    },
+    "constraints": {
+      "items": {
+        "$ref": "#/$defs/ConstraintSpec"
+      },
+      "title": "Constraints",
+      "type": "array"
+    },
+    "attachment_points": {
+      "items": {
+        "$ref": "#/$defs/AttachmentPoint"
+      },
+      "title": "Attachment Points",
+      "type": "array"
+    },
+    "material_profile_id": {
+      "title": "Material Profile Id",
+      "type": "string"
+    },
+    "runtime_export_refs": {
+      "items": {
+        "$ref": "#/$defs/AssetRef"
+      },
+      "title": "Runtime Export Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "rig_id",
+    "setup_pose_id",
+    "layers",
+    "bones",
+    "mesh_bundle_ref",
+    "shape_key_bundle_ref",
+    "masks_ref",
+    "material_profile_id"
+  ],
+  "title": "RigManifest",
+  "type": "object"
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-011 — I2V Generation Result",
+  "description": "Per-beat I2V generation results: video clip URLs, motion metadata, segment info, batch statistics (FR-VID-03).",
+  "type": "object",
+  "required": ["generation_batch_id", "project_id", "model_used", "vram_tier", "results", "batch_stats", "generation_timestamp"],
+  "properties": {
+    "generation_batch_id": {
+      "type": "string",
+      "pattern": "^I2V-BATCH-",
+      "description": "Unique identifier for this I2V generation batch."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "CMF project identifier."
+    },
+    "beat_cluster_id": {
+      "type": "string",
+      "description": "Beat cluster identifier."
+    },
+    "model_used": {
+      "type": "string",
+      "description": "I2V model used (e.g., stable-video-diffusion-xt, cogvideox)."
+    },
+    "vram_tier": {
+      "type": "string",
+      "enum": ["48GB"],
+      "description": "VRAM tier used. I2V requires 48GB — no 24GB fallback."
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "status"],
+        "properties": {
+          "beat_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "prompt_id": {
+            "type": "string",
+            "description": "RunningHub prompt ID for this job."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["GENERATED", "I2V_GENERATION_TIMEOUT", "I2V_ARTIFACT_DETECTED", "I2V_SUBMISSION_FAILED", "MOTION_PRESET_MISSING", "KEN_BURNS_FALLBACK", "FAILED"],
+            "description": "Job outcome status."
+          },
+          "input_keyframe_url": {
+            "type": "string",
+            "description": "URL of the source keyframe image."
+          },
+          "output_video_url": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "description": "URL of the generated video clip. Null on failure."
+          },
+          "output_resolution": {
+            "type": "string",
+            "description": "Video resolution (e.g., 1080x1920)."
+          },
+          "output_fps": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "output_duration_sec": {
+            "type": "number",
+            "minimum": 0
+          },
+          "output_frame_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "motion_parameters_applied": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "motion_bucket_id": { "type": "integer" },
+                  "motion_strength": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "camera_motion": { "type": "string" }
+                }
+              },
+              { "type": "null" }
+            ]
+          },
+          "segment_info": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["segment_index", "frame_start", "frame_end", "frame_count"],
+                  "properties": {
+                    "segment_index": { "type": "integer" },
+                    "frame_start": { "type": "integer" },
+                    "frame_end": { "type": "integer" },
+                    "frame_count": { "type": "integer" },
+                    "needs_crossfade": { "type": "boolean" }
+                  }
+                }
+              },
+              { "type": "null" }
+            ],
+            "description": "Segment details for beats split due to exceeding model max frames."
+          },
+          "generation_time_sec": {
+            "type": "number",
+            "minimum": 0
+          },
+          "workflow_id": {
+            "type": "string"
+          },
+          "seed_used": {
+            "type": "integer"
+          },
+          "vram_tier_used": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "batch_stats": {
+      "type": "object",
+      "required": ["total_beats", "generated", "failed"],
+      "properties": {
+        "total_beats": { "type": "integer", "minimum": 0 },
+        "generated": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "segmented_beats": { "type": "integer", "minimum": 0 },
+        "total_generation_time_sec": { "type": "number", "minimum": 0 },
+        "parallel_throughput": { "type": "string" }
+      }
+    },
+    "generation_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

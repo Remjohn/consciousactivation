@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf.container.contract.schema.v1",
+  "title": "CMF Container Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_id",
+    "container_id",
+    "name",
+    "version",
+    "arc_order",
+    "narrative_role",
+    "neural_targets",
+    "transportation_state",
+    "motor_resonance_target",
+    "cls_budget",
+    "asl_seconds",
+    "color_temperature_kelvin",
+    "pad_target",
+    "motion_palette",
+    "duration_share_of_video",
+    "detection_mode",
+    "prediction_error_budget",
+    "compatible_components",
+    "hard_requirements",
+    "default_component"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_id": {
+      "const": "cmf.container.contract/v1"
+    },
+    "container_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "arc_order": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "narrative_role": {
+      "type": "string"
+    },
+    "neural_targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "transportation_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "target_depth", "reentry_required"],
+      "properties": {
+        "phase": {
+          "type": "string"
+        },
+        "target_depth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "reentry_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "cls_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "max"],
+      "properties": {
+        "target": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "asl_seconds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "color_temperature_kelvin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        }
+      }
+    },
+    "pad_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pleasure", "arousal", "dominance"],
+      "properties": {
+        "pleasure": {
+          "type": "number"
+        },
+        "arousal": {
+          "type": "number"
+        },
+        "dominance": {
+          "type": "number"
+        }
+      }
+    },
+    "motion_palette": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "duration_share_of_video": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "detection_mode": {
+      "enum": ["TENSION", "VULNERABILITY", "RECOGNITION"]
+    },
+    "prediction_error_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "max", "strategy"],
+      "properties": {
+        "target": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "strategy": {
+          "type": "string"
+        }
+      }
+    },
+    "compatible_components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "hard_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "default_component": {
+      "type": "string"
+    },
+    "motor_resonance_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mirror_neuron_load", "embodied_action_type", "simulation_depth"],
+      "properties": {
+        "mirror_neuron_load": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "embodied_action_type": {
+          "enum": ["observation", "imitation", "synchrony", "still"]
+        },
+        "simulation_depth": {
+          "enum": ["shallow", "moderate", "deep"]
+        }
+      }
+    }
+  }
+}

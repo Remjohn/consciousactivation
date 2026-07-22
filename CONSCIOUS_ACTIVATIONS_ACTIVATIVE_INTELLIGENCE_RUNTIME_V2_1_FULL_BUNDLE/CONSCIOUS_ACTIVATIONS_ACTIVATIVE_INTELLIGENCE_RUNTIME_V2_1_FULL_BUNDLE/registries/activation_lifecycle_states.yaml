@@ -1,0 +1,54 @@
+schema_version: ai-v2-lifecycle-states/v1
+version: 2.0.0
+states:
+- context_locked
+- hypotheses_compiled
+- planned
+- armed
+- live
+- observed
+- resolved
+- source_packaged
+- transferred
+- produced
+- published
+- evaluated
+- learned
+- superseded
+- cancelled
+transitions:
+  context_locked:
+  - hypotheses_compiled
+  - cancelled
+  hypotheses_compiled:
+  - planned
+  - cancelled
+  planned:
+  - armed
+  - cancelled
+  armed:
+  - live
+  - cancelled
+  live:
+  - observed
+  - cancelled
+  observed:
+  - resolved
+  resolved:
+  - source_packaged
+  - cancelled
+  source_packaged:
+  - transferred
+  transferred:
+  - produced
+  produced:
+  - published
+  - evaluated
+  published:
+  - evaluated
+  evaluated:
+  - learned
+  - superseded
+  learned:
+  - superseded
+  superseded: []

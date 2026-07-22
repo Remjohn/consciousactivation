@@ -1,0 +1,33 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-005
+enabled: true
+priority:
+  tier: quality
+  rank: 2
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: critical_content_in_bottom_zone
+    operator: eq
+    value: true
+  - metric: critical_content_in_right_margin
+    operator: eq
+    value: true
+route_hints:
+  correct:
+    - move_content_up
+    - clear_platform_ui_zone

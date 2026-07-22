@@ -1,0 +1,77 @@
+schema_version: conscious-activations-source-traceability/v3.3
+traceability_id: CA-P03-TRACE-TS-VID-002-2026-07-22
+spec_id: TS-VID-002
+target_sha256: ea8f83e732ac9da4ff8c31816ba9ad7e6c6a8bf866b1b6a5ae4c3bb4c9bc9b13
+authority_state: CANDIDATE_NOT_CURRENT
+specification_work_authorized: true
+build_authority: false
+controlling_requirements:
+  - requirement_id: FR-069
+    owner: Atomic Harness Pipeline
+    story_id: ST-04.02
+    source: F12
+    spec_sections: ['2', '3.5', '5.5', '6.5', '6.7', '6.8', '9', '10']
+    behavior: Every selected A-roll span preserves exact source lineage, valid boundaries, declared function and recomputable output time.
+    denial_evidence: WORD_BOUNDARY_INVALID, AUDIO_BOUNDARY_INVALID, SOURCE_OUTPUT_MAP_DISCONTINUITY
+  - requirement_id: FR-139
+    owner: Atomic Harness Pipeline
+    story_id: ST-04.02
+    source: F24
+    spec_sections: ['2', '3.2', '5.3', '6.7', '9', '10']
+    behavior: Approved original source remains the mandatory A-roll spine; generated/paraphrased talking-head cannot substitute.
+    denial_evidence: GENERATED_A_ROLL_FORBIDDEN, UNSUPPORTED_PARAPHRASE_AS_SOURCE, A_ROLL_SPINE_MISSING
+  - requirement_id: FR-140
+    owner: Atomic Harness Pipeline
+    story_id: ST-04.02
+    source: F24
+    spec_sections: ['3.3', '3.6', '3.7', '5.4', '6.3', '6.4', '6.6', '9', '10']
+    behavior: A bounded portfolio uses approved moments/context/speakers/events and cannot synthesize unsupported quotes or self-approve.
+    denial_evidence: CONTEXT_MEANING_CHANGED, UNSUPPORTED_PARAPHRASE_AS_SOURCE, GENERATOR_EVALUATOR_NOT_INDEPENDENT
+  - requirement_id: FR-141
+    owner: Atomic Harness Pipeline
+    story_id: ST-04.02
+    source: F24
+    spec_sections: ['3.5', '5.5', '6.4', '6.5', '6.7', '6.8', '9', '10']
+    behavior: Cuts use exact word or permitted silence/audio-event boundaries and carry downstream visible-continuity evidence requirements.
+    denial_evidence: WORD_BOUNDARY_INVALID, AUDIO_BOUNDARY_INVALID, PADDING_EXCEEDS_AUTHORITY
+story_traceability:
+  - story_id: ST-04.02
+    name: Talking-head A-roll selection and word-safe EDL
+    primary_example: Approved Expression Moment compiles to valid source boundaries and exactly recomputable output duration.
+    adversarial_example: Fully generated paraphrase labeled interview-derived fails A-roll eligibility.
+    recovery: Only the affected selection case and dependency descendants rerun.
+    evidence_sections: ['5', '6', '8', '9', '10']
+ownership_traceability:
+  interview_expression_owned:
+    - source package and immutable media evidence
+    - words, phrases, speakers, audio events and visual references
+    - Reaction Receipt and Expression Moment boundary, meaning, approval and source scope
+  air_owned:
+    - Activative purpose and semantic production meaning
+    - Primitive and archetype coalition
+    - role-tension, Matrix, Final Script and Activation Transfer
+  builder_harness_owned:
+    - category/profile, sequence role, target and governing constraints
+  pipeline_owned:
+    - bounded A-roll eligibility and candidate orchestration
+    - independent technical evaluation and authorized decision record
+    - A-roll EDL, source-output time map and successor VideoEditProgram version
+  forbidden_pipeline_mutations:
+    - interview source classification, provenance, evidence or approval
+    - AIR semantic program meaning
+    - Builder Harness authority
+upstream_interface_traceability:
+  - spec_id: TS-VID-001
+    sha256: cfa33fdc9fcfc0a98c1b73f9ef6ed970b906774f5f87deb33fbde8fd385c2cd8
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    admitted_types: [SourceMediaTechnicalRegistration, RationalTime, TimeInterval, VideoEditProgram, PRIMARY_A_ROLL_SPINE, SourceToOutputTimeMap]
+  - spec_id: TS-INT-004
+    sha256: e6147fc8ca8f8d6d3a0ff8954336fe9b844c8e18e45c41b330c558f7d87a0d5a
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    admitted_types: [ExpressionSourceSpan, ExpressionMomentBoundary, ExpressionMoment, ExpressionMomentApprovalReceipt]
+source_disposition_summary:
+  required_authority_or_unique_evidence_used: [SRC-INT-001, SRC-LEG-006, SRC-LEG-007]
+  deferred_reference_only_not_used_for_claims: [SRC-AM-002, SRC-EXT-017, SRC-EXT-018, SRC-EXT-019, SRC-EXT-020, SRC-EXT-023, SRC-EXT-024]
+  unresolved_required_sources: []
+claim_ceiling: WRITTEN_PENDING_AUDIT_NOT_BUILD_READY
+result: PASS

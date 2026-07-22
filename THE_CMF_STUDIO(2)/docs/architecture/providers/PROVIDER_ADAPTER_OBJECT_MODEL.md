@@ -1,0 +1,26 @@
+# Provider Adapter Object Model
+
+Core contracts:
+
+```text
+ProviderAdapterConfig
+ProviderCredentialRef
+ProviderCapabilityProfile
+ProviderExecutionRequest
+ProviderAssetInput
+ProviderPromptContract
+ProviderOutputRequirement
+ProviderPreflightReport
+ProviderCostEstimate
+ProviderSubmissionReceipt
+ProviderPollReceipt
+ProviderOutputAsset
+ProviderJobReceipt
+ProviderErrorReceipt
+ProviderRetryPolicy
+ProviderDownloadReceipt
+ProviderModerationReceipt
+ProviderAdapterHealth
+```
+
+ProviderExecutionRequest is the only valid provider entry point. Adapters should not accept loose prompts from UI or agents.

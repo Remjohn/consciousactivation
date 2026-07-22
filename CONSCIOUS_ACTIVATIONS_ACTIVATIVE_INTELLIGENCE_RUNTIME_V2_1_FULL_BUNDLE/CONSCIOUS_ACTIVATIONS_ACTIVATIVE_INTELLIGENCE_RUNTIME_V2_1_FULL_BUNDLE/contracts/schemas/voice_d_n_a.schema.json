@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "brand_context_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "emotional_distance": {
+      "title": "Emotional Distance",
+      "type": "string"
+    },
+    "metaphor_range": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Metaphor Range",
+      "type": "array"
+    },
+    "prohibited_centroid_patterns": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Prohibited Centroid Patterns",
+      "type": "array"
+    },
+    "rhythm_patterns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rhythm Patterns",
+      "type": "array"
+    },
+    "sentence_pressure_patterns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Sentence Pressure Patterns",
+      "type": "array"
+    },
+    "source_evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Source Evidence Refs",
+      "type": "array"
+    },
+    "specificity_patterns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Specificity Patterns",
+      "type": "array"
+    },
+    "stance_patterns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Stance Patterns",
+      "type": "array"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "vocabulary_patterns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Vocabulary Patterns",
+      "type": "array"
+    },
+    "voice_dna_id": {
+      "title": "Voice Dna Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "voice_dna_id",
+    "version",
+    "brand_context_ref",
+    "vocabulary_patterns",
+    "rhythm_patterns",
+    "sentence_pressure_patterns",
+    "stance_patterns",
+    "specificity_patterns",
+    "metaphor_range",
+    "emotional_distance",
+    "source_evidence_refs"
+  ],
+  "title": "VoiceDNA",
+  "type": "object"
+}

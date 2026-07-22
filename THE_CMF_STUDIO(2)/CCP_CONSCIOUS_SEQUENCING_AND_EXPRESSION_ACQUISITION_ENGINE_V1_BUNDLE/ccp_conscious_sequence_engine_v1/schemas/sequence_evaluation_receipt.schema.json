@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "SequenceStageScore": {
+      "additionalProperties": false,
+      "properties": {
+        "stage": {
+          "$ref": "#/$defs/ViewerState"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "dimensions": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "stage",
+        "score",
+        "dimensions"
+      ],
+      "title": "SequenceStageScore",
+      "type": "object"
+    },
+    "ViewerState": {
+      "enum": [
+        "perceptual_entry",
+        "relevant_open_question",
+        "active_prediction",
+        "truthful_payoff",
+        "human_affinity",
+        "expected_future_value"
+      ],
+      "title": "ViewerState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "sequence_program_id": {
+      "title": "Sequence Program Id",
+      "type": "string"
+    },
+    "sequence_program_sha256": {
+      "title": "Sequence Program Sha256",
+      "type": "string"
+    },
+    "stage_scores": {
+      "items": {
+        "$ref": "#/$defs/SequenceStageScore"
+      },
+      "title": "Stage Scores",
+      "type": "array"
+    },
+    "loop_closure_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Loop Closure Score",
+      "type": "number"
+    },
+    "source_grounding_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Source Grounding Score",
+      "type": "number"
+    },
+    "voice_dna_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Voice Dna Score",
+      "type": "number"
+    },
+    "negative_space_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Negative Space Score",
+      "type": "number"
+    },
+    "doctrine_alignment_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Doctrine Alignment Score",
+      "type": "number"
+    },
+    "confusion_penalty": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confusion Penalty",
+      "type": "number"
+    },
+    "manipulation_risk": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Manipulation Risk",
+      "type": "number"
+    },
+    "overall_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Overall Score",
+      "type": "number"
+    },
+    "hard_failures": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Hard Failures",
+      "type": "array"
+    },
+    "operator_status": {
+      "enum": [
+        "approved",
+        "needs_revision",
+        "rejected"
+      ],
+      "title": "Operator Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "sequence_program_id",
+    "sequence_program_sha256",
+    "stage_scores",
+    "loop_closure_score",
+    "source_grounding_score",
+    "voice_dna_score",
+    "negative_space_score",
+    "doctrine_alignment_score",
+    "confusion_penalty",
+    "manipulation_risk",
+    "overall_score",
+    "operator_status"
+  ],
+  "title": "SequenceEvaluationReceipt",
+  "type": "object"
+}

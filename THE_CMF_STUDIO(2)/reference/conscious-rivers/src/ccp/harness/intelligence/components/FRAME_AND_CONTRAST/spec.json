@@ -1,0 +1,49 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "FRAME_AND_CONTRAST",
+  "scene_number": 9,
+  "name": "Frame and Contrast",
+  "version": "1.0",
+  "function": "Binary framing scene that makes their way versus your way unmistakable.",
+  "compatible_containers": [
+    "CHALLENGE"
+  ],
+  "cls_footprint": {
+    "typical": 2.5,
+    "max": 3.0
+  },
+  "required_asset_types": [
+    "A_ROLL",
+    "B_ROLL",
+    "TEXT",
+    "SPLIT_SCREEN"
+  ],
+  "template_variants": [
+    "their_way_vs_your_way",
+    "before_after_conflict",
+    "choice_fork"
+  ],
+  "effect_dependencies": [
+    "split_screen",
+    "contrast_text"
+  ],
+  "selection_signals": [
+    "binary_emotion",
+    "enemy_naming",
+    "side_taking"
+  ],
+  "audio_profile": {
+    "score_role": "polarize",
+    "energy_band": "medium_high",
+    "mode": "adversarial",
+    "prosodic_hint": "declarative_binary",
+    "prosodic_contour_target": {
+      "pitch_shape": "level",
+      "stress_placement": "initial",
+      "rate_wpm": { "min": 140, "max": 170 },
+      "emotional_register": "authority"
+    }
+  },
+  "fallback_behavior": "Reduce to a challenge scene with explicit verbal contrast."
+}

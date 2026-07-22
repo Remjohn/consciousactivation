@@ -1,0 +1,162 @@
+{
+  "asset_id": "LQRT-SCENE-BUILDER-v1",
+  "version": "1.0.0",
+  "compile_target": "SCENE_BUILDER",
+  "entrypoint": "layered_questions_eval",
+  "inputs": [
+    {
+      "name": "scene_packet",
+      "required": true,
+      "description": "Arc stage, scene purpose, target CLS, duration, selected subsystems, and candidate scene parameters."
+    },
+    {
+      "name": "neighbor_context",
+      "required": true,
+      "description": "Previous and next beat metadata used for parameter unpredictability and continuity checks."
+    },
+    {
+      "name": "project_evidence",
+      "required": true,
+      "description": "Quotes, transcript excerpts, research notes, project negative space, and approved brand constraints."
+    }
+  ],
+  "derived_features": [
+    {
+      "feature_id": "saturation_coverage",
+      "method": "count_required_evidence_sources",
+      "description": "Measures whether the candidate scene is grounded in transcript, project DNA, and subsystem evidence rather than stylistic guesswork."
+    },
+    {
+      "feature_id": "dominant_detection_mode",
+      "method": "classify_scene_trigger",
+      "description": "Classifies the scene as tension, vulnerability, or recognition dominant based on arc role and supporting evidence."
+    },
+    {
+      "feature_id": "compression_density_score",
+      "method": "score_parameter_compression",
+      "description": "Measures whether raw parameters have been compressed into a coherent Layer-2 directive rather than a loose list of effects."
+    },
+    {
+      "feature_id": "parameter_delta_from_previous",
+      "method": "compare_neighbor_parameters",
+      "description": "Calculates whether at least one meaningful parameter expectation is broken relative to the previous beat."
+    }
+  ],
+  "detection_modes": [
+    {
+      "mode": "TENSION",
+      "activation_rule": "Activate when the scene exists to violate expectation, force a turn, or produce prediction error.",
+      "minimum_confidence": 0.65,
+      "output_fields": ["tension_source", "prediction_break", "arc_shift"]
+    },
+    {
+      "mode": "VULNERABILITY",
+      "activation_rule": "Activate when the scene must expose cost, softness, or emotional nakedness through framing, color, pace, or sound.",
+      "minimum_confidence": 0.65,
+      "output_fields": ["cost_signal", "intimacy_anchor", "warmth_strategy"]
+    },
+    {
+      "mode": "RECOGNITION",
+      "activation_rule": "Activate when the scene must make the audience feel seen through accurate specificity and culturally precise detail.",
+      "minimum_confidence": 0.65,
+      "output_fields": ["recognition_detail", "tribe_specificity", "real_world_anchor"]
+    }
+  ],
+  "laws": [
+    {
+      "law_id": "LAW_1",
+      "name": "Saturation Before Generation",
+      "purpose": "Block scenes that are not grounded in project evidence.",
+      "runtime_stage": "pre-compose",
+      "checks": [
+        {
+          "check_id": "L1-REQ-SOURCES",
+          "kind": "coverage",
+          "field": "project_evidence.source_types",
+          "operator": "contains_all",
+          "value": ["transcript", "project_dna", "subsystem_evidence"],
+          "failure_code": "LQ_SATURATION_MISSING",
+          "severity": "FAIL",
+          "repair_hint": "Load transcript evidence, strategy context, and at least one subsystem rationale before composing."
+        }
+      ]
+    },
+    {
+      "law_id": "LAW_2",
+      "name": "Three-Mode Emotional Detection",
+      "purpose": "Force the scene to name which irreducible trigger it is serving.",
+      "runtime_stage": "pre-compose",
+      "checks": [
+        {
+          "check_id": "L2-MODE-CLASSIFIED",
+          "kind": "classification",
+          "field": "dominant_detection_mode.confidence",
+          "operator": ">=",
+          "value": 0.65,
+          "failure_code": "LQ_MODE_AMBIGUOUS",
+          "severity": "FAIL",
+          "repair_hint": "Clarify whether the beat is driven by tension, vulnerability, or recognition."
+        }
+      ]
+    },
+    {
+      "law_id": "LAW_3",
+      "name": "Compression, Not Elimination",
+      "purpose": "Ensure the scene resolves into a small number of dense directives rather than many disconnected settings.",
+      "runtime_stage": "pre-compose",
+      "checks": [
+        {
+          "check_id": "L3-DENSITY-SCORE",
+          "kind": "threshold",
+          "field": "compression_density_score",
+          "operator": ">=",
+          "value": 0.70,
+          "failure_code": "LQ_DENSITY_TOO_LOW",
+          "severity": "FAIL",
+          "repair_hint": "Collapse the candidate into no more than three scene-level directives with explicit trigger intent."
+        }
+      ]
+    },
+    {
+      "law_id": "LAW_4",
+      "name": "Unpredictability Gate",
+      "purpose": "Require at least one meaningful expectation break relative to adjacent beats.",
+      "runtime_stage": "pre-compose",
+      "checks": [
+        {
+          "check_id": "L4-PARAMETER-DELTA",
+          "kind": "delta",
+          "field": "parameter_delta_from_previous.changed_axes",
+          "operator": ">=",
+          "value": 1,
+          "failure_code": "LQ_PREDICTABLE_BEAT",
+          "severity": "FAIL",
+          "repair_hint": "Change at least one of color temperature, motion profile, pacing, or framing expectation relative to the previous beat."
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "pass_score": 0.80,
+    "warn_score": 0.68,
+    "weights": {
+      "LAW_1": 0.25,
+      "LAW_2": 0.20,
+      "LAW_3": 0.25,
+      "LAW_4": 0.30
+    }
+  },
+  "output_contract": {
+    "result_schema": "DEP-VID-034",
+    "decision_field": "decision",
+    "required_fields": [
+      "layered_questions.score",
+      "layered_questions.dominant_mode",
+      "layered_questions.law_results"
+    ]
+  },
+  "failure_policy": {
+    "on_warn": "REVISE",
+    "on_fail": "BLOCK"
+  }
+}

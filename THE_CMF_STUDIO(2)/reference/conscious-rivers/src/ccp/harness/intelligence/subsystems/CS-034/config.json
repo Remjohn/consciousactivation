@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-034",
+  "name": "Event Schema Activation Monitor",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Zacks Event Segmentation Theory",
+    "Narrative Schema Theory",
+    "Metz Film Narratology",
+    "Schema Congruity Theory"
+  ],
+  "inputs": [
+    "event_boundary_count",
+    "schema_familiarity_score",
+    "schema_violation_timing",
+    "boundary_spacing_seconds",
+    "narrative_segment_count"
+  ],
+  "outputs": [
+    "schema_activation_score",
+    "boundary_density_verdict",
+    "segmentation_advice",
+    "violation_timing_list"
+  ],
+  "thresholds": {
+    "min_schema_activation_score": 0.40,
+    "max_boundary_density_per_beat": 0.50,
+    "min_boundary_spacing_seconds": 1.5,
+    "require_schema_establishment": true,
+    "block_threshold": {
+      "schema_activation_score": 0.30,
+      "boundary_density_per_beat": 0.70
+    }
+  },
+  "default_action_on_fail": "REVISE"
+}

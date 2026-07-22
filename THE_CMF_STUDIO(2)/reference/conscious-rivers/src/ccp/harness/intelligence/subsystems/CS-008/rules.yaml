@@ -1,0 +1,42 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-008
+enabled: true
+priority:
+  tier: encoding
+  rank: 1
+enforcement:
+  mode: block_on_fail
+  default_result: BLOCK
+applies_to:
+  containers:
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+coordinates_with:
+  - CS-024
+  - CS-032
+block_conditions:
+  - metric: adjacent_cls_transition
+    operator: eq
+    value:
+      - 4
+      - 4
+  - metric: time_to_receiving_beat_seconds
+    operator: lt
+    value: 2
+  - metric: time_to_receiving_beat_seconds
+    operator: gt
+    value: 5
+  - metric: receiving_cls
+    operator: gt
+    value: 2
+route_hints:
+  recovery_paths:
+    - insert_pause_container
+    - extend_vulnerable_hold
+    - reduce_followup_cls

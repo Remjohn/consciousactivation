@@ -1,0 +1,261 @@
+{
+  "$defs": {
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "NarrativeState": {
+      "enum": [
+        "cinematic",
+        "vulnerability",
+        "authority",
+        "teaching",
+        "invitation"
+      ],
+      "title": "NarrativeState",
+      "type": "string"
+    },
+    "ReactionObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "inferred_interpretations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Inferred Interpretations",
+          "type": "array"
+        },
+        "modality": {
+          "enum": [
+            "lexical",
+            "vocal",
+            "visual",
+            "temporal",
+            "interactional",
+            "technical"
+          ],
+          "title": "Modality",
+          "type": "string"
+        },
+        "observation_confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Observation Confidence",
+          "type": "number"
+        },
+        "observation_id": {
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "observed_value": {
+          "title": "Observed Value",
+          "type": "string"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        "time_end_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Time End Ms"
+        },
+        "time_start_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Time Start Ms"
+        }
+      },
+      "required": [
+        "observation_id",
+        "modality",
+        "source_ref",
+        "observed_value",
+        "observation_confidence"
+      ],
+      "title": "ReactionObservation",
+      "type": "object"
+    },
+    "ReactionOutcome": {
+      "enum": [
+        "anchor_hit",
+        "partial_anchor_hit",
+        "unexpected_edge",
+        "state_transition",
+        "complete_landing",
+        "flat_answer",
+        "topic_escape",
+        "defensive_reaction",
+        "counteractivation",
+        "activation_null",
+        "observation_failure",
+        "operator_interruption"
+      ],
+      "title": "ReactionOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "anchor_status": {
+      "enum": [
+        "none",
+        "partial",
+        "hit",
+        "unexpected"
+      ],
+      "title": "Anchor Status",
+      "type": "string"
+    },
+    "call_id": {
+      "title": "Call Id",
+      "type": "string"
+    },
+    "contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "epistemic_state": {
+      "$ref": "#/$defs/EpistemicState"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "interpretation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Interpretation"
+    },
+    "next_action_recommendation": {
+      "title": "Next Action Recommendation",
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/ReactionObservation"
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "operator_resolution_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "outcome": {
+      "$ref": "#/$defs/ReactionOutcome"
+    },
+    "post_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NarrativeState"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pre_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NarrativeState"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "contract_ref",
+    "call_id",
+    "pre_state",
+    "observations",
+    "outcome",
+    "post_state",
+    "anchor_status",
+    "epistemic_state",
+    "next_action_recommendation",
+    "evidence_refs",
+    "created_at"
+  ],
+  "title": "ReactionReceipt",
+  "type": "object"
+}

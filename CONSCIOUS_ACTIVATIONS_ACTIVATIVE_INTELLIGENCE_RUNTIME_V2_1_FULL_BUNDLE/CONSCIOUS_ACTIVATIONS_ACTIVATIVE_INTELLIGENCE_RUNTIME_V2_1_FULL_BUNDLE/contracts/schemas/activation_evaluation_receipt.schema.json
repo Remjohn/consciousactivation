@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "ActivationDomain": {
+      "enum": [
+        "source",
+        "relationship",
+        "audience"
+      ],
+      "title": "ActivationDomain",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dimension_scores": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Dimension Scores",
+      "type": "object"
+    },
+    "domain": {
+      "$ref": "#/$defs/ActivationDomain"
+    },
+    "evaluated_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "gate_results": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Gate Results",
+      "type": "object"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "responsible_failure_layer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Responsible Failure Layer"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "concerns",
+        "fail",
+        "human_resolution_required"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    },
+    "wrong_readings": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Readings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "evaluated_ref",
+    "domain",
+    "gate_results",
+    "dimension_scores",
+    "verdict",
+    "evidence_refs",
+    "created_at"
+  ],
+  "title": "ActivationEvaluationReceipt",
+  "type": "object"
+}

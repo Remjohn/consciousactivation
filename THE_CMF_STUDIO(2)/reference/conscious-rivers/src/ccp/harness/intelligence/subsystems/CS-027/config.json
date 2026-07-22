@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-027",
+  "name": "Temporal Binding",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Mayer's Principles",
+    "Audiovisual temporal binding research"
+  ],
+  "inputs": [
+    "phonetic_onset_ms",
+    "graphic_first_frame_ms",
+    "waveform_peak_ms",
+    "event_type",
+    "event_salience"
+  ],
+  "outputs": [
+    "binding_score",
+    "timing_offset_ms",
+    "verdict",
+    "violations"
+  ],
+  "thresholds": {
+    "preferred_offset_ms": {
+      "min": -20,
+      "max": 160
+    },
+    "hard_late_failure_ms": 300,
+    "visual_lead_preferred": true
+  },
+  "default_action_on_fail": "REVISE"
+}

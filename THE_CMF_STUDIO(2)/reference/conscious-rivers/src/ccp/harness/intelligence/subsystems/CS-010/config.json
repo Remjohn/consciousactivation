@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-010",
+  "name": "Cross-Modal Audio Primer",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Kuleshov",
+    "Audio-Visual Congruence"
+  ],
+  "inputs": [
+    "audio_key_mode",
+    "timbral_register",
+    "beat_map",
+    "scene_intent",
+    "transition_timing"
+  ],
+  "outputs": [
+    "audio_first_priming_plan",
+    "congruence_rating",
+    "verdict"
+  ],
+  "thresholds": {
+    "preferred_audio_preload_ms": {
+      "min": 150,
+      "max": 500
+    },
+    "prefer_j_cut": true,
+    "avoid_mode_conflict": true
+  },
+  "default_action_on_fail": "REVISE"
+}

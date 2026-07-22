@@ -1,0 +1,151 @@
+{
+  "$defs": {
+    "ActivationDirection": {
+      "enum": [
+        "mirror",
+        "target",
+        "tribe",
+        "moral",
+        "aspiration",
+        "future_loss",
+        "grief",
+        "nostalgia",
+        "contradiction",
+        "curiosity"
+      ],
+      "title": "ActivationDirection",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "attention_sequence": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Attention Sequence",
+      "type": "array"
+    },
+    "audience_segment": {
+      "title": "Audience Segment",
+      "type": "string"
+    },
+    "directions": {
+      "items": {
+        "$ref": "#/$defs/ActivationDirection"
+      },
+      "title": "Directions",
+      "type": "array"
+    },
+    "domain": {
+      "const": "audience",
+      "default": "audience",
+      "title": "Domain",
+      "type": "string"
+    },
+    "emotional_load": {
+      "title": "Emotional Load",
+      "type": "string"
+    },
+    "format_harness": {
+      "title": "Format Harness",
+      "type": "string"
+    },
+    "freshness_profile_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "participation_path": {
+      "title": "Participation Path",
+      "type": "string"
+    },
+    "pattern_interrupt": {
+      "title": "Pattern Interrupt",
+      "type": "string"
+    },
+    "pattern_match": {
+      "title": "Pattern Match",
+      "type": "string"
+    },
+    "program_id": {
+      "title": "Program Id",
+      "type": "string"
+    },
+    "roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "array"
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "stance": {
+      "title": "Stance",
+      "type": "string"
+    },
+    "transfer_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "program_id",
+    "transfer_contract_ref",
+    "source_package_ref",
+    "audience_segment",
+    "format_harness",
+    "directions",
+    "roles",
+    "stance",
+    "emotional_load",
+    "pattern_match",
+    "pattern_interrupt",
+    "attention_sequence",
+    "participation_path",
+    "wrong_reading_locks"
+  ],
+  "title": "DerivativeActivationProgram",
+  "type": "object"
+}

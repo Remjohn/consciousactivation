@@ -1,0 +1,248 @@
+{
+  "global": {
+    "hard_fail_conditions": [
+      "headline_unreadable_at_25_percent_scale",
+      "brand_context_version_missing",
+      "source_quote_or_stat_unverified",
+      "more_than_three_competing_focal_points",
+      "text_overflow",
+      "forbidden_visual_style",
+      "identity_mismatch",
+      "unsafe_or_stereotyping_micro_semiotic_anchor"
+    ],
+    "dimensions": {
+      "hook_clarity": 0.12,
+      "message_legibility": 0.15,
+      "composition_hierarchy": 0.13,
+      "archetype_fit": 0.1,
+      "derivative_fit": 0.07,
+      "brand_consistency": 0.12,
+      "primitive_compliance": 0.1,
+      "negative_space_compliance": 0.08,
+      "micro_semiotic_anchor_quality": 0.05,
+      "source_fidelity": 0.05,
+      "platform_fit": 0.03
+    },
+    "minimum_overall_score": 0.84,
+    "human_review_required": true
+  },
+  "profiles": {
+    "assertion": {
+      "extra_weights": {
+        "immediate_comprehension": 0.2,
+        "claim_force": 0.15,
+        "visual_support_not_distraction": 0.1
+      },
+      "threshold": 0.86
+    },
+    "quote_source_fidelity": {
+      "extra_weights": {
+        "quote_accuracy": 0.25,
+        "speaker_attribution": 0.15,
+        "emotional_crop_fit": 0.1
+      },
+      "threshold": 0.9,
+      "hard_fail": [
+        "quote_not_verbatim_or_approved",
+        "wrong_speaker"
+      ]
+    },
+    "social_source_fidelity": {
+      "extra_weights": {
+        "social_shell_accuracy": 0.1,
+        "source_provenance": 0.25,
+        "response_context_clarity": 0.1
+      },
+      "threshold": 0.9,
+      "hard_fail": [
+        "fabricated_post_or_handle_without_label"
+      ]
+    },
+    "conceptual_metaphor": {
+      "extra_weights": {
+        "metaphor_comprehension": 0.25,
+        "semantic_alignment": 0.2,
+        "visual_originality": 0.08
+      },
+      "threshold": 0.86
+    },
+    "emotional_scene": {
+      "extra_weights": {
+        "emotional_accuracy": 0.25,
+        "humanity_not_melodrama": 0.15,
+        "identity_resonance": 0.1
+      },
+      "threshold": 0.86
+    },
+    "urgency": {
+      "extra_weights": {
+        "stakes_clarity": 0.2,
+        "ethical_restraint": 0.2,
+        "actionability": 0.1
+      },
+      "threshold": 0.88,
+      "hard_fail": [
+        "fear_without_mechanism_or_path"
+      ]
+    },
+    "comparison": {
+      "extra_weights": {
+        "binary_clarity": 0.25,
+        "option_parity": 0.15,
+        "difference_visibility": 0.15
+      },
+      "threshold": 0.88
+    },
+    "comparison_dark": {
+      "extra_weights": {
+        "binary_clarity": 0.25,
+        "dramatic_legibility": 0.12,
+        "option_parity": 0.15
+      },
+      "threshold": 0.88
+    },
+    "poll": {
+      "extra_weights": {
+        "question_clarity": 0.22,
+        "option_distinctness": 0.2,
+        "vote_impulse": 0.15
+      },
+      "threshold": 0.88
+    },
+    "poll_identity": {
+      "extra_weights": {
+        "identity_relevance": 0.2,
+        "option_distinctness": 0.2,
+        "non_manipulative_choice": 0.15
+      },
+      "threshold": 0.88
+    },
+    "scorecard": {
+      "extra_weights": {
+        "feature_alignment": 0.2,
+        "comparability": 0.18,
+        "data_or_claim_accuracy": 0.2
+      },
+      "threshold": 0.9
+    },
+    "debate": {
+      "extra_weights": {
+        "position_clarity": 0.2,
+        "comment_impulse": 0.15,
+        "fair_framing": 0.15
+      },
+      "threshold": 0.87
+    },
+    "cartoon_moral": {
+      "extra_weights": {
+        "scene_moral_coherence": 0.25,
+        "single_reading_without_caption": 0.12,
+        "tone_fit": 0.1
+      },
+      "threshold": 0.86
+    },
+    "character_thesis": {
+      "extra_weights": {
+        "character_archetype_legibility": 0.2,
+        "thesis_fit": 0.2,
+        "identity_consistency": 0.15
+      },
+      "threshold": 0.87
+    },
+    "object_metaphor": {
+      "extra_weights": {
+        "object_metaphor_clarity": 0.25,
+        "visual_proportion": 0.1,
+        "teaching_payoff": 0.15
+      },
+      "threshold": 0.86
+    },
+    "framework_diptych": {
+      "extra_weights": {
+        "panel_comparability": 0.22,
+        "caption_scanability": 0.15,
+        "contrast_payoff": 0.15
+      },
+      "threshold": 0.88
+    },
+    "framework_triptych": {
+      "extra_weights": {
+        "sequence_clarity": 0.22,
+        "panel_scanability": 0.18,
+        "density_control": 0.12
+      },
+      "threshold": 0.88
+    },
+    "framework_quad": {
+      "extra_weights": {
+        "grid_clarity": 0.22,
+        "panel_independence": 0.15,
+        "density_control": 0.15
+      },
+      "threshold": 0.89
+    },
+    "progression": {
+      "extra_weights": {
+        "directionality": 0.22,
+        "milestone_clarity": 0.18,
+        "journey_payoff": 0.15
+      },
+      "threshold": 0.88
+    },
+    "relational": {
+      "extra_weights": {
+        "emotional_precision": 0.22,
+        "non_cliche_language": 0.15,
+        "scene_relevance": 0.15
+      },
+      "threshold": 0.87
+    },
+    "two_scenarios": {
+      "extra_weights": {
+        "branch_clarity": 0.22,
+        "shared_decision_point": 0.15,
+        "consequence_difference": 0.18
+      },
+      "threshold": 0.88
+    },
+    "sports_stats": {
+      "extra_weights": {
+        "stat_accuracy": 0.3,
+        "photo_identity_accuracy": 0.15,
+        "scan_speed": 0.12
+      },
+      "threshold": 0.92,
+      "hard_fail": [
+        "unverified_stat",
+        "wrong_player_or_team"
+      ]
+    },
+    "sports_quote": {
+      "extra_weights": {
+        "quote_accuracy": 0.25,
+        "event_context": 0.15,
+        "photo_relevance": 0.15
+      },
+      "threshold": 0.91
+    },
+    "promo": {
+      "extra_weights": {
+        "metadata_accuracy": 0.25,
+        "cta_clarity": 0.15,
+        "portrait_quality": 0.12
+      },
+      "threshold": 0.91,
+      "hard_fail": [
+        "wrong_date_time_or_platform"
+      ]
+    },
+    "promo_minimal": {
+      "extra_weights": {
+        "metadata_accuracy": 0.25,
+        "premium_whitespace": 0.15,
+        "cta_clarity": 0.12
+      },
+      "threshold": 0.9
+    }
+  }
+}

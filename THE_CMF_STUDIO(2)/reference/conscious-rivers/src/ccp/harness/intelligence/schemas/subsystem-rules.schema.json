@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf.subsystem.rules.schema.v1",
+  "title": "CMF Subsystem Rules",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_id",
+    "subsystem_id",
+    "enabled",
+    "priority",
+    "enforcement",
+    "applies_to"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string"
+    },
+    "schema_id": {
+      "const": "cmf.subsystem.rules/v1"
+    },
+    "subsystem_id": {
+      "type": "string",
+      "pattern": "^CS-[0-9]{3}$"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "priority": {
+      "type": "object",
+      "required": ["tier", "rank"],
+      "properties": {
+        "tier": {
+          "type": "string",
+          "enum": ["survival", "encoding", "recall", "quality", "polish"]
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "enforcement": {
+      "type": "object",
+      "required": ["mode", "default_result"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["pass_on_fail", "revise_on_fail", "block_on_fail"]
+        },
+        "default_result": {
+          "type": "string",
+          "enum": ["PASS", "REVISE", "BLOCK"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "applies_to": {
+      "type": "object",
+      "required": ["containers", "stages"],
+      "properties": {
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

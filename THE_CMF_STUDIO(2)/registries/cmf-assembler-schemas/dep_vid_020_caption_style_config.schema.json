@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-020 — Caption Style Configuration",
+  "description": "Configuration for caption style, font, colors, and positioning. Consumed by FR-VID-07 Caption & Typography Engine.",
+  "type": "object",
+  "required": ["style_preset", "font_family", "font_size_base", "color_theme"],
+  "properties": {
+    "style_preset": {
+      "type": "string",
+      "enum": ["hormozi", "capcut", "cinematic", "minimal"],
+      "description": "Caption animation style."
+    },
+    "font_family": {
+      "type": "string",
+      "enum": ["Inter", "Outfit", "Montserrat"],
+      "description": "Google Font family."
+    },
+    "font_size_base": {
+      "type": "integer",
+      "minimum": 12,
+      "maximum": 120,
+      "description": "Base font size in pixels."
+    },
+    "font_size_emphasis": {
+      "type": "integer",
+      "minimum": 12,
+      "maximum": 180,
+      "description": "Emphasis font size in pixels (typically 150% of base)."
+    },
+    "color_theme": {
+      "type": "object",
+      "required": ["base_text_color", "emphasis_color", "shadow_color"],
+      "properties": {
+        "base_text_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Hex color for normal text, from PSSL foundation_hue."
+        },
+        "emphasis_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Hex color for emphasized words, complementary hue."
+        },
+        "shadow_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Hex color for text shadow (readability)."
+        }
+      }
+    },
+    "safe_zone": {
+      "type": "object",
+      "properties": {
+        "x_min": { "type": "number", "default": 0.10 },
+        "x_max": { "type": "number", "default": 0.90 },
+        "y_min": { "type": "number", "default": 0.55 },
+        "y_max": { "type": "number", "default": 0.85 }
+      }
+    },
+    "max_lines": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3,
+      "default": 2,
+      "description": "Maximum number of caption lines per frame."
+    },
+    "emphasis_scale": {
+      "type": "number",
+      "minimum": 1.0,
+      "maximum": 3.0,
+      "default": 1.5,
+      "description": "Font size multiplier for emphasized words."
+    }
+  }
+}

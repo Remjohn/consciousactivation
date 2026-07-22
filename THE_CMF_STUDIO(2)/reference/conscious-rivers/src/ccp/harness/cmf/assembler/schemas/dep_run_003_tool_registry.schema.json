@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-003",
+  "title": "Tool Contract Registry",
+  "description": "FR-VID-12 §4 Stage 6 — Input/output contracts and execution metadata for CMF tools. Each entry declares the tool's interface, execution backend, and policy tags for policy enforcement.",
+  "type": "object",
+  "required": ["tool_id", "tool_type", "description", "input_contract", "output_contract", "execution_backend", "policy_tags"],
+  "properties": {
+    "tool_id": {
+      "type": "string",
+      "description": "Unique tool identifier (e.g. artifact_resolver, manifest_patch_apply)."
+    },
+    "tool_type": {
+      "type": "string",
+      "enum": ["query", "mutation", "validation", "generation", "analysis"],
+      "description": "Functional classification of the tool."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what the tool does."
+    },
+    "input_contract": {
+      "type": "object",
+      "required": ["parameters"],
+      "properties": {
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type", "required"],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "required": { "type": "boolean" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      },
+      "description": "Typed input parameters the tool accepts."
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["returns"],
+      "properties": {
+        "returns": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string" },
+            "schema_ref": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        }
+      },
+      "description": "Typed output the tool returns."
+    },
+    "execution_backend": {
+      "type": "string",
+      "enum": ["python_callable", "shell_wrapper", "http_adapter"],
+      "description": "How the tool is executed at runtime."
+    },
+    "policy_tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["evidence", "composition", "validation", "production", "review", "learning"]
+      },
+      "minItems": 1,
+      "description": "Policy tags used by DEP-RUN-004 to determine which profiles/agents may invoke this tool."
+    }
+  }
+}

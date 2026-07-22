@@ -1,0 +1,1903 @@
+schema_version: conscious-activations-spec-dependency-edge-classification/v1
+classification_id: CA-P02C-EDGE-CLASSIFICATION-2026-07-22
+source_dag:
+  path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_RECONCILIATION/SPEC_DEPENDENCY_DAG.yaml
+  sha256: 1cf4299781e76c9c80f4489291a92b0a5e1f666f91b8cf9476307a03da5257eb
+node_count: 60
+edge_count: 118
+accounted_exactly_once: true
+primary_class_counts:
+  AUTHORITY_DEPENDENCY: 9
+  WRITE_INTERFACE_DEPENDENCY: 109
+  WRITE_CONTEXT_DEPENDENCY: 0
+  ACCEPTANCE_PREREQUISITE: 0
+  BUILD_PREREQUISITE: 0
+  REFERENCE_ONLY: 0
+classification_policy:
+  generic_dependency_infers_accepted_for_build_at_write: false
+  authority_satisfaction: CURRENT_AUTHORITY_OR_EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION
+  interface_satisfaction: HASH_PINNED_WRITTEN_OR_REVISED_DRAFT_OR_GOVERNED_SEED
+  context_absence_blocks_only_if_unique_required_information: true
+  acceptance_prerequisite_blocks_write: false
+  build_prerequisite_blocks_write: false
+  reference_blocks_write: false
+edges:
+- edge_id: SDE-001
+  upstream_spec_id: TS-AHP-001
+  upstream_title: Program Authority, Current-State Reconciliation, and Brownfield Source Admission
+  downstream_spec_id: TS-AHP-002
+  downstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-002
+  upstream_spec_id: TS-AIR-001
+  upstream_title: Constitutional Authority, Activation Domains, and Epistemic State
+  downstream_spec_id: TS-AHP-002
+  downstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-003
+  upstream_spec_id: TS-AIR-001
+  upstream_title: Constitutional Authority, Activation Domains, and Epistemic State
+  downstream_spec_id: TS-AIR-002
+  downstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-004
+  upstream_spec_id: TS-AIR-001
+  upstream_title: Constitutional Authority, Activation Domains, and Epistemic State
+  downstream_spec_id: TS-AIR-004
+  downstream_title: Primitive Family Registry and Primitive Binding
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-005
+  upstream_spec_id: TS-AIR-001
+  upstream_title: Constitutional Authority, Activation Domains, and Epistemic State
+  downstream_spec_id: TS-AIR-003
+  downstream_title: Activation Hypothesis Portfolio and Comparative Search
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-006
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-003
+  downstream_title: Activation Hypothesis Portfolio and Comparative Search
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-007
+  upstream_spec_id: TS-AIR-001
+  upstream_title: Constitutional Authority, Activation Domains, and Epistemic State
+  downstream_spec_id: TS-AIR-007
+  downstream_title: Brand Genesis, Voice DNA, Visual DNA, and Distillation Layers
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-008
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-007
+  downstream_title: Brand Genesis, Voice DNA, Visual DNA, and Distillation Layers
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-009
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-005
+  downstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-010
+  upstream_spec_id: TS-AIR-004
+  upstream_title: Primitive Family Registry and Primitive Binding
+  downstream_spec_id: TS-AIR-005
+  downstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-011
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-008
+  downstream_title: Planned Activative Intelligence and Interview Asset Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-012
+  upstream_spec_id: TS-AIR-003
+  upstream_title: Activation Hypothesis Portfolio and Comparative Search
+  downstream_spec_id: TS-AIR-008
+  downstream_title: Planned Activative Intelligence and Interview Asset Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-013
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-014
+  downstream_title: Relationship Activation and ReelCast Progression
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-014
+  upstream_spec_id: TS-AIR-003
+  upstream_title: Activation Hypothesis Portfolio and Comparative Search
+  downstream_spec_id: TS-AIR-014
+  downstream_title: Relationship Activation and ReelCast Progression
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-015
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-006
+  downstream_title: Archetype Coalition and Psychological Role Inside a Tension
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-016
+  upstream_spec_id: TS-AIR-005
+  upstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  downstream_spec_id: TS-AIR-006
+  downstream_title: Archetype Coalition and Psychological Role Inside a Tension
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-017
+  upstream_spec_id: TS-AIR-002
+  upstream_title: Identity, Context Premise, Resonance, and Matrix of Edging
+  downstream_spec_id: TS-AIR-013
+  downstream_title: Campaign Activation, Freshness, and Audience Reaction
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-018
+  upstream_spec_id: TS-AIR-003
+  upstream_title: Activation Hypothesis Portfolio and Comparative Search
+  downstream_spec_id: TS-AIR-013
+  downstream_title: Campaign Activation, Freshness, and Audience Reaction
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-019
+  upstream_spec_id: TS-AIR-005
+  upstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  downstream_spec_id: TS-AIR-013
+  downstream_title: Campaign Activation, Freshness, and Audience Reaction
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-020
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-SKL-001
+  downstream_title: Canonical Skills, Skill Composition Recipes, Steering Recipes, and Transformation Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-021
+  upstream_spec_id: TS-AIR-005
+  upstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  downstream_spec_id: TS-SKL-001
+  downstream_title: Canonical Skills, Skill Composition Recipes, Steering Recipes, and Transformation Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-022
+  upstream_spec_id: TS-AIR-008
+  upstream_title: Planned Activative Intelligence and Interview Asset Contracts
+  downstream_spec_id: TS-AIR-009
+  downstream_title: Live Narrative State Induction and Interviewer Resonance
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-023
+  upstream_spec_id: TS-AIR-008
+  upstream_title: Planned Activative Intelligence and Interview Asset Contracts
+  downstream_spec_id: TS-INT-001
+  downstream_title: Canonical Interview Source Package and Dual Admission
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-024
+  upstream_spec_id: TS-AIR-008
+  upstream_title: Planned Activative Intelligence and Interview Asset Contracts
+  downstream_spec_id: TS-INT-007
+  downstream_title: Live Activative State and Interview Execution
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-025
+  upstream_spec_id: TS-AIR-009
+  upstream_title: Live Narrative State Induction and Interviewer Resonance
+  downstream_spec_id: TS-INT-007
+  downstream_title: Live Activative State and Interview Execution
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-026
+  upstream_spec_id: TS-INT-001
+  upstream_title: Canonical Interview Source Package and Dual Admission
+  downstream_spec_id: TS-INT-002
+  downstream_title: Word/Speaker Alignment and Packed Phrase Transcript
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-027
+  upstream_spec_id: TS-INT-001
+  upstream_title: Canonical Interview Source Package and Dual Admission
+  downstream_spec_id: TS-INT-003
+  downstream_title: Shot Boundary, Transition, Keyframe, and Visual Reference Index
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-028
+  upstream_spec_id: TS-INT-007
+  upstream_title: Live Activative State and Interview Execution
+  downstream_spec_id: TS-INT-006
+  downstream_title: Reaction Observation and Reaction Receipt Evidence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-029
+  upstream_spec_id: TS-INT-002
+  upstream_title: Word/Speaker Alignment and Packed Phrase Transcript
+  downstream_spec_id: TS-INT-004
+  downstream_title: Tag Provenance, Anchor Hit, and Expression Moment Governance
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-030
+  upstream_spec_id: TS-INT-003
+  upstream_title: Shot Boundary, Transition, Keyframe, and Visual Reference Index
+  downstream_spec_id: TS-INT-004
+  downstream_title: Tag Provenance, Anchor Hit, and Expression Moment Governance
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-031
+  upstream_spec_id: TS-INT-006
+  upstream_title: Reaction Observation and Reaction Receipt Evidence
+  downstream_spec_id: TS-INT-004
+  downstream_title: Tag Provenance, Anchor Hit, and Expression Moment Governance
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-032
+  upstream_spec_id: TS-INT-004
+  upstream_title: Tag Provenance, Anchor Hit, and Expression Moment Governance
+  downstream_spec_id: TS-AIR-011
+  downstream_title: Expression Moments and Observed Activative Intelligence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-033
+  upstream_spec_id: TS-INT-006
+  upstream_title: Reaction Observation and Reaction Receipt Evidence
+  downstream_spec_id: TS-AIR-011
+  downstream_title: Expression Moments and Observed Activative Intelligence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-034
+  upstream_spec_id: TS-INT-004
+  upstream_title: Tag Provenance, Anchor Hit, and Expression Moment Governance
+  downstream_spec_id: TS-INT-005
+  downstream_title: Expression Ingredient Inventory and Asset Package Spec
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-035
+  upstream_spec_id: TS-AIR-005
+  upstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  downstream_spec_id: TS-AIR-015
+  downstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-036
+  upstream_spec_id: TS-AIR-006
+  upstream_title: Archetype Coalition and Psychological Role Inside a Tension
+  downstream_spec_id: TS-AIR-015
+  downstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-037
+  upstream_spec_id: TS-AIR-007
+  upstream_title: Brand Genesis, Voice DNA, Visual DNA, and Distillation Layers
+  downstream_spec_id: TS-AIR-015
+  downstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-038
+  upstream_spec_id: TS-AIR-011
+  upstream_title: Expression Moments and Observed Activative Intelligence
+  downstream_spec_id: TS-AIR-015
+  downstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-039
+  upstream_spec_id: TS-AIR-015
+  upstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  downstream_spec_id: TS-AIR-016
+  downstream_title: Activation Transfer Fidelity and Source Fidelity
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-040
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-AHP-003
+  downstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-041
+  upstream_spec_id: TS-INT-005
+  upstream_title: Expression Ingredient Inventory and Asset Package Spec
+  downstream_spec_id: TS-AHP-003
+  downstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-042
+  upstream_spec_id: TS-AIR-015
+  upstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  downstream_spec_id: TS-AHP-003
+  downstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-043
+  upstream_spec_id: TS-AIR-016
+  upstream_title: Activation Transfer Fidelity and Source Fidelity
+  downstream_spec_id: TS-AHP-003
+  downstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-044
+  upstream_spec_id: TS-AIR-015
+  upstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  downstream_spec_id: TS-AIR-017
+  downstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-045
+  upstream_spec_id: TS-AIR-016
+  upstream_title: Activation Transfer Fidelity and Source Fidelity
+  downstream_spec_id: TS-AIR-017
+  downstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-046
+  upstream_spec_id: TS-AHP-003
+  upstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  downstream_spec_id: TS-VID-001
+  downstream_title: Existing VideoEditProgram Adoption and Canonical Source Media Intake
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-047
+  upstream_spec_id: TS-INT-002
+  upstream_title: Word/Speaker Alignment and Packed Phrase Transcript
+  downstream_spec_id: TS-VID-001
+  downstream_title: Existing VideoEditProgram Adoption and Canonical Source Media Intake
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-048
+  upstream_spec_id: TS-INT-003
+  upstream_title: Shot Boundary, Transition, Keyframe, and Visual Reference Index
+  downstream_spec_id: TS-VID-001
+  downstream_title: Existing VideoEditProgram Adoption and Canonical Source Media Intake
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-049
+  upstream_spec_id: TS-AIR-015
+  upstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  downstream_spec_id: TS-VID-001
+  downstream_title: Existing VideoEditProgram Adoption and Canonical Source Media Intake
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-050
+  upstream_spec_id: TS-AIR-001
+  upstream_title: Constitutional Authority, Activation Domains, and Epistemic State
+  downstream_spec_id: TS-AIR-019
+  downstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-051
+  upstream_spec_id: TS-AIR-005
+  upstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  downstream_spec_id: TS-AIR-019
+  downstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-052
+  upstream_spec_id: TS-AIR-017
+  upstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  downstream_spec_id: TS-AIR-019
+  downstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-053
+  upstream_spec_id: TS-AHP-003
+  upstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  downstream_spec_id: TS-ANI-001
+  downstream_title: Source-Grounded Non-Format-02 2D Animation Derivative Runtime
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-054
+  upstream_spec_id: TS-AIR-015
+  upstream_title: Derivative Activation Programs, Guest Voice DNA Final Scripts, and Mandatory
+  downstream_spec_id: TS-ANI-001
+  downstream_title: Source-Grounded Non-Format-02 2D Animation Derivative Runtime
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-055
+  upstream_spec_id: TS-AIR-017
+  upstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  downstream_spec_id: TS-ANI-001
+  downstream_title: Source-Grounded Non-Format-02 2D Animation Derivative Runtime
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-056
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-DEL-001
+  downstream_title: Source-Grounded Visual Asset Demand, Asset Result, Geometry, and Usage Acknowledgement
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-057
+  upstream_spec_id: TS-AIR-017
+  upstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  downstream_spec_id: TS-DEL-001
+  downstream_title: Source-Grounded Visual Asset Demand, Asset Result, Geometry, and Usage Acknowledgement
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-058
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-EVAL-001
+  downstream_title: Deterministic and Independent Evaluation Profiles
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-059
+  upstream_spec_id: TS-AIR-017
+  upstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  downstream_spec_id: TS-EVAL-001
+  downstream_title: Deterministic and Independent Evaluation Profiles
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-060
+  upstream_spec_id: TS-AHP-003
+  upstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  downstream_spec_id: TS-STA-001
+  downstream_title: Composition IR, PRETEXT, Geometry, Annotation, and Skia Runtime
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-061
+  upstream_spec_id: TS-AIR-017
+  upstream_title: Visual Activation, Composition-Before-Editing, and Production Handoff
+  downstream_spec_id: TS-STA-001
+  downstream_title: Composition IR, PRETEXT, Geometry, Annotation, and Skia Runtime
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-062
+  upstream_spec_id: TS-VID-001
+  upstream_title: Existing VideoEditProgram Adoption and Canonical Source Media Intake
+  downstream_spec_id: TS-VID-002
+  downstream_title: Talking-Head A-Roll Selection, Word-Boundary EDL, and Output-Time Mapping
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-063
+  upstream_spec_id: TS-INT-004
+  upstream_title: Tag Provenance, Anchor Hit, and Expression Moment Governance
+  downstream_spec_id: TS-VID-002
+  downstream_title: Talking-Head A-Roll Selection, Word-Boundary EDL, and Output-Time Mapping
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-064
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-AHP-004
+  downstream_title: Workflow Node Kernel, Scheduler, Bounded Roles, and Handoffs
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-065
+  upstream_spec_id: TS-AIR-019
+  upstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  downstream_spec_id: TS-AHP-004
+  downstream_title: Workflow Node Kernel, Scheduler, Bounded Roles, and Handoffs
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-066
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-RET-001
+  downstream_title: Authority-First Hybrid Retrieval and JIT Execution Capsule Compiler
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-067
+  upstream_spec_id: TS-AIR-019
+  upstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  downstream_spec_id: TS-RET-001
+  downstream_title: Authority-First Hybrid Retrieval and JIT Execution Capsule Compiler
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-068
+  upstream_spec_id: TS-DEL-001
+  upstream_title: Source-Grounded Visual Asset Demand, Asset Result, Geometry, and Usage Acknowledgement
+  downstream_spec_id: TS-VAE-BOUND-001
+  downstream_title: VAE Provider Ownership for SAM3, Lucida, Layered Generation, ComfyUI, and Google GNM
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-069
+  upstream_spec_id: TS-EVAL-001
+  upstream_title: Deterministic and Independent Evaluation Profiles
+  downstream_spec_id: TS-EVAL-002
+  downstream_title: Rendered Visual Syntax Reparse and Responsible-Layer Diagnosis
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-070
+  upstream_spec_id: TS-STA-001
+  upstream_title: Composition IR, PRETEXT, Geometry, Annotation, and Skia Runtime
+  downstream_spec_id: TS-CAR-001
+  downstream_title: Source-Grounded Carousel Runtime and Export Package
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-071
+  upstream_spec_id: TS-AHP-003
+  upstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  downstream_spec_id: TS-CAR-001
+  downstream_title: Source-Grounded Carousel Runtime and Export Package
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-072
+  upstream_spec_id: TS-STA-001
+  upstream_title: Composition IR, PRETEXT, Geometry, Annotation, and Skia Runtime
+  downstream_spec_id: TS-SPV-001
+  downstream_title: Source-Grounded SuperVisual Runtime and Export Package
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-073
+  upstream_spec_id: TS-AHP-003
+  upstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  downstream_spec_id: TS-SPV-001
+  downstream_title: Source-Grounded SuperVisual Runtime and Export Package
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-074
+  upstream_spec_id: TS-VID-002
+  upstream_title: Talking-Head A-Roll Selection, Word-Boundary EDL, and Output-Time Mapping
+  downstream_spec_id: TS-VID-003
+  downstream_title: Captions, Audio, Evidence, B-Roll, Reframing, and Motion-Slot Planning
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-075
+  upstream_spec_id: TS-DEL-001
+  upstream_title: Source-Grounded Visual Asset Demand, Asset Result, Geometry, and Usage Acknowledgement
+  downstream_spec_id: TS-VID-003
+  downstream_title: Captions, Audio, Evidence, B-Roll, Reframing, and Motion-Slot Planning
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-076
+  upstream_spec_id: TS-AHP-004
+  upstream_title: Workflow Node Kernel, Scheduler, Bounded Roles, and Handoffs
+  downstream_spec_id: TS-AHP-005
+  downstream_title: Batch Dependency Graph and Selective Invalidation
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-077
+  upstream_spec_id: TS-AIR-019
+  upstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  downstream_spec_id: TS-AHP-005
+  downstream_title: Batch Dependency Graph and Selective Invalidation
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-078
+  upstream_spec_id: TS-VID-002
+  upstream_title: Talking-Head A-Roll Selection, Word-Boundary EDL, and Output-Time Mapping
+  downstream_spec_id: TS-VID-004
+  downstream_title: Temporal Embodiment Binding and FFmpeg Production-Correctness
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-079
+  upstream_spec_id: TS-VID-003
+  upstream_title: Captions, Audio, Evidence, B-Roll, Reframing, and Motion-Slot Planning
+  downstream_spec_id: TS-VID-004
+  downstream_title: Temporal Embodiment Binding and FFmpeg Production-Correctness
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-080
+  upstream_spec_id: TS-AHP-005
+  upstream_title: Batch Dependency Graph and Selective Invalidation
+  downstream_spec_id: TS-AHP-006
+  downstream_title: Durable Events, Checkpoints, Replay, Cancellation, Migration, and Recovery
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-081
+  upstream_spec_id: TS-AIR-019
+  upstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  downstream_spec_id: TS-AHP-006
+  downstream_title: Durable Events, Checkpoints, Replay, Cancellation, Migration, and Recovery
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-082
+  upstream_spec_id: TS-EVAL-002
+  upstream_title: Rendered Visual Syntax Reparse and Responsible-Layer Diagnosis
+  downstream_spec_id: TS-EVAL-003
+  downstream_title: Selective Repair, Invalidation, Repair Limits, and Human Escalation
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-083
+  upstream_spec_id: TS-AIR-019
+  upstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  downstream_spec_id: TS-EVAL-003
+  downstream_title: Selective Repair, Invalidation, Repair Limits, and Human Escalation
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-084
+  upstream_spec_id: TS-AHP-005
+  upstream_title: Batch Dependency Graph and Selective Invalidation
+  downstream_spec_id: TS-EVAL-003
+  downstream_title: Selective Repair, Invalidation, Repair Limits, and Human Escalation
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-085
+  upstream_spec_id: TS-VID-004
+  upstream_title: Temporal Embodiment Binding and FFmpeg Production-Correctness
+  downstream_spec_id: TS-VID-005
+  downstream_title: Remotion, HyperFrames, FFmpeg Render, QA, and Export Adapters
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-086
+  upstream_spec_id: TS-AHP-006
+  upstream_title: Durable Events, Checkpoints, Replay, Cancellation, Migration, and Recovery
+  downstream_spec_id: TS-AHP-007
+  downstream_title: Execution Fingerprints, Sandbox, Continuous Assurance, and Incident Containment
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-087
+  upstream_spec_id: TS-EVAL-001
+  upstream_title: Deterministic and Independent Evaluation Profiles
+  downstream_spec_id: TS-AHP-007
+  downstream_title: Execution Fingerprints, Sandbox, Continuous Assurance, and Incident Containment
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-088
+  upstream_spec_id: TS-EVAL-003
+  upstream_title: Selective Repair, Invalidation, Repair Limits, and Human Escalation
+  downstream_spec_id: TS-CAS-001
+  downstream_title: Natural-Language Revision Compiler and ChangeRequestProgram
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-089
+  upstream_spec_id: TS-AHP-005
+  upstream_title: Batch Dependency Graph and Selective Invalidation
+  downstream_spec_id: TS-CAS-001
+  downstream_title: Natural-Language Revision Compiler and ChangeRequestProgram
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-090
+  upstream_spec_id: TS-VID-005
+  upstream_title: Remotion, HyperFrames, FFmpeg Render, QA, and Export Adapters
+  downstream_spec_id: TS-VID-006
+  downstream_title: Rendered Cut-Boundary Evaluation and Bounded Temporal Repair
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-091
+  upstream_spec_id: TS-EVAL-001
+  upstream_title: Deterministic and Independent Evaluation Profiles
+  downstream_spec_id: TS-VID-006
+  downstream_title: Rendered Cut-Boundary Evaluation and Bounded Temporal Repair
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-092
+  upstream_spec_id: TS-EVAL-002
+  upstream_title: Rendered Visual Syntax Reparse and Responsible-Layer Diagnosis
+  downstream_spec_id: TS-VID-006
+  downstream_title: Rendered Cut-Boundary Evaluation and Bounded Temporal Repair
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-093
+  upstream_spec_id: TS-CAS-001
+  upstream_title: Natural-Language Revision Compiler and ChangeRequestProgram
+  downstream_spec_id: TS-CAS-002
+  downstream_title: Direct Manipulation Command Adapter and Selective Rerun
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-094
+  upstream_spec_id: TS-VID-006
+  upstream_title: Rendered Cut-Boundary Evaluation and Bounded Temporal Repair
+  downstream_spec_id: TS-BATCH-001
+  downstream_title: Cross-Derivative Continuity, Lineage, Usage, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-095
+  upstream_spec_id: TS-CAR-001
+  upstream_title: Source-Grounded Carousel Runtime and Export Package
+  downstream_spec_id: TS-BATCH-001
+  downstream_title: Cross-Derivative Continuity, Lineage, Usage, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-096
+  upstream_spec_id: TS-SPV-001
+  upstream_title: Source-Grounded SuperVisual Runtime and Export Package
+  downstream_spec_id: TS-BATCH-001
+  downstream_title: Cross-Derivative Continuity, Lineage, Usage, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-097
+  upstream_spec_id: TS-ANI-001
+  upstream_title: Source-Grounded Non-Format-02 2D Animation Derivative Runtime
+  downstream_spec_id: TS-BATCH-001
+  downstream_title: Cross-Derivative Continuity, Lineage, Usage, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-098
+  upstream_spec_id: TS-CAS-002
+  upstream_title: Direct Manipulation Command Adapter and Selective Rerun
+  downstream_spec_id: TS-CAS-003
+  downstream_title: HumanResolutionEpisode Ledger, Retrieval Indexing, and Programming-Material Disposition
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-099
+  upstream_spec_id: TS-AHP-003
+  upstream_title: Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts
+  downstream_spec_id: TS-CAS-004
+  downstream_title: Source-to-Batch Control Tower, Category Workbenches, Evidence, Health, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-100
+  upstream_spec_id: TS-AHP-006
+  upstream_title: Durable Events, Checkpoints, Replay, Cancellation, Migration, and Recovery
+  downstream_spec_id: TS-CAS-004
+  downstream_title: Source-to-Batch Control Tower, Category Workbenches, Evidence, Health, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-101
+  upstream_spec_id: TS-BATCH-001
+  upstream_title: Cross-Derivative Continuity, Lineage, Usage, and Audit Export
+  downstream_spec_id: TS-CAS-004
+  downstream_title: Source-to-Batch Control Tower, Category Workbenches, Evidence, Health, and Audit Export
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-102
+  upstream_spec_id: TS-CAS-003
+  upstream_title: HumanResolutionEpisode Ledger, Retrieval Indexing, and Programming-Material Disposition
+  downstream_spec_id: TS-AIR-018
+  downstream_title: Human Resolution Episodes and Scoped Learning
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-103
+  upstream_spec_id: TS-AIR-011
+  upstream_title: Expression Moments and Observed Activative Intelligence
+  downstream_spec_id: TS-AIR-018
+  downstream_title: Human Resolution Episodes and Scoped Learning
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-104
+  upstream_spec_id: TS-AHP-001
+  upstream_title: Program Authority, Current-State Reconciliation, and Brownfield Source Admission
+  downstream_spec_id: TS-REL-002
+  downstream_title: Source-First Release Evidence, Expansion Claims, and Implementation Handoff
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-105
+  upstream_spec_id: TS-REL-001
+  upstream_title: Format 02 Deferral, Historical Evidence Isolation, and Future Activation Gate
+  downstream_spec_id: TS-REL-002
+  downstream_title: Source-First Release Evidence, Expansion Claims, and Implementation Handoff
+  primary_class: AUTHORITY_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: EXPLICIT_CANDIDATE_SPECIFICATION_WORK_AUTHORIZATION_PLUS_HASH_PINNED_UPSTREAM_DRAFT
+  classification_basis: Upstream fixes the governing authority or release boundary required to draft the downstream contract.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-106
+  upstream_spec_id: TS-CAS-003
+  upstream_title: HumanResolutionEpisode Ledger, Retrieval Indexing, and Programming-Material Disposition
+  downstream_spec_id: TS-REL-002
+  downstream_title: Source-First Release Evidence, Expansion Claims, and Implementation Handoff
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-107
+  upstream_spec_id: TS-CAS-004
+  upstream_title: Source-to-Batch Control Tower, Category Workbenches, Evidence, Health, and Audit Export
+  downstream_spec_id: TS-CAS-005
+  downstream_title: Campaign Order, Shared Shell, Autonomy Modes, and Exception Review
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-108
+  upstream_spec_id: TS-AIR-003
+  upstream_title: Activation Hypothesis Portfolio and Comparative Search
+  downstream_spec_id: TS-AIR-020
+  downstream_title: Programmed Models, Independent Evaluation, Product Integration, and Evidence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-109
+  upstream_spec_id: TS-AIR-005
+  upstream_title: Primitive Coalition Contract, Coalition Signature, Edge Product, and Steering
+  downstream_spec_id: TS-AIR-020
+  downstream_title: Programmed Models, Independent Evaluation, Product Integration, and Evidence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-110
+  upstream_spec_id: TS-AIR-018
+  upstream_title: Human Resolution Episodes and Scoped Learning
+  downstream_spec_id: TS-AIR-020
+  downstream_title: Programmed Models, Independent Evaluation, Product Integration, and Evidence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-111
+  upstream_spec_id: TS-AIR-019
+  upstream_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+  downstream_spec_id: TS-AIR-020
+  downstream_title: Programmed Models, Independent Evaluation, Product Integration, and Evidence
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-112
+  upstream_spec_id: TS-CAS-005
+  upstream_title: Campaign Order, Shared Shell, Autonomy Modes, and Exception Review
+  downstream_spec_id: TS-CAS-006
+  downstream_title: Ship/Publish Authority and Harness-to-Studio Surface Routing
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-113
+  upstream_spec_id: TS-EVAL-003
+  upstream_title: Selective Repair, Invalidation, Repair Limits, and Human Escalation
+  downstream_spec_id: TS-CAS-006
+  downstream_title: Ship/Publish Authority and Harness-to-Studio Surface Routing
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-114
+  upstream_spec_id: TS-AHP-002
+  upstream_title: AtomicHarnessDefinition Intake and HarnessExecutionBindingManifest
+  downstream_spec_id: TS-PM-001
+  downstream_title: Programmed Model Artifact, Claim, Model Program, Lifecycle, and Resolver
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-115
+  upstream_spec_id: TS-AIR-020
+  upstream_title: Programmed Models, Independent Evaluation, Product Integration, and Evidence
+  downstream_spec_id: TS-PM-001
+  downstream_title: Programmed Model Artifact, Claim, Model Program, Lifecycle, and Resolver
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-116
+  upstream_spec_id: TS-PM-001
+  upstream_title: Programmed Model Artifact, Claim, Model Program, Lifecycle, and Resolver
+  downstream_spec_id: TS-AHP-008
+  downstream_title: Adaptive Candidate Search, Comparison, Budget, and Stopping
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-117
+  upstream_spec_id: TS-AIR-003
+  upstream_title: Activation Hypothesis Portfolio and Comparative Search
+  downstream_spec_id: TS-AHP-008
+  downstream_title: Adaptive Candidate Search, Comparison, Budget, and Stopping
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+- edge_id: SDE-118
+  upstream_spec_id: TS-EVAL-001
+  upstream_title: Deterministic and Independent Evaluation Profiles
+  downstream_spec_id: TS-AHP-008
+  downstream_title: Adaptive Candidate Search, Comparison, Budget, and Stopping
+  primary_class: WRITE_INTERFACE_DEPENDENCY
+  write_blocking: true
+  unique_required_information: true
+  write_satisfaction: HASH_PINNED_UPSTREAM_DRAFT_OR_REVISED_DRAFT_OR_GOVERNED_CONTRACT_SEED
+  classification_basis: Downstream contract consumes or constrains an upstream typed object, workflow boundary, or handoff; draft interface detail
+    is required at WRITE.
+  accepted_for_build_required_at_write: false
+  build_state_blocks_write: false
+  later_stage_requirements:
+    acceptance: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE
+    build: NOT_INFERRED_FROM_GENERIC_EDGE_RECLASSIFY_ONLY_WITH_ATTRIBUTABLE_EVIDENCE

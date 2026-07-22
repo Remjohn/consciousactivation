@@ -1,0 +1,94 @@
+# DEP-VID-010 — I2V Motion Preset Library
+# FR-VID-03 §3 TD2, §4 Stage 1
+#
+# Maps beat arc stages to motion parameter sets.
+# Operators do not manually set motion parameters — these are determined
+# by the beat's arc_stage. This ensures every CMF video has consistent
+# motion grammar.
+
+model_defaults:
+  svd:
+    name: "Stable Video Diffusion XT"
+    max_frames: 96
+    default_fps: 24
+    min_frames: 14
+  cogvideo:
+    name: "CogVideoX"
+    max_frames: 120
+    default_fps: 24
+    min_frames: 24
+
+# Segment overlap for beats exceeding model max_frames
+# FR-VID-03 §4 Stage 1 Step 4: "6-frame overlap for cross-fading"
+segment_overlap_frames: 6
+
+arc_stage_presets:
+  hook:
+    description: "Attention capture — high visual impact, draws viewer in"
+    camera_motion: "slow_zoom_in"
+    motion_strength: 0.6
+    motion_bucket_id: 127
+    fps: 24
+
+  rising_action:
+    description: "Building tension — moderate forward movement"
+    camera_motion: "steady_push_forward"
+    motion_strength: 0.5
+    motion_bucket_id: 100
+    fps: 24
+
+  climax:
+    description: "Emotional peak — dynamic, intense movement"
+    camera_motion: "dynamic_push_forward"
+    motion_strength: 0.8
+    motion_bucket_id: 180
+    fps: 24
+
+  falling_action:
+    description: "Tension release — gradual deceleration"
+    camera_motion: "slow_pull_back"
+    motion_strength: 0.4
+    motion_bucket_id: 80
+    fps: 24
+
+  resolution:
+    description: "Emotional landing — gentle, contemplative"
+    camera_motion: "gentle_drift"
+    motion_strength: 0.3
+    motion_bucket_id: 60
+    fps: 24
+
+  transition:
+    description: "Beat-to-beat bridge — smooth lateral movement"
+    camera_motion: "lateral_pan"
+    motion_strength: 0.4
+    motion_bucket_id: 90
+    fps: 24
+
+  establishing:
+    description: "Scene setting — wide, stable, exploratory"
+    camera_motion: "slow_pan_right"
+    motion_strength: 0.35
+    motion_bucket_id: 70
+    fps: 24
+
+  montage:
+    description: "Rapid sequence — quick cuts, varied motion"
+    camera_motion: "quick_zoom_out"
+    motion_strength: 0.7
+    motion_bucket_id: 150
+    fps: 24
+
+  static:
+    description: "Minimal motion — contemplative pause"
+    camera_motion: "subtle_breathe"
+    motion_strength: 0.15
+    motion_bucket_id: 40
+    fps: 24
+
+  coda:
+    description: "Final statement — slow fade-style drift"
+    camera_motion: "gentle_drift"
+    motion_strength: 0.2
+    motion_bucket_id: 50
+    fps: 24

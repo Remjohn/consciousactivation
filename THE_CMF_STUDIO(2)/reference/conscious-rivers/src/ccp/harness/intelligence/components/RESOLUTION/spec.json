@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "RESOLUTION",
+  "scene_number": 6,
+  "name": "Resolution",
+  "version": "1.0",
+  "function": "Direct landing scene that shows calm after the insight.",
+  "compatible_containers": [
+    "RESOLUTION"
+  ],
+  "cls_footprint": {
+    "typical": 1.5,
+    "max": 2.0
+  },
+  "required_asset_types": [
+    "A_ROLL",
+    "B_ROLL"
+  ],
+  "template_variants": [
+    "calm_after_peak",
+    "transformation_settle",
+    "direct_landing"
+  ],
+  "effect_dependencies": [
+    "gentle_drift",
+    "warm_fade"
+  ],
+  "selection_signals": [
+    "closure",
+    "deceleration",
+    "warm_return"
+  ],
+  "audio_profile": {
+    "score_role": "land",
+    "energy_band": "low",
+    "mode": "relieved",
+    "prosodic_hint": "softened_decline",
+    "prosodic_contour_target": {
+      "pitch_shape": "falling",
+      "stress_placement": "distributed",
+      "rate_wpm": { "min": 100, "max": 130 },
+      "emotional_register": "calm"
+    }
+  },
+  "fallback_behavior": "Use a simple warm a-roll closure with minimal motion."
+}

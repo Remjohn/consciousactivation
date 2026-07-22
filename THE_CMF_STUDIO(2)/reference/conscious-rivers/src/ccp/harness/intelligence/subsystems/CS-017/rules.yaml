@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-017
+enabled: true
+priority:
+  tier: encoding
+  rank: 7
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: adjacent_delta_kelvin
+    operator: lt
+    value: 600
+route_hints:
+  adjust:
+    - cool_confrontation
+    - warm_vulnerability
+    - restore_resolve_temperature

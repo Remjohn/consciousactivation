@@ -1,0 +1,178 @@
+# DEP-VID-007 — RunningHub T2I Workflow Registry
+# FR-VID-02 Task 2: "Register at least 2 workflows: Flux (48GB) and SDXL (24GB)"
+#
+# Each workflow defines:
+#   - workflow_id: Unique identifier for the ComfyUI workflow
+#   - model: Target model name (matched against CMF_T2I_MODEL env var)
+#   - vram_tier: Required VRAM tier on RunningHub
+#   - template: ComfyUI workflow JSON structure with placeholder values
+#     (NodeInfoList parameter injection replaces placeholders at runtime)
+
+registry_id: "DEP-VID-007"
+version: "1.0"
+description: "RunningHub T2I Workflow Registry for CMF Video Pipeline"
+
+workflows:
+  # ---------- Flux Dev FP8 — 48GB VRAM (primary) ----------
+  - workflow_id: "RH-WF-CMF-T2I-FLUX-001"
+    model: "flux-dev-fp8"
+    model_display_name: "Flux Dev FP8"
+    vram_tier: "48GB"
+    description: >
+      High-quality Flux T2I for CMF production keyframes.
+      48GB VRAM required. Uses proxy-plus endpoint.
+    default_resolution:
+      width: 1080
+      height: 1920
+    template:
+      positive_prompt:
+        class_type: "CLIPTextEncode"
+        inputs:
+          text: ""
+          clip:
+            - "clip_loader"
+            - 0
+      negative_prompt:
+        class_type: "CLIPTextEncode"
+        inputs:
+          text: ""
+          clip:
+            - "clip_loader"
+            - 0
+      sampler:
+        class_type: "KSampler"
+        inputs:
+          seed: 0
+          steps: 25
+          cfg: 7.0
+          sampler_name: "euler"
+          scheduler: "normal"
+          denoise: 1.0
+          model:
+            - "model_loader"
+            - 0
+          positive:
+            - "positive_prompt"
+            - 0
+          negative:
+            - "negative_prompt"
+            - 0
+          latent_image:
+            - "empty_latent"
+            - 0
+      empty_latent:
+        class_type: "EmptyLatentImage"
+        inputs:
+          width: 1080
+          height: 1920
+          batch_size: 1
+      model_loader:
+        class_type: "CheckpointLoaderSimple"
+        inputs:
+          ckpt_name: "flux-dev-fp8.safetensors"
+      clip_loader:
+        class_type: "CLIPLoader"
+        inputs:
+          clip_name: "flux-clip.safetensors"
+      vae_decode:
+        class_type: "VAEDecode"
+        inputs:
+          samples:
+            - "sampler"
+            - 0
+          vae:
+            - "vae_loader"
+            - 0
+      vae_loader:
+        class_type: "VAELoader"
+        inputs:
+          vae_name: "flux-vae.safetensors"
+      save_image:
+        class_type: "SaveImage"
+        inputs:
+          filename_prefix: "CMF-T2I"
+          images:
+            - "vae_decode"
+            - 0
+
+  # ---------- SDXL Base 1.0 — 24GB VRAM (fallback) ----------
+  - workflow_id: "RH-WF-CMF-T2I-SDXL-001"
+    model: "sdxl-base-1.0"
+    model_display_name: "Stable Diffusion XL Base 1.0"
+    vram_tier: "24GB"
+    description: >
+      Cost-effective SDXL T2I for budget-constrained or fallback generation.
+      24GB VRAM. Uses standard proxy endpoint.
+    default_resolution:
+      width: 1080
+      height: 1920
+    template:
+      positive_prompt:
+        class_type: "CLIPTextEncodeSDXL"
+        inputs:
+          text: ""
+          clip:
+            - "clip_loader"
+            - 0
+      negative_prompt:
+        class_type: "CLIPTextEncodeSDXL"
+        inputs:
+          text: ""
+          clip:
+            - "clip_loader"
+            - 0
+      sampler:
+        class_type: "KSampler"
+        inputs:
+          seed: 0
+          steps: 30
+          cfg: 7.5
+          sampler_name: "euler_ancestral"
+          scheduler: "normal"
+          denoise: 1.0
+          model:
+            - "model_loader"
+            - 0
+          positive:
+            - "positive_prompt"
+            - 0
+          negative:
+            - "negative_prompt"
+            - 0
+          latent_image:
+            - "empty_latent"
+            - 0
+      empty_latent:
+        class_type: "EmptyLatentImage"
+        inputs:
+          width: 1080
+          height: 1920
+          batch_size: 1
+      model_loader:
+        class_type: "CheckpointLoaderSimple"
+        inputs:
+          ckpt_name: "sd_xl_base_1.0.safetensors"
+      clip_loader:
+        class_type: "CLIPLoader"
+        inputs:
+          clip_name: "sdxl-clip.safetensors"
+      vae_decode:
+        class_type: "VAEDecode"
+        inputs:
+          samples:
+            - "sampler"
+            - 0
+          vae:
+            - "vae_loader"
+            - 0
+      vae_loader:
+        class_type: "VAELoader"
+        inputs:
+          vae_name: "sdxl-vae.safetensors"
+      save_image:
+        class_type: "SaveImage"
+        inputs:
+          filename_prefix: "CMF-T2I"
+          images:
+            - "vae_decode"
+            - 0

@@ -1,0 +1,33 @@
+schema: ../../schemas/container-rules.schema.json
+schema_id: cmf.container.rules/v1
+container_id: RESOLUTION
+enabled: true
+priority:
+  tier: structural
+  rank: 5
+enforcement:
+  mode: block_on_fail
+  default_result: REVISE
+applies_to:
+  stages:
+    - scene_builder
+    - editor_regeneration
+required_sequence:
+  previous:
+    - TURNING_POINT
+  next:
+    - VISION
+warn_conditions:
+  - metric: closure_signal_score
+    operator: lt
+    value: 0.75
+  - metric: cls_observed
+    operator: gt
+    value: 2.0
+route_hints:
+  preferred_components:
+    - RESOLUTION
+    - SYMBOLIC_ECHO
+    - THE_PAUSE
+    - ENCOURAGING_CHANGE
+  fallback: closure_landing

@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "ExpressionMomentState": {
+      "enum": [
+        "proposed",
+        "validated",
+        "approved",
+        "borderline",
+        "rejected",
+        "superseded"
+      ],
+      "title": "ExpressionMomentState",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approval_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "context_window": {
+      "title": "Context Window",
+      "type": "string"
+    },
+    "eligible_routes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Eligible Routes",
+      "type": "array"
+    },
+    "end_ms": {
+      "exclusiveMinimum": 0,
+      "title": "End Ms",
+      "type": "integer"
+    },
+    "epistemic_state": {
+      "$ref": "#/$defs/EpistemicState"
+    },
+    "moment_id": {
+      "title": "Moment Id",
+      "type": "string"
+    },
+    "qualities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Qualities",
+      "type": "array"
+    },
+    "quote_or_summary": {
+      "title": "Quote Or Summary",
+      "type": "string"
+    },
+    "reaction_receipt_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Reaction Receipt Refs",
+      "type": "array"
+    },
+    "rejection_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rejection Reason"
+    },
+    "role_potential": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Role Potential",
+      "type": "array"
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "source_span_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "speaker_id": {
+      "title": "Speaker Id",
+      "type": "string"
+    },
+    "start_ms": {
+      "minimum": 0,
+      "title": "Start Ms",
+      "type": "integer"
+    },
+    "state": {
+      "$ref": "#/$defs/ExpressionMomentState"
+    },
+    "wrong_reading_risks": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Risks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "moment_id",
+    "source_package_ref",
+    "source_span_ref",
+    "speaker_id",
+    "start_ms",
+    "end_ms",
+    "quote_or_summary",
+    "context_window",
+    "qualities",
+    "role_potential",
+    "eligible_routes",
+    "state",
+    "epistemic_state"
+  ],
+  "title": "ExpressionMoment",
+  "type": "object"
+}

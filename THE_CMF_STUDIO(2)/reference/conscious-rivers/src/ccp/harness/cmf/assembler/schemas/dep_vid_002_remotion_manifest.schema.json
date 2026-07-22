@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-002",
+  "title": "Remotion Video Manifest",
+  "description": "FR-VID-01 §5 — Complete Remotion-compatible video manifest consumed by FR-VID-08 compositions. Contains per-beat entries with frame timings, asset URLs, transitions, and audio layer.",
+  "type": "object",
+  "required": ["manifest_id", "project_id", "beat_cluster_id", "arc_type", "fps", "width", "height", "total_frames", "total_duration_sec", "beats", "audio", "status"],
+  "properties": {
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^MAN-VID-\\d{8}-\\d{3}$"
+    },
+    "project_id": { "type": "string" },
+    "beat_cluster_id": { "type": "string" },
+    "arc_type": { "type": "string" },
+    "composition_template": { "type": "string" },
+    "fps": { "type": "integer", "enum": [24, 30, 60] },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "aspect_ratio": { "type": "string" },
+    "total_frames": { "type": "integer", "minimum": 0 },
+    "total_duration_sec": { "type": "number", "minimum": 0 },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "beat_type", "arc_stage", "start_frame", "duration_frames", "asset_status"],
+        "properties": {
+          "beat_index": { "type": "integer", "minimum": 0 },
+          "beat_type": { "type": "string" },
+          "arc_stage": { "type": "string" },
+          "start_frame": { "type": "integer", "minimum": 0 },
+          "duration_frames": { "type": "integer", "minimum": 1 },
+          "duration_sec": { "type": "number" },
+          "video_clip_url": { "type": ["string", "null"] },
+          "fallback_image_url": { "type": ["string", "null"] },
+          "asset_status": { "type": "string", "enum": ["RESOLVED", "ASSET_MISSING", "KEN_BURNS_FALLBACK"] },
+          "fingerprint_id": { "type": ["string", "null"] },
+          "transition": {
+            "type": ["object", "null"],
+            "properties": {
+              "type": { "type": "string" },
+              "duration_frames": { "type": "integer" },
+              "preset_id": { "type": "string" }
+            }
+          },
+          "narration_text": { "type": "string" },
+          "selected_container": { "type": "string" },
+          "selected_component": { "type": "string" },
+          "selected_scene_template_id": { "type": ["string", "null"] },
+          "selected_effect_stack": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "estimated_scene_cls": { "type": ["number", "null"] },
+          "effect_recommendations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "effect_id": { "type": "string" },
+                "name": { "type": ["string", "null"] },
+                "category": { "type": ["string", "null"] },
+                "mechanical_score": { "type": "number" },
+                "cls_impact": { "type": ["number", "null"] },
+                "arousal": { "type": ["number", "null"] },
+                "presence": { "type": ["number", "null"] },
+                "attention_role": { "type": ["string", "null"] },
+                "congruence_mode": { "type": ["string", "null"] },
+                "text_competition_risk": { "type": ["string", "null"] },
+                "breakdown": { "type": "object" }
+              }
+            }
+          },
+          "scene_research_profile": {
+            "type": "object",
+            "properties": {
+              "target_attention_mode": { "type": ["string", "null"] },
+              "isc_priority": { "type": ["string", "null"] },
+              "memory_role": { "type": ["string", "null"] },
+              "av_congruence_mode": { "type": ["string", "null"] },
+              "continuity_requirement": { "type": ["string", "null"] },
+              "text_policy": { "type": ["string", "null"] },
+              "peak_end_weight": { "type": ["string", "null"] }
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "voiceover_path": { "type": ["string", "null"] },
+        "music_path": { "type": ["string", "null"] },
+        "ducking_curve": { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "ducking_target_db": { "type": "integer" },
+        "music_start_frame": { "type": "integer" },
+        "music_fade_out_frames": { "type": "integer" }
+      }
+    },
+    "status": { "type": "string", "enum": ["ASSEMBLED", "ASSEMBLED_WITH_GAPS"] },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "generation_timestamp": { "type": "string" }
+  }
+}

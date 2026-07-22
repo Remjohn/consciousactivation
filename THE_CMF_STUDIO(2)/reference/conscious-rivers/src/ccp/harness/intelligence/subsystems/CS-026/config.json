@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-026",
+  "name": "Identity Tracking",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "LC4MP",
+    "Attention Capture"
+  ],
+  "inputs": [
+    "face_count_over_time",
+    "role_tags",
+    "shot_prominence",
+    "narrative_necessity"
+  ],
+  "outputs": [
+    "identity_load_rating",
+    "reduction_advice",
+    "verdict"
+  ],
+  "thresholds": {
+    "max_dominant_faces": 1,
+    "max_decorative_secondary_faces": 0,
+    "allow_secondary_faces_if_functional": true
+  },
+  "default_action_on_fail": "REVISE"
+}

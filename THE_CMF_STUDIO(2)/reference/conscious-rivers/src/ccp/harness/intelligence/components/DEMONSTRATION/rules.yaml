@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: DEMONSTRATION
+enabled: true
+selection_priority:
+  tier: secondary
+  rank: 13
+enforcement:
+  mode: allow_with_checks
+  default_result: ALLOW
+applies_to:
+  containers:
+    - CHALLENGE
+  stages:
+    - scene_builder
+incompatibilities:
+  - text_overload
+warn_conditions:
+  - metric: mechanism_visibility_score
+    operator: lt
+    value: 0.75
+route_hints:
+  select:
+    - use_when_the_process_itself_convinces
+    - avoid_when_only abstract claims are available

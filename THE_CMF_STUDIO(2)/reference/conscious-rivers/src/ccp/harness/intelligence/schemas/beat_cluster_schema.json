@@ -1,0 +1,190 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Beat Cluster Schema (VCP Edition)",
+    "description": "Grouped quotes that together express a complete narrative concept. Each cluster represents a story BEAT with a Visual Cinematic Premise for creative interpretation.",
+    "type": "object",
+    "required": [
+        "project_id",
+        "arc",
+        "clusters"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "Project identifier, e.g., '02_50-12 Audrey'"
+        },
+        "arc": {
+            "type": "string",
+            "description": "The narrative arc type, e.g., 'The Witness', 'The Phoenix'"
+        },
+        "generated_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "vcp_version": {
+            "type": "string",
+            "description": "VCP schema version (current: 2.0)"
+        },
+        "clusters": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 7,
+            "description": "One cluster per major beat (SC01-SC05, or arc-specific beats)",
+            "items": {
+                "type": "object",
+                "required": [
+                    "cluster_id",
+                    "beat_position",
+                    "concept",
+                    "quotes",
+                    "arc_context",
+                    "visual_cinematic_premise"
+                ],
+                "properties": {
+                    "cluster_id": {
+                        "type": "string",
+                        "pattern": "^SC0[1-5]$",
+                        "description": "Simple scene code: SC01, SC02, SC03, SC04, SC05"
+                    },
+                    "beat_position": {
+                        "type": "string",
+                        "enum": [
+                            "HOOK",
+                            "PAIN",
+                            "SOLUTION",
+                            "PROOF",
+                            "CLOSE"
+                        ],
+                        "description": "Narrative beat position in the arc"
+                    },
+                    "concept": {
+                        "type": "object",
+                        "required": [
+                            "title",
+                            "description",
+                            "core_emotion"
+                        ],
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "maxLength": 60,
+                                "description": "A short poetic title for the concept (3-7 words)"
+                            },
+                            "description": {
+                                "type": "string",
+                                "minLength": 50,
+                                "maxLength": 200,
+                                "description": "Extended description of what this beat represents emotionally and narratively"
+                            },
+                            "core_emotion": {
+                                "type": "string",
+                                "description": "Single word for the dominant emotion"
+                            }
+                        }
+                    },
+                    "quotes": {
+                        "type": "object",
+                        "required": [
+                            "representative",
+                            "supporting"
+                        ],
+                        "properties": {
+                            "representative": {
+                                "type": "object",
+                                "required": [
+                                    "text",
+                                    "timestamp",
+                                    "why_representative"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "description": "The EXACT verbatim quote from transcript"
+                                    },
+                                    "timestamp": {
+                                        "type": "string",
+                                        "pattern": "^\\d{2}:\\d{2}(:\\d{2})?$",
+                                        "description": "Timestamp in HH:MM:SS or HH:MM format"
+                                    },
+                                    "why_representative": {
+                                        "type": "string",
+                                        "description": "Justification for why this quote was selected"
+                                    }
+                                }
+                            },
+                            "supporting": {
+                                "type": "array",
+                                "minItems": 0,
+                                "maxItems": 4,
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "text",
+                                        "timestamp",
+                                        "function"
+                                    ],
+                                    "properties": {
+                                        "text": {
+                                            "type": "string",
+                                            "description": "Verbatim supporting quote"
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "pattern": "^\\d{2}:\\d{2}(:\\d{2})?$"
+                                        },
+                                        "function": {
+                                            "type": "string",
+                                            "description": "What this quote adds: CONTEXT, INTENSIFICATION, EXPANSION, etc."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "arc_context": {
+                        "type": "object",
+                        "required": [
+                            "before",
+                            "turning_point",
+                            "after"
+                        ],
+                        "description": "The narrative arc structure for this beat",
+                        "properties": {
+                            "before": {
+                                "type": "string",
+                                "description": "The state before this moment (use transcript phrases)"
+                            },
+                            "turning_point": {
+                                "type": "string",
+                                "description": "What this quote reveals or changes (use transcript phrases)"
+                            },
+                            "after": {
+                                "type": "string",
+                                "description": "The implication or consequence (use transcript phrases)"
+                            }
+                        }
+                    },
+                    "visual_cinematic_premise": {
+                        "type": "string",
+                        "minLength": 250,
+                        "maxLength": 500,
+                        "description": "60-80 word PURE NARRATIVE mini-story using EXACT PHRASES from transcript. MUST include BEFORE/TURNING/AFTER structure. NO visual direction ('Show...'), NO shot types, NO body parts. This is a STORY for composers to INTERPRET."
+                    },
+                    "arc_position": {
+                        "type": "object",
+                        "properties": {
+                            "beat": {
+                                "type": "string",
+                                "description": "Beat name: HOOK, PAIN, SOLUTION, PROOF, CLOSE"
+                            },
+                            "narrative_function": {
+                                "type": "string",
+                                "description": "What this beat does for the story"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

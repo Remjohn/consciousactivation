@@ -1,0 +1,91 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audience_relationship": {
+      "title": "Audience Relationship",
+      "type": "string"
+    },
+    "brand_context_id": {
+      "title": "Brand Context Id",
+      "type": "string"
+    },
+    "brand_genesis_session_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "identity_truths": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Identity Truths",
+      "type": "array"
+    },
+    "positioning_tension": {
+      "title": "Positioning Tension",
+      "type": "string"
+    },
+    "source_references": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Source References",
+      "type": "array"
+    },
+    "supersedes_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "brand_context_id",
+    "version",
+    "brand_genesis_session_ref",
+    "identity_truths",
+    "audience_relationship",
+    "positioning_tension",
+    "source_references"
+  ],
+  "title": "BrandContextVersion",
+  "type": "object"
+}

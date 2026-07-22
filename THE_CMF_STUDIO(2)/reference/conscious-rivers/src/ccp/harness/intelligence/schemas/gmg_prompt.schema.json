@@ -1,0 +1,316 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "gmg_prompt.schema.json",
+    "title": "CMF GMG Prompt",
+    "description": "Generative Motion Graphics prompt structure following Noir Triad protocol and Expert persona system. Output from GMG Composer.",
+    "type": "object",
+    "required": [
+        "project_id",
+        "scene_code",
+        "expert",
+        "single_word",
+        "noir_triad",
+        "phases"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "Project identifier"
+        },
+        "scene_code": {
+            "type": "string",
+            "description": "Scene reference (e.g., 'W1', 'RESOLUTION-1-A-1')"
+        },
+        "script_reference": {
+            "type": "object",
+            "description": "Source quote from premise_analysis.json",
+            "properties": {
+                "quote": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "vae_decoder": {
+            "type": "object",
+            "description": "Reasoning chain before prompt generation",
+            "required": [
+                "semantic_check",
+                "shadow_filter",
+                "anti_cliche_gate"
+            ],
+            "properties": {
+                "semantic_check": {
+                    "type": "string",
+                    "description": "What is the narrative function? (Proof, Process, Pain, Logic, Connection)"
+                },
+                "shadow_filter": {
+                    "type": "string",
+                    "description": "Which Expert's visual language captures this function?"
+                },
+                "anti_cliche_gate": {
+                    "type": "object",
+                    "properties": {
+                        "stock_version": {
+                            "type": "string",
+                            "description": "Generic '3D art' version"
+                        },
+                        "subversion": {
+                            "type": "string",
+                            "description": "How we make it meaningful"
+                        }
+                    }
+                }
+            }
+        },
+        "expert": {
+            "type": "object",
+            "description": "Expert persona assignment",
+            "required": [
+                "id",
+                "name",
+                "narrative_function"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "enum": [
+                        "01",
+                        "02",
+                        "03",
+                        "04",
+                        "05",
+                        "06"
+                    ],
+                    "description": "Expert number"
+                },
+                "name": {
+                    "type": "string",
+                    "enum": [
+                        "Neo-Schematic Architect",
+                        "Mono-Kinetic Protagonist",
+                        "Matter Sculptor",
+                        "Paper Architect",
+                        "Data Weaver",
+                        "Visual Synthesizer"
+                    ]
+                },
+                "narrative_function": {
+                    "type": "string",
+                    "description": "What this expert visualizes",
+                    "examples": [
+                        "System, Connection",
+                        "Human Experience, Struggle",
+                        "Metaphor, State Change"
+                    ]
+                },
+                "visual_language": {
+                    "type": "array",
+                    "description": "Expert vocabulary",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "nodes",
+                        "grid",
+                        "vectors",
+                        "silhouette",
+                        "viscous",
+                        "axiom"
+                    ]
+                },
+                "word_count_target": {
+                    "type": "object",
+                    "properties": {
+                        "min": {
+                            "type": "integer"
+                        },
+                        "max": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "single_word": {
+            "type": "string",
+            "description": "ONE word only for typography (HEAVY, RISE, TRUTH, ORDRE)",
+            "maxLength": 20
+        },
+        "noir_triad": {
+            "type": "object",
+            "description": "Color palette constraint",
+            "required": [
+                "background",
+                "primary",
+                "accent"
+            ],
+            "properties": {
+                "background": {
+                    "type": "string",
+                    "const": "#050505",
+                    "description": "Pure black (always)"
+                },
+                "primary": {
+                    "type": "string",
+                    "description": "Subject color (grayscale, or forest green for Expert 01)",
+                    "examples": [
+                        "grayscale",
+                        "white",
+                        "grey",
+                        "silver",
+                        "#1B4332"
+                    ]
+                },
+                "accent": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "description": "Gold #FFC727 (null for Expert 06)",
+                    "examples": [
+                        "#FFC727",
+                        null
+                    ]
+                }
+            }
+        },
+        "phases": {
+            "type": "object",
+            "description": "3-Phase output structure",
+            "required": [
+                "t2i",
+                "i2i",
+                "i2v"
+            ],
+            "properties": {
+                "t2i": {
+                    "type": "object",
+                    "description": "Phase A: Last Frame (Text-to-Image)",
+                    "required": [
+                        "prompt"
+                    ],
+                    "properties": {
+                        "prompt": {
+                            "type": "string",
+                            "description": "T2I prompt in Expert voice"
+                        },
+                        "negative_prompt": {
+                            "type": "string"
+                        },
+                        "output_file": {
+                            "type": "string",
+                            "description": "GMG_W{N}_T2I.txt"
+                        }
+                    }
+                },
+                "i2i": {
+                    "type": "object",
+                    "description": "Phase B: First Frame (Image-to-Image deconstruction)",
+                    "required": [
+                        "prompt",
+                        "strength"
+                    ],
+                    "properties": {
+                        "action": {
+                            "type": "object",
+                            "properties": {
+                                "delete": {
+                                    "type": "string",
+                                    "description": "What to remove"
+                                },
+                                "reset": {
+                                    "type": "string",
+                                    "description": "What to reset to initial state"
+                                },
+                                "keep": {
+                                    "type": "string",
+                                    "description": "What to preserve"
+                                }
+                            }
+                        },
+                        "prompt": {
+                            "type": "string",
+                            "description": "I2I deconstruction instruction"
+                        },
+                        "strength": {
+                            "type": "number",
+                            "minimum": 0.4,
+                            "maximum": 0.8,
+                            "default": 0.65
+                        },
+                        "output_file": {
+                            "type": "string",
+                            "description": "GMG_W{N}_I2I.txt"
+                        }
+                    }
+                },
+                "i2v": {
+                    "type": "object",
+                    "description": "Phase C: Motion (Image-to-Video)",
+                    "required": [
+                        "prompt",
+                        "physics_engine",
+                        "duration"
+                    ],
+                    "properties": {
+                        "physics_engine": {
+                            "type": "string",
+                            "description": "Expert-specific motion type",
+                            "enum": [
+                                "Snap, Deploy, Connect",
+                                "Drift, Blow, Weather",
+                                "Melt, Crack, Bloom, Grow",
+                                "Layer, Peel, Stack",
+                                "Count, Flow, Rise",
+                                "Draw, Extend, Rotate"
+                            ]
+                        },
+                        "prompt": {
+                            "type": "string",
+                            "description": "Physics-based motion description"
+                        },
+                        "duration": {
+                            "type": "string",
+                            "default": "5s"
+                        },
+                        "fps": {
+                            "type": "integer",
+                            "default": 24
+                        },
+                        "output_file": {
+                            "type": "string",
+                            "description": "GMG_W{N}_I2V.txt"
+                        }
+                    }
+                }
+            }
+        },
+        "quality_gates": {
+            "type": "object",
+            "description": "Self-validation before output",
+            "properties": {
+                "noir_triad_valid": {
+                    "type": "boolean"
+                },
+                "single_word_valid": {
+                    "type": "boolean"
+                },
+                "expert_voice_valid": {
+                    "type": "boolean"
+                },
+                "word_count_valid": {
+                    "type": "boolean"
+                },
+                "three_phases_complete": {
+                    "type": "boolean"
+                },
+                "physics_verbs_valid": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

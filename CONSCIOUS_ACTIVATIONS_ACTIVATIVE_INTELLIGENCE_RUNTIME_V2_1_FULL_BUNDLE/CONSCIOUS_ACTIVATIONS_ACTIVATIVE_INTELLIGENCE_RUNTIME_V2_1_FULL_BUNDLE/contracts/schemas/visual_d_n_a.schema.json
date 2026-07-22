@@ -1,0 +1,133 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "brand_context_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "composition_tendencies": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Composition Tendencies",
+      "type": "array"
+    },
+    "edge_behaviors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Edge Behaviors",
+      "type": "array"
+    },
+    "materiality": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Materiality",
+      "type": "array"
+    },
+    "motion_character": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Motion Character",
+      "type": "array"
+    },
+    "negative_space_functions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Negative Space Functions",
+      "type": "array"
+    },
+    "prohibited_centroid_defaults": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Prohibited Centroid Defaults",
+      "type": "array"
+    },
+    "real_life_reference_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Real Life Reference Refs",
+      "type": "array"
+    },
+    "subject_treatment": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Subject Treatment",
+      "type": "array"
+    },
+    "typographic_posture": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Typographic Posture",
+      "type": "array"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "visual_dna_id": {
+      "title": "Visual Dna Id",
+      "type": "string"
+    },
+    "visual_temperature": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Visual Temperature",
+      "type": "array"
+    }
+  },
+  "required": [
+    "visual_dna_id",
+    "version",
+    "brand_context_ref",
+    "real_life_reference_refs",
+    "subject_treatment",
+    "visual_temperature",
+    "materiality",
+    "composition_tendencies",
+    "negative_space_functions",
+    "edge_behaviors",
+    "typographic_posture"
+  ],
+  "title": "VisualDNA",
+  "type": "object"
+}

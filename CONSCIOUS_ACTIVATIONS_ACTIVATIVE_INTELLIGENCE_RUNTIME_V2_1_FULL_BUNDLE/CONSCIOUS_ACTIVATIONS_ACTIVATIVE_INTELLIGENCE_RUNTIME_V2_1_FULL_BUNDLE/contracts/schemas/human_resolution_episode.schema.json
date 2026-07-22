@@ -1,0 +1,185 @@
+{
+  "$defs": {
+    "ApplicabilityEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "audience_segments": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Audience Segments",
+          "type": "array"
+        },
+        "coach_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Coach Ids",
+          "type": "array"
+        },
+        "exclusions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "formats": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Formats",
+          "type": "array"
+        },
+        "platforms": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Platforms",
+          "type": "array"
+        },
+        "pressure_domains": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Pressure Domains",
+          "type": "array"
+        },
+        "relationship_stages": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Relationship Stages",
+          "type": "array"
+        }
+      },
+      "title": "ApplicabilityEnvelope",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_replacement_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "applicability": {
+      "$ref": "#/$defs/ApplicabilityEnvelope"
+    },
+    "before_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "episode_id": {
+      "title": "Episode Id",
+      "type": "string"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "exact_reason": {
+      "title": "Exact Reason",
+      "type": "string"
+    },
+    "implicated_layer": {
+      "title": "Implicated Layer",
+      "type": "string"
+    },
+    "invalidated_descendant_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Invalidated Descendant Refs",
+      "type": "array"
+    },
+    "learning_recommendation": {
+      "enum": [
+        "none",
+        "capture_only",
+        "steering_candidate",
+        "constitutional_candidate"
+      ],
+      "title": "Learning Recommendation",
+      "type": "string"
+    },
+    "operator_action": {
+      "title": "Operator Action",
+      "type": "string"
+    },
+    "wrong_reading": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Wrong Reading"
+    }
+  },
+  "required": [
+    "episode_id",
+    "before_ref",
+    "operator_action",
+    "exact_reason",
+    "implicated_layer",
+    "applicability",
+    "evidence_refs",
+    "learning_recommendation",
+    "created_at"
+  ],
+  "title": "HumanResolutionEpisode",
+  "type": "object"
+}

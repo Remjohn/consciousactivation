@@ -1,0 +1,101 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "consumer_product": {
+      "title": "Consumer Product",
+      "type": "string"
+    },
+    "consumer_verdict": {
+      "enum": [
+        "accepted",
+        "rejected",
+        "adapter_required"
+      ],
+      "title": "Consumer Verdict",
+      "type": "string"
+    },
+    "limitations": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "next_admissible_action": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Admissible Action"
+    },
+    "object_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "producer_product": {
+      "title": "Producer Product",
+      "type": "string"
+    },
+    "producer_verdict": {
+      "enum": [
+        "pass",
+        "blocked",
+        "superseded"
+      ],
+      "title": "Producer Verdict",
+      "type": "string"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "schema_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "producer_product",
+    "consumer_product",
+    "object_ref",
+    "schema_ref",
+    "producer_verdict",
+    "consumer_verdict"
+  ],
+  "title": "ProductHandoffReceipt",
+  "type": "object"
+}

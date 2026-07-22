@@ -1,0 +1,34 @@
+schema: ../../schemas/container-rules.schema.json
+schema_id: cmf.container.rules/v1
+container_id: CHALLENGE
+enabled: true
+priority:
+  tier: structural
+  rank: 3
+enforcement:
+  mode: block_on_fail
+  default_result: REVISE
+applies_to:
+  stages:
+    - scene_builder
+    - editor_regeneration
+required_sequence:
+  previous:
+    - SETUP
+  next:
+    - TURNING_POINT
+warn_conditions:
+  - metric: cls_observed
+    operator: gt
+    value: 3.0
+  - metric: problem_clarity_score
+    operator: lt
+    value: 0.75
+route_hints:
+  preferred_components:
+    - CHALLENGE
+    - FRAME_AND_CONTRAST
+    - JUXTAPOSITION
+    - THE_EVIDENCE
+    - DEMONSTRATION
+  fallback: problem_state_contrast

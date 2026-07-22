@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-035 - Scene Intelligence Runtime Asset",
+  "description": "Compiled scene-builder/editor-regeneration runtime asset that merges container/component contracts with research-backed scene template, effect, and sequence intelligence.",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "asset_id",
+    "version",
+    "compile_target",
+    "runtime_stage",
+    "compiled_at",
+    "validation_contract",
+    "arc_stage_container_map",
+    "active_containers",
+    "active_components",
+    "container_component_index",
+    "containers",
+    "components",
+    "scene_templates",
+    "container_template_index",
+    "effect_library",
+    "research_contracts",
+    "scoring_models",
+    "evidence_refs"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "enum": ["cmf.scene.intelligence.runtime/v1"]
+    },
+    "asset_id": { "type": "string" },
+    "version": { "type": "string" },
+    "compile_target": {
+      "type": "string",
+      "enum": ["SCENE_BUILDER", "EDITOR_REGENERATION"]
+    },
+    "runtime_stage": { "type": "string" },
+    "compiled_at": { "type": "string" },
+    "validation_contract": { "type": "object" },
+    "arc_stage_container_map": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "active_containers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "active_components": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "container_component_index": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "containers": { "type": "object" },
+    "components": { "type": "object" },
+    "research_contracts": {
+      "type": "object",
+      "required": ["scene_template_contract", "effect_contract"],
+      "properties": {
+        "scene_template_contract": { "type": "object" },
+        "effect_contract": { "type": "object" }
+      }
+    },
+    "scene_templates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "template_id",
+          "name",
+          "container_id",
+          "preferred_components",
+          "base_cls",
+          "target_attention_mode",
+          "isc_priority",
+          "memory_role",
+          "av_congruence_mode",
+          "continuity_requirement",
+          "text_policy",
+          "recommended_duration_seconds",
+          "max_primary_visual_units",
+          "peak_end_weight",
+          "coded_effects"
+        ],
+        "properties": {
+          "template_id": { "type": "string" },
+          "name": { "type": "string" },
+          "container_id": { "type": "string" },
+          "preferred_components": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "base_cls": { "type": "number" },
+          "coded_effects": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "editorial_techniques": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "container_template_index": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "effect_library": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "effect_id",
+          "category",
+          "cls_impact",
+          "arousal",
+          "presence",
+          "attention_role",
+          "congruence_mode",
+          "text_competition_risk",
+          "best_for",
+          "avoid_when"
+        ],
+        "properties": {
+          "effect_id": { "type": "string" },
+          "category": { "type": "string" },
+          "cls_impact": { "type": "number" },
+          "arousal": { "type": "number" },
+          "presence": { "type": "number" },
+          "attention_role": { "type": "string" },
+          "congruence_mode": { "type": "string" },
+          "sync_window_ms": { "type": "object" },
+          "text_competition_risk": { "type": "string" },
+          "best_for": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "avoid_when": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "cognitive_rhythm_validator": { "type": "object" },
+    "scoring_models": { "type": "object" },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

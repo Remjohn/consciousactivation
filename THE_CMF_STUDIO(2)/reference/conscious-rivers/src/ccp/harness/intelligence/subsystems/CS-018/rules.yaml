@@ -1,0 +1,30 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-018
+enabled: true
+priority:
+  tier: encoding
+  rank: 8
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: presence_arousal_ratio
+    operator: lt
+    value: 1.25
+route_hints:
+  prefer:
+    - subtle_drift
+    - breathing_motion
+  avoid:
+    - gratuitous_handheld_shake

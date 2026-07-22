@@ -1,0 +1,24 @@
+{
+  "bundle_id": "ccp_capability_preflight_provider_menu_v1_patch",
+  "version": "1.0.0",
+  "purpose": "Capability preflight and provider menu layer before real provider/render execution.",
+  "integration_mode": "repo_overlay_milestone_commits",
+  "contains": {
+    "architecture_docs": 7,
+    "contract_files": 1,
+    "repository_files": 1,
+    "service_files": 4,
+    "registries": 8,
+    "skill_manifests": 9,
+    "tests": 1,
+    "apply_instructions": 1
+  },
+  "hard_laws": [
+    "Do not call providers.",
+    "Do not call runtimes.",
+    "Do not infer configured secrets.",
+    "Missing required capabilities block the pipeline.",
+    "Batch execution is blocked until sample approval when sample_required=True.",
+    "Operator must see configured/missing/degraded/blocked status before real execution."
+  ]
+}

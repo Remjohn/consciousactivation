@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-013
+enabled: true
+priority:
+  tier: recall
+  rank: 4
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+warn_conditions:
+  - metric: novelty_score
+    operator: lt
+    value: 0.7
+route_hints:
+  vary:
+    - scene_vehicle
+    - timing_signature
+    - motion_palette

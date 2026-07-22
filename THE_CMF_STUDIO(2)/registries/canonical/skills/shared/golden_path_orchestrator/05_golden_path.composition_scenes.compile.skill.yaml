@@ -1,0 +1,18 @@
+id: golden_path.composition_scenes.compile
+version: "1.0.0"
+status: active
+owner_agent: golden_path_orchestrator_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Run or verify the deterministic Format 02 Health Myth golden path."
+inputs:
+  - Format02GoldenPathInput
+outputs:
+  - GoldenPathRun
+  - GoldenPathReceipt
+hard_gates:
+  - "Do not call providers."
+  - "Do not call real Remotion or FFmpeg."
+  - "Do not create a second harness."
+  - "Preserve brand_context_version_id."
+  - "Preserve source_span_refs."
+  - "Exactly 8 Format 02 scenes."

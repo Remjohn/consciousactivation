@@ -1,0 +1,106 @@
+{
+  "schema": "cmf.composition.reaction_clip_preview.v0",
+  "status": "draft_for_visual_approval_not_final_template_json",
+  "canonical_layout": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "unit": "px",
+      "aspect_ratio": "9:16"
+    },
+    "zones": {
+      "reaction_ui_zone": {
+        "position": "upper",
+        "height_px": 1000,
+        "role": "mechanic UI synchronized to interviewer question and guest reaction beat"
+      },
+      "human_scene_zone": {
+        "position": "lower",
+        "height_px": 920,
+        "role": "upper-body interviewer and guest with removed backgrounds composited into scene",
+        "supported_modes": [
+          "duo_interaction",
+          "guest_only_reaction"
+        ]
+      }
+    }
+  },
+  "beat_sync_contract": [
+    "interviewer_question",
+    "guest_reaction",
+    "mechanic_state_change",
+    "reveal_or_lock"
+  ],
+  "compositions": [
+    {
+      "template_code": "VRS-SPLIT",
+      "title": "Versus Split Screen",
+      "format": "short video / visual poll / carousel cover",
+      "accent": "#2DA7FF",
+      "renderer": "render_vrs",
+      "file": "vrs-split-reaction-clip.png",
+      "source_app": "apps/react-debate",
+      "human_scene_mode": "duo"
+    },
+    {
+      "template_code": "TRK-TIER",
+      "title": "Tier List Ranking",
+      "format": "ranking short / carousel sequence",
+      "accent": "#FFC21A",
+      "renderer": "render_tier",
+      "file": "trk-tier-reaction-clip.png",
+      "source_app": "apps/react-tierlist",
+      "human_scene_mode": "duo"
+    },
+    {
+      "template_code": "RNK-BLIND",
+      "title": "Blind Ranking",
+      "format": "blind ranking short video",
+      "accent": "#FFC21A",
+      "renderer": "render_blind",
+      "file": "rnk-blind-reaction-clip.png",
+      "source_app": "apps/react-blind-rank",
+      "human_scene_mode": "duo"
+    },
+    {
+      "template_code": "RNK-PROPOSAL",
+      "title": "Proposal Ranking",
+      "format": "proposal ranking quiz",
+      "accent": "#FFC21A",
+      "renderer": "render_proposal",
+      "file": "rnk-proposal-reaction-clip.png",
+      "source_app": "apps/react-ranking-quiz",
+      "human_scene_mode": "duo"
+    },
+    {
+      "template_code": "ELM-BRACKET",
+      "title": "Choice Bracket",
+      "format": "elimination choice video",
+      "accent": "#FF3B3B",
+      "renderer": "render_bracket",
+      "file": "elm-bracket-reaction-clip.png",
+      "source_app": "apps/react-elimination",
+      "human_scene_mode": "duo"
+    },
+    {
+      "template_code": "MIR-QUIZ",
+      "title": "Mirror Quiz",
+      "format": "mirror quiz / identity diagnostic",
+      "accent": "#34C759",
+      "renderer": "render_mirror",
+      "file": "mir-quiz-reaction-clip.png",
+      "source_app": "apps/react-mirror-quiz",
+      "human_scene_mode": "duo"
+    },
+    {
+      "template_code": "AUTH-LADDER",
+      "title": "Authority Ladder Quiz",
+      "format": "authority quiz / teaching sequence",
+      "accent": "#FFC21A",
+      "renderer": "render_authority",
+      "file": "auth-ladder-reaction-clip.png",
+      "source_app": "apps/react-authority-quiz",
+      "human_scene_mode": "duo"
+    }
+  ]
+}

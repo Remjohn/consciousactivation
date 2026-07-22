@@ -1,0 +1,14 @@
+# Service Plan
+
+```text
+composition_intelligence_service.py
+composition_template_service.py
+cognitive_load_gate_service.py
+attention_path_service.py
+text_placement_service.py
+real_life_cutout_composition_service.py
+provider_composition_plate_service.py
+reference_edit_contract_service.py
+format02_composition_service.py
+composition_commander_service.py
+```

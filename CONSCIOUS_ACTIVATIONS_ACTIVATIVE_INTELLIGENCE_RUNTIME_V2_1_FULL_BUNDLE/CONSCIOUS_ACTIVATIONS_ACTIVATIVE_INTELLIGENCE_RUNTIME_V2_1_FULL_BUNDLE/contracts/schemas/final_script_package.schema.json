@@ -1,0 +1,208 @@
+{
+  "$defs": {
+    "FinalScriptSegment": {
+      "additionalProperties": false,
+      "properties": {
+        "local_archetype_function": {
+          "title": "Local Archetype Function",
+          "type": "string"
+        },
+        "local_primitive_binding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Local Primitive Binding Ids",
+          "type": "array"
+        },
+        "segment_id": {
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "source_span_refs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "title": "Source Span Refs",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "transformation_kind": {
+          "enum": [
+            "verbatim",
+            "condensed",
+            "adapted",
+            "newly_authored"
+          ],
+          "title": "Transformation Kind",
+          "type": "string"
+        },
+        "voice_dna_check": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_applicable"
+          ],
+          "title": "Voice Dna Check",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment_id",
+        "text",
+        "transformation_kind",
+        "local_archetype_function",
+        "local_primitive_binding_ids",
+        "voice_dna_check"
+      ],
+      "title": "FinalScriptSegment",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "anti_centroid_locks": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Anti Centroid Locks",
+      "type": "array"
+    },
+    "archetype_coalition_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "brand_context_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "category_target": {
+      "title": "Category Target",
+      "type": "string"
+    },
+    "edge_product_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "expression_moment_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Expression Moment Refs",
+      "type": "array"
+    },
+    "final_script_id": {
+      "title": "Final Script Id",
+      "type": "string"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "draft",
+        "validated",
+        "approved",
+        "superseded"
+      ],
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "operator_approval_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "primitive_coalition_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "role_tension_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "rscs_receipt_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 5,
+      "title": "Rscs Receipt Refs",
+      "type": "array"
+    },
+    "segments": {
+      "items": {
+        "$ref": "#/$defs/FinalScriptSegment"
+      },
+      "minItems": 1,
+      "title": "Segments",
+      "type": "array"
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "visual_dna_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "voice_dna_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "final_script_id",
+    "version",
+    "source_package_ref",
+    "expression_moment_refs",
+    "role_tension_contract_ref",
+    "primitive_coalition_ref",
+    "archetype_coalition_ref",
+    "edge_product_ref",
+    "brand_context_ref",
+    "voice_dna_ref",
+    "visual_dna_ref",
+    "rscs_receipt_refs",
+    "segments",
+    "category_target",
+    "wrong_reading_locks",
+    "anti_centroid_locks",
+    "operator_approval_ref",
+    "lifecycle_state"
+  ],
+  "title": "FinalScriptPackage",
+  "type": "object"
+}

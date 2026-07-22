@@ -1,0 +1,33 @@
+schema: ../../schemas/container-rules.schema.json
+schema_id: cmf.container.rules/v1
+container_id: SETUP
+enabled: true
+priority:
+  tier: structural
+  rank: 2
+enforcement:
+  mode: block_on_fail
+  default_result: REVISE
+applies_to:
+  stages:
+    - scene_builder
+    - editor_regeneration
+required_sequence:
+  previous:
+    - HOOK
+  next:
+    - CHALLENGE
+warn_conditions:
+  - metric: cls_observed
+    operator: gt
+    value: 2.0
+  - metric: asl_observed
+    operator: lt
+    value: 2.5
+route_hints:
+  preferred_components:
+    - SETUP
+    - VOICE_OF_TRUTH
+    - ARCHETYPAL_MOMENT
+    - THE_VIBE
+  fallback: contextual_setup

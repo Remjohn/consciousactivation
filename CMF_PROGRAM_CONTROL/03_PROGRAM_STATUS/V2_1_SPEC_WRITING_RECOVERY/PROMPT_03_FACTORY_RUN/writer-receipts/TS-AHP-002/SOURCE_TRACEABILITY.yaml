@@ -1,0 +1,47 @@
+schema_version: conscious-activations-source-traceability/v3.3
+spec_id: TS-AHP-002
+quality_state: WRITTEN_PENDING_AUDIT
+authority_state: CANDIDATE_NOT_CURRENT
+traceability:
+  FR-007:
+    requirement: Load exact AtomicHarnessDefinition.
+    story: ST-03.01
+    source_ids: [SRC-CUR-004, SRC-CUR-008, SRC-CUR-010, SRC-LEG-001]
+    spec_sections: ['3', '4', '5', '6', '7', '9.1', '9.2', '9.3', '10']
+  FR-008:
+    requirement: Validate the complete Harness graph.
+    story: ST-03.01
+    source_ids: [SRC-CUR-004, SRC-CUR-008, SRC-CUR-010, SRC-LEG-001]
+    spec_sections: ['3', '4', '5', '6', '7', '9.3', '9.4', '10']
+  FR-009:
+    requirement: Compile HarnessExecutionBindingManifest.
+    story: ST-03.01
+    source_ids: [SRC-CUR-004, SRC-CUR-008, SRC-CUR-010, SRC-LEG-001]
+    spec_sections: ['3', '5', '6', '7', '9.5', '9.6', '9.11', '10']
+  FR-010:
+    requirement: Forbid semantic mutation by binding.
+    story: ST-03.01
+    source_ids: [SRC-CUR-004, SRC-CUR-010, SRC-LEG-001]
+    spec_sections: ['3', '5', '6', '8', '9.7', '10']
+  FR-011:
+    requirement: Fail on unresolved ownership.
+    story: ST-03.01
+    source_ids: [SRC-CUR-008, SRC-CUR-010, SRC-LEG-001]
+    spec_sections: ['3', '5', '6', '8', '9.6', '9.8', '9.13', '10']
+  FR-012:
+    requirement: Support supersession and invalidation.
+    story: ST-03.01
+    source_ids: [SRC-CUR-004, SRC-CUR-008, SRC-CUR-010, SRC-LEG-001]
+    spec_sections: ['5', '6', '7', '8', '9.9', '9.10', '9.11', '9.12', '10']
+story_acceptance:
+  ST-03.01_AC1_primary_journey: ['5', '6', '9.1', '9.3', '9.4', '9.5']
+  ST-03.01_AC2_adversarial_denial: ['3', '8', '9.2', '9.6', '9.7', '9.8', '9.13']
+  ST-03.01_AC3_evidence_and_replay: ['5', '6', '8', '9.1', '9.4', '9.9', '9.10', '9.11']
+  ST-03.01_AC4_cbar_hardening: ['3', '6', '8', '9.6', '9.7', '9.13']
+  ST-03.01_AC5_selective_recovery: ['5', '8', '9.9', '9.10']
+upstream_draft_interfaces:
+  TS-AHP-001: authority_status_source_admission_reference
+  TS-AIR-001: semantic_reference_lineage_lifecycle_reference
+unattributed_unavailable_source_claims: []
+result: PASS_COMPLETE_FOR_WRITING_PENDING_INDEPENDENT_AUDIT
+

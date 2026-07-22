@@ -1,0 +1,178 @@
+experience_primitive_id: "EXP-FBK-001"
+canonical_name: "RIM Feedback Discipline"
+aliases:
+  - "Relevant Immediate Meaningful"
+  - "The Action-Reaction Loop"
+  - "Real-Time Scoring"
+
+experience_family: "feedback_scoring"
+mechanic_role: "system"
+moment_role: "feedback_delivery"
+implementation_role: "architectural"
+
+source_audits:
+  - audit_file: "AUDIT_SuperBetter_Jane_McGonigal.md"
+    primitive_name_in_audit: "RIM Feedback"
+    mcda_score: 180
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_SuperBetter_Jane_McGonigal.md"
+  - audit_file: "AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+    primitive_name_in_audit: "The Action-Reaction Loop"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+
+book_reference:
+  title: "SuperBetter / Reality Is Broken"
+  author: "Jane McGonigal"
+  chapters:
+    - "Chapter 1: What Exactly Is a Game?"
+    - "Chapter 6: Power-ups"
+  key_pages: "15-28"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Reality is Broken - Jane McGonigal.md"
+
+summary: >
+  RIM Feedback Discipline ensures that all feedback delivered to the user is Relevant
+  (tied directly to their current goal), Immediate (delivered the moment the action
+  is completed), and Meaningful (understandable within the context of their identity).
+  It strictly bans delayed, disconnected, or purely vanity metrics.
+
+core_move: >
+  Architect the feedback loops so that the moment the user completes an action, the
+  system immediately returns a score or visual response that explicitly explains
+  *why* the action mattered to the user's specific progression.
+
+why_it_works: >
+  Jane McGonigal defines Direct Feedback as one of the four defining traits of a
+  game. Without immediate, meaningful feedback, the user feels like they are throwing
+  effort into a void, which destroys intrinsic motivation. By ensuring the feedback
+  is 'RIM' (Relevant, Immediate, Meaningful), the user's brain successfully maps
+  the effort to the reward, reinforcing the neural pathway necessary for habit
+  formation and triggering curiosity about how to score higher next time.
+
+examples:
+  - context: "BOOK: Reality Is Broken - The Tetris Drop"
+    application: >
+      When a player drops a piece in Tetris, the line immediately flashes and disappears.
+      The score updates instantly. The feedback is perfectly Relevant, Immediate, and
+      Meaningful to the goal of clearing the board.
+    effect: >
+      Creates a tight neurological loop that makes the game highly addictive.
+
+  - context: "CCP: The Live Conviction Meter"
+    application: >
+      During a V2WS Automated Webinar, the coach receives real-time, ambient color
+      feedback on the edges of their screen based on their vocal intensity (Immediate).
+      Green means high conviction, alerting them they are succeeding (Meaningful).
+    effect: >
+      Allows micro-adjustments in real-time without breaking flow.
+
+  - context: "CCP: The Instant AI Scorecard"
+    application: >
+      The millisecond a coach submits a Conscious Reactions audio clip, the CPSC
+      scoring engine processes it. Within 3 seconds, a Telegram message arrives with
+      their exact Delivery Score and a 1-sentence breakdown.
+    effect: >
+      The extreme immediacy prevents post-recording anxiety and capitalizes on peak curiosity.
+
+  - context: "CCP: The +1 Resonance Power-Up"
+    application: >
+      When a user receives a 'Based' vote from a peer, they instantly receive a push
+      notification saying '+1 Resonance. Your message connected.'
+    effect: >
+      Transforms a generic 'Like' into a meaningful validation of their speaking identity.
+
+  - context: "CCP: The Post-Debate Haptic Pulse"
+    application: >
+      Upon finishing a CBCS Law 28 drill, the Mini App vibrates sequentially 3 times
+      and displays a visual checkmark before returning to the home screen.
+    effect: >
+      Provides satisfying, visceral feedback that the heavy cognitive lifting is complete.
+
+anti_examples:
+  - description: >
+      A user records 10 audio responses over a week. On Sunday, they receive an email
+      saying 'You spoke 5,000 words this week! Good job.'
+    why_it_fails: >
+      The feedback is dangerously delayed. The user cannot connect the score to any
+      specific performance, breaking the action-reaction loop and rendering the data meaningless.
+
+experience_stage_fit:
+  entry: 0.6
+  activation: 0.8
+  recording: 0.6
+  scoring: 1.0
+  social_spread: 0.7
+  recovery: 0.4
+  retention: 0.9
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 1.0
+  score_card: 1.0
+  share_asset: 0.8
+  voice_prompt: 0.4
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.3
+  clarity: 0.9
+  safety: 0.7
+  status: 0.8
+  belonging: 0.4
+  curiosity: 0.9
+  replay_desire: 0.9
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.9
+  challenge_progression: 0.9
+  silent_referral: 0.8
+  coach_os_deployment: 0.7
+  premium_trust_architecture: 0.6
+  onboarding_activation: 0.8
+  social_economy: 0.9
+  content_extraction: 0.7
+
+activation_conditions:
+  - "User completes any loop requiring physical or cognitive effort"
+  - "A peer interacts with the user's previously generated content"
+
+suppression_conditions:
+  - "User is in the middle of a continuous recording (do not interrupt with loud feedback unless it is ambient)."
+
+misuse_modes:
+  - "Notification Spam — confusing 'Immediate' with 'Constant', pinging the user for every tiny background event until they mute the bot."
+  - "Vanity Metrics — giving them a score that goes up arbitrarily (e.g., '10 points for logging in') which contains no meaning about their actual skill."
+
+synergizes_with:
+  - "EXP-TRG-006" # The Variable Reward Schedule (RIM feedback is the vehicle for variable rewards)
+  - "EXP-FRC-003" # B=MAP Friction Audit (Immediate feedback increases perceived Ability for the next loop)
+
+conflicts_with:
+  - "EXP-FBK-004" # Bring the Data Forward (Cumulative data relies on delayed aggregation, creating a necessary tension with RIM)
+
+implementation_targets:
+  frontend_components:
+    - "InstantScoreCard — the UI component that flashes immediately after recording submission"
+    - "AmbientConvictionGlow — real-time border color changes during V2WS recording"
+  backend_rules:
+    - "scoring_engine: enforce maximum 3-second latency on all CPSC audio processing"
+  telemetry_events:
+    - "feedback_latency_ms"
+    - "bounce_rate_post_score"
+  experiments:
+    - "A/B test: Immediate push notification of a vote vs Silently updating the score on the dashboard"
+
+experience_metrics:
+  entry_rate: 0.6
+  react_rate: 0.9
+  completion_rate: 0.8
+  share_rate: 0.7
+  comeback_rate: 1.0
+  day7_retention: 0.9
+  upgrade_signal: 0.7
+
+crosswalk_id: "XW-FBK-RIM"
+crosswalk_note: >
+  If the AI is too slow, the game is broken. Latency is the enemy of fiero.

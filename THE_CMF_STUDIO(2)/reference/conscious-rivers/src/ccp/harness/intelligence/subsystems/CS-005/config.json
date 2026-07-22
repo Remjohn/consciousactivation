@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-005",
+  "name": "Safe Zone Enforcer",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Eye Tracking",
+    "Mobile center-bias studies"
+  ],
+  "inputs": [
+    "element_bounding_boxes",
+    "platform_template",
+    "aspect_ratio",
+    "ui_exclusion_zones"
+  ],
+  "outputs": [
+    "placement_compliance_report",
+    "verdict",
+    "violations"
+  ],
+  "thresholds": {
+    "preferred_face_band_pct": {
+      "min": 15,
+      "max": 25
+    },
+    "preferred_caption_band_pct": {
+      "min": 30,
+      "max": 60
+    },
+    "blocked_bottom_zone_pct": 20,
+    "avoid_right_margin_pct": 15
+  },
+  "default_action_on_fail": "REVISE"
+}

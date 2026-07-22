@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf.component.rules.schema.v1",
+  "title": "CMF Component Rules",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_id",
+    "component_id",
+    "enabled",
+    "selection_priority",
+    "enforcement",
+    "applies_to"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string"
+    },
+    "schema_id": {
+      "const": "cmf.component.rules/v1"
+    },
+    "component_id": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "selection_priority": {
+      "type": "object"
+    },
+    "enforcement": {
+      "type": "object"
+    },
+    "applies_to": {
+      "type": "object"
+    },
+    "incompatibilities": {
+      "type": "array"
+    },
+    "warn_conditions": {
+      "type": "array"
+    },
+    "route_hints": {
+      "type": "object"
+    },
+    "selection_conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["if", "then"],
+        "properties": {
+          "if": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["metric", "operator", "value"],
+            "properties": {
+              "metric": { "type": "string" },
+              "operator": { "type": "string" },
+              "value": {}
+            }
+          },
+          "then": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["variant"],
+            "properties": {
+              "variant": { "type": "string" },
+              "score_adjustment": { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

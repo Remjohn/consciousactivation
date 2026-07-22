@@ -1,0 +1,51 @@
+id: gmg.expert_04.compile
+version: "1.0.0"
+status: active
+name: "Gmg Expert_04 Compile"
+owner_agent: style_route_agent
+sub_agents:
+  - cac_route_agent
+  - gmg_route_agent
+  - paper_cut_route_agent
+  - provider_blueprint_agent
+skill_type: dspy_plus_pydantic
+dspy_program: GMGExpert04Program
+purpose: "Compile Paper Architect spec with document/evidence/archive input."
+inputs:
+  - brand_id
+  - brand_context_version_id
+  - visual_preproduction_packet_id
+  - asset_candidate_refs
+  - frame_profile
+  - composition_role
+outputs:
+  - StyleRouteTypedObject
+  - StyleRouteReceipt
+required_contracts:
+  - StyleRouteDecisionRequest
+  - StyleRouteDecision
+  - StyleRouteSourcePacket
+  - RouteProductionSpec
+  - ProviderJobBlueprint
+required_registries:
+  - registry.visual_styles.style_routes.v1
+  - registry.visual_styles.route_preconditions.v1
+  - registry.visual_styles.source_grounding_modes.v1
+  - registry.visual_styles.route_forbidden_patterns.v1
+hard_gates:
+  - "One provider job gets one primary style route."
+  - "CAC requires real-life/source reference."
+  - "GMG Expert 03 requires photo cutout object."
+  - "GMG Expert 04 requires document/evidence/archive input."
+  - "Paper-Cut Artifact requires source object reference."
+  - "Style Route must not execute providers."
+forbidden_shortcuts:
+  - "Do not average route systems in a single provider job."
+  - "Do not bypass source grounding requirements."
+  - "Do not convert route selection into generic style adjectives."
+runtime_accuracy:
+  pydantic_validation: required
+  dspy_reasoning: allowed_when_dspy_program_is_not_null
+  deterministic_guards: required
+  idempotency_key: required_for_state_change_or_provider_job
+  audit_receipt: required

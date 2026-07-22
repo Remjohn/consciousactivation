@@ -1,0 +1,36 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-023
+enabled: true
+priority:
+  tier: encoding
+  rank: 9
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: target_asl_seconds
+    operator: outside_range
+    value:
+      min: 0.8
+      max: 2.4
+route_hints:
+  generate:
+    - clustered_bursts
+    - reset_spaces
+    - natural_variation
+  regenerate:
+    - retime_neighbor_window
+    - preserve_target_beat_identity
+    - rebalance_transition_density

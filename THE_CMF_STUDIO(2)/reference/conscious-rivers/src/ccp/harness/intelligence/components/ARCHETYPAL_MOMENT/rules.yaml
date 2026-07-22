@@ -1,0 +1,27 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: ARCHETYPAL_MOMENT
+enabled: true
+selection_priority:
+  tier: premium
+  rank: 12
+enforcement:
+  mode: allow_with_checks
+  default_result: REVIEW
+applies_to:
+  containers:
+    - SETUP
+    - TURNING_POINT
+    - VISION
+  stages:
+    - scene_builder
+incompatibilities:
+  - symbol_without_context
+warn_conditions:
+  - metric: symbolic_readability_score
+    operator: lt
+    value: 0.75
+route_hints:
+  select:
+    - use_when_personal_vulnerability_is_not_available
+    - use_when_mythic_framing_strengthens_identity

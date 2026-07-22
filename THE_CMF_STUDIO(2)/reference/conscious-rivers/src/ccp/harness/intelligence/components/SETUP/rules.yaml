@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: SETUP
+enabled: true
+selection_priority:
+  tier: default
+  rank: 2
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - SETUP
+  stages:
+    - scene_builder
+incompatibilities:
+  - premature_climax
+warn_conditions:
+  - metric: asl_observed
+    operator: lt
+    value: 2.5
+route_hints:
+  select:
+    - use_when_personal_context_is_available
+    - use_when_clarity_matters_more_than_novelty

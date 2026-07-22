@@ -1,0 +1,166 @@
+{
+  "$defs": {
+    "ActivationDirection": {
+      "enum": [
+        "mirror",
+        "target",
+        "tribe",
+        "moral",
+        "aspiration",
+        "future_loss",
+        "grief",
+        "nostalgia",
+        "contradiction",
+        "curiosity"
+      ],
+      "title": "ActivationDirection",
+      "type": "string"
+    },
+    "CampaignAssetPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "derivative_program_ref": {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        "edge": {
+          "title": "Edge",
+          "type": "string"
+        },
+        "format_harness": {
+          "title": "Format Harness",
+          "type": "string"
+        },
+        "primary_direction": {
+          "$ref": "#/$defs/ActivationDirection"
+        },
+        "primary_role": {
+          "title": "Primary Role",
+          "type": "string"
+        },
+        "sequence_index": {
+          "minimum": 0,
+          "title": "Sequence Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "asset_id",
+        "derivative_program_ref",
+        "sequence_index",
+        "primary_role",
+        "primary_direction",
+        "edge",
+        "format_harness"
+      ],
+      "title": "CampaignAssetPlan",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "affinity_reset_indices": {
+      "default": [],
+      "items": {
+        "type": "integer"
+      },
+      "title": "Affinity Reset Indices",
+      "type": "array"
+    },
+    "assets": {
+      "items": {
+        "$ref": "#/$defs/CampaignAssetPlan"
+      },
+      "minItems": 1,
+      "title": "Assets",
+      "type": "array"
+    },
+    "audience_segments": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Audience Segments",
+      "type": "array"
+    },
+    "campaign_id": {
+      "title": "Campaign Id",
+      "type": "string"
+    },
+    "direction_diversity_minimum": {
+      "minimum": 1,
+      "title": "Direction Diversity Minimum",
+      "type": "integer"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "fatigue_budget": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Fatigue Budget",
+      "type": "number"
+    },
+    "publication_order_locked": {
+      "default": true,
+      "title": "Publication Order Locked",
+      "type": "boolean"
+    },
+    "repeated_structure_limit": {
+      "minimum": 1,
+      "title": "Repeated Structure Limit",
+      "type": "integer"
+    },
+    "role_diversity_minimum": {
+      "minimum": 1,
+      "title": "Role Diversity Minimum",
+      "type": "integer"
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    }
+  },
+  "required": [
+    "campaign_id",
+    "source_package_ref",
+    "audience_segments",
+    "assets",
+    "role_diversity_minimum",
+    "direction_diversity_minimum",
+    "repeated_structure_limit",
+    "fatigue_budget",
+    "evaluation_contract_ref"
+  ],
+  "title": "CampaignActivationProgram",
+  "type": "object"
+}

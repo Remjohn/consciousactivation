@@ -1,0 +1,230 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Storyboard Ingredients Schema",
+    "description": "VDP-Enhanced ingredients for Storyboard Reaction Shot generation with T-Code scoring",
+    "type": "object",
+    "required": [
+        "project_id",
+        "visual_system",
+        "brand_avatar",
+        "clusters"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "Project identifier, e.g., '02_50-12 Audrey'"
+        },
+        "visual_system": {
+            "type": "string",
+            "const": "STORYBOARD",
+            "description": "Must be 'STORYBOARD' for this schema"
+        },
+        "visual_language": {
+            "type": "string",
+            "description": "Storyboard visual philosophy: 'Reaction Shot — A thought colliding with reality'"
+        },
+        "vdp_core_principle": {
+            "type": "string",
+            "const": "Texture + Action = Story. Texture alone = Stock Photo.",
+            "description": "VDP Core Principle reminder"
+        },
+        "brand_avatar": {
+            "type": "object",
+            "required": [
+                "name",
+                "physical_dna"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "physical_dna": {
+                    "type": "string",
+                    "description": "VERBATIM from Brand Avatar file — never paraphrase"
+                }
+            }
+        },
+        "clusters": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "cluster_id",
+                    "quote",
+                    "timestamp",
+                    "ingredients",
+                    "scoring"
+                ],
+                "properties": {
+                    "cluster_id": {
+                        "type": "string",
+                        "description": "Arc-specific beat ID (W1, W2, etc.)"
+                    },
+                    "quote": {
+                        "type": "string",
+                        "description": "Exact verbatim quote from transcript"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "description": "Start - End timestamp"
+                    },
+                    "ingredients": {
+                        "type": "object",
+                        "required": [
+                            "trigger",
+                            "body_physiology",
+                            "environment",
+                            "camera_intent",
+                            "imperfection",
+                            "kinetic_verb"
+                        ],
+                        "properties": {
+                            "trigger": {
+                                "type": "string",
+                                "description": "What event/word/realization triggered this moment (the EVENT, not the emotion)"
+                            },
+                            "body_physiology": {
+                                "type": "string",
+                                "description": "Involuntary physical response + KINETIC VERB (not passive adjectives)"
+                            },
+                            "environment": {
+                                "type": "string",
+                                "description": "Location + texture + light (specific, not generic 'room')"
+                            },
+                            "camera_intent": {
+                                "type": "object",
+                                "required": [
+                                    "t_codes",
+                                    "v_code",
+                                    "rationale"
+                                ],
+                                "properties": {
+                                    "t_codes": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "enum": [
+                                                "T1",
+                                                "T2",
+                                                "T3",
+                                                "T4",
+                                                "T5",
+                                                "T6",
+                                                "T7",
+                                                "T8"
+                                            ]
+                                        },
+                                        "description": "Selected T-Codes from the 8 Dopamine Triggers"
+                                    },
+                                    "v_code": {
+                                        "type": "string",
+                                        "enum": [
+                                            "V1",
+                                            "V5",
+                                            "V-WIDE"
+                                        ],
+                                        "description": "V1 (Extreme Close-Up), V5 (Tactile Proximity), or V-WIDE. V2/V3 mid-shots are BANNED."
+                                    },
+                                    "rationale": {
+                                        "type": "string",
+                                        "description": "Why this framing serves the emotional intent"
+                                    }
+                                }
+                            },
+                            "imperfection": {
+                                "type": "string",
+                                "description": "Hyper-specific entropy detail (not 'messy hair' but 'thread loose on left cuff')"
+                            },
+                            "implied_sound": {
+                                "type": "string",
+                                "description": "Ambient audio in this moment (not music)"
+                            },
+                            "kinetic_verb": {
+                                "type": "string",
+                                "description": "Active struggle verb from Kinetic Multiplier (grinding, wiping, rubbing, choking back)"
+                            },
+                            "sensory_zoom": {
+                                "type": "object",
+                                "description": "Explicit Body + Object + Texture breakdown",
+                                "properties": {
+                                    "body_part": {
+                                        "type": "string"
+                                    },
+                                    "touching_what": {
+                                        "type": "string"
+                                    },
+                                    "texture": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "scoring": {
+                        "type": "object",
+                        "description": "VDP T-Code scoring — must total 10+ to pass",
+                        "required": [
+                            "total",
+                            "pass"
+                        ],
+                        "properties": {
+                            "t1_points": {
+                                "type": "number",
+                                "description": "Body Language: +2 base (+1 if touching object)"
+                            },
+                            "t2_points": {
+                                "type": "number",
+                                "description": "Private Behavior: +2 base (+1 if texture visible)"
+                            },
+                            "t3_points": {
+                                "type": "number",
+                                "description": "Artifact: +1 base (+1 if hands interact)"
+                            },
+                            "t4_points": {
+                                "type": "number",
+                                "description": "Number: +1"
+                            },
+                            "t5_points": {
+                                "type": "number",
+                                "description": "Named Enemy: +1"
+                            },
+                            "t6_points": {
+                                "type": "number",
+                                "description": "Failed Solution: +1"
+                            },
+                            "t7_points": {
+                                "type": "number",
+                                "description": "Weird Detail: +2 (only if REAL in transcript)"
+                            },
+                            "t8_points": {
+                                "type": "number",
+                                "description": "Sensory Violation: +2 base (+1 if Kinetic)"
+                            },
+                            "v_code_points": {
+                                "type": "number",
+                                "description": "V1/V5: +2, V-WIDE: +1, V2/V3: -5 penalty"
+                            },
+                            "sensory_zoom_points": {
+                                "type": "number",
+                                "description": "+2 if Sensory Zoom applied (Body + Verb + Object + Texture)"
+                            },
+                            "kinetic_bonus": {
+                                "type": "number",
+                                "description": "+1 if Kinetic Verb present (not passive)"
+                            },
+                            "total": {
+                                "type": "number",
+                                "minimum": 0,
+                                "description": "Sum of all points"
+                            },
+                            "pass": {
+                                "type": "boolean",
+                                "description": "true if total >= 10"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

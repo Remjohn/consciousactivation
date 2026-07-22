@@ -1,0 +1,72 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "audience_segment": {
+      "title": "Audience Segment",
+      "type": "string"
+    },
+    "freshness_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Freshness Score",
+      "type": "number"
+    },
+    "profile_id": {
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "qualitative_fatigue_signals": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Qualitative Fatigue Signals",
+      "type": "array"
+    },
+    "recent_directions": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Recent Directions",
+      "type": "object"
+    },
+    "recent_linguistic_patterns": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Recent Linguistic Patterns",
+      "type": "object"
+    },
+    "recent_roles": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Recent Roles",
+      "type": "object"
+    },
+    "recent_visual_operators": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Recent Visual Operators",
+      "type": "object"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_id",
+    "audience_segment",
+    "freshness_score",
+    "updated_at"
+  ],
+  "title": "ActivationFreshnessProfile",
+  "type": "object"
+}

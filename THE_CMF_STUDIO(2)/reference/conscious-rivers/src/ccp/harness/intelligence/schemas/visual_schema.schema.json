@@ -1,0 +1,271 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "visual_schema.schema.json",
+    "title": "CMF Visual Schema",
+    "description": "Per-project visual DNA derived from transcript, Brand Avatar, and E-Roll Research. Maps to the 16 Elements of Visual Familiarity.",
+    "type": "object",
+    "required": [
+        "project_id",
+        "coach",
+        "category_a_human_experience",
+        "category_b_environmental_context"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "Project identifier (e.g., '05_50-12 Fitou')"
+        },
+        "coach": {
+            "type": "string",
+            "description": "Coach name for tribe_soul.json reference"
+        },
+        "eroll_research_ref": {
+            "type": "string",
+            "description": "Path to E-Roll Deep Research Report (optional, for cultural grounding)"
+        },
+        "category_a_human_experience": {
+            "type": "object",
+            "description": "Elements 1-4: Universal experiences, emotions, body types, decisive moments",
+            "required": [
+                "universal_experiences",
+                "recognizable_emotions",
+                "brand_avatar"
+            ],
+            "properties": {
+                "universal_experiences": {
+                    "type": "array",
+                    "description": "Daily rituals the audience will recognize",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 2,
+                    "examples": [
+                        "Working through physical pain",
+                        "The ritual of arriving at work before dawn"
+                    ]
+                },
+                "recognizable_emotions": {
+                    "type": "object",
+                    "properties": {
+                        "primary": {
+                            "type": "string",
+                            "description": "The dominant emotional state"
+                        },
+                        "secondary": {
+                            "type": "string",
+                            "description": "Supporting emotional layer"
+                        },
+                        "micro_expressions": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "Observable facial/body cues",
+                            "examples": [
+                                "Jaw clench",
+                                "Nostril flare",
+                                "Eye squeeze"
+                            ]
+                        }
+                    }
+                },
+                "brand_avatar": {
+                    "type": "object",
+                    "description": "Physical DNA copied VERBATIM from Brand Avatar file",
+                    "required": [
+                        "physical_dna"
+                    ],
+                    "properties": {
+                        "physical_dna": {
+                            "type": "string",
+                            "description": "Exact physical description (age, ethnicity, hair, eyes, defining features)"
+                        },
+                        "costume": {
+                            "type": "string",
+                            "description": "Characteristic clothing"
+                        }
+                    }
+                },
+                "decisive_moments": {
+                    "type": "array",
+                    "description": "Specific frozen moments that define the story",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "The moment his hand presses into his side",
+                        "The moment she sets down the phone"
+                    ]
+                }
+            }
+        },
+        "category_b_environmental_context": {
+            "type": "object",
+            "description": "Elements 5-8: Contextual clues, human-scale spaces, liminal spaces, cultural symbols",
+            "required": [
+                "contextual_clues",
+                "human_scale_spaces"
+            ],
+            "properties": {
+                "contextual_clues": {
+                    "type": "array",
+                    "description": "Specific objects/textures grounding the story in reality",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "Construction site with exposed rebar",
+                        "Stacked bricks in perfect alignment"
+                    ]
+                },
+                "human_scale_spaces": {
+                    "type": "array",
+                    "description": "Recognizable everyday environments",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "Outdoor construction site",
+                        "Kitchen at 3 AM"
+                    ]
+                },
+                "liminal_spaces": {
+                    "type": "array",
+                    "description": "In-between or transitional spaces",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "Empty construction site at dawn",
+                        "Hospital corridor at night"
+                    ]
+                },
+                "cultural_symbols": {
+                    "type": "array",
+                    "description": "Objects that signal cultural identity (can reference E-Roll Research)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "West African wax print fabric",
+                        "Kinkeliba tea leaves"
+                    ]
+                }
+            }
+        },
+        "category_c_visual_grammar": {
+            "type": "object",
+            "description": "Elements 9-12: Compositions, framing, focal points, lighting",
+            "properties": {
+                "archetypal_compositions": {
+                    "type": "array",
+                    "description": "Classic visual arrangements",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "Man against vast open sky",
+                        "Hands framing meticulous work"
+                    ]
+                },
+                "natural_framing": {
+                    "type": "array",
+                    "description": "Environmental elements that create intimacy (OPTIONAL)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "Through scaffolding poles",
+                        "Doorframe of unfinished building"
+                    ]
+                },
+                "focal_point_rule": {
+                    "type": "string",
+                    "description": "The composition constraint",
+                    "default": "One person. One action. One emotion."
+                },
+                "lighting_contexts": {
+                    "type": "object",
+                    "description": "Lighting per emotional context",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "category_d_aesthetic_memory": {
+            "type": "object",
+            "description": "Elements 13-16: Colors, nostalgia, light quality, visual tropes",
+            "properties": {
+                "color_palette": {
+                    "type": "object",
+                    "properties": {
+                        "dominant": {
+                            "type": "string",
+                            "description": "Primary colors"
+                        },
+                        "accent": {
+                            "type": "string",
+                            "description": "Supporting colors"
+                        }
+                    }
+                },
+                "nostalgic_aesthetic": {
+                    "type": "string",
+                    "description": "Overall visual style reference",
+                    "examples": [
+                        "Documentary realism",
+                        "Vogue Living editorial"
+                    ]
+                },
+                "light_quality": {
+                    "type": "object",
+                    "description": "Light character per emotional state",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "visual_tropes_to_use": {
+                    "type": "array",
+                    "description": "Classic imagery that resonates",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "visual_tropes_to_avoid": {
+                    "type": "array",
+                    "description": "Clichéd imagery to reject",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "subjective_distortions": {
+            "type": "object",
+            "description": "Emotional state to visual distortion mapping (for CAC)",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "distortion_type": {
+                        "type": "string",
+                        "enum": [
+                            "Isolation",
+                            "Symmetry",
+                            "Weight",
+                            "Expansion",
+                            "Compression",
+                            "Blur"
+                        ]
+                    },
+                    "visual_effect": {
+                        "type": "string"
+                    },
+                    "texture_emphasis": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

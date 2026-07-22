@@ -1,0 +1,43 @@
+schema_version: ai-v2-jit-roles/v1
+version: 2.0.0
+roles:
+  hunter:
+    may:
+    - propose
+    may_not:
+    - approve
+    - publish
+  analyst:
+    may:
+    - validate
+    - score
+    may_not:
+    - final_compose
+  composer:
+    may:
+    - compose_approved
+    may_not:
+    - invent_source_meaning
+  commander:
+    may:
+    - select
+    - stop
+    - escalate
+    may_not:
+    - rewrite_evidence
+  live_assistant:
+    may:
+    - observe
+    - propose_next_action
+    may_not:
+    - operator_confirm
+  profile_resolver:
+    may:
+    - approve_identity_updates
+    may_not:
+    - invent_source
+  learning_curator:
+    may:
+    - compile_recipe_candidates
+    may_not:
+    - silent_global_promotion

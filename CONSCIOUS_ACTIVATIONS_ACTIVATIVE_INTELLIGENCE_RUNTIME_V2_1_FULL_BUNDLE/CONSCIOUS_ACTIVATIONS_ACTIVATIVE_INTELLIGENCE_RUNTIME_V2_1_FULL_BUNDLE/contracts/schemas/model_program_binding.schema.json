@@ -1,0 +1,102 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tool_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Tool Ids",
+      "type": "array"
+    },
+    "binding_id": {
+      "title": "Binding Id",
+      "type": "string"
+    },
+    "budget_class": {
+      "title": "Budget Class",
+      "type": "string"
+    },
+    "canonical_skill_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Canonical Skill Refs",
+      "type": "array"
+    },
+    "claim_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "context_capsule_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "deterministic_validator_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Deterministic Validator Refs",
+      "type": "array"
+    },
+    "fallback_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "independent_evaluator_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "primitive_contract_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Primitive Contract Refs",
+      "type": "array"
+    },
+    "workflow_node_type": {
+      "title": "Workflow Node Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "binding_id",
+    "claim_ref",
+    "workflow_node_type",
+    "canonical_skill_refs",
+    "allowed_tool_ids",
+    "context_capsule_ref",
+    "deterministic_validator_refs",
+    "independent_evaluator_ref",
+    "fallback_ref",
+    "budget_class"
+  ],
+  "title": "ModelProgramBinding",
+  "type": "object"
+}

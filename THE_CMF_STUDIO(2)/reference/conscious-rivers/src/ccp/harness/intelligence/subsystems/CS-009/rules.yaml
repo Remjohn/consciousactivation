@@ -1,0 +1,30 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-009
+enabled: true
+priority:
+  tier: encoding
+  rank: 3
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: contradiction_score
+    operator: gt
+    value: 0.3
+route_hints:
+  prefer:
+    - emotionally_permeable_b_roll
+    - lower_semantic_load_insert
+  avoid:
+    - literal_conflicting_stock

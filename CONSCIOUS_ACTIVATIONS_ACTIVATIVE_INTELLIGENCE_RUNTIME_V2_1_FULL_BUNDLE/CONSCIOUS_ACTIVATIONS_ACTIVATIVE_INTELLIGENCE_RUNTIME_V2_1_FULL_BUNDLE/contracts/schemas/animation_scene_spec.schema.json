@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "character_or_avatar_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Character Or Avatar Refs",
+      "type": "array"
+    },
+    "composition_intent": {
+      "title": "Composition Intent",
+      "type": "string"
+    },
+    "environment_and_prop_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Environment And Prop Refs",
+      "type": "array"
+    },
+    "function": {
+      "enum": [
+        "b_roll",
+        "explanation",
+        "quote_visualization",
+        "concept_demonstration",
+        "carousel_element",
+        "supervisual_element",
+        "full_animation"
+      ],
+      "title": "Function",
+      "type": "string"
+    },
+    "pose_expression_intent": {
+      "title": "Pose Expression Intent",
+      "type": "string"
+    },
+    "render_requirement": {
+      "enum": [
+        "composition_ready",
+        "preview_required",
+        "full_render_required"
+      ],
+      "title": "Render Requirement",
+      "type": "string"
+    },
+    "scene_id": {
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "script_segment_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Script Segment Ids",
+      "type": "array"
+    },
+    "source_audio_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "source_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "transparency_required": {
+      "default": false,
+      "title": "Transparency Required",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "scene_id",
+    "source_ref",
+    "script_segment_ids",
+    "function",
+    "pose_expression_intent",
+    "composition_intent",
+    "render_requirement"
+  ],
+  "title": "AnimationSceneSpec",
+  "type": "object"
+}

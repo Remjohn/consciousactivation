@@ -1,0 +1,714 @@
+{
+  "schema_version": "cmf.carousel_slide_composition_library.v1",
+  "registry_id": "CMF-CAROUSEL-SLIDE-COMP-LIB-001",
+  "name": "CMF Carousel Slide Composition Library",
+  "status": "active-draft",
+  "purpose": "Queryable library of carousel slide atoms. Each slide atom owns a specific composition meaning, primitive triad, visual grammar, geometry requirements, and sequence position policy.",
+  "recognized_carousel_format_codes": [
+    "CAR-LST",
+    "CAR-JUX"
+  ],
+  "global_rules": {
+    "minimum_validated_primitives": 3,
+    "required_roles": [
+      "meaning_transform",
+      "delivery_shape",
+      "format_material"
+    ],
+    "must_preserve_sequence_over_single_image": true,
+    "must_use_grid_as_cognitive_relief": true,
+    "must_emit_geometrics_layout_plan": true,
+    "must_emit_skia_render_job": true,
+    "forbidden_behaviors": [
+      "same_layout_every_slide_without_sequence_reason",
+      "decorative_image_without_composition_meaning",
+      "text_dump_slide",
+      "primitive_labels_without_exact_ids",
+      "browser_screenshot_as_production_render",
+      "newsletter_format"
+    ]
+  },
+  "query_dimensions": [
+    "format_code",
+    "slide_atom_code",
+    "composition_meaning",
+    "allowed_position",
+    "archetype_route",
+    "primitive_id",
+    "primitive_role",
+    "visual_shot_type",
+    "layout_density",
+    "matrix_pressure",
+    "audience_state",
+    "brand_context_version_id",
+    "source_expression_moment_id"
+  ],
+  "slide_atoms": [
+    {
+      "slide_atom_code": "CAR-SL-001-HOOK-PREMISE",
+      "display_name": "Hook Premise Cover",
+      "composition_meaning": "Name the edge, contradiction, promise, or question that makes the carousel worth swiping.",
+      "allowed_positions": [
+        "first"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-BUS-003",
+          "canonical_name": "Narrative Structural Backbone"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-001",
+          "canonical_name": "Composition as Eye-Path Engineering"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "typographic_establishing_frame",
+        "layout_density": "low",
+        "primary_eye_path": [
+          "dominant headline",
+          "one punctum or symbolic object",
+          "small guest or brand mark"
+        ],
+        "geometry_requirements": [
+          "single dominant text block",
+          "minimum 35 percent negative space",
+          "one clear focal object or cutout",
+          "no more than one secondary label"
+        ]
+      },
+      "query_tags": [
+        "cover",
+        "hook",
+        "premise",
+        "edge",
+        "question"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-002-AUDIENCE-MIRROR",
+      "display_name": "Audience Mirror",
+      "composition_meaning": "Make the audience recognize themselves before teaching or challenging them.",
+      "allowed_positions": [
+        "early",
+        "middle"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-024",
+          "canonical_name": "Space as Psychological Relationship"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "medium_emotional_context",
+        "layout_density": "medium",
+        "primary_eye_path": [
+          "recognition phrase",
+          "human/environmental pressure",
+          "small diagnostic cue"
+        ],
+        "geometry_requirements": [
+          "subject or symbolic environment must show pressure",
+          "text must not cover face or hands",
+          "space must express trapped, exposed, confused, or relieved state"
+        ]
+      },
+      "query_tags": [
+        "audience",
+        "recognition",
+        "pain",
+        "mirror",
+        "context-premise"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-003-STAKES-COST",
+      "display_name": "Stakes and Cost",
+      "composition_meaning": "Show what the current belief, habit, or blind spot is costing the audience.",
+      "allowed_positions": [
+        "early",
+        "middle"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-BUS-003",
+          "canonical_name": "Narrative Structural Backbone"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-024",
+          "canonical_name": "Space as Psychological Relationship"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "wide_pressure_or_scale_frame",
+        "layout_density": "low",
+        "primary_eye_path": [
+          "cost statement",
+          "scale/pressure visual",
+          "one consequence label"
+        ],
+        "geometry_requirements": [
+          "large spatial metaphor",
+          "one consequence only",
+          "avoid shame-heavy pileups"
+        ]
+      },
+      "query_tags": [
+        "stakes",
+        "cost",
+        "risk",
+        "pressure",
+        "consequence"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-004-MYTH-BREAK",
+      "display_name": "Myth Break",
+      "composition_meaning": "Separate the false belief from the truer frame without flattening nuance.",
+      "allowed_positions": [
+        "early",
+        "middle"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-001",
+          "canonical_name": "Composition as Eye-Path Engineering"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "split_label_or_paper_strip_frame",
+        "layout_density": "medium",
+        "primary_eye_path": [
+          "myth label",
+          "break marker",
+          "truth label"
+        ],
+        "geometry_requirements": [
+          "myth and truth must be visually separable",
+          "truth must receive stronger final eye-path position",
+          "annotation cue allowed only if tied to final text"
+        ]
+      },
+      "query_tags": [
+        "myth",
+        "truth",
+        "debunk",
+        "contrast",
+        "frame-breaker"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-005-MECHANISM-REVEAL",
+      "display_name": "Mechanism Reveal",
+      "composition_meaning": "Reveal the mechanism, causal model, or hidden structure behind the idea.",
+      "allowed_positions": [
+        "middle"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-025",
+          "canonical_name": "The Rule of Three Message Architecture"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-BUS-012",
+          "canonical_name": "The Grid as Cognitive Relief"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "diagram_or_system_map",
+        "layout_density": "medium",
+        "primary_eye_path": [
+          "mechanism title",
+          "three-part structure",
+          "one takeaway"
+        ],
+        "geometry_requirements": [
+          "maximum three mechanism nodes",
+          "consistent baseline grid",
+          "arrows or connectors must show causality, not decoration"
+        ]
+      },
+      "query_tags": [
+        "mechanism",
+        "framework",
+        "causality",
+        "diagram",
+        "teaching"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-006-THREE-PILLAR-MAP",
+      "display_name": "Three-Pillar Map",
+      "composition_meaning": "Compress the teaching into three memorable buckets that the audience can retain.",
+      "allowed_positions": [
+        "middle",
+        "late"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-025",
+          "canonical_name": "The Rule of Three Message Architecture"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-BUS-012",
+          "canonical_name": "The Grid as Cognitive Relief"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "three_column_or_three_card_grid",
+        "layout_density": "medium",
+        "primary_eye_path": [
+          "map title",
+          "pillar one",
+          "pillar two",
+          "pillar three"
+        ],
+        "geometry_requirements": [
+          "exactly three main units",
+          "equal visual weight unless one pillar is declared dominant",
+          "no nested lists beyond one short line per pillar"
+        ]
+      },
+      "query_tags": [
+        "three",
+        "pillars",
+        "message-map",
+        "framework",
+        "summary"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-007-JUXTAPOSITION",
+      "display_name": "Juxtaposition Split",
+      "composition_meaning": "Make the difference between two worlds, choices, identities, or time states immediately visible.",
+      "allowed_positions": [
+        "middle",
+        "late"
+      ],
+      "compatible_format_codes": [
+        "CAR-JUX",
+        "CAR-LST"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-VSG-018",
+          "canonical_name": "Sequence Over Single Image"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-001",
+          "canonical_name": "Composition as Eye-Path Engineering"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "two_world_split_or_before_after",
+        "layout_density": "medium",
+        "primary_eye_path": [
+          "left state",
+          "center tension marker",
+          "right state"
+        ],
+        "geometry_requirements": [
+          "two sides must be visually equivalent enough to compare",
+          "contrast must not rely only on color",
+          "labels must be short and mirrored"
+        ]
+      },
+      "query_tags": [
+        "juxtaposition",
+        "before-after",
+        "versus",
+        "contrast",
+        "choice"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-008-EVIDENCE-OBJECT",
+      "display_name": "Evidence Object",
+      "composition_meaning": "Ground the claim in a concrete quote, receipt, artifact, screenshot-style proof object, or source-backed detail.",
+      "allowed_positions": [
+        "middle",
+        "late"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-BUS-003",
+          "canonical_name": "Narrative Structural Backbone"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-001",
+          "canonical_name": "Composition as Eye-Path Engineering"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "proof_card_or_artifact_closeup",
+        "layout_density": "medium",
+        "primary_eye_path": [
+          "evidence object",
+          "highlighted phrase",
+          "interpretive caption"
+        ],
+        "geometry_requirements": [
+          "proof object must be source-backed",
+          "highlight must point to one exact detail",
+          "interpretive caption must not overclaim"
+        ]
+      },
+      "query_tags": [
+        "evidence",
+        "proof",
+        "quote",
+        "receipt",
+        "source-backed"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-009-CONCRETE-SCENE",
+      "display_name": "Concrete Scene",
+      "composition_meaning": "Translate the abstract idea into one inspectable real-life scene.",
+      "allowed_positions": [
+        "middle",
+        "late"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-VSG-018",
+          "canonical_name": "Sequence Over Single Image"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-024",
+          "canonical_name": "Space as Psychological Relationship"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "scene_reconstruction_or_contextual_cutaway",
+        "layout_density": "low",
+        "primary_eye_path": [
+          "scene image",
+          "short label",
+          "lesson extraction"
+        ],
+        "geometry_requirements": [
+          "scene must show where this happens",
+          "text must be minimal",
+          "background must carry meaning, not decoration"
+        ]
+      },
+      "query_tags": [
+        "example",
+        "scene",
+        "context",
+        "real-life",
+        "cutaway"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-010-PATTERN-BREAK",
+      "display_name": "Pattern Break",
+      "composition_meaning": "Interrupt an established list, visual rhythm, or assumption to create surprise and memorability.",
+      "allowed_positions": [
+        "late"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-HUM-032",
+          "canonical_name": "Rule of Three"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-HUM-034",
+          "canonical_name": "Comedy Buddy"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-018",
+          "canonical_name": "Sequence Over Single Image"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "unexpected_turn_or_meta_slide",
+        "layout_density": "low",
+        "primary_eye_path": [
+          "expected pattern cue",
+          "turn",
+          "self-aware payoff"
+        ],
+        "geometry_requirements": [
+          "must have at least two prior slides establishing pattern",
+          "turn must connect logically to prior pattern",
+          "do not use if safety-critical or solemn story arc"
+        ]
+      },
+      "query_tags": [
+        "pattern-break",
+        "turn",
+        "humor",
+        "surprise",
+        "meta"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-011-REFRAME-IDENTITY",
+      "display_name": "Reframe and Identity Shift",
+      "composition_meaning": "Name the new interpretation, identity, or decision the audience should leave with.",
+      "allowed_positions": [
+        "late",
+        "penultimate"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-BUS-003",
+          "canonical_name": "Narrative Structural Backbone"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-024",
+          "canonical_name": "Space as Psychological Relationship"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "resolution_or_expansion_frame",
+        "layout_density": "low",
+        "primary_eye_path": [
+          "new frame",
+          "liberating space or resolved object",
+          "one memorable line"
+        ],
+        "geometry_requirements": [
+          "must visually differ from stakes/cost slide",
+          "space should feel resolved or opened",
+          "avoid vague motivational language"
+        ]
+      },
+      "query_tags": [
+        "reframe",
+        "identity",
+        "resolution",
+        "shift",
+        "new-belief"
+      ]
+    },
+    {
+      "slide_atom_code": "CAR-SL-012-APPLICATION-CTA",
+      "display_name": "Application CTA",
+      "composition_meaning": "Convert the insight into a concrete next action, save/share reason, reflection prompt, or reaction seed.",
+      "allowed_positions": [
+        "last"
+      ],
+      "compatible_format_codes": [
+        "CAR-LST",
+        "CAR-JUX"
+      ],
+      "default_primitive_triads": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-025",
+          "canonical_name": "The Rule of Three Message Architecture"
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine"
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-BUS-012",
+          "canonical_name": "The Grid as Cognitive Relief"
+        }
+      ],
+      "visual_grammar": {
+        "shot_type": "clean_action_or_reflection_card",
+        "layout_density": "low",
+        "primary_eye_path": [
+          "action phrase",
+          "one prompt or save reason",
+          "brand/guest handle"
+        ],
+        "geometry_requirements": [
+          "one primary action only",
+          "no more than three supporting words or bullets",
+          "brand mark must not compete with action"
+        ]
+      },
+      "query_tags": [
+        "cta",
+        "application",
+        "save",
+        "reflection",
+        "reaction-seed"
+      ]
+    }
+  ],
+  "sequence_blueprints": [
+    {
+      "blueprint_code": "CAR-BP-LST-05-EXPLANATION",
+      "display_name": "Five Slide Explanation Carousel",
+      "compatible_format_codes": [
+        "CAR-LST"
+      ],
+      "slide_atom_sequence": [
+        "CAR-SL-001-HOOK-PREMISE",
+        "CAR-SL-002-AUDIENCE-MIRROR",
+        "CAR-SL-005-MECHANISM-REVEAL",
+        "CAR-SL-006-THREE-PILLAR-MAP",
+        "CAR-SL-012-APPLICATION-CTA"
+      ]
+    },
+    {
+      "blueprint_code": "CAR-BP-JUX-06-CONTRAST",
+      "display_name": "Six Slide Juxtaposition Carousel",
+      "compatible_format_codes": [
+        "CAR-JUX"
+      ],
+      "slide_atom_sequence": [
+        "CAR-SL-001-HOOK-PREMISE",
+        "CAR-SL-003-STAKES-COST",
+        "CAR-SL-007-JUXTAPOSITION",
+        "CAR-SL-008-EVIDENCE-OBJECT",
+        "CAR-SL-011-REFRAME-IDENTITY",
+        "CAR-SL-012-APPLICATION-CTA"
+      ]
+    },
+    {
+      "blueprint_code": "CAR-BP-LST-07-PATTERN-BREAK",
+      "display_name": "Seven Slide Listicle With Turn",
+      "compatible_format_codes": [
+        "CAR-LST"
+      ],
+      "slide_atom_sequence": [
+        "CAR-SL-001-HOOK-PREMISE",
+        "CAR-SL-002-AUDIENCE-MIRROR",
+        "CAR-SL-005-MECHANISM-REVEAL",
+        "CAR-SL-006-THREE-PILLAR-MAP",
+        "CAR-SL-009-CONCRETE-SCENE",
+        "CAR-SL-010-PATTERN-BREAK",
+        "CAR-SL-012-APPLICATION-CTA"
+      ]
+    }
+  ],
+  "hard_failure_codes": [
+    "CAROUSEL_SLIDE_ATOM_UNKNOWN",
+    "CAROUSEL_SLIDE_POSITION_INVALID",
+    "CAROUSEL_PRIMITIVE_TRIAD_MISSING",
+    "CAROUSEL_SEQUENCE_ARC_FLAT",
+    "CAROUSEL_GRID_CONTINUITY_MISSING",
+    "CAROUSEL_SHOT_VARIETY_MISSING",
+    "CAROUSEL_SLIDE_MEANING_MISSING",
+    "CAROUSEL_GEOMETRICS_PLAN_MISSING"
+  ]
+}

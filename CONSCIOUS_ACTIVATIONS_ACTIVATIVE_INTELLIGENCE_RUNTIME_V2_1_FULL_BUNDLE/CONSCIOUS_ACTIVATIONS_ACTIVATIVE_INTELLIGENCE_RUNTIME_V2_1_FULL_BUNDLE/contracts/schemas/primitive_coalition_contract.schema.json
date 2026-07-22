@@ -1,0 +1,440 @@
+{
+  "$defs": {
+    "CoalitionSignature": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Canonical Fingerprint",
+          "type": "string"
+        },
+        "dominant_pressure_path": {
+          "title": "Dominant Pressure Path",
+          "type": "string"
+        },
+        "experiential_progression": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Experiential Progression"
+        },
+        "participation_threshold": {
+          "title": "Participation Threshold",
+          "type": "string"
+        },
+        "psychological_role_transition": {
+          "title": "Psychological Role Transition",
+          "type": "string"
+        },
+        "recognition_move": {
+          "title": "Recognition Move",
+          "type": "string"
+        },
+        "signature_id": {
+          "title": "Signature Id",
+          "type": "string"
+        },
+        "tension_release_pattern": {
+          "title": "Tension Release Pattern",
+          "type": "string"
+        },
+        "visual_attention_logic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visual Attention Logic"
+        }
+      },
+      "required": [
+        "signature_id",
+        "dominant_pressure_path",
+        "recognition_move",
+        "tension_release_pattern",
+        "psychological_role_transition",
+        "participation_threshold",
+        "canonical_fingerprint"
+      ],
+      "title": "CoalitionSignature",
+      "type": "object"
+    },
+    "EdgeProduct": {
+      "additionalProperties": false,
+      "properties": {
+        "broad_signal_ref": {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        "consequence": {
+          "title": "Consequence",
+          "type": "string"
+        },
+        "counteractivation_risks": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Counteractivation Risks",
+          "type": "array"
+        },
+        "edge_product_id": {
+          "title": "Edge Product Id",
+          "type": "string"
+        },
+        "epistemic_state": {
+          "$ref": "#/$defs/EpistemicState"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "minItems": 1,
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "hidden_pressure": {
+          "title": "Hidden Pressure",
+          "type": "string"
+        },
+        "matrix_of_edging_ref": {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        "psychological_role": {
+          "title": "Psychological Role",
+          "type": "string"
+        },
+        "stance": {
+          "title": "Stance",
+          "type": "string"
+        },
+        "surviving_edge": {
+          "title": "Surviving Edge",
+          "type": "string"
+        },
+        "tension": {
+          "title": "Tension",
+          "type": "string"
+        }
+      },
+      "required": [
+        "edge_product_id",
+        "broad_signal_ref",
+        "matrix_of_edging_ref",
+        "hidden_pressure",
+        "surviving_edge",
+        "stance",
+        "psychological_role",
+        "tension",
+        "consequence",
+        "evidence_refs",
+        "epistemic_state"
+      ],
+      "title": "EdgeProduct",
+      "type": "object"
+    },
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "PrimitiveBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "activation_evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "minItems": 1,
+          "title": "Activation Evidence Refs",
+          "type": "array"
+        },
+        "binding_id": {
+          "minLength": 1,
+          "title": "Binding Id",
+          "type": "string"
+        },
+        "conflicts_with": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Conflicts With",
+          "type": "array"
+        },
+        "core_move": {
+          "minLength": 1,
+          "title": "Core Move",
+          "type": "string"
+        },
+        "epistemic_state": {
+          "$ref": "#/$defs/EpistemicState"
+        },
+        "family": {
+          "minLength": 1,
+          "title": "Family",
+          "type": "string"
+        },
+        "local_function": {
+          "minLength": 1,
+          "title": "Local Function",
+          "type": "string"
+        },
+        "misuse_modes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Misuse Modes",
+          "type": "array"
+        },
+        "plane": {
+          "$ref": "#/$defs/PrimitivePlane"
+        },
+        "primitive_id": {
+          "minLength": 1,
+          "title": "Primitive Id",
+          "type": "string"
+        },
+        "primitive_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Primitive Sha256",
+          "type": "string"
+        },
+        "primitive_version": {
+          "minLength": 1,
+          "title": "Primitive Version",
+          "type": "string"
+        },
+        "suppression_conditions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Suppression Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "binding_id",
+        "primitive_id",
+        "primitive_version",
+        "primitive_sha256",
+        "plane",
+        "family",
+        "core_move",
+        "local_function",
+        "activation_evidence_refs",
+        "epistemic_state"
+      ],
+      "title": "PrimitiveBinding",
+      "type": "object"
+    },
+    "PrimitiveMisuseRisk": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "misuse_mode": {
+          "title": "Misuse Mode",
+          "type": "string"
+        },
+        "prevention_gate": {
+          "title": "Prevention Gate",
+          "type": "string"
+        },
+        "primitive_id": {
+          "title": "Primitive Id",
+          "type": "string"
+        },
+        "probable_wrong_reading": {
+          "title": "Probable Wrong Reading",
+          "type": "string"
+        },
+        "risk_id": {
+          "title": "Risk Id",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            "fatal"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "trigger_condition": {
+          "title": "Trigger Condition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "risk_id",
+        "primitive_id",
+        "misuse_mode",
+        "trigger_condition",
+        "probable_wrong_reading",
+        "severity",
+        "prevention_gate"
+      ],
+      "title": "PrimitiveMisuseRisk",
+      "type": "object"
+    },
+    "PrimitivePlane": {
+      "enum": [
+        "meaning_plane",
+        "experience_plane"
+      ],
+      "title": "PrimitivePlane",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coalition_id": {
+      "title": "Coalition Id",
+      "type": "string"
+    },
+    "compatibility_explanation": {
+      "minLength": 1,
+      "title": "Compatibility Explanation",
+      "type": "string"
+    },
+    "conflict_resolutions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Conflict Resolutions",
+      "type": "array"
+    },
+    "edge_product": {
+      "$ref": "#/$defs/EdgeProduct"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "execution_order": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2,
+      "title": "Execution Order",
+      "type": "array"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "proposed",
+        "validated",
+        "approved",
+        "superseded"
+      ],
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "misuse_risks": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PrimitiveMisuseRisk"
+      },
+      "title": "Misuse Risks",
+      "type": "array"
+    },
+    "primitive_bindings": {
+      "items": {
+        "$ref": "#/$defs/PrimitiveBinding"
+      },
+      "minItems": 2,
+      "title": "Primitive Bindings",
+      "type": "array"
+    },
+    "signature": {
+      "$ref": "#/$defs/CoalitionSignature"
+    },
+    "source_context_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Source Context Refs",
+      "type": "array"
+    },
+    "suppressed_bindings": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Suppressed Bindings",
+      "type": "array"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "coalition_id",
+    "version",
+    "source_context_refs",
+    "primitive_bindings",
+    "execution_order",
+    "compatibility_explanation",
+    "signature",
+    "edge_product",
+    "evaluation_contract_ref",
+    "lifecycle_state"
+  ],
+  "title": "PrimitiveCoalitionContract",
+  "type": "object"
+}

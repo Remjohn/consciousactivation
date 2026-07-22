@@ -1,0 +1,36 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-027
+enabled: true
+priority:
+  tier: encoding
+  rank: 3
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+coordinates_with:
+  - CS-022
+block_conditions:
+  - metric: timing_offset_ms
+    operator: gt
+    value: 300
+warn_conditions:
+  - metric: timing_offset_ms
+    operator: outside_range
+    value:
+      min: -20
+      max: 160
+route_hints:
+  preferred_fix:
+    - shift_visual_earlier
+    - rebind_to_phonetic_onset

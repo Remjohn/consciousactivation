@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-032 - Layered Questions Runtime Asset",
+  "description": "Compiled runtime form of the 4 Laws of Layered Questions for Scene Builder and editor regeneration.",
+  "type": "object",
+  "required": [
+    "asset_id",
+    "version",
+    "compile_target",
+    "entrypoint",
+    "inputs",
+    "derived_features",
+    "detection_modes",
+    "laws",
+    "scoring",
+    "output_contract",
+    "failure_policy"
+  ],
+  "properties": {
+    "asset_id": {
+      "type": "string",
+      "description": "Unique identifier for this compiled runtime asset."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the asset."
+    },
+    "compile_target": {
+      "type": "string",
+      "enum": ["SCENE_BUILDER", "EDITOR_REGENERATION"],
+      "description": "Pipeline target that consumes this asset."
+    },
+    "entrypoint": {
+      "type": "string",
+      "description": "Tool or runtime function that evaluates this asset."
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "required"],
+        "properties": {
+          "name": { "type": "string" },
+          "required": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "derived_features": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["feature_id", "method"],
+        "properties": {
+          "feature_id": { "type": "string" },
+          "method": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "detection_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["mode", "activation_rule"],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["TENSION", "VULNERABILITY", "RECOGNITION"]
+          },
+          "activation_rule": { "type": "string" },
+          "minimum_confidence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "output_fields": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "laws": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["law_id", "name", "checks"],
+        "properties": {
+          "law_id": {
+            "type": "string",
+            "enum": ["LAW_1", "LAW_2", "LAW_3", "LAW_4"]
+          },
+          "name": { "type": "string" },
+          "purpose": { "type": "string" },
+          "runtime_stage": { "type": "string" },
+          "checks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["check_id", "kind", "failure_code"],
+              "properties": {
+                "check_id": { "type": "string" },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "coverage",
+                    "classification",
+                    "threshold",
+                    "delta",
+                    "uniqueness",
+                    "scope"
+                  ]
+                },
+                "field": { "type": "string" },
+                "operator": { "type": "string" },
+                "value": {},
+                "failure_code": { "type": "string" },
+                "severity": {
+                  "type": "string",
+                  "enum": ["WARN", "FAIL"]
+                },
+                "repair_hint": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "required": ["pass_score", "warn_score", "weights"],
+      "properties": {
+        "pass_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "warn_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "weights": {
+          "type": "object",
+          "properties": {
+            "LAW_1": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "LAW_2": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "LAW_3": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+            "LAW_4": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+          }
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["result_schema", "decision_field"],
+      "properties": {
+        "result_schema": { "type": "string" },
+        "decision_field": { "type": "string" },
+        "required_fields": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "failure_policy": {
+      "type": "object",
+      "required": ["on_warn", "on_fail"],
+      "properties": {
+        "on_warn": {
+          "type": "string",
+          "enum": ["ANNOTATE", "REVISE", "ESCALATE"]
+        },
+        "on_fail": {
+          "type": "string",
+          "enum": ["BLOCK", "REVISE", "ESCALATE"]
+        }
+      }
+    }
+  }
+}

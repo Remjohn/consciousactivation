@@ -1,0 +1,19 @@
+id: project_workspace.artifact_lineage.record
+version: "1.0.0"
+status: active
+owner_agent: project_workspace_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Create deterministic client workspaces, artifact refs, manifests, lineage, and receipts."
+inputs:
+  - ClientWorkspace
+  - RunArtifactDirectory
+  - ArtifactRef
+outputs:
+  - ArtifactManifest
+  - ArtifactReceipt
+hard_gates:
+  - "Do not write outside workspace root."
+  - "Do not allow path traversal."
+  - "Do not delete artifacts."
+  - "Artifact refs are pointers, not raw file contents."
+  - "Materialized artifacts require sha256."

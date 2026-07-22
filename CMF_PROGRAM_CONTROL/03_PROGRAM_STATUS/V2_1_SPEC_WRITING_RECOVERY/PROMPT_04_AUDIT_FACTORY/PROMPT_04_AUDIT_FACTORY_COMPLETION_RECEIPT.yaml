@@ -1,0 +1,27 @@
+schema_version: conscious-activations-prompt04-audit-factory-completion/v1
+receipt_id: CA-P04-AUDIT-FACTORY-BLOCKED-2026-07-23
+issued_on: '2026-07-23'
+result: AUDIT_FACTORY_BLOCKED
+prompt03_gate_result: PASS_WITH_EXECUTION_METHOD_CONCERN
+prompt03_specs_written_pending_audit: 60
+target_spec_count: 60
+per_spec_audit_records: 60
+outcomes:
+  ACCEPTED_FOR_BUILD_CANDIDATE: 0
+  REVISION_REQUIRED: 0
+  ARCHITECT_DECISION_REQUIRED: 0
+  AUDIT_BLOCKED: 60
+factory_blocker:
+  blocker_id: P04-AUDIT-BLOCKER-001
+  type: INDEPENDENT_AUDITOR_RESOURCE_UNAVAILABLE
+  severity: BLOCKING
+  evidence: A probe independent auditor for TS-AHP-001 returned the account usage-limit error before producing audit artifacts.
+  effect: Prompt 04 cannot truthfully satisfy the independent per-spec audit requirement or the writer-cannot-audit-own-spec
+    rule.
+  required_action: Rerun Prompt 04 when independent auditor capacity is available; do not revise specs or advance Prompt 05/06
+    from this blocked audit package.
+spec_bytes_modified: false
+code_modified: false
+development_capsules_issued: false
+build_authority_issued: false
+next_permitted_action: RERUN_PROMPT_04_WITH_AVAILABLE_INDEPENDENT_AUDITORS

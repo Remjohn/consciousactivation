@@ -1,0 +1,45 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-034
+enabled: true
+priority:
+  tier: encoding
+  rank: 5
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - manifest_assembly
+warn_conditions:
+  - metric: boundary_density_per_beat
+    operator: gt
+    value: 0.50
+  - metric: schema_activation_score
+    operator: lt
+    value: 0.40
+block_conditions:
+  - metric: schema_activation_score
+    operator: lt
+    value: 0.30
+    when:
+      metric: boundary_density_per_beat
+      operator: gt
+      value: 0.70
+route_hints:
+  establish_schema:
+    - anchor_opening_schema_before_violation
+    - reduce_edit_density_in_first_third
+    - ensure_schema_legibility_beat_precedes_twist
+  reduce_density:
+    - extend_hold_durations
+    - consolidate_b_roll_cuts
+    - remove_redundant_transition_beats

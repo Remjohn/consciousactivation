@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "local_archetype_function": {
+      "title": "Local Archetype Function",
+      "type": "string"
+    },
+    "local_primitive_binding_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Local Primitive Binding Ids",
+      "type": "array"
+    },
+    "segment_id": {
+      "title": "Segment Id",
+      "type": "string"
+    },
+    "source_span_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Source Span Refs",
+      "type": "array"
+    },
+    "text": {
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "transformation_kind": {
+      "enum": [
+        "verbatim",
+        "condensed",
+        "adapted",
+        "newly_authored"
+      ],
+      "title": "Transformation Kind",
+      "type": "string"
+    },
+    "voice_dna_check": {
+      "enum": [
+        "pass",
+        "fail",
+        "not_applicable"
+      ],
+      "title": "Voice Dna Check",
+      "type": "string"
+    }
+  },
+  "required": [
+    "segment_id",
+    "text",
+    "transformation_kind",
+    "local_archetype_function",
+    "local_primitive_binding_ids",
+    "voice_dna_check"
+  ],
+  "title": "FinalScriptSegment",
+  "type": "object"
+}

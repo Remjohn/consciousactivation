@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: THE_EVIDENCE
+enabled: true
+selection_priority:
+  tier: secondary
+  rank: 14
+enforcement:
+  mode: allow_with_checks
+  default_result: ALLOW
+applies_to:
+  containers:
+    - CHALLENGE
+  stages:
+    - scene_builder
+incompatibilities:
+  - dense_motion_plus_text
+warn_conditions:
+  - metric: evidence_legibility_score
+    operator: lt
+    value: 0.8
+route_hints:
+  select:
+    - use_when_one_clean_fact_can_move_belief
+    - prefer_low_motion_layouts

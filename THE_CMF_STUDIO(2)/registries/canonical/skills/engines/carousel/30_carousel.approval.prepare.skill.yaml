@@ -1,0 +1,46 @@
+id: carousel.approval.prepare
+version: "1.0.0"
+status: active
+name: "Carousel Approval Prepare"
+owner_agent: carousel_builder_agent
+sub_agents:
+  - carousel_strategist_agent
+  - source_fidelity_agent
+  - sequence_planner_agent
+  - slide_role_planner_agent
+  - carousel_copy_agent
+  - asset_allocation_agent
+  - composition_agent
+  - carousel_eval_agent
+skill_type: deterministic_plus_summary
+dspy_program: null
+purpose: "Prepare approval packet"
+inputs:
+  - brand_id
+  - brand_context_version_id
+  - carousel_context
+outputs:
+  - CarouselTypedObject
+  - CarouselReceipt
+required_contracts:
+  - CarouselProject
+  - CarouselVariant
+  - CarouselSourcePacket
+  - CarouselSequenceStrategy
+  - CarouselSlideRolePlan
+  - CarouselRenderBatchContract
+hard_gates:
+  - "brand_context_version_id is required."
+  - "16:9 is source-only and rejected as carousel delivery."
+  - "Factual claims require source refs."
+  - "Provider blueprints require composition lock."
+  - "Export requires approval."
+forbidden_shortcuts:
+  - "Do not duplicate shared Visual Preproduction, Asset Intelligence, Style Route, or Provider logic."
+  - "Do not create filler slides."
+  - "Do not average style routes inside one provider job."
+runtime_accuracy:
+  pydantic_validation: required
+  dspy_reasoning: allowed_when_dspy_program_is_not_null
+  deterministic_guards: required
+  audit_receipt: required

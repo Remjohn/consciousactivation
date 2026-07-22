@@ -1,0 +1,17 @@
+id: format_adapter.carousel.apply
+version: "1.0.0"
+status: active
+owner_agent: format_engine_adapter_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Adapt authorized Format Intelligence programs into SuperVisual or Carousel engine inputs."
+inputs:
+  - SuperVisualFormatProgram
+  - CarouselFormatProgram
+outputs:
+  - SuperVisualBuilderFormatAdapterInput
+  - CarouselEngineFormatAdapterInput
+hard_gates:
+  - "Format program must be authorized."
+  - "Preserve brand_context_version_id."
+  - "Preserve source_span_refs."
+  - "Do not call providers or render."

@@ -1,0 +1,20 @@
+id: local_render_worker.job.create
+version: "1.0.0"
+status: active
+owner_agent: local_render_worker_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Register local render workers and manage fake render job lifecycle."
+inputs:
+  - LocalRenderWorker
+  - RenderJob
+outputs:
+  - RenderJobLease
+  - RenderJobResult
+  - RenderWorkerHealthReceipt
+hard_gates:
+  - "Do not call Remotion."
+  - "Do not call FFmpeg."
+  - "Do not call providers."
+  - "Do not shell out to external runtimes."
+  - "Lease only to healthy workers with available required capabilities."
+  - "V1 results are fake/deterministic only."

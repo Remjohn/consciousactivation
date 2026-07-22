@@ -1,0 +1,33 @@
+schema: ../../schemas/container-rules.schema.json
+schema_id: cmf.container.rules/v1
+container_id: VISION
+enabled: true
+priority:
+  tier: structural
+  rank: 6
+enforcement:
+  mode: block_on_fail
+  default_result: REVISE
+applies_to:
+  stages:
+    - scene_builder
+    - editor_regeneration
+required_sequence:
+  previous:
+    - RESOLUTION
+  next: []
+warn_conditions:
+  - metric: cta_overlap_seconds
+    operator: lt
+    value: 0.5
+  - metric: end_state_recall_score
+    operator: lt
+    value: 0.8
+route_hints:
+  preferred_components:
+    - THE_VISION
+    - THE_COMMUNITY
+    - ENCOURAGING_CHANGE
+    - THE_VIBE
+    - ARCHETYPAL_MOMENT
+  fallback: future_state_close

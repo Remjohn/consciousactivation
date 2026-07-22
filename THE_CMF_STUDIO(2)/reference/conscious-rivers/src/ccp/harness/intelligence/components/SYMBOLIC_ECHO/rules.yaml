@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: SYMBOLIC_ECHO
+enabled: true
+selection_priority:
+  tier: premium
+  rank: 8
+enforcement:
+  mode: allow_with_checks
+  default_result: REVIEW
+applies_to:
+  containers:
+    - RESOLUTION
+  stages:
+    - scene_builder
+incompatibilities:
+  - no_callback_asset
+warn_conditions:
+  - metric: callback_coherence_score
+    operator: lt
+    value: 0.8
+route_hints:
+  select:
+    - use_when_earlier_symbol_can_return_transformed
+    - use_when_memory_encoding_is_priority

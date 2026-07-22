@@ -1,0 +1,99 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "binding_results": {
+      "additionalProperties": {
+        "enum": [
+          "pass",
+          "fail",
+          "not_applicable"
+        ],
+        "type": "string"
+      },
+      "title": "Binding Results",
+      "type": "object"
+    },
+    "coalition_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "coalition_signature_preserved": {
+      "title": "Coalition Signature Preserved",
+      "type": "boolean"
+    },
+    "conflict_gate_passed": {
+      "title": "Conflict Gate Passed",
+      "type": "boolean"
+    },
+    "edge_product_preserved": {
+      "title": "Edge Product Preserved",
+      "type": "boolean"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "misuse_gate_passed": {
+      "title": "Misuse Gate Passed",
+      "type": "boolean"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail",
+        "insufficient_evidence"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "coalition_ref",
+    "binding_results",
+    "conflict_gate_passed",
+    "misuse_gate_passed",
+    "coalition_signature_preserved",
+    "edge_product_preserved",
+    "evidence_refs",
+    "verdict"
+  ],
+  "title": "PrimitiveEvaluationReceipt",
+  "type": "object"
+}

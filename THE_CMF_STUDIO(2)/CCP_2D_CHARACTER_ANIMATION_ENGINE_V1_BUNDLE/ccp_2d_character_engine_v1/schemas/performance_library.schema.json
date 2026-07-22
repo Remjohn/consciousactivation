@@ -1,0 +1,251 @@
+{
+  "$defs": {
+    "ActingState": {
+      "additionalProperties": false,
+      "properties": {
+        "state_id": {
+          "title": "State Id",
+          "type": "string"
+        },
+        "communicative_intent": {
+          "title": "Communicative Intent",
+          "type": "string"
+        },
+        "emotion": {
+          "$ref": "#/$defs/EmotionSpec"
+        },
+        "base_clip": {
+          "title": "Base Clip",
+          "type": "string"
+        },
+        "gesture_clip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gesture Clip"
+        },
+        "face_pose": {
+          "title": "Face Pose",
+          "type": "string"
+        },
+        "gaze_policy": {
+          "title": "Gaze Policy",
+          "type": "string"
+        },
+        "hand_pose_L": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hand Pose L"
+        },
+        "hand_pose_R": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hand Pose R"
+        },
+        "energy": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Energy",
+          "type": "number"
+        },
+        "minimum_hold_ticks": {
+          "minimum": 0,
+          "title": "Minimum Hold Ticks",
+          "type": "integer"
+        },
+        "transition_in_ticks": {
+          "minimum": 0,
+          "title": "Transition In Ticks",
+          "type": "integer"
+        },
+        "transition_out_ticks": {
+          "minimum": 0,
+          "title": "Transition Out Ticks",
+          "type": "integer"
+        },
+        "primitive_affinities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Primitive Affinities",
+          "type": "array"
+        },
+        "forbidden_contexts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Contexts",
+          "type": "array"
+        }
+      },
+      "required": [
+        "state_id",
+        "communicative_intent",
+        "emotion",
+        "base_clip",
+        "face_pose",
+        "gaze_policy",
+        "energy",
+        "minimum_hold_ticks",
+        "transition_in_ticks",
+        "transition_out_ticks"
+      ],
+      "title": "ActingState",
+      "type": "object"
+    },
+    "EmotionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "title": "Primary",
+          "type": "string"
+        },
+        "secondary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Secondary"
+        },
+        "intensity": {
+          "default": 0.5,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Intensity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "primary"
+      ],
+      "title": "EmotionSpec",
+      "type": "object"
+    },
+    "TransitionRule": {
+      "additionalProperties": false,
+      "properties": {
+        "from_state": {
+          "title": "From State",
+          "type": "string"
+        },
+        "to_state": {
+          "title": "To State",
+          "type": "string"
+        },
+        "allowed": {
+          "title": "Allowed",
+          "type": "boolean"
+        },
+        "min_mix_ticks": {
+          "minimum": 0,
+          "title": "Min Mix Ticks",
+          "type": "integer"
+        },
+        "max_mix_ticks": {
+          "minimum": 0,
+          "title": "Max Mix Ticks",
+          "type": "integer"
+        },
+        "bridge_clip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bridge Clip"
+        }
+      },
+      "required": [
+        "from_state",
+        "to_state",
+        "allowed",
+        "min_mix_ticks",
+        "max_mix_ticks"
+      ],
+      "title": "TransitionRule",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "library_id": {
+      "title": "Library Id",
+      "type": "string"
+    },
+    "acting_states": {
+      "items": {
+        "$ref": "#/$defs/ActingState"
+      },
+      "title": "Acting States",
+      "type": "array"
+    },
+    "transition_rules": {
+      "items": {
+        "$ref": "#/$defs/TransitionRule"
+      },
+      "title": "Transition Rules",
+      "type": "array"
+    },
+    "viseme_map_id": {
+      "title": "Viseme Map Id",
+      "type": "string"
+    },
+    "facial_pose_map_id": {
+      "title": "Facial Pose Map Id",
+      "type": "string"
+    },
+    "gaze_map_id": {
+      "title": "Gaze Map Id",
+      "type": "string"
+    },
+    "hand_pose_map_id": {
+      "title": "Hand Pose Map Id",
+      "type": "string"
+    },
+    "prop_action_map_id": {
+      "title": "Prop Action Map Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "library_id",
+    "acting_states",
+    "transition_rules",
+    "viseme_map_id",
+    "facial_pose_map_id",
+    "gaze_map_id",
+    "hand_pose_map_id",
+    "prop_action_map_id"
+  ],
+  "title": "PerformanceLibrary",
+  "type": "object"
+}

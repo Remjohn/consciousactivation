@@ -1,0 +1,16 @@
+# Service Plan
+
+```text
+avatar_asset_production_service.py
+avatar_psd_layer_service.py
+avatar_face_plate_approval_service.py
+avatar_paper_body_layer_service.py
+avatar_rig_export_service.py
+stretchy_studio_manifest_service.py
+spine_export_manifest_service.py
+dragonbones_export_manifest_service.py
+avatar_action_timeline_service.py
+avatar_character_qa_service.py
+avatar_rig_continuity_service.py
+avatar_remotion_layer_payload_service.py
+```

@@ -1,0 +1,102 @@
+{
+  "registry_id": "registry.skills.shared.asset_intelligence.v1",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "asset.ingest",
+      "file": "registries/canonical/skills/shared/asset_intelligence/01_asset.ingest.skill.yaml",
+      "skill_type": "deterministic_plus_pydantic",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.fingerprint",
+      "file": "registries/canonical/skills/shared/asset_intelligence/02_asset.fingerprint.skill.yaml",
+      "skill_type": "deterministic_python",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.rights_provenance.check",
+      "file": "registries/canonical/skills/shared/asset_intelligence/03_asset.rights_provenance.check.skill.yaml",
+      "skill_type": "deterministic_policy_plus_operator_review",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.classify",
+      "file": "registries/canonical/skills/shared/asset_intelligence/04_asset.classify.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "AssetClassificationProgram"
+    },
+    {
+      "id": "asset.semantic_profile.compile",
+      "file": "registries/canonical/skills/shared/asset_intelligence/05_asset.semantic_profile.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "AssetSemanticProfileProgram"
+    },
+    {
+      "id": "asset.primitive_affinity.score",
+      "file": "registries/canonical/skills/shared/asset_intelligence/06_asset.primitive_affinity.score.skill.yaml",
+      "skill_type": "dspy_plus_deterministic_scoring",
+      "dspy_program": "AssetPrimitiveAffinityProgram"
+    },
+    {
+      "id": "asset.intrinsic_eval.run",
+      "file": "registries/canonical/skills/shared/asset_intelligence/07_asset.intrinsic_eval.run.skill.yaml",
+      "skill_type": "hybrid_eval_runtime",
+      "dspy_program": "AssetIntrinsicEvalProgram"
+    },
+    {
+      "id": "asset.contextual_eval.run",
+      "file": "registries/canonical/skills/shared/asset_intelligence/08_asset.contextual_eval.run.skill.yaml",
+      "skill_type": "hybrid_eval_runtime",
+      "dspy_program": "AssetContextualEvalProgram"
+    },
+    {
+      "id": "asset.retrieve",
+      "file": "registries/canonical/skills/shared/asset_intelligence/09_asset.retrieve.skill.yaml",
+      "skill_type": "deterministic_filter_plus_semantic_rerank",
+      "dspy_program": "AssetRetrievalRerankProgram"
+    },
+    {
+      "id": "asset.requirement_match.score",
+      "file": "registries/canonical/skills/shared/asset_intelligence/10_asset.requirement_match.score.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "AssetRequirementMatchProgram"
+    },
+    {
+      "id": "asset.reference_board.compile",
+      "file": "registries/canonical/skills/shared/asset_intelligence/11_asset.reference_board.compile.skill.yaml",
+      "skill_type": "deterministic_grouping_plus_dspy_summary",
+      "dspy_program": "AssetReferenceBoardProgram"
+    },
+    {
+      "id": "asset.variant.materialize",
+      "file": "registries/canonical/skills/shared/asset_intelligence/12_asset.variant.materialize.skill.yaml",
+      "skill_type": "deterministic_receipt_validation",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.usage.record",
+      "file": "registries/canonical/skills/shared/asset_intelligence/13_asset.usage.record.skill.yaml",
+      "skill_type": "deterministic_receipt",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.performance.update",
+      "file": "registries/canonical/skills/shared/asset_intelligence/14_asset.performance.update.skill.yaml",
+      "skill_type": "deterministic_aggregation",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.fatigue.compute",
+      "file": "registries/canonical/skills/shared/asset_intelligence/15_asset.fatigue.compute.skill.yaml",
+      "skill_type": "deterministic_rules",
+      "dspy_program": null
+    },
+    {
+      "id": "asset.winner.promote",
+      "file": "registries/canonical/skills/shared/asset_intelligence/16_asset.winner.promote.skill.yaml",
+      "skill_type": "deterministic_threshold_plus_operator_approval",
+      "dspy_program": null
+    }
+  ]
+}

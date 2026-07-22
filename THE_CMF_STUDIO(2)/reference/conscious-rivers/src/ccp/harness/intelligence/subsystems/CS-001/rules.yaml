@@ -1,0 +1,43 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-001
+enabled: true
+priority:
+  tier: survival
+  rank: 1
+enforcement:
+  mode: block_on_fail
+  default_result: BLOCK
+applies_to:
+  containers:
+    - HOOK
+  stages:
+    - scene_builder
+    - manifest_assembly
+evaluation_order:
+  before:
+    - CS-002
+    - CS-025
+block_conditions:
+  - metric: focal_element_count
+    operator: neq
+    value: 1
+  - metric: initial_cls
+    operator: gt
+    value: 2
+  - metric: competing_text_block_count
+    operator: gt
+    value: 0
+  - metric: ui_overlap
+    operator: eq
+    value: true
+warn_conditions:
+  - metric: dominant_element_vertical_position_pct
+    operator: outside_range
+    value:
+      min: 15
+      max: 40
+route_hints:
+  preferred_openers:
+    - single_face_anchor
+    - single_object_anchor

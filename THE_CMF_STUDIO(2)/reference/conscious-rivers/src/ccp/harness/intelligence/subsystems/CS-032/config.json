@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-032",
+  "name": "Silence Container",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Excitation Transfer Theory",
+    "LC4MP"
+  ],
+  "inputs": [
+    "preceding_cls",
+    "time_since_peak_seconds",
+    "soundtrack_density",
+    "dialogue_density",
+    "candidate_pause_cls"
+  ],
+  "outputs": [
+    "pause_required",
+    "recommended_pause_position_seconds",
+    "verdict",
+    "violations"
+  ],
+  "thresholds": {
+    "trigger_cls": 4,
+    "required_pause_cls_max": 1,
+    "insertion_window_seconds": {
+      "min": 2,
+      "max": 5
+    },
+    "min_pause_duration_ms": 750,
+    "allow_dense_dialogue": false
+  },
+  "default_action_on_fail": "REVISE"
+}

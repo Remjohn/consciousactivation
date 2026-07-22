@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-008",
+  "title": "Team Config",
+  "description": "FR-VID-12 §4 Stage 7 — Structured multi-agent dispatch definition. Teams use selective or parallel dispatch with an orchestrator that merges results. Agents exchange structured packets, not implicit conversational state.",
+  "type": "object",
+  "required": ["team_id", "description", "execution_shape", "agents", "orchestrator", "packet_types"],
+  "properties": {
+    "team_id": {
+      "type": "string",
+      "description": "Unique team identifier (e.g. composition-team, production-team)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the team's purpose."
+    },
+    "execution_shape": {
+      "type": "string",
+      "enum": ["team"],
+      "description": "Execution shape — team means selective or parallel dispatch with orchestrator merge."
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "role"],
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "description": "Reference to a DEP-RUN-002 agent contract ID."
+          },
+          "role": {
+            "type": "string",
+            "description": "The agent's role within this team."
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this agent can be skipped if unavailable."
+          }
+        }
+      },
+      "minItems": 2,
+      "description": "Agents participating in this team."
+    },
+    "orchestrator": {
+      "type": "string",
+      "description": "Agent ID of the orchestrator responsible for dispatching tasks and merging results."
+    },
+    "packet_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["task_packet", "summary_packet", "decision_log", "failure_report"]
+      },
+      "minItems": 1,
+      "description": "Structured packet types exchanged between agents in this team."
+    },
+    "merge_strategy": {
+      "type": "string",
+      "enum": ["orchestrator_decides", "vote", "first_success", "all_required"],
+      "description": "How the orchestrator merges results from team agents."
+    }
+  }
+}

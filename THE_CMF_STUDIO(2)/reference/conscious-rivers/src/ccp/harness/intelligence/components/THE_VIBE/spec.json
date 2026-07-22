@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "THE_VIBE",
+  "scene_number": 17,
+  "name": "The Vibe",
+  "version": "1.0",
+  "function": "Atmospheric tone carrier that establishes or extends a mood state without heavy exposition.",
+  "compatible_containers": [
+    "HOOK",
+    "SETUP",
+    "VISION"
+  ],
+  "cls_footprint": {
+    "typical": 1.8,
+    "max": 2.5
+  },
+  "required_asset_types": [
+    "B_ROLL",
+    "ATMOSPHERIC_TEXTURE",
+    "A_ROLL"
+  ],
+  "template_variants": [
+    "opener_texture",
+    "tone_setting_haze",
+    "aspirational_texture"
+  ],
+  "effect_dependencies": [
+    "ambient_motion",
+    "atmospheric_grade"
+  ],
+  "selection_signals": [
+    "tone",
+    "texture",
+    "mood_extension"
+  ],
+  "audio_profile": {
+    "score_role": "atmosphere",
+    "energy_band": "low_medium",
+    "mode": "immersive",
+    "prosodic_hint": "breath_led_sparse",
+    "prosodic_contour_target": {
+      "pitch_shape": "level",
+      "stress_placement": "distributed",
+      "rate_wpm": { "min": 100, "max": 130 },
+      "emotional_register": "intimacy"
+    }
+  },
+  "fallback_behavior": "Reduce to a simple ambient b-roll bridge if tone is the only job."
+}

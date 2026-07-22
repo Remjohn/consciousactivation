@@ -1,0 +1,176 @@
+# Voice and Audio Intimacy — Meaning Primitive
+# Calibrated against PRM-HUM-009.yaml (Golden Anchor)
+
+primitive_id: "PRM-VOC-003"
+canonical_name: "Writing for the Ear, Not the Eye"
+aliases:
+  - "Ear-First Composition"
+  - "Auditory Processing Priority"
+
+family: "voice_audio_intimacy"
+implementation_role: "constraint"
+
+source_audits:
+  - audit_file: "AUDIT Finding Your Voice Rob Quicke.md"
+    primitive_name_in_audit: "Writing for the Ear, Not the Eye"
+    mcda_score: 194
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/08_Sound_Design/AUDIT Finding Your Voice Rob Quicke.md"
+
+book_reference:
+  title: "Finding Your Voice in Radio, Audio, and Podcast Production"
+  author: "Rob Quicke"
+  chapters:
+    - "Chapter 3: Discovering Effective Writing for Ears and Audiences"
+    - "Chapter 4: Discovering How to Use Sound"
+  key_pages: "67-95"
+  book_path: "lab/Public Speeaking Coaching/08_Sound_Design/Finding Your Voice in Radio Audio and Podcast - Rob Quicke.md"
+
+summary: >
+  Writing for the Ear constrains all CCP spoken content to be composed
+  for auditory processing first. Quicke distinguishes discoverer-stage
+  writing from print writing: rewriting portions of a script to make it
+  "sound more natural as you are reading it" is not optional polish — it
+  is the primary composition act. The ear processes rhythm, breathing
+  cadence, and tonal contour; the eye processes layout, punctuation, and
+  paragraph structure. Content designed for the eye that is then spoken
+  aloud creates synthetic rhythm — the hallmark of AI-generated text.
+  In CCP, this primitive is the anti-slop filter for every Sonic Scribe
+  output.
+
+core_move: >
+  Draft content specifically for spoken rhythm, breathing cadence, and
+  auditory processing.
+
+why_it_works: >
+  Quicke explains that modulating voice from high to low and discovering
+  "appropriate modulation will become second nature as will the whole
+  process of physically making sound." But this only works when the text
+  was composed for the voice in the first place. He recommends "practice
+  rewriting portions of a script to make it sound more natural as you are
+  reading it — as long as you do not change the meaning, you can always
+  make these kinds of adjustments." The mechanism is prosodic alignment:
+  written-for-eye text has clause structures optimized for visual scanning
+  (long subordinate clauses, parenthetical asides, em-dashes) that create
+  unnatural pause patterns when spoken. Written-for-ear text uses short
+  declarative sentences, breath-friendly phrase lengths (5-9 words per
+  breath group), and natural stress patterns that match English prosody.
+  Dobbs reinforces this from the broadcast side: "Don't write the way
+  you read; write the way you talk." CCP voice notes that violate this
+  rule sound robotic even when the TTS engine is technically excellent.
+
+examples:
+  - context: "BOOK: Finding Your Voice - Ear-First Composition"
+    application: >
+      Quicke insists that rewriting scripts to "sound more natural as you are reading it" is the primary composition act. The ear processes rhythm and breathing cadence; the eye processes punctuation.
+    effect: >
+      Written-for-ear text matches English prosody, preventing the synthetic rhythm of AI-generated text.
+
+  - context: "CCP: CMF - Sonic Scribe Scripting"
+    application: >
+      The LLM generates compound sentences averaging 28 words. The ear-first rewrite breaks these into six simple sentences averaging 11 words, replacing commas with periods and "however" with "But".
+    effect: >
+      The rendered voice note sounds like speech. Breath points align with semantic boundaries.
+
+  - context: "CCP: CBCS - Telegram Follow-Up"
+    application: >
+      Instead of a complex subordinate clause ("Although it might seem..."), the text is rewritten into punchy, standalone thought units: "This week felt like a setback. I know. But here's what to notice."
+    effect: >
+      The emotional payload arrives cleanly without the listener holding clauses in working memory.
+
+  - context: "CCP: V2WS - Webinar Script Polish"
+    application: >
+      Before a webinar, the V2WS system flags all parenthetical asides and em-dashes in the speaker's script, converting them into standalone declarative sentences.
+    effect: >
+      The speaker doesn't stumble over visual punctuation that has no auditory equivalent.
+
+  - context: "CCP: Conscious Reactions - Live Audio Feedback"
+    application: >
+      The Guardian agent scrubs Latin abbreviations ("i.e.", "vis-a-vis") from the script before TTS rendering, replacing them with natural spoken transitions.
+    effect: >
+      The TTS doesn't sound robotic or overly academic.
+
+anti_examples:
+  - description: >
+      A voice note script contains the sentence: "The framework — which
+      we discussed last Tuesday (see attached notes) — should be applied
+      iteratively, i.e., each pass refines the previous output vis-à-vis
+      the stated benchmarks."
+    why_it_fails: >
+      Parenthetical references ("see attached notes"), Latin abbreviations
+      ("i.e.", "vis-à-vis"), and em-dash asides are eye-processing
+      conventions. When spoken aloud, the listener cannot see the dashes
+      or parentheses that signal subordination. The auditory stream
+      becomes a single unstructured flow. Quicke's ear-writing principle
+      requires each thought to stand alone.
+
+phase_fit:
+  pre_trigger: 0.3
+  post_trigger: 0.4
+  generation: 0.95
+  revision: 0.9
+  delivery: 0.7
+
+surface_fit:
+  text: 0.2
+  voice: 0.95
+  visual: 0.1
+  sonic: 0.6
+  webinar: 0.7
+  telegram: 0.8
+
+goal_bias:
+  connection: 0.7
+  surprise: 0.1
+  tension: 0.1
+  clarity: 0.9
+  memorability: 0.6
+  persuasion: 0.3
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.1
+  trigger_provocation: 0.2
+  authenticated_capture: 0.3
+  meaning_extraction: 0.4
+  content_generation: 0.95
+  edge_product_assembly: 0.6
+  delivery_coaching: 0.8
+  experience_flow: 0.4
+  premium_differentiation: 0.3
+
+trigger_conditions:
+  - "Target pipeline includes TTS synthesis (Sonic Scribe)"
+  - "Source text originates from an LLM prompt generation"
+  - "AST analysis detects compound sentences > 20 words or parentheticals"
+
+suppression_conditions:
+  - "Target surface is purely text-based (CBCS Web UI)"
+  - "Payload requires formal legal or compliance register"
+  - "Target surface relies entirely on visual data card layout"
+
+misuse_modes:
+  - "Dumbing down content — ear-first does not mean vocabulary reduction"
+  - "Removing all complexity — some ideas require longer sentences even in speech"
+  - "Applying the rule to text channels where written conventions aid comprehension"
+
+synergizes_with:
+  - "PRM-VOC-001"  # Write for the Distracted Ear — ear-first is the execution layer for distracted-ear intent
+  - "PRM-VOC-004"  # Proofread Aloud — the aloud test validates ear-first composition
+  - "PRM-VOC-002"  # Audience-of-One Intimacy — conversational register is inherently ear-first
+  - "PRM-VSG-014"  # Playback Context Is Part of the Composition — phone speaker reinforces ear-first necessity
+
+conflicts_with:
+  - "PRM-BUS-006"  # Hierarchy as Semantic Attention Routing — visual hierarchy conventions conflict with auditory flow
+  - "PRM-BUS-012"  # Typography as Voice — typography is by definition an eye-processing tool
+
+crosswalk_id: null
+crosswalk_note: null
+
+notes: >
+  This primitive is a mandatory constraint for the Sonic Scribe pipeline.
+  Any LLM-generated text passing through the voice rendering chain must
+  be filtered through the ear-first rewrite before TTS synthesis. The
+  constraint is structural, not stylistic — it changes sentence architecture,
+  not vocabulary. Pair with PRM-VOC-004 (Proofread Aloud) as the
+  validation step. Note: goal_bias.connection and goal_bias.clarity are
+  both elevated because ear-first writing serves both — natural speech
+  rhythm creates connection, and simple structure creates clarity.

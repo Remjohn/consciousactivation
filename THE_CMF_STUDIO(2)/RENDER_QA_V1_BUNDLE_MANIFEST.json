@@ -1,0 +1,30 @@
+{
+  "bundle_id": "ccp_render_qa_v1_patch",
+  "version": "1.0.0",
+  "purpose": "Operational render QA receipts for playability, duration, audio, frame samples, captions, visual regression, character identity, motion promise, and delivery promise.",
+  "contains": {
+    "architecture_docs": 6,
+    "fixture_files": 2,
+    "contract_files": 1,
+    "service_files": 1,
+    "registries": 5,
+    "skill_manifests": 9,
+    "tests": 1
+  },
+  "contracts": [
+    "FFprobeValidationReceipt",
+    "FrameSamplingReceipt",
+    "AudioLevelAnalysisReceipt",
+    "CaptionBurnCheckReceipt",
+    "VisualRegressionScreenshotReceipt",
+    "CharacterQAReport",
+    "MotionDowngradeBlocker",
+    "DeliveryPromiseValidationReceipt"
+  ],
+  "hard_laws": [
+    "No external tool calls in V1.",
+    "Blocking QA failures fail composite report.",
+    "Silent motion downgrade blocks unless operator-approved as warning.",
+    "Delivery promise validates V9.1 rendered asset metrics."
+  ]
+}

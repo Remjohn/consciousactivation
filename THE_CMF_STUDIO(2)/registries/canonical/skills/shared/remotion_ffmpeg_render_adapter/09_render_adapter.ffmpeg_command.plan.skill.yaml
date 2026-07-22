@@ -1,0 +1,21 @@
+id: render_adapter.ffmpeg_command.plan
+version: "1.1.0"
+status: active
+owner_agent: render_adapter_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Plan and validate gated Remotion/FFmpeg local render pipeline."
+inputs:
+  - RemotionRenderJob
+  - FFmpegFinishJob
+outputs:
+  - RemotionRenderResult
+  - FFmpegFinishResult
+  - RenderQAReport
+hard_gates:
+  - "Do not call providers."
+  - "Do not shell out unless explicitly enabled."
+  - "Real local execution requires tested capability and local worker lease."
+  - "Preserve Complete Editing Session state wrapper."
+  - "Validate seven-layer composition."
+  - "Reject banned motion vocabulary."
+  - "Enforce memetic sound cue moderation."

@@ -1,0 +1,2409 @@
+{
+  "asset_id": "SSRT-SCENE-BUILDER-v1",
+  "version": "1.0.0",
+  "compile_target": "SCENE_BUILDER",
+  "runtime_stage": "scene_builder",
+  "compiled_at": "2026-06-09T11:31:20.419194+00:00",
+  "validation_contract": {
+    "config_schema_id": "cmf.subsystem.config/v1",
+    "rules_schema_id": "cmf.subsystem.rules/v1"
+  },
+  "active_subsystems": [
+    "CS-001",
+    "CS-002",
+    "CS-003",
+    "CS-004",
+    "CS-005",
+    "CS-006",
+    "CS-007",
+    "CS-008",
+    "CS-009",
+    "CS-010",
+    "CS-011",
+    "CS-012",
+    "CS-013",
+    "CS-014",
+    "CS-015",
+    "CS-016",
+    "CS-017",
+    "CS-018",
+    "CS-019",
+    "CS-020",
+    "CS-021",
+    "CS-022",
+    "CS-023",
+    "CS-024",
+    "CS-025",
+    "CS-026",
+    "CS-027",
+    "CS-028",
+    "CS-029",
+    "CS-030",
+    "CS-031",
+    "CS-032",
+    "CS-033",
+    "CS-034"
+  ],
+  "thresholds": {
+    "CS-001": {
+      "imprint_window_ms": 400,
+      "required_focal_element_count": 1,
+      "max_initial_cls": 2,
+      "preferred_vertical_band_pct": {
+        "min": 15,
+        "max": 40
+      },
+      "max_competing_text_blocks": 0,
+      "allow_ui_overlap": false
+    },
+    "CS-002": {
+      "recognition_window_seconds": {
+        "min": 1.5,
+        "max": 2.5
+      },
+      "max_time_to_face_seconds": 2.0,
+      "preferred_face_count": 1,
+      "preferred_top_band_pct": {
+        "min": 15,
+        "max": 25
+      },
+      "require_visible_eyes_and_mouth": true
+    },
+    "CS-003": {
+      "max_gaze_overlay_mismatch_degrees": 25,
+      "max_dense_overlay_blocks_with_direct_gaze": 1,
+      "direct_gaze_for_bonding": true,
+      "averted_gaze_for_instruction": true
+    },
+    "CS-004": {
+      "required_arc_order": [
+        "HOOK",
+        "SETUP",
+        "CHALLENGE",
+        "TURNING_POINT",
+        "RESOLUTION",
+        "VISION"
+      ],
+      "minimum_structural_synchrony_score": 0.8,
+      "block_on_arc_violation": true
+    },
+    "CS-005": {
+      "preferred_face_band_pct": {
+        "min": 15,
+        "max": 25
+      },
+      "preferred_caption_band_pct": {
+        "min": 30,
+        "max": 60
+      },
+      "blocked_bottom_zone_pct": 20,
+      "avoid_right_margin_pct": 15
+    },
+    "CS-006": {
+      "max_focal_shift_pct_frame_width": 15,
+      "allow_large_jump_with_reorientation": true,
+      "prefer_attention_compatible_cuts": true
+    },
+    "CS-007": {
+      "minimum_information_delta_per_cut": 1,
+      "max_redundant_cut_run": 2,
+      "require_semantic_novelty": true
+    },
+    "CS-008": {
+      "trigger_cls": 4,
+      "receiving_cls_min": 1,
+      "receiving_cls_max": 2,
+      "golden_zone_seconds": {
+        "min": 2,
+        "max": 5
+      },
+      "full_decay_seconds": 10,
+      "forbidden_adjacent_transition": [
+        4,
+        4
+      ]
+    },
+    "CS-009": {
+      "contamination_window_shots": {
+        "min": 3,
+        "max": 5
+      },
+      "max_contradiction_score": 0.3,
+      "prefer_neutral_b_roll": true
+    },
+    "CS-010": {
+      "preferred_audio_preload_ms": {
+        "min": 150,
+        "max": 500
+      },
+      "prefer_j_cut": true,
+      "avoid_mode_conflict": true
+    },
+    "CS-011": {
+      "peak_end_budget_multiplier": 2.0,
+      "default_focus_scenes": [
+        "TURNING_POINT",
+        "VISION"
+      ],
+      "minimum_peak_end_focus_score": 0.8
+    },
+    "CS-012": {
+      "max_cta_gap_seconds": 3.0,
+      "preferred_fusion_window_seconds": {
+        "min": 0.0,
+        "max": 3.0
+      },
+      "allow_detached_outro": false
+    },
+    "CS-013": {
+      "recent_history_window_videos": 3,
+      "minimum_novelty_score": 0.7,
+      "forbid_identical_component_pattern_consecutive": true,
+      "forbid_identical_timing_pattern_consecutive": true
+    },
+    "CS-014": {
+      "primary_vector_count": 1,
+      "secondary_vector_count": 1,
+      "max_emotional_beats": 3
+    },
+    "CS-015": {
+      "minimum_inference_duration_ms": 750,
+      "contextless_minimum_duration_ms": 2000,
+      "allow_hook_microcuts": true
+    },
+    "CS-016": {
+      "minimum_pad_alignment_score": 0.8,
+      "require_scene_metadata_palette": true,
+      "archetype_palette_required": true
+    },
+    "CS-017": {
+      "minimum_adjacent_delta_kelvin": 600,
+      "vulnerability_kelvin_band": {
+        "min": 3200,
+        "max": 4200
+      },
+      "challenge_kelvin_band": {
+        "min": 5000,
+        "max": 6000
+      }
+    },
+    "CS-018": {
+      "minimum_presence_arousal_ratio": 1.25,
+      "max_standard_cls_cost": 2,
+      "reserve_high_arousal_for": [
+        "TURNING_POINT",
+        "VISION"
+      ]
+    },
+    "CS-019": {
+      "empowerment_directions": [
+        "UP",
+        "LEFT_TO_RIGHT"
+      ],
+      "challenge_directions": [
+        "DOWN",
+        "RIGHT_TO_LEFT"
+      ],
+      "max_contradiction_score": 0.2
+    },
+    "CS-020": {
+      "mobile_parallax_scale": 0.6,
+      "desktop_parallax_scale": 1.0,
+      "max_mobile_depth_multiplier": 0.7
+    },
+    "CS-021": {
+      "minimum_full_width_pan_seconds": 7.0,
+      "prefer_cut_when_under_threshold": true
+    },
+    "CS-022": {
+      "preferred_sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "speech_priority": true,
+      "block_on_out_of_window_commit": true
+    },
+    "CS-023": {
+      "target_asl_seconds": {
+        "min": 0.8,
+        "max": 2.4
+      },
+      "use_one_over_f_distribution": true,
+      "require_reset_spaces": true
+    },
+    "CS-024": {
+      "high_arousal_cls_min": 3,
+      "high_arousal_duration_seconds": {
+        "min": 3.0,
+        "max": 5.0
+      },
+      "low_arousal_duration_seconds": {
+        "min": 1.5,
+        "max": 3.0
+      },
+      "max_information_density_per_cut_for_high_arousal": 2
+    },
+    "CS-025": {
+      "retention_window_seconds": 3,
+      "target_hook_asl_seconds": {
+        "min": 0.8,
+        "max": 1.5
+      },
+      "max_opening_cls": 2,
+      "max_time_to_face_seconds": 2.0,
+      "max_time_to_primary_signal_seconds": 1.7,
+      "allow_delayed_intro": false
+    },
+    "CS-026": {
+      "max_dominant_faces": 1,
+      "max_decorative_secondary_faces": 0,
+      "allow_secondary_faces_if_functional": true
+    },
+    "CS-027": {
+      "preferred_offset_ms": {
+        "min": -20,
+        "max": 160
+      },
+      "hard_late_failure_ms": 300,
+      "visual_lead_preferred": true
+    },
+    "CS-028": {
+      "max_simultaneous_meaningful_elements": 3,
+      "allow_supportive_context_element": 1
+    },
+    "CS-029": {
+      "publish_ready_score": 80,
+      "revise_score_min": 65,
+      "high_risk_score_max": 64
+    },
+    "CS-030": {
+      "minimum_neural_phase_consistency_score": 0.8,
+      "parameters_inherit_from_container": true
+    },
+    "CS-031": {
+      "biological_fit_weight": 0.6,
+      "novelty_weight": 0.3,
+      "preference_weight": 0.1,
+      "require_subsystem_consultation": true
+    },
+    "CS-032": {
+      "trigger_cls": 4,
+      "required_pause_cls_max": 1,
+      "insertion_window_seconds": {
+        "min": 2,
+        "max": 5
+      },
+      "min_pause_duration_ms": 750,
+      "allow_dense_dialogue": false
+    },
+    "CS-033": {
+      "minimum_prediction_error_score": 0.35,
+      "maximum_prediction_error_score": 1.0,
+      "maximum_legibility_loss": 0.25,
+      "preferred_reveal_window_ms": {
+        "min": 250,
+        "max": 2200
+      },
+      "maximum_surprise_resolution_seconds": 3.0,
+      "require_container_budget_alignment": true
+    },
+    "CS-034": {
+      "min_schema_activation_score": 0.4,
+      "max_boundary_density_per_beat": 0.5,
+      "min_boundary_spacing_seconds": 1.5,
+      "require_schema_establishment": true,
+      "block_threshold": {
+        "schema_activation_score": 0.3,
+        "boundary_density_per_beat": 0.7
+      }
+    }
+  },
+  "packages": {
+    "CS-001": {
+      "name": "First Frame Imprint",
+      "priority_tier": "survival",
+      "default_action_on_fail": "BLOCK",
+      "thresholds": {
+        "imprint_window_ms": 400,
+        "required_focal_element_count": 1,
+        "max_initial_cls": 2,
+        "preferred_vertical_band_pct": {
+          "min": 15,
+          "max": 40
+        },
+        "max_competing_text_blocks": 0,
+        "allow_ui_overlap": false
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK"
+        ],
+        "stages": [
+          "scene_builder",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "block_on_fail",
+        "default_result": "BLOCK"
+      },
+      "rules": {
+        "priority": {
+          "tier": "survival",
+          "rank": 1
+        },
+        "block_conditions": [
+          {
+            "metric": "focal_element_count",
+            "operator": "neq",
+            "value": 1
+          },
+          {
+            "metric": "initial_cls",
+            "operator": "gt",
+            "value": 2
+          },
+          {
+            "metric": "competing_text_block_count",
+            "operator": "gt",
+            "value": 0
+          },
+          {
+            "metric": "ui_overlap",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "dominant_element_vertical_position_pct",
+            "operator": "outside_range",
+            "value": {
+              "min": 15,
+              "max": 40
+            }
+          }
+        ],
+        "route_hints": {
+          "preferred_openers": [
+            "single_face_anchor",
+            "single_object_anchor"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {
+          "before": [
+            "CS-002",
+            "CS-025"
+          ]
+        }
+      }
+    },
+    "CS-002": {
+      "name": "Face Recognition Window",
+      "priority_tier": "survival",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "recognition_window_seconds": {
+          "min": 1.5,
+          "max": 2.5
+        },
+        "max_time_to_face_seconds": 2.0,
+        "preferred_face_count": 1,
+        "preferred_top_band_pct": {
+          "min": 15,
+          "max": 25
+        },
+        "require_visible_eyes_and_mouth": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "survival",
+          "rank": 2
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "time_to_face_seconds",
+            "operator": "gt",
+            "value": 2.0
+          },
+          {
+            "metric": "face_count",
+            "operator": "gt",
+            "value": 1
+          }
+        ],
+        "route_hints": {
+          "prioritize": [
+            "introduce_coach_face_earlier",
+            "switch_to_medium_close_up",
+            "reduce_secondary_faces"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-003": {
+      "name": "Gaze Direction Transfer",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "max_gaze_overlay_mismatch_degrees": 25,
+        "max_dense_overlay_blocks_with_direct_gaze": 1,
+        "direct_gaze_for_bonding": true,
+        "averted_gaze_for_instruction": true
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 3
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "gaze_overlay_mismatch_degrees",
+            "operator": "gt",
+            "value": 25
+          }
+        ],
+        "route_hints": {
+          "correct": [
+            "align_overlay_with_eye_line",
+            "switch_to_averted_gaze",
+            "sequence_face_and_text"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-004": {
+      "name": "ISC Structure Enforcer",
+      "priority_tier": "quality",
+      "default_action_on_fail": "BLOCK",
+      "thresholds": {
+        "required_arc_order": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "minimum_structural_synchrony_score": 0.8,
+        "block_on_arc_violation": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "block_on_fail",
+        "default_result": "BLOCK"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 1
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "structural_synchrony_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "enforce": [
+            "preserve_arc_role",
+            "reject_nonfunctional_insertions"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-005": {
+      "name": "Safe Zone Enforcer",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "preferred_face_band_pct": {
+          "min": 15,
+          "max": 25
+        },
+        "preferred_caption_band_pct": {
+          "min": 30,
+          "max": 60
+        },
+        "blocked_bottom_zone_pct": 20,
+        "avoid_right_margin_pct": 15
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 2
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "critical_content_in_bottom_zone",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "metric": "critical_content_in_right_margin",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "route_hints": {
+          "correct": [
+            "move_content_up",
+            "clear_platform_ui_zone"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-006": {
+      "name": "Gaze Continuity Checker",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "max_focal_shift_pct_frame_width": 15,
+        "allow_large_jump_with_reorientation": true,
+        "prefer_attention_compatible_cuts": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 4
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "focal_shift_pct_frame_width",
+            "operator": "gt",
+            "value": 15
+          }
+        ],
+        "route_hints": {
+          "corrective_moves": [
+            "align_incoming_focal_point",
+            "reframe_b_roll",
+            "add_reorientation_cue"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-007": {
+      "name": "Theta Reset Validator",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_information_delta_per_cut": 1,
+        "max_redundant_cut_run": 2,
+        "require_semantic_novelty": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 2
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "information_delta_per_cut",
+            "operator": "lt",
+            "value": 1
+          }
+        ],
+        "route_hints": {
+          "remove": [
+            "redundant_punch_in",
+            "empty_reframe"
+          ],
+          "preserve": [
+            "semantically_new_cut"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-008": {
+      "name": "Excitation Transfer Timer",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "BLOCK",
+      "thresholds": {
+        "trigger_cls": 4,
+        "receiving_cls_min": 1,
+        "receiving_cls_max": 2,
+        "golden_zone_seconds": {
+          "min": 2,
+          "max": 5
+        },
+        "full_decay_seconds": 10,
+        "forbidden_adjacent_transition": [
+          4,
+          4
+        ]
+      },
+      "applies_to": {
+        "containers": [
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "block_on_fail",
+        "default_result": "BLOCK"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 1
+        },
+        "block_conditions": [
+          {
+            "metric": "adjacent_cls_transition",
+            "operator": "eq",
+            "value": [
+              4,
+              4
+            ]
+          },
+          {
+            "metric": "time_to_receiving_beat_seconds",
+            "operator": "lt",
+            "value": 2
+          },
+          {
+            "metric": "time_to_receiving_beat_seconds",
+            "operator": "gt",
+            "value": 5
+          },
+          {
+            "metric": "receiving_cls",
+            "operator": "gt",
+            "value": 2
+          }
+        ],
+        "warn_conditions": [],
+        "route_hints": {
+          "recovery_paths": [
+            "insert_pause_container",
+            "extend_vulnerable_hold",
+            "reduce_followup_cls"
+          ]
+        },
+        "coordinates_with": [
+          "CS-024",
+          "CS-032"
+        ],
+        "evaluation_order": {}
+      }
+    },
+    "CS-009": {
+      "name": "Emotional Contamination",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "contamination_window_shots": {
+          "min": 3,
+          "max": 5
+        },
+        "max_contradiction_score": 0.3,
+        "prefer_neutral_b_roll": true
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 3
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "contradiction_score",
+            "operator": "gt",
+            "value": 0.3
+          }
+        ],
+        "route_hints": {
+          "prefer": [
+            "emotionally_permeable_b_roll",
+            "lower_semantic_load_insert"
+          ],
+          "avoid": [
+            "literal_conflicting_stock"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-010": {
+      "name": "Cross-Modal Audio Primer",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "preferred_audio_preload_ms": {
+          "min": 150,
+          "max": 500
+        },
+        "prefer_j_cut": true,
+        "avoid_mode_conflict": true
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 4
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "audio_preload_ms",
+            "operator": "lt",
+            "value": 150
+          }
+        ],
+        "route_hints": {
+          "prime": [
+            "use_j_cut",
+            "preload_score",
+            "align_audio_mode_with_scene"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-011": {
+      "name": "Peak-End Budget Allocator",
+      "priority_tier": "recall",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "peak_end_budget_multiplier": 2.0,
+        "default_focus_scenes": [
+          "TURNING_POINT",
+          "VISION"
+        ],
+        "minimum_peak_end_focus_score": 0.8
+      },
+      "applies_to": {
+        "containers": [
+          "TURNING_POINT",
+          "VISION",
+          "RESOLUTION"
+        ],
+        "stages": [
+          "scene_builder"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "recall",
+          "rank": 1
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "peak_end_focus_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "prioritize": [
+            "turn_up_peak_complexity",
+            "strengthen_end_state"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {
+          "after": [
+            "CS-008",
+            "CS-024"
+          ]
+        }
+      }
+    },
+    "CS-012": {
+      "name": "CTA Fusion Timer",
+      "priority_tier": "recall",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "max_cta_gap_seconds": 3.0,
+        "preferred_fusion_window_seconds": {
+          "min": 0.0,
+          "max": 3.0
+        },
+        "allow_detached_outro": false
+      },
+      "applies_to": {
+        "containers": [
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "recall",
+          "rank": 2
+        },
+        "block_conditions": [
+          {
+            "metric": "detached_outro",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "gap_duration_seconds",
+            "operator": "gt",
+            "value": 3.0
+          }
+        ],
+        "route_hints": {
+          "correct": [
+            "move_cta_into_end_window",
+            "remove_branded_tail_gap"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-013": {
+      "name": "Variation Engine",
+      "priority_tier": "recall",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "recent_history_window_videos": 3,
+        "minimum_novelty_score": 0.7,
+        "forbid_identical_component_pattern_consecutive": true,
+        "forbid_identical_timing_pattern_consecutive": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "recall",
+          "rank": 4
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "novelty_score",
+            "operator": "lt",
+            "value": 0.7
+          }
+        ],
+        "route_hints": {
+          "vary": [
+            "scene_vehicle",
+            "timing_signature",
+            "motion_palette"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-014": {
+      "name": "Emotional Beat Limiter",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "primary_vector_count": 1,
+        "secondary_vector_count": 1,
+        "max_emotional_beats": 3
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 5
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "emotional_beat_count",
+            "operator": "gt",
+            "value": 3
+          }
+        ],
+        "route_hints": {
+          "simplify": [
+            "collapse_affective_turns",
+            "preserve_primary_vector"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-015": {
+      "name": "Shot Duration Enforcer",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_inference_duration_ms": 750,
+        "contextless_minimum_duration_ms": 2000,
+        "allow_hook_microcuts": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 5
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "shot_length_ms",
+            "operator": "lt",
+            "value": 750
+          }
+        ],
+        "route_hints": {
+          "corrective_moves": [
+            "extend_hold",
+            "reduce_semantic_load",
+            "serialize_information"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-016": {
+      "name": "PAD Color Vector Mapper",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_pad_alignment_score": 0.8,
+        "require_scene_metadata_palette": true,
+        "archetype_palette_required": true
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 6
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "pad_alignment_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "calibrate": [
+            "adjust_brightness",
+            "adjust_saturation",
+            "switch_grade_archetype"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-017": {
+      "name": "Temperature Arc",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_adjacent_delta_kelvin": 600,
+        "vulnerability_kelvin_band": {
+          "min": 3200,
+          "max": 4200
+        },
+        "challenge_kelvin_band": {
+          "min": 5000,
+          "max": 6000
+        }
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 7
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "adjacent_delta_kelvin",
+            "operator": "lt",
+            "value": 600
+          }
+        ],
+        "route_hints": {
+          "adjust": [
+            "cool_confrontation",
+            "warm_vulnerability",
+            "restore_resolve_temperature"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-018": {
+      "name": "Presence/Arousal",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_presence_arousal_ratio": 1.25,
+        "max_standard_cls_cost": 2,
+        "reserve_high_arousal_for": [
+          "TURNING_POINT",
+          "VISION"
+        ]
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 8
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "presence_arousal_ratio",
+            "operator": "lt",
+            "value": 1.25
+          }
+        ],
+        "route_hints": {
+          "prefer": [
+            "subtle_drift",
+            "breathing_motion"
+          ],
+          "avoid": [
+            "gratuitous_handheld_shake"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-019": {
+      "name": "Directional Semantics",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "empowerment_directions": [
+          "UP",
+          "LEFT_TO_RIGHT"
+        ],
+        "challenge_directions": [
+          "DOWN",
+          "RIGHT_TO_LEFT"
+        ],
+        "max_contradiction_score": 0.2
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 6
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "contradiction_score",
+            "operator": "gt",
+            "value": 0.2
+          }
+        ],
+        "route_hints": {
+          "align": [
+            "match_motion_to_scene_semantics",
+            "reverse_conflicting_vector"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-020": {
+      "name": "Parallax Scaler",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "mobile_parallax_scale": 0.6,
+        "desktop_parallax_scale": 1.0,
+        "max_mobile_depth_multiplier": 0.7
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 7
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "mobile_depth_multiplier",
+            "operator": "gt",
+            "value": 0.7
+          }
+        ],
+        "route_hints": {
+          "scale": [
+            "reduce_mobile_depth",
+            "keep_desktop_preview_separate"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-021": {
+      "name": "Pan Speed Limiter",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_full_width_pan_seconds": 7.0,
+        "prefer_cut_when_under_threshold": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 8
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "full_width_pan_seconds",
+            "operator": "lt",
+            "value": 7.0
+          }
+        ],
+        "route_hints": {
+          "corrective_moves": [
+            "slow_pan",
+            "shorten_traverse",
+            "cut_to_new_frame"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-022": {
+      "name": "AV Sync Enforcer",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "preferred_sync_window_ms": {
+          "min": -20,
+          "max": 100
+        },
+        "speech_priority": true,
+        "block_on_out_of_window_commit": true
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 3
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "timing_offset_ms",
+            "operator": "outside_range",
+            "value": {
+              "min": -20,
+              "max": 100
+            }
+          }
+        ],
+        "route_hints": {
+          "correct": [
+            "retime_visual_event",
+            "retime_audio_event",
+            "refresh_caption_alignment"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-023": {
+      "name": "Rhythm Generator",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "target_asl_seconds": {
+          "min": 0.8,
+          "max": 2.4
+        },
+        "use_one_over_f_distribution": true,
+        "require_reset_spaces": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 9
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "target_asl_seconds",
+            "operator": "outside_range",
+            "value": {
+              "min": 0.8,
+              "max": 2.4
+            }
+          }
+        ],
+        "route_hints": {
+          "generate": [
+            "clustered_bursts",
+            "reset_spaces",
+            "natural_variation"
+          ],
+          "regenerate": [
+            "retime_neighbor_window",
+            "preserve_target_beat_identity",
+            "rebalance_transition_density"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-024": {
+      "name": "Arousal-Pacing Gate",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "high_arousal_cls_min": 3,
+        "high_arousal_duration_seconds": {
+          "min": 3.0,
+          "max": 5.0
+        },
+        "low_arousal_duration_seconds": {
+          "min": 1.5,
+          "max": 3.0
+        },
+        "max_information_density_per_cut_for_high_arousal": 2
+      },
+      "applies_to": {
+        "containers": [
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 2
+        },
+        "block_conditions": [
+          {
+            "metric": "scene_cls",
+            "operator": "gte",
+            "value": 3,
+            "when": {
+              "metric": "median_shot_duration_seconds",
+              "operator": "lt",
+              "value": 3.0
+            }
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "scene_cls",
+            "operator": "lte",
+            "value": 2,
+            "when": {
+              "metric": "median_shot_duration_seconds",
+              "operator": "gt",
+              "value": 3.0
+            }
+          }
+        ],
+        "route_hints": {
+          "high_arousal_strategy": [
+            "extend_hold",
+            "reduce_cut_count",
+            "simplify_visual_load"
+          ]
+        },
+        "coordinates_with": [
+          "CS-008",
+          "CS-023",
+          "CS-027"
+        ],
+        "evaluation_order": {}
+      }
+    },
+    "CS-025": {
+      "name": "Retention Cascade",
+      "priority_tier": "survival",
+      "default_action_on_fail": "BLOCK",
+      "thresholds": {
+        "retention_window_seconds": 3,
+        "target_hook_asl_seconds": {
+          "min": 0.8,
+          "max": 1.5
+        },
+        "max_opening_cls": 2,
+        "max_time_to_face_seconds": 2.0,
+        "max_time_to_primary_signal_seconds": 1.7,
+        "allow_delayed_intro": false
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK"
+        ],
+        "stages": [
+          "scene_builder",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "block_on_fail",
+        "default_result": "BLOCK"
+      },
+      "rules": {
+        "priority": {
+          "tier": "survival",
+          "rank": 2
+        },
+        "block_conditions": [
+          {
+            "metric": "hook_asl_seconds",
+            "operator": "outside_range",
+            "value": {
+              "min": 0.8,
+              "max": 1.5
+            }
+          },
+          {
+            "metric": "opening_cls",
+            "operator": "gt",
+            "value": 2
+          },
+          {
+            "metric": "time_to_primary_signal_seconds",
+            "operator": "gt",
+            "value": 1.7
+          },
+          {
+            "metric": "delayed_intro",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "time_to_face_seconds",
+            "operator": "gt",
+            "value": 2.0
+          }
+        ],
+        "route_hints": {
+          "corrective_moves": [
+            "move_face_earlier",
+            "move_stakes_earlier",
+            "remove_logo_or_preamble"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {
+          "after": [
+            "CS-001"
+          ]
+        }
+      }
+    },
+    "CS-026": {
+      "name": "Identity Tracking",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "max_dominant_faces": 1,
+        "max_decorative_secondary_faces": 0,
+        "allow_secondary_faces_if_functional": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 9
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "dominant_face_count",
+            "operator": "gt",
+            "value": 1
+          }
+        ],
+        "route_hints": {
+          "reduce": [
+            "decorative_secondary_faces",
+            "unnecessary_testimony_cuts"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-027": {
+      "name": "Temporal Binding",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "preferred_offset_ms": {
+          "min": -20,
+          "max": 160
+        },
+        "hard_late_failure_ms": 300,
+        "visual_lead_preferred": true
+      },
+      "applies_to": {
+        "containers": [
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 3
+        },
+        "block_conditions": [
+          {
+            "metric": "timing_offset_ms",
+            "operator": "gt",
+            "value": 300
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "timing_offset_ms",
+            "operator": "outside_range",
+            "value": {
+              "min": -20,
+              "max": 160
+            }
+          }
+        ],
+        "route_hints": {
+          "preferred_fix": [
+            "shift_visual_earlier",
+            "rebind_to_phonetic_onset"
+          ]
+        },
+        "coordinates_with": [
+          "CS-022"
+        ],
+        "evaluation_order": {}
+      }
+    },
+    "CS-028": {
+      "name": "Element Counter",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "max_simultaneous_meaningful_elements": 3,
+        "allow_supportive_context_element": 1
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 10
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "meaningful_element_count",
+            "operator": "gt",
+            "value": 3
+          }
+        ],
+        "route_hints": {
+          "reduce": [
+            "serialize_information",
+            "remove_decorative_overlay",
+            "collapse_redundant_text"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-029": {
+      "name": "ISC Quality Scorer",
+      "priority_tier": "recall",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "publish_ready_score": 80,
+        "revise_score_min": 65,
+        "high_risk_score_max": 64
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "recall",
+          "rank": 3
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "isc_quality_score",
+            "operator": "lt",
+            "value": 80
+          }
+        ],
+        "route_hints": {
+          "escalate": [
+            "inspect_weakest_dimensions",
+            "revise_global_structure"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {
+          "after": [
+            "CS-001",
+            "CS-008",
+            "CS-024",
+            "CS-025",
+            "CS-027",
+            "CS-032"
+          ]
+        }
+      }
+    },
+    "CS-030": {
+      "name": "Neural Phase Router",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_neural_phase_consistency_score": 0.8,
+        "parameters_inherit_from_container": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 11
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "neural_phase_consistency_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "align": [
+            "motion_defaults",
+            "pacing_defaults",
+            "saliency_defaults"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-031": {
+      "name": "Scene Type Selector",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "biological_fit_weight": 0.6,
+        "novelty_weight": 0.3,
+        "preference_weight": 0.1,
+        "require_subsystem_consultation": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 12
+        },
+        "block_conditions": [],
+        "warn_conditions": [
+          {
+            "metric": "biological_fit_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "closest_valid_scene_vehicle",
+            "novelty_preserving_alternative"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {
+          "after": [
+            "CS-001",
+            "CS-002",
+            "CS-013",
+            "CS-025"
+          ]
+        }
+      }
+    },
+    "CS-032": {
+      "name": "Silence Container",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "trigger_cls": 4,
+        "required_pause_cls_max": 1,
+        "insertion_window_seconds": {
+          "min": 2,
+          "max": 5
+        },
+        "min_pause_duration_ms": 750,
+        "allow_dense_dialogue": false
+      },
+      "applies_to": {
+        "containers": [
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 4
+        },
+        "block_conditions": [
+          {
+            "metric": "preceding_cls",
+            "operator": "eq",
+            "value": 4,
+            "when": {
+              "metric": "pause_present",
+              "operator": "eq",
+              "value": false
+            }
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "candidate_pause_cls",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "metric": "dialogue_density",
+            "operator": "gt",
+            "value": 0
+          }
+        ],
+        "route_hints": {
+          "preferred_component": [
+            "THE_PAUSE"
+          ],
+          "corrective_moves": [
+            "insert_low_cls_container",
+            "strip_dialogue_from_pause",
+            "reduce_score_density"
+          ]
+        },
+        "coordinates_with": [
+          "CS-008"
+        ],
+        "evaluation_order": {}
+      }
+    },
+    "CS-033": {
+      "name": "Prediction Error Gate",
+      "priority_tier": "quality",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "minimum_prediction_error_score": 0.35,
+        "maximum_prediction_error_score": 1.0,
+        "maximum_legibility_loss": 0.25,
+        "preferred_reveal_window_ms": {
+          "min": 250,
+          "max": 2200
+        },
+        "maximum_surprise_resolution_seconds": 3.0,
+        "require_container_budget_alignment": true
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "editor_regeneration"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "quality",
+          "rank": 13
+        },
+        "block_conditions": [
+          {
+            "metric": "container_budget_exceeded",
+            "operator": "eq",
+            "value": true,
+            "when": {
+              "metric": "legibility_loss",
+              "operator": "gt",
+              "value": 0.25
+            }
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "prediction_error_score",
+            "operator": "lt",
+            "value": 0.35
+          },
+          {
+            "metric": "legibility_loss",
+            "operator": "gt",
+            "value": 0.25
+          }
+        ],
+        "route_hints": {
+          "amplify": [
+            "escalate_schema_break",
+            "delay_explanatory_relief",
+            "switch_to_contrastive_vehicle"
+          ],
+          "soften": [
+            "restore_legibility",
+            "narrow_surprise_window",
+            "resolve_prediction_error_faster"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    },
+    "CS-034": {
+      "name": "Event Schema Activation Monitor",
+      "priority_tier": "encoding",
+      "default_action_on_fail": "REVISE",
+      "thresholds": {
+        "min_schema_activation_score": 0.4,
+        "max_boundary_density_per_beat": 0.5,
+        "min_boundary_spacing_seconds": 1.5,
+        "require_schema_establishment": true,
+        "block_threshold": {
+          "schema_activation_score": 0.3,
+          "boundary_density_per_beat": 0.7
+        }
+      },
+      "applies_to": {
+        "containers": [
+          "HOOK",
+          "SETUP",
+          "CHALLENGE",
+          "TURNING_POINT",
+          "RESOLUTION",
+          "VISION"
+        ],
+        "stages": [
+          "scene_builder",
+          "manifest_assembly"
+        ]
+      },
+      "enforcement": {
+        "mode": "revise_on_fail",
+        "default_result": "REVISE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "encoding",
+          "rank": 5
+        },
+        "block_conditions": [
+          {
+            "metric": "schema_activation_score",
+            "operator": "lt",
+            "value": 0.3,
+            "when": {
+              "metric": "boundary_density_per_beat",
+              "operator": "gt",
+              "value": 0.7
+            }
+          }
+        ],
+        "warn_conditions": [
+          {
+            "metric": "boundary_density_per_beat",
+            "operator": "gt",
+            "value": 0.5
+          },
+          {
+            "metric": "schema_activation_score",
+            "operator": "lt",
+            "value": 0.4
+          }
+        ],
+        "route_hints": {
+          "establish_schema": [
+            "anchor_opening_schema_before_violation",
+            "reduce_edit_density_in_first_third",
+            "ensure_schema_legibility_beat_precedes_twist"
+          ],
+          "reduce_density": [
+            "extend_hold_durations",
+            "consolidate_b_roll_cuts",
+            "remove_redundant_transition_beats"
+          ]
+        },
+        "coordinates_with": [],
+        "evaluation_order": {}
+      }
+    }
+  },
+  "evidence_refs": [
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-001\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-001\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-002\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-002\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-003\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-003\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-004\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-004\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-005\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-005\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-006\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-006\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-007\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-007\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-008\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-008\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-009\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-009\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-010\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-010\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-011\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-011\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-012\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-012\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-013\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-013\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-014\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-014\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-015\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-015\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-016\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-016\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-017\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-017\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-018\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-018\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-019\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-019\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-020\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-020\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-021\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-021\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-022\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-022\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-023\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-023\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-024\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-024\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-025\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-025\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-026\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-026\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-027\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-027\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-028\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-028\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-029\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-029\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-030\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-030\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-031\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-031\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-032\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-032\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-033\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-033\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-034\\config.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\subsystems\\CS-034\\rules.yaml"
+  ]
+}

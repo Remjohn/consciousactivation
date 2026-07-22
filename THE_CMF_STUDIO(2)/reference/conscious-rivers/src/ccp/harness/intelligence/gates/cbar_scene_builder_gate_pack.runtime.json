@@ -1,0 +1,419 @@
+{
+  "gate_pack_id": "CBAR-SCENE-BUILDER-v1",
+  "version": "1.0.0",
+  "compile_target": "SCENE_BUILDER",
+  "entrypoint": "cbar_gate_run",
+  "required_context": [
+    "scene_packet",
+    "neighbor_context",
+    "pad_profile",
+    "motion_profile",
+    "audio_sync_plan"
+  ],
+  "gates": [
+    {
+      "gate_id": "SC-01",
+      "name": "Color Grade vs Arc Stage",
+      "lineage": ["CMF_Master_Scene_Intelligence.md#GATE SC-01"],
+      "applies_to": ["scene_candidate", "effect_candidate"],
+      "questions": [
+        {
+          "question_id": "SC-01-Q1",
+          "constraint_a": {
+            "rule_id": "ARC_STAGE_EMOTIONAL_ACCURACY",
+            "statement": "The selected color regime must match the emotional truth of the target arc stage.",
+            "source": "CMF_Master_Scene_Intelligence.md#GATE SC-01"
+          },
+          "constraint_b": {
+            "rule_id": "BRAND_PALETTE_CONTINUITY",
+            "statement": "The scene should preserve project palette continuity and recognizable brand chroma.",
+            "source": "project_dna.brand_palette"
+          },
+          "tension": "Brand palette consistency can conflict with the emotional truth of the arc stage.",
+          "failure_scenario": "Muted or misaligned color energy destroys the intended peak or softness of the beat.",
+          "resolution_demands": [
+            "State whether arc-stage emotional accuracy overrides brand palette continuity.",
+            "Name the precedence rule that authorizes that decision.",
+            "Name the final archetype or color regime that will be used."
+          ],
+          "downstream_proof": [
+            "Provide the resolved PAD arousal value.",
+            "Confirm compatibility with the target CLS state."
+          ],
+          "downstream_consumer": {
+            "module_id": "scene_graph_build",
+            "expected_input": "A scene packet whose color profile is emotionally valid for the arc stage.",
+            "failure_mode": "Scene Builder emits a visually polished but structurally false beat."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "SC-01-Q1-AROUSAL-MATCH",
+              "field": "resolved_color.pad_arousal",
+              "operator": "within_target_band",
+              "value": "scene_packet.target_arousal_band",
+              "failure_code": "CBAR_COLOR_AROUSAL_MISMATCH",
+              "repair_hint": "Shift the color archetype until PAD arousal matches the arc target."
+            }
+          ]
+        },
+        {
+          "question_id": "SC-01-Q2",
+          "constraint_a": {
+            "rule_id": "VULNERABILITY_WARMTH_BAND",
+            "statement": "A vulnerability beat must remain inside the warm temperature band.",
+            "source": "CMF_Master_Scene_Intelligence.md#Effects Library Subsystem"
+          },
+          "constraint_b": {
+            "rule_id": "LAW_4_PARAMETER_UNPREDICTABILITY",
+            "statement": "The beat must break at least one expectation established by the previous beat.",
+            "source": "CMF_Master_Scene_Intelligence.md#The Unpredictability Gate Applied to Composition"
+          },
+          "tension": "Vulnerability warmth can conflict with Law 4 unpredictability across adjacent beats.",
+          "failure_scenario": "Adjacent scenes collapse into the same temperature signature and the emotional shift becomes invisible.",
+          "resolution_demands": [
+            "Specify the chosen Kelvin value.",
+            "Name the precedence rule that resolves warmth versus surprise.",
+            "Describe how it differs perceptibly from the previous beat while preserving emotional accuracy."
+          ],
+          "downstream_proof": [
+            "Provide the pleasure delta from the previous beat.",
+            "Confirm the delta clears the perceptual threshold."
+          ],
+          "downstream_consumer": {
+            "module_id": "manifest_assembler",
+            "expected_input": "A beat color profile with a valid sequence-level delta and preserved emotional class.",
+            "failure_mode": "Manifest carries two adjacent beats that feel emotionally identical despite different narrative roles."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "SC-01-Q2-KELVIN-DELTA",
+              "field": "resolved_color.kelvin_delta_from_previous",
+              "operator": ">=",
+              "value": 200,
+              "failure_code": "CBAR_COLOR_DELTA_TOO_SMALL",
+              "repair_hint": "Increase temperature separation without breaking the vulnerability warmth band."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "SC-01-Q2",
+        "review_scope": "ALL_PRIOR_QUESTIONS",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "SC-02",
+      "name": "Motion Effect vs Cognitive Load",
+      "lineage": ["CMF_Master_Scene_Intelligence.md#GATE SC-02"],
+      "applies_to": ["scene_candidate", "effect_candidate"],
+      "questions": [
+        {
+          "question_id": "SC-02-Q1",
+          "constraint_a": {
+            "rule_id": "MAXIMIZE_PRESENCE",
+            "statement": "The selected motion should maximize felt presence for the beat.",
+            "source": "Camera Motion subsystem"
+          },
+          "constraint_b": {
+            "rule_id": "CLS_BUDGET_LIMIT",
+            "statement": "The motion effect must remain inside the cognitive load budget of the beat.",
+            "source": "LC4MP CLS interaction matrix"
+          },
+          "tension": "High-presence motion can violate the CLS budget of soft scenes.",
+          "failure_scenario": "The viewer enters processing mode when the beat needed feeling mode.",
+          "resolution_demands": [
+            "Choose the highest-presence motion effect that still fits the CLS budget.",
+            "Name the precedence rule that determines when CLS budget defeats raw presence.",
+            "Name the effect score profile."
+          ],
+          "downstream_proof": [
+            "Show CLS plus content arousal remains under the overload threshold."
+          ],
+          "downstream_consumer": {
+            "module_id": "prompt_compile",
+            "expected_input": "A motion profile that is both expressive and cognitively survivable.",
+            "failure_mode": "Prompt compilation carries a visually impressive motion instruction that overloads the target beat."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "SC-02-Q1-CLS-BUDGET",
+              "field": "resolved_motion.cls_cost",
+              "operator": "<=",
+              "value": "scene_packet.cls_budget_remaining",
+              "failure_code": "CBAR_MOTION_CLS_OVERLOAD",
+              "repair_hint": "Select a lower-cost motion effect or simplify scene content."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "SC-02-Q1",
+        "review_scope": "ALL_PRIOR_QUESTIONS",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "SC-03",
+      "name": "Audio Congruence vs Visual Rhythm",
+      "lineage": ["CMF_Master_Scene_Intelligence.md#GATE SC-03"],
+      "applies_to": ["scene_candidate", "audio_timing"],
+      "questions": [
+        {
+          "question_id": "SC-03-Q1",
+          "constraint_a": {
+            "rule_id": "BPM_CUT_SYNC",
+            "statement": "The cut rhythm should respect the selected music cadence.",
+            "source": "Audio Engine subsystem"
+          },
+          "constraint_b": {
+            "rule_id": "EMOTIONAL_PACING_TRUTH",
+            "statement": "The beat pacing must preserve the correct emotional register.",
+            "source": "CMF_Master_Scene_Intelligence.md#GATE SC-03"
+          },
+          "tension": "Music BPM can demand a cut rhythm that breaks the emotional pacing of the beat.",
+          "failure_scenario": "The scene becomes musically busy and emotionally false.",
+          "resolution_demands": [
+            "Choose beat-sync, phrase-sync, or a hybrid strategy.",
+            "State the precedence rule that decides between rhythm purity and emotional truth.",
+            "State why the chosen strategy preserves the emotional register."
+          ],
+          "downstream_proof": [
+            "Confirm all cut offsets remain inside the AV sync window."
+          ],
+          "downstream_consumer": {
+            "module_id": "audio_engine",
+            "expected_input": "An AV timing plan whose rhythm strategy is explicit and legally synchronized.",
+            "failure_mode": "Audio engine receives an incoherent timing plan and bakes false emotional pacing into the manifest."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "SC-03-Q1-SYNC-WINDOW",
+              "field": "audio_sync_plan.max_offset_ms",
+              "operator": "between",
+              "value": [-20, 100],
+              "failure_code": "CBAR_AV_SYNC_OUT_OF_WINDOW",
+              "repair_hint": "Retime audio or scene cuts until sync falls inside the valid binding window."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "SC-03-Q1",
+        "review_scope": "ALL_PRIOR_QUESTIONS",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "SC-04",
+      "name": "Kuleshov Sequencing vs Excitation Transfer Timing",
+      "lineage": ["CMF_Master_Scene_Intelligence.md#GATE SC-04"],
+      "applies_to": ["scene_candidate", "assembly_candidate"],
+      "questions": [
+        {
+          "question_id": "SC-04-Q4",
+          "constraint_a": {
+            "rule_id": "LOCAL_SCENE_VALIDITY",
+            "statement": "Every local scene decision may appear valid in isolation.",
+            "source": "prior gate resolutions"
+          },
+          "constraint_b": {
+            "rule_id": "GLOBAL_SEQUENCE_COHERENCE",
+            "statement": "The full sequence must remain coherent across Kuleshov flow, excitation timing, emotional count, and ending allocation.",
+            "source": "CMF_Master_Scene_Intelligence.md#GATE SC-04"
+          },
+          "tension": "Local scene decisions can still produce a globally incoherent sequence.",
+          "failure_scenario": "Meaning flow, excitation zones, or the final VISION allocation break at sequence level.",
+          "resolution_demands": [
+            "Review all prior resolutions for mutual consistency.",
+            "Verify the sequence satisfies Kuleshov flow, excitation windows, emotional beat limits, and VISION duration."
+          ],
+          "downstream_proof": [
+            "Emit a Constraint Resolution Manifest before the scene can be committed."
+          ],
+          "downstream_consumer": {
+            "module_id": "manifest_assembler",
+            "expected_input": "A globally consistent sequence packet with no unresolved contradiction across prior gate resolutions.",
+            "failure_mode": "Manifest assembly commits individually valid beats that fail as a sequence."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "SC-04-Q4-VISION-DURATION",
+              "field": "sequence_metrics.vision_duration_sec",
+              "operator": ">=",
+              "value": 10,
+              "failure_code": "CBAR_VISION_TOO_SHORT",
+              "repair_hint": "Reallocate duration so the ending snapshot has enough time to register."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "SC-04-Q4",
+        "review_scope": "ALL_PRIOR_GATES",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "SC-05",
+      "name": "Cognitive Rhythm Coherence",
+      "lineage": ["cognitive_rhythm_validator.scene_builder.runtime.json"],
+      "applies_to": ["assembly_candidate"],
+      "questions": [
+        {
+          "question_id": "SC-05-Q1",
+          "constraint_a": {
+            "rule_id": "COGNITIVE_LOAD_RECOVERY",
+            "statement": "High-CLS beats must be followed by recovery space within the sequence.",
+            "source": "LC4MP resource-call limits / cognitive_rhythm_validator CR-01"
+          },
+          "constraint_b": {
+            "rule_id": "DRAMATIC_MOMENTUM",
+            "statement": "Sustained dramatic momentum may resist inserting low-load beats after peaks.",
+            "source": "Narrative arc pressure"
+          },
+          "tension": "Recovery beats reduce momentum but prevent cognitive overload.",
+          "failure_scenario": "The sequence sustains CLS 4-5 runs without relief, causing processing collapse and dropout.",
+          "resolution_demands": [
+            "Verify the CLS recovery ratio meets the threshold.",
+            "Confirm that any strategic mismatch is resolved within one beat.",
+            "Name the peak-end focus allocation."
+          ],
+          "downstream_proof": [
+            "Emit cognitive rhythm validator score and per-gate verdicts."
+          ],
+          "downstream_consumer": {
+            "module_id": "manifest_assembler",
+            "expected_input": "A sequence whose cognitive rhythm passes all five validator gates.",
+            "failure_mode": "Manifest assembly commits a cognitively unsustainable sequence."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "SC-05-Q1-RECOVERY-RATIO",
+              "field": "sequence_metrics.cognitive_rhythm.recovery_ratio",
+              "operator": ">=",
+              "value": 0.5,
+              "failure_code": "CBAR_CLS_RECOVERY_INSUFFICIENT",
+              "repair_hint": "Insert a low-load clarifier, release beat, or pause within one beat of each CLS 4-5 spike."
+            },
+            {
+              "check_id": "SC-05-Q1-PEAK-END-FOCUS",
+              "field": "sequence_metrics.cognitive_rhythm.peak_end_focus_score",
+              "operator": ">=",
+              "value": 0.5,
+              "failure_code": "CBAR_PEAK_END_UNDERALLOCATED",
+              "repair_hint": "Allocate the cleanest, most coherent scene templates and effect stacks to turning-point and ending beats."
+            },
+            {
+              "check_id": "SC-05-Q1-RHYTHM-SCORE",
+              "field": "sequence_metrics.cognitive_rhythm.overall_score",
+              "operator": ">=",
+              "value": 0.65,
+              "failure_code": "CBAR_COGNITIVE_RHYTHM_FAILING",
+              "repair_hint": "Review the cognitive rhythm validator gate breakdown and address the lowest-scoring gate first."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "SC-05-Q1",
+        "review_scope": "ALL_PRIOR_GATES",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    }
+  ],
+  "output_contract": {
+    "result_schema": "DEP-VID-034",
+    "per_gate_shape": "{ gate_id, passed, questions[] }",
+    "proof_receipt_stage_name": "SCENE_LEGITIMACY_GATE"
+  },
+  "failure_policy": {
+    "question_fail": "REVISE",
+    "gate_fail": "BLOCK"
+  }
+}

@@ -1,0 +1,145 @@
+primitive_id: "PRM-BUS-001"
+canonical_name: "Perception and Guidance Stack"
+aliases:
+  - "Perception and Behavioral Guidance as a Unified Stack"
+family: "design_business"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Design_Is_Storytelling_Ellen_Lupton.md"
+    primitive_name_in_audit: "Perception and Behavioral Guidance as a Unified Stack"
+    mcda_score: 199
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/06_Design_and_Business/AUDIT_Design_Is_Storytelling_Ellen_Lupton.md"
+
+book_reference:
+  title: "Design Is Storytelling"
+  author: "Ellen Lupton"
+  chapters:
+    - "The Gaze"
+    - "Gestalt Principles"
+    - "Affordance"
+  key_pages: "112-145"
+  book_path: "lab/Public Speeaking Coaching/06_Design_and_Business/Design Is Storytelling - Ellen Lupton.md"
+
+summary: >
+  Perception and Guidance Stack treats visual design not as a decorative layer,
+  but as a unified cognitive and behavioral routing system. It integrates the
+  gaze, Gestalt grouping, affordances, and multisensory cues into one coherent
+  pathway that manages the user's attention and invites immediate action. It
+  recognizes that users do not just look at a design; they actively search it
+  and act upon it.
+
+core_move: >
+  Design visuals, text hierarchy, and action cues as one integrated system
+  that controls where the eye goes and what the hand does next.
+
+why_it_works: >
+  According to Lupton's synthesis of Gestalt psychology and behavioral economics,
+  the human brain actively seeks patterns to reduce cognitive load and feels 
+  frustrated when patterns break randomly. By deliberately stacking visual hierarchy,
+  clear affordances (cues that suggest how an object should be used), and
+  consistent grouping, the design lowers the biological cost of comprehension
+  and naturally guides the user toward the intended behavioral threshold.
+
+examples:
+  - context: "BOOK: Design Is Storytelling - The Gaze and Gestalt"
+    application: >
+      Lupton integrates the gaze, Gestalt grouping, affordances, and multisensory cues into one coherent pathway that manages attention. The brain seeks patterns to reduce cognitive load and feels frustrated when they break randomly.
+    effect: >
+      Lowers the biological cost of comprehension and naturally guides the user toward the intended behavioral threshold.
+
+  - context: "CCP: CMF - Visual Hierarchy Design"
+    application: >
+      During carousel generation, the agent groups diagnostic symptoms closely together (proximity) and leaves massive negative space before a single, high-contrast CTA button with a drop shadow (affordance).
+    effect: >
+      The eye naturally falls to the button. Cognitive friction drops because the visual structure does the organizing work, maximizing click-through rates.
+
+  - context: "CCP: Telegram - Mini App Onboarding"
+    application: >
+      The agent strips all decorative borders and secondary links from the flow, applying the heaviest visual weight to the 'Start First Reflection' button placed exactly where the thumb naturally rests.
+    effect: >
+      The path to action is unmistakable. The client doesn't need to read instructions; the interface's affordance pulls them directly into the primary workflow.
+
+  - context: "CCP: V2WS - Slide Optimization"
+    application: >
+      A dense, bulleted webinar slide is flagged. The agent reconstructs it using color blocking to draw the gaze sequentially from a problem statement down to a singular insight.
+    effect: >
+      The audience isn't overwhelmed by text. The visual path explicitly mirrors the rhetorical argument.
+
+  - context: "CCP: CCF - The 'Slow Down' Friction"
+    application: >
+      Conversely, when a user needs to confirm a destructive action (like deleting a course), the system intentionally removes smooth affordances, forcing them to manually type a confirmation word.
+    effect: >
+      Breaks the automated gaze cycle, forcing conscious cognitive engagement before an irreversible error occurs.
+
+anti_examples:
+  - description: >
+      A webinar slide that fills every corner with text and uses three
+      different contrasting colors for emphasis on different bullet points.
+    why_it_fails: >
+      When everything is emphasized, nothing is. The brain's pattern-recognition
+      system (Gestalt) is overwhelmed by competing signals, destroying the
+      hierarchy. The user stops reading because the visual environment requires
+      too much effort to parse.
+
+phase_fit:
+  pre_trigger: 0.2
+  post_trigger: 0.6
+  generation: 0.9
+  revision: 0.8
+  delivery: 0.7
+
+surface_fit:
+  text: 0.8
+  voice: 0.2
+  visual: 0.9
+  sonic: 0.3
+  webinar: 0.9
+  telegram: 0.8
+
+goal_bias:
+  connection: 0.4
+  surprise: 0.1
+  tension: 0.2
+  clarity: 0.9
+  memorability: 0.7
+  persuasion: 0.8
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.2
+  trigger_provocation: 0.4
+  authenticated_capture: 0.3
+  meaning_extraction: 0.4
+  content_generation: 0.8
+  edge_product_assembly: 0.9
+  delivery_coaching: 0.3
+  experience_flow: 0.9
+  premium_differentiation: 0.8
+
+trigger_conditions:
+  - "AST visual analysis detects a cluttered user interface, slide, or visual asset leading to high drop-off rates"
+  - "System detects a core coaching insight buried within dense, unformatted explanatory text"
+  - "User needs to architect a fast, frictionless decision threshold in a Telegram flow"
+
+suppression_conditions:
+  - "Coaching moment requires pure auditory intimacy (e.g., a quiet voice note) where visual hierarchies do not apply"
+  - "Goal of the interaction is intentional cognitive friction (e.g., deep reflection) where smooth affordance would bypass the necessary work"
+
+misuse_modes:
+  - "Dark Patterns — Using strong affordances to trick the user into an unintended action"
+  - "Visual Noise — Adding fake depth or contrast that doesn't actually route attention"
+  - "Device Mismatch — Designing a visual hierarchy for desktop that breaks completely on a mobile thumb-scroll"
+
+synergizes_with:
+  - "PRM-BUS-006" # Hierarchy as Attention Routing
+  - "PRM-BUS-014" # Affordance as Invitation
+  - "PRM-PRS-031" # Explanation Engine
+
+conflicts_with:
+  - "PRM-HUM-026" # Misplaced Focus - intentionally breaking hierarchy for humor
+  - "PRM-HUM-004" # Contrastive Extreme Polarization
+
+crosswalk_id: "XW-BEHAVIORAL-ROUTING"
+crosswalk_note: "On the meaning plane, this structures how an argument or visual is read. On the experience plane, it dictates the friction of the actual software interaction."
+
+notes: "One of the most critical primitives for CMF and Telegram Mini App UX. Float calibration: goal_bias.clarity is dominant (0.9), surprise is very low (0.1)."

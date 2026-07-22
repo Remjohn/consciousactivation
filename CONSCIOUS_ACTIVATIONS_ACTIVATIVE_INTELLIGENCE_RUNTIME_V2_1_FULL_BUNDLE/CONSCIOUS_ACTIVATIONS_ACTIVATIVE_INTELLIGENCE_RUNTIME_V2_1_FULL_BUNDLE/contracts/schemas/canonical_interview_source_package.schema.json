@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "AdmissionMode": {
+      "enum": [
+        "brief_led",
+        "imported_source"
+      ],
+      "title": "AdmissionMode",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "absent_planning_declaration": {
+      "default": false,
+      "title": "Absent Planning Declaration",
+      "type": "boolean"
+    },
+    "admission_mode": {
+      "$ref": "#/$defs/AdmissionMode"
+    },
+    "brief_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "expression_moment_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Expression Moment Refs",
+      "type": "array"
+    },
+    "keyframe_set_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "lifecycle_state": {
+      "const": "source_packaged",
+      "default": "source_packaged",
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "original_media_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Original Media Refs",
+      "type": "array"
+    },
+    "phrase_pack_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "planned_pack_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "provenance_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Provenance Refs",
+      "type": "array"
+    },
+    "reaction_receipt_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Reaction Receipt Refs",
+      "type": "array"
+    },
+    "operator_source_authority_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "shot_map_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "source_package_id": {
+      "title": "Source Package Id",
+      "type": "string"
+    },
+    "speaker_map_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "tag_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Tag Refs",
+      "type": "array"
+    },
+    "transcript_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_package_id",
+    "version",
+    "admission_mode",
+    "original_media_refs",
+    "transcript_ref",
+    "speaker_map_ref",
+    "phrase_pack_ref",
+    "operator_source_authority_ref",
+    "provenance_refs"
+  ],
+  "title": "CanonicalInterviewSourcePackage",
+  "type": "object"
+}

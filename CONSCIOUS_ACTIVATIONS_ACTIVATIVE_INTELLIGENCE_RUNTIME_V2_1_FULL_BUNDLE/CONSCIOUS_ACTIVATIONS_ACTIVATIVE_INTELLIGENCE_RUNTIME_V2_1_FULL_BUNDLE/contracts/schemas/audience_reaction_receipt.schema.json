@@ -1,0 +1,136 @@
+{
+  "$defs": {
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "asset_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "audience_segment": {
+      "title": "Audience Segment",
+      "type": "string"
+    },
+    "counteractivation_evidence": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Counteractivation Evidence",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "epistemic_state": {
+      "$ref": "#/$defs/EpistemicState"
+    },
+    "intended_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Intended Roles",
+      "type": "array"
+    },
+    "observed_reactions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Observed Reactions",
+      "type": "array"
+    },
+    "operator_resolution_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "quantitative_metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "default": {},
+      "title": "Quantitative Metrics",
+      "type": "object"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "role_evidence": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "title": "Role Evidence",
+      "type": "object"
+    },
+    "wrong_roles": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Roles",
+      "type": "array"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "asset_ref",
+    "audience_segment",
+    "observed_reactions",
+    "role_evidence",
+    "intended_roles",
+    "epistemic_state",
+    "created_at"
+  ],
+  "title": "AudienceReactionReceipt",
+  "type": "object"
+}

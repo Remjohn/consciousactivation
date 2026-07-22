@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-008",
+  "name": "Excitation Transfer Timer",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Excitation Transfer Theory"
+  ],
+  "inputs": [
+    "cls_timeline",
+    "beat_start_times",
+    "beat_durations",
+    "scene_sequence",
+    "arousal_tags"
+  ],
+  "outputs": [
+    "verdict",
+    "transfer_window_seconds",
+    "recommended_followup_beat",
+    "violations"
+  ],
+  "thresholds": {
+    "trigger_cls": 4,
+    "receiving_cls_min": 1,
+    "receiving_cls_max": 2,
+    "golden_zone_seconds": {
+      "min": 2,
+      "max": 5
+    },
+    "full_decay_seconds": 10,
+    "forbidden_adjacent_transition": [
+      4,
+      4
+    ]
+  },
+  "default_action_on_fail": "BLOCK"
+}

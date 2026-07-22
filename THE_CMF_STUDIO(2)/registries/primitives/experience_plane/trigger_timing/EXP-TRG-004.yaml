@@ -1,0 +1,178 @@
+experience_primitive_id: "EXP-TRG-004"
+canonical_name: "Tailoring & Suggestion"
+aliases:
+  - "State-Based Intervention"
+  - "Relevant Information Prompting"
+  - "Dynamic Scaffolding"
+
+experience_family: "trigger_timing"
+mechanic_role: "trigger"
+moment_role: "feedback_delivery"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Persuasive_Technology_BJ_Fogg.md"
+    primitive_name_in_audit: "Tailoring & Suggestion"
+    mcda_score: 165
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Persuasive_Technology_BJ_Fogg.md"
+
+book_reference:
+  title: "Persuasive Technology"
+  author: "BJ Fogg"
+  chapters:
+    - "Chapter 4: Computers as Social Actors"
+    - "Chapter 8: Mobility and Connectivity"
+  key_pages: "89-102, 205-215"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Persuasive Technology - BJ Fogg.md"
+
+summary: >
+  Tailoring & Suggestion dictates that interventions are exponentially more
+  effective when the system curates its prompts based on the user's specific
+  telemetry, rather than generic advice. In CCP, the Guardian Agent and the
+  scoring pipelines do not give broad 'public speaking tips.' They intervene
+  with precise, tailored suggestions based on the exact biometric or semantic
+  failure just recorded, providing relevant scaffolding exactly when needed.
+
+core_move: >
+  Use real-time biometric and semantic telemetry to tailor all feedback and
+  prompts, completely eliminating generic 'best practice' notifications.
+
+why_it_works: >
+  BJ Fogg notes that computing technology is uniquely persuasive because it
+  can tailor its message to the individual dynamically (unlike a book or a static
+  video). When a system suggests a highly specific correction based on observed
+  behavior, it acts as a 'Social Actor' demonstrating empathy and attention.
+  Generic advice is ignored; tailored suggestion feels like a high-end coach
+  who is actively listening, dramatically increasing compliance and trust.
+
+examples:
+  - context: "BOOK: Persuasive Technology - Heart rate monitor feedback"
+    application: >
+      A fitness device doesn't just say 'run faster.' It monitors heart rate
+      telemetry and suggests 'Push your pace for 30 seconds to hit your target zone.'
+      The suggestion is tailored to real-time biological data.
+    effect: >
+      The user obeys the prompt because they know it is based on their immediate state.
+
+  - context: "CCP: Guardian Agent Pause Architecture Feedback"
+    application: >
+      A coach records a reaction. The NIM stack detects they are using 'um' and 'like'
+      to fill space. The Guardian Agent intercepts: 'Your argument is strong, but you
+      used 12 filler words. Suggestion: Breathe instead of speaking when transitioning.
+      Try the Redemption Round.'
+    effect: >
+      The feedback is irrefutable and hyper-tailored, creating high trust in the system's intelligence.
+
+  - context: "CCP: Law28 Adaptive Track Routing"
+    application: >
+      If a user's conviction score drops for three consecutive days, the system doesn't
+      push the next aggressive challenge. It tailors the prompt: 'You seem fatigued.
+      Today is a Recovery Day. Just record a 30-second low-stakes reflection.'
+    effect: >
+      The system acts as an empathetic coach, adjusting the load based on performance telemetry.
+
+  - context: "CCP: Topic Tailoring via SCRE"
+    application: >
+      The Sovereign CRAL Research Engine knows a coach is a B2B SaaS founder. It suppresses
+      generic pop-culture debate topics and exclusively pushes high-charge topics regarding
+      SaaS market conditions.
+    effect: >
+      The triggers are highly relevant to the coach's identity, increasing the likelihood of action.
+
+  - context: "CCP: Voice DNA Evolution Prompt"
+    application: >
+      The Sunday Postcard notes: 'Your pacing variance increased by 18% this week, making
+      you sound significantly less robotic. Keep leaning into the pregnant pause.'
+    effect: >
+      The summary provides tailored proof of change, deeply cementing platform loyalty.
+
+anti_examples:
+  - description: >
+      Sending an automated 'Tip of the Day: Remember to make eye contact!' to a coach
+      who just completed an audio-only reaction via Telegram.
+    why_it_fails: >
+      The suggestion is generic, untailored, and contextually irrelevant. It breaks the
+      illusion of the system as a conscious, observant coach, reducing it to a dumb bot.
+
+experience_stage_fit:
+  entry: 0.4
+  activation: 0.6
+  recording: 0.2
+  scoring: 1.0
+  social_spread: 0.3
+  recovery: 0.9
+  retention: 0.8
+  conversion: 0.6
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 0.8
+  score_card: 1.0
+  share_asset: 0.4
+  voice_prompt: 0.9
+  push_nudge: 0.7
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.6
+  clarity: 0.9
+  safety: 0.8
+  status: 0.5
+  belonging: 0.6
+  curiosity: 0.5
+  replay_desire: 0.7
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.8
+  cbcs_accountability: 1.0
+  challenge_progression: 0.9
+  silent_referral: 0.4
+  coach_os_deployment: 0.9
+  premium_trust_architecture: 0.9
+  onboarding_activation: 0.6
+  social_economy: 0.3
+  content_extraction: 0.5
+
+activation_conditions:
+  - "System has successfully extracted biometric or semantic telemetry from an action"
+  - "The user's performance deviates from their baseline or a specific benchmark"
+
+suppression_conditions:
+  - "Insufficient telemetry data to make a specific claim (Tier 1 cold start)"
+
+misuse_modes:
+  - "Pretending to tailor by using mail-merge style 'Hi {Name}' without actual behavioral tailoring"
+  - "Over-tailoring to the point of being creepy or overwhelming the user with minor data points"
+
+synergizes_with:
+  - "EXP-FBK-003" # Adaptive Diagnostic Routing
+  - "EXP-TRG-003" # Kairos (Delivering the tailored suggestion at the right time)
+
+conflicts_with:
+  - "EXP-SAF-004" # If tailoring reveals too much data too early, it might break the Comfort boundary
+
+implementation_targets:
+  frontend_components:
+    - "DiagnosticFeedbackCard — rendering the specific, tailored AI observation"
+    - "AdaptiveDailyPrompt — altering the daily Law28 instructions based on previous day's telemetry"
+  backend_rules:
+    - "tailoring_engine: block any notification that does not contain at least one dynamic telemetry variable"
+  telemetry_events:
+    - "tailored_suggestion_delivered"
+    - "redemption_round_accepted"
+    - "dynamic_track_adjustment"
+  experiments:
+    - "A/B test: Direct blunt tailoring ('You hedged 5 times') vs Soft coaching tailoring ('I noticed some hesitation')"
+
+experience_metrics:
+  entry_rate: 0.4
+  react_rate: 0.7
+  completion_rate: 0.8
+  share_rate: 0.4
+  comeback_rate: 0.8
+  day7_retention: 0.9
+  upgrade_signal: 0.7
+
+crosswalk_id: "XW-TRG-TAILOR"
+crosswalk_note: >
+  Essential for Law28 CBCS. Prevents the challenge from feeling like a static PDF calendar.

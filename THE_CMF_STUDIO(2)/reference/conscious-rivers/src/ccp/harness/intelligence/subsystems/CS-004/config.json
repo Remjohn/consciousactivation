@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-004",
+  "name": "ISC Structure Enforcer",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Neurocinematics",
+    "Eye Tracking"
+  ],
+  "inputs": [
+    "container_sequence",
+    "component_assignments",
+    "arc_metadata",
+    "focal_continuity_score"
+  ],
+  "outputs": [
+    "structural_synchrony_score",
+    "verdict",
+    "violations"
+  ],
+  "thresholds": {
+    "required_arc_order": [
+      "HOOK",
+      "SETUP",
+      "CHALLENGE",
+      "TURNING_POINT",
+      "RESOLUTION",
+      "VISION"
+    ],
+    "minimum_structural_synchrony_score": 0.8,
+    "block_on_arc_violation": true
+  },
+  "default_action_on_fail": "BLOCK"
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "cmf.doctrine_eval_definition.v1",
+  "eval_definition_id": "EVL-DOCTRINE-ACT-064-001",
+  "name": "64-State Acting Library Doctrine Eval",
+  "object_types": [
+    "acting_library",
+    "acting_reference",
+    "brand_context_version"
+  ],
+  "pipeline_stages": [
+    "acting_library_generation",
+    "acting_library_review",
+    "brand_genesis"
+  ],
+  "required_categories": [
+    "doctrine_alignment",
+    "acting_library_coverage",
+    "asset_generation_policy",
+    "identity_consistency",
+    "likeness",
+    "negative_space",
+    "primitive_registry_fidelity",
+    "evaluation_target_coverage"
+  ],
+  "source_doctrine_refs": [
+    "THE CMF STUDIO/CCP_CMF_Brand_Genesis_and_Micro_Semiotic_Pipeline_V3.md",
+    "THE CMF STUDIO/CCP_STUDIO_GREENFIELD_AGENT_CONTEXT_V2_PYTHON_DSPY_PI.md",
+    "THE CMF STUDIO/CCP_STUDIO_GREENFIELD_AGENT_CONTEXT_V2_PYTHON_DSPY_PI/02_DOMAIN_CONTRACTS_AND_STATE_MACHINES.md",
+    "THE CMF STUDIO/CCP_STUDIO_GREENFIELD_AGENT_CONTEXT_V2_PYTHON_DSPY_PI/03_IMPLEMENTATION_SEQUENCE_AND_RELEASE_GATES.md",
+    "THE CMF STUDIO/CCP_Creative_Pipeline_Architecture_V2.md"
+  ],
+  "evidence_routes": [
+    "identity_pack",
+    "human_approval_before_generation",
+    "acting_state_matrix_64",
+    "provider_receipts_64",
+    "cell_metadata",
+    "auto_qc_scores",
+    "human_review_grid",
+    "negative_space_updates",
+    "library_lock_receipt"
+  ],
+  "primitive_obligations": [
+    {
+      "primitive_family": "ACT",
+      "registry_ref": "registries/primitives/visual_plane/acting",
+      "obligation": "Acting primitives must represent communicative performance, not random posing.",
+      "evidence_route": "primitive_registry"
+    },
+    {
+      "primitive_family": "IDN",
+      "registry_ref": "registries/primitives/identity_plane",
+      "obligation": "Identity primitives must preserve stable traits, age, body type, hair, wardrobe, and source-evidence lineage.",
+      "evidence_route": "primitive_registry"
+    },
+    {
+      "primitive_family": "NEG",
+      "registry_ref": "registries/primitives/negative_space",
+      "obligation": "Rejected visual patterns must update Negative Space only after human approval.",
+      "evidence_route": "primitive_registry"
+    },
+    {
+      "primitive_family": "VSG",
+      "registry_ref": "registries/primitives/visual_plane",
+      "obligation": "Visual scoring primitives must gate likeness, emotion, gesture, hands, crop, and artifact risks.",
+      "evidence_route": "primitive_registry"
+    },
+    {
+      "primitive_family": "SAF",
+      "registry_ref": "registries/primitives/governance_plane",
+      "obligation": "Provider and likeness generation policy must be compatible with consent before dispatch.",
+      "evidence_route": "primitive_registry"
+    }
+  ],
+  "threshold": 0.9,
+  "hard_failure_codes": [
+    "DOCTRINE_SOURCE_MISSING",
+    "DOCTRINE_EVIDENCE_ROUTE_MISSING",
+    "PRIMITIVE_OBLIGATION_MISSING"
+  ]
+}

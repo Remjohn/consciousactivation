@@ -1,0 +1,542 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dep_vid_031_project_api_contract",
+  "title": "CMF Project API Contract",
+  "description": "REST API contract for the CMF Project Management system (FR-VID-11). Defines all endpoints for project CRUD, folder management, asset browsing, pipeline monitoring, and agent chat.",
+  "type": "object",
+  "required": ["base_url", "version", "endpoints", "authentication", "error_format", "sse_events"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "API base URL (e.g., http://localhost:8000)."
+    },
+    "version": {
+      "type": "string",
+      "const": "v1",
+      "description": "API version prefix."
+    },
+    "authentication": {
+      "type": "string",
+      "const": "Bearer token (Authorization header)",
+      "description": "All endpoints require Bearer token authentication."
+    },
+    "error_format": {
+      "type": "object",
+      "required": ["error", "code"],
+      "properties": {
+        "error": { "type": "string", "description": "Human-readable error message." },
+        "code": { "type": "string", "description": "Machine-readable error code." },
+        "details": { "type": "object", "description": "Additional error context." }
+      },
+      "description": "Standard error response shape for all endpoints."
+    },
+    "endpoints": {
+      "type": "object",
+      "properties": {
+        "projects_list": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/projects" },
+            "query_params": {
+              "type": "object",
+              "properties": {
+                "folder_id": { "type": "string", "description": "Filter by folder." },
+                "status": { "type": "string", "enum": ["DRAFT", "GENERATING", "REVIEW", "APPROVED", "PUBLISHED", "ARCHIVED"] },
+                "arc_type": { "type": "string", "enum": ["witness", "transformation", "discovery"] },
+                "client": { "type": "string" },
+                "tag": { "type": "string", "description": "Filter by a single tag." },
+                "q": { "type": "string", "description": "Full-text search across title, client, tags." },
+                "sort_by": { "type": "string", "enum": ["updated_at", "created_at", "title", "status", "total_cost_usd"], "default": "updated_at" },
+                "sort_dir": { "type": "string", "enum": ["asc", "desc"], "default": "desc" },
+                "page": { "type": "integer", "minimum": 1, "default": 1 },
+                "per_page": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "projects": { "type": "array", "items": { "$ref": "dep_vid_030_project_metadata" } },
+                "total": { "type": "integer" },
+                "page": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "project_get": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/projects/{projectId}" },
+            "response": { "$ref": "dep_vid_030_project_metadata" }
+          }
+        },
+        "project_create": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects" },
+            "body": {
+              "type": "object",
+              "required": ["title"],
+              "properties": {
+                "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+                "client": { "type": "string", "maxLength": 100 },
+                "folder_id": { "type": "string" },
+                "tags": { "type": "array", "items": { "type": "string" } },
+                "beat_cluster": { "$ref": "dep_vid_001_beat_cluster", "description": "Optional: attach beat cluster to start pipeline." },
+                "start_pipeline": { "type": "boolean", "default": false, "description": "If true and beat_cluster provided, immediately start pipeline." }
+              }
+            },
+            "response": { "$ref": "dep_vid_030_project_metadata" }
+          }
+        },
+        "project_update": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "PATCH" },
+            "path": { "const": "/api/projects/{projectId}" },
+            "body": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "client": { "type": "string" },
+                "folder_id": { "type": "string" },
+                "tags": { "type": "array", "items": { "type": "string" } },
+                "status": { "type": "string" }
+              }
+            },
+            "response": { "$ref": "dep_vid_030_project_metadata" }
+          }
+        },
+        "project_archive": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects/{projectId}/archive" },
+            "response": {
+              "type": "object",
+              "properties": {
+                "success": { "type": "boolean" },
+                "archived_at": { "type": "string", "format": "date-time" }
+              }
+            }
+          }
+        },
+        "project_restore": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects/{projectId}/restore" },
+            "response": { "$ref": "dep_vid_030_project_metadata" }
+          }
+        },
+        "project_delete": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "DELETE" },
+            "path": { "const": "/api/projects/{projectId}" },
+            "description": { "const": "Soft delete. Rate-limited: max 5 per hour." },
+            "response": {
+              "type": "object",
+              "properties": {
+                "success": { "type": "boolean" }
+              }
+            }
+          }
+        },
+        "project_duplicate": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects/{projectId}/duplicate" },
+            "body": {
+              "type": "object",
+              "properties": {
+                "new_title": { "type": "string" },
+                "new_folder_id": { "type": "string" }
+              }
+            },
+            "response": { "$ref": "dep_vid_030_project_metadata" }
+          }
+        },
+        "folders_tree": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/folders" },
+            "response": {
+              "type": "object",
+              "properties": {
+                "folders": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["folder_id", "name"],
+                    "properties": {
+                      "folder_id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "parent_folder_id": { "type": ["string", "null"] },
+                      "color": { "type": "string" },
+                      "sort_order": { "type": "integer" },
+                      "project_count": { "type": "integer" },
+                      "children": { "type": "array", "description": "Recursive folder tree." }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "folder_create": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/folders" },
+            "body": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+                "parent_folder_id": { "type": "string" },
+                "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+              }
+            }
+          }
+        },
+        "folder_update": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "PATCH" },
+            "path": { "const": "/api/folders/{folderId}" },
+            "body": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "parent_folder_id": { "type": "string" },
+                "color": { "type": "string" },
+                "sort_order": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "folder_delete": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "DELETE" },
+            "path": { "const": "/api/folders/{folderId}" },
+            "description": { "const": "Moves contained projects to parent folder (or root). Does NOT delete projects." },
+            "response": {
+              "type": "object",
+              "properties": {
+                "success": { "type": "boolean" },
+                "projects_moved": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "assets_list": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/projects/{projectId}/assets" },
+            "query_params": {
+              "type": "object",
+              "properties": {
+                "prefix": { "type": "string", "description": "S3 subfolder (e.g., 'keyframes/'). Must not contain '..'." },
+                "type": { "type": "string", "enum": ["image", "video", "audio", "all"], "default": "all" }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "assets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["key", "filename", "content_type", "size_bytes", "last_modified", "presigned_url"],
+                    "properties": {
+                      "key": { "type": "string", "description": "Full S3 object key." },
+                      "filename": { "type": "string" },
+                      "content_type": { "type": "string" },
+                      "size_bytes": { "type": "integer" },
+                      "last_modified": { "type": "string", "format": "date-time" },
+                      "thumbnail_url": { "type": ["string", "null"] },
+                      "presigned_url": { "type": "string", "format": "uri" },
+                      "beat_index": { "type": ["integer", "null"], "description": "Beat association if filename matches beat naming convention." }
+                    }
+                  }
+                },
+                "total": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "assets_upload": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects/{projectId}/assets/upload" },
+            "content_type": { "const": "multipart/form-data" },
+            "body": {
+              "type": "object",
+              "required": ["file", "subfolder"],
+              "properties": {
+                "file": { "type": "string", "description": "Binary file upload." },
+                "subfolder": { "type": "string", "description": "Target subfolder (e.g., 'source/'). Must not contain '..'." }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "asset_url": { "type": "string", "format": "uri" },
+                "thumbnail_url": { "type": ["string", "null"] },
+                "content_type": { "type": "string" },
+                "size_bytes": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "assets_delete": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "DELETE" },
+            "path": { "const": "/api/projects/{projectId}/assets" },
+            "body": {
+              "type": "object",
+              "required": ["keys"],
+              "properties": {
+                "keys": { "type": "array", "items": { "type": "string" }, "minItems": 1, "maxItems": 100, "description": "S3 object keys to delete. All must belong to the project's prefix." }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "deleted": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "assets_presign": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects/{projectId}/assets/presign" },
+            "body": {
+              "type": "object",
+              "required": ["keys"],
+              "properties": {
+                "keys": { "type": "array", "items": { "type": "string" }, "minItems": 1, "maxItems": 50 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "urls": { "type": "object", "additionalProperties": { "type": "string", "format": "uri" } }
+              }
+            }
+          }
+        },
+        "dashboard_stats": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/dashboard/stats" },
+            "response": {
+              "type": "object",
+              "required": ["active_pipelines", "awaiting_review", "approved_today", "failed", "total_cost_today_usd", "queue_depth", "concurrent_used", "concurrent_limit"],
+              "properties": {
+                "active_pipelines": { "type": "integer", "minimum": 0 },
+                "awaiting_review": { "type": "integer", "minimum": 0 },
+                "approved_today": { "type": "integer", "minimum": 0 },
+                "failed": { "type": "integer", "minimum": 0 },
+                "total_cost_today_usd": { "type": "number", "minimum": 0 },
+                "queue_depth": { "type": "integer", "minimum": 0 },
+                "concurrent_used": { "type": "integer", "minimum": 0 },
+                "concurrent_limit": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        },
+        "dashboard_pipelines": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/dashboard/pipelines" },
+            "query_params": {
+              "type": "object",
+              "properties": {
+                "state": { "type": "string" },
+                "sort_by": { "type": "string", "default": "started_at" },
+                "page": { "type": "integer", "default": 1 },
+                "per_page": { "type": "integer", "default": 20 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "pipelines": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "pipeline_id": { "type": "string" },
+                      "project_id": { "type": "string" },
+                      "project_title": { "type": "string" },
+                      "current_state": { "type": "string" },
+                      "progress": { "type": "object" },
+                      "cost_usd": { "type": "number" },
+                      "started_at": { "type": "string", "format": "date-time" },
+                      "duration_in_state_sec": { "type": "number" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "dashboard_stream": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/dashboard/stream" },
+            "content_type": { "const": "text/event-stream" },
+            "description": { "const": "Server-Sent Events stream for real-time pipeline and queue updates." }
+          }
+        },
+        "dashboard_throughput": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/dashboard/throughput" },
+            "query_params": {
+              "type": "object",
+              "properties": {
+                "days": { "type": "integer", "minimum": 1, "maximum": 365, "default": 30 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "daily": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "date": { "type": "string", "format": "date" },
+                      "completed": { "type": "integer" },
+                      "failed": { "type": "integer" },
+                      "total_cost_usd": { "type": "number" },
+                      "avg_completion_sec": { "type": "number" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "comments_list": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/projects/{projectId}/comments" },
+            "query_params": {
+              "type": "object",
+              "properties": {
+                "limit": { "type": "integer", "default": 10, "maximum": 50 },
+                "offset": { "type": "integer", "default": 0 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["comment_id", "project_id", "author", "content", "created_at"],
+                    "properties": {
+                      "comment_id": { "type": "string" },
+                      "project_id": { "type": "string" },
+                      "author": { "type": "string" },
+                      "content": { "type": "string", "maxLength": 2000 },
+                      "is_agent_command": { "type": "boolean" },
+                      "agent_response": { "type": ["string", "null"] },
+                      "agent_job_id": { "type": ["string", "null"] },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                },
+                "total": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "comments_create": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/projects/{projectId}/comments" },
+            "body": {
+              "type": "object",
+              "required": ["content"],
+              "properties": {
+                "content": { "type": "string", "minLength": 1, "maxLength": 2000 }
+              }
+            },
+            "description": { "const": "If content starts with '@agent', routes to Copilot for action classification and execution." }
+          }
+        }
+      }
+    },
+    "sse_events": {
+      "type": "object",
+      "properties": {
+        "pipeline_update": {
+          "type": "object",
+          "properties": {
+            "pipeline_id": { "type": "string" },
+            "project_id": { "type": "string" },
+            "state": { "type": "string" },
+            "progress": { "type": "object" },
+            "cost_usd": { "type": "number" }
+          }
+        },
+        "queue_update": {
+          "type": "object",
+          "properties": {
+            "queue_stats": {
+              "type": "object",
+              "properties": {
+                "queued": { "type": "integer" },
+                "processing": { "type": "integer" },
+                "completed": { "type": "integer" },
+                "failed": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "cost_update": {
+          "type": "object",
+          "properties": {
+            "daily_cost_usd": { "type": "number" },
+            "pipeline_id": { "type": "string" },
+            "delta_usd": { "type": "number" }
+          }
+        },
+        "project_update": {
+          "type": "object",
+          "properties": {
+            "project_id": { "type": "string" },
+            "field": { "type": "string" },
+            "old_value": {},
+            "new_value": {}
+          }
+        }
+      },
+      "description": "SSE event payloads emitted by the /api/dashboard/stream endpoint."
+    }
+  },
+  "additionalProperties": false
+}

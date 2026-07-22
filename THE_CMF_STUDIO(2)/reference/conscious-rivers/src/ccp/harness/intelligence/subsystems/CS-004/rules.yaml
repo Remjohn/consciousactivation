@@ -1,0 +1,30 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-004
+enabled: true
+priority:
+  tier: quality
+  rank: 1
+enforcement:
+  mode: block_on_fail
+  default_result: BLOCK
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: structural_synchrony_score
+    operator: lt
+    value: 0.8
+route_hints:
+  enforce:
+    - preserve_arc_role
+    - reject_nonfunctional_insertions

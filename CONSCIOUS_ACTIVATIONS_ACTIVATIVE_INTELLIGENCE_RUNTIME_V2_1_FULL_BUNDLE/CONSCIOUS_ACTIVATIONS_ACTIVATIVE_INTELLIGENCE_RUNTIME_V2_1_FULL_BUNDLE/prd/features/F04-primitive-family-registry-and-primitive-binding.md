@@ -1,0 +1,399 @@
+---
+
+type: prd_feature_module
+product: Conscious Activations Activative Intelligence Runtime
+product_id: CA-AIR
+feature_id: F04
+title: Primitive Family Registry and Primitive Binding
+version: 2.1.0-draft
+status: DRAFT_FOR_HUMAN_RATIFICATION
+date: '2026-07-22'
+owners:
+- Activative Intelligence Runtime
+- Primitive registry authority
+dependencies:
+- F04
+source_documents:
+- SRC-PRIM-001
+- SRC-PRIM-002
+- SRC-PRIM-003
+- SRC-MOE-001
+active_primitives:
+- PRM-BUS-001
+- PRM-BUS-006
+- PRM-PSY-001
+capability_areas:
+- PrimitiveFamilyReference
+- PrimitiveVersionReference
+- PrimitiveBinding
+- PrimitiveBindingReceipt
+- PrimitiveConflictSet
+functional_requirements: AIR-FR-019–AIR-FR-024
+governing_decision: AIR-D009
+
+---
+
+
+
+# F04 — Primitive Family Registry and Primitive Binding
+
+
+
+## 1. Architectural Claim and User Outcome
+
+**User outcome:** The Runtime grounds activation in exact Meaning-Plane and Experience-Plane primitives rather than generic creative advice.
+
+**Architectural claim:** Primitives are the smallest reusable activation and experience behaviors. They are not visual decorations or prompt tips. A Primitive Binding states how one exact primitive applies to the current source, role, tension, archetype, and stage.
+
+This feature exists because the Activative Intelligence Runtime cannot be implemented as a loose chain of prompts. It must create a visible, versioned semantic state whose owner, evidence, limits, and downstream consequences are inspectable. The entry condition is: **A selected activation hypothesis and current stage require a concrete behavioral recipe.** The terminal condition is: **Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence.**
+
+The feature protects the product from this concrete shortcut: **select primitives by name similarity without loading their core move, misuse modes, or conflicts** If that shortcut is accepted, the downstream result is not merely lower quality; **the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program**
+
+The feature is governed by `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging). Historical CMF material supplies exact Primitive, archetype, interview, brand, composition, and service evidence. It does not silently become V2.1 authority.
+
+## 2. Core Architecture and Lifecycle Model
+
+        The feature is a bounded lifecycle responsibility. Its canonical objects are `PrimitiveFamilyReference`, `PrimitiveVersionReference`, `PrimitiveBinding`, `PrimitiveBindingReceipt`, `PrimitiveConflictSet`. The owning products and authorities are Activative Intelligence Runtime, Primitive registry authority. No one actor gains every one of those responsibilities merely because a single model or service can technically produce several outputs.
+
+        | State | Required condition | Produced object or receipt |
+|---|---|---|
+| Entry | A selected activation hypothesis and current stage require a concrete behavioral recipe. | intake and eligibility receipt |
+| Compiled | inputs are reconciled under the feature contract | `PrimitiveFamilyReference` and `PrimitiveVersionReference` |
+| Evaluated | hard gates and independent judgment pass | `PrimitiveBindingReceipt` |
+| Terminal | Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence. | immutable feature completion or blocker receipt |
+| Superseded | an accepted upstream object changes | additive successor plus descendant invalidation receipt |
+
+        The lifecycle follows five rules. First, the input object is loaded by exact identity rather than copied into an unversioned prompt. Second, the feature computes only the semantic or operational responsibility assigned to it. Third, every material field retains its epistemic state. Fourth, evaluation occurs before the object becomes downstream-eligible. Fifth, supersession is additive and invalidates only dependent descendants.
+
+        The feature must remain compatible with the V2.1 master sequence: Identity and audience context → Matrix of Edging → Activation Hypothesis Portfolio → Primitive bindings and coalition → psychological role inside a tension → archetype coalition → Guest Voice DNA Final Script → category-native composition → execution → observation → HumanResolution and scoped learning. A feature may participate in only part of that sequence, but it cannot invent an alternate sequence that bypasses the governing gates.
+
+## 3. Canonical Objects, Schemas, and Contracts
+
+        | Canonical object | Owner | Required purpose |
+|---|---|---|
+| `PrimitiveFamilyReference` | Activative Intelligence Runtime | primary typed state for this feature; exact lineage and lifecycle are mandatory |
+| `PrimitiveVersionReference` | Primitive registry authority | versioned intermediate or decision object; exact lineage and lifecycle are mandatory |
+| `PrimitiveBinding` | Primitive registry authority | versioned intermediate or decision object; exact lineage and lifecycle are mandatory |
+| `PrimitiveBindingReceipt` | Primitive registry authority | versioned intermediate or decision object; exact lineage and lifecycle are mandatory |
+| `PrimitiveConflictSet` | Primitive registry authority | evaluation, resolution, or terminal evidence; exact lineage and lifecycle are mandatory |
+
+        Every object uses stable IDs, explicit versions, canonical serialization, source references, lifecycle state, field-level epistemic state where material, and additive supersession. A typed contract must distinguish required fields from optional evidence; absence must be represented explicitly rather than filled with a plausible default.
+
+        The object model also preserves four classifications separately: the product that owns the object, the actor that produced the current version, the workflow role that requested it, and the authority that may accept or supersede it. A Hunter may propose a candidate, an Analyst may evaluate it, a Composer may assemble approved ingredients, and a Commander may authorize a transition; none of those role names grants cross-product sovereignty.
+
+        The schemas for this feature are generated or referenced under `contracts/schemas/`. Human-readable contract notes live under `contracts/`. The implementation Tech Spec maps these contracts to proposed target models, repositories, service interfaces, and tests without designing a duplicate canonical object.
+
+## 4. Architectural Correction and Brownfield Reconciliation
+
+        V2 correctly modeled the temporal lifecycle, but it did not fully integrate the current Primitive, archetype, Brand Genesis, Voice DNA, Visual DNA, RSCS, CCV, SDA, SFL, Final Script, and Composition-Before-Editing laws. The current correction keeps the useful V2 objects and state machines while making the production-semantic dependencies explicit.
+
+        | Predecessor asset | Disposition | V2.1 use |
+|---|---|---|
+| 191 Meaning primitives | `REUSE_AS_EVIDENCE` | preserve tested structure and examples; replace obsolete authority and add V2.1 contracts |
+| 50 Experience primitives | `REUSE_AS_EVIDENCE` | preserve tested structure and examples; replace obsolete authority and add V2.1 contracts |
+| CMF primitive coalition contracts and compiler service | `ADAPT` | preserve tested structure and examples; replace obsolete authority and add V2.1 contracts |
+| `source://cmf_studio/registries/primitives/` | `EXACT_SOURCE_REVIEW_REQUIRED` | implementation spec must inspect this path before assigning target ownership |
+| `source://cmf_studio/src/ccp_studio/contracts/primitive_coalition.py` | `EXACT_SOURCE_REVIEW_REQUIRED` | implementation spec must inspect this path before assigning target ownership |
+
+        Brownfield source is classified before implementation as REUSE, ADAPT, ACTIVATE, REPLACE, or ARCHIVE. Tested pure models, hashing, validators, receipts, registries, and rejection fixtures are preferred for reuse. Services that perform the right execution but own obsolete semantics are adapted behind current interfaces. Historical prompts and archetype files remain evidence and candidate data, not current authority. Fake provider outputs, synthetic URIs represented as real artifacts, and monolithic Studio ownership remain archived behavior.
+
+## 5. Deep Mechanism: Psychological Role, Primitive Physics, and Archetype Consequence
+
+        The feature is interpreted through the central Activative law: **content activates when it gives the viewer a psychological role inside a tension.** For source-activation features, the equivalent question is which role and tension permit the human source to enter a more truthful expression state. For relationship features, the question is which bounded role and micro-commitment fit the current relationship stage. For production features, the question is whether the approved source charge survives into the audience role.
+
+        | Primitive | Plane / family | Core move | Load-bearing constraint |
+|---|---|---|---|
+| `PRM-BUS-001` — Perception and Guidance Stack | meaning_plane / `design_business` | Design visuals, text hierarchy, and action cues as one integrated system that controls where the eye goes and what the hand does next. | Dark Patterns — Using strong affordances to trick the user into an unintended action; Visual Noise — Adding fake depth or contrast that doesn't actually route attention |
+| `PRM-BUS-006` — Hierarchy as Attention Routing | meaning_plane / `design_business` | Assign distinct, uncompetitive visual weights to different semantic roles in the content, ensuring the viewer's eye is routed exactly where it needs to go, in the exact order it needs to go there. | Too Many Levels — Creating 6 different levels of hierarchy that confuse rather than clarify; Arbitrary Emphasis — Bolding random words in a sentence just for 'pop', breaking the semantic meaning |
+| `PRM-PSY-001` — Matching Principle | meaning_plane / `psychological_diagnostics` | Detect the active conversation layer (practical, emotional, or social) and match it before attempting to redirect or advise. | Layer Inflexibility — detecting the initial layer and refusing to shift when the client naturally transitions to a different layer.; Performative Matching — using the vocabulary of a layer without genuine alignment or empathy, which clients detect as manipulation. |
+
+        These Primitive selections are not decorative citations. The implementation must load their exact YAMLs, including core moves, activation and suppression conditions, misuse modes, conflicts, examples, and source provenance. Their local jobs must appear in a Primitive Binding. When more than one Primitive is active, the program must state their ordering, compatibility, conflicts, Coalition Signature, Edge Product contribution, and Primitive Misuse Risk.
+
+        Archetype evidence becomes relevant only after the coalition is coherent. The archetype cannot be selected by filename similarity or because it historically performed well. It must carry the present psychological role, tension, Guest Voice DNA, source evidence, and category geometry. The operator-approved Final Script then becomes the semantic authority consumed by composition.
+
+## 6. Implementation and Runtime Integration
+
+The proposed primary target modules are `src/cmf_activative_intelligence/primitive_family_registry_and_primitive_binding.py` and `src/cmf_activative_intelligence/services/primitive_family_registry_and_primitive_binding_service.py`. The controlling Tech Spec may split those targets when one product boundary or independent runtime requires it, but it may not place the entire feature inside one generic agent.
+
+Implementation begins with exact model and schema validation, then immutable repository operations, then domain services, then independent evaluation, then cross-product handoff. Learned responsibilities are added only after the contract, deterministic baseline, retrieval surface, tools, benchmark, fallback, and HumanResolution capture exist.
+
+The Runtime should prefer deterministic code for identity, hashing, lifecycle legality, exact eligibility, dependency traversal, source alignment, and contract enforcement. Small Programmed Models are appropriate for bounded classification, candidate proposal, tool compilation, script transformation, and diagnosis after the harness reduces ambiguity. Stronger models are teachers and difficult-case planners, not hidden authority. Every execution records the active context, model or deterministic implementation, tools, outputs, evaluation, and fallback.
+
+## 7. Workflow and Cross-Product Integration
+
+Upstream objects are admitted only through typed references. The feature produces objects consumed by **F05** and any explicitly named cross-product handoff. Interview Expression owns live source activation and source resolution; the Activative Intelligence Runtime owns semantic lifecycle programs; the Builder declares dependencies; the Pipeline executes approved derivative programs; the VAE realizes visual demands; Delegation carries product messages; the Studio captures attributable human resolutions.
+
+Every handoff includes exact object version, content hash, source lineage, lifecycle status, epistemic state, owning product, evaluation receipt, limitations, and invalidation relationships. The consumer may reject an object that is stale, unsupported, outside applicability, or missing required evidence. It may not repair an upstream semantic object silently.
+
+The JIT context compiler supplies only the context required by the current bounded role. Hunters receive discovery evidence; Analysts receive full evidence and contradictions; Composers receive approved ingredients and contracts; Commanders receive alternatives, receipts, gates, and stopping laws. The same unrestricted prompt is not given to every role.
+
+## 8. Operator Experience, Supervision, and Self-Translation
+
+The Studio presents this feature as an inspectable lifecycle rather than a black-box generation button. The operator can see the source objects, current state, candidate alternatives, Primitive and archetype dependencies, evaluation evidence, blockers, and exact next admissible actions. The Studio remains a projection and command surface; canonical state remains in the owning product.
+
+A meaningful operator approval, rejection, comparison, revision, direct manipulation, or explanation emits a `HumanResolutionEpisode`. The episode records the before-state, request or action, responsible layer, exact change program, affected descendants, output, evaluation, and applicability. Capture and retrieval indexing are automatic. Promotion to a Steering Recipe, Programmed Model dataset, evaluator rule, archetype authority, Primitive change, Voice DNA update, or Identity DNA observation requires its own evidence and release path.
+
+The product’s self-translation principle is that source activation, expression, and operator resolution become structured derivative and learning material without requiring the operator to reconstruct the production graph manually. The system automates the repeatable work while preserving human semantic and creative authority at genuine boundaries.
+
+## 9. Functional Requirements and Behavior-Specific Acceptance
+
+
+### AIR-FR-019 — Distinguish Meaning and Experience Primitive planes
+
+            **Owning product:** Activative Intelligence Runtime  
+            **Primary Story:** `AIR-ST-04.01`  
+            **Lifecycle:** `NEW_V2_1_OR_DEEPENED`  
+            **Requirement:** Every primitive query and binding shall declare whether the primitive creates meaning or shapes the participant experience, and cross-plane relationships shall be explicit.
+
+            **Trigger and preconditions:** A selected activation hypothesis and current stage require a concrete behavioral recipe. Exact inputs, source references, product ownership, active versions, and prerequisite receipts must resolve before the operation begins.
+
+            **Required output or transition:** The operation produces or updates the applicable PrimitiveFamilyReference, PrimitiveVersionReference, PrimitiveBinding, PrimitiveBindingReceipt, PrimitiveConflictSet state and moves toward the terminal condition without changing upstream meaning or hiding uncertainty.
+
+            **Invariants:** Meaning and Experience planes remain distinct.; Primitive IDs and versions are exact.; Primitive applicability is contextual, not universal.; A primitive cannot be selected solely because its name sounds relevant.
+
+            **Positive acceptance scenario**
+
+            - **Given** A selected activation hypothesis and current stage require a concrete behavioral recipe.
+            - **When** the Runtime performs **distinguish meaning and experience primitive planes** under the active feature contract
+            - **Then** Every primitive query and binding shall declare whether the primitive creates meaning or shapes the participant experience, and cross-plane relationships shall be explicit, and the resulting state is eligible for the feature terminal condition: Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence..
+            - **And** the result records the active Primitive bindings, epistemic state, product owner, evaluator, and descendant dependencies when applicable.
+
+            **Adversarial denial scenario**
+
+            - **Given** a proposed Primitive is unresolved to its exact YAML, conflicts with another binding, or has an unaddressed misuse mode
+            - **When** the same operation is requested
+            - **Then** the Runtime emits a typed blocker before the invalid state becomes downstream-eligible.
+            - **And** no missing source truth, Primitive meaning, human decision, or product authority is synthesized to make the request pass.
+
+            **Required evidence**
+
+            - exact input object IDs, versions, hashes, and source references
+- the active contract, product owner, actor identity, and lifecycle transition
+- positive and adversarial validation results with immutable receipt identity
+- exact Primitive YAML hashes, bindings, compatibility decisions, misuse risks, Coalition Signature, and Primitive Evaluation Receipt
+
+            **Downstream proof:** If this requirement is implemented incorrectly, the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program The immediate consumer is **F05**, which must be able to deny the object using only its public contract and receipts.
+
+            **Sources and decision:** `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging); `AIR-D009`.
+
+### AIR-FR-020 — Resolve exact primitive versions
+
+            **Owning product:** Activative Intelligence Runtime  
+            **Primary Story:** `AIR-ST-04.01`  
+            **Lifecycle:** `NEW_V2_1_OR_DEEPENED`  
+            **Requirement:** The Runtime shall resolve primitive identifiers, versions, family, source registry, applicability, misuse risks, and supersession state before coalition compilation.
+
+            **Trigger and preconditions:** A selected activation hypothesis and current stage require a concrete behavioral recipe. Exact inputs, source references, product ownership, active versions, and prerequisite receipts must resolve before the operation begins.
+
+            **Required output or transition:** The operation produces or updates the applicable PrimitiveFamilyReference, PrimitiveVersionReference, PrimitiveBinding, PrimitiveBindingReceipt, PrimitiveConflictSet state and moves toward the terminal condition without changing upstream meaning or hiding uncertainty.
+
+            **Invariants:** Meaning and Experience planes remain distinct.; Primitive IDs and versions are exact.; Primitive applicability is contextual, not universal.; A primitive cannot be selected solely because its name sounds relevant.
+
+            **Positive acceptance scenario**
+
+            - **Given** A selected activation hypothesis and current stage require a concrete behavioral recipe.
+            - **When** the Runtime performs **resolve exact primitive versions** under the active feature contract
+            - **Then** The Runtime shall resolve primitive identifiers, versions, family, source registry, applicability, misuse risks, and supersession state before coalition compilation, and the resulting state is eligible for the feature terminal condition: Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence..
+            - **And** the result records the active Primitive bindings, epistemic state, product owner, evaluator, and descendant dependencies when applicable.
+
+            **Adversarial denial scenario**
+
+            - **Given** a proposed Primitive is unresolved to its exact YAML, conflicts with another binding, or has an unaddressed misuse mode
+            - **When** the same operation is requested
+            - **Then** the Runtime emits a typed blocker before the invalid state becomes downstream-eligible.
+            - **And** no missing source truth, Primitive meaning, human decision, or product authority is synthesized to make the request pass.
+
+            **Required evidence**
+
+            - exact input object IDs, versions, hashes, and source references
+- the active contract, product owner, actor identity, and lifecycle transition
+- positive and adversarial validation results with immutable receipt identity
+- exact Primitive YAML hashes, bindings, compatibility decisions, misuse risks, Coalition Signature, and Primitive Evaluation Receipt
+
+            **Downstream proof:** If this requirement is implemented incorrectly, the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program The immediate consumer is **F05**, which must be able to deny the object using only its public contract and receipts.
+
+            **Sources and decision:** `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging); `AIR-D009`.
+
+### AIR-FR-021 — Create explicit Primitive Bindings
+
+            **Owning product:** Activative Intelligence Runtime  
+            **Primary Story:** `AIR-ST-04.02`  
+            **Lifecycle:** `NEW_V2_1_OR_DEEPENED`  
+            **Requirement:** A Primitive Binding shall connect one primitive to a target object, stage, role, tension, intended effect, execution surface, evidence, and allowed adaptation.
+
+            **Trigger and preconditions:** A selected activation hypothesis and current stage require a concrete behavioral recipe. Exact inputs, source references, product ownership, active versions, and prerequisite receipts must resolve before the operation begins.
+
+            **Required output or transition:** The operation produces or updates the applicable PrimitiveFamilyReference, PrimitiveVersionReference, PrimitiveBinding, PrimitiveBindingReceipt, PrimitiveConflictSet state and moves toward the terminal condition without changing upstream meaning or hiding uncertainty.
+
+            **Invariants:** Meaning and Experience planes remain distinct.; Primitive IDs and versions are exact.; Primitive applicability is contextual, not universal.; A primitive cannot be selected solely because its name sounds relevant.
+
+            **Positive acceptance scenario**
+
+            - **Given** A selected activation hypothesis and current stage require a concrete behavioral recipe.
+            - **When** the Runtime performs **create explicit primitive bindings** under the active feature contract
+            - **Then** A Primitive Binding shall connect one primitive to a target object, stage, role, tension, intended effect, execution surface, evidence, and allowed adaptation, and the resulting state is eligible for the feature terminal condition: Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence..
+            - **And** the result records the active Primitive bindings, epistemic state, product owner, evaluator, and descendant dependencies when applicable.
+
+            **Adversarial denial scenario**
+
+            - **Given** a proposed Primitive is unresolved to its exact YAML, conflicts with another binding, or has an unaddressed misuse mode
+            - **When** the same operation is requested
+            - **Then** the Runtime emits a typed blocker before the invalid state becomes downstream-eligible.
+            - **And** no missing source truth, Primitive meaning, human decision, or product authority is synthesized to make the request pass.
+
+            **Required evidence**
+
+            - exact input object IDs, versions, hashes, and source references
+- the active contract, product owner, actor identity, and lifecycle transition
+- positive and adversarial validation results with immutable receipt identity
+- exact Primitive YAML hashes, bindings, compatibility decisions, misuse risks, Coalition Signature, and Primitive Evaluation Receipt
+
+            **Downstream proof:** If this requirement is implemented incorrectly, the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program The immediate consumer is **F05**, which must be able to deny the object using only its public contract and receipts.
+
+            **Sources and decision:** `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging); `AIR-D009`.
+
+### AIR-FR-022 — Represent suppression, synergy, and conflict relations
+
+            **Owning product:** Activative Intelligence Runtime  
+            **Primary Story:** `AIR-ST-04.02`  
+            **Lifecycle:** `NEW_V2_1_OR_DEEPENED`  
+            **Requirement:** Bindings shall expose primitives that reinforce, suppress, contradict, or become fatal with one another under the current objective.
+
+            **Trigger and preconditions:** A selected activation hypothesis and current stage require a concrete behavioral recipe. Exact inputs, source references, product ownership, active versions, and prerequisite receipts must resolve before the operation begins.
+
+            **Required output or transition:** The operation produces or updates the applicable PrimitiveFamilyReference, PrimitiveVersionReference, PrimitiveBinding, PrimitiveBindingReceipt, PrimitiveConflictSet state and moves toward the terminal condition without changing upstream meaning or hiding uncertainty.
+
+            **Invariants:** Meaning and Experience planes remain distinct.; Primitive IDs and versions are exact.; Primitive applicability is contextual, not universal.; A primitive cannot be selected solely because its name sounds relevant.
+
+            **Positive acceptance scenario**
+
+            - **Given** A selected activation hypothesis and current stage require a concrete behavioral recipe.
+            - **When** the Runtime performs **represent suppression, synergy, and conflict relations** under the active feature contract
+            - **Then** Bindings shall expose primitives that reinforce, suppress, contradict, or become fatal with one another under the current objective, and the resulting state is eligible for the feature terminal condition: Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence..
+            - **And** the result records the active Primitive bindings, epistemic state, product owner, evaluator, and descendant dependencies when applicable.
+
+            **Adversarial denial scenario**
+
+            - **Given** the input is stale, contradictory, unresolved, or cannot support the claimed state transition
+            - **When** the same operation is requested
+            - **Then** the Runtime emits a typed blocker before the invalid state becomes downstream-eligible.
+            - **And** no missing source truth, Primitive meaning, human decision, or product authority is synthesized to make the request pass.
+
+            **Required evidence**
+
+            - exact input object IDs, versions, hashes, and source references
+- the active contract, product owner, actor identity, and lifecycle transition
+- positive and adversarial validation results with immutable receipt identity
+
+            **Downstream proof:** If this requirement is implemented incorrectly, the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program The immediate consumer is **F05**, which must be able to deny the object using only its public contract and receipts.
+
+            **Sources and decision:** `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging); `AIR-D009`.
+
+### AIR-FR-023 — Require stage-appropriate primitive coverage
+
+            **Owning product:** Activative Intelligence Runtime  
+            **Primary Story:** `AIR-ST-04.03`  
+            **Lifecycle:** `NEW_V2_1_OR_DEEPENED`  
+            **Requirement:** The Runtime shall verify that source activation, script formation, composition, experience, and evaluation stages receive the primitive coverage required by the current archetype and category.
+
+            **Trigger and preconditions:** A selected activation hypothesis and current stage require a concrete behavioral recipe. Exact inputs, source references, product ownership, active versions, and prerequisite receipts must resolve before the operation begins.
+
+            **Required output or transition:** The operation produces or updates the applicable PrimitiveFamilyReference, PrimitiveVersionReference, PrimitiveBinding, PrimitiveBindingReceipt, PrimitiveConflictSet state and moves toward the terminal condition without changing upstream meaning or hiding uncertainty.
+
+            **Invariants:** Meaning and Experience planes remain distinct.; Primitive IDs and versions are exact.; Primitive applicability is contextual, not universal.; A primitive cannot be selected solely because its name sounds relevant.
+
+            **Positive acceptance scenario**
+
+            - **Given** A selected activation hypothesis and current stage require a concrete behavioral recipe.
+            - **When** the Runtime performs **require stage-appropriate primitive coverage** under the active feature contract
+            - **Then** The Runtime shall verify that source activation, script formation, composition, experience, and evaluation stages receive the primitive coverage required by the current archetype and category, and the resulting state is eligible for the feature terminal condition: Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence..
+            - **And** the result records the active Primitive bindings, epistemic state, product owner, evaluator, and descendant dependencies when applicable.
+
+            **Adversarial denial scenario**
+
+            - **Given** a proposed Primitive is unresolved to its exact YAML, conflicts with another binding, or has an unaddressed misuse mode
+            - **When** the same operation is requested
+            - **Then** the Runtime emits a typed blocker before the invalid state becomes downstream-eligible.
+            - **And** no missing source truth, Primitive meaning, human decision, or product authority is synthesized to make the request pass.
+
+            **Required evidence**
+
+            - exact input object IDs, versions, hashes, and source references
+- the active contract, product owner, actor identity, and lifecycle transition
+- positive and adversarial validation results with immutable receipt identity
+- exact Primitive YAML hashes, bindings, compatibility decisions, misuse risks, Coalition Signature, and Primitive Evaluation Receipt
+
+            **Downstream proof:** If this requirement is implemented incorrectly, the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program The immediate consumer is **F05**, which must be able to deny the object using only its public contract and receipts.
+
+            **Sources and decision:** `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging); `AIR-D009`.
+
+### AIR-FR-024 — Emit a Primitive Binding Receipt
+
+            **Owning product:** Activative Intelligence Runtime  
+            **Primary Story:** `AIR-ST-04.03`  
+            **Lifecycle:** `NEW_V2_1_OR_DEEPENED`  
+            **Requirement:** Every accepted binding shall record registry identity, selected version, applicability rationale, source evidence, exclusions, and downstream consumers.
+
+            **Trigger and preconditions:** A selected activation hypothesis and current stage require a concrete behavioral recipe. Exact inputs, source references, product ownership, active versions, and prerequisite receipts must resolve before the operation begins.
+
+            **Required output or transition:** The operation produces or updates the applicable PrimitiveFamilyReference, PrimitiveVersionReference, PrimitiveBinding, PrimitiveBindingReceipt, PrimitiveConflictSet state and moves toward the terminal condition without changing upstream meaning or hiding uncertainty.
+
+            **Invariants:** Meaning and Experience planes remain distinct.; Primitive IDs and versions are exact.; Primitive applicability is contextual, not universal.; A primitive cannot be selected solely because its name sounds relevant.
+
+            **Positive acceptance scenario**
+
+            - **Given** A selected activation hypothesis and current stage require a concrete behavioral recipe.
+            - **When** the Runtime performs **emit a primitive binding receipt** under the active feature contract
+            - **Then** Every accepted binding shall record registry identity, selected version, applicability rationale, source evidence, exclusions, and downstream consumers, and the resulting state is eligible for the feature terminal condition: Every required behavior is bound to exact primitive versions, stage-local applications, suppression rules, and evidence..
+            - **And** the result records the active Primitive bindings, epistemic state, product owner, evaluator, and descendant dependencies when applicable.
+
+            **Adversarial denial scenario**
+
+            - **Given** a proposed Primitive is unresolved to its exact YAML, conflicts with another binding, or has an unaddressed misuse mode
+            - **When** the same operation is requested
+            - **Then** the Runtime emits a typed blocker before the invalid state becomes downstream-eligible.
+            - **And** no missing source truth, Primitive meaning, human decision, or product authority is synthesized to make the request pass.
+
+            **Required evidence**
+
+            - exact input object IDs, versions, hashes, and source references
+- the active contract, product owner, actor identity, and lifecycle transition
+- positive and adversarial validation results with immutable receipt identity
+- exact Primitive YAML hashes, bindings, compatibility decisions, misuse risks, Coalition Signature, and Primitive Evaluation Receipt
+
+            **Downstream proof:** If this requirement is implemented incorrectly, the selected primitive behaves differently from the assumed name and injects an incompatible core move into the program The immediate consumer is **F05**, which must be able to deny the object using only its public contract and receipts.
+
+            **Sources and decision:** `SRC-PRIM-001` (Meaning Primitive Registry specification), `SRC-PRIM-002` (Experience Primitive Registry specification), `SRC-PRIM-003` (CMF full primitive YAML snapshot), `SRC-MOE-001` (Matrix of Edging); `AIR-D009`.
+
+## 10. Validation, Risks, Stop Conditions, and Completion Law
+
+### Required gates
+
+| Gate | Pass condition | Failure consequence |
+|---|---|---|
+| Source and identity | every source, Primitive, archetype evidence item, and upstream object resolves to exact version/hash | feature remains blocked; no inferred replacement |
+| Product ownership | producer, evaluator, human authority, and downstream consumer are explicit | transition is illegal |
+| Epistemology | planned, observed, inferred, confirmed, rejected, and superseded fields remain distinct | object cannot enter JIT context or composition |
+| Primitive physics | exact YAML loaded; coalition compatibility, misuse, signature, and Edge Product evaluated where applicable | candidate is ineligible regardless of fluency or polish |
+| Psychological role | role, tension, recognition, and counteractivation are explicit where audience activation is claimed | output is not approved as Activative |
+| Final Script and composition | approved Guest Voice DNA Final Script and category composition program exist before editing/generation where applicable | production node does not start |
+| Independent evaluation | producer does not approve itself; deterministic checks precede judgment | no promotion or terminal acceptance |
+| Replay and invalidation | exact context, decisions, results, and descendant edges are reproducible | release evidence fails |
+
+### Feature-specific risks
+
+1. **Premature semantic closure:** select primitives by name similarity without loading their core move, misuse modes, or conflicts. Mitigation: candidate and hard-gate evidence remains visible until a lawful stopping condition.
+2. **Centroid drift:** the system may choose fluent, polished, broadly acceptable output that weakens the Edge Product. Mitigation: Primitive, Voice/Visual DNA, psychological-role, and anti-centroid gates are non-compensable.
+3. **Product-boundary leakage:** one service may attempt to repair or approve an upstream object. Mitigation: typed handoffs, owning-product checks, and descendant-only invalidation.
+4. **Over-learning:** a local correction may be generalized beyond evidence. Mitigation: automatic capture, explicit applicability envelopes, shadow evaluation, and release-controlled promotion.
+
+### Stop conditions
+
+- a required source or exact Primitive YAML is unavailable;
+- the role, tension, Edge Product, or product owner cannot be established;
+- the feature would require inventing a human reaction, source fact, Voice DNA, Visual DNA, or approval;
+- the implementation duplicates a current canonical object or crosses product sovereignty;
+- independent evaluation cannot distinguish the claimed success from a polished failure;
+- a real-human, audience, external-product, or production claim is requested without corresponding evidence.
+
+**Completion law:** this feature is planning-complete only when all six FRs have one primary Story and one controlling Tech Spec, all active Primitive IDs resolve to exact source YAMLs, brownfield dispositions are explicit, positive and adversarial scenarios pass, and the feature’s terminal object can be denied downstream when its evidence is invalid. Planning completion does not authorize implementation or production.

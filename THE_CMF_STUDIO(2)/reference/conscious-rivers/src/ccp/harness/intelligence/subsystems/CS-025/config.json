@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-025",
+  "name": "Retention Cascade",
+  "version": "1.0",
+  "priority_tier": "survival",
+  "research_basis": [
+    "Attention Capture",
+    "Film Editing"
+  ],
+  "inputs": [
+    "first_three_seconds_timeline",
+    "hook_asl_seconds",
+    "time_to_face_seconds",
+    "time_to_primary_signal_seconds",
+    "opening_cls",
+    "focal_clarity_score"
+  ],
+  "outputs": [
+    "verdict",
+    "retention_survival_score",
+    "violations"
+  ],
+  "thresholds": {
+    "retention_window_seconds": 3,
+    "target_hook_asl_seconds": {
+      "min": 0.8,
+      "max": 1.5
+    },
+    "max_opening_cls": 2,
+    "max_time_to_face_seconds": 2.0,
+    "max_time_to_primary_signal_seconds": 1.7,
+    "allow_delayed_intro": false
+  },
+  "default_action_on_fail": "BLOCK"
+}

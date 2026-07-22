@@ -1,0 +1,268 @@
+{
+  "$defs": {
+    "ArchetypeBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "archetype_id": {
+          "title": "Archetype Id",
+          "type": "string"
+        },
+        "binding_id": {
+          "title": "Binding Id",
+          "type": "string"
+        },
+        "category_geometry": {
+          "title": "Category Geometry",
+          "type": "string"
+        },
+        "evidence_prompt_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImmutableRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "local_function": {
+          "title": "Local Function",
+          "type": "string"
+        },
+        "primitive_binding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Primitive Binding Ids",
+          "type": "array"
+        },
+        "rejection_conditions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Rejection Conditions",
+          "type": "array"
+        },
+        "source_fit": {
+          "title": "Source Fit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "binding_id",
+        "archetype_id",
+        "local_function",
+        "source_fit",
+        "category_geometry",
+        "primitive_binding_ids"
+      ],
+      "title": "ArchetypeBinding",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "PsychologicalRoleTensionContract": {
+      "additionalProperties": false,
+      "properties": {
+        "activation_domain": {
+          "enum": [
+            "source",
+            "relationship",
+            "audience",
+            "campaign",
+            "derivative"
+          ],
+          "title": "Activation Domain",
+          "type": "string"
+        },
+        "contract_id": {
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "counteractivation_roles": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Counteractivation Roles",
+          "type": "array"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "minItems": 1,
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "participation_threshold": {
+          "minLength": 1,
+          "title": "Participation Threshold",
+          "type": "string"
+        },
+        "psychological_role": {
+          "minLength": 1,
+          "title": "Psychological Role",
+          "type": "string"
+        },
+        "recognition_path": {
+          "minLength": 1,
+          "title": "Recognition Path",
+          "type": "string"
+        },
+        "stance": {
+          "minLength": 1,
+          "title": "Stance",
+          "type": "string"
+        },
+        "tension": {
+          "minLength": 1,
+          "title": "Tension",
+          "type": "string"
+        },
+        "transfer_invariants": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transfer Invariants",
+          "type": "array"
+        }
+      },
+      "required": [
+        "contract_id",
+        "activation_domain",
+        "psychological_role",
+        "tension",
+        "recognition_path",
+        "stance",
+        "participation_threshold",
+        "transfer_invariants",
+        "evidence_refs"
+      ],
+      "title": "PsychologicalRoleTensionContract",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "anti_centroid_locks": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Anti Centroid Locks",
+      "type": "array"
+    },
+    "category_target": {
+      "title": "Category Target",
+      "type": "string"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "proposed",
+        "validated",
+        "approved",
+        "superseded"
+      ],
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "primary_archetype": {
+      "$ref": "#/$defs/ArchetypeBinding"
+    },
+    "primitive_coalition_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "program_id": {
+      "title": "Program Id",
+      "type": "string"
+    },
+    "rejected_alternatives": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Rejected Alternatives",
+      "type": "array"
+    },
+    "role_tension_contract": {
+      "$ref": "#/$defs/PsychologicalRoleTensionContract"
+    },
+    "sequence_or_reading_logic": {
+      "title": "Sequence Or Reading Logic",
+      "type": "string"
+    },
+    "source_expression_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Source Expression Refs",
+      "type": "array"
+    },
+    "supporting_archetypes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ArchetypeBinding"
+      },
+      "title": "Supporting Archetypes",
+      "type": "array"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "program_id",
+    "version",
+    "role_tension_contract",
+    "primitive_coalition_ref",
+    "primary_archetype",
+    "source_expression_refs",
+    "category_target",
+    "sequence_or_reading_logic",
+    "anti_centroid_locks",
+    "wrong_reading_locks",
+    "lifecycle_state"
+  ],
+  "title": "ArchetypeCoalitionProgram",
+  "type": "object"
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "SYMBOLIC_ECHO",
+  "scene_number": 8,
+  "name": "Symbolic Echo",
+  "version": "1.0",
+  "function": "Closure vehicle that reuses a transformed symbol from earlier in the story.",
+  "compatible_containers": [
+    "RESOLUTION"
+  ],
+  "cls_footprint": {
+    "typical": 1.5,
+    "max": 2.0
+  },
+  "required_asset_types": [
+    "B_ROLL",
+    "OBJECT_CALLBACK"
+  ],
+  "template_variants": [
+    "match_cut_callback",
+    "transformed_object_return",
+    "visual_rhyme_close"
+  ],
+  "effect_dependencies": [
+    "match_cut",
+    "warm_fade"
+  ],
+  "selection_signals": [
+    "closure_event",
+    "memory_anchor",
+    "callback_strength"
+  ],
+  "audio_profile": {
+    "score_role": "recall",
+    "energy_band": "low",
+    "mode": "reflective",
+    "prosodic_hint": "sparse_resolving",
+    "prosodic_contour_target": {
+      "pitch_shape": "falling",
+      "stress_placement": "final",
+      "rate_wpm": { "min": 90, "max": 125 },
+      "emotional_register": "calm"
+    }
+  },
+  "fallback_behavior": "Fall back to direct resolution if no transformed symbol exists."
+}

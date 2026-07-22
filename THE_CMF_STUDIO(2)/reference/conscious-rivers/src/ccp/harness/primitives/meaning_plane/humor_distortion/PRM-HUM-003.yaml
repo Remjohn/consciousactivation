@@ -1,0 +1,190 @@
+# Primitive: PRM-HUM-003 — Filter Constraints
+# Source: How to Write Funny (Scott Dikkers)
+# MCDA: 171
+
+primitive_id: "PRM-HUM-003"
+canonical_name: "Filter Constraints"
+aliases:
+  - "The 11 Funny Filters"
+  - "Deterministic Distortion Algorithms"
+  - "Subtext Concealment Protocols"
+
+family: "humor_distortion"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "Audit_How_to_Write_Funny_CCP.md"
+    primitive_name_in_audit: "The 11 Filter Constraints (Deterministic Distortion Algorithms)"
+    mcda_score: 171
+    audit_path: "lab/Public Speeaking Coaching/01_Humor_and_Comedy/Audit_How_to_Write_Funny_CCP.md"
+
+book_reference:
+  title: "How to Write Funny"
+  author: "Scott Dikkers"
+  chapters:
+    - "Chapter 6: The 11 Funny Filters"
+    - "Chapter 7: Using the Funny Filters — Filtering, Finessing, Divining"
+  key_pages: "Ch 6 lines 1704-3165, Ch 7 lines 3175-3200"
+  book_path: "lab/Public Speeaking Coaching/01_Humor_and_Comedy/How_to_Write_Funny__Your_Serious_Step-By-_-_Scott_Dikkers.md"
+
+summary: >
+  Filter Constraints is the system-level primitive that maps Dikkers' 11
+  Funny Filters (Irony, Character, Shock, Hyperbole, Wordplay, Reference,
+  Madcap, Parody, Analogy, Misplaced Focus, Metahumor) as discrete,
+  selectable distortion algorithms within the CCP's Adapter Registry. Each
+  Filter is a specific mechanism for concealing the Subtext — creating
+  a barrier between the reader and the writer's intended message so the
+  reader must "add two and two to discover the hidden message" (line 1711).
+  The primitive's power is constraint-based creativity: instead of asking
+  the LLM to "be funny," the system explicitly assigns a specific Filter
+  (or combination of Filters) based on the active mood state, content
+  surface, and coach Voice DNA, forcing the model into a tight deterministic
+  corridor that produces reliable, non-generic humor.
+
+core_move: >
+  Select and assign a specific Funny Filter (or layered combination) to
+  the generation pipeline as a rigid structural constraint, replacing the
+  vague instruction 'be funny' with a precise distortion algorithm.
+
+why_it_works: >
+  Dikkers states that "if a piece of your writing doesn't employ at least
+  one of the 11 Funny Filters, or it's not using the Funny Filters properly,
+  very few readers will find it funny" (lines 1740-1742). The mechanism
+  is constrained generation: each Filter provides a specific cognitive
+  operation (Irony = write the polar opposite; Hyperbole = exaggerate
+  beyond the laws of reason; Misplaced Focus = focus on the wrong thing).
+  These operations are deterministic enough to be system-prompted but
+  creative enough to produce varied output. The Filters also blur at the
+  periphery (line 2608), enabling layered combinations — Bob Hope's
+  "politicians have their hands in their own pockets" combines Character +
+  two layers of Irony + Hyperbole + Metahumor (lines 2225-2238). CCP
+  leverages this by assigning primary and garnish Filters to each content
+  request.
+
+examples:
+  - context: "BOOK: How to Write Funny - Filter Constraints"
+    application: >
+      Dikkers maps 11 specific 'Funny Filters' (Irony, Hyperbole, Reference, etc.) as discrete distortion algorithms. Instead of vague 'be funny' instructions, assigning a specific filter forces the humor into a tight deterministic corridor that conceals the Subtext.
+    effect: >
+      Produces reliable, non-generic humor by providing a specific cognitive operation for the reader to decode.
+
+  - context: "CCP: CMF - JIT Skill Compilation"
+    application: >
+      The JIT compiler selects a primary Filter (e.g., Hyperbole) and a garnish (e.g., Reference) based on the audience mood state. The prompt explicitly constrains the LLM to 'exaggerate beyond reason, anchored in a shared experience'.
+    effect: >
+      Prevents the LLM from defaulting to generic whimsy or mild snark. The output is tightly structured and surprising.
+
+  - context: "CCP: CBCS - Upgrading Sarcasm to Irony"
+    application: >
+      When the agent detects a coach relying on amateur Sarcasm (Irony light), it prescribes the full Irony Filter: 'Play it straight. Adopt the opposite position with absolute conviction. Let them discover the joke.'
+    effect: >
+      The coach's humor upgrades to professional-grade satire. The audience feels respected because they are trusted to decode the message.
+
+  - context: "CCP: V2WS - Pattern Interruption"
+    application: >
+      At the 40-minute mark of a dense webinar, the system automatically injects a 'Misplaced Focus' filter into the script, deliberately dwelling on an absurd, irrelevant detail of a case study.
+    effect: >
+      Breaks audience fatigue. The sudden shift in cognitive operation re-engages their attention before the pitch.
+
+  - context: "CCP: CCF - The Filter Sandbox"
+    application: >
+      The app provides a daily exercise where the coach takes a single boring truth and rewrites it using three different assigned Filters, training their neurological flexibility.
+    effect: >
+      The coach develops an intuitive mastery of deterministic distortion, making them funnier on live coaching calls.
+
+anti_examples:
+  - description: >
+      A CMF agent prompt reads 'Make this content funny and engaging'
+      without specifying any Funny Filter — relying on the model's
+      general humor capability.
+    why_it_fails: >
+      Dikkers' entire Chapter 6 exists to replace vague humor instructions
+      with specific mechanisms. Without a Filter Constraint, the LLM
+      defaults to the most common pattern in its training data — usually
+      mild Snark or basic Character humor — producing generic output that
+      "comes off as little more than a big mess" (line 477). The absence
+      of a specific Filter is the absence of a specific mechanism.
+
+  - description: >
+      The system assigns all 11 Filters simultaneously to a single content
+      piece, instructing the model to 'use as many Filters as possible.'
+    why_it_fails: >
+      While Dikkers encourages layering Filters, each layer must serve
+      the Subtext. Assigning all 11 creates competing distortions that
+      cancel each other out — the audience cannot decode which cognitive
+      operation to perform and the content reads as chaotic rather than
+      funny. Professional humor typically uses 2-4 Filters maximum in
+      a single joke (lines 2225-2238 show Bob Hope using ~5 as an
+      exceptional case).
+
+phase_fit:
+  pre_trigger: 0.2
+  post_trigger: 0.4
+  generation: 0.9
+  revision: 0.8
+  delivery: 0.3
+
+surface_fit:
+  text: 0.9
+  voice: 0.7
+  visual: 0.6
+  sonic: 0.2
+  webinar: 0.8
+  telegram: 0.6
+
+goal_bias:
+  connection: 0.4
+  surprise: 0.8
+  tension: 0.3
+  clarity: 0.6
+  memorability: 0.6
+  persuasion: 0.3
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.2
+  trigger_provocation: 0.5
+  authenticated_capture: 0.2
+  meaning_extraction: 0.4
+  content_generation: 0.9
+  edge_product_assembly: 0.8
+  delivery_coaching: 0.5
+  experience_flow: 0.2
+  premium_differentiation: 0.7
+
+trigger_conditions:
+  - "System is executing any prompt that includes a 'humor' or 'engagement' objective; it must assign a specific Filter"
+  - "Agent detects the user is relying on amateur sarcasm and needs to be upgraded to structural Irony"
+  - "AST analysis indicates a draft is 'supposed to be funny' but lacks a clear comedic mechanism"
+
+suppression_conditions:
+  - "System is generating purely informational content with no humor objective"
+  - "Coach's audience is in a state where comedic distortion would read as inappropriate (acute grief, immediate crisis)"
+
+misuse_modes:
+  - "Filter-without-Subtext — applying Filters to content that has no irreducible truth, producing technically correct but emotionally empty humor"
+  - "Single-Filter rigidity — always defaulting to the same Filter (usually Reference or Character) across all content, creating pattern fatigue"
+  - "Filter-as-label — naming the Filter in the content itself ('This is ironic, right?'), breaking the concealment that makes Filters work"
+
+synergizes_with:
+  - "PRM-HUM-002"  # Irreducible Truth — Filters conceal the Subtext; without Subtext, Filters produce empty comedy
+  - "PRM-HUM-001"  # Dual-Processor Engine — the Editor uses Filters as the evaluation rubric; the Clown generates through them
+  - "PRM-HUM-004"  # Contrastive Extreme Polarization — heightening is the meta-instruction that applies to every Filter
+  - "PRM-HUM-005"  # Absolute Verisimilitude — Parody Filter specifically requires verisimilitude to function
+
+conflicts_with:
+  - "PRM-HUM-006"  # Temporal Resolution Delay — delay rules sometimes conflict with Filters that require front-loaded reveals (e.g., Parody format recognition)
+
+crosswalk_id: null
+crosswalk_note: null
+
+notes: >
+  This is the most system-level primitive in the HUM family — it operates
+  as a meta-constraint on the generation pipeline rather than a specific
+  creative move. Its MCDA (171) is tied with Absolute Verisimilitude,
+  reflecting their equal importance as infrastructure primitives. Float note:
+  goal_bias.surprise is high (0.8) because each Filter is specifically
+  designed to create a different TYPE of surprise — Irony surprises through
+  opposition, Hyperbole through impossibility, Misplaced Focus through
+  omission. goal_bias.clarity is moderate (0.6) because Filters create
+  structured surprise rather than pure ambiguity — the audience has a
+  clear cognitive operation to perform.

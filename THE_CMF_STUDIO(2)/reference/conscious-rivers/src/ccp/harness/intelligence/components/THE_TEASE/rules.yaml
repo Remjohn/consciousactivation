@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: THE_TEASE
+enabled: true
+selection_priority:
+  tier: secondary
+  rank: 10
+enforcement:
+  mode: allow_with_checks
+  default_result: ALLOW
+applies_to:
+  containers:
+    - HOOK
+  stages:
+    - scene_builder
+incompatibilities:
+  - vague_promise
+warn_conditions:
+  - metric: clarity_score
+    operator: lt
+    value: 0.75
+route_hints:
+  select:
+    - use_when_curiosity_is_strong_and_message_can_pay_off_fast
+    - avoid_when_offer_is_already_complex

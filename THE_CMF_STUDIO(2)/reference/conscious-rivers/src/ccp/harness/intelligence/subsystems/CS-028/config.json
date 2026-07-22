@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-028",
+  "name": "Element Counter",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Mayer's Principles",
+    "Split-attention research"
+  ],
+  "inputs": [
+    "meaningful_element_count",
+    "semantic_weights",
+    "redundancy_map"
+  ],
+  "outputs": [
+    "element_count_compliance",
+    "reduction_recommendation",
+    "verdict"
+  ],
+  "thresholds": {
+    "max_simultaneous_meaningful_elements": 3,
+    "allow_supportive_context_element": 1
+  },
+  "default_action_on_fail": "REVISE"
+}

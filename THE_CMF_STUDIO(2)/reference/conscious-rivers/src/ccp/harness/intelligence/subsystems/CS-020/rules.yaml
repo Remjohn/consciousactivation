@@ -1,0 +1,28 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-020
+enabled: true
+priority:
+  tier: quality
+  rank: 7
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: mobile_depth_multiplier
+    operator: gt
+    value: 0.7
+route_hints:
+  scale:
+    - reduce_mobile_depth
+    - keep_desktop_preview_separate

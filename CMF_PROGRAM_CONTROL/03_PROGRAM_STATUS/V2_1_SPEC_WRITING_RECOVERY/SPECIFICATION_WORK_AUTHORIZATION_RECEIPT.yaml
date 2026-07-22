@@ -1,0 +1,34 @@
+schema_version: conscious-activations-specification-work-authorization-receipt/v1
+receipt_id: CA-P02C-SPEC-WORK-AUTH-2026-07-22
+issued_on: '2026-07-22'
+status: ACTIVE_SPECIFICATION_WORK_ONLY
+sources:
+- path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_RECONCILIATION/PROMPT_02_GATE_RECEIPT.yaml
+  sha256: 01f054b4e3efa67345a3fbd4b33fadc4f26b0174ffdfaa44d5090051cc214709
+  fact: specification_work_explicitly_authorized_true
+- path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_RECONCILIATION/COMPLETION_RECEIPT.yaml
+  sha256: bb0057effade4074c84063a376d61e908bb636d81e93141290c4a61112456105
+  fact: 60_frozen_one_spec_packets_ready_for_prompt03
+- path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_AUTHORITY_CONVERGENCE/COMPLETION_RECEIPT.yaml
+  sha256: 032b90b449fd5bafd96685ae40370f652bdfba38fdec1d0761be115c069f528f
+  fact: candidate_authority_pending_ratification_no_implementation_authority
+- source: operator Prompt 02C dated 2026-07-22
+  fact: explicitly_authorizes_recovery_chain_specification_work
+authorized_actions:
+- WRITE
+- INDEPENDENT_AUDIT
+- REVISION_FROM_FINDINGS
+- INDEPENDENT_REAUDIT
+- TECHNICAL_CONVERGENCE
+forbidden_actions:
+- ACCEPTED_FOR_BUILD_WHILE_RATIFICATION_PENDING
+- DEVELOPMENT_CAPSULE
+- BUILD
+- PRODUCT_IMPLEMENTATION
+- PRODUCTION
+- CERTIFICATION
+- VAE_STAGE_5
+candidate_authority_state: CANDIDATE_NOT_CURRENT
+maximum_pre_ratification_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+expires_on_input_hash_drift: true
+

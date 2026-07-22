@@ -1,0 +1,156 @@
+{
+  "$defs": {
+    "ApplicabilityEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "audience_segments": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Audience Segments",
+          "type": "array"
+        },
+        "coach_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Coach Ids",
+          "type": "array"
+        },
+        "exclusions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "formats": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Formats",
+          "type": "array"
+        },
+        "platforms": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Platforms",
+          "type": "array"
+        },
+        "pressure_domains": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Pressure Domains",
+          "type": "array"
+        },
+        "relationship_stages": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Relationship Stages",
+          "type": "array"
+        }
+      },
+      "title": "ApplicabilityEnvelope",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "advantage_profile": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Advantage Profile",
+      "type": "object"
+    },
+    "applicability": {
+      "$ref": "#/$defs/ApplicabilityEnvelope"
+    },
+    "artifact_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "capability_id": {
+      "title": "Capability Id",
+      "type": "string"
+    },
+    "claim_id": {
+      "title": "Claim Id",
+      "type": "string"
+    },
+    "fallback_binding_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "hard_gate_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Hard Gate Refs",
+      "type": "array"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "proposed",
+        "experimental",
+        "validated",
+        "shadow",
+        "limited_production",
+        "production",
+        "deprecated",
+        "retired",
+        "revoked"
+      ],
+      "title": "Lifecycle State",
+      "type": "string"
+    }
+  },
+  "required": [
+    "claim_id",
+    "capability_id",
+    "artifact_ref",
+    "applicability",
+    "advantage_profile",
+    "hard_gate_refs",
+    "fallback_binding_ref",
+    "lifecycle_state"
+  ],
+  "title": "LearnedCapabilityClaim",
+  "type": "object"
+}

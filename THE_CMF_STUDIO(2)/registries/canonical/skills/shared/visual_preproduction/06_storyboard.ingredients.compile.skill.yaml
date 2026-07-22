@@ -1,0 +1,56 @@
+id: storyboard.ingredients.compile
+version: "1.0.0"
+status: active
+name: "Storyboard Ingredients Compile"
+owner_agent: visual_preproduction_agent
+sub_agents:
+  - visual_researcher_agent
+  - storyboard_composer_agent
+  - visual_analyst_agent
+  - storyboard_commander_agent
+skill_type: dspy_plus_pydantic
+dspy_program: StoryboardIngredientCompilerProgram
+purpose: "Compile required visual ingredients from VisualSchema and PrimitiveCoalition."
+inputs:
+  - brand_id
+  - brand_context_version_id
+  - source_context_refs
+  - primitive_coalition_contract_id
+  - target_component
+  - preproduction_depth
+outputs:
+  - VisualPreproductionTypedObject
+  - VisualPreproductionReceipt
+required_contracts:
+  - VisualSchema
+  - StoryboardIngredientSet
+  - VisualBeatPlan
+  - PRIMALAnalysis
+  - VAEDecoderReport
+  - ConstraintGateCReport
+  - VisualAnalystReport
+  - StoryboardCommanderVerdict
+  - VisualPreproductionPacket
+required_registries:
+  - registry.visual_preproduction.visual_familiarity_elements.v1
+  - registry.visual_preproduction.shot_types.v1
+  - registry.visual_preproduction.t_codes.v1
+  - registry.visual_preproduction.v_codes.v1
+  - registry.visual_preproduction.kinetic_verbs.v1
+  - registry.visual_preproduction.lighting_presets.v1
+hard_gates:
+  - "brand_context_version_id is required."
+  - "VisualSchema must cover all 16 familiarity elements or mark not_applicable with reason."
+  - "Blocking Constraint Gate C violations prevent packet freeze."
+  - "Full-batch generation requires StoryboardCommanderVerdict."
+forbidden_shortcuts:
+  - "Do not create provider jobs from loose visual prose."
+  - "Do not leave Visual Familiarity elements blank."
+  - "Do not perform unmanaged asset search."
+  - "Do not override deterministic gates with LLM judgment."
+runtime_accuracy:
+  pydantic_validation: required
+  dspy_reasoning: allowed_when_dspy_program_is_not_null
+  deterministic_guards: required
+  idempotency_key: required_for_state_change_or_provider_job
+  audit_receipt: required

@@ -1,0 +1,419 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "cac_prompt.schema.json",
+    "title": "CMF CAC Prompt",
+    "description": "Camera-Action-Composition prompt structure following the Vogue Living editorial framework. Output from CAC Composer.",
+    "type": "object",
+    "required": [
+        "project_id",
+        "scene_code",
+        "el_shaddai_structure",
+        "motion_spec"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "Project identifier"
+        },
+        "scene_code": {
+            "type": "string",
+            "description": "Scene reference from final_script.json (e.g., 'SC02')"
+        },
+        "visual_schema_ref": {
+            "type": "string",
+            "description": "Path to the Visual Schema used for grounding"
+        },
+        "el_shaddai_structure": {
+            "type": "object",
+            "description": "6-Section prompt structure (El Shaddai Protocol)",
+            "required": [
+                "anchor",
+                "contact",
+                "composition",
+                "atmosphere",
+                "imperfection",
+                "lens"
+            ],
+            "properties": {
+                "anchor": {
+                    "type": "object",
+                    "description": "Section 1: Physical grounding in mundane reality",
+                    "required": [
+                        "vae_decode",
+                        "mundane_object"
+                    ],
+                    "properties": {
+                        "vae_decode": {
+                            "type": "string",
+                            "description": "Decoded representation: [Environment] + [Subject] + [Action]",
+                            "examples": [
+                                "Modern French apartment kitchen. 50-year-old West African woman. Standing still."
+                            ]
+                        },
+                        "mundane_object": {
+                            "type": "string",
+                            "description": "Everyday object that grounds the scene",
+                            "examples": [
+                                "ceramic cup with steam rising",
+                                "folded newspaper on counter"
+                            ]
+                        }
+                    }
+                },
+                "contact": {
+                    "type": "object",
+                    "description": "Section 2: Physical interaction with environment",
+                    "required": [
+                        "body_contact",
+                        "surface_relationship"
+                    ],
+                    "properties": {
+                        "body_contact": {
+                            "type": "string",
+                            "description": "How body touches/interacts with objects",
+                            "examples": [
+                                "Fingertips pressing against cool tile wall",
+                                "Palm flat on wooden table"
+                            ]
+                        },
+                        "surface_relationship": {
+                            "type": "string",
+                            "description": "Tension between body and surface",
+                            "examples": [
+                                "Weight of body settling into chair",
+                                "Tension in shoulders against door frame"
+                            ]
+                        }
+                    }
+                },
+                "composition": {
+                    "type": "object",
+                    "description": "Section 3: Editorial framing (Vogue Living approach)",
+                    "required": [
+                        "framing",
+                        "subject_placement",
+                        "posture_gaze"
+                    ],
+                    "properties": {
+                        "framing": {
+                            "type": "string",
+                            "enum": [
+                                "rule_of_thirds",
+                                "center_dominant",
+                                "golden_ratio",
+                                "asymmetric_tension"
+                            ],
+                            "description": "Compositional approach"
+                        },
+                        "subject_placement": {
+                            "type": "string",
+                            "description": "Where subject sits in frame",
+                            "examples": [
+                                "Left third, body turned 3/4 to camera",
+                                "Center frame, direct gaze"
+                            ]
+                        },
+                        "negative_space": {
+                            "type": "string",
+                            "description": "Breathing room in frame (can include environmental elements)",
+                            "examples": [
+                                "Sea extends to right edge",
+                                "Empty wall behind subject"
+                            ]
+                        },
+                        "natural_framing": {
+                            "type": "string",
+                            "description": "OPTIONAL: Environmental edges creating intimacy",
+                            "examples": [
+                                "Doorway frames subject",
+                                "Window edge on left"
+                            ]
+                        },
+                        "posture_gaze": {
+                            "type": "string",
+                            "description": "Body language and eye direction conveying emotion",
+                            "examples": [
+                                "Shoulders dropped, gaze down at hands",
+                                "Chin slightly lifted, eyes closed"
+                            ]
+                        },
+                        "environment": {
+                            "type": "string",
+                            "description": "Curated real-world setting",
+                            "examples": [
+                                "Morning kitchen, soft light through sheer curtains",
+                                "Empty garden bench, autumn leaves"
+                            ]
+                        },
+                        "single_action": {
+                            "type": "string",
+                            "description": "One small, intentional gesture",
+                            "examples": [
+                                "Thumb tracing rim of cup",
+                                "Hand resting on own neck"
+                            ]
+                        }
+                    }
+                },
+                "atmosphere": {
+                    "type": "object",
+                    "description": "Section 4: Light and sensory environment",
+                    "required": [
+                        "lighting",
+                        "color_temperature"
+                    ],
+                    "properties": {
+                        "lighting": {
+                            "type": "string",
+                            "description": "Light source and quality",
+                            "examples": [
+                                "Soft morning light from left window",
+                                "Overhead kitchen light, slightly harsh"
+                            ]
+                        },
+                        "color_temperature": {
+                            "type": "string",
+                            "enum": [
+                                "cool",
+                                "warm",
+                                "neutral",
+                                "hot",
+                                "mixed"
+                            ],
+                            "description": "Emotional color coding"
+                        },
+                        "color_meaning": {
+                            "type": "string",
+                            "description": "What the color temperature conveys emotionally"
+                        },
+                        "sensory_stack": {
+                            "type": "array",
+                            "description": "Non-visual sensory suggestions",
+                            "items": {
+                                "type": "string"
+                            },
+                            "examples": [
+                                "silence except for distant traffic",
+                                "smell of coffee in air"
+                            ]
+                        }
+                    }
+                },
+                "imperfection": {
+                    "type": "object",
+                    "description": "Section 5: The one humanizing detail",
+                    "required": [
+                        "detail"
+                    ],
+                    "properties": {
+                        "detail": {
+                            "type": "string",
+                            "description": "One imperfect element that tells a micro-story",
+                            "examples": [
+                                "Chipped nail polish on index finger",
+                                "Single grey hair catching light"
+                            ]
+                        },
+                        "emotional_resonance": {
+                            "type": "string",
+                            "description": "What this imperfection reveals about the journey"
+                        }
+                    }
+                },
+                "lens": {
+                    "type": "object",
+                    "description": "Section 6: Camera specifications",
+                    "required": [
+                        "focal_length",
+                        "depth_of_field"
+                    ],
+                    "properties": {
+                        "focal_length": {
+                            "type": "string",
+                            "description": "Lens choice",
+                            "examples": [
+                                "85mm",
+                                "50mm",
+                                "35mm"
+                            ]
+                        },
+                        "depth_of_field": {
+                            "type": "string",
+                            "description": "Focus depth",
+                            "examples": [
+                                "f/1.8 shallow, subject isolated",
+                                "f/4 moderate, context visible"
+                            ]
+                        },
+                        "camera_angle": {
+                            "type": "string",
+                            "examples": [
+                                "eye level",
+                                "slightly below",
+                                "high angle looking down"
+                            ]
+                        },
+                        "camera_movement": {
+                            "type": "string",
+                            "description": "Static or minimal movement",
+                            "default": "static",
+                            "examples": [
+                                "static",
+                                "barely perceptible push in"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "motion_spec": {
+            "type": "object",
+            "description": "Motion control for I2V (95% frozen body, living environment)",
+            "required": [
+                "body_strength",
+                "environment_strength",
+                "duration"
+            ],
+            "properties": {
+                "body_strength": {
+                    "type": "number",
+                    "minimum": 0.15,
+                    "maximum": 0.25,
+                    "description": "Motion strength for body (minimal)"
+                },
+                "environment_strength": {
+                    "type": "number",
+                    "minimum": 0.35,
+                    "maximum": 0.50,
+                    "description": "Motion strength for environment"
+                },
+                "duration": {
+                    "type": "string",
+                    "description": "Video length",
+                    "examples": [
+                        "3s",
+                        "4s",
+                        "5s"
+                    ]
+                },
+                "allowed_body_motion": {
+                    "type": "array",
+                    "description": "Subtle movements allowed",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "blink",
+                            "head_tilt",
+                            "tear_track",
+                            "nostril_flare",
+                            "swallow",
+                            "breath"
+                        ]
+                    }
+                },
+                "environment_motion": {
+                    "type": "array",
+                    "description": "Environmental elements that move",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        "curtain sway",
+                        "steam rising",
+                        "dust particles",
+                        "light shift"
+                    ]
+                },
+                "forbidden_motion": {
+                    "type": "array",
+                    "description": "Movements that break the frozen effect",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "mouth_opening",
+                        "walking",
+                        "gesture"
+                    ]
+                }
+            }
+        },
+        "temporal_question": {
+            "type": "object",
+            "description": "Is this Before or After the moment?",
+            "properties": {
+                "position": {
+                    "type": "string",
+                    "enum": [
+                        "before",
+                        "after"
+                    ],
+                    "description": "Never 'during' - suspend in anticipation or aftermath"
+                },
+                "the_event": {
+                    "type": "string",
+                    "description": "What happened or is about to happen"
+                }
+            }
+        },
+        "breath_state": {
+            "type": "object",
+            "description": "The breath frozen in time",
+            "properties": {
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "held_inhale",
+                        "held_exhale",
+                        "post_exhale",
+                        "mid_inhale"
+                    ]
+                },
+                "emotional_meaning": {
+                    "type": "string",
+                    "description": "What this breath state conveys"
+                }
+            }
+        },
+        "depth_layers": {
+            "type": "object",
+            "description": "Foreground/Subject/Background composition",
+            "properties": {
+                "foreground": {
+                    "type": "string",
+                    "description": "Blurred element at frame edge, creates intimacy"
+                },
+                "subject": {
+                    "type": "string",
+                    "description": "Sharp focus on protagonist"
+                },
+                "background": {
+                    "type": "string",
+                    "description": "Context, slightly soft"
+                }
+            }
+        },
+        "quality_gate": {
+            "type": "object",
+            "description": "Self-validation questions",
+            "properties": {
+                "magazine_cover_test": {
+                    "type": "boolean",
+                    "description": "Would you buy this as a magazine cover?"
+                },
+                "silence_test": {
+                    "type": "boolean",
+                    "description": "Does this visual feel soundless?"
+                },
+                "anti_cliche_test": {
+                    "type": "boolean",
+                    "description": "Have you avoided sunrise/fist pump/ladder tropes?"
+                }
+            }
+        },
+        "final_prompt": {
+            "type": "string",
+            "description": "The assembled T2I/I2V prompt text"
+        }
+    }
+}
