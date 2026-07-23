@@ -23,6 +23,8 @@ KNOWN_BUNDLES: list[Path] = [
     / "CONSCIOUS_ACTIVATIONS_PHASE_03_AHP_CORE_BUNDLE",
     REPO_ROOT / "CONSCIOUS_ACTIVATIONS_PHASE_01_03_TRACEABILITY_AND_GAP_CLOSURE_BUNDLE"
     / "CONSCIOUS_ACTIVATIONS_PHASE_01_03_TRACEABILITY_AND_GAP_CLOSURE_BUNDLE",
+    REPO_ROOT / "CONSCIOUS_ACTIVATIONS_PHASE_04_INTERVIEW_EXPRESSION_BUNDLE"
+    / "CONSCIOUS_ACTIVATIONS_PHASE_04_INTERVIEW_EXPRESSION_BUNDLE",
 ]
 
 
@@ -35,7 +37,15 @@ def sha256_file(path: Path) -> str:
 
 
 def bundle_is_applied(bundle_root: Path, repo: Path) -> bool:
-    """Check if all operations in this bundle are already applied to the repo."""
+    """Check if this bundle has already been applied (via receipt or file ops)."""
+    manifest_path = bundle_root / "PACKAGE_MANIFEST.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        bundle_id = manifest.get("bundle_id")
+        if bundle_id:
+            receipt = repo / ".conscious-activations" / "bundle-state" / bundle_id / "apply_receipt.json"
+            if receipt.exists():
+                return True
     ops_path = bundle_root / "FILE_OPERATIONS.json"
     if not ops_path.exists():
         return False
