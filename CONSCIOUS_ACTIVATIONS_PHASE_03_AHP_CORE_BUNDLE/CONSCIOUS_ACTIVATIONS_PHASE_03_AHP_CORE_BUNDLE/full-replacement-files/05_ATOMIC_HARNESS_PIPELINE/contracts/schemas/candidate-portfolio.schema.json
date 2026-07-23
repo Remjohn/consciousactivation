@@ -1,0 +1,74 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:candidate_portfolio",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "best_candidate_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "budget_units": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "candidate_ids_evaluated": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "candidates": {
+      "type": "array"
+    },
+    "max_candidates": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "plateau_delta_bps": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "plateau_window": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "portfolio_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "quality_threshold_bps": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "spent_units": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "stop_reason": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "tie_breaker": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "portfolio_id",
+    "candidate_ids_evaluated",
+    "best_candidate_id",
+    "spent_units",
+    "budget_units",
+    "stop_reason",
+    "quality_threshold_bps",
+    "max_candidates",
+    "plateau_window",
+    "plateau_delta_bps",
+    "tie_breaker",
+    "candidates"
+  ],
+  "title": "candidate_portfolio",
+  "type": "object"
+}

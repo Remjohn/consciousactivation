@@ -1,0 +1,187 @@
+experience_primitive_id: "EXP-TRG-003"
+canonical_name: "Kairos / Opportune Moment"
+aliases:
+  - "Peak Receptivity Prompting"
+  - "The Right Moment"
+  - "B=MAP Synchronization"
+
+experience_family: "trigger_timing"
+mechanic_role: "trigger"
+moment_role: "intervention_timing"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Persuasive_Technology_BJ_Fogg.md"
+    primitive_name_in_audit: "Kairos / Opportune Moment"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Persuasive_Technology_BJ_Fogg.md"
+
+book_reference:
+  title: "Persuasive Technology"
+  author: "BJ Fogg"
+  chapters:
+    - "Chapter 3: Computers as Persuasive Technologies"
+    - "Chapter 5: Credibility and Computers"
+  key_pages: "31-45, 120-135"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Persuasive Technology - BJ Fogg.md"
+
+summary: >
+  Kairos is the principle of delivering an intervention, prompt, or upsell
+  at the exact opportune moment when the user's receptivity (Motivation)
+  and capacity to act (Ability) are simultaneously peaking. In CCP, this
+  means never relying on arbitrary cron-job schedules. We only prompt for
+  referrals, challenge upgrades, or deeper vulnerability when the user has
+  just experienced a win, demonstrated high engagement, or explicitly signaled
+  a "search phase" for help.
+
+core_move: >
+  Monitor telemetry for spikes in user motivation or ability, and trigger
+  requests or escalations exclusively within those narrow opportune windows.
+
+why_it_works: >
+  BJ Fogg's Behavior Model (B=MAP) dictates that a Prompt will fail if Motivation
+  and Ability are not sufficiently high. The concept of "Kairos" (the opportune
+  moment) recognizes that Motivation is highly volatile. A user might be highly
+  motivated immediately after seeing their conviction score jump 15%, but zero
+  percent motivated 4 hours later. By dynamically deploying prompts at the apex
+  of these emotional spikes, the system achieves vastly higher conversion rates
+  without feeling spammy.
+
+examples:
+  - context: "BOOK: Persuasive Technology - The error message opportunity"
+    application: >
+      Fogg describes how software often misses Kairos. When a user experiences
+      an error, they are highly motivated to fix it. If the software offers a
+      troubleshooting tutorial at that exact moment, the user takes it. If offered
+      randomly the next day, they ignore it.
+    effect: >
+      Matches the intervention perfectly to the user's immediate state of need.
+
+  - context: "CCP: Conscious Reactions Debate Win"
+    application: >
+      A coach checks their Telegram Mini App and sees they just won a Debate Mode
+      by 40 votes. At this exact moment of high pride and motivation, the system
+      triggers the Kairos prompt: 'Ready to refine that delivery even further?
+      Start the Law28 Challenge.'
+    effect: >
+      The $29/mo Continuity upgrade is offered exactly when the value of communication
+      mastery is most visceral.
+
+  - context: "CCP: Law28 Hedge Threshold Exceeded"
+    application: >
+      During a Law28 drill, the AI detects the coach hedged 7 times in 60 seconds
+      (high frustration/low ability moment). The system immediately offers a
+      'Redemption Round with Coach Guidance' prompt.
+    effect: >
+      Provides the exact scaffolding needed precisely when the user realizes they
+      are failing.
+
+  - context: "CCP: Silent Referral Peer Validation"
+    application: >
+      A peer votes on a debate and sees their chosen side win. The system triggers:
+      'You have good judgment. Want to try a solo reaction?'
+    effect: >
+      Capitalizes on the micro-win of voting to escalate them to speaking.
+
+  - context: "CCP: Sunday Postcard Reflection"
+    application: >
+      After the user reads their highly personalized Sunday Postcard (a moment of
+      deep reflection and high system trust), the system prompts them to generate
+      a public Testimonial Proof artifact.
+    effect: >
+      The user is already reflecting on their growth, making the testimonial request
+      feel natural rather than extractive.
+
+anti_examples:
+  - description: >
+      Sending an automated marketing email at 9:00 AM on a Tuesday asking the
+      coach to upgrade to the $29/mo tier, regardless of when they last used the app.
+    why_it_fails: >
+      A complete violation of Kairos. The user has no immediate motivation, no
+      recent win-state, and is likely busy. The prompt fails because B=MAP is ignored.
+
+experience_stage_fit:
+  entry: 0.4
+  activation: 0.8
+  recording: 0.1
+  scoring: 0.9
+  social_spread: 0.9
+  recovery: 0.8
+  retention: 0.7
+  conversion: 1.0
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 0.9
+  score_card: 0.8
+  share_asset: 0.5
+  voice_prompt: 0.8
+  push_nudge: 0.7
+
+user_state_effects:
+  confidence: 0.6
+  urgency: 0.9
+  clarity: 0.7
+  safety: 0.5
+  status: 0.6
+  belonging: 0.4
+  curiosity: 0.5
+  replay_desire: 0.6
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.8
+  cbcs_accountability: 0.9
+  challenge_progression: 0.9
+  silent_referral: 1.0
+  coach_os_deployment: 0.7
+  premium_trust_architecture: 0.8
+  onboarding_activation: 0.7
+  social_economy: 0.9
+  content_extraction: 0.5
+
+activation_conditions:
+  - "Telemetry detects a spike in positive emotion (win, high score, social validation)"
+  - "Telemetry detects a specific point of failure where user needs immediate help"
+  - "The user's Ability (time, attention, cognitive load) is confirmed high"
+
+suppression_conditions:
+  - "User is idle or has not interacted with the platform recently"
+  - "User is in the middle of a high-cognitive-load task (recording)"
+
+misuse_modes:
+  - "Confusing Kairos with just 'fast notifications'. Timing must be tied to user state, not just system events."
+  - "Interrupting a delicate moment of vulnerability with a commercial upsell."
+
+synergizes_with:
+  - "EXP-TRG-004" # Tailoring & Suggestion
+  - "EXP-TRG-006" # Context-Aware System Triggers
+
+conflicts_with:
+  - "EXP-SAF-001" # If Kairos is used to sell during a recovery phase, it breaks safety
+
+implementation_targets:
+  frontend_components:
+    - "DynamicPromptOverlay — rendering contextual CTAs only after specific win-states"
+    - "DebateVictoryScreen — housing the upgrade Kairos prompt"
+  backend_rules:
+    - "kairos_engine: listen for specific telemetry thresholds (score > 90, votes > 10) to trigger interventions"
+  telemetry_events:
+    - "kairos_opportunity_detected"
+    - "kairos_prompt_deployed"
+    - "kairos_conversion_success"
+  experiments:
+    - "A/B test: Prompting for testimonial immediately after a high score vs waiting for the weekly summary"
+
+experience_metrics:
+  entry_rate: 0.4
+  react_rate: 0.9
+  completion_rate: 0.7
+  share_rate: 0.9
+  comeback_rate: 0.6
+  day7_retention: 0.8
+  upgrade_signal: 1.0
+
+crosswalk_id: "XW-TRG-KAIROS"
+crosswalk_note: >
+  This is the primary mechanism for the CPSC Free Proof to Continuity upgrade path.
+  Conversion happens at the apex of the reaction win-state.

@@ -1,0 +1,182 @@
+# Primitive: PRM-HUM-017 — Attitude-Emotion Binding
+# Source: Mastering Stand-Up (Stephen Rosenfield)
+# MCDA: 176
+
+primitive_id: "PRM-HUM-017"
+canonical_name: "Attitude-Emotion Binding"
+aliases:
+  - "Emotional Fullness"
+  - "The Attitude Tag Layer"
+  - "Performed Emotion Protocol"
+
+family: "humor_distortion"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "Audit_Mastering_Stand-Up_CCP.md"
+    primitive_name_in_audit: "The Attitude-Emotion Binding Layer (Emotional Fullness)"
+    mcda_score: 176
+    audit_path: "lab/Public Speeaking Coaching/01_Humor_and_Comedy/Audit_Mastering_Stand-Up_CCP.md"
+
+book_reference:
+  title: "Mastering Stand-Up"
+  author: "Stephen Rosenfield"
+  chapters:
+    - "Section 1: The 7 Most Valuable Performance Primitives for the CCP"
+  key_pages: "Audit reference Section 1, Primitive 4"
+  book_path: "lab/Public Speeaking Coaching/01_Humor_and_Comedy/Mastering_Stand-Up_-_Stephen_Rosenfield.md"
+
+summary: >
+  Attitude-Emotion Binding mandates that every word a performer speaks —
+  and every word the CCP generates — must be grounded in a clear, nameable,
+  maximally intense emotion. Rosenfield insists that "hating something is
+  funnier than being a little annoyed with it; adoring something is funnier
+  than liking it." Low-emotion, flat delivery collapses audience attention
+  regardless of how clever the writing is. Crucially, the performer delivers
+  the FORM of the emotion, not the real emotion — the audience must always
+  sense that the speaker is in control, preserving the psychological safety
+  required for laughter and trust. In CCP, this primitive requires every
+  compiled output block to carry an explicitly tagged `attitude_state`
+  metadata field (e.g., `fed_up`, `delighted`, `brutally_frank`, `astonished`),
+  which the Critic Sub-agent validates at ≥ 0.85 cosine similarity against
+  the text's semantic tone.
+
+core_move: >
+  Assign an explicit, high-intensity emotional label to every content block,
+  then validate that the generated text's semantic tone matches the declared
+  emotion — rejecting any output that reads as emotionally ambiguous or neutral.
+
+why_it_works: >
+  Rosenfield demonstrates that audiences track a performer's emotional state
+  moment-to-moment. When the emotion is undefined or tepid, the audience's
+  mirror neurons have nothing to lock onto — attention drifts. When the
+  emotion is named, intense, and consistent, the audience calibrates their
+  own emotional response to the performer's, creating the neurological
+  coupling that makes communication feel alive. The distinction between
+  performed and real emotion is existentially important: real, uncontrolled
+  emotion makes the audience feel unsafe ("is this person having a breakdown?"),
+  while performed emotion radiates mastery and invites the audience to
+  enjoy the ride.
+
+examples:
+  - context: "BOOK: Mastering Stand-Up - Emotional Fullness"
+    application: >
+      Rosenfield mandates every word must be grounded in a clear, nameable, intense emotion (the form of the emotion, not uncontrolled reality). Hating is funnier than being annoyed.
+    effect: >
+      Provides the audience's mirror neurons something to lock onto, creating neurological coupling.
+
+  - context: "CCP: CMF - The Metadata Enforcement Layer"
+    application: >
+      Every compiled output block carries an explicitly tagged `attitude_state` (e.g., `fed_up`, `delighted`). The Critic Sub-agent validates the semantic tone against this tag.
+    effect: >
+      Prevents the generation of emotionally ambiguous or neutral AI text. Content consistently radiates a specific emotional posture.
+
+  - context: "CCP: CVE Visual Engine - Escalating Arcs"
+    application: >
+      A 7-slide carousel is tagged with escalating attitude states (Slide 1: `annoyed` -> Slide 6: `astonished`). The PSSL renders typography and visual temperature to match.
+    effect: >
+      The audience feels the speaker's emotional intensity building, creating momentum that pulls them through to the CTA.
+
+  - context: "CCP: CBCS - LIWC-22 Re-recording"
+    application: >
+      The agent analyzes a voice note and detects neutral-informational tone. It instructs the coach to pick ONE intense emotion and re-record it as if consumed by that emotion.
+    effect: >
+      Engagement metrics spike because listeners hear a person who actually feels something about what they are saying.
+
+  - context: "CCP: V2WS - The 'Performed Mastery' Switch"
+    application: >
+      The script explicitly notes where the coach should deliver the *form* of anger rather than genuine rage, ensuring the audience feels safe while enjoying the intensity.
+    effect: >
+      The coach radiates mastery, inviting the audience to enjoy the ride rather than worrying about the coach's stability.
+
+anti_examples:
+  - description: >
+      A CMF hook reads: 'It's interesting how many people struggle with
+      consistency in their business, and I think we should talk about it.'
+    why_it_fails: >
+      The attitude is undefined. 'Interesting' is not an emotion — it is
+      an intellectual observation with zero emotional charge. The audience
+      cannot feel what the speaker feels because the speaker appears to
+      feel nothing. Rosenfield would diagnose this as 'flat delivery' —
+      the death sentence for any performance, regardless of content quality.
+
+  - description: >
+      A coach delivers genuine, uncontrolled anger in a video about a
+      personal betrayal, screaming and clearly struggling to maintain
+      composure.
+    why_it_fails: >
+      This violates the 'performed vs. real' distinction. The audience
+      does not feel safe — they sense the speaker has lost control. The
+      content may be powerful, but the delivery converts trust into
+      discomfort. Rosenfield mandates that the performer delivers the
+      FORM of anger (controlled, modulated, deliberately intensified)
+      while remaining visibly in command of the performance.
+
+phase_fit:
+  pre_trigger: 0.3
+  post_trigger: 0.6
+  generation: 0.9
+  revision: 0.9
+  delivery: 0.8
+
+surface_fit:
+  text: 0.8
+  voice: 0.9
+  visual: 0.8
+  sonic: 0.4
+  webinar: 0.9
+  telegram: 0.7
+
+goal_bias:
+  connection: 0.8
+  surprise: 0.4
+  tension: 0.7
+  clarity: 0.6
+  memorability: 0.7
+  persuasion: 0.7
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.2
+  trigger_provocation: 0.7
+  authenticated_capture: 0.5
+  meaning_extraction: 0.4
+  content_generation: 0.9
+  edge_product_assembly: 0.9
+  delivery_coaching: 0.9
+  experience_flow: 0.7
+  premium_differentiation: 0.7
+
+trigger_conditions:
+  - "System is compiling an output block; must enforce the injection of an explicit `attitude_state` metadata tag"
+  - "Critic agent detects cosine similarity < 0.85 between the declared attitude tag and the generated text's semantic tone"
+  - "AST or audio analysis flags a coach's input as emotionally neutral or lacking intense attitude binding"
+
+suppression_conditions:
+  - "Content is deliberately calm and meditative (e.g., guided reflection) where emotional intensity would be counterproductive"
+  - "Coach's Voice DNA specifies a 'Quiet Authority' archetype where emotional maximalism would break character"
+
+misuse_modes:
+  - "Emotional whiplash — changing the attitude tag on every sentence within a single content block, producing a manic tonal landscape that exhausts the audience"
+  - "Intensity ceiling — tagging every block with maximum intensity ('FURIOUS', 'DEVASTATED'), creating emotional fatigue and loss of contrast"
+  - "Label-without-execution — tagging a block as 'brutally_frank' but generating text that reads as politely informational, creating a metadata-content mismatch the Critic must catch"
+
+synergizes_with:
+  - "PRM-HUM-014"  # Joyous Communication — provides the overarching emotional container; Attitude Binding provides the specific micro-emotions within it
+  - "PRM-HUM-016"  # Setup-Punchline Architecture — the setup MUST declare an attitude for the punchline to release against
+  - "PRM-HUM-010"  # High-Contrast Conflict — emotional contrast between characters or perspectives is a function of their differing attitude states
+
+conflicts_with:
+  - "PRM-HUM-020"  # Thought Moment Illusion — manufactured spontaneity may require brief moments of emotional ambiguity (the 'what was I saying?' pause) that technically violate full-time attitude binding
+
+crosswalk_id: null
+crosswalk_note: null
+
+notes: >
+  This primitive is the metadata enforcement layer for the Voice DNA's
+  emotional architecture axis (Path). Its MCDA (176) is tied with
+  Setup-Punchline Architecture, reflecting their co-dependency — structure
+  without emotion is sterile; emotion without structure is chaos. Float note:
+  surface_fit.voice is ceiling (0.9) because vocal delivery is the most
+  emotionally transparent medium. phase_fit.generation and revision are
+  both high (0.9) because the attitude must be assigned during generation
+  AND validated during revision — it is a two-pass enforcement.

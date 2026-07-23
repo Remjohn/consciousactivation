@@ -1,0 +1,184 @@
+experience_primitive_id: "EXP-TRG-005"
+canonical_name: "First Major Win-State"
+aliases:
+  - "The Fiero Moment"
+  - "Epic Win Gating"
+  - "Earned Expansion"
+
+experience_family: "trigger_timing"
+mechanic_role: "trigger"
+moment_role: "score_reveal"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+    primitive_name_in_audit: "First Major Win-State"
+    mcda_score: 197
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+
+book_reference:
+  title: "Reality Is Broken"
+  author: "Jane McGonigal"
+  chapters:
+    - "Chapter 2: The Rise of the Happiness Engineer"
+    - "Chapter 3: More Satisfying Work"
+  key_pages: "35-50, 68-75"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Reality is Broken - Jane McGonigal.md"
+
+summary: >
+  First Major Win-State prevents the product from asking users to share,
+  invite, or recruit before they have experienced 'Fiero'—the neurochemical
+  rush of triumph over a genuinely difficult challenge. Jane McGonigal emphasizes
+  that an 'Epic Win' is only felt if the challenge is hard but fair. In CCP,
+  this means we do not ask a coach to share a User Card or invite a peer
+  until they have actually conquered a Law28 constraint or won a Debate,
+  ensuring the share is an act of pride rather than a marketing favor.
+
+core_move: >
+  Gate all social and expansion triggers behind a mathematically proven,
+  hard-won success state, completely suppressing them during onboarding or failure.
+
+why_it_works: >
+  McGonigal defines 'Fiero' as the emotion of triumph over adversity, which
+  is one of the most powerful neurochemical highs we can experience. If a product
+  asks for a share before Fiero is achieved, the user feels manipulated. If it
+  gives an unearned reward (a fake win), the user feels patronized. But if the
+  system sets a strict biometric threshold (e.g., 'zero filler words'), and the
+  user hits it after three tries, the resulting Fiero makes them WANT to show
+  the world what they achieved.
+
+examples:
+  - context: "BOOK: Reality Is Broken - The Epic Win"
+    application: >
+      In World of Warcraft, players do not invite their friends to look at their
+      level 1 character. They invite friends to witness an 'Epic Win'—defeating
+      a boss after weeks of failure. The difficulty creates the desire to share.
+    effect: >
+      Sharing becomes a natural byproduct of pride, not an extractive UI pattern.
+
+  - context: "CCP: Law28 Platinum Tier"
+    application: >
+      A coach struggles with the Pause Architecture drill for 4 days. On day 5,
+      their waveform is clean, and the NIM stack awards them a 92/100, bumping
+      them to the Platinum tier. ONLY at this moment does the Telegram bot offer
+      the 'Share your User Card' button.
+    effect: >
+      The coach eagerly shares the card because it represents a real, hard-won
+      victory, accelerating Silent Referral.
+
+  - context: "CCP: Conscious Reactions Debate Victory"
+    application: >
+      A coach participates in a high-stakes debate against a peer. After 24 hours,
+      the final vote tally comes in: 45 to 12. The system triggers a victory
+      animation and immediately offers a one-tap 'Broadcast Victory to LinkedIn' asset.
+    effect: >
+      The coach shares the CMF asset to flex their victory, expanding the ecosystem.
+
+  - context: "CCP: The Redemption Round Triumph"
+    application: >
+      A coach's first reaction is rejected by the Anti-Centroid gate. They use the
+      Guardian Agent's advice, record a sharper take, and pass the gate. The system
+      highlights the delta: 'You fixed your hedging.' The share prompt appears.
+    effect: >
+      The contrast between failure and success amplifies the Fiero, driving the share.
+
+  - context: "CCP: Testimonial Builder Trigger"
+    application: >
+      The system does not ask for a testimonial via email after 30 days. It waits
+      for the coach to cross a major conviction density milestone. At that exact
+      moment of success, the Silent Testimonial Builder asks: 'Record a 30-second
+      voice note on how that felt.'
+    effect: >
+      The testimonial is raw, authentic, and fueled by the immediate high of the win.
+
+anti_examples:
+  - description: >
+      Pumping out a generic 'You recorded your first voice note! Share it!' pop-up
+      after a low-effort, heavily hedged 15-second baseline recording.
+    why_it_fails: >
+      The user hasn't done anything difficult. There is no Fiero. The prompt feels
+      cheap and manipulative, actively degrading the platform's premium authority.
+
+experience_stage_fit:
+  entry: 0.1
+  activation: 0.4
+  recording: 0.1
+  scoring: 0.9
+  social_spread: 1.0
+  recovery: 0.2
+  retention: 0.7
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 0.8
+  mini_app: 0.9
+  score_card: 1.0
+  share_asset: 0.9
+  voice_prompt: 0.5
+  push_nudge: 0.4
+
+user_state_effects:
+  confidence: 1.0
+  urgency: 0.6
+  clarity: 0.8
+  safety: 0.7
+  status: 1.0
+  belonging: 0.8
+  curiosity: 0.4
+  replay_desire: 0.5
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 0.9
+  challenge_progression: 1.0
+  silent_referral: 1.0
+  coach_os_deployment: 0.5
+  premium_trust_architecture: 0.9
+  onboarding_activation: 0.4
+  social_economy: 0.9
+  content_extraction: 0.8
+
+activation_conditions:
+  - "User achieves a verified, high-threshold win (score > 85, passed a strict gate, won a debate)"
+  - "User has overcome a previously recorded failure or plateau (demonstrated delta)"
+
+suppression_conditions:
+  - "User is performing routine or low-effort actions"
+  - "User's score indicates regression or failure"
+
+misuse_modes:
+  - "Participation Trophies — lowering the bar for a 'win' so everyone gets it immediately."
+  - "Interrupting the actual Fiero moment with a clunky marketing funnel."
+
+synergizes_with:
+  - "EXP-FBK-001" # RIM Feedback Discipline
+  - "EXP-TRG-003" # Kairos (The Win-State IS the Opportune Moment)
+
+conflicts_with:
+  - "EXP-SAF-001" # Do not ask for expansion during white-hat recovery
+
+implementation_targets:
+  frontend_components:
+    - "WinStateAnimation — a premium, visceral celebration rendering only on true wins"
+    - "UserCardShareGate — unlocking the share button only when tier progresses"
+  backend_rules:
+    - "epic_win_detection: trigger social expansion endpoints only when score_delta > threshold or tier_advanced = true"
+  telemetry_events:
+    - "epic_win_achieved"
+    - "fiero_moment_shared"
+    - "testimonial_captured_at_apex"
+  experiments:
+    - "A/B test: The strictness of the win-state threshold required to unlock the share button"
+
+experience_metrics:
+  entry_rate: 0.2
+  react_rate: 0.6
+  completion_rate: 0.5
+  share_rate: 1.0
+  comeback_rate: 0.8
+  day7_retention: 0.9
+  upgrade_signal: 0.9
+
+crosswalk_id: "XW-TRG-WIN-STATE"
+crosswalk_note: >
+  Essential for Silent Referral. Growth comes from pride, not obligation.

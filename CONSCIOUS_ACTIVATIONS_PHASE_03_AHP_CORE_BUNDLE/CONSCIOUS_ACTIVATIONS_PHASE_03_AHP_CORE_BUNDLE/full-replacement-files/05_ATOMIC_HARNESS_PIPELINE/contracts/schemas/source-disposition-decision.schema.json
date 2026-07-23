@@ -1,0 +1,72 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:source_disposition_decision",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_exclusions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "behavior_preservation_refs": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "decided_by": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "decision_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "disposition": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evidence_refs": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "replacement_reason": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_record_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "target_paths": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "decision_id",
+    "source_record_id",
+    "disposition",
+    "target_paths",
+    "replacement_reason",
+    "behavior_preservation_refs",
+    "authority_exclusions",
+    "decided_by",
+    "evidence_refs"
+  ],
+  "title": "source_disposition_decision",
+  "type": "object"
+}

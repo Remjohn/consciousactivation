@@ -1,0 +1,180 @@
+experience_primitive_id: "EXP-FRC-004"
+canonical_name: "Friction-Zero Ability"
+aliases:
+  - "The Absolute Minimum"
+  - "Instant On"
+  - "Barrier Collapse"
+
+experience_family: "friction_ability"
+mechanic_role: "trigger"
+moment_role: "session_initiation"
+implementation_role: "frontend"
+
+source_audits:
+  - audit_file: "AUDIT_Persuasive_Technology_BJ_Fogg.md"
+    primitive_name_in_audit: "Friction-Zero Ability"
+    mcda_score: 160
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Persuasive_Technology_BJ_Fogg.md"
+  - audit_file: "AUDIT_Dont_Make_Me_Think_Steve_Krug.md"
+    primitive_name_in_audit: "Zero-Thought Onboarding"
+    mcda_score: 180
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Dont_Make_Me_Think_Steve_Krug.md"
+
+book_reference:
+  title: "Persuasive Technology / Don't Make Me Think"
+  author: "BJ Fogg / Steve Krug"
+  chapters:
+    - "Chapter 4: The Ability Chain"
+    - "Chapter 1: Don't make me think!"
+  key_pages: "10-25"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Tiny Habits The Small Changes That Change Everything - BJ Fogg.md"
+
+summary: >
+  Friction-Zero Ability demands that the absolute core behavior of the platform
+  (hitting 'Record') must have mathematically zero start-up cost. There can be
+  no pre-requisite reading, no software setup, and no cognitive 'what do I say'
+  burden. If the user has a phone in their hand, they must be able to record
+  within 2 seconds of the thought occurring.
+
+core_move: >
+  Architect the software and the content delivery so that the user's phone is
+  always primed to record, bypassing all traditional app-loading, login, and
+  context-gathering friction.
+
+why_it_works: >
+  Fogg's model dictates that when Motivation is at its lowest (e.g., the user is
+  exhausted after a 10-hour workday), the only way a behavior occurs is if Ability
+  is off the charts. Krug echoes this by stating that users 'satisfice'—if recording
+  takes effort, they will choose the easier option (not recording). By embedding
+  the recorder directly into Telegram (an app already open on their phone) and
+  auto-generating the topic, we reduce physical and mental friction to absolute zero.
+
+examples:
+  - context: "BOOK: Tiny Habits - The Push-up Trigger"
+    application: >
+      Instead of 'Go to the gym for 1 hour' (high friction), the habit is 'Do 2
+      push-ups after you pee.' The physical startup cost is zero because you are
+      already standing up in a private room.
+    effect: >
+      Guarantees execution even on the lowest motivation days.
+
+  - context: "CCP: Seamless Telegram Authorization"
+    application: >
+      The user never creates a password. When they tap a debate link, the Mini App
+      pulls their Telegram auth token automatically and logs them in silently in the
+      background.
+    effect: >
+      Eliminates the #1 cause of digital churn: forgotten passwords and login screens.
+
+  - context: "CCP: Auto-Primed Microphone"
+    application: >
+      When the Web App opens, the user does not need to navigate to a 'Recording Studio'
+      tab. The primary view *is* the recording studio. The mic permission is cached,
+      and the 'Record' button is active immediately.
+    effect: >
+      Reduces physical effort from multiple navigations to a single tap.
+
+  - context: "CCP: The Guided Take (Zero Brain Cycles)"
+    application: >
+      If a user hesitates for 5 seconds on the record screen, the UI flashes a
+      'Fill in the Blank' prompt: 'I disagree with the Jury because...'
+    effect: >
+      Removes the cognitive friction of inventing an opening sentence from scratch.
+
+  - context: "CCP: Offline Mode Queueing"
+    application: >
+      If the user is on a subway with bad service, the 'Record' button still works.
+      The app caches the audio locally and auto-uploads when service returns,
+      rather than throwing a frustrating 'Network Error' wall.
+    effect: >
+      Prevents environmental friction from blocking the core behavior.
+
+anti_examples:
+  - description: >
+      The moment the user has to record their first reaction but hasn't allowed mic
+      permissions yet, the app throws an aggressive OS pop-up blocking the screen
+      without explaining why.
+    why_it_fails: >
+      Massive friction spike. The user feels intruded upon, doesn't know what the
+      app will do with their mic, and clicks 'Deny', permanently breaking the core loop.
+
+experience_stage_fit:
+  entry: 1.0
+  activation: 1.0
+  recording: 1.0
+  scoring: 0.2
+  social_spread: 0.8
+  recovery: 0.9
+  retention: 0.7
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 1.0
+  score_card: 0.1
+  share_asset: 0.9
+  voice_prompt: 0.8
+  push_nudge: 1.0
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.2
+  clarity: 1.0
+  safety: 0.9
+  status: 0.2
+  belonging: 0.3
+  curiosity: 0.4
+  replay_desire: 0.7
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.9
+  challenge_progression: 0.8
+  silent_referral: 1.0
+  coach_os_deployment: 0.7
+  premium_trust_architecture: 0.8
+  onboarding_activation: 1.0
+  social_economy: 0.8
+  content_extraction: 0.9
+
+activation_conditions:
+  - "User clicks any Telegram link or inline button to launch the Mini App"
+  - "User is prompted to perform the core recording loop"
+
+suppression_conditions:
+  - "User is performing a high-stakes, irrevocable action (e.g., deleting their account), which MUST have friction."
+
+misuse_modes:
+  - "Accidental Actions — making the button so frictionless and large that users accidentally trigger recordings in their pocket, causing frustration."
+  - "Skipping Context — making it so fast to record that the user doesn't actually know what topic they are supposed to be talking about."
+
+synergizes_with:
+  - "EXP-FRC-003" # B=MAP Friction Audit (This is the ultimate expression of the audit)
+  - "EXP-TRG-002" # The Inline Execution Trap (Uses Telegram to bypass app stores)
+
+conflicts_with:
+  - "EXP-FRC-005" # Ritualized Agency (Sometimes adding a TINY bit of friction via a 'Ritual' increases commitment)
+
+implementation_targets:
+  frontend_components:
+    - "ZeroStateRecorder — a default UI view that assumes the user wants to record immediately upon app load"
+  backend_rules:
+    - "auth_engine: 100% reliance on Telegram Seamless Auth"
+  telemetry_events:
+    - "time_to_first_record_ms"
+    - "friction_bounce_rate"
+  experiments:
+    - "A/B test: Auto-starting the recording countdown upon app open vs waiting for a manual tap"
+
+experience_metrics:
+  entry_rate: 1.0
+  react_rate: 1.0
+  completion_rate: 0.9
+  share_rate: 0.8
+  comeback_rate: 0.8
+  day7_retention: 0.7
+  upgrade_signal: 0.6
+
+crosswalk_id: "XW-FRC-ZERO"
+crosswalk_note: >
+  This is why CCP is built on Telegram instead of a standalone iOS app.

@@ -1,0 +1,40 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:harness_package_import",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "definition_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "member_digests": {
+      "type": "array"
+    },
+    "package_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "package_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "receipt_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "package_id",
+    "package_sha256",
+    "definition_sha256",
+    "manifest_sha256",
+    "receipt_sha256",
+    "member_digests"
+  ],
+  "title": "harness_package_import",
+  "type": "object"
+}

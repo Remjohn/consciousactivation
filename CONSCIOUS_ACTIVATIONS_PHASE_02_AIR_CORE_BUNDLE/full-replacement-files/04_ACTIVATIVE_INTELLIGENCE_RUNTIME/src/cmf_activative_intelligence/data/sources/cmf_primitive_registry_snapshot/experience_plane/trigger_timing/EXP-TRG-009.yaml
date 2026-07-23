@@ -1,0 +1,182 @@
+experience_primitive_id: "EXP-TRG-009"
+canonical_name: "Habit Path Architecture"
+aliases:
+  - "Scaffolded Triggering"
+  - "The Escalation Arc"
+  - "Effort to Automation"
+
+experience_family: "trigger_timing"
+mechanic_role: "loop"
+moment_role: "progression_gating"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Gamify_How_Gamification_Motivates_People_Brian_Burke.md"
+    primitive_name_in_audit: "Habit Path Architecture"
+    mcda_score: 188
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Gamify_How_Gamification_Motivates_People_Brian_Burke.md"
+
+book_reference:
+  title: "Gamify"
+  author: "Brian Burke"
+  chapters:
+    - "Chapter 5: Gamification Mechanics"
+    - "Chapter 6: Designing a Gamified Solution"
+  key_pages: "105-120, 140-155"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Gamify How Gamification Motivates People - Brian Burke.md"
+
+summary: >
+  Habit Path Architecture governs the sequencing of triggers and challenges
+  over time. It ensures the platform carefully escalates difficulty, moving the
+  user from conscious, high-friction effort (learning a new behavior) into
+  automatic, habitual loops (unconscious competence). In CCP, this means Law28
+  does not ask a Day 1 user to perform a complex storytelling drill. It starts
+  with mere willingness to record, then escalates to removing filler words,
+  then advances to pressure testing, preventing cognitive overload.
+
+core_move: >
+  Sequence challenge triggers from minimum-viable-effort to high-complexity,
+  gating advanced triggers until the foundational behaviors have become automatic.
+
+why_it_works: >
+  Burke's framework shows that gamified systems must guide players through a
+  journey. If the initial challenge is too hard, they quit (frustration). If
+  the later challenges are too easy, they quit (boredom). By dynamically managing
+  the 'Habit Path,' the system provides just enough scaffolding at the beginning
+  to get the user moving, and slowly removes that scaffolding as the user's
+  competence increases, eventually requiring them to perform complex communication
+  feats with zero preparation.
+
+examples:
+  - context: "BOOK: Gamify - The Player Journey"
+    application: >
+      A good game starts with a 'tutorial level' where failure is almost impossible
+      and mechanics are introduced one by one. By level 10, the game demands complex
+      combinations of those mechanics simultaneously.
+    effect: >
+      The player remains in a state of flow, constantly challenged but never overwhelmed.
+
+  - context: "CCP: Law28 Layer Escalation"
+    application: >
+      Week 1 triggers only focus on the 'Foundation' (recording daily, anti-hedging).
+      Week 2 introduces 'Structure' (opening hooks). Week 4 introduces 'Command'
+      (pressure tolerance). The triggers evolve with the user's capacity track.
+    effect: >
+      The user does not experience cognitive overload and churn out on Day 3.
+
+  - context: "CCP: Conscious Reactions Time Compression"
+    application: >
+      A new user might be given 5 minutes to record a reaction. After their 10th
+      successful reaction, the system triggers 'Hard Mode': 'You have proven your
+      competence. For this reaction, you only get 90 seconds. Go.'
+    effect: >
+      The system artificially increases the difficulty to maintain the Fiero high.
+
+  - context: "CCP: The Removal of the Safety Net"
+    application: >
+      Initially, the system might allow 3 re-records per drill. As the user reaches
+      the Platinum tier, the trigger says: 'Platinum standard applied. One take only.
+      No redos.'
+    effect: >
+      Forces the transition from conscious effort to automatic, habitual performance under pressure.
+
+  - context: "CCP: Trigger Fade-Out"
+    application: >
+      Once telemetry shows a coach is spontaneously initiating reactions 3 times a week,
+      the system completely turns off generic push notifications, relying solely on
+      Context-Aware SCRE triggers to avoid annoying an advanced user.
+    effect: >
+      The external trigger scaffolding is removed once the internal habit is established.
+
+anti_examples:
+  - description: >
+      Onboarding a new user and immediately sending a trigger that demands a 5-minute,
+      highly structured pitch with zero filler words, grading them harshly when they fail.
+    why_it_fails: >
+      The Habit Path is inverted. The cognitive load is too high for a beginner. The user
+      feels incompetent, humiliated, and abandons the platform immediately.
+
+experience_stage_fit:
+  entry: 0.8
+  activation: 0.9
+  recording: 0.7
+  scoring: 0.5
+  social_spread: 0.4
+  recovery: 0.8
+  retention: 1.0
+  conversion: 0.7
+
+surface_fit:
+  telegram_message: 0.8
+  mini_app: 0.9
+  score_card: 0.7
+  share_asset: 0.3
+  voice_prompt: 0.8
+  push_nudge: 0.6
+
+user_state_effects:
+  confidence: 0.9
+  urgency: 0.5
+  clarity: 0.9
+  safety: 0.8
+  status: 0.7
+  belonging: 0.4
+  curiosity: 0.6
+  replay_desire: 0.8
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.7
+  cbcs_accountability: 1.0
+  challenge_progression: 1.0
+  silent_referral: 0.5
+  coach_os_deployment: 0.9
+  premium_trust_architecture: 0.8
+  onboarding_activation: 0.9
+  social_economy: 0.5
+  content_extraction: 0.4
+
+activation_conditions:
+  - "User successfully completes the current tier of difficulty consistently"
+  - "System dynamically tracks user progression through the Capacity Tracks"
+
+suppression_conditions:
+  - "User is struggling with the current tier (do not escalate)"
+  - "User is in a dormancy recovery state (drop them down one level of difficulty)"
+
+misuse_modes:
+  - "Chronological Progression — advancing the difficulty just because it is 'Day 8' regardless of whether the user actually mastered Day 7."
+  - "Invisible Escalation — making things harder without telling the user, making them feel like they are getting worse."
+
+synergizes_with:
+  - "EXP-FBK-004" # The Progression Ring
+  - "EXP-TRG-004" # Tailoring & Suggestion
+
+conflicts_with:
+  - "EXP-TRG-002" # Hook Cycle Velocity (If the escalated challenge is too hard, it slows down the cycle)
+
+implementation_targets:
+  frontend_components:
+    - "TierBadgeUI — visually confirming that the rules have changed as they level up"
+    - "DynamicConstraintTimer — adjusting the countdown clock based on user tier"
+  backend_rules:
+    - "progression_engine: require 3 consecutive successful passes before escalating drill complexity"
+  telemetry_events:
+    - "habit_path_escalation_triggered"
+    - "hard_mode_unlocked"
+    - "scaffolding_removed"
+  experiments:
+    - "A/B test: Auto-escalating difficulty vs asking the user 'Are you ready for Hard Mode?'"
+
+experience_metrics:
+  entry_rate: 0.8
+  react_rate: 0.7
+  completion_rate: 0.9
+  share_rate: 0.4
+  comeback_rate: 0.8
+  day7_retention: 0.9
+  upgrade_signal: 0.8
+
+crosswalk_id: "XW-TRG-PATH"
+crosswalk_note: >
+  The architectural cure for Error One in PRD-05 (Calendar-Based Progression).
+  Forces evidence-based progression instead of time-based progression.

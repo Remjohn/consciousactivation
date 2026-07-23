@@ -1,0 +1,182 @@
+experience_primitive_id: "EXP-PRG-001"
+canonical_name: "Hook Cycle Velocity"
+aliases:
+  - "The Tight Loop"
+  - "Immediate Turnaround"
+  - "Rapid Re-Entry"
+
+experience_family: "progression_replay"
+mechanic_role: "loop"
+moment_role: "session_bridging"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Hooked_Ryan_Hoover.md"
+    primitive_name_in_audit: "Hook Cycle Velocity"
+    mcda_score: 185
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Hooked_Ryan_Hoover.md"
+
+book_reference:
+  title: "Hooked"
+  author: "Nir Eyal / Ryan Hoover"
+  chapters:
+    - "Chapter 2: Trigger"
+    - "Chapter 5: Investment"
+  key_pages: "120-135"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Hooked - Ryan Hoover.md"
+
+summary: >
+  Hook Cycle Velocity dictates that the speed at which a user passes through
+  the four stages of the Hook model (Trigger, Action, Variable Reward, Investment)
+  determines the strength of the habit. A slow cycle (e.g., waiting 3 days for
+  a human coach to grade a drill) kills progression. In CCP, the AI Delivery
+  Score and the instant Telegram interface guarantee hyper-velocity. A coach
+  receives a trigger, records in 60 seconds, receives a variable score in 5
+  seconds, and immediately 'invests' by launching a counter-take, completing
+  the entire progression loop in under 3 minutes.
+
+core_move: >
+  Eliminate all latency between the Action and the Variable Reward, and ensure
+  the Reward screen immediately prompts the next Investment to chain loops together
+  at maximum velocity.
+
+why_it_works: >
+  Nir Eyal emphasizes that habits are formed by frequency and velocity. If a
+  user acts and has to wait hours for the reward (the feedback), the neurological
+  link between the effort and the dopamine hit is severed. By using the CMF
+  to process audio instantaneously, we achieve 'Hook Cycle Velocity'. The user
+  is still in a state of high emotional arousal when the score hits. If the
+  score is variable (unpredictable), they immediately crave a replay to 'fix'
+  the score, triggering the next loop instantly.
+
+examples:
+  - context: "BOOK: Hooked - Instagram's Photo Filter Velocity"
+    application: >
+      Instagram didn't invent photo sharing, but they eliminated the latency.
+      Take photo -> instant filter -> instant post -> instant likes. The velocity
+      of the reward loop created a daily compulsion.
+    effect: >
+      Unprecedented daily active usage driven by the speed of the progression loop.
+
+  - context: "CCP: The 5-Second Score Reveal"
+    application: >
+      A coach finishes a 3-minute Law28 drill. The system does not say 'Check
+      your email tomorrow for results.' It displays a 5-second 'Analyzing
+      Resonance' animation, then instantly drops the score, capitalizing on
+      the user's post-recording adrenaline.
+    effect: >
+      The immediate feedback acts as a massive variable reward, driving instant replay desire.
+
+  - context: "CCP: The Instant Rebuttal Link"
+    application: >
+      The moment a coach loses a debate, the failure screen contains a pre-filled
+      Telegram link to start a 'Counter-Take'.
+    effect: >
+      The 'Investment' phase of the hook is executed before the user can close the app.
+
+  - context: "CCP: Audience Mirror Quiz Velocity"
+    application: >
+      An audience member swipes 'Agree' on a take. The UI instantly swaps to:
+      'The Jury disagrees. Why are you right? Tap to record.'
+    effect: >
+      Zero latency between the passive action and the active progression prompt.
+
+  - context: "CCP: Sunday Postcard Automation"
+    application: >
+      The Sunday Postcard isn't a static email. It's an interactive Telegram
+      message. 'You ranked 4th this week. Tap to challenge the #3 coach.'
+    effect: >
+      The weekly review instantly launches the new weekly progression cycle.
+
+anti_examples:
+  - description: >
+      A coach records a highly emotional debate take, hits submit, and sees:
+      'Thank you! Your recording has been sent to our admins for review.
+      Check back in 24-48 hours.'
+    why_it_fails: >
+      The velocity is dead. By the time the reward (the review) arrives, the
+      coach has completely forgotten the emotional context of the recording.
+      The progression loop is severed, and replay desire drops to zero.
+
+experience_stage_fit:
+  entry: 0.8
+  activation: 0.9
+  recording: 0.4
+  scoring: 1.0
+  social_spread: 0.3
+  recovery: 0.7
+  retention: 0.9
+  conversion: 0.6
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 1.0
+  score_card: 0.9
+  share_asset: 0.2
+  voice_prompt: 0.8
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.6
+  urgency: 0.9
+  clarity: 0.8
+  safety: 0.4
+  status: 0.3
+  belonging: 0.6
+  curiosity: 0.8
+  replay_desire: 1.0
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.8
+  challenge_progression: 0.9
+  silent_referral: 0.6
+  coach_os_deployment: 0.7
+  premium_trust_architecture: 0.4
+  onboarding_activation: 0.9
+  social_economy: 0.8
+  content_extraction: 0.9
+
+activation_conditions:
+  - "User completes a core action (recording, voting) and expects feedback"
+  - "System has the backend capacity to deliver the variable reward instantly"
+
+suppression_conditions:
+  - "User is in a reflective, long-form learning mode (e.g., reading a textbook module)"
+
+misuse_modes:
+  - "Frictionless Garbage — making the loop so fast that the user can literally spam recordings without thinking, turning it into a clicker game."
+  - "Predictable Velocity — the loop is fast, but the reward is always the same (e.g., always 10 points), killing the variable curiosity."
+
+synergizes_with:
+  - "EXP-SAF-002" # Possible-Win Scarcity (The instant prompt is often a scarce retry)
+  - "EXP-TRG-001" # The Bounded Async Request
+
+conflicts_with:
+  - "EXP-PRG-004" # Long Loops (Velocity must be balanced against long-term meaning)
+
+implementation_targets:
+  frontend_components:
+    - "InstantScoreReveal — the UI must never show a 'Pending Review' state for core loop actions"
+    - "InvestmentPrompt — the CTA that appears immediately alongside the score"
+  backend_rules:
+    - "cmf_pipeline: prioritize core loop audio processing to ensure < 5s turnaround time"
+  telemetry_events:
+    - "hook_cycle_completed"
+    - "time_to_reward_latency"
+    - "immediate_replay_triggered"
+  experiments:
+    - "A/B test: 1-second score reveal vs 5-second 'anticipation building' score reveal"
+
+experience_metrics:
+  entry_rate: 0.4
+  react_rate: 0.8
+  completion_rate: 0.9
+  share_rate: 0.4
+  comeback_rate: 1.0
+  day7_retention: 0.9
+  upgrade_signal: 0.7
+
+crosswalk_id: "XW-PRG-VELOCITY"
+crosswalk_note: >
+  This is the defining technical advantage of CCP over human-led coaching groups.

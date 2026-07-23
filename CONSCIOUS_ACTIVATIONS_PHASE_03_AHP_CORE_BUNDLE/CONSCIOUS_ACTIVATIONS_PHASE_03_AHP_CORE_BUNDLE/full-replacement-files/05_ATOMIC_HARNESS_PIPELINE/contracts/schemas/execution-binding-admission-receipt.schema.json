@@ -1,0 +1,83 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:execution_binding_admission_receipt",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "authority_snapshot_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "binding_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "blockers": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "decision": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "decision_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "maximum_claim": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "program_status_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "receipt_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "supersedes_receipt_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "validated_contract_refs": {
+      "type": "array"
+    },
+    "validated_source_record_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "receipt_id",
+    "request_id",
+    "decision",
+    "authority_snapshot_id",
+    "program_status_id",
+    "binding_sha256",
+    "validated_source_record_ids",
+    "validated_contract_refs",
+    "blockers",
+    "maximum_claim",
+    "supersedes_receipt_id",
+    "actor_id",
+    "decision_digest"
+  ],
+  "title": "execution_binding_admission_receipt",
+  "type": "object"
+}

@@ -1,0 +1,39 @@
+schema_version: ca-phase02-reference-build-receipt/v1
+bundle_id: CA-PHASE02-AIR-CORE-2026-07-23
+issued_on: "2026-07-23"
+status: PASS
+reference_environment:
+  baseline: CLEAN_PHASE_01_REPOSITORY_COPY
+  source_snapshot: CONSCIOUS_ACTIVATIONS.zip
+  phase1_predecessor: CONSCIOUS_ACTIVATIONS_PHASE_01_FOUNDATION_BUNDLE.zip
+apply:
+  result: APPLIED_VALIDATED
+  operation_count: 383
+  create_count: 374
+  replace_count: 9
+  validation_command: python scripts/phase2/validate_phase2.py
+  validation_result: PASS
+validation:
+  phase1_regression: PASS_14_TESTS_36_SUBTESTS
+  phase2_tests: PASS_13_TESTS
+  combined: PASS_27_TESTS_36_SUBTESTS_ZERO_FAILURES
+  python_compilation: PASS
+  clean_install: PASS
+  schema_export: PASS_17_OF_17
+  deterministic_demo: PASS_SYNTHETIC_ONLY
+  primitive_registry: PASS_243_RECORDS_242_UNIQUE_IDS_1_PRESERVED_COLLISION
+  archetype_registry: PASS_96_HISTORICAL_EVIDENCE_RECORDS
+rollback:
+  result: ROLLED_BACK
+  restoration: PASS_11493_FILES_ZERO_MISSING_ZERO_EXTRA_ZERO_CHANGED
+  baseline_file_count: 11493
+  restored_file_count: 11493
+  cache_cleanup: PASS
+claim_boundary:
+  claim_ceiling: AIR_PHASE_02_CORE_IMPLEMENTED_DEVELOPMENT_PASS
+  external_model_calls: 0
+  real_human_evidence_claimed: false
+  production_authorized: false
+  certified: false
+  format02_activated: false
+  vae_stage5_authorized: false

@@ -1,0 +1,226 @@
+# Golden Example — Experience Primitive
+# This file is the calibration anchor for ALL experience primitive YAML files.
+# Every agent MUST load this before writing their family batch.
+
+experience_primitive_id: "EXP-TRG-001"
+canonical_name: "First Major Win-State Before Social Expansion"
+aliases:
+  - "First Win Gate"
+  - "Reward Before Referral"
+  - "Earned Share Readiness"
+
+experience_family: "trigger_timing"
+mechanic_role: "loop"
+moment_role: "score_reveal"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Actionable_Gamification_Yu_kai_Chou.md"
+    primitive_name_in_audit: "First Major Win-State Before Social Expansion"
+    mcda_score: 197
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Actionable_Gamification_Yu_kai_Chou.md"
+
+book_reference:
+  title: "Actionable Gamification"
+  author: "Yu-kai Chou"
+  chapters:
+    - "Chapter 2: The PBL Fallacy"
+    - "Chapter 5: Core Drive 2 — Development and Accomplishment"
+    - "Chapter 14: The Onboarding Phase"
+  key_pages: "45-58, 142-160, 310-325"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Actionable Gamification - Yu-kai Chou.md"
+
+summary: >
+  First Major Win-State Before Social Expansion is the timing primitive
+  that prevents the product from asking users to share, invite, or
+  recruit before they have experienced a real, emotionally satisfying
+  reward. Yu-kai Chou demonstrates that premature social asks feel
+  extractive and kill referral willingness, while post-reward social
+  asks feel natural and amplify the user's pride. In CCP, this means
+  the coach must receive their delivery score, see content being
+  processed, and feel professionally validated BEFORE any share,
+  vote, or jury invitation appears.
+
+core_move: >
+  Delay all social expansion requests until the user has achieved
+  their first emotionally satisfying win within the product.
+
+why_it_works: >
+  Yu-kai Chou's Octalysis framework shows that Core Drive 2
+  (Development and Accomplishment) must fire before Core Drive 5
+  (Social Influence and Relatedness) is activated. Neurologically,
+  the user needs dopamine from their own achievement before they
+  can feel proud enough to broadcast that achievement socially.
+  If the product asks for sharing before the reward lands, the
+  user's emotional state is still uncertain — they don't know if
+  the product is worth endorsing. After the reward, they WANT to
+  share because the share becomes an identity signal, not a
+  marketing favor.
+
+examples:
+  - context: "Free hot topic reaction — first-time user in Solo Reaction mode"
+    application: >
+      The coach receives a 15-second topic brief, records a 2-5 minute
+      reaction, and immediately sees their AI Delivery Score with a
+      granular breakdown (pacing, conviction, semantic resonance). The
+      score card shows their strongest dimension highlighted in gold.
+      Only AFTER this score reveal does the UI surface a share prompt:
+      'This thesis is worth debating. Invite 2 peers to jury this take.'
+    effect: >
+      The coach shares from a position of pride rather than obligation.
+      The shared artifact carries the score (social proof), making the
+      referral feel like a flex rather than spam. Silent referral
+      conversion rate increases because the sender has already been
+      validated.
+
+  - context: "7-Day Speaking Challenge — Day 1 completion"
+    application: >
+      After completing Day 1's constraint challenge, the system delivers
+      the score, a congratulatory micro-animation, and a 'Day 1 Conquered'
+      badge. The challenge progress bar fills to 14%. Only then does a
+      secondary CTA appear: 'Challenge a friend to beat your Day 1 score.'
+    effect: >
+      The user has tangible evidence of accomplishment. The challenge
+      invitation feels like competitive play rather than recruitment.
+      The friend receives a specific, beatable target rather than a
+      generic 'try this app' link.
+
+  - context: "Debate with Jury mode — coach finishes their take"
+    application: >
+      After recording, the coach sees their delivery score immediately.
+      If the score is above 75/100, the system surfaces 'Your take is
+      strong enough to go live. Publish to the jury?' If below 75, it
+      offers the Redemption Round first. Social exposure is gated by
+      quality, not just completion.
+    effect: >
+      The coach never feels publicly embarrassed. The quality gate
+      preserves their professional identity and makes them more willing
+      to participate in future debates because the system protects them.
+
+anti_examples:
+  - description: >
+      Showing a 'Share with your network!' popup immediately after
+      the user opens the Mini App for the first time, before they
+      have recorded anything or seen any value.
+    why_it_fails: >
+      The user has no emotional stake, no achievement to broadcast,
+      and no reason to endorse the product. The share request feels
+      extractive and damages first-impression trust. Yu-kai calls
+      this 'asking for the marriage before the first date.'
+
+  - description: >
+      Asking the user to invite jury members during the recording
+      process, before they've finished their own take.
+    why_it_fails: >
+      The user is in a state of creative vulnerability — they're
+      focusing on their performance. Interrupting with a social
+      ask breaks their flow, degrades recording quality, and
+      makes the product feel like it prioritizes growth over
+      the user's experience.
+
+experience_stage_fit:
+  entry: 0.3
+  activation: 0.5
+  recording: 0.2
+  scoring: 0.9
+  social_spread: 1.0
+  recovery: 0.4
+  retention: 0.7
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 0.5
+  mini_app: 0.9
+  score_card: 0.9
+  share_asset: 1.0
+  voice_prompt: 0.3
+  push_nudge: 0.4
+
+user_state_effects:
+  confidence: 0.9
+  urgency: 0.3
+  clarity: 0.6
+  safety: 0.8
+  status: 0.7
+  belonging: 0.5
+  curiosity: 0.3
+  replay_desire: 0.4
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 0.6
+  challenge_progression: 0.8
+  silent_referral: 1.0
+  coach_os_deployment: 0.7
+  premium_trust_architecture: 0.8
+  onboarding_activation: 0.9
+  social_economy: 0.9
+  content_extraction: 0.4
+
+activation_conditions:
+  - "User has just completed their first core action (recording, scoring, or challenge day)"
+  - "AI Delivery Score has been calculated and is ready to display"
+  - "The user's emotional state is positive or neutral (not frustrated from a technical failure)"
+  - "No prior social expansion request has been made in this session"
+
+suppression_conditions:
+  - "User has not yet completed any core action in the current session"
+  - "User is mid-recording or mid-flow — do not interrupt"
+  - "User just received a low score and is in recovery/redemption state"
+
+misuse_modes:
+  - "Premature social ask — requesting shares before the first win lands"
+  - "Win-state inflation — making every micro-action feel like a win, diluting the real reward"
+  - "Score-gating too aggressively — setting the quality threshold so high that most users never reach the share prompt"
+
+synergizes_with:
+  - "EXP-FBK-001"  # RIM Feedback Discipline — the score IS the win-state
+  - "EXP-SOC-001"  # Social Treasures — the share becomes a social treasure
+  - "EXP-SAF-001"  # White Hat Recovery — emotional sequencing after the win
+  - "EXP-PRG-001"  # Hook Cycle Velocity — the win must happen within the first cycle
+
+conflicts_with:
+  - "EXP-TRG-002"  # Aggressive urgency triggers that push action before reward
+  - "EXP-SOC-003"  # Identity-Driven Social Proof if applied before user has identity stake
+
+implementation_targets:
+  frontend_components:
+    - "ScoreRevealScreen — gate share CTA behind score display completion"
+    - "SharePromptOverlay — only render after win-state confirmation"
+    - "ChallengeProgressBar — trigger share prompt after milestone fill"
+  backend_rules:
+    - "share_gate: require score_revealed=true before enabling share endpoints"
+    - "win_state_tracker: log first_win_achieved per user for analytics"
+  telemetry_events:
+    - "first_win_state_achieved"
+    - "share_prompt_displayed_after_win"
+    - "share_completed_after_win"
+    - "share_prompt_dismissed"
+  experiments:
+    - "A/B test: share prompt at 2s vs 5s delay after score reveal"
+    - "A/B test: share prompt copy — 'Invite jury' vs 'Challenge a friend'"
+
+experience_metrics:
+  entry_rate: 0.3
+  react_rate: 0.5
+  completion_rate: 0.6
+  share_rate: 0.9
+  comeback_rate: 0.7
+  day7_retention: 0.6
+  upgrade_signal: 0.7
+
+crosswalk_id: "XW-WIN-BEFORE-SPREAD"
+crosswalk_note: >
+  Meaning side: governs how content quality gates determine whether
+  output is ready for distribution (quality threshold before publishing).
+  Experience side: governs the timing of social expansion requests
+  relative to the user's emotional reward state.
+
+notes: >
+  This is the single most important timing primitive for Conscious
+  Reactions. If the product violates this primitive even once during
+  onboarding, the user's referral willingness is permanently damaged.
+  Yu-kai Chou calls this the 'Discovery Phase contract' — the product
+  must prove its value before asking for social labor. Implementation
+  must be strict: no share prompts, no invite buttons, no jury requests
+  until score_revealed=true for the current session.

@@ -1,0 +1,189 @@
+experience_primitive_id: "EXP-SOC-001"
+canonical_name: "Social Treasures + Group Quests"
+aliases:
+  - "Gifted Rewards"
+  - "The Jury Economy"
+  - "Required Collaboration"
+
+experience_family: "social_referral"
+mechanic_role: "loop"
+moment_role: "expansion_trigger"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+    primitive_name_in_audit: "Social Treasures + Group Quests"
+    mcda_score: 194
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+
+book_reference:
+  title: "Reality Is Broken"
+  author: "Jane McGonigal"
+  chapters:
+    - "Chapter 5: Fun with Strangers"
+    - "Chapter 6: Social Fabric"
+  key_pages: "96-110, 125-135"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Reality is Broken - Jane McGonigal.md"
+
+summary: >
+  Social Treasures + Group Quests dictate that the most powerful rewards
+  in a system cannot be earned by solo grinding; they must be gifted by, or
+  earned in collaboration with, other users. In CCP, this means a coach cannot
+  self-certify their debate victory or independently earn a "Jury Voted" badge.
+  They must invite peers to vote (Social Treasure) or form a faction to
+  argue a side (Group Quest). This turns "invite friends" from an annoying
+  marketing ask into an intrinsic game mechanic required to unlock status.
+
+core_move: >
+  Design high-status rewards that strictly require the participation, votes,
+  or gifts of other human users, explicitly blocking solo attainment.
+
+why_it_works: >
+  Jane McGonigal outlines that "Ambient Sociability" and "Social Fabric" are
+  woven when players must rely on each other for progression. Similarly, Yu-kai
+  Chou defines a "Social Treasure" as a reward that you can only get if someone
+  else gives it to you. When a system asks a user to "Share this app," it triggers
+  marketing fatigue. When a system says, "You need 3 peer votes to unlock the
+  Platinum Debate Badge," the user naturally recruits their peers because the
+  peers hold the Social Treasure. The referral happens silently as a byproduct
+  of gameplay.
+
+examples:
+  - context: "BOOK: Reality Is Broken - Farmville's gifted items"
+    application: >
+      In early social games, the best items could not be bought; they could
+      only be sent as gifts from friends. This forced players to invite their
+      real-world friends into the game simply to access the necessary resources.
+    effect: >
+      Created massive viral loops because the referral was disguised as a
+      necessary survival/progression mechanic.
+
+  - context: "CCP: Conscious Reactions Debate Jury"
+    application: >
+      A coach records a take on a hot topic. The AI gives them a high delivery
+      score, but the "Industry Consensus" badge remains locked. To unlock it,
+      they must share their reaction to Telegram and get 5 unique peers to vote
+      'For' their thesis.
+    effect: >
+      The coach willingly distributes the CCP link to their network to claim their
+      Social Treasure (the votes).
+
+  - context: "CCP: Law28 Accountability Pair"
+    application: >
+      A coach is struggling with the 'Command' tier. The system offers a Group Quest:
+      'If you and your accountability partner both hit >90 Conviction Density today,
+      you both unlock the Sovereign Vault content early.'
+    effect: >
+      Instead of solo failure, the coach pressures their peer to perform, creating
+      social accountability and shared triumph.
+
+  - context: "CCP: The Supervisor Endorsement"
+    application: >
+      A new user cannot access the $99/mo Coach OS features by simply paying.
+      They must receive an endorsement (Social Treasure) from an existing
+      verified operator within the ecosystem who vouches for their authority.
+    effect: >
+      Creates a highly exclusive, premium feel while forcing users to network
+      and bring other high-value operators into the platform's orbit.
+
+  - context: "CCP: Team Reaction Battles"
+    application: >
+      A prompt is dropped: 'Agency vs In-House.' Coaches record their takes
+      and align with a faction. The winning faction's members all receive
+      a temporary UI halo on their User Cards.
+    effect: >
+      Transforms solo recording into a tribal group quest, increasing retention.
+
+anti_examples:
+  - description: >
+      Offering a coach a 'Gold Star' badge just for sharing a referral link
+      to their Facebook wall, regardless of whether anyone clicks it.
+    why_it_fails: >
+      This is transactional marketing, not a Social Treasure. The coach feels
+      like a spammer, their audience ignores the link, and the badge carries
+      zero actual status because no human collaboration was required.
+
+experience_stage_fit:
+  entry: 0.3
+  activation: 0.4
+  recording: 0.2
+  scoring: 0.6
+  social_spread: 1.0
+  recovery: 0.7
+  retention: 0.9
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 1.0
+  score_card: 0.8
+  share_asset: 0.9
+  voice_prompt: 0.2
+  push_nudge: 0.4
+
+user_state_effects:
+  confidence: 0.6
+  urgency: 0.8
+  clarity: 0.7
+  safety: 0.4
+  status: 0.9
+  belonging: 1.0
+  curiosity: 0.6
+  replay_desire: 0.8
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.9
+  challenge_progression: 0.7
+  silent_referral: 1.0
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.9
+  onboarding_activation: 0.4
+  social_economy: 1.0
+  content_extraction: 0.3
+
+activation_conditions:
+  - "User has completed a core action but the final validation requires peer input"
+  - "User is connected to a social graph or has the means to share a cryptographic link"
+  - "The reward being offered carries genuine status within the platform"
+
+suppression_conditions:
+  - "User has not yet proven their baseline competency (no first win-state yet)"
+  - "The requested social action could expose the user to shame (e.g., sharing a failed drill)"
+
+misuse_modes:
+  - "Making the game unplayable without friends, causing solo users to hit a hard wall and churn."
+  - "Allowing users to create fake accounts to gift themselves Social Treasures."
+
+synergizes_with:
+  - "EXP-TRG-005" # First Major Win-State (Earn the right to ask for the treasure)
+  - "EXP-SOC-005" # Collaborative Role Architecture
+
+conflicts_with:
+  - "EXP-SAF-002" # Over-reliance on social pressure can break safe isolation boundaries
+
+implementation_targets:
+  frontend_components:
+    - "DebateVotingUI — the interface where peers grant the Social Treasure (votes)"
+    - "LockedBadgeCard — showing the requirement of peer endorsement to unlock"
+  backend_rules:
+    - "social_economy_engine: strictly validate that votes/gifts come from unique, non-sockpuppet tenant IDs"
+  telemetry_events:
+    - "social_treasure_requested"
+    - "social_treasure_granted"
+    - "group_quest_completed"
+  experiments:
+    - "A/B test: Requiring 3 votes vs 5 votes to unlock a Debate Victory badge"
+
+experience_metrics:
+  entry_rate: 0.4
+  react_rate: 0.6
+  completion_rate: 0.7
+  share_rate: 1.0
+  comeback_rate: 0.9
+  day7_retention: 0.8
+  upgrade_signal: 0.9
+
+crosswalk_id: "XW-SOC-TREASURE"
+crosswalk_note: >
+  This is the primary mechanical engine for Silent Referral (PRD-09).

@@ -1,0 +1,174 @@
+experience_primitive_id: "EXP-FBK-005"
+canonical_name: "Attention Filtering"
+aliases:
+  - "The Positivity Bias"
+  - "Negative Nesting"
+  - "The Support Spotlight"
+
+experience_family: "feedback_scoring"
+mechanic_role: "system"
+moment_role: "ui_navigation"
+implementation_role: "frontend_polishing"
+
+source_audits:
+  - audit_file: "AUDIT_Beyond_Belief_Nir_Eyal.md"
+    primitive_name_in_audit: "Attention Filtering"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Beyond_Belief_Nir_Eyal.md"
+
+book_reference:
+  title: "Beyond Belief"
+  author: "Nir Eyal"
+  chapters:
+    - "Chapter 5: Reframing Stress"
+    - "Chapter 8: The Architecture of Belief"
+  key_pages: "160-175"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Beyond Belief.md"
+
+summary: >
+  Attention Filtering dictates how mixed feedback is presented visually. The UI must
+  deliberately hijack the user's 'attentional keyhole' by giving massive visual real
+  estate (fonts, colors, placement) to positive progress, ally support, and strengths,
+  while structurally nesting or minimizing negative data so it requires a click to view.
+
+core_move: >
+  Format all scorecards and dashboards so that what they did right (and the support
+  they received) occupies 80% of the screen, hiding the critical/negative feedback
+  behind a 'View Details' or 'Areas for Improvement' accordion.
+
+why_it_works: >
+  Nir Eyal discusses how humans have a severe negativity bias; if we see 10 compliments
+  and 1 insult, our brain fixates entirely on the insult, destroying psychological safety.
+  Because the CPSC AI is clinical and objective, it will deliver harsh truths about pacing
+  and conviction. If that harsh truth is the first or largest thing the user sees, they
+  will bounce. By explicitly filtering their attention toward their progress first, we
+  secure their confidence before asking them to engage their System 2 brain to process
+  the critique.
+
+examples:
+  - context: "BOOK: Beyond Belief - The Positivity Framing"
+    application: >
+      When patients are told a surgery has a 90% survival rate, they are calm. When
+      told it has a 10% mortality rate, they panic. The data is identical, but the
+      attentional focus dictates the emotional response and compliance.
+    effect: >
+      Controls the user's emotional state by directing their visual focus.
+
+  - context: "CCP: The CPSC Scorecard Layout"
+    application: >
+      A user receives a 65/100 Delivery Score. The top of the card says in large green
+      text: 'Top Strength: Emotional Resonance'. The critique about their severe stuttering
+      is placed at the bottom in smaller, neutral-colored text under an 'Optimization' tab.
+    effect: >
+      The user feels validated first, making them open to the critique second.
+
+  - context: "CCP: The Peer Feedback Priority"
+    application: >
+      When opening a debate response, the UI highlights '2 Peers voted Based' in
+      bright colors. The '1 Peer voted Cringe' is visible, but grayed out and smaller.
+    effect: >
+      Magnifies social support while minimizing social rejection.
+
+  - context: "CCP: The Streak Failure Reframe"
+    application: >
+      If a user breaks a 14-day streak, the dashboard does not show a massive red '0'.
+      It shows '14 Days Mastered' in gold, and underneath says 'Ready to start a new chain?'
+    effect: >
+      Prevents the despair of a broken streak by focusing on the accumulated success.
+
+  - context: "CCP: V2WS Pitch Critique"
+    application: >
+      The AI tells the coach: 'You held 80% of the audience through the transition.'
+      It does NOT say: 'You lost 20% of the audience.'
+    effect: >
+      Maintains the speaker's state of high status during a stressful post-mortem.
+
+anti_examples:
+  - description: >
+      A user opens their dashboard and immediately sees a giant red graph showing that
+      their 'Filler Word Frequency' has spiked by 300%, alongside a warning banner.
+    why_it_fails: >
+      The UI forces the user's attentional keyhole onto their failure. Their cortisol
+      spikes, they feel attacked by the machine, and they close the app to avoid the pain.
+
+experience_stage_fit:
+  entry: 0.6
+  activation: 0.8
+  recording: 0.4
+  scoring: 1.0
+  social_spread: 0.7
+  recovery: 1.0
+  retention: 0.9
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 1.0
+  score_card: 1.0
+  share_asset: 0.8
+  voice_prompt: 0.7
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 1.0
+  urgency: 0.2
+  clarity: 0.8
+  safety: 1.0
+  status: 0.9
+  belonging: 0.8
+  curiosity: 0.7
+  replay_desire: 0.8
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 0.9
+  challenge_progression: 0.8
+  silent_referral: 0.7
+  coach_os_deployment: 0.9
+  premium_trust_architecture: 1.0
+  onboarding_activation: 1.0
+  social_economy: 0.8
+  content_extraction: 0.6
+
+activation_conditions:
+  - "User receives any CPSC Delivery Score or AI critique"
+  - "User experiences a failure state (broken streak, low score, lost debate)"
+
+suppression_conditions:
+  - "User has specifically requested a 'Ruthless Roast' or 'Hardcore Analysis' mode where they explicitly want the pain."
+
+misuse_modes:
+  - "Delusional Positivity — hiding the negative feedback so completely that the user thinks they are perfect and never improves."
+  - "Sandwiching Fails — delivering praise, then a brutal insult, then praise. The user sees through the corporate 'compliment sandwich' and distrusts the AI."
+
+synergizes_with:
+  - "EXP-FRC-006" # Hypnosedation Reframing (Attention Filtering is the UI execution of Reframing)
+  - "EXP-SAF-001" # White Hat Emotional Sequencing (Protects psychological safety)
+
+conflicts_with:
+  - "EXP-FBK-001" # RIM Feedback (Feedback must be meaningful, so we can't hide the truth entirely, we just sequence it)
+
+implementation_targets:
+  frontend_components:
+    - "ProgressiveDisclosureCritique — an accordion component that hides constructive criticism until clicked"
+    - "HighlightRenderer — CSS classes that enforce primary brand colors for positive stats and neutral grays for negative stats"
+  backend_rules:
+    - "prompt_engine: instruct the LLM to format the first sentence of any critique as a highlight of a strength"
+  telemetry_events:
+    - "critique_accordion_open_rate"
+    - "bounce_rate_on_low_score"
+  experiments:
+    - "A/B test: Showing the numeric score first vs Showing the text highlight first"
+
+experience_metrics:
+  entry_rate: 0.6
+  react_rate: 0.8
+  completion_rate: 0.7
+  share_rate: 0.8
+  comeback_rate: 0.9
+  day7_retention: 0.9
+  upgrade_signal: 0.8
+
+crosswalk_id: "XW-FBK-FILTER"
+crosswalk_note: >
+  This is how we give harsh, clinical feedback without making the user cry and churn.
