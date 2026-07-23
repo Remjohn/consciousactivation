@@ -1,0 +1,83 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-INT-002-BATCH006
+spec_id: TS-INT-002
+spec_title: "Word/Speaker Alignment and Packed Phrase Transcript"
+product: Interview Expression
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. Upstream draft TS-INT-001 passed Batch 6 audit.
+  Eligible for TECHNICALLY_ACCEPTED_PENDING_RATIFICATION. NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      FR-124, FR-128, ST-01.03, ST-02.01 covered by 12 ACs in Section 9.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      authority_state CANDIDATE_NOT_CURRENT and build_authority false correctly declared.
+      Upstream draft TS-INT-001 (ca13c9fd) labeled DRAFT_DEPENDENCY_NOT_ACCEPTED.
+      Interview Expression owns transcript alignment, speaker map, audio events, packed phrase transcript.
+      TS-INT-006 owns Reaction Receipt; TS-INT-004 owns Expression Moment.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      AlignedWord, SpeakerMap, AudioEvent, AlignmentLimitation, TranscriptAlignmentComponent,
+      PhrasePackingPolicy, PackedPhrase, PackedPhraseTranscript, AlignmentValidationReceipt,
+      PhrasePackingReceipt. Workflows A-E complete. Rational timebase arithmetic. Idempotency,
+      concurrency, invalidation, replay.
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      Rational time conversion. Raw tokens preserved verbatim. Low confidence regions typed.
+      Phrase packing preserves filler/hesitation/events. Epistemic tag states preserved.
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      Studio interview PRD and doctrine ADAPT/REUSE as evidence.
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      11 target paths in Section 7, 8 test file paths in Section 10, ACs 1-12 falsifiable.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+  - finding_id: NOTE-INT-002-001
+    severity: NOTE
+    lens: lens_1_fr_story_outcome_coverage
+    location: "Section 1, controlling feature rows"
+    finding: >
+      PRD_COMBINED.md feature and EPICS_AND_VERTICAL_STORIES.md files were not directly read;
+      ACs in Section 9 are sufficient.
+    required_action: "Record as informational."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 1
+  critical: 0
+  warning: 0
+  note: 1
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
