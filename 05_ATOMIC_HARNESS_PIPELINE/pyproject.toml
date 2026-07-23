@@ -4,18 +4,22 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cmf-atomic-harness-pipeline"
-version = "0.1.0.dev1"
-description = "Development-only Phase 1 shell for Atomic Harness Pipeline."
+version = "0.2.0.dev1"
+description = "Development-only deterministic Atomic Harness Pipeline core."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["ca-runtime==0.1.0.dev1"]
 
 [project.scripts]
-cmf-pipeline = "cmf_pipeline.entrypoint:main"
+cmf-pipeline = "cmf_pipeline.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["cmf_pipeline*"]
+
+[tool.setuptools.package-data]
+cmf_pipeline = ["py.typed", "migrations/*.sql"]

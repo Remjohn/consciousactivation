@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from ca_runtime.cli import product_status
-from . import PRODUCT_ID, PRODUCT_VERSION
+from pathlib import Path
+from typing import Any
+
+from .application import PipelineApplication
 
 
-def status() -> dict[str, object]:
-    return product_status(PRODUCT_ID, PRODUCT_VERSION)
+def status(database_path: str | Path | None = None) -> dict[str, Any]:
+    return PipelineApplication(database_path).status()

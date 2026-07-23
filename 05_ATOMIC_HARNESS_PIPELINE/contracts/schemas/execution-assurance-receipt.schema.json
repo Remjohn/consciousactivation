@@ -1,0 +1,68 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:execution_assurance_receipt",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assurance_receipt_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "findings": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "fingerprint_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "production_assurance_claimed": {
+      "type": "boolean"
+    },
+    "result": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "sandbox_declaration_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "target_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "assurance_receipt_id",
+    "target_ref",
+    "fingerprint_id",
+    "sandbox_declaration_id",
+    "findings",
+    "result",
+    "production_assurance_claimed"
+  ],
+  "title": "execution_assurance_receipt",
+  "type": "object"
+}
