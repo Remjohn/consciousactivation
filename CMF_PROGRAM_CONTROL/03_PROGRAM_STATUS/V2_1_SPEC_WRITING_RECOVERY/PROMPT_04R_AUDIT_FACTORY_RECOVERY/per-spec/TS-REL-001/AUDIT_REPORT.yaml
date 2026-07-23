@@ -1,0 +1,143 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-REL-001-BATCH001
+spec_id: TS-REL-001
+spec_title: "Format 02 Deferral, Historical Evidence Isolation, and Future Activation Gate"
+product_owner: Program Control
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. Spec is in an allowed Program Control
+  path and correctly carries PRODUCT_ADOPTION_REQUIRED semantics (no product-local
+  build authority claimed). Eligible to progress to TECHNICALLY_ACCEPTED_PENDING_RATIFICATION.
+  This outcome is NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      FR-079 through FR-084 are all covered by 14 numbered acceptance criteria in
+      Section 9. Each criterion has one positive and one failure example, an evidence
+      artifact type, and a test layer. ST-11.01 is the single controlling story;
+      all FR-to-AC mappings are explicit. AC-8 (CBAR) and AC-11 (historical replay
+      exactness) cover adversarial and recovery cross-cutting concerns.
+      AC-14 (claim ceiling) is explicitly tied to pre-ratification state.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      Repository write-authority audit rule (CA_TECH_SPEC_AUDIT_SKILL §§ repository
+      write-authority audit rule): TS-REL-001 is at
+      CMF_PROGRAM_CONTROL/01_PRODUCT_AUTHORITIES/v2.1-candidates/specs/ — this is
+      a Program Control candidate path. The spec carries PRODUCT_ADOPTION_REQUIRED
+      semantics: Section 7 explicitly states product-local Builder, Pipeline, VAE,
+      Studio, and Delegation paths are not assigned here and any future adoption
+      must be separately authorized by the applicable product and re-audited.
+      The spec does NOT claim product-local write or build authority.
+      Product sovereignty assignments in Section 3 are consistent with
+      CROSS_PRODUCT_AUTHORITY_MATRIX.yaml: Builder owns AtomicHarnessDefinition;
+      Program Control owns the deferral state and activation decision.
+      No duplicate field owners detected.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      Six commands are fully specified with preconditions, events, and state effects.
+      State machine is complete with only two states (DEFERRED_AWAITING_CURRENT_ATOMIC_HARNESS,
+      ACTIVATION_ELIGIBLE) and explicit return-to-deferred on evidence drift.
+      ACTIVATION_ELIGIBLE explicitly does not start Pipeline work or VAE Stage 5.
+      Idempotency key is sha256(command_type || canonical_payload_without_receipt_time) —
+      deterministic. Optimistic concurrency uses expected_record_version.
+      Atomic commit covers record and receipt together. Gate evaluation pins the
+      evidence snapshot; concurrent update cannot enter an in-flight snapshot.
+      Supersession preserves prior entries for replay.
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      TS-REL-001 is a Program Control gate spec; it makes no Primitive, archetype,
+      or Final Script compilation claims. Lens 4 activates on historical evidence
+      fidelity: all historical artifacts in Section 4 are classified with explicit
+      dispositions (REUSE, ADAPT, ARCHIVE) and none are promoted to current authority.
+      Section 3 invariant 3 states historical evidence is immutable, hash-addressed,
+      classified, and never treated as current authority. The 13 registry families
+      are explicitly enumerated in Section 6 and classified as reconciliation
+      requirements, not active runtime registry values (invariant 4).
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      MASTER_STATUS.md states Format 02 remains contract_compatible with strongest
+      state, not production-certified. TS-REL-001 Section 3 is consistent:
+      current_state == DEFERRED_AWAITING_CURRENT_ATOMIC_HARNESS.
+      FORMAT02_PROFILE_ALIAS_REGISTRY.yaml is referenced as current Program Control
+      registry. Builder's format_profiles.py is REUSE as structural evidence only.
+      VAE status (not certified, Stage 5 not authorized) is consistent with
+      MASTER_STATUS.md. Spec declares itself Wave 0 with no upstream spec
+      dependency, consistent with SPEC_DEPENDENCY_DAG.yaml reference in Section 1.
+      TS-REL-002 is noted as a downstream authority dependency in Section 1;
+      the spec correctly does not write TS-REL-002 content.
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      Section 10 specifies 7 test files with named test cases covering gate decisions,
+      historical evidence, aliases, claim ceilings, replay/invalidation, portability,
+      and architecture absence scan. AC-1 through AC-14 all include failure examples.
+      Activation prerequisites in Section 3 are enumerated exhaustively; the gate
+      function is deterministic and fail-closed. Typed failure codes are complete
+      with retry class and next admissible action. No behavior requires a builder
+      to invent logic. Section 7 stages list exact target paths under
+      CMF_PROGRAM_CONTROL only.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+
+  - finding_id: NOTE-REL-001-001
+    severity: NOTE
+    lens: lens_1_fr_story_outcome_coverage
+    location: "Section 1, F14 AHP PRD feature reference"
+    finding: >
+      F14 AHP PRD feature file was not directly read. The ACs it supplies to FR-079
+      through FR-084 are reproduced in Section 9. A future re-audit should verify
+      the file hash against what's recorded on the SHA reference in spec.
+    required_action: "Record as informational; does not block."
+    architect_decision_required: false
+    blocks_build: false
+
+  - finding_id: NOTE-REL-001-002
+    severity: NOTE
+    lens: lens_2_authority_ownership_sovereignty
+    location: "Section 3, activation prerequisites — product-adoption receipts"
+    finding: >
+      The activation prerequisites list includes 'current product-adoption receipts
+      for every affected product-local specification'. The spec does not enumerate
+      which product-local specs will need adoption or audit at activation time.
+      This is appropriate scope for TS-REL-001 (a gate spec, not a product spec)
+      but should be tracked as a prerequisite for the eventual activation request.
+    required_action: "Record as a planning note; does not block TS-REL-001 audit."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 2
+  critical: 0
+  warning: 0
+  note: 2
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+repository_write_authority_check: PASS
+product_adoption_required: true

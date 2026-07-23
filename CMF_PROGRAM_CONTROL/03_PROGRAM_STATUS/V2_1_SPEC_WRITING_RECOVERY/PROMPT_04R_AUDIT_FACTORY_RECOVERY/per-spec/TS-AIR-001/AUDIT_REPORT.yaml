@@ -1,0 +1,139 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-AIR-001-BATCH001
+spec_id: TS-AIR-001
+spec_title: "Constitutional Authority, Activation Domains, and Epistemic State"
+product: Activative Intelligence Runtime
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. No critical drift conditions
+  triggered. Spec is eligible to progress to TECHNICALLY_ACCEPTED_PENDING_RATIFICATION.
+  This outcome is NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      AIR-FR-001 through AIR-FR-006 are all covered with distinct numbered
+      acceptance criteria in Section 9. Each criterion provides one positive,
+      one negative/adversarial scenario, named evidence artifacts, and a
+      test layer. AIR-ST-01.01 through ST-01.03 are traced. AC-7 (recovery
+      boundary) and AC-8 (idempotency/atomic rollback) cover non-FR cross-cutting
+      concerns required by the stories. AC-10 (claim ceiling) is explicitly tied
+      to build-authority state.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      Constitutional authority chain is correctly stated: Constitution V1.1 wins;
+      V2.1 AIR constitution is CANDIDATE_NOT_CURRENT pending ratification.
+      Section 3 correctly assigns AIR as owner of semantic activation lifecycle
+      meaning. The hard invariant 'Activative Contract Compiler != Activative
+      Intelligence Runtime' is stated in Section 3 and echoed in scope exclusions.
+      Spec does not claim live source observation (Interview Expression's domain),
+      Pipeline execution, VAE production, or Studio canonical state. Human remains
+      canonical value owner for Coach/Guest Identity DNA. No duplicate field
+      owner assignments detected.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      DeclareSemanticObjectCommand and SupersedeSemanticObjectCommand are fully
+      specified with required fields. LifecycleTransitionReceipt includes command
+      hash, prior/result refs, gate results, committed artifact/edge refs, typed
+      blocker or null. F01 lifecycle state machine
+      (proposed->validated->evaluated->downstream_eligible, with terminals
+      rejected, superseded, cancelled) is complete. Only evaluated->downstream_eligible
+      is permitted after non-compensable gate passage; supersession never rewrites
+      prior state. Cancellation both before and after commit are handled. Idempotency
+      uses command_id + payload_sha256. AtomicCommit covers version, assertions,
+      edges, command record, and receipt in one transaction.
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      Brownfield disposition table in Section 4 is complete with typed reasons
+      (ADAPT, REUSE, ACTIVATE, ARCHIVE). No V2 predecessor is promoted to V2.1
+      authority. The V2 adapter explicitly blocks migration for unknown campaign/
+      derivative domains rather than guessing (AIR_F01_MIGRATION_AMBIGUOUS).
+      Three specific Primitives are cited (PRM-PSY-008, PRM-VSG-003, EXP-FBK-001)
+      with hashes and specific application rules in Section 3. EpistemicAssertion
+      schema enforces field-level epistemic states not object-level; direct source
+      evidence required for 'observed'; operator_confirmed requires attributable
+      human ref. No fuzzy or invented Primitive IDs detected.
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      Section 4 addresses all predecessor implementation paths with dispositions.
+      No current 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/ tree exists — consistent
+      with MASTER_STATUS.md noting AIR/AHP source roots were registered as intended
+      paths only and were not created. Cross-domain handoff contract
+      (CrossDomainHandoffRef) is typed and requires transformation receipt.
+      Downstream eligibility gates for F02 are referenced in AC-6 and tested
+      separately in test_f01_to_f02_denial.py. TS-AIR-001 is correctly Wave 0
+      with no upstream spec dependency.
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      Section 10 specifies 11 exact test file paths with named test cases covering
+      unit, contract, integration, architecture, migration, recovery, clean-environment,
+      and reference-slice layers. Section 7 stages exact target paths. All ACs have
+      failure examples and named evidence artifacts. Section 10 completion evidence
+      list requires generated schemas, two fresh-process full-suite passes, source
+      compilation/type checks, canonical hash matrix, migration report,
+      clean-environment report, architecture-boundary report, replay/invalidation
+      report, and independent evaluation receipt. No behavior requires invention.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+
+  - finding_id: NOTE-AIR-001-001
+    severity: NOTE
+    lens: lens_1_fr_story_outcome_coverage
+    location: "Section 1, controlling PRD feature row"
+    finding: >
+      The AIR PRD F01 feature file and EPICS_AND_VERTICAL_STORIES.md were not
+      directly read by this auditor session. Their ACs are reproduced in Section 9.
+      A future re-audit should verify SHA-256 hashes on file.
+    evidence: "Hashes on record: f37dee0f (F01), b74fa0d6 (Stories)."
+    required_action: "Record as informational; does not block."
+    architect_decision_required: false
+    blocks_build: false
+
+  - finding_id: NOTE-AIR-001-002
+    severity: NOTE
+    lens: lens_4_activative_primitive_archetype_source_fidelity
+    location: "Section 3, Primitive application"
+    finding: >
+      The three Primitives (PRM-PSY-008, PRM-VSG-003, EXP-FBK-001) are cited with
+      specific hashes and application rules but were not directly read. The spec's
+      stated application of each Primitive is internally consistent with its stated
+      purpose (dignity-preserving correction, intent-governed representation, transition
+      feedback). A future re-audit should verify hashes against the registry files.
+    required_action: "Record as informational; does not block."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 2
+  critical: 0
+  warning: 0
+  note: 2
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION

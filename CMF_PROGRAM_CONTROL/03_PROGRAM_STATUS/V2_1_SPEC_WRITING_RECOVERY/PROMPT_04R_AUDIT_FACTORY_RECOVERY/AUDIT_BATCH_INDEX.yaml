@@ -6,24 +6,35 @@ purpose: >
   must be committed before the next batch begins. Batch completion receipts
   are stored in per-batch subdirectories.
 
-factory_state: AUDIT_FACTORY_PAUSED_CAPACITY
+factory_state: AUDIT_FACTORY_RUNNING
 specs_total: 60
-specs_audited: 0
-specs_pending: 0
-specs_pending_capacity: 60
+specs_audited: 3
+specs_pending: 57
+specs_pending_capacity: 0
 
 batches:
   - batch_number: 1
-    batch_state: PAUSED_CAPACITY
+    batch_state: COMPLETED
     specs:
       - TS-AHP-001
       - TS-AIR-001
       - TS-REL-001
-    auditor_1: INDEPENDENT_AUDITOR_1 (RESOURCE_EXHAUSTED)
-    auditor_2: INDEPENDENT_AUDITOR_2 (RESOURCE_EXHAUSTED)
-    auditor_3: INDEPENDENT_AUDITOR_3 (STOPPED)
+    auditor: controller-session-user-authorized
+    auditor_note: >
+      User directed controller session to audit directly after child-agent quota exhausted.
+      Factual independence preserved (specs written by Prompt 03 agents).
+    batch_commit_sha: PENDING_COMMIT
+    batch_receipt_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/batch-001/BATCH_001_COMPLETION_RECEIPT.yaml
+    outcomes:
+      TS-AHP-001: AUDIT_PASS
+      TS-AIR-001: AUDIT_PASS
+      TS-REL-001: AUDIT_PASS
+
+  - batch_number: 2
+    batch_state: IN_PROGRESS
+    specs:
+      - TS-AHP-002
+      - TS-AIR-002
+      - TS-AIR-004
+    auditor: controller-session-user-authorized
     batch_commit_sha: null
-    batch_receipt_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/batch-001/BATCH_001_STOP_RECEIPT.yaml
-    notes: >
-      Batch 1 paused due to child-agent account capacity exhaustion (RESOURCE_EXHAUSTED code 429).
-      Resumption point: TS-AHP-001.
