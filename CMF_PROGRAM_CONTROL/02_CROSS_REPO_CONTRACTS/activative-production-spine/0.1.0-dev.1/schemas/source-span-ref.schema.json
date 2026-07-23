@@ -1,0 +1,42 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:source-span-ref",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact source-time lineage span.",
+  "properties": {
+    "end_ms": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "source_ref": {
+      "$ref": "immutable-ref.schema.json"
+    },
+    "speaker_id": {
+      "minLength": 1,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_ms": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "transcript_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "source_ref",
+    "start_ms",
+    "end_ms",
+    "speaker_id",
+    "transcript_sha256"
+  ],
+  "title": "SourceSpanRef",
+  "type": "object"
+}

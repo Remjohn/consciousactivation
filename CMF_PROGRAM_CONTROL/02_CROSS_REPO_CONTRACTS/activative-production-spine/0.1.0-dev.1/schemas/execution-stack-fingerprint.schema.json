@@ -1,0 +1,74 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:execution-stack-fingerprint",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact resolved implementation stack identity.",
+  "properties": {
+    "canonical_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "contract_release_ref": {
+      "$ref": "immutable-ref.schema.json"
+    },
+    "evaluator_ref": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "immutable-ref.schema.json"
+        }
+      ]
+    },
+    "fingerprint_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "hardware_profile": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "implementation_ref": {
+      "$ref": "immutable-ref.schema.json"
+    },
+    "model_ref": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "immutable-ref.schema.json"
+        }
+      ]
+    },
+    "precision": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "runtime_ref": {
+      "$ref": "immutable-ref.schema.json"
+    },
+    "tool_refs": {
+      "items": {
+        "$ref": "immutable-ref.schema.json"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "fingerprint_id",
+    "contract_release_ref",
+    "implementation_ref",
+    "runtime_ref",
+    "tool_refs",
+    "evaluator_ref",
+    "model_ref",
+    "hardware_profile",
+    "precision",
+    "canonical_sha256"
+  ],
+  "title": "ExecutionStackFingerprint",
+  "type": "object"
+}

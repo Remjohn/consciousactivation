@@ -1,0 +1,50 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:typed-failure",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Typed failure with one responsible product and next admissible action.",
+  "properties": {
+    "code": {
+      "pattern": "^[A-Z0-9_\\-]+$",
+      "type": "string"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "immutable-ref.schema.json"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "message": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "next_action": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "responsible_product": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "retry_class": {
+      "enum": [
+        "non_retryable",
+        "retryable_same_input",
+        "retryable_after_input",
+        "human_decision_required"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "responsible_product",
+    "message",
+    "retry_class",
+    "next_action",
+    "evidence_refs"
+  ],
+  "title": "TypedFailure",
+  "type": "object"
+}

@@ -1,0 +1,48 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:product-status-envelope",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Development status projection with explicit claim ceiling.",
+  "properties": {
+    "authority": {
+      "$ref": "authority-ref.schema.json"
+    },
+    "certified": {
+      "type": "boolean"
+    },
+    "development_authorized": {
+      "type": "boolean"
+    },
+    "lifecycle_state": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "product_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "product_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?$",
+      "type": "string"
+    },
+    "production_authorized": {
+      "type": "boolean"
+    },
+    "updated_at_utc": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_id",
+    "product_version",
+    "lifecycle_state",
+    "development_authorized",
+    "production_authorized",
+    "certified",
+    "authority",
+    "updated_at_utc"
+  ],
+  "title": "ProductStatusEnvelope",
+  "type": "object"
+}

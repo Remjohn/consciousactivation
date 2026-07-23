@@ -1,0 +1,70 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:event-envelope",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable domain or workflow event metadata envelope.",
+  "properties": {
+    "actor": {
+      "$ref": "actor-ref.schema.json"
+    },
+    "aggregate_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "aggregate_version": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "authority": {
+      "$ref": "authority-ref.schema.json"
+    },
+    "causation_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "occurred_at_utc": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "payload_schema": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "payload_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "payload_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "aggregate_id",
+    "aggregate_version",
+    "actor",
+    "authority",
+    "payload_schema",
+    "payload_version",
+    "payload_sha256",
+    "occurred_at_utc",
+    "causation_id",
+    "correlation_id"
+  ],
+  "title": "EventEnvelope",
+  "type": "object"
+}

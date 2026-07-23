@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cmf-atomic-harness-pipeline"
+version = "0.1.0.dev1"
+description = "Development-only Phase 1 shell for Atomic Harness Pipeline."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["ca-runtime==0.1.0.dev1"]
+
+[project.scripts]
+cmf-pipeline = "cmf_pipeline.entrypoint:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["cmf_pipeline*"]
