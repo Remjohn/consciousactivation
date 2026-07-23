@@ -1,0 +1,29 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AHP-003
+spec_path: 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-AHP-003.md
+spec_sha256: 072041914b836be5a45e80ee87102cc490f0927a946633e78806bee63e3578ed
+phase: PHASE_03
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 21
+  direct_aggregate_test_evidence: 8
+  implementation_without_direct_ac_test: 13
+  unimplemented_or_nonbehavior: 0
+implementation_paths:
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/batch/service.py
+- 05_ATOMIC_HARNESS_PIPELINE/contracts/schemas/source-backed-content-batch.schema.json
+- 05_ATOMIC_HARNESS_PIPELINE/contracts/schemas/derivative-job.schema.json
+test_evidence:
+- tests/phase3/test_authority_and_batch.py::AuthorityBatchTests::test_source_backed_batch_preserves_exact_lineage_and_animation_derivative
+- tests/phase3/test_authority_and_batch.py::AuthorityBatchTests::test_batch_rejects_format02
+open_gap_ids:
+- GAP-REAL-INTERVIEW-AIR-ADAPTERS
+- GAP-ROUTE-RANKING-DEDUPE
+- GAP-WRONG-READING-INHERITANCE-E2E
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false
