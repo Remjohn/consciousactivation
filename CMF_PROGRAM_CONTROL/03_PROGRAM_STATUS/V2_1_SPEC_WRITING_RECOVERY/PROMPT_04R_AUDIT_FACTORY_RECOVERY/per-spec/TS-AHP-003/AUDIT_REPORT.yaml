@@ -1,0 +1,100 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-AHP-003-BATCH009
+spec_id: TS-AHP-003
+spec_title: "Source-Backed Content Batch, Archetype Routing, and Derivative Job Contracts"
+product: Atomic Harness Pipeline
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. Upstream draft dependencies
+  (TS-AHP-002, TS-INT-005, TS-AIR-015, TS-AIR-016) all passed prior audits in Batches 1, 8, and 9.
+  SRC-EXT-023 deferred reference correctly handled with source gap notice.
+  Eligible for TECHNICALLY_ACCEPTED_PENDING_RATIFICATION. NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      FR-133 through FR-136, ST-03.02, ST-03.03 fully covered.
+      Laws enforced: no route manufactured, each job retains Harness/evidence, shared changes invalidate only dependents.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      authority_state CANDIDATE_NOT_CURRENT and build_authority false correctly declared.
+      All 4 upstream drafts (TS-AHP-002 3e76ee7e, TS-INT-005 ffdac055, TS-AIR-015 58946bef, TS-AIR-016 5e4437ba)
+      labeled DRAFT_DEPENDENCY_NOT_ACCEPTED and verified.
+      Pipeline owns batch programs, route eligibility projections, derivative jobs, shared analysis bindings,
+      execution state, dedupe/conflict decisions, receipts.
+      Product sovereignty matrix (Section 3.2) explicitly details boundaries for IE, AIR, Builder, Pipeline,
+      VAE, Delegation, Studio. Activative Contract Compiler != AIR.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      Complete data models: ContentBatchOrchestrationProgram, SourceUseGrant, SharedSourceAnalysisArtifactRef,
+      SharedSourceAnalysisBinding, DerivativeRouteCandidate, RouteEligibilityDecision, RouteRankingResult,
+      RouteSelectionReceipt, ContentDerivativeJob, DerivativeIdentitySignature, DerivativeComparisonResult,
+      AcceptedDiversityPlan.
+      Commands (16), events (17), repository port, atomicity, idempotency, concurrency, cancellation, replay,
+      selective invalidation.
+      Format 02 explicitly DEFERRED_AWAITING_CURRENT_ATOMIC_HARNESS.
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      SRC-INT-001 (c9014d28) and SRC-INT-003 (58e92fee) cited as required unique evidence.
+      SRC-AM-001 (9059fe3c) cited for Format 02 deferral.
+      SRC-EXT-023 correctly listed as DEFERRED_REFERENCE.
+      No route is manufactured — Section 3.3 enforces 6 independent passes before route eligibility.
+      Pipeline never searches for a new archetype; consumes AIR-approved candidates only.
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      Builder implementation contracts (AtomicHarnessDefinition, CategoryOperatingRules) consumed via TS-AHP-002.
+      TS-INT-005, TS-AIR-015, TS-AIR-016 interfaces consumed consistently with Batch 8/9 audit findings.
+      Format 02 deferral decision consistent with TS-REL-001.
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      Implementation stages with proposed paths. Falsifiable ACs.
+      Invalid examples in Section 6.8 specific and clear.
+      Testing evidence and failure modes specified.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+  - finding_id: NOTE-AHP-003-001
+    severity: NOTE
+    lens: lens_2_authority_ownership_sovereignty
+    location: "Section 3.3, Route Eligibility"
+    finding: >
+      Route eligibility requires 6 independent passes. If genuine alternatives exist, human selection
+      is required. If none exist, NO_ELIGIBLE_ROUTE blocks the job without blocking unrelated jobs.
+      This design prevents silent auto-routing into incorrect archetypes.
+    required_action: "Record as informational."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 1
+  critical: 0
+  warning: 0
+  note: 1
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
