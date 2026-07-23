@@ -1,0 +1,29 @@
+schema_version: conscious-activations-audit-batch-stop-receipt/v1
+receipt_id: CA-P04R-BATCH-001-STOP-RECEIPT-2026-07-23
+issued_on: '2026-07-23'
+batch_number: 1
+batch_state: PAUSED_CAPACITY
+trigger_event:
+  type: CHILD_AGENT_RESOURCE_EXHAUSTED
+  error_code: RESOURCE_EXHAUSTED (code 429)
+  message: Individual quota reached.
+  affected_auditors:
+    - auditor_1: INDEPENDENT_AUDITOR_1 (TS-AHP-001) - RESOURCE_EXHAUSTED
+    - auditor_2: INDEPENDENT_AUDITOR_2 (TS-AIR-001) - RESOURCE_EXHAUSTED
+    - auditor_3: INDEPENDENT_AUDITOR_3 (TS-REL-001) - STOPPED_ON_RESTART
+specs_in_batch:
+  - spec_id: TS-AHP-001
+    status: AUDIT_PENDING_CAPACITY
+  - spec_id: TS-AIR-001
+    status: AUDIT_PENDING_CAPACITY
+  - spec_id: TS-REL-001
+    status: AUDIT_PENDING_CAPACITY
+actions_taken:
+  - controller_self_audit_prevented: true
+  - fabricated_findings_prevented: true
+  - completed_audits_preserved: true
+  - unaudited_specs_marked: AUDIT_PENDING_CAPACITY
+  - spec_bytes_modified: false
+  - development_capsules_issued: false
+resumption_instructions: >
+  The next run must resume from the first AUDIT_PENDING_CAPACITY spec: TS-AHP-001 (Batch 1).

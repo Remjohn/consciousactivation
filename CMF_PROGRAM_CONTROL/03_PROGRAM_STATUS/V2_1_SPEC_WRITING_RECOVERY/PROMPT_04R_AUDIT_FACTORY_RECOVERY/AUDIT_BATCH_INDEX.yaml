@@ -1,0 +1,29 @@
+schema_version: conscious-activations-audit-batch-index/v1
+index_id: CA-P04R-AUDIT-BATCH-INDEX-2026-07-23
+issued_on: '2026-07-23'
+purpose: >
+  Tracks all audit batches in the Prompt 04R recovery campaign. Each batch
+  must be committed before the next batch begins. Batch completion receipts
+  are stored in per-batch subdirectories.
+
+factory_state: AUDIT_FACTORY_PAUSED_CAPACITY
+specs_total: 60
+specs_audited: 0
+specs_pending: 0
+specs_pending_capacity: 60
+
+batches:
+  - batch_number: 1
+    batch_state: PAUSED_CAPACITY
+    specs:
+      - TS-AHP-001
+      - TS-AIR-001
+      - TS-REL-001
+    auditor_1: INDEPENDENT_AUDITOR_1 (RESOURCE_EXHAUSTED)
+    auditor_2: INDEPENDENT_AUDITOR_2 (RESOURCE_EXHAUSTED)
+    auditor_3: INDEPENDENT_AUDITOR_3 (STOPPED)
+    batch_commit_sha: null
+    batch_receipt_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/batch-001/BATCH_001_STOP_RECEIPT.yaml
+    notes: >
+      Batch 1 paused due to child-agent account capacity exhaustion (RESOURCE_EXHAUSTED code 429).
+      Resumption point: TS-AHP-001.
