@@ -1,0 +1,54 @@
+schema_version: ca-audit-batch-completion-receipt/v1
+receipt_id: CA-P04R-BATCH-012-COMPLETE-2026-07-23
+batch_number: 12
+issued_on: "2026-07-23"
+batch_state: COMPLETED
+factory_state_after_batch: AUDIT_FACTORY_RUNNING
+
+specs_in_batch:
+  - spec_id: TS-VID-002
+    outcome: AUDIT_PASS
+    quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+    blocking_findings: 0
+    warnings: 0
+    notes: 1
+    note_highlights:
+      - "visible_discontinuity_risk field in evaluation receipt reserved for downstream render stage"
+
+  - spec_id: TS-AHP-004
+    outcome: AUDIT_PASS
+    quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+    blocking_findings: 0
+    warnings: 0
+    notes: 1
+    note_highlights:
+      - "AIR repair-plan ownership separation: Pipeline computes runtime graph, AIR owns semantic repair"
+
+  - spec_id: TS-RET-001
+    outcome: AUDIT_PASS
+    quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+    blocking_findings: 0
+    warnings: 0
+    notes: 1
+    note_highlights:
+      - "Minimum Complete Context deletion proof requirement: solver must prove necessity of each item"
+
+batch_summary:
+  total_specs: 3
+  audit_pass: 3
+  revision_required: 0
+  architect_decision_required: 0
+  audit_blocked: 0
+  total_blocking_findings: 0
+  total_warnings: 0
+  total_notes: 3
+
+cumulative_total_audited: 36
+cumulative_audit_pass: 36
+cumulative_blocking_findings: 0
+
+next_batch: 13
+next_batch_specs:
+  - TS-VAE-BOUND-001
+  - TS-EVAL-002
+  - TS-CAR-001
