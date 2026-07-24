@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "duration_frames": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "fps_denominator": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "fps_numerator": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "height": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "items": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "READ_ONLY_CANONICAL_PROGRAM_PROJECTION"
+      ],
+      "type": "string"
+    },
+    "tracks": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "video_edit_program_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "width": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "projection_id",
+    "video_edit_program_ref",
+    "state",
+    "width",
+    "height",
+    "fps_numerator",
+    "fps_denominator",
+    "duration_frames",
+    "tracks",
+    "items"
+  ],
+  "title": "TimelineProjection",
+  "type": "object"
+}

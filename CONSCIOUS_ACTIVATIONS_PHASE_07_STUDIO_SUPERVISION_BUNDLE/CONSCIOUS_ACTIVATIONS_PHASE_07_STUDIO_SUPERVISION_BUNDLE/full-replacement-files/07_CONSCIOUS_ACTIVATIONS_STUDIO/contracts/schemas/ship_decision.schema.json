@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acknowledgement_required": {
+      "type": "boolean"
+    },
+    "authorized_artifact_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "artifact_kind": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "bytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "media_type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "uri": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "artifact_kind",
+          "bytes",
+          "media_type",
+          "sha256",
+          "uri"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "decision_actor": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "actor_type": {
+          "enum": [
+            "deterministic_module",
+            "model_program",
+            "human"
+          ],
+          "type": "string"
+        },
+        "product_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "workflow_role": {
+          "enum": [
+            "hunter",
+            "analyst",
+            "composer",
+            "commander",
+            "evaluator",
+            "operator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_id",
+        "actor_type",
+        "product_id",
+        "workflow_role"
+      ],
+      "type": "object"
+    },
+    "decision_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "decision_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "denial_codes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "request_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "AUTHORIZED",
+        "DENIED"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "request_ref",
+    "status",
+    "denial_codes",
+    "authorized_artifact_refs",
+    "acknowledgement_required",
+    "decision_actor",
+    "decision_sha256"
+  ],
+  "title": "ShipDecision",
+  "type": "object"
+}

@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "compilation_status": {
+      "enum": [
+        "COMPILED",
+        "NEEDS_CLARIFICATION",
+        "DENIED"
+      ],
+      "type": "string"
+    },
+    "confidence_micros": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "creative_degrees_of_freedom": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "declared_invariants": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "escalation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "exact_operations": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "expected_state_version": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "interpretation": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "invalidated_downstream_nodes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "preview_required": {
+      "type": "boolean"
+    },
+    "program_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "program_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "request_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "required_transformations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "source_kind": {
+      "enum": [
+        "NATURAL_LANGUAGE",
+        "DIRECT_MANIPULATION"
+      ],
+      "type": "string"
+    },
+    "target_layer_or_nodes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "validation_plan": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "program_id",
+    "compilation_status",
+    "request_ref",
+    "interpretation",
+    "target_layer_or_nodes",
+    "exact_operations",
+    "declared_invariants",
+    "required_transformations",
+    "creative_degrees_of_freedom",
+    "invalidated_downstream_nodes",
+    "validation_plan",
+    "preview_required",
+    "confidence_micros",
+    "escalation",
+    "source_kind",
+    "expected_state_version",
+    "program_sha256"
+  ],
+  "title": "ChangeRequestProgram",
+  "type": "object"
+}

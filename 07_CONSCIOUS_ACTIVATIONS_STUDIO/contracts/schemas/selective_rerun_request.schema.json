@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "change_request_program_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "changed_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "invalidated_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "preserved_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "reason": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "rerun_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "rerun_request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "run_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "validation_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "rerun_request_id",
+    "run_ref",
+    "change_request_program_ref",
+    "changed_node_ids",
+    "invalidated_node_ids",
+    "rerun_node_ids",
+    "preserved_node_ids",
+    "validation_node_ids",
+    "reason"
+  ],
+  "title": "SelectiveRerunRequest",
+  "type": "object"
+}

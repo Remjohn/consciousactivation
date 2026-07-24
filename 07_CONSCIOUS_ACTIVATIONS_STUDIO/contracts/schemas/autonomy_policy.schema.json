@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "checkpoint_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "exception_only": {
+      "type": "boolean"
+    },
+    "final_review_required": {
+      "type": "boolean"
+    },
+    "mode": {
+      "enum": [
+        "AUTOPILOT",
+        "REVIEW_BEFORE_SHIP",
+        "CHECKPOINTED",
+        "SHADOW"
+      ],
+      "type": "string"
+    },
+    "publication_authority_required": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "mode",
+    "checkpoint_ids",
+    "exception_only",
+    "final_review_required",
+    "publication_authority_required"
+  ],
+  "title": "AutonomyPolicy",
+  "type": "object"
+}

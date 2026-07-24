@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "current_state_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "evaluation_ref": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "object_id",
+            "version",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_state_version": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "jit_capsule_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "natural_language_request": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "operator_actor": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "actor_type": {
+          "enum": [
+            "deterministic_module",
+            "model_program",
+            "human"
+          ],
+          "type": "string"
+        },
+        "product_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "workflow_role": {
+          "enum": [
+            "hunter",
+            "analyst",
+            "composer",
+            "commander",
+            "evaluator",
+            "operator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_id",
+        "actor_type",
+        "product_id",
+        "workflow_role"
+      ],
+      "type": "object"
+    },
+    "permitted_tool_registry_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "run_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "target_node_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "target_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "request_id",
+    "run_ref",
+    "target_refs",
+    "target_node_ids",
+    "category_id",
+    "natural_language_request",
+    "current_state_ref",
+    "evaluation_ref",
+    "jit_capsule_ref",
+    "permitted_tool_registry_ref",
+    "operator_actor",
+    "expected_state_version"
+  ],
+  "title": "OperatorRevisionRequest",
+  "type": "object"
+}
