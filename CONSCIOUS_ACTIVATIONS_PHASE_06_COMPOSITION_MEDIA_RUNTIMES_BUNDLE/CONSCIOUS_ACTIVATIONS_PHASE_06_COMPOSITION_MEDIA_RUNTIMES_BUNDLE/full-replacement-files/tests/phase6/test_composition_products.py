@@ -1,0 +1,13 @@
+from _support import ref
+from cmf_pipeline.application import PipelineApplication
+from cmf_pipeline.composition import SuperVisualService,CarouselService,AnimationSceneRealizer
+from cmf_pipeline.evaluation import RenderReparseService
+
+def page(pid,text,syntax='PRIMARY_CLAIM'):
+ return {'page_id':pid,'sequence_role':'CLAIM','viewer_state_goal':'RECOGNITION','negative_space_regions':[{'x':600000,'y':50000,'width':300000,'height':200000}],'elements':[{'element_id':f't-{pid}','element_type':'TEXT','semantic_role':'IDENTITY_ANCHOR','syntax_role':syntax,'bbox':{'x':50000,'y':100000,'width':850000,'height':300000},'why':'Preserve source-backed hierarchy','z_index':1,'text':text,'font_size_px':36,'foreground_rgb':[255,255,255],'background_rgb':[20,40,80],'overlap_allowed':False,'source_refs':[ref('moment','m')],'protected_properties':['source_fidelity']} ]}
+def req(kind,pages):return {'composition_kind':kind,'semantic_program_ref':ref('sem','s'),'final_script_ref':ref('script','s'),'primitive_coalition_ref':ref('prim','s'),'archetype_coalition_ref':ref('arch','s'),'activation_transfer_contract_ref':ref('transfer','s'),'canvas':{'width_px':400,'height_px':600,'background_rgb':[10,20,40]},'pages':pages,'wrong_reading_locks':['keep_edge'],'profile_id':'test'}
+def test_static_products_and_reparse(tmp_path):
+ app=PipelineApplication(tmp_path/'db.sqlite3');app.initialize();sv_ir=app.compositions.compile(req('SUPERVISUAL',[page('p1','YOU CAN CHANGE')]),idempotency_key='sv')['object']['payload'];sv=SuperVisualService().render(sv_ir,tmp_path,'sv.png');assert sv['manifest']['byte_count']>100;rep=RenderReparseService().reparse_static(artifact_path=sv['output_path'],artifact_ref={'object_id':sv['manifest']['artifact_id'],'version':'1.0.0','sha256':sv['manifest']['sha256']},composition=sv_ir);assert rep['result']=='PASS'
+ car_ir=app.compositions.compile(req('CAROUSEL',[page('p1','ONE'),page('p2','TWO'),page('p3','THREE')]),idempotency_key='car')['object']['payload'];car=CarouselService().render(car_ir,tmp_path,'carousel');assert len(car['pages'])==3;assert (tmp_path/'carousel.pdf').is_file()
+def test_animation_scene_realization(tmp_path):
+ app=PipelineApplication(tmp_path/'db.sqlite3');app.initialize();ir=app.compositions.compile(req('ANIMATION_SCENE',[page('scene','MOVE','MOTION_SUBJECT')]),idempotency_key='ani')['object']['payload'];scene={'animation_scene_package_id':'scene-pkg','animation_scene_package_version':'1.0.0','scenes':[{'scene_id':'scene'}]};result=AnimationSceneRealizer().realize(scene_package=scene,composition=ir,output_dir=tmp_path/'ani',logical_uri='scene.mp4',frame_count=6,fps=6);assert result['manifest']['format02_activated'] is False;assert (tmp_path/'ani/scene.mp4').is_file()
