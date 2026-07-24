@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tool_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "budget_bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "forbidden_action_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "format_profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "include_contradictions": {
+      "type": "boolean"
+    },
+    "include_failed_alternatives": {
+      "type": "boolean"
+    },
+    "query_text": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "required_action_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "required_projection_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "required_source_kinds": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "required_tags": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "role_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_package_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "stopping_law_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_id",
+    "query_text",
+    "role_id",
+    "category_id",
+    "format_profile_id",
+    "required_source_kinds",
+    "required_tags",
+    "required_action_ids",
+    "required_projection_ids",
+    "include_contradictions",
+    "include_failed_alternatives",
+    "budget_bytes",
+    "allowed_tool_ids",
+    "forbidden_action_ids",
+    "stopping_law_id",
+    "source_package_ref"
+  ],
+  "title": "RetrievalRequest",
+  "type": "object"
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "blocked_actions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "claim_ceiling": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "completed_phase_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "handoff_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "handoff_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "next_permitted_actions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "open_gap_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "release_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "handoff_id",
+    "release_ref",
+    "completed_phase_ids",
+    "open_gap_ids",
+    "next_permitted_actions",
+    "blocked_actions",
+    "claim_ceiling",
+    "handoff_sha256"
+  ],
+  "title": "ImplementationHandoff",
+  "type": "object"
+}

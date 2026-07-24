@@ -1,0 +1,121 @@
+{
+  "$id": "https://contracts.conscious-activations.dev/vae/technical_evaluation_receipt/1.0.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_ref": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "title": "Resource reference",
+      "type": "object"
+    },
+    "demand_request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "deterministic_checks": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "check_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "PASS",
+              "FAIL"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "check_id",
+          "result"
+        ],
+        "title": "Contract",
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "evaluation_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evaluation_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evaluator_actor_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "hard_gate_result": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "type": "string"
+    },
+    "independent_vlm_executed": {
+      "type": "boolean"
+    },
+    "producer_actor_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "production_eligible": {
+      "type": "boolean"
+    },
+    "profile_state": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "verdict": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "evaluation_id",
+    "evaluation_version",
+    "artifact_ref",
+    "demand_request_id",
+    "producer_actor_id",
+    "evaluator_actor_id",
+    "profile_state",
+    "deterministic_checks",
+    "hard_gate_result",
+    "verdict",
+    "production_eligible",
+    "independent_vlm_executed"
+  ],
+  "title": "Technical Evaluation Receipt",
+  "type": "object"
+}
