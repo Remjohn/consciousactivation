@@ -1,0 +1,39 @@
+name: conscious-activations
+
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      CA_DATA_ROOT: /state
+      CA_MEDIA_ROOT: /media
+      CA_DELEGATION_ROOT: /app/packages/ca_delegation_rc4
+    volumes:
+      - ca-state:/state
+      - ca-media:/media
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    restart: unless-stopped
+
+  # NOTE: this service is not runnable yet. infra/docker/dockerfile.web and
+  # apps/web's build do not exist in this repo -- they are TS-APP-UI-001,
+  # explicitly out of scope for TS-APP-API-001. `docker compose up` with no
+  # target will therefore try (and fail) to build this. AC-006 accounts for
+  # this by targeting `api` specifically:
+  #   docker compose -f infra/docker/docker-compose.yml up --build -d api
+  web:
+    build:
+      context: ../../apps/web
+      dockerfile: ../../infra/docker/dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - api
+
+volumes:
+  ca-state: {}
+  ca-media: {}

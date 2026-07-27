@@ -1,0 +1,17 @@
+# Gateway framework dependencies (for local dev without Docker).
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+pydantic==2.7.0
+
+# NOTE: this file only covers the gateway itself. api/main.py also imports
+# the nine local packages under packages/ and services/ (cmf_pipeline,
+# cmf_activative_intelligence, cmf_vae, cmf_builder,
+# conscious_activations_interview_expression, ca_contracts, ca_runtime,
+# ca_delegation_rc4, ca_release). Install those separately, e.g.:
+#   pip install -e packages/ca_contracts -e packages/ca_runtime \
+#               -e packages/ca_delegation_rc4 -e packages/ca_release \
+#               -e services/pipeline -e services/air -e services/vae \
+#               -e services/interview -e services/builder
+# ca_delegation_rc4 additionally requires jsonschema>=4.0, which pip will
+# pull in automatically as long as network access to PyPI is available.

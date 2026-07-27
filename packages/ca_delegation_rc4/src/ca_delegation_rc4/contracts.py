@@ -8,7 +8,7 @@ from typing import Any
 from jsonschema import Draft202012Validator, FormatChecker
 
 EXPECTED_VERSION = "1.1.0-rc.4"
-EXPECTED_DIGEST = "sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44"
+EXPECTED_DIGEST = "sha256:e616d3f9f24633174658e02a29806eb13c2ce8df6419eeb70a3e6413fb69c281"
 
 
 class ContractSetError(ValueError):
