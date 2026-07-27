@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "binding_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "binding_reason": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "harness_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "operator_entry_policy": {
+      "enum": [
+        "EXCEPTION_ONLY",
+        "REVIEW_ALLOWED"
+      ],
+      "type": "string"
+    },
+    "primary_surface": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "supporting_surfaces": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "binding_id",
+    "harness_ref",
+    "category_id",
+    "primary_surface",
+    "supporting_surfaces",
+    "operator_entry_policy",
+    "binding_reason"
+  ],
+  "title": "StudioSurfaceBinding",
+  "type": "object"
+}

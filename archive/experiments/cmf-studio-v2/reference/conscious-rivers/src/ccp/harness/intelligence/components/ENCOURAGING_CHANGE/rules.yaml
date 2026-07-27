@@ -1,0 +1,26 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: ENCOURAGING_CHANGE
+enabled: true
+selection_priority:
+  tier: secondary
+  rank: 7
+enforcement:
+  mode: allow_with_checks
+  default_result: ALLOW
+applies_to:
+  containers:
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+incompatibilities:
+  - guilt_cta
+warn_conditions:
+  - metric: encouragement_specificity
+    operator: lt
+    value: 0.7
+route_hints:
+  select:
+    - use_when_hopeful_transition_is_needed
+    - use_when_vision_needs_softer_entry

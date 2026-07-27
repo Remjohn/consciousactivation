@@ -1,0 +1,39 @@
+schema_version: cmf-builder-activative-skill-change-request/v1
+request_id: SKILL_EVALUATION_AGENT_001
+calling_lane: SKILL_EVALUATION_AGENT
+status: ACCEPTED_AND_APPLIED
+requests:
+  - target_file: skill-packages/activative_intelligence_pack_compiler/1.0.0/manifest.json
+    exact_symbol: evaluation_assets
+    required_additive_change: >-
+      Bind the public development corpus manifest and rubric by exact repository-relative
+      path and SHA-256 without implying protected-case or production certification evidence.
+    preconditions:
+      - portable package manifest exists and is immutable
+      - evaluation corpus hash validation passes
+    postconditions:
+      - the package identifies the exact development evaluation assets used for ST-05.03
+  - target_file: src/cmf_builder/application/activative_skill_commands.py
+    exact_symbol: SkillEvaluationReceipt construction and maturity transition gate
+    required_additive_change: >-
+      Invoke or consume the deterministic development evaluator with exact package,
+      corpus, rubric and evaluator hashes; permit at most development_validated and
+      fail closed on any hard gate or hash mismatch.
+    preconditions:
+      - the exact package identity is frozen
+      - the 14-case public development corpus passes
+      - no protected labels or production thresholds are loaded
+    postconditions:
+      - the stored receipt binds exact evaluated artifact and evaluation asset identities
+      - shadow_ready and certified cannot be emitted by this campaign
+invariants:
+  - human truth and human reaction remain external
+  - Identity DNA and Audience Context Premise are immutable reference-only inputs
+  - semantic fields remain structured and lineage-complete
+  - wrong-reading locks cannot be removed or weakened
+  - no production, shadow-ready or certification claim
+  - no external provider execution
+focused_tests:
+  - tests/skills/activative_evaluation/
+  - tests/skills/portable_package/
+  - tests/stories/st_05_03/

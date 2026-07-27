@@ -1,0 +1,52 @@
+schema_version: cmf-builder-dependency-supersession-addendum/v1
+addendum_id: builder-delegation-rc4-active-baseline
+status: ACTIVE
+recorded: "2026-07-15"
+scope: dependency_and_profile_metadata_only
+planning_authority_preserved:
+  obligations: 410
+  epics: 12
+  stories: 69
+  epic_or_story_redesign_performed: false
+  step_4_started: false
+active_dependency:
+  package: delegation-contracts
+  version: 1.1.0-rc.4
+  pin: ../../contracts/integration/DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+  trust_status: local_unsigned_release_candidate
+  production_eligibility: false
+historical_dependency_snapshots:
+  - versions: [1.1.0-rc.1]
+    classification: historical_confirmed_planning_snapshot
+    artifacts:
+      - EPIC_INVENTORY.yaml
+      - EPIC_DESIGN_PROPOSAL.md
+    active_dependency_effect: none
+  - versions: [1.1.0-rc.1, 1.1.0-rc.2]
+    classification: historical_step_4_snapshot_not_rerun
+    artifacts:
+      - STEP4_CROSS_REPO_DEPENDENCY_VALIDATION.yaml
+      - STEP4_VALIDATION_REPORT.json
+      - STEP4_PLANNING_COVERAGE_REPORT.md
+      - STEP4_BLOCKER_IMPACT_REPORT.md
+    active_dependency_effect: none
+  - versions: [1.1.0-rc.3]
+    classification: historical_pre_step_4_integration_evidence
+    artifacts:
+      - BUILDER_DELEGATION_RC3_INTEGRATION_REPORT.md
+      - BUILDER_DELEGATION_RC3_VALIDATION.json
+      - tools/validate_builder_delegation_rc3_integration.py
+    active_dependency_effect: none
+active_metadata:
+  story_dependency_register: STORY_CROSS_REPOSITORY_DEPENDENCIES.yaml
+  release_1_subset: RELEASE_1_STORY_SUBSET.yaml
+  rc4_validation: BUILDER_DELEGATION_RC4_VALIDATION.json
+  rc4_report: BUILDER_DELEGATION_RC4_INTEGRATION_REPORT.md
+format02:
+  canonical_profile_id: format02_minimal_coach_theatre
+  historical_alias: minimal_coach_theatre
+  alias_registry: ../../../CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/FORMAT02_PROFILE_ALIAS_REGISTRY.yaml
+  strongest_current_state: contract_compatible
+  production_certified: false
+authorization_effect: none
+

@@ -1,0 +1,237 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.03:INDEPENDENT_DIMENSIONS_AND_CONTROLLED_MUTATIONS
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.03
+  title: Score Independent Dimensions and Controlled Mutations
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: quality dimensions remain visible and non-compensable rather than collapsing into one flattering score
+  primary_obligations:
+    - D024
+    - FR-111
+    - FR-112
+    - FR-113
+    - FR-114
+    - FR-115
+    - FR-116
+    - HG-008
+    - NFR-EVAL-004
+  primary_obligation_count: 9
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-08.02
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-08.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_receipt_sha256: c9438a38beb08a54a55d8f681972786282afc4f9a32756e6f027069bca4cae0b
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-08.02/DELTA_CAPSULE.yaml
+    sha256: bcf840550206b39ebea52d85ed51dd05f0b2798c6c0ad996b43b6769fed687b7
+    validation: PASS_PREPARATION_REFERENCE_ONLY
+  unissued_receipt_shell:
+    sha256: 899bec8c462d23450f07fb2ee8cd28ec155a1b57f6331c209ea872a82f5a3aef
+    satisfies_dependency: false
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.03
+  - docs/architecture/adr/ADR-010-BENCHMARK-GOVERNANCE-AND-MATURITY.md
+  - docs/tech-specs/specs/TS-10-BEHAVIORAL-EVALUATION-AND-BENCHMARKS.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - EvaluationCase
+    - ConstitutionalEvaluationReceipt
+    - ConstitutionalReadinessReceipt
+    - RepairReceipt
+  schemas:
+    - docs/contracts/schemas/constitutional-evaluation.schema.json
+    - docs/contracts/schemas/conversational-expression.schema.json
+  ownership_rule: existing contracts and schemas are referenced without local fork or authority expansion
+two_gate_boundary:
+  implementation_gate:
+    scope: deterministic offline scoring, mutation, stability and result-ingestion mechanisms over repository-owned development fixtures
+    closes_evidence_gate: false
+  evidence_gate:
+    status: EVIDENCE_AND_HUMAN_POLICY_GATES_REMAIN_OPEN
+    external_evaluator_required_for_this_implementation: false
+    real_protected_benchmark_created: false
+    production_threshold_created: false
+    certification_authority: false
+implementation_scope_after_dependency_pass:
+  - immutable development rubric identity and version with canonical hash-bound dimension and hard-gate declarations
+  - independent dimension scorecards that retain every dimension even when a non-authoritative trend summary is calculated
+  - one-variable controlled mutation plans and receipts with exact base-case, mutated-field, invariant and expected-decision lineage
+  - non-compensable gate evaluation that cannot be overridden by a composite, average, best run or unrelated dimension
+  - deterministic repeated-run stability summaries containing distributions and dominant failure patterns without inventing release thresholds
+  - typed downstream result ingestion bound to the Builder version, evaluated artifact and originating receipt identity
+  - deterministic rejection, invalidation and rollback receipts with zero partial scorecard state
+immutable_development_rubric:
+  rubric_id: OD-AM-001-ST-08.03-INDEPENDENT-DIMENSIONS-v1
+  rubric_version: 1.0.0-development
+  status: STRUCTURAL_DEVELOPMENT_ONLY_NOT_HUMAN_RATIFIED_FOR_RELEASE
+  immutable_before_evaluation: true
+  mutable_after_result_observation: false
+  base_dimensions:
+    - evidence_understanding
+    - visual_and_temporal_understanding
+    - atomicity
+    - product_architecture
+    - skill_system
+    - evaluation_and_repair_quality
+    - implementation_readiness
+    - downstream_performance
+  extension_rule: category-specific dimensions require an explicit versioned category or profile declaration and remain independently visible
+  substitution_rule: metrics from one category, format profile or production substrate cannot substitute for another without an explicit equivalence receipt
+  thresholds:
+    development_fixture_expectations: permitted_when_explicit_and_non_promotional
+    production_or_certification_thresholds: HUMAN_GOVERNED_NOT_DEFINED
+independent_scoring_rules:
+  - every applicable dimension has its own identity, observation, evidence references, status and failure context
+  - NOT_APPLICABLE is explicit, justified and cannot substitute for missing required evidence
+  - a composite trend may be reported only as non-authoritative supplementary data
+  - no composite or average may hide a missing, rejected, failed or non-compensable dimension
+  - category and profile applicability are validated before scoring
+  - identical canonical inputs yield byte-identical scorecards, decisions and receipts
+controlled_mutation_rules:
+  exactly_one_declared_variable_changed: true
+  immutable_base_case_required: true
+  mutation_identity_required: true
+  preserved_invariants_required: true
+  supported_development_mutations:
+    - preserve_topic_change_grammar
+    - preserve_grammar_change_topic
+    - remove_one_sequence_invariant
+    - swap_semantic_polarity
+    - inject_irrelevant_style_evidence
+  failure_conditions:
+    - more than one uncontrolled variable changes
+    - base-case or mutated-input identity is missing
+    - the expected decision does not explain the changed invariant
+    - mutation corrupts evidence beyond the declared causal test
+    - source, category, profile, rubric or artifact lineage is lost
+non_compensable_gates:
+  gate_ids:
+    - critical_unsupported_decision
+    - evidence_failure
+    - wrong_atomicity
+    - contract_contradiction
+    - silent_rewrite
+    - untested_required_skill
+    - benchmark_leakage
+    - false_readiness
+    - anti_goal_violation
+  enforcement: any applicable failed gate rejects the bounded decision regardless of scores or stability summaries
+lineage_and_identity_requirements:
+  pinned_inputs:
+    - evaluated_artifact_identity_and_hash
+    - Builder_version
+    - target_category_and_profile
+    - source_IR_and_semantic_lineage
+    - benchmark_portfolio_and_case_identity
+    - controlled_mutation_identity
+    - rubric_version_and_hash
+    - scoring_policy_version_and_hash
+    - evaluator_contract_version
+    - threshold_policy_reference
+    - predecessor_maturity_receipt
+    - downstream_result_origin_and_receipt
+  canonical_identity_rule: identities derive only from canonical content and governed versioned references
+  nondeterministic_identity_inputs_prohibited:
+    - wall_clock_time
+    - random_identifier
+    - absolute_machine_path
+    - environment_specific_value
+    - unordered_map_iteration
+stability_and_ingestion_boundary:
+  repeated_run_summary:
+    required: true
+    records: [per_dimension_distribution, dominant_failure_patterns, repetition_identity, missing_or_rejected_runs]
+    production_variance_threshold: NOT_DEFINED
+  downstream_results:
+    accepted_structural_types:
+      - implementation_question
+      - specification_delta
+      - test_failure
+      - latency_and_cost
+      - repair_round
+      - first_pass_acceptance
+      - human_preference_reference
+      - wrong_reading_outcome
+      - certification_result_reference
+    rule: ingest without mutating historical scorecards and reject any result lacking exact artifact, Builder-version and authority lineage
+failure_and_authority_boundary:
+  reject:
+    - leaked protected case or label
+    - category-inappropriate rubric or metric substitution
+    - hidden dimension or hidden minimum failure
+    - unstable or incomplete repetitions represented as conclusive
+    - downstream evidence without exact identity and authority
+    - stale, altered, superseded or invalidated predecessor evidence
+    - unauthorized rubric, score, gate, result, invalidation or rollback mutation
+    - conflicting repeat command payload
+  external_evaluator_or_provider_calls: prohibited
+  protected_label_access: prohibited
+  human_reaction_data: prohibited
+  partial_state_on_failure: prohibited
+blocker_and_evidence_gates_remaining:
+  BD-004: EVIDENCE_PENDING
+  BD-008: EVIDENCE_PENDING
+  HD-006: HUMAN_POLICY_PENDING_REAL_HUMAN_REACTION_DATA_PROHIBITED
+  HD-007: HUMAN_POLICY_PENDING_CONVERSATIONAL_THRESHOLDS_AND_CERTIFICATION
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/independent_scoring.py
+  tests:
+    - tests/stories/st_08_03/test_independent_dimension_scoring.py
+    - tests/stories/st_08_03/test_controlled_mutations.py
+    - tests/stories/st_08_03/test_non_compensable_gates.py
+    - tests/stories/st_08_03/test_lineage_determinism_and_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.03/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.03/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.03/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  mechanical_integrator_files:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-08.02 implementation or completion evidence
+  - external evaluator, provider, runtime, transport, model, credential or network behavior
+  - real protected labels, real human reactions or external product behavior
+  - production thresholds, production promotion, certification or publication
+acceptance_after_dependency_pass:
+  - all eight base dimensions remain independently visible and category-appropriate
+  - each controlled mutation changes exactly one declared variable while retaining complete base-case and invariant lineage
+  - every applicable non-compensable gate is explicit and no score, mean or best run can override failure
+  - rubric, scoring policy, evaluated artifact, mutation, repetition and downstream evidence versions are immutable and hash-bound
+  - repeated-run summaries preserve distributions and dominant failure patterns without creating production thresholds
+  - identical governed inputs produce byte-identical scorecards, decisions, invalidations and rollback receipts
+  - changed governed inputs create new immutable identities and invalidate only affected descendants
+  - leakage, missing identity, unauthorized mutation and conflicting commands fail atomically with zero partial state
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-08.04_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_threshold_defined: false
+  production_ready: false
+  certified: false

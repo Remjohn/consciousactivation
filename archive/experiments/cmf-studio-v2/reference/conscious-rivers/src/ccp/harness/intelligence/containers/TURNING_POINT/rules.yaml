@@ -1,0 +1,33 @@
+schema: ../../schemas/container-rules.schema.json
+schema_id: cmf.container.rules/v1
+container_id: TURNING_POINT
+enabled: true
+priority:
+  tier: structural
+  rank: 4
+enforcement:
+  mode: block_on_fail
+  default_result: REVISE
+applies_to:
+  stages:
+    - scene_builder
+    - editor_regeneration
+required_sequence:
+  previous:
+    - CHALLENGE
+  next:
+    - RESOLUTION
+warn_conditions:
+  - metric: peak_signal_score
+    operator: lt
+    value: 0.85
+  - metric: post_peak_drop_seconds
+    operator: gt
+    value: 5.0
+route_hints:
+  preferred_components:
+    - TURNING_POINT
+    - JUXTAPOSITION
+    - ARCHETYPAL_MOMENT
+    - VOICE_OF_TRUTH
+  fallback: revelation_peak

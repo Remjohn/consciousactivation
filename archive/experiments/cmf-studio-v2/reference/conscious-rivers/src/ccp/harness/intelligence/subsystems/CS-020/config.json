@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-020",
+  "name": "Parallax Scaler",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Camera Motion",
+    "Mobile vection studies"
+  ],
+  "inputs": [
+    "target_platform",
+    "depth_values",
+    "motion_profile",
+    "scene_type"
+  ],
+  "outputs": [
+    "parallax_coefficient",
+    "use_authorization",
+    "verdict"
+  ],
+  "thresholds": {
+    "mobile_parallax_scale": 0.6,
+    "desktop_parallax_scale": 1.0,
+    "max_mobile_depth_multiplier": 0.7
+  },
+  "default_action_on_fail": "REVISE"
+}

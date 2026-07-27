@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-024",
+  "name": "Arousal-Pacing Gate",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "LC4MP"
+  ],
+  "inputs": [
+    "scene_arousal_score",
+    "scene_cls",
+    "shot_duration_map",
+    "information_density_per_cut",
+    "scene_role"
+  ],
+  "outputs": [
+    "verdict",
+    "recommended_duration_band_seconds",
+    "overload_risk",
+    "violations"
+  ],
+  "thresholds": {
+    "high_arousal_cls_min": 3,
+    "high_arousal_duration_seconds": {
+      "min": 3.0,
+      "max": 5.0
+    },
+    "low_arousal_duration_seconds": {
+      "min": 1.5,
+      "max": 3.0
+    },
+    "max_information_density_per_cut_for_high_arousal": 2
+  },
+  "default_action_on_fail": "REVISE"
+}

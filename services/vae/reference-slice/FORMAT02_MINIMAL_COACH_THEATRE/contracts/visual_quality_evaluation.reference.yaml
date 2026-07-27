@@ -1,0 +1,117 @@
+evaluation_id: VQE-F02-0001-C03
+candidate_ref: ASSET-F02-0001-C03
+demand_ref: VAD-F02-0001-v1
+evaluation_profile: character-scene-composition@1.1.0-draft
+profile_status: specified_not_certified
+profile_thresholds_ref: EVAL-AUTHORITY-PENDING-F02-V1.1
+deterministic_validation:
+  verdict: pass
+  checks:
+    dimensions: pass
+    alpha: pass
+    file_integrity: pass
+    receipt_completeness: pass
+    constitutional_context_completeness: pass
+asset_evaluation:
+  verdict: repair_required
+  scores:
+    semantic_fidelity: 0.94
+    activative_fidelity: 0.84
+    identity_continuity: 0.97
+    technical_quality: 0.95
+composition_evaluation:
+  verdict: pass
+  scores:
+    geometry_fit: 0.93
+    hierarchy_support: 0.92
+    crop_resilience: 0.96
+  render_ref: asset://evaluation/compositions/F02-0001-C03.png
+constitutional_evaluation:
+  verdict: repair_required
+  scores:
+    zero_second_hook: 0.86
+    pattern_match_strength: 0.90
+    pattern_interrupt_strength: 0.84
+    viewer_role_clarity: 0.91
+    activation_direction_fidelity: 0.87
+    prediction_gap: 0.82
+    payoff: 0.88
+    affinity: 0.90
+    anticipation_residue: 0.81
+    anti_cliche_strength: 0.89
+    feature_contract_compliance: 0.72
+  feature_contract_results:
+    - feature_contract_ref: FEAT-GAZE-F02-004-v1
+      applicable: true
+      verdict: pass
+      evidence: Gaze remains relational and directed toward the comparison field.
+    - feature_contract_ref: FEAT-EXPR-F02-004-v1
+      applicable: true
+      verdict: pass
+      evidence: Expression reads as restrained skepticism rather than contempt.
+    - feature_contract_ref: FEAT-HANDS-F02-004-v1
+      applicable: true
+      verdict: repair_required
+      evidence: Open palm reads as explanation rather than skeptical withholding.
+    - feature_contract_ref: FEAT-SPACE-F02-004-v1
+      applicable: true
+      verdict: pass
+      evidence: Negative space preserves the explanation field and attention path.
+  no_text_evaluation:
+    applicability: not_applicable
+    applicability_reason: >-
+      The authoritative Format 02 profile evaluates this reaction inside a composition
+      with a reserved explanatory-copy region rather than as a no-text asset.
+    verdict: not_applicable
+    meaning_survives: null
+    viewer_role_survives: null
+    evidence: Not run; applicability must be re-evaluated for any no-text derivative.
+wrong_reading_evaluation:
+  verdict: pass
+  risk_score: 0.08
+  dominant_interpretation: restrained skepticism before recognition
+  lock_results:
+    - lock: Do not read as contempt or mockery.
+      triggered: false
+      evidence: Mouth and brow remain restrained; gaze is relational.
+    - lock: Do not imply that effort is worthless.
+      triggered: false
+      evidence: The visual stages resistance before the later explanation.
+    - lock: Do not use a front-facing centered presentation pose.
+      triggered: false
+      evidence: Subject remains three-quarter and foreground-right.
+syntax_context_evaluation:
+  recurrence_verdict: beneficial_recurrence
+  contextual_similarity_to_recent_uses: 0.29
+  continuity_value: 0.95
+  fatigue_risk: 0.06
+  explanation:
+    - Same character identity supports continuity.
+    - The pose and reaction role differ from recent uses.
+temporal_evaluation: {}
+responsible_layer_summary:
+  primary_layer: materialization_pose_conditioning
+  contributing_layers:
+    - feature_contract
+  repair_authority: vae_owned_binding
+  evidence: >-
+    The authoritative hands contract is complete; the materialized pose failed to
+    express skeptical withholding.
+failures:
+  - failure_code: FEATURE_CONTRACT_GESTURE_MISMATCH
+    severity: major
+    responsible_layer: materialization_pose_conditioning
+    contributing_layers:
+      - feature_contract
+    evidence_bbox:
+      - 0.55
+      - 0.42
+      - 0.22
+      - 0.18
+    explanation: The open-palm gesture reads as explanation rather than skeptical withholding.
+repair_contract_ref: REPAIR-F02-0001-R1
+verdict: repair_required
+evaluator_identity:
+  vlm: architecture_pending
+  program: character-scene-evaluator-v1.1
+  profile_version: 1.1.0-draft

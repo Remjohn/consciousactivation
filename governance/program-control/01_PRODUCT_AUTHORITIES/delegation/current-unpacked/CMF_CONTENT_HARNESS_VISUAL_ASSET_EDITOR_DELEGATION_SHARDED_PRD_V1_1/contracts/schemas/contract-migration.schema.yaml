@@ -1,0 +1,31 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Contract Migration
+type: object
+additionalProperties: false
+required:
+- migration_id
+- source
+- target
+- transformations
+- authority_effect
+- validation
+- output
+properties:
+  migration_id:
+    type: string
+    minLength: 1
+    pattern: ^MIG-
+  source:
+    type: object
+  target:
+    type: object
+  transformations:
+    type: array
+    items:
+      type: object
+  authority_effect:
+    type: object
+  validation:
+    type: object
+  output:
+    type: object

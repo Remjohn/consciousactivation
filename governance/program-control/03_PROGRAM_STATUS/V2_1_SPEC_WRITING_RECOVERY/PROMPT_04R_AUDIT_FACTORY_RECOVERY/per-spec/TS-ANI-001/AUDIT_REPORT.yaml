@@ -1,0 +1,72 @@
+schema_version: ca-audit-report/v1
+receipt_id: CA-P04R-AUDIT-TS-ANI-001-REPORT-2026-07-23
+auditor: INDEPENDENT_AUDITOR_CONTROLLER
+spec_id: TS-ANI-001
+spec_title: Source-Grounded Non-Format-02 2D Animation Derivative Runtime
+product: Atomic Harness Pipeline
+batch: 10
+issued_on: "2026-07-23"
+
+independence_declaration:
+  auditor_is_spec_writer: false
+  auditor_is_controller: false
+  conflicts_of_interest: NONE
+
+spec_identity:
+  hash_on_record: "8bce45fdf570d41a263f5df882d2297ce52fa1fef7615d534c025b1c8cc12ff9"
+  quality_state_claimed: WRITTEN_PENDING_AUDIT
+  authority_state_claimed: CANDIDATE_NOT_CURRENT
+  build_authority_claimed: false
+  build_state_claimed: NOT_BUILD_READY
+  ceiling_claimed: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+  format02_state: DEFERRED_NOT_ACTIVE
+  writing_wave: 12
+
+outcome: AUDIT_PASS
+quality_state_after_audit: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+audit_pass_is_accepted_for_build: false
+audit_pass_is_production_eligible: false
+
+lens_results:
+  lens_1_fr_story_outcome_coverage: PASS
+  lens_2_authority_ownership_sovereignty: PASS
+  lens_3_contract_lifecycle_completeness: PASS
+  lens_4_activative_primitive_archetype_source_fidelity: PASS
+  lens_5_brownfield_cross_spec_consistency: PASS
+  lens_6_build_readiness_testability: PASS
+
+blocking_findings: 0
+warnings: 0
+notes: 1
+
+findings:
+  - id: NOTE-ANI-001-001
+    lens: 4
+    severity: NOTE
+    title: "Generated performance labeling — cue-level enforcement required at implementation"
+    description: >
+      Section 6.4 PerformanceTrackV1 specifies that a generated cue carries a generated-performance
+      label and cannot claim actual participant reaction. Section 3.4 further requires
+      GENERATED_PERFORMANCE labeling unless a cue is a direct, source-timed representation whose
+      provenance permits a narrower claim. AC-ANI-008 tests this boundary.
+      The spec does not specify the exact schema field name for the generated-performance label on
+      PerformanceTrackV1 cues — the field is implied but not fully named as a required enum/boolean
+      in the cue schema pseudocode. This does not constitute a blocking finding because the
+      behavioral requirement is clearly stated; implementors must ensure the field is explicitly
+      typed and that its absence fails validation.
+    action: Implementation must add an explicit typed generated_performance field to the cue schema.
+      This is a design-completion item for the implementation stage, not an audit blocker.
+
+upstream_draft_dependency_status:
+  - spec_id: TS-AHP-003
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "072041914b836be5a45e80ee87102cc490f0927a946633e78806bee63e3578ed"
+    revision_impact: "Governing decisions; architecture/workflows; models/contracts/schemas/APIs; failure/migration/rollback/recovery/observability; acceptance; testing/evidence"
+  - spec_id: TS-AIR-015
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "58946bef28d60b991fd2897429f199534c104b9096b977125f2e5b6a710a03d8"
+    revision_impact: "Governing decisions; architecture/workflows; models/contracts/schemas/APIs; failure/migration/rollback/recovery/observability; acceptance; testing/evidence"
+  - spec_id: TS-AIR-017
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "0e87466a326eac865a66609d2609a1fc8006f5b32a5a847bd01e36e488363a81"
+    revision_impact: "Governing decisions; architecture/workflows; models/contracts/schemas/APIs; failure/migration/rollback/recovery/observability; acceptance; testing/evidence"

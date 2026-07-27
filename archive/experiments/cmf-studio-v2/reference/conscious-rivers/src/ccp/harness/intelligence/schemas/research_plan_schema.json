@@ -1,0 +1,159 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "E-Roll Research Plan",
+    "description": "Schema for arc-specific research planning generated from deep-researcher skills",
+    "type": "object",
+    "required": [
+        "project_id",
+        "arc",
+        "generated_at",
+        "source_skill",
+        "research_questions",
+        "beat_mapping"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "description": "Project identifier, e.g., '02_50-12 Audrey'"
+        },
+        "arc": {
+            "type": "string",
+            "description": "Selected arc from strategy_brief.json",
+            "enum": [
+                "The Witness",
+                "The Breakthrough",
+                "The Call to Adventure",
+                "The Confrontation",
+                "The Core Transformation",
+                "The Divine Spark",
+                "The Comedic Reframe",
+                "The Quiet Reflection",
+                "The Rally",
+                "The Sacred Return",
+                "The Shared Struggle",
+                "The Ticking Clock",
+                "The Warning"
+            ]
+        },
+        "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO timestamp of generation"
+        },
+        "source_skill": {
+            "type": "string",
+            "description": "Path to the arc-specific deep-researcher skill used"
+        },
+        "research_questions": {
+            "type": "array",
+            "minItems": 12,
+            "maxItems": 12,
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "beat",
+                    "category",
+                    "question",
+                    "research_target",
+                    "status"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 12,
+                        "description": "Question number (1-12)"
+                    },
+                    "beat": {
+                        "type": "string",
+                        "pattern": "^(W[1-5]|B[1-4]|CA[1-4]|CO[1-4]|CT[1-4]|DS[1-4]|CR[1-4]|QR[1-4]|RA[1-4]|SR[1-4]|SS[1-4]|TC[1-4]|WA[1-4])$",
+                        "description": "Beat code from the arc"
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Research category, e.g., 'COACH CREDIBILITY', 'CLIENT TRANSFORMATION'"
+                    },
+                    "question": {
+                        "type": "string",
+                        "description": "Exact question text from the arc skill"
+                    },
+                    "source_field": {
+                        "type": "string",
+                        "description": "Where to find input data, e.g., 'tribe_soul.shared_heroes'"
+                    },
+                    "research_target": {
+                        "type": "string",
+                        "description": "What to search for in browser research"
+                    },
+                    "expected_output": {
+                        "type": "string",
+                        "default": "2-3 URLs",
+                        "description": "Expected number of URLs to find"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "in_progress",
+                            "completed",
+                            "skipped"
+                        ],
+                        "description": "Research status for this question"
+                    },
+                    "findings": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "description": "Verified URL from browser search"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "Title or name of the reference"
+                                },
+                                "relevance": {
+                                    "type": "string",
+                                    "description": "Why this is relevant to the beat"
+                                },
+                                "validated": {
+                                    "type": "boolean",
+                                    "default": false,
+                                    "description": "Whether URL was validated via read_url_content"
+                                }
+                            }
+                        },
+                        "description": "Research findings for this question"
+                    }
+                }
+            }
+        },
+        "beat_mapping": {
+            "type": "object",
+            "description": "Maps beat codes to question IDs",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "integer"
+                }
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "total_urls_found": {
+                    "type": "integer"
+                },
+                "total_urls_validated": {
+                    "type": "integer"
+                },
+                "research_duration_minutes": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+id: format_intelligence.engine_adapter_payload.compile
+version: "1.0.0"
+status: active
+name: "Format_Intelligence Engine_Adapter_Payload Compile"
+owner_agent: format_intelligence_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Compile extraction packets into format-specific realization programs."
+inputs:
+  - FormatIntelligenceContext
+  - GenericExtractionPacketRef
+outputs:
+  - FormatIntelligenceProgram
+  - FormatCommanderVerdict
+required_contracts:
+  - FormatIntelligenceProgram
+  - FormatIngredientChecklist
+  - FormatCompositionGrammar
+  - FormatLayerStackSpec
+  - FormatStyleRoutePolicy
+  - FormatEvalGateSet
+  - EngineAdapterPayload
+required_registries:
+  - registry.format_intelligence.formats.v1
+  - registry.format_intelligence.sub_formats.v1
+  - registry.format_intelligence.format_required_ingredients.v1
+hard_gates:
+  - "brand_context_version_id is required."
+  - "Format Intelligence consumes extraction packets; it does not read raw transcripts as primary input."
+  - "Every format program requires source_span_refs."
+  - "Required ingredient checklist must pass before commander authorization."
+  - "Style route policies reject forbidden routes."
+runtime_accuracy:
+  pydantic_validation: required
+  deterministic_guards: required
+  dspy_reasoning: allowed_for_route_rationale_only
+  receipt: required

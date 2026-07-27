@@ -1,0 +1,76 @@
+{
+  "schema_id": "cmf.cognitive.rhythm.validator/v1",
+  "validator_id": "CRV-SCENE-BUILDER-v1",
+  "version": "1.0.0",
+  "compile_target": "SCENE_BUILDER",
+  "runtime_stage": "scene_builder",
+  "sequence_contract": {
+    "estimated_scene_cls_field": "estimated_scene_cls",
+    "mismatch_mode_value": "strategic_mismatch",
+    "strict_mode_value": "strict",
+    "peak_end_stages": ["TURNING_POINT", "RESOLUTION", "VISION"],
+    "reset_stage_hints": ["SETUP", "RESOLUTION"],
+    "max_unrecovered_high_cls_run": 1
+  },
+  "gates": [
+    {
+      "gate_id": "CR-01",
+      "name": "CLS Recovery Gate",
+      "metric": "recovery_ratio",
+      "operator": ">=",
+      "value": 0.8,
+      "block_below": 0.5,
+      "weight": 0.25,
+      "repair_hint": "Insert a low-load clarifier, release beat, or pause within one beat of each CLS 4-5 spike.",
+      "notes": "Derived from LC4MP resource-call limits and the need for recovery after dense bursts."
+    },
+    {
+      "gate_id": "CR-02",
+      "name": "Mismatch Resolution Gate",
+      "metric": "mismatch_resolution_ratio",
+      "operator": ">=",
+      "value": 1.0,
+      "block_below": 0.75,
+      "weight": 0.2,
+      "repair_hint": "Resolve strategic audio-visual mismatch by the next beat instead of sustaining it across the sequence.",
+      "notes": "Treat incongruence as a temporary interrupt, not a default mode."
+    },
+    {
+      "gate_id": "CR-03",
+      "name": "Peak-End Anchor Gate",
+      "metric": "peak_end_focus_score",
+      "operator": ">=",
+      "value": 0.8,
+      "block_below": 0.5,
+      "weight": 0.25,
+      "repair_hint": "Allocate the cleanest, most coherent scene templates and effect stacks to turning-point and ending beats.",
+      "notes": "Implements peak-end weighting for remembered moments."
+    },
+    {
+      "gate_id": "CR-04",
+      "name": "Continuity Anchor Gate",
+      "metric": "continuity_anchor_ratio",
+      "operator": ">=",
+      "value": 0.75,
+      "block_below": 0.5,
+      "weight": 0.15,
+      "repair_hint": "Add match-action, eyeline, palette, or sound-bed anchors across dense or montage-heavy runs.",
+      "notes": "Protects eye-tracking continuity and Kuleshov legibility during complex sequences."
+    },
+    {
+      "gate_id": "CR-05",
+      "name": "Cadence Reset Gate",
+      "metric": "reset_space_ratio",
+      "operator": ">=",
+      "value": 0.2,
+      "block_below": 0.1,
+      "weight": 0.15,
+      "repair_hint": "Increase the proportion of reset or bridge beats so the viewer gets perceptual breathing room.",
+      "notes": "Aligns with rhythm, shot-duration, and sequence segmentation research."
+    }
+  ],
+  "score_bands": {
+    "pass": 0.8,
+    "revise": 0.65
+  }
+}

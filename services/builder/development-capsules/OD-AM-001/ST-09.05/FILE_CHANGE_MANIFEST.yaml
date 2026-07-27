@@ -1,0 +1,43 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-09.05
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/workflow/candidate_routing.py
+    role: candidate race, risk-aware route, evaluator isolation and human-gate policy contracts
+  - path: tests/stories/st_09_05/test_candidate_race_quality_gates.py
+    role: candidate evaluation gate and winner-selection coverage
+  - path: tests/stories/st_09_05/test_risk_aware_compute_routing.py
+    role: deterministic provider-neutral compute route coverage
+  - path: tests/stories/st_09_05/test_evaluator_isolation_and_human_gates.py
+    role: evaluator-view isolation and human-gate boundary coverage
+  - path: tests/stories/st_09_05/test_failure_authority_invalidation_rollback.py
+    role: repeat, authority, invalidation and rollback coverage
+files_modified:
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    role: mechanical exact-source registration for ST-09.05 source
+  - path: development-capsules/OD-AM-001/ST-09.05/TEST_RESULTS.json
+    role: compact test evidence
+  - path: development-capsules/OD-AM-001/ST-09.05/FILE_CHANGE_MANIFEST.yaml
+    role: compact file-scope evidence
+  - path: development-capsules/OD-AM-001/ST-09.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    role: OD-AM-001 implementation completion receipt
+production_files_changed:
+  - src/cmf_builder/workflow/candidate_routing.py
+test_files_changed:
+  - tests/stories/st_09_05/test_candidate_race_quality_gates.py
+  - tests/stories/st_09_05/test_risk_aware_compute_routing.py
+  - tests/stories/st_09_05/test_evaluator_isolation_and_human_gates.py
+  - tests/stories/st_09_05/test_failure_authority_invalidation_rollback.py
+shared_files_changed:
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+status_files_changed:
+  - docs/implementation/offline-development/OVERNIGHT_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  path_ownership_conformant: true
+  provider_model_compute_or_external_runtime_executed: false
+  production_or_certification_status_created: false
+  file_scope_verdict: PASS

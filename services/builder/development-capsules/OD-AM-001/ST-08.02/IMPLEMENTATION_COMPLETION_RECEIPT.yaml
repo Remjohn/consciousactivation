@@ -1,0 +1,90 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-08.02:DEVELOPMENT_MATURITY_RECEIPTS:95407ae3e94b
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-08.02
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder can deterministically issue development-only maturity receipts from
+  exact protected-evidence receipt contracts, layered case metadata, explicit
+  portfolio branches and exact evaluation identities while capping emitted maturity
+  at development_validated and preserving all external evidence, production and
+  certification gates.
+primary_obligations_implemented:
+  - ADR-010
+  - D022
+  - D023
+  - FR-107
+  - FR-108
+  - FR-109
+  - FR-110
+  - NFR-EVAL-001
+  - NFR-TRACE-003
+dependency_receipts:
+  satisfied:
+    - ST-08.01:ImplementationCompletionReceipt:e8c2c8048720379874405844cfa59b43fc59941496724f36b42ea65ca2cd1466
+  pending: []
+source_files:
+  - path: src/cmf_builder/evaluation/maturity_promotion.py
+    sha256: 95407ae3e94b1cf00566717a11118f178eb3ecf4ebb242003332b05909d434f9
+test_files:
+  - path: tests/stories/st_08_02/test_development_maturity_promotion.py
+    sha256: 83a93524a5e169fcb9a96c7bd4c1bdab7051f930b13b4b16f10b5271a5594382
+  - path: tests/stories/st_08_02/test_negative_boundaries.py
+    sha256: 1d00f89dcd5e8c396321f2ef63006890af68def0f76bf4008d74cf3f0267007e
+  - path: tests/stories/st_08_02/test_authority_and_determinism.py
+    sha256: 7c9ea3dce580c8a0d53032d7f4d8b8b71893a417d09ed88ca96f05833ac968d6
+  - path: tests/stories/st_08_02/test_rollback_and_invalidation.py
+    sha256: 4e4a3f0f85ea5de4e5165b7b95765e8294846c4984732923c19419b28b4eac69
+tests:
+  status: PASS_ALL_GOVERNED_GATES
+  focused: PASS_28_OF_28
+  affected_ST_08_01_and_ST_08_02: PASS_71_OF_71
+  architecture_boundary: PASS_12_OF_12
+  complete_repository_regression: PASS_1310_OF_1310_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  mandatory_skips: 0
+  results_path: development-capsules/OD-AM-001/ST-08.02/TEST_RESULTS.json
+deterministic_identity_evidence: >-
+  Identical governed inputs produce byte-identical maturity receipts; changed
+  rubric, evaluator or dependency identities produce new immutable identities and
+  deterministic invalidation receipts.
+authority_and_boundary_evidence:
+  OD_AM_001_receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  ST_08_01_receipt_sha256: e8c2c8048720379874405844cfa59b43fc59941496724f36b42ea65ca2cd1466
+  ST_08_01_delta_capsule_sha256: 07812f6cd6b01025812364f2f2a2381f39d7498897a29580ff474294b1d6a866
+  source_boundary_registry_sha256: ba705bd5ff8a3b3cc43f83d39fcb02de4f84b26f70148248dc9a6b8fffcbe68a
+  exact_evaluated_version_only: PASS
+  protected_label_custody_and_generator_isolation: PASS
+  hard_gate_and_non_compensable_failure_enforcement: PASS
+  maximum_maturity: development_validated
+  stable_shadow_ready_production_ready_and_certified_claims_rejected: PASS
+  real_protected_evidence_created: false
+  production_or_certification_authority: false
+rollback_evidence: PASS_INVALIDATION_DEPRECATION_SUPERSESSION_ROLLBACK_ZERO_MUTATION
+observability_evidence: PASS_SUCCESS_REJECTION_INVALIDATION_AND_TRANSITION_OBSERVATIONS
+evidence_gate_status: EVIDENCE_AND_HUMAN_POLICY_GATES_REMAIN_OPEN
+external_gates_remaining_open:
+  - BD-004
+  - BD-007
+  - BD-008
+  - HD-006
+  - HD-007
+  - XDEP-001
+  - XDEP-002
+  - XDEP-003
+  - XDEP-004
+  - XDEP-006
+maximum_maturity: development_validated
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: e70f49369e77a1b54e4cf0db1d4be3dee21ed83b9bfe9f8c665b47d9a75c0500
+  test_results_sha256: 180b98278f63a1b33fbca15c171edee79fe55d8ba1319ca577bc57a747edd5ec
+  file_change_manifest_sha256: b93e68900a16fc5b126a660d1ecc4321610bdbfd55ce70b2d0d8e7e9872bca87
+  source_boundary_registry_sha256: ba705bd5ff8a3b3cc43f83d39fcb02de4f84b26f70148248dc9a6b8fffcbe68a
+  production_source_tree_sha256: 022b9eb655bf858d93956778cf73e73c36aa20de87055415f48b9dc99e3639a6
+issuance_rule: PASS_FRESH_CANONICAL_INTEGRATOR_FULL_REGRESSION_AND_SOURCE_TREE_HASH
+promotion_gate: PASS_CANONICAL_FULL_REGRESSION_SOURCE_BOUNDARY_AND_EVIDENCE_VALIDATION

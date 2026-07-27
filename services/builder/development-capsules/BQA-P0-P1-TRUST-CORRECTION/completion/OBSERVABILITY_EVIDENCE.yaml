@@ -1,0 +1,50 @@
+schema_version: cmf-builder-bqa-trust-correction-observability/v1
+capsule_id: BQA-P0-P1-TRUST-CORRECTION
+verdict: PASS
+target_validation_outbox:
+  committed_intents_per_command: 10
+  order:
+    - atomic_content_harness_validation_started
+    - eight_ordered_dimension_results
+    - atomic_content_harness_validation_committed
+  state_model: [pending, in_flight, delivered]
+  queryable_by: command_id
+  identity_evidence:
+    - validation_receipt_id
+    - validation_receipt_hash
+    - definition_id
+    - definition_hash
+    - run_id
+    - authority_identity
+    - correlation_id
+    - causation_id
+  sink_failure_before_acceptance:
+    caller_outcome: ORIGINAL_COMMITTED_RECEIPT_RETURNED
+    false_NOT_COMMITTED_observation_count: 0
+    pending_count: 10
+    delivered_count: 0
+  partial_delivery_probe:
+    acknowledged_before_failure: 3
+    pending_after_failure: 7
+    duplicate_retry_delivered: 7
+    duplicate_acceptance_decisions: 0
+    final_delivered_count: 10
+authority_observations:
+  governed_semantic_mutations_rejected: 8
+  governed_section_mutations_rejected: 80
+  compiler_actor_cases_rejected: [unknown, wrong_kind, stale]
+  rejected_before_target_commit: true
+run_transaction_observations:
+  operations: [create, transition, waiver, checkpoint, resume]
+  injected_boundaries: [events, checkpoint, command_record]
+  partial_state_after_failure: 0
+  clean_retry: PASS_15_OF_15
+concurrency_observations:
+  repeated_atomic_races: 10
+  successes_per_race: 1
+  conflicts_per_race: 1
+  lost_events: 0
+archive_observations:
+  candidate_identity_and_descriptors_same_buffer: PASS
+  replacement_archive_influenced_descriptors: false
+production_or_certification_claim: false

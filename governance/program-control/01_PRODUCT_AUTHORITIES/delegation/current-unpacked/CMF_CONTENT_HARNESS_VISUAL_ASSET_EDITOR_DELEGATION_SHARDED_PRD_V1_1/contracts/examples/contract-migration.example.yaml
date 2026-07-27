@@ -1,0 +1,20 @@
+migration_id: MIG-VAD-1.0-TO-1.1
+source:
+  message_type: visual_asset_demand
+  version: '1.0'
+  payload_hash: sha256:demand0042
+target:
+  version: '1.1'
+transformations:
+- from: composition.text_safe_bbox
+  to: composition_intent.reserved_regions[headline]
+authority_effect:
+  semantic_change: false
+  composition_authority_change: false
+validation:
+  source_schema: pass
+  target_schema: pass
+  semantic_equivalence: pass
+output:
+  new_payload_ref: contract://migrations/VAD-F02-0042-v1.1
+  new_payload_hash: sha256:migrateddemand0042

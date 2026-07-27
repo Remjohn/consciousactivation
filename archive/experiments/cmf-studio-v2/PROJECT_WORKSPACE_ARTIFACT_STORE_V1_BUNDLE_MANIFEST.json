@@ -1,0 +1,24 @@
+{
+  "bundle_id": "ccp_project_workspace_artifact_store_v1_patch",
+  "version": "1.0.0",
+  "purpose": "Deterministic client workspace folder and artifact reference store.",
+  "integration_mode": "repo_overlay_milestone_commits",
+  "contains": {
+    "architecture_docs": 7,
+    "contract_files": 1,
+    "repository_files": 1,
+    "service_files": 6,
+    "registries": 7,
+    "skill_manifests": 10,
+    "tests": 1,
+    "apply_instructions": 1
+  },
+  "hard_laws": [
+    "Do not write outside workspace root.",
+    "Do not allow path traversal.",
+    "Do not delete artifacts.",
+    "Artifact refs are pointers, not raw file contents.",
+    "Materialized artifacts require sha256.",
+    "Manifests cannot mix workspaces."
+  ]
+}

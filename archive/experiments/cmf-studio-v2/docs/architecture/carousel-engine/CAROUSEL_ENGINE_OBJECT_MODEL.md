@@ -1,0 +1,30 @@
+# Carousel Engine Object Model
+
+Core objects:
+
+```text
+CarouselProject
+CarouselVariant
+CarouselSourcePacket
+CarouselSequenceStrategy
+CarouselViewerStateSequence
+CarouselSlideCountDecision
+CarouselSlideRolePlan
+CarouselClaimMap
+CarouselCopySystem
+CarouselSlideBrief
+CarouselSlideCopyPacket
+CarouselAssetRequirementPlan
+CarouselAssetAllocationPlan
+CarouselVisualSystem
+CarouselStyleRoutePolicy
+CarouselSlideCompositionHypothesis
+CarouselSlideCompositionDecision
+CarouselSlideLayerPlan
+CarouselRenderBatchContract
+CarouselSlideRenderReceipt
+CarouselSequenceEvaluationReceipt
+CarouselRevisionReceipt
+CarouselExportPack
+CarouselApprovalPacket
+```

@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-015",
+  "name": "Shot Duration Enforcer",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Kuleshov Effect",
+    "Event perception"
+  ],
+  "inputs": [
+    "shot_length_ms",
+    "prior_context_duration_ms",
+    "shot_role",
+    "semantic_complexity",
+    "shot_scale"
+  ],
+  "outputs": [
+    "duration_verdict",
+    "recommended_minimum_hold_ms",
+    "violations"
+  ],
+  "thresholds": {
+    "minimum_inference_duration_ms": 750,
+    "contextless_minimum_duration_ms": 2000,
+    "allow_hook_microcuts": true
+  },
+  "default_action_on_fail": "REVISE"
+}

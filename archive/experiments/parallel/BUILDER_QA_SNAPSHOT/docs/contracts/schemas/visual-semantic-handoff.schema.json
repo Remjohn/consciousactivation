@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf://builder/contracts/visual-semantic-handoff/v1",
+  "title": "Activation-first Visual Semantic and Delegation Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["activative_intelligence_pack_ref", "visual_semantic_pack", "visual_narrative_program", "feature_contract_refs", "composition_asset_pack", "visual_syntax_handoff_ref", "tv_route_request", "delegation_handoff"],
+  "properties": {
+    "activative_intelligence_pack_ref": {"$ref": "#/$defs/VersionedRef"},
+    "visual_semantic_pack": {"$ref": "#/$defs/VisualSemanticPack"},
+    "visual_narrative_program": {"$ref": "#/$defs/VisualNarrativeProgram"},
+    "feature_contract_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/VersionedRef"}},
+    "composition_asset_pack": {"$ref": "#/$defs/CompositionAssetPack"},
+    "visual_syntax_handoff_ref": {"$ref": "#/$defs/VersionedRef"},
+    "tv_route_request": {"$ref": "#/$defs/TVRouteRequest"},
+    "delegation_handoff": {"$ref": "#/$defs/DelegationHandoff"}
+  },
+  "$defs": {
+    "VersionedRef": {"type": "object", "additionalProperties": false, "required": ["object_id", "version", "sha256"], "properties": {"object_id": {"type": "string"}, "version": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "VisualSemanticPack": {"type": "object", "additionalProperties": false, "required": ["recognition_intent", "audience_visual_world_refs", "recognition_carrier", "wrong_reading_locks", "candidate_scores"], "properties": {"recognition_intent": {"type": "string"}, "audience_visual_world_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/VersionedRef"}}, "recognition_carrier": {"type": "string"}, "wrong_reading_locks": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "candidate_scores": {"type": "array", "minItems": 1, "items": {"type": "object"}}}},
+    "VisualNarrativeProgram": {"type": "object", "additionalProperties": false, "required": ["attention_states", "viewer_roles", "prediction_gaps", "pattern_interrupts", "payoff"], "properties": {"attention_states": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "viewer_roles": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "prediction_gaps": {"type": "array", "items": {"type": "string"}}, "pattern_interrupts": {"type": "array", "items": {"type": "string"}}, "payoff": {"type": "string"}}},
+    "AssetDemand": {"type": "object", "additionalProperties": false, "required": ["demand_id", "semantic_ref", "narrative_ref", "asset_role", "constraints"], "properties": {"demand_id": {"type": "string"}, "semantic_ref": {"$ref": "#/$defs/VersionedRef"}, "narrative_ref": {"$ref": "#/$defs/VersionedRef"}, "asset_role": {"type": "string"}, "constraints": {"type": "object"}}},
+    "CompositionAssetPack": {"type": "object", "additionalProperties": false, "required": ["pack_ref", "asset_demands", "non_mutation_hash"], "properties": {"pack_ref": {"$ref": "#/$defs/VersionedRef"}, "asset_demands": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/AssetDemand"}}, "non_mutation_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "TVRouteRequest": {"type": "object", "additionalProperties": false, "required": ["request_id", "beat_routes", "semantic_ref", "narrative_ref"], "properties": {"request_id": {"type": "string"}, "beat_routes": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["beat_id", "route", "bbox", "why"], "properties": {"beat_id": {"type": "string"}, "route": {"type": "string"}, "bbox": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}}, "why": {"type": "string"}}}}, "semantic_ref": {"$ref": "#/$defs/VersionedRef"}, "narrative_ref": {"$ref": "#/$defs/VersionedRef"}}},
+    "DelegationHandoff": {"type": "object", "additionalProperties": false, "required": ["handoff_id", "target", "contract_version", "input_hash", "execution_owner", "builder_execution_forbidden"], "properties": {"handoff_id": {"type": "string"}, "target": {"enum": ["visual_asset_editor", "content_asset_delegation_contract"]}, "contract_version": {"type": "string"}, "input_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "execution_owner": {"type": "string"}, "builder_execution_forbidden": {"const": true}}}
+  }
+}

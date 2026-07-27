@@ -1,0 +1,42 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-09.05",
+  "status": "PASS",
+  "development_mode": "OD_AM_001_OFFLINE_DEVELOPMENT",
+  "focused_story_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_05 -q",
+    "passed": 11,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "workflow_batch_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_01 tests/stories/st_09_02 tests/stories/st_09_03 tests/stories/st_09_04 tests/stories/st_09_05 --import-mode=importlib -q",
+    "passed": 123,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "architecture_boundary_tests": {
+    "passed": 12,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "latest_applicable_full_repository_regression": {
+    "status": "PASS_CARRIED_FROM_ST_09_04_CHECKPOINT",
+    "aggregate_passed": 1795,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "next_full_regression_due_after": "ST-09.06"
+  },
+  "python_source_compilation": {
+    "command": "python -m compileall -q src",
+    "status": "PASS"
+  },
+  "provider_model_or_compute_execution": 0,
+  "human_gate_resolved_by_automation": 0,
+  "production_or_certification_claims": 0,
+  "verdict": "PASS"
+}

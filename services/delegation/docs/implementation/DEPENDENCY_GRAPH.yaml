@@ -1,0 +1,208 @@
+schema_version: 1
+graph_id: cmf-delegation-stage4-readiness
+generated_at: "2026-07-14"
+stage4_verdict: FAIL
+stage5_authorized: false
+
+rules:
+  - stage5_nodes_require: R4-06
+  - shared_contract_release_must_be_signed_and_immutable: true
+  - product_repositories_must_consume_pinned_release: true
+  - schema_forks_are_prohibited: true
+
+nodes:
+  - id: BASELINE-STAGE3
+    type: artifact
+    owner: CMF_DELEGATION_PROTOCOL
+    status: LOCAL_GATES_PASS_UNPUBLISHED
+    depends_on: []
+    evidence:
+      - packages/contracts/registry.json
+      - packages/contracts/release-manifest.json
+      - docs/tech-specs/STAGE3_CONTRACT_BASELINE_REPORT.md
+
+  - id: EXT-UPSTREAM-REPOS
+    type: external_gate
+    owner: CONTENT_HARNESS_AND_VAE
+    status: BLOCKED
+    depends_on: []
+    issues: [XRI-001, XRI-002, XRI-013]
+
+  - id: EXT-CONTROL-TOWER
+    type: external_gate
+    owner: HARNESS_CONTROL_TOWER
+    status: BLOCKED
+    depends_on: []
+    issues: [XRI-014]
+
+  - id: EXT-SECURITY
+    type: external_gate
+    owner: SECURITY_ARCHITECTURE
+    status: BLOCKED
+    depends_on: []
+    issues: [XRI-015]
+
+  - id: EXT-OPERATIONS
+    type: external_gate
+    owner: PLATFORM_ARCHITECTURE
+    status: BLOCKED
+    depends_on: []
+    issues: [XRI-016, XRI-017]
+
+  - id: R4-01
+    type: readiness_story
+    title: Exact field authority
+    owner: CMF_DELEGATION_PROTOCOL
+    status: COMPLETE
+    depends_on: [BASELINE-STAGE3]
+    resolves: [XRI-019]
+
+  - id: R4-02
+    type: readiness_story
+    title: Canonical lifecycle reconciliation
+    owner: CMF_DELEGATION_PROTOCOL
+    status: COMPLETE
+    depends_on: [R4-01]
+    resolves: [XRI-020]
+
+  - id: R4-03
+    type: readiness_story
+    title: Complete compatibility and migration vectors
+    owner: CMF_DELEGATION_PROTOCOL
+    status: COMPLETE
+    depends_on: [R4-01]
+    resolves: [XRI-012]
+
+  - id: R4-04
+    type: readiness_story
+    title: Normative Format 02 scenario portfolio
+    owner: CMF_DELEGATION_PROTOCOL
+    status: COMPLETE
+    depends_on: [R4-02, R4-03]
+    resolves: [XRI-021]
+
+  - id: R4-05
+    type: readiness_story
+    title: Owner reconciliation and immutable release
+    owner: CROSS_REPOSITORY_GOVERNANCE
+    status: BLOCKED
+    depends_on:
+      - R4-04
+      - EXT-UPSTREAM-REPOS
+      - EXT-CONTROL-TOWER
+      - EXT-SECURITY
+      - EXT-OPERATIONS
+
+  - id: R4-06
+    type: readiness_gate
+    title: Stage 4 evidence rerun
+    owner: CMF_DELEGATION_PROTOCOL
+    status: BLOCKED
+    depends_on: [R4-05]
+    required_verdict: PASS
+
+  - id: VS-01
+    type: implementation_story
+    title: Signed single-asset happy path
+    status: NOT_AUTHORIZED
+    depends_on: [R4-06]
+
+  - id: VS-04
+    type: implementation_story
+    title: Pinned compatibility negotiation
+    status: NOT_AUTHORIZED
+    depends_on: [R4-06]
+
+  - id: VS-05
+    type: implementation_story
+    title: Append-only audit and reconstruction
+    status: NOT_AUTHORIZED
+    depends_on: [VS-01]
+
+  - id: VS-02
+    type: implementation_story
+    title: Idempotent command delivery
+    status: NOT_AUTHORIZED
+    depends_on: [VS-01, VS-05]
+
+  - id: VS-03
+    type: implementation_story
+    title: Replay rejection
+    status: NOT_AUTHORIZED
+    depends_on: [VS-02]
+
+  - id: VS-12
+    type: implementation_story
+    title: Atomic acceptance and recovery
+    status: NOT_AUTHORIZED
+    depends_on: [VS-03, VS-05]
+
+  - id: VS-06
+    type: implementation_story
+    title: Safe cancellation
+    status: NOT_AUTHORIZED
+    depends_on: [VS-12]
+
+  - id: VS-07
+    type: implementation_story
+    title: Supersession and selective invalidation
+    status: NOT_AUTHORIZED
+    depends_on: [VS-12]
+
+  - id: VS-08
+    type: implementation_story
+    title: Constraint amendment
+    status: NOT_AUTHORIZED
+    depends_on: [VS-07]
+
+  - id: VS-09
+    type: implementation_story
+    title: Post-completion governance
+    status: NOT_AUTHORIZED
+    depends_on: [VS-12]
+
+  - id: VS-13
+    type: implementation_story
+    title: Budget escalation
+    status: NOT_AUTHORIZED
+    depends_on: [VS-12]
+
+  - id: VS-10
+    type: implementation_story
+    title: One atomic Delegation Set
+    status: NOT_AUTHORIZED
+    depends_on: [VS-06, VS-07, VS-08, VS-09, VS-13]
+
+  - id: VS-14
+    type: implementation_story
+    title: Additive Control Tower projection
+    status: NOT_AUTHORIZED
+    depends_on: [VS-05, EXT-CONTROL-TOWER]
+
+  - id: VS-11
+    type: implementation_story
+    title: Format 02 conformance runtime
+    status: NOT_AUTHORIZED
+    depends_on: [VS-02, VS-03, VS-04, VS-10, VS-12, VS-14]
+
+critical_path:
+  - BASELINE-STAGE3
+  - R4-01
+  - R4-02
+  - R4-04
+  - R4-05
+  - R4-06
+  - VS-01
+  - VS-05
+  - VS-02
+  - VS-03
+  - VS-12
+  - VS-07
+  - VS-08
+  - VS-10
+  - VS-11
+
+stage4_gate:
+  required_nodes: [R4-01, R4-02, R4-03, R4-04, R4-05]
+  current_failed_nodes: [R4-05]
+  implementation_start_node: VS-01

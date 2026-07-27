@@ -1,0 +1,27 @@
+id: video.composition_scenes.attach
+version: "1.0.0"
+status: active
+owner_agent: video_editing_commander
+skill_type: deterministic_plus_pydantic
+purpose: "Compile source/format/composition/avatar inputs into deterministic video timeline and fake render receipts."
+inputs:
+  - VideoEditingProject
+  - VideoSourceAssetSet
+  - VideoFormatProgramRef
+  - VideoCompositionSceneRef
+outputs:
+  - VideoTimelineProgram
+  - RenderReceipt
+  - VideoEvaluationReceipt
+hard_gates:
+  - "brand_context_version_id is required."
+  - "16:9 is source-only and rejected as delivery."
+  - "Composition must be attached before timeline compilation."
+  - "Final render requires final timeline lock."
+  - "Final render cannot call providers."
+  - "Export requires approved variant."
+runtime_accuracy:
+  pydantic_validation: required
+  deterministic_guards: required
+  dspy_reasoning: allowed_for_revision_or_rationale_only
+  receipt: required

@@ -1,0 +1,38 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Budget Authorization
+type: object
+additionalProperties: false
+required:
+- authorization_id
+- version
+- program
+- ceilings
+- policy
+- owner
+properties:
+  authorization_id:
+    type: string
+    minLength: 1
+    pattern: ^BUD-
+  version:
+    type: integer
+    minimum: 1
+  program:
+    type: string
+    minLength: 1
+    enum:
+    - lean
+    - standard
+    - premium
+    - exploration
+    - capability_learning
+    - custom
+  ceilings:
+    type: object
+  policy:
+    type: object
+  escalation:
+    type: object
+  owner:
+    type: string
+    minLength: 1

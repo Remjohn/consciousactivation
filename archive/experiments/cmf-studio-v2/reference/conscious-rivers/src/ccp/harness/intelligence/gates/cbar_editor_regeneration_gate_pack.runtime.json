@@ -1,0 +1,294 @@
+{
+  "gate_pack_id": "CBAR-EDITOR-REGEN-v1",
+  "version": "1.0.0",
+  "compile_target": "EDITOR_REGENERATION",
+  "entrypoint": "cbar_gate_run",
+  "required_context": [
+    "manifest_patch_request",
+    "beat_context",
+    "fingerprint_entry",
+    "neighbor_context",
+    "revision_note"
+  ],
+  "gates": [
+    {
+      "gate_id": "RG-01",
+      "name": "Arc-Preserving Color Regeneration",
+      "lineage": ["SC-01", "CMF_Master_Scene_Intelligence.md#GATE SC-01"],
+      "applies_to": ["manifest_patch", "regeneration_request"],
+      "questions": [
+        {
+          "question_id": "RG-01-Q1",
+          "constraint_a": {
+            "rule_id": "TARGET_BEAT_REPAIR",
+            "statement": "The regeneration should repair the target beat's color problem.",
+            "source": "revision_note + target beat review failure"
+          },
+          "constraint_b": {
+            "rule_id": "ARC_SEQUENCE_CONTINUITY",
+            "statement": "The target beat must remain valid inside the surrounding arc progression.",
+            "source": "sequence PAD rules"
+          },
+          "tension": "A color change can fix the target beat but break the surrounding arc trajectory.",
+          "failure_scenario": "The regenerated beat becomes visually correct in isolation and structurally false in sequence.",
+          "resolution_demands": [
+            "Describe the intended color delta for the target beat.",
+            "Name the precedence rule that decides local repair versus sequence continuity.",
+            "Confirm that neighboring beat relationships still hold."
+          ],
+          "downstream_proof": [
+            "Show that arc-stage PAD progression still passes sequence thresholds."
+          ],
+          "downstream_consumer": {
+            "module_id": "manifest_patch_apply",
+            "expected_input": "A regenerated beat whose color repair still fits sequence continuity.",
+            "failure_mode": "Editor writes a locally improved beat that breaks the approved emotional arc."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "RG-01-Q1-ARC-DELTA",
+              "field": "beat_context.sequence_pad_delta_valid",
+              "operator": "==",
+              "value": true,
+              "failure_code": "CBAR_REGEN_ARC_COLOR_BREAK",
+              "repair_hint": "Reduce color drift or adjust the regeneration target so sequence PAD continuity remains valid."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "RG-01-Q1",
+        "review_scope": "ALL_PRIOR_QUESTIONS",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "RG-02",
+      "name": "Mutation Containment vs Expressive Fix",
+      "lineage": ["SC-02", "CMF_Master_Scene_Intelligence.md#GATE SC-02"],
+      "applies_to": ["manifest_patch", "regeneration_request"],
+      "questions": [
+        {
+          "question_id": "RG-02-Q1",
+          "constraint_a": {
+            "rule_id": "EXPRESSIVE_REPAIR_SCOPE",
+            "statement": "The requested fix may require a material expressive change in the target beat.",
+            "source": "revision_note"
+          },
+          "constraint_b": {
+            "rule_id": "SURGICAL_MUTATION_BOUNDARY",
+            "statement": "Regeneration must remain surgical and avoid collateral changes outside the target scope.",
+            "source": "FR-VID-05 + editor mutation rules"
+          },
+          "tension": "The request needs a stronger expressive change, but regeneration must stay surgical.",
+          "failure_scenario": "A local fix spills into non-target beats or rewrites approved motion decisions.",
+          "resolution_demands": [
+            "Name the exact target fields that may change.",
+            "Name the precedence rule that limits expressive repair when scope containment is threatened.",
+            "State which dependent fields are allowed to update for continuity."
+          ],
+          "downstream_proof": [
+            "Provide the final mutation scope."
+          ],
+          "downstream_consumer": {
+            "module_id": "editor_manifest_store",
+            "expected_input": "A patch whose path set is explicitly contained to allowed mutation scope.",
+            "failure_mode": "The canonical manifest absorbs unintended neighbor changes."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "RG-02-Q1-SCOPE",
+              "field": "manifest_patch_request.changed_paths",
+              "operator": "subset_of",
+              "value": [
+                "/beats/{target}/fallback_image_url",
+                "/beats/{target}/video_clip_url",
+                "/beats/{target}/transition",
+                "/beats/{target}/color_profile",
+                "/beats/{target}/motion_profile"
+              ],
+              "failure_code": "CBAR_REGEN_SCOPE_VIOLATION",
+              "repair_hint": "Limit the patch to target-beat media and dependent continuity fields only."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "RG-02-Q1",
+        "review_scope": "ALL_PRIOR_QUESTIONS",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "RG-03",
+      "name": "Audio-Visual Timing Integrity During Regeneration",
+      "lineage": ["SC-03", "CMF_Master_Scene_Intelligence.md#GATE SC-03"],
+      "applies_to": ["manifest_patch", "regeneration_request"],
+      "questions": [
+        {
+          "question_id": "RG-03-Q1",
+          "constraint_a": {
+            "rule_id": "VISUAL_REPAIR_EXECUTE",
+            "statement": "The visual regeneration should improve the target beat immediately.",
+            "source": "regeneration request"
+          },
+          "constraint_b": {
+            "rule_id": "TIMING_BINDING_PRESERVE",
+            "statement": "Caption and audio bindings must remain valid or be explicitly recomputed before commit.",
+            "source": "AV synchrony rules"
+          },
+          "tension": "A visual regeneration can silently break existing caption and audio timing.",
+          "failure_scenario": "The regenerated beat looks better but no longer lands on the intended words or music accents.",
+          "resolution_demands": [
+            "State whether timing remains preserved or must be recomputed.",
+            "Name the precedence rule that decides between immediate patch commit and timing recompute.",
+            "List which timing assets need refresh if not preserved."
+          ],
+          "downstream_proof": [
+            "Confirm caption and audio offsets remain inside allowed timing bands."
+          ],
+          "downstream_consumer": {
+            "module_id": "caption_timing_adjust",
+            "expected_input": "A decision that either preserves timing legally or triggers recompute before manifest commit.",
+            "failure_mode": "Editor accepts a beat that visually improves while audio and captions become false."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "RG-03-Q1-TIMING-WINDOW",
+              "field": "beat_context.post_regen_sync_offset_ms",
+              "operator": "between",
+              "value": [-20, 100],
+              "failure_code": "CBAR_REGEN_TIMING_BREAK",
+              "repair_hint": "Trigger caption_timing_adjust or audio retime before accepting the regenerated beat."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "RG-03-Q1",
+        "review_scope": "ALL_PRIOR_QUESTIONS",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    },
+    {
+      "gate_id": "RG-04",
+      "name": "Fingerprint Integrity and Neighbor Protection",
+      "lineage": ["CMF_Master_Scene_Intelligence.md#Part IV", "FR-VID-05 Gate H"],
+      "applies_to": ["manifest_patch", "regeneration_request"],
+      "questions": [
+        {
+          "question_id": "RG-04-Q1",
+          "constraint_a": {
+            "rule_id": "CANONICAL_MANIFEST_UPDATE",
+            "statement": "The regenerated beat must be written back into the canonical project file.",
+            "source": "editor regeneration workflow"
+          },
+          "constraint_b": {
+            "rule_id": "PROVENANCE_AND_NEIGHBOR_LOCKS",
+            "statement": "Fingerprint history and non-target beat locks must survive the update intact.",
+            "source": "FR-VID-05 Gate H"
+          },
+          "tension": "The canonical manifest must change, but provenance and approved neighbors must remain auditable.",
+          "failure_scenario": "The edit is accepted with missing fingerprint history or unlocked neighboring seeds.",
+          "resolution_demands": [
+            "Confirm fingerprint supersession is logged.",
+            "Name the precedence rule that prevents a manifest write when auditability is incomplete.",
+            "Confirm all non-target beats remain locked."
+          ],
+          "downstream_proof": [
+            "Attach the regeneration history update and neighbor lock confirmation to the Constraint Resolution Manifest."
+          ],
+          "downstream_consumer": {
+            "module_id": "regeneration_handler",
+            "expected_input": "A manifest update request with preserved provenance and stable neighbor locks.",
+            "failure_mode": "The audit chain breaks and approved neighbors lose determinism."
+          },
+          "resolution_contract": {
+            "must_derive": true,
+            "required_fields": [
+              "winning_constraint",
+              "precedence_rule_id",
+              "precedence_reasoning",
+              "chosen_action",
+              "downstream_impact"
+            ]
+          },
+          "automated_checks": [
+            {
+              "check_id": "RG-04-Q1-HISTORY",
+              "field": "fingerprint_entry.history_step_present",
+              "operator": "==",
+              "value": true,
+              "failure_code": "CBAR_REGEN_HISTORY_MISSING",
+              "repair_hint": "Log superseded fingerprint metadata before writing the new asset back to the manifest."
+            }
+          ]
+        }
+      ],
+      "cascade_lock": {
+        "question_id": "RG-04-Q1",
+        "review_scope": "ALL_PRIOR_GATES",
+        "required_outputs": [
+          "consistency_verdict",
+          "contradiction_list",
+          "secondary_resolution_required",
+          "constraint_manifest_ready"
+        ]
+      }
+    }
+  ],
+  "output_contract": {
+    "result_schema": "DEP-VID-034",
+    "per_gate_shape": "{ gate_id, passed, questions[] }",
+    "proof_receipt_stage_name": "EDITOR_REGEN_LEGITIMACY_GATE"
+  },
+  "failure_policy": {
+    "question_fail": "REVISE",
+    "gate_fail": "BLOCK"
+  }
+}

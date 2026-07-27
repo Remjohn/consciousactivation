@@ -1,0 +1,609 @@
+{
+  "$defs": {
+    "AuthorityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "field_scopes": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string",
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true,
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "principal": {
+          "$ref": "#/$defs/PrincipalRef",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        }
+      },
+      "required": [
+        "action",
+        "principal",
+        "field_scopes"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "BoundingBoxBasisPoints": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "width": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "x": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "y": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    "ChangeItem": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "REPLACE"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "reason": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "value_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "operation",
+        "value_ref",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "DemandIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "request_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "request_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "EvidenceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceIdentityRef"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verdict": {
+          "enum": [
+            "PASS",
+            "CONCERNS",
+            "FAIL"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "verdict",
+        "evidence_refs",
+        "note"
+      ],
+      "type": "object"
+    },
+    "ExecutionIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "demand": {
+          "$ref": "#/$defs/DemandIdentityRef"
+        },
+        "execution_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "plan_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef"
+        }
+      },
+      "required": [
+        "execution_id",
+        "demand",
+        "plan_ref"
+      ],
+      "type": "object"
+    },
+    "FailureSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "VALIDATION",
+            "AUTHORITY",
+            "COMPATIBILITY",
+            "BUDGET",
+            "EXECUTION",
+            "INTEGRITY",
+            "LIFECYCLE",
+            "CAPABILITY",
+            "HUMAN_REVIEW",
+            "SECURITY"
+          ],
+          "type": "string"
+        },
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "field_paths": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string",
+            "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "message": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "category",
+        "message",
+        "retryable",
+        "field_paths"
+      ],
+      "type": "object"
+    },
+    "IntegrityProof": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string",
+              "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "issued_at": {
+          "format": "date-time",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "key_id": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "nonce": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9_-]{86}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "signer": {
+          "$ref": "#/$defs/PrincipalRef",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_id",
+        "signer",
+        "signature",
+        "issued_at",
+        "expires_at",
+        "nonce"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "MoneyAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "type": "string"
+        },
+        "minor_units": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "minor_units"
+      ],
+      "type": "object"
+    },
+    "PrincipalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "principal_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "principal_type": {
+          "enum": [
+            "CONTENT_HARNESS",
+            "DELEGATION_PROTOCOL",
+            "VISUAL_ASSET_EDITOR",
+            "CONTROL_TOWER"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "product_version": {
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        }
+      },
+      "required": [
+        "principal_id",
+        "principal_type",
+        "product_version"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "ResourceIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "resource_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "ResultIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "result_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "result_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "State": {
+      "enum": [
+        "DRAFT",
+        "SUBMITTED",
+        "REJECTED",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "RESULT_READY",
+        "RESULT_REJECTED",
+        "COMPLETED",
+        "AMENDMENT_REQUIRED",
+        "SUPERSEDED",
+        "COST_APPROVAL_REQUIRED",
+        "CAPABILITY_GAP",
+        "HUMAN_REVIEW_REQUIRED",
+        "CANCELLATION_REQUESTED",
+        "CANCELLED",
+        "PARTIAL_RESULT_READY",
+        "INVALIDATED",
+        "REVOKED",
+        "REPLACED"
+      ],
+      "type": "string"
+    }
+  },
+  "$id": "https://contracts.cmf.dev/delegation/delegation-envelope/1.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "CMF delegation protocol delegation-envelope message.",
+  "properties": {
+    "authority": {
+      "$ref": "#/$defs/AuthorityClaim",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "causation_id": {
+      "anyOf": [
+        {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "correlation_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "integrity": {
+      "$ref": "#/$defs/IntegrityProof",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "message_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "message_type": {
+      "pattern": "^[a-z][a-z0-9-]{2,63}$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "message_version": {
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "payload_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "payload_ref": {
+      "format": "uri",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "protocol_version": {
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "type": "string",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "recipient": {
+      "$ref": "#/$defs/PrincipalRef",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    },
+    "sender": {
+      "$ref": "#/$defs/PrincipalRef",
+      "x-cmf-value-owner": "SIGNING_PRINCIPAL"
+    }
+  },
+  "required": [
+    "protocol_version",
+    "message_type",
+    "message_version",
+    "message_id",
+    "correlation_id",
+    "causation_id",
+    "sender",
+    "recipient",
+    "authority",
+    "occurred_at",
+    "idempotency_key",
+    "payload_hash",
+    "payload_ref",
+    "integrity"
+  ],
+  "title": "Delegation Envelope",
+  "type": "object",
+  "x-cmf-authority": {
+    "allowed_producers": [
+      "CONTENT_HARNESS",
+      "DELEGATION_PROTOCOL",
+      "VISUAL_ASSET_EDITOR",
+      "CONTROL_TOWER"
+    ],
+    "path_kind": "JSON_POINTER_TEMPLATE",
+    "value_owner_by_path": {
+      "/authority": "SIGNING_PRINCIPAL",
+      "/authority/action": "SIGNING_PRINCIPAL",
+      "/authority/field_scopes": "SIGNING_PRINCIPAL",
+      "/authority/field_scopes/{index}": "SIGNING_PRINCIPAL",
+      "/authority/principal": "SIGNING_PRINCIPAL",
+      "/authority/principal/principal_id": "SIGNING_PRINCIPAL",
+      "/authority/principal/principal_type": "SIGNING_PRINCIPAL",
+      "/authority/principal/product_version": "SIGNING_PRINCIPAL",
+      "/causation_id": "SIGNING_PRINCIPAL",
+      "/correlation_id": "SIGNING_PRINCIPAL",
+      "/idempotency_key": "SIGNING_PRINCIPAL",
+      "/integrity": "SIGNING_PRINCIPAL",
+      "/integrity/algorithm": "SIGNING_PRINCIPAL",
+      "/integrity/expires_at": "SIGNING_PRINCIPAL",
+      "/integrity/issued_at": "SIGNING_PRINCIPAL",
+      "/integrity/key_id": "SIGNING_PRINCIPAL",
+      "/integrity/nonce": "SIGNING_PRINCIPAL",
+      "/integrity/signature": "SIGNING_PRINCIPAL",
+      "/integrity/signer": "SIGNING_PRINCIPAL",
+      "/integrity/signer/principal_id": "SIGNING_PRINCIPAL",
+      "/integrity/signer/principal_type": "SIGNING_PRINCIPAL",
+      "/integrity/signer/product_version": "SIGNING_PRINCIPAL",
+      "/message_id": "SIGNING_PRINCIPAL",
+      "/message_type": "SIGNING_PRINCIPAL",
+      "/message_version": "SIGNING_PRINCIPAL",
+      "/occurred_at": "SIGNING_PRINCIPAL",
+      "/payload_hash": "SIGNING_PRINCIPAL",
+      "/payload_ref": "SIGNING_PRINCIPAL",
+      "/protocol_version": "SIGNING_PRINCIPAL",
+      "/recipient": "SIGNING_PRINCIPAL",
+      "/recipient/principal_id": "SIGNING_PRINCIPAL",
+      "/recipient/principal_type": "SIGNING_PRINCIPAL",
+      "/recipient/product_version": "SIGNING_PRINCIPAL",
+      "/sender": "SIGNING_PRINCIPAL",
+      "/sender/principal_id": "SIGNING_PRINCIPAL",
+      "/sender/principal_type": "SIGNING_PRINCIPAL",
+      "/sender/product_version": "SIGNING_PRINCIPAL"
+    }
+  },
+  "x-cmf-consumers": [
+    "CONTENT_HARNESS",
+    "DELEGATION_PROTOCOL",
+    "VISUAL_ASSET_EDITOR",
+    "CONTROL_TOWER"
+  ],
+  "x-cmf-idempotency": "CONDITIONAL",
+  "x-cmf-lifecycle-effects": [],
+  "x-cmf-message-type": "delegation-envelope",
+  "x-cmf-message-version": "1.0"
+}

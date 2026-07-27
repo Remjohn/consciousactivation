@@ -1,0 +1,45 @@
+schema_version: cmf-builder-bd004-canonical-approval-validation-receipt/v1
+receipt_id: BD004-CANONICAL-APPROVAL-VALIDATION-2026-07-17
+recorded_at_utc: 2026-07-17T00:36:34.1720040Z
+authority_instruction: >-
+  CONSUME AND VALIDATE docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_APPROVAL.yaml
+  AS THE SINGLE GOVERNED BD-004 APPROVAL.
+single_governed_approval:
+  path: docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_APPROVAL.yaml
+  sha256: 870773f10eaa003239916babf317e4862cd2def8a9b00b57ed6243d1595d797e
+  status: APPROVED_BOUNDED_DEVELOPMENT_USE
+  governed_operator_id: emilio-conscious-elite-internal-dev
+  represented_organization: Conscious Elite
+historical_request_template:
+  path: docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_DECISION.yaml
+  sha256: 108e446ad9e46c840dbc8bceb04d040acd9879551a55765d7414561b22253c6d
+  classification: HISTORICAL_REQUEST_TEMPLATE
+  completed_declaration: false
+  may_authorize_admission: false
+historical_ingest_snapshot:
+  path: docs/implementation/category-native-evidence/BD004_OPERATOR_AUTHORITY_APPROVAL_2026-07-17.yaml
+  sha256: 870773f10eaa003239916babf317e4862cd2def8a9b00b57ed6243d1595d797e
+  byte_identical_to_single_governed_approval: true
+  authority_status: NON_GOVERNING_HISTORICAL_INGEST_SNAPSHOT
+bindings:
+  archive_sha256:
+    expected: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+    observed: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+    verdict: PASS
+  admitted_set_sha256:
+    expected: 4321a232dee1dc87ac5a97d2b8e9ba115dec52558b7d5abc13cee1f851bfb70a
+    observed: 4321a232dee1dc87ac5a97d2b8e9ba115dec52558b7d5abc13cee1f851bfb70a
+    verdict: PASS
+  purpose:
+    expected: development_only_non_certifying_category_native_evidence
+    observed: development_only_non_certifying_category_native_evidence
+    verdict: PASS
+validation:
+  approval_yaml: PASS
+  identity_and_authority_fields: PASS_OPERATOR_ASSERTED
+  scope_and_prohibitions: PASS
+  archive_bytes: PASS
+  admitted_member_bytes: PASS_48_OF_48
+  excluded_member_count: 1386
+  production_or_certification_authority: NOT_GRANTED
+verdict: PASS_SINGLE_GOVERNED_APPROVAL_VALIDATED

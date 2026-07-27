@@ -1,0 +1,149 @@
+primitive_id: "PRM-VSG-035"
+canonical_name: "Playback Context Is Part of the Composition"
+aliases:
+  - "Phone-First Audio"
+  - "The Downmix Reality"
+family: "visual_sonic_guidance"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT Designing Sound Beck Kalinak.md"
+    primitive_name_in_audit: "Playback Context Is Part of the Composition"
+    mcda_score: 190
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/08_Sound_Design/AUDIT Designing Sound Beck Kalinak.md"
+
+book_reference:
+  title: "Sound"
+  author: "Kathryn Kalinak"
+  chapters:
+    - "Technology and Workflow"
+  key_pages: "Sections detailing how playback environments (theaters vs homes) alter the mix"
+  book_path: "lab/Public Speeaking Coaching/08_Sound_Design/Sound - Kathryn Kalinak.md"
+
+summary: >
+  Playback Context Is Part of the Composition dictates that a soundtrack is never composed in a vacuum;
+  it is composed for the speaker that will play it. Because the vast majority of social content and
+  coaching materials are consumed on mobile phones—often in noisy environments through low-end speakers
+  or single earbuds—the creator must actively design for these constraints. A mix that sounds 'epic'
+  on studio monitors will often collapse into unintelligible mud on a phone.
+core_move: >
+  Optimize all audio for the lowest common denominator of playback. Center-weight the vocals (do not
+  rely on wide stereo panning for the main message). Cut unnecessary low-end frequencies (which phone
+  speakers cannot reproduce anyway) to clear up the midrange. Ensure mono compatibility so the track
+  survives being played through a single speaker.
+why_it_works: >
+  As Kalinak notes regarding the history of film distribution, a soundtrack's truth changes depending
+  on where it is heard. An immersive Dolby Atmos mix fails if played on a 1990s television. Today,
+  the 'theater' is a 6-inch phone screen held on a crowded subway. Phone speakers physically cannot
+  reproduce sub-bass, and they struggle with complex, wide-stereo soundscapes. If a creator relies
+  on those frequencies to carry the emotional payload, the audience simply will not hear it. By mixing
+  specifically for the 'midrange' (where the human voice lives) and ensuring mono strength, the creator
+  guarantees that the emotional intent survives the journey to the user's ear.
+
+examples:
+  - context: "BOOK: Mixing for the distribution format"
+    application: >
+      Kalinak explores how mixing engineers had to create 'downmixes' (reducing a complex surround mix
+      into stereo or mono) to ensure the film sounded acceptable when broadcast on television. The
+      mix had to be fundamentally altered to prioritize dialogue intelligibility over spatial immersion.
+    effect: >
+      The story survived the degradation of the playback system.
+
+  - context: "CCP: AI Music Generation via Suno/ACE-Step"
+    application: >
+      The Sonic Scribe evaluates an AI-generated music track for a reel. The track features an incredibly
+      deep, rumbling sub-bass line. The Scribe rejects the track or applies a high-pass filter at 100Hz
+      before combining it with the coach's voice.
+    effect: >
+      Because the phone speaker cannot play the sub-bass, keeping it in the mix would only cause distortion.
+      By removing it, the coach's voice sounds significantly cleaner and more professional on the end
+      user's device.
+
+  - context: "CCP: Telegram Coaching (CBCS) ambient noise"
+    application: >
+      A coach sends a voice note recorded while walking near traffic. The CCP system automatically applies
+      a harsh vocal isolation algorithm. While this makes the coach's voice sound slightly 'robotic' or
+      thin compared to a studio mic, it completely eliminates the background roar.
+    effect: >
+      The client is listening on a noisy train with one AirPod. The 'thin but clean' audio is perfectly
+      legible, whereas 'natural but noisy' audio would have been impossible to understand. Intelligibility
+      always wins over high-fidelity in mobile contexts.
+
+  - context: "CCP: V2WS Webinar 'The Testimonial' module"
+    application: >
+      A client-submitted testimonial video has terrible audio (recorded in an echoey room). Instead of
+      trying to make it sound 'perfect,' the orchestration engine simply pushes the testimonial's volume
+      up, centers it strictly in mono, and adds hard-coded subtitles.
+    effect: >
+      The system recognizes that the playback context demands clarity. By converting it to mono and adding
+      subtitles, it guarantees the proof lands, even if the user's volume is set to 10%.
+
+anti_examples:
+  - description: >
+      A creator spends hours mixing a promotional video using $2,000 studio headphones. They pan
+      different sound effects far to the left and right, and rely on a deep sub-bass drop for the transition.
+    why_it_fails: >
+      When the user watches the video on their phone (which only has one bottom-firing speaker), the
+      panned effects disappear completely, and the sub-bass drop is completely silent. The transition
+      feels awkward and amateurish because the creator mixed for their own studio, not the user's reality.
+
+phase_fit:
+  pre_trigger: 0.9
+  post_trigger: 0.9
+  generation: 0.9
+  revision: 0.9
+  delivery: 0.9
+
+surface_fit:
+  text: 0.1
+  voice: 0.9
+  visual: 0.1
+  sonic: 0.9
+  webinar: 0.9
+  telegram: 0.9
+
+goal_bias:
+  connection: 0.8
+  surprise: 0.5
+  tension: 0.5
+  clarity: 0.9
+  memorability: 0.8
+  persuasion: 0.9
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.2
+  trigger_provocation: 0.9
+  authenticated_capture: 0.9
+  meaning_extraction: 0.5
+  content_generation: 0.9
+  edge_product_assembly: 0.9
+  delivery_coaching: 0.9
+  experience_flow: 0.9
+  premium_differentiation: 0.9
+
+trigger_conditions:
+  - "The asset is explicitly designed for short-form mobile consumption (TikTok, Reels, Telegram)"
+  - "The CMF engine is finalizing the master mix for render"
+  - "A user complains that they couldn't understand the coach's voice in a previous video"
+
+suppression_conditions:
+  - "The asset is a highly specialized, long-form 'meditation' or 'spatial audio journey' explicitly designed to be consumed with high-end headphones"
+
+misuse_modes:
+  - "Over-Compression — Smashing the audio file with so much digital compression to make it 'loud for TikTok' that it distorts and physically hurts the listener's ears"
+  - "The Treble Spike — Boosting the high frequencies too much to compensate for phone speakers, resulting in a harsh, piercing 'sibilance' (S-sounds) that irritates the nervous system"
+  - "Ignoring Desktop entirely — While mobile is king, making a webinar sound *so* narrow that it sounds terrible for the 30% of high-ticket buyers watching on a desktop setup"
+
+synergizes_with:
+  - "PRM-VSG-034" # Workflow Creates Aesthetics (Playback context MUST dictate the workflow)
+  - "PRM-PRS-001" # The Binary Scroll (If the audio isn't clear instantly on a phone, they will scroll)
+
+conflicts_with:
+  - "PRM-VSG-025" # Intangibles and Optical Personality (If 'grit and noise' ruin intelligibility on a small speaker)
+
+crosswalk_id: "XW-PLAYBACK-CONTEXT"
+crosswalk_note: "Meaning focuses on phone-first audio mastering; Experience focuses on Mobile-First UI/UX and touch targets."
+
+notes: >
+  CMF Render Agents must apply a final 'Phone-First Validation Pass' to all audio: high-pass filter
+  at 80Hz, collapse low frequencies to mono, and ensure Voice RMS is securely above Music RMS.

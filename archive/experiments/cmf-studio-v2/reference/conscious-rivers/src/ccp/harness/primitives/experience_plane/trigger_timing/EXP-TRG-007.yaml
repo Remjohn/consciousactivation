@@ -1,0 +1,181 @@
+experience_primitive_id: "EXP-TRG-007"
+canonical_name: "Contextual Timing Triggers"
+aliases:
+  - "Time-Pocket Anchoring"
+  - "The Sunday Protocol"
+  - "Life Rhythm Synchronization"
+
+experience_family: "trigger_timing"
+mechanic_role: "trigger"
+moment_role: "cadence_enforcement"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+    primitive_name_in_audit: "Contextual Timing Triggers"
+    mcda_score: 140
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+
+book_reference:
+  title: "Reality Is Broken"
+  author: "Jane McGonigal"
+  chapters:
+    - "Chapter 6: Fun with Strangers"
+    - "Chapter 8: Leveling Up in Life"
+  key_pages: "115-125, 150-165"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Reality is Broken - Jane McGonigal.md"
+
+summary: >
+  Contextual Timing Triggers align the platform's requests with the user's
+  natural, real-world rhythms rather than an arbitrary software clock.
+  While Context-Aware System Triggers (TRG-006) respond to erratic external
+  events (like news), Contextual Timing Triggers respond to predictable human
+  rhythms (morning coffee, Sunday reflection, post-workout). In CCP, this
+  manifests as the Sunday Postcard arriving exactly when executives naturally
+  reflect on their week, or morning drills arriving right before the day's first call.
+
+core_move: >
+  Map routine prompts explicitly to the user's biological and professional
+  calendar rhythms, ensuring the system integrates into existing habits rather
+  than demanding new ones.
+
+why_it_works: >
+  McGonigal points out that successful alternate reality games and gamified
+  systems don't force players to abandon their lives; they fit into the "time
+  pockets" of reality. If you ask a CEO to reflect deeply at 2:00 PM on a Tuesday,
+  they will fail because their context is pure execution. If you ask them to
+  reflect at 8:00 AM on Sunday, they will succeed. Stacking a digital habit onto
+  an existing physical habit (like morning coffee) dramatically reduces the
+  friction of adoption.
+
+examples:
+  - context: "BOOK: Reality Is Broken - Nike+ running alignment"
+    application: >
+      Nike+ didn't invent running; it layered a digital tracking system over an
+      existing physical habit. The app's triggers (audio feedback) happened
+      concurrently with the physical rhythm of the run.
+    effect: >
+      The digital tool became inseparable from the physical routine.
+
+  - context: "CCP: The Sunday Postcard"
+    application: >
+      The comprehensive weekly readout (benchmark deltas, voice DNA updates, and
+      identity commentary) is NEVER sent on a Wednesday. It is sent exclusively
+      on Sunday morning, accompanied by a prompt for a long-form reflective voice note.
+    effect: >
+      The system leverages the natural "Sunday planning/reflection" mindset of a coach,
+      ensuring high completion rates for deep-work tasks.
+
+  - context: "CCP: Law28 Morning Commute Drill"
+    application: >
+      The daily constraint drill is pushed at 7:30 AM local time, explicitly framed
+      for the commute or morning coffee: 'You have 2 minutes before the world starts
+      demanding things. Nail this baseline.'
+    effect: >
+      The action piggybacks onto an existing morning routine.
+
+  - context: "CCP: Friday Afternoon Victory Lap"
+    application: >
+      At 4:00 PM on Friday, the system prompts the coach to select their best reaction
+      from the week to compile into a CMF highlight reel.
+    effect: >
+      Aligns with the natural end-of-week wind-down and desire for accomplishment validation.
+
+  - context: "CCP: Pre-Webinar State Pump"
+    application: >
+      The system knows the coach has a V2WS webinar at 2:00 PM. At 1:45 PM, it sends
+      a rapid-fire articulation drill: 'Warm up the vocal cords. 60 seconds. Go.'
+    effect: >
+      The trigger serves as highly useful functional prep exactly when needed.
+
+anti_examples:
+  - description: >
+      Sending the deep, reflective weekly review on a Monday morning at 9:00 AM.
+    why_it_fails: >
+      Monday morning is peak execution context. The user will swipe away the notification
+      and never return to it because the context clashes violently with the requested action.
+
+experience_stage_fit:
+  entry: 0.3
+  activation: 0.6
+  recording: 0.8
+  scoring: 0.4
+  social_spread: 0.5
+  recovery: 0.7
+  retention: 1.0
+  conversion: 0.5
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 0.6
+  score_card: 0.8
+  share_asset: 0.4
+  voice_prompt: 0.7
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.7
+  urgency: 0.4
+  clarity: 0.8
+  safety: 0.9
+  status: 0.5
+  belonging: 0.4
+  curiosity: 0.5
+  replay_desire: 0.7
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.5
+  cbcs_accountability: 0.9
+  challenge_progression: 0.9
+  silent_referral: 0.4
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.8
+  onboarding_activation: 0.4
+  social_economy: 0.3
+  content_extraction: 0.6
+
+activation_conditions:
+  - "The user's local timezone is known and accurate"
+  - "The requested action matches the cognitive load suitable for the time of day"
+
+suppression_conditions:
+  - "User is detected to be outside normal routine (e.g., vacation mode enabled)"
+  - "Contextual timing conflicts with an acute crisis or failure state"
+
+misuse_modes:
+  - "Assuming all users have the exact same schedule (failing to allow timezone/preference offsets)"
+  - "Forcing heavy cognitive tasks into low-attention time pockets (like the middle of the workday)"
+
+synergizes_with:
+  - "EXP-FBK-001" # RIM Feedback Discipline (Structuring the Sunday Postcard)
+  - "EXP-TRG-001" # External to Internal Trigger Mapping
+
+conflicts_with:
+  - "EXP-TRG-002" # Hook Cycle Velocity (If the contextual pocket is only weekly, velocity is lost)
+
+implementation_targets:
+  frontend_components:
+    - "TelegramScheduler — managing dispatch times based on user-defined time-pockets"
+    - "SundayPostcardView — a specialized, serene UI designed for slow, reflective reading"
+  backend_rules:
+    - "context_timing_engine: strictly hold weekly summaries until Sunday AM local time"
+  telemetry_events:
+    - "contextual_time_pocket_hit"
+    - "sunday_postcard_opened"
+    - "morning_drill_completed"
+  experiments:
+    - "A/B test: Allowing users to set their own 'Morning' time vs dynamically inferring it from activity"
+
+experience_metrics:
+  entry_rate: 0.3
+  react_rate: 0.7
+  completion_rate: 0.9
+  share_rate: 0.4
+  comeback_rate: 0.9
+  day7_retention: 1.0
+  upgrade_signal: 0.6
+
+crosswalk_id: "XW-TRG-TIME-POCKET"
+crosswalk_note: >
+  This is the key to minimizing churn. By fitting into existing life rhythms,
+  the platform avoids feeling like "one more chore to do."

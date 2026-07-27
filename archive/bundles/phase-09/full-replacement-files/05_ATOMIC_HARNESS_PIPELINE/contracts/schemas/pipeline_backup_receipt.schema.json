@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "backup_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "integrity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "logical_uri": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_database_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "table_count": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "backup_id",
+    "logical_uri",
+    "sha256",
+    "bytes",
+    "integrity",
+    "table_count",
+    "source_database_sha256"
+  ],
+  "title": "PipelineBackupReceipt",
+  "type": "object"
+}

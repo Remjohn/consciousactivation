@@ -1,0 +1,64 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-08.01
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/evaluation/fresh_context_controls.py
+    role: deterministic offline fresh-context evaluation contracts and calculations
+    sha256: a4bae7b3b86b503dd980b027c4f17855b1d5ace2d6352bcde1c69c56581358f6
+  - path: tests/stories/st_08_01/test_fresh_context_evaluation.py
+    role: five-layer paired-control acceptance, statistics and observation tests
+  - path: tests/stories/st_08_01/test_failure_boundaries.py
+    role: fail-closed control, repetition, context, authority and identity tests
+  - path: tests/stories/st_08_01/test_determinism_and_authority.py
+    role: deterministic receipt, lineage, authority and claim-ceiling tests
+files_modified:
+  - development-capsules/OD-AM-001/ST-08.01/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-08.01/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-08.01/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-08.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+production_files_changed:
+  - src/cmf_builder/evaluation/fresh_context_controls.py
+lane_owned_production_files_changed:
+  - path: src/cmf_builder/evaluation/fresh_context_controls.py
+    owner: ST0801_EVALUATION_LANE
+integrator_owned_shared_files_changed:
+  - path: src/cmf_builder/application/authority.py
+    owner: CANONICAL_INTEGRATOR
+    sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+    role: additive shared Action registration and exact-resource authorization boundary
+test_files_changed:
+  - tests/stories/st_08_01/test_fresh_context_evaluation.py
+  - tests/stories/st_08_01/test_failure_boundaries.py
+  - tests/stories/st_08_01/test_determinism_and_authority.py
+shared_files_changed:
+  - src/cmf_builder/application/authority.py
+status_files_changed: []
+paths_outside_capsule_allowlist_changed: []
+prohibited_files_changed: []
+external_dependencies_added: []
+shared_core_change_requests:
+  - request_id: CR-ST0801-001
+    path: docs/implementation/offline-development/change-requests/CR-ST0801-001.yaml
+    sha256: a9c2ee95fd1bb1801b86c57b7b006577c781a3b3be05f205b21d6155765e7954
+    status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR
+  - request_id: CR-ST0801-002
+    path: docs/implementation/offline-development/change-requests/CR-ST0801-002.yaml
+    sha256: f3919d2a898dae62b7415386703a5aaa11dc1790b685b8d8ef0d353d3e569235
+    status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR
+validation:
+  exact_allowlist_conformant: true
+  focused_tests: PASS_43_OF_43
+  affected_tests: PASS_224_OF_224
+  architecture_tests: PASS_12_OF_12
+  full_repository_regression: PASS_1282_OF_1282_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  authority_and_fresh_context_trust_correction: PASS
+  semantic_receipt_and_rejection_boundary_correction: PASS
+  wildcard_authority_and_construction_receipt_forgery_correction: PASS
+  nested_graph_reconstruction_and_object_mutation_correction: PASS
+  private_anchor_self_reseal_and_subclass_authority_bypass_correction: PASS
+  forged_rejection_and_observation_deep_validation: PASS
+  independent_remediation_review: PASS_NO_ACTIONABLE_FINDINGS
+  external_provider_model_human_or_product_execution: false
+  empirical_or_production_claim_created: false

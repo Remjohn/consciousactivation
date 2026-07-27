@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "failed_object_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "failure_id": {
+      "title": "Failure Id",
+      "type": "string"
+    },
+    "frozen_upstream_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Frozen Upstream Refs",
+      "type": "array"
+    },
+    "human_escalation_required": {
+      "default": false,
+      "title": "Human Escalation Required",
+      "type": "boolean"
+    },
+    "invalidated_descendant_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Invalidated Descendant Refs",
+      "type": "array"
+    },
+    "object_to_change_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "rerun_nodes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rerun Nodes",
+      "type": "array"
+    },
+    "responsible_layer": {
+      "title": "Responsible Layer",
+      "type": "string"
+    },
+    "root_cause": {
+      "title": "Root Cause",
+      "type": "string"
+    }
+  },
+  "required": [
+    "failure_id",
+    "failed_object_ref",
+    "responsible_layer",
+    "root_cause",
+    "evidence_refs",
+    "frozen_upstream_refs",
+    "object_to_change_ref",
+    "invalidated_descendant_refs",
+    "rerun_nodes"
+  ],
+  "title": "FailureAttribution",
+  "type": "object"
+}

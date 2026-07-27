@@ -1,0 +1,33 @@
+﻿schema_version: conscious-activations-prompt05-revision-factory-completion/v1
+receipt_id: CA-P05-REVISION-FACTORY-GATE-BLOCKED-2026-07-23
+issued_on: '2026-07-23'
+result: REVISION_FACTORY_GATE_BLOCKED
+required_gate:
+  prompt04_must_pass: true
+  each_target_requires_revision_required_or_resolved_architecture_decision: true
+observed_gate:
+  prompt04_result: AUDIT_FACTORY_BLOCKED
+  accepted_for_build_candidate: 0
+  revision_required: 0
+  architect_decision_required: 0
+  audit_blocked: 60
+gate_blocker:
+  blocker_id: P05-GATE-BLOCKER-001
+  type: PROMPT04_AUDIT_FACTORY_BLOCKED
+  severity: BLOCKING
+  evidence: Prompt 04 completion receipt reports AUDIT_FACTORY_BLOCKED because independent auditor capacity was unavailable.
+  required_action: Rerun Prompt 04 with available independent auditors before starting Prompt 05.
+revision_activity:
+  specs_revised: 0
+  reviser_agents_dispatched: 0
+  architecture_decisions_resolved: 0
+  findings_dispositioned: 0
+forbidden_actions_preserved:
+  audited: false
+  implemented_code: false
+  issued_development_capsules: false
+  modified_specs: false
+  created_release_bytes: false
+  build_authority_issued: false
+  production_authority_issued: false
+next_permitted_action: RERUN_PROMPT_04_WITH_AVAILABLE_INDEPENDENT_AUDITORS

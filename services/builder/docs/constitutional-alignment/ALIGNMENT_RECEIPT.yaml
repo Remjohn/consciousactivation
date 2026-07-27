@@ -1,0 +1,194 @@
+alignment:
+  batch: A
+  status: complete
+  verdict: CONCERNS
+  completed_on: '2026-07-14'
+  authority_previous: Builder V1.1
+  authority_current: Builder V1.2
+  constitutional_authority:
+    version: 1.1.0
+    sha256: 21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b
+  requirement_comparison:
+    functional_requirements_previous: 210
+    functional_requirements_current: 210
+    non_functional_requirements_previous: 53
+    non_functional_requirements_current: 53
+    changed_stable_requirements: [FR-137, FR-139, FR-145, FR-146, FR-147]
+    added_requirement_ids: []
+    removed_requirement_ids: []
+  preserved:
+    tech_specs: TS-00 through TS-15
+    accepted_adrs: 18
+    control_tower_ux: approved contract and original receipt
+    planning_baseline_rows: 401
+    epic_step_2_started: false
+    implementation_started: false
+  concerns:
+    - V1.2 shard and registry wording are only partially synchronized.
+    - V1.2 contains stale four-category assumptions glossary anti-goal release and certification text.
+    - V1.2 ID coverage still reports four categories and twelve source records.
+    - Product Constitution visual chain omits the required T/V somatic-route request.
+    - Human decisions HD-001 through HD-007 remain open.
+  modified_files:
+    - docs/constitutional-alignment/ALIGNMENT_CHARTER.md
+    - docs/constitutional-alignment/ALIGNMENT_RECEIPT.yaml
+    - docs/constitutional-alignment/ARTIFACT_IMPACT_MATRIX.csv
+    - docs/constitutional-alignment/AUTHORITY_DELTA.md
+    - docs/constitutional-alignment/HUMAN_DECISIONS_REQUIRED.yaml
+    - docs/constitutional-alignment/PATCH_BATCHES.yaml
+    - docs/constitutional-alignment/REQUIREMENT_DELTA.csv
+    - docs/constitutional-alignment/VALIDATION_REPORT.md
+    - PROGRAM_STATUS_EXPORT.yaml
+  validations:
+    - name: authority_chain_read
+      result: PASS
+    - name: normalized_requirement_registry_diff
+      result: PASS
+    - name: permitted_write_scope
+      result: PASS
+    - name: yaml_parse
+      result: PASS
+    - name: csv_parse
+      result: PASS
+    - name: exact_modified_file_set
+      result: PASS
+  stopped_after_batch_A: true
+
+patch_execution:
+  authority: explicit_user_direction_2026_07_14
+  completed_on: '2026-07-14'
+  batches:
+    B:
+      status: COMPLETE
+      verdict: PASS
+      contract_validation: PASS
+      prd_validation: PASS
+      categories: 5
+      conversational_profiles: 4
+      compilation_targets: 3
+      hard_gates: 15
+      source_records: 13
+      contract_definitions: 14
+      schemas: 4
+      examples: 5
+    C:
+      status: COMPLETE
+      verdict: PASS
+      technical_specifications: 16
+      technical_spec_validation: PASS
+      accepted_adrs_preserved: 18
+      adrs_additively_patched: [ADR-007, ADR-008, ADR-010, ADR-011, ADR-013, ADR-018]
+      architecture_validation: PASS
+      original_ratification_records_modified: false
+      control_tower_ux_modified: false
+    D:
+      status: COMPLETE_CONFIRMED
+      verdict: PASS
+      planning_validation: PASS
+      original_rows: 401
+      revised_rows: 410
+      added_rows: 9
+      removed_rows: 0
+      changed_obligation_report_rows: 223
+      epic_assignments: 0
+      story_assignments: 0
+      inventory_confirmed_on: '2026-07-14'
+      confirmation_receipt: docs/planning/V1_2_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    E:
+      status: COMPLETE_PENDING_HUMAN_CONFIRMATION
+      verdict: PASS
+      epic_design_validation: PASS
+      proposed_epics: 12
+      primary_assignments: 410
+      secondary_traceability_links: 361
+      story_assignments: 0
+      authorization_receipt: docs/planning/EPIC_STEP_2_AUTHORIZATION_RECEIPT.yaml
+    STEP_3:
+      status: COMPLETE_PENDING_HUMAN_CONFIRMATION
+      verdict: PASS
+      story_design_validation: PASS
+      proposed_stories: 69
+      primary_story_assignments: 410
+      dependency_edges: 103
+      maximum_primary_obligations_per_story: 15
+      primary_outcomes: 69
+      testable_acceptance_sets: 69
+      completion_receipts_issued: 0
+      blocked_or_conditional_entries: 67
+      release_1_story_subset: 69
+      cross_repository_dependencies: 6
+      authorization_receipt: docs/planning/EPIC_INVENTORY_CONFIRMATION_RECEIPT.yaml
+  preserved:
+    stable_fr_ids: 210
+    stable_nfr_ids: 53
+    accepted_adrs: 18
+    format_02_reference_scope: true
+    control_tower_ux_approval: true
+    visual_asset_editor_not_implemented: true
+    delegation_protocol_not_implemented: true
+    production_implementation_not_started: true
+    epic_step_2_not_started: false
+    vertical_story_authoring_not_started: false
+  open_gates:
+    human_decisions: [HD-006, HD-007]
+    blockers: [BD-004, BD-007, BD-008, BD-010, BD-014]
+    implementation_readiness: FAIL
+    story_inventory_confirmation: PENDING
+  satisfied_gates:
+    human_inventory_confirmation: CONFIRMED
+    confirmation_text: CONFIRM V1.2 INVENTORY
+    confirmation_receipt: docs/planning/V1_2_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    epic_step_2_authorization: AUTHORIZED
+    epic_step_2_authorization_receipt: docs/planning/EPIC_STEP_2_AUTHORIZATION_RECEIPT.yaml
+    epic_inventory_confirmation: CONFIRMED
+    epic_inventory_confirmation_receipt: docs/planning/EPIC_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    vertical_story_authoring_step_3: AUTHORIZED
+  exact_file_manifest: docs/constitutional-alignment/BUILDER_ALIGNMENT_PATCH_FILE_MANIFEST.yaml
+  step_3_file_manifest: docs/planning/STORY_DESIGN_FILE_MANIFEST.yaml
+  stopped_before_epic_step_2: false
+  stopped_before_step_3: false
+  stopped_before_step_4: true
+
+step_4_execution:
+  authority: docs/planning/STORY_INVENTORY_CONFIRMATION_RECEIPT.yaml
+  confirmation_text: CONFIRM BUILDER V1.2 STORY INVENTORY AND BEGIN STEP 4
+  completed_on: '2026-07-14'
+  status: COMPLETE
+  coverage_verdict: PASS
+  planning_completeness_verdict: CONCERNS
+  artifact_integrity_verdict: CONCERNS
+  implementation_readiness_verdict: FAIL
+  confirmed_obligations: 410
+  confirmed_epics: 12
+  confirmed_stories: 69
+  feature_technical_spec_assignments: 69
+  dependency_edges: 103
+  forward_dependency_edges: 0
+  completion_receipts_issued: 0
+  artifact_integrity_concern:
+    epic_validation_hash_pinned_by_step_3_receipt: f6306221a8d891fb497638b8156b6469cf275da7854017c29eab72043b62f989
+    epic_validation_hash_observed_before_step_4: dac666f0ee991926f9407d3289ae99d746dd965d78a7240a4af6b52a84f7728b
+    disposition: preserve_and_reconcile_before_fresh_readiness_pass
+  additional_planning_concerns:
+    story_validation_hash_reconciliation: required
+    format_02_dependency_independence: ST-12.03_transitively_depends_on_ST-06.05_and_ST-08.07
+    XDEP_003_baseline: confirmed_RC1_vs_validated_unsigned_RC2
+  open_gates:
+    human_decisions: [HD-006, HD-007]
+    blockers: [BD-004, BD-007, BD-008, BD-010, BD-014]
+  outputs:
+    - docs/planning/STORY_INVENTORY_CONFIRMATION_RECEIPT.yaml
+    - docs/planning/FEATURE_TECH_SPEC_ASSIGNMENTS.csv
+    - docs/planning/FILE_CHURN_RISK_BOUNDARY_REVIEW.md
+    - docs/planning/IMPLEMENTATION_READINESS_REPORT.md
+    - docs/planning/STEP_4_COVERAGE_AND_READINESS_VALIDATION_REPORT.json
+    - docs/planning/STEP4_PLANNING_COVERAGE_REPORT.md
+    - docs/planning/STEP4_REQUIREMENT_TRACEABILITY.csv
+    - docs/planning/STEP4_STORY_READINESS_MATRIX.csv
+    - docs/planning/STEP4_BLOCKER_IMPACT_REPORT.md
+    - docs/planning/STEP4_RELEASE1_EXECUTION_SEQUENCE.yaml
+    - docs/planning/STEP4_CROSS_REPO_DEPENDENCY_VALIDATION.yaml
+    - docs/planning/IMPLEMENTATION_READINESS_FINAL.md
+    - docs/planning/STEP4_VALIDATION_REPORT.json
+  production_implementation_authorized: false
+  stopped_before_production_implementation: true

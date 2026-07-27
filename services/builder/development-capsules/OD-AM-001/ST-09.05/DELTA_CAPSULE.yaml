@@ -1,0 +1,249 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-09.05:CANDIDATE_RACES_AND_HUMAN_GOVERNED_COMPUTE_ROUTING
+preparation_status: VALIDATED_STRUCTURE_DEPENDENCY_PENDING
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-09.05
+  title: Race Candidates and Route Compute Under Human Authority
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: compute is spent proportionally while consequential decisions stay human-governed
+  primary_obligations:
+    - AG-011
+    - FR-198
+    - FR-199
+    - FR-200
+    - FR-201
+    - NFR-WORKFLOW-009
+  primary_obligation_count: 6
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_LOCAL_POLICY_EXTERNAL_AND_MANUAL_SHADOW_EVIDENCE_PENDING
+dependency:
+  story_id: ST-09.04
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-09.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: NOT_ISSUED_DEPENDENCY_PENDING
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-09.04/DELTA_CAPSULE.yaml
+    sha256: 87141514ec022fef1c5c21d2096b72ea59f19b99338daa8534fb601261467a1b
+    validation: PASS_PREPARATION_REFERENCE_ONLY
+  unissued_receipt_shell:
+    sha256: 60e28cef5429648a8e58c61db6c6272ac5bf199568976af7aa09d7069ee7eb7c
+    satisfies_dependency: false
+dependency_gate:
+  satisfied: 0
+  required: 1
+  verdict: DEPENDENCY_PENDING
+  missing: [ST-09.04:ImplementationCompletionReceipt:IMPLEMENTED_DEVELOPMENT_PASS]
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-09.05
+  - docs/architecture/adr/ADR-002-SEPARATE-HARNESS-IR-AND-WORKFLOW-IR.md
+  - docs/architecture/adr/ADR-005-HUMAN-AGENT-CODE-AUTHORITY.md
+  - docs/architecture/adr/ADR-006-WORKFLOW-ENGINE-ADAPTER.md
+  - docs/architecture/adr/ADR-012-SANDBOX-AND-LEAST-PRIVILEGE.md
+  - docs/architecture/adr/ADR-016-DEPLOYMENT-AND-OBSERVABILITY.md
+  - docs/architecture/adr/ADR-017-RELEASE-1-WORKFLOW-PROFILES.md
+  - docs/tech-specs/specs/TS-07-OWNERSHIP-PHASE-CONTEXT-CONTRACT-REFERENCE-REPAIR-GRAPHS.md
+  - docs/tech-specs/specs/TS-14-BUILDER-WORKFLOW-RUNTIME.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles: [WorkflowIR, WorkflowNodeContract, CheckpointReceipt, PromotionReceipt]
+  schema_refs: []
+  ownership_rule: Builder owns deterministic provider-neutral policy and decisions; providers, engines, external products and human truth retain their authority
+two_gate_boundary:
+  implementation_gate:
+    scope: deterministic local candidate-race, risk-aware compute-routing, evaluator-isolation and human-gate policy mechanisms
+    closes_external_conformance: false
+  evidence_gate:
+    status: MANUAL_SHADOW_TEMPORAL_PROVIDER_AND_EXTERNAL_VALIDATION_PENDING
+    actual_candidate_or_provider_execution_evidence: false
+    actual_manual_shadow_parity_evidence: false
+    production_authority: false
+implementation_scope_after_dependency_pass:
+  - compile candidate-race plans only when candidates share one governed input and output contract and declare independent sandbox-policy references
+  - validate deterministic selection after every required independent evaluation against declared quality, contract, cost and latency gates
+  - compile risk-aware route decisions from node responsibility, ambiguity, risk, expected value, prior evidence references and explicit budget limits
+  - select only registered abstract model tiers, candidate counts, evaluator strengths and tool grants without invoking a provider or claiming empirical fitness
+  - compile evaluator views containing only the candidate, rubric, minimum evidence, contracts and provenance, excluding generator reasoning, preferred answers and protected labels
+  - compile immutable human-gate placements for constitutional, policy, risk, waiver, incident, release and final-review authority
+  - preserve exact workflow, profile, checkpoint, authority, budget, provenance and invalidation lineage in all local policy decisions and receipts
+candidate_race_contract:
+  required_fields:
+    - race_id_and_version
+    - workflow_profile_and_node_identity
+    - common_input_and_output_contract_hashes
+    - candidate_declarations_and_independent_sandbox_policy_refs
+    - evaluator_policy_and_minimum_view_contract
+    - quality_contract_cost_and_latency_gates
+    - budget_and_candidate_fan_out_limits
+    - deterministic_selection_and_tie_policy
+    - authority_and_provenance
+  rules:
+    - first completion is never sufficient for winner selection
+    - all required evaluations must be present and artifact-identity bound
+    - candidates with mismatched contracts, inputs, lineage or sandbox independence fail closed
+    - gate failure produces no winner or promoted candidate
+    - identical governed inputs produce the same race-plan identity and selection decision
+  actual_candidate_generation_or_evaluation: prohibited
+risk_aware_compute_routing:
+  governed_inputs:
+    - node_responsibility_and_actor_kind
+    - task_complexity_and_ambiguity
+    - operational_and_authority_risk
+    - expected_value
+    - prior_benchmark_or_development_evidence_refs
+    - latency_cost_and_compute_budget
+    - registered_profile_and_route_policy
+  governed_outputs:
+    - abstract_model_tier
+    - candidate_count
+    - evaluator_strength
+    - tool_grants
+    - compute_budget
+    - required_human_gate_refs
+    - decision_identity_and_justification
+  rules:
+    - routing is deterministic from the exact policy and evidence inputs
+    - missing, stale, unverifiable or contradictory evidence blocks the affected route
+    - no route may silently select a provider, model, tool, credential or network grant
+    - lower initial price cannot override total-cost, reliability, quality or risk evidence
+    - budget overflow pauses or routes to an already-declared human approval gate
+  actual_provider_model_or_compute_dispatch: prohibited
+independent_evaluator_boundary:
+  allowed_view:
+    - candidate_identity_and_canonical_output
+    - minimum_required_input_contract_and_evidence
+    - immutable_rubric_and_gate_versions
+    - source_lineage_and_provenance_required_for_judgment
+    - declared cost_and_latency_observations
+  forbidden_view:
+    - generator_hidden_reasoning
+    - generator_preferred_answer_or_rank
+    - protected_benchmark_labels
+    - unrelated_candidates_or_workspace_context
+    - credential_values_or_provider_secrets
+  evaluation_result_must_bind: [candidate_hash, evaluator_policy_hash, rubric_hash, evidence_hashes, authority, outcome]
+  actual_independent_provider_or_human_evaluation: prohibited
+human_gate_authority:
+  required_gate_classes:
+    - constitutional_decision
+    - product_or_policy_decision
+    - risk_or_budget_escalation
+    - waiver
+    - incident_authorization
+    - release_or_promotion
+    - final_review_where_profile_requires_it
+  rules:
+    - model, agent, evaluator or deterministic policy cannot resolve a human-owned gate
+    - required gates may be removed only by a separately approved evidence-backed policy version
+    - incident routing grants no emergency authority over evidence, labels or constitutional decisions
+    - absent, stale, unauthorized or conflicting human authority blocks the affected transition
+failure_invalidation_rollback_and_history:
+  reject:
+    - winner_selection_before_all_required_evaluations
+    - first_finished_candidate_auto_selection
+    - generator_context_or_protected_label_leakage_to_evaluator
+    - risk_blind_or_budget_unbounded_compute_route
+    - unregistered_model_tier_provider_tool_or_profile
+    - automation_that_removes_or_resolves_required_human_gate
+    - unauthorized route, selection, gate, invalidation or rollback mutation
+    - provider, model, engine, network, credential or external-product execution request
+  invalidation:
+    - changed candidate, rubric, evidence, route policy, budget, authority, profile or upstream checkpoint invalidates only affected decisions and descendants
+  rollback:
+    - restore the prior active policy-decision reference without mutating immutable history
+  partial_state_on_failure: prohibited
+  historical_reproduction: required
+lineage_determinism_and_observability:
+  canonical_inputs:
+    - Workflow_IR_profile_node_and_checkpoint_hashes
+    - ST-09.04_checkpoint_resume_sandbox_and_parallel_plan_receipts
+    - candidate_contracts_evaluator_policy_rubric_and_gate_versions
+    - route_policy_risk_budget_and_evidence_versions
+    - human_gate_authority_and_invalidation_refs
+  identity_rule: race-plan, route, evaluator-view, selection, gate, invalidation and rollback identities derive only from canonical governed content
+  repeat_command: identical payload returns the original local decision and receipt without duplicate state
+  conflicting_command: reject atomically with zero decision, winner, route, gate resolution, receipt, event or command record
+  required_observation_fields: [run_id, story_id, artifact_identity, authority_identity, version, provenance, outcome, failure_context]
+external_and_evidence_gates_remaining:
+  direct_dependency:
+    status: DEPENDENCY_PENDING
+    detail: ST-09.04 OD-AM-001 ImplementationCompletionReceipt is not issued
+  manual_shadow_evidence:
+    status: EVIDENCE_PENDING
+    detail: actual expert workflow, route, intervention, gate and outcome parity evidence remains absent
+  XDEP-001:
+    status: AUTHORITY_REMAINS_EXTERNAL
+    detail: Program Control records remain read-only
+  XDEP-005:
+    status: FUTURE_CONSUMER_NOT_IMPLEMENTATION_EVIDENCE
+    detail: Operator Manual documentation cannot substitute for routing, gate, evaluator or runtime evidence
+  ADR-006-Temporal:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: local policy decisions do not prove Temporal routing, signal, replay, retry, resume, fault or migration behavior
+  ADR-012-isolation-platform:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: evaluator-view and sandbox-policy validation does not prove process, container, worktree or provider isolation
+  provider_boundary:
+    status: PROVIDER_MODEL_COMPUTE_AND_OUTAGE_EVIDENCE_PENDING
+    detail: no credential, API call, model execution, provider comparison, compute dispatch, outage or provider-evaluator isolation is performed
+  product_boundary:
+    status: EXTERNAL_PRODUCT_RUNTIME_AND_ACCEPTANCE_REMAIN_EXTERNAL
+    detail: no VAE, Delegation, Interview Expression, ReelCast or downstream product behavior is implemented or validated
+  production_promotion:
+    status: PRODUCTION_EVIDENCE_AND_AUTHORITY_PENDING
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/workflow/candidate_routing.py
+  tests:
+    - tests/stories/st_09_05/test_candidate_race_quality_gates.py
+    - tests/stories/st_09_05/test_risk_aware_compute_routing.py
+    - tests/stories/st_09_05/test_evaluator_isolation_and_human_gates.py
+    - tests/stories/st_09_05/test_failure_authority_invalidation_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-09.05/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-09.05/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-09.05/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-09.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-09.04 implementation or completion evidence
+  - external engine, scheduler, agent, evaluator, model, provider, credential, network, process, container, worktree, transport or external-product behavior
+  - behavior owned by ST-09.06 or any later Story
+  - production execution, promotion, readiness or certification
+prohibited_claims:
+  - actual_manual_shadow_parity
+  - actual_candidate_race_or_model_compute_execution
+  - empirical_model_tier_provider_or_routing_superiority
+  - provider_evaluator_isolation_or_outage_validated
+  - durable_Temporal_routing_signal_replay_or_fault_conformance
+  - OS_process_container_or_worktree_isolation_conformant
+  - human_gate_policy_or_production_threshold_ratified
+  - external_product_compatible
+  - production_workflow_ready
+  - production_ready
+  - certified
+acceptance_after_dependency_pass:
+  - selection cannot occur before every required quality, contract, cost and latency evaluation passes
+  - compute routes are deterministic, risk-aware, budget-bounded and provider-neutral
+  - evaluator views exclude generator reasoning, preferences, protected labels and unrelated context
+  - human-owned gates remain explicit, immutable and unresolvable by model, agent, evaluator or local policy
+  - failures and changes invalidate only affected local decisions and preserve immutable history and rollback
+  - identical governed inputs produce byte-identical plans, decisions and receipts
+  - local structural evidence cannot close manual-shadow, Temporal, provider, isolation-platform, external-product or production gates
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-09.06_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

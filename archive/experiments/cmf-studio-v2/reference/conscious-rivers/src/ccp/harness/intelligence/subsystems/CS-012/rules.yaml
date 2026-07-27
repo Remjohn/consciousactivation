@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-012
+enabled: true
+priority:
+  tier: recall
+  rank: 2
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: gap_duration_seconds
+    operator: gt
+    value: 3.0
+block_conditions:
+  - metric: detached_outro
+    operator: eq
+    value: true
+route_hints:
+  correct:
+    - move_cta_into_end_window
+    - remove_branded_tail_gap

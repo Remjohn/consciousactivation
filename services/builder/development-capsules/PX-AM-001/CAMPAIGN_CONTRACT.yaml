@@ -1,0 +1,39 @@
+schema_version: cmf-builder-productization-campaign-contract/v1
+campaign: PX-AM-001
+confirmed_obligations: 410
+primary_obligation_ownership_changed: false
+units:
+  PZ-01:
+    amendment_unit: ST-01.02-GENERIC-TASK-INGESTION
+    obligations: [FR-009, FR-010, FR-011, FR-012, FR-013, FR-014, FR-015, FR-016, FR-017, FR-018, FR-137]
+    outcome: governed generic or Activative operator manifest becomes a canonical hash-bound input
+    lane: MANIFEST_AGENT
+  PZ-02:
+    amendment_unit: ST-01.01-DURABLE-RUN-PERSISTENCE
+    obligations: [ADR-001, ADR-005, FR-002, FR-003, FR-006, FR-007, FR-050, NFR-REL-002]
+    outcome: governed records and command receipts survive fresh processes without identity drift
+    lane: STORAGE_AGENT
+  PZ-03:
+    amendment_unit: ST-10.10-BUILDER-CORE-COMMAND-SURFACE
+    obligations: [ADR-005, UXC-002, FR-001, FR-003, FR-006, FR-007, FR-120, FR-125, FR-126]
+    outcome: operator can ingest build inspect and export through a deterministic Builder-owned CLI
+    lane: CLI_AGENT_AND_INTEGRATOR
+  PZ-04:
+    amendment_unit: ST-07.02-GENERIC-TASK-COMPILATION
+    obligations: [ADR-004, FR-051, FR-052, FR-053, FR-054, FR-055, FR-056, FR-057, FR-058, FR-059, FR-171, FR-177]
+    outcome: generic and Activative manifests compile to deterministic portable non-production AtomicHarnessDefinition packages
+    lane: INTEGRATOR
+dependencies:
+  PZ-01: []
+  PZ-02: []
+  PZ-03: [PZ-01, PZ-02]
+  PZ-04: [PZ-01, PZ-02, PZ-03]
+frozen_interfaces: docs/implementation/productization/FROZEN_INTERFACES.yaml
+path_locks: docs/implementation/productization/PATH_OWNERSHIP_LOCKS.yaml
+completion_requires:
+  - focused lane tests
+  - full regression after each integrated unit
+  - final full regression twice
+  - Python source compilation
+  - portability and secret scan
+  - PZ-01 through PZ-04 receipts

@@ -1,0 +1,30 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-030
+enabled: true
+priority:
+  tier: quality
+  rank: 11
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: neural_phase_consistency_score
+    operator: lt
+    value: 0.8
+route_hints:
+  align:
+    - motion_defaults
+    - pacing_defaults
+    - saliency_defaults

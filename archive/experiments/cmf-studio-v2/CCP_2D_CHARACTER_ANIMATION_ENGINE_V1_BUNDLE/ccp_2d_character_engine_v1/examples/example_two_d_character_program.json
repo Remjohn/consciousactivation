@@ -1,0 +1,363 @@
+{
+  "schema_version": "1.0.0",
+  "program_id": "tdcp_brand001_asset032_v1",
+  "status": "approved_for_render",
+  "timebase": {
+    "ticks_per_second": 48000,
+    "audio_sample_rate": 48000,
+    "fps_numerator": 30,
+    "fps_denominator": 1,
+    "duration_ticks": 2160000
+  },
+  "context_refs": {
+    "brand_id": "brand_001",
+    "brand_context_version_id": "bcv_014",
+    "interview_brief_id": "brief_009",
+    "interview_asset_contract_id": "iac_028",
+    "complete_expression_session_id": "xes_009",
+    "transcript_beat_map_id": "tbm_009_v3",
+    "expression_moment_ids": [
+      "em_014"
+    ],
+    "voice_dna_version_id": "voice_dna_v5",
+    "visual_dna_version_id": "visual_dna_v3",
+    "primitive_eval_bundle_id": "primitive_eval_221",
+    "doctrine_bundle_id": "doctrine_v9_1",
+    "asset_package_spec_id": "aps_009",
+    "scene_template_id": "paper_explainer_single_actor_v3",
+    "format_target": "vertical_9_16"
+  },
+  "character": {
+    "identity_pack_id": "identity_brand001_v2",
+    "character_art_version_id": "char_art_v5",
+    "layered_asset_version_id": "layered_psd_v4",
+    "rig_version_id": "rig_v7",
+    "performance_library_version_id": "performance_lib_v3",
+    "acting_library_version_id": "acting_64_v1",
+    "costume_skin": "green_blazer_v2",
+    "micro_semiotic_anchor_skins": [
+      "herbal_tea_pin_v1"
+    ]
+  },
+  "asset_bundle": {
+    "psd": {
+      "uri": "s3://brands/001/character/v4/character.psd",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "mime_type": "image/vnd.adobe.photoshop"
+    },
+    "spine_skeleton": {
+      "uri": "s3://brands/001/character/v7/skeleton.json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "mime_type": "application/json"
+    },
+    "atlas": {
+      "uri": "s3://brands/001/character/v7/character.atlas",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "mime_type": "text/plain"
+    },
+    "textures": [
+      {
+        "uri": "s3://brands/001/character/v7/atlas_0.png",
+        "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "mime_type": "image/png"
+      }
+    ],
+    "audio_master": {
+      "uri": "s3://sessions/xes_009/voice_master.wav",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "mime_type": "audio/wav"
+    }
+  },
+  "rig_manifest": {
+    "rig_id": "rig_v7",
+    "coordinate_system": {
+      "origin": "character_root",
+      "x_axis": "right",
+      "y_axis": "up",
+      "units": "pixels_at_design_resolution"
+    },
+    "setup_pose_id": "neutral_open_v1",
+    "layers": [
+      {
+        "layer_id": "torso",
+        "semantic_type": "torso",
+        "side": "center",
+        "source_name": "torso",
+        "parent_id": null,
+        "draw_order": 20,
+        "canvas_rect": [
+          300,
+          500,
+          480,
+          700
+        ],
+        "pivot_hint": [
+          0.5,
+          0.15
+        ],
+        "texture_ref": {
+          "uri": "s3://brands/001/character/v7/torso.png",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "mime_type": "image/png"
+        },
+        "mask_ids": [],
+        "material_id": "paper_skin_v1",
+        "visible": true
+      }
+    ],
+    "bones": [
+      {
+        "bone_id": "root",
+        "parent_id": null,
+        "x": 0,
+        "y": 0,
+        "rotation_deg": 0,
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_x_deg": 0,
+        "shear_y_deg": 0,
+        "rotation_min_deg": null,
+        "rotation_max_deg": null,
+        "bend_direction": null
+      },
+      {
+        "bone_id": "torso",
+        "parent_id": "root",
+        "x": 0,
+        "y": 0,
+        "rotation_deg": 0,
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_x_deg": 0,
+        "shear_y_deg": 0,
+        "rotation_min_deg": -12,
+        "rotation_max_deg": 12,
+        "bend_direction": "either"
+      }
+    ],
+    "mesh_bundle_ref": {
+      "uri": "s3://brands/001/character/v7/meshes.bin",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "format": "ccp-mesh-v1"
+    },
+    "shape_key_bundle_ref": {
+      "uri": "s3://brands/001/character/v7/shape_keys.bin",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "format": "ccp-shapekey-v1"
+    },
+    "masks_ref": {
+      "uri": "s3://brands/001/character/v7/masks.json",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "format": "json"
+    },
+    "constraints": [],
+    "attachment_points": [
+      {
+        "id": "hand_R",
+        "bone_id": "torso",
+        "local_position": [
+          14.2,
+          4.8
+        ],
+        "local_rotation": 2.0
+      }
+    ],
+    "material_profile_id": "paper_material_warm_v2",
+    "runtime_export_refs": []
+  },
+  "performance_library": {
+    "library_id": "performance_lib_v3",
+    "acting_states": [
+      {
+        "state_id": "confident_open_explain",
+        "communicative_intent": "teach_with_authority",
+        "emotion": {
+          "primary": "confident",
+          "secondary": "warm",
+          "intensity": 0.68
+        },
+        "base_clip": "idle_upright_open",
+        "gesture_clip": "two_hand_open_explain",
+        "face_pose": "confident_half_smile",
+        "gaze_policy": "camera_primary",
+        "hand_pose_L": "open",
+        "hand_pose_R": "open",
+        "energy": 0.64,
+        "minimum_hold_ticks": 57600,
+        "transition_in_ticks": 9600,
+        "transition_out_ticks": 14400,
+        "primitive_affinities": [
+          "clarity",
+          "conviction",
+          "teaching"
+        ],
+        "forbidden_contexts": [
+          "grief_peak"
+        ]
+      }
+    ],
+    "transition_rules": [],
+    "viseme_map_id": "viseme_9shape_fr_v2",
+    "facial_pose_map_id": "facial_pose_v3",
+    "gaze_map_id": "gaze_policy_v2",
+    "hand_pose_map_id": "hand_pose_v2",
+    "prop_action_map_id": "prop_actions_v1"
+  },
+  "transcript_alignment": {
+    "word_alignment_ref": {
+      "uri": "s3://sessions/xes_009/alignment/words.json",
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "format": "json"
+    },
+    "phoneme_alignment_ref": {
+      "uri": "s3://sessions/xes_009/alignment/phonemes.json",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "format": "json"
+    },
+    "viseme_cues_ref": {
+      "uri": "s3://sessions/xes_009/alignment/visemes.json",
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "format": "json"
+    },
+    "alignment_confidence": 0.94,
+    "manual_repairs": []
+  },
+  "performance_tracks": [
+    {
+      "track_id": "base_body",
+      "priority": 0,
+      "property_scope": [
+        "body"
+      ],
+      "cues": [
+        {
+          "cue_id": "base_001",
+          "start_tick": 0,
+          "end_tick": 2160000,
+          "action": "play_clip",
+          "clip_id": "idle_grounded",
+          "state_id": null,
+          "target_id": null,
+          "value": null,
+          "loop": true,
+          "mix_in_ticks": 4800,
+          "mix_out_ticks": 0,
+          "semantic_target": null
+        }
+      ],
+      "cue_ref": null
+    },
+    {
+      "track_id": "face",
+      "priority": 3,
+      "property_scope": [
+        "face"
+      ],
+      "cues": [
+        {
+          "cue_id": "face_001",
+          "start_tick": 240000,
+          "end_tick": 421200,
+          "action": "apply_acting_state",
+          "clip_id": null,
+          "state_id": "confident_open_explain",
+          "target_id": null,
+          "value": null,
+          "loop": false,
+          "mix_in_ticks": 9600,
+          "mix_out_ticks": 14400,
+          "semantic_target": "meaning_reveal"
+        }
+      ],
+      "cue_ref": null
+    }
+  ],
+  "motion_canvas_choreography": {
+    "template_id": "paper_cut_explainer_actor_left_v3",
+    "character_position": {
+      "x": 0.27,
+      "y": 0.71,
+      "scale": 0.88,
+      "rotation_deg": 0
+    },
+    "camera_cues": [
+      {
+        "start_tick": 0,
+        "end_tick": 720000,
+        "motion": "slow_push",
+        "scale_from": 1,
+        "scale_to": 1.035,
+        "x_from": 0,
+        "x_to": 0,
+        "y_from": 0,
+        "y_to": 0,
+        "easing": "ease_in_out_cubic"
+      }
+    ],
+    "scene_object_cues": [],
+    "seed": "tdcp_brand001_asset032_v1"
+  },
+  "remotion_composition": {
+    "composition_id": "CCP2DCharacterVertical",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_in_frames": 1350,
+    "character_render_mode": "embedded_spine_runtime",
+    "subtitle_profile_id": "emotional_subtitles_v2",
+    "background_scene_id": "cream_paper_teaching_v4",
+    "safe_zone_profile_id": "vertical_reel_v2",
+    "audio_master_ref": "asset_bundle.audio_master",
+    "seed": "tdcp_brand001_asset032_v1"
+  },
+  "ffmpeg_finishing": {
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "audio_codec": "aac",
+    "audio_bitrate": "192k",
+    "voice_loudness_target_lufs": -16,
+    "true_peak_target_db": -1.5,
+    "music_ducking_profile": "voice_priority_gentle",
+    "output_variants": [
+      "1080x1920_master",
+      "720x1280_preview"
+    ]
+  },
+  "evaluation": {
+    "required_gates": [
+      "character_identity",
+      "rig_integrity",
+      "lip_sync",
+      "beat_performance_match",
+      "primitive_compliance",
+      "doctrine_alignment",
+      "technical_render"
+    ],
+    "thresholds": {
+      "identity_consistency": 0.9,
+      "lip_sync": 0.86,
+      "beat_performance_match": 0.82,
+      "primitive_compliance": 0.9,
+      "doctrine_alignment": 0.95
+    },
+    "results": []
+  },
+  "operator_approval": {
+    "status": "approved",
+    "approved_by": "operator_emmanuel",
+    "approved_at": "2026-06-24T13:35:00Z",
+    "approval_surface": "telegram_mini_app",
+    "revision_history_ids": []
+  },
+  "receipt": {
+    "program_sha256": null,
+    "python_harness_image_digest": "sha256:python",
+    "motion_canvas_image_digest": "sha256:motion",
+    "remotion_image_digest": "sha256:remotion",
+    "ffmpeg_version": "7.x-pinned",
+    "character_runtime_version": "spine-4.0-pinned",
+    "font_hashes": [],
+    "provider_output_hashes": [],
+    "rendered_file_sha256": null
+  }
+}

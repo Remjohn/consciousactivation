@@ -1,0 +1,49 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "VOICE_OF_TRUTH",
+  "scene_number": 11,
+  "name": "Voice of Truth",
+  "version": "1.0",
+  "function": "Belief-anchoring testimony or external validation scene.",
+  "compatible_containers": [
+    "SETUP",
+    "TURNING_POINT"
+  ],
+  "cls_footprint": {
+    "typical": 2.0,
+    "max": 3.0
+  },
+  "required_asset_types": [
+    "A_ROLL",
+    "TESTIMONIAL",
+    "TEXT"
+  ],
+  "template_variants": [
+    "mentor_validation",
+    "external_quote",
+    "truth_bomb_testimony"
+  ],
+  "effect_dependencies": [
+    "quote_reveal",
+    "slow_push"
+  ],
+  "selection_signals": [
+    "authority_transfer",
+    "belief_shift",
+    "credibility_boost"
+  ],
+  "audio_profile": {
+    "score_role": "validate",
+    "energy_band": "medium",
+    "mode": "credible",
+    "prosodic_hint": "grounded_testimonial",
+    "prosodic_contour_target": {
+      "pitch_shape": "falling",
+      "stress_placement": "initial",
+      "rate_wpm": { "min": 120, "max": 150 },
+      "emotional_register": "authority"
+    }
+  },
+  "fallback_behavior": "Use direct coach testimony if external proof is unavailable."
+}

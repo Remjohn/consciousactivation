@@ -1,0 +1,62 @@
+schema_version: conscious-activations-source-traceability/v3.3
+spec_id: TS-AHP-004
+quality_state: WRITTEN_PENDING_AUDIT
+authority_state: CANDIDATE_NOT_CURRENT
+traceability:
+  AIR-FR-112:
+    requirement: Represent Hunter, Analyst, Composer and Commander as explicit bounded workflow roles with separate actor, inputs, outputs, authority and handoff.
+    stories: [AIR-ST-19.02]
+    source_ids: [SRC-AI2-REPAIR-001, SRC-AHP-F16-001, SRC-AHP-F03-001]
+    spec_sections: ['2', '3.3', '3.4', '3.5', '5.5', '5.6', '6.3', '6.4', '6.7', '7', '8', '9.3', '9.8', '9.9', '10']
+  FR-013:
+    requirement: Compile phases into explicit Workflow Nodes with exact capabilities and typed handoffs.
+    stories: [ST-03.04]
+    source_ids: [SRC-CUR-007, SRC-CUR-008, SRC-CUR-010, SRC-LEG-001, SRC-LEG-002, SRC-LEG-003]
+    spec_sections: ['2', '3', '4', '5.2', '6.2', '6.3', '7', '9.1', '10']
+  FR-014:
+    requirement: Declare execution actor, capability ownership class, workflow role and product boundary independently.
+    stories: [ST-03.04]
+    source_ids: [SRC-CUR-008, SRC-CUR-010, SRC-AHP-F03-001]
+    spec_sections: ['3.3', '3.4', '4', '5.1', '5.2', '6.3', '9.2', '10']
+  FR-015:
+    requirement: Enforce acyclic dependencies, gates, eligible parallelism and deterministic ready order.
+    stories: [ST-03.04]
+    source_ids: [SRC-CUR-007, SRC-CUR-010, SRC-LEG-001, SRC-LEG-002, SRC-LEG-003]
+    spec_sections: ['3.7', '4', '5.3', '5.7', '6.3', '6.5', '7', '8', '9.4', '10']
+  FR-016:
+    requirement: Start a downstream node only after exact producer output and handoff validation pass.
+    stories: [ST-03.04]
+    source_ids: [SRC-CUR-010, SRC-LEG-001, SRC-LEG-003]
+    spec_sections: ['3.6', '4', '5.3', '6.3', '6.5', '8', '9.5', '10']
+  FR-017:
+    requirement: Represent human authority and independent product calls as visible nodes.
+    stories: [ST-03.04]
+    source_ids: [SRC-CUR-008, SRC-CUR-010, SRC-AHP-F03-001, SRC-INT-001]
+    spec_sections: ['3.2', '3.3', '3.6', '5.4', '6.3', '6.8', '8', '9.6', '9.12', '9.17', '10']
+  FR-018:
+    requirement: Emit immutable receipts for every node attempt with inputs, JIT, implementation, actions, outputs, validation, status, timing, cost and lineage.
+    stories: [ST-03.04]
+    source_ids: [SRC-CUR-010, SRC-LEG-001, SRC-LEG-002, SRC-LEG-003, SRC-MIG-001]
+    spec_sections: ['3.6', '3.7', '4', '5.3', '5.7', '6.5', '6.8', '8', '9.7', '9.13', '9.14', '9.15', '10']
+  FR-137:
+    requirement: Represent bounded production roles rather than hidden personas or monolithic multi-agent prompts.
+    stories: [ST-03.04]
+    source_ids: [SRC-MIG-001, SRC-INT-001, SRC-CUR-010, SRC-AHP-F03-001]
+    spec_sections: ['2', '3.3', '3.4', '4', '5.5', '6.3', '6.4', '7', '9.3', '10']
+story_acceptance:
+  ST-03.04_primary: ['5.2', '5.3', '5.4', '5.5', '9.1', '9.2', '9.4', '9.5', '9.6']
+  ST-03.04_adversarial: ['3', '5.3', '6.9', '8.1', '9.2', '9.6', '9.12', '9.13']
+  ST-03.04_replay: ['5.7', '6.5', '6.6', '6.8', '8.3', '8.4', '9.7', '9.15']
+  ST-03.04_selective_recovery: ['3.5', '5.6', '6.6', '6.7', '8.4', '9.10', '9.11']
+  AIR-ST-19.02_primary_and_boundary: ['3.2', '3.4', '3.5', '5.5', '5.6', '6.4', '6.7', '9.3', '9.8', '9.9']
+  AIR-ST-19.02_recovery_and_cbar: ['3.5', '3.8', '5.6', '6.6', '6.7', '8.4', '9.10', '9.11', '9.12']
+authority_boundaries:
+  activative_intelligence_runtime: owns_failure_attribution_and_semantic_repair_program_meaning
+  atomic_harness_pipeline: owns_runtime_workflow_scheduler_dependency_graph_invalidation_jit_execution_and_receipts
+  atomic_harness_builder: owns_atomic_harness_definition_and_declared_graph_requirements
+  independent_evaluation: owns_independent_receipt_meaning_and_no_producer_self_approval
+upstream_draft_interfaces:
+  TS-AHP-002: harness_graph_binding_ownership_handoff_evaluation_and_repair_requirement_projection
+  TS-AIR-019: failure_attribution_semantic_repair_referral_role_context_and_pipeline_handoff
+unattributed_unavailable_source_claims: []
+result: PASS_COMPLETE_FOR_WRITING_PENDING_INDEPENDENT_AUDIT

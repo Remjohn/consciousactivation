@@ -1,0 +1,271 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://cmf.conscious-movie-factory.com/schemas/narrative_dna.schema.json",
+    "title": "CMF Narrative DNA Schema",
+    "description": "JSON Schema for validating narrative_dna structure in strategy_brief.json files",
+    "type": "object",
+    "required": [
+        "project_id",
+        "selected_arc",
+        "arc_confidence",
+        "unified_frame_statement",
+        "protagonist_voice",
+        "narrative_dna"
+    ],
+    "properties": {
+        "project_id": {
+            "type": "string",
+            "pattern": "^\\d{2}_\\d{2}-\\d{2} .+$",
+            "description": "Project ID in format XX_XX-XX Name"
+        },
+        "selected_arc": {
+            "type": "string",
+            "enum": [
+                "The Witness",
+                "The Breakthrough",
+                "The Shared Struggle",
+                "The Confrontation",
+                "The Core Transformation",
+                "The Warning",
+                "The Rally",
+                "The Divine Spark",
+                "The Call to Adventure",
+                "The Ticking Clock",
+                "The Comedic Reframe",
+                "The Sacred Return",
+                "The Quiet Reflection"
+            ],
+            "description": "One of the 13 valid CMF arcs"
+        },
+        "arc_confidence": {
+            "type": "number",
+            "minimum": 0.75,
+            "maximum": 1.0,
+            "description": "Confidence score for arc selection (must be >= 0.75)"
+        },
+        "unified_frame_statement": {
+            "type": "string",
+            "minLength": 80,
+            "maxLength": 200,
+            "description": "20-25 word frame statement capturing core transformation"
+        },
+        "protagonist_voice": {
+            "type": "object",
+            "required": [
+                "name",
+                "role"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "description": "Client name from transcript"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "client",
+                        "coach",
+                        "community"
+                    ],
+                    "description": "Protagonist role type"
+                }
+            }
+        },
+        "narrative_dna": {
+            "type": "object",
+            "required": [
+                "mission",
+                "root_concept",
+                "state_alpha",
+                "the_abyss",
+                "the_spark",
+                "state_omega",
+                "sensory_anchors",
+                "coach_role"
+            ],
+            "properties": {
+                "mission": {
+                    "type": "string",
+                    "pattern": "^DECODE_.+_TRANSFORMATION$",
+                    "description": "Mission code in format DECODE_[TYPE]_TRANSFORMATION"
+                },
+                "root_concept": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z]+(_[A-Za-z]+){1,3}$",
+                    "description": "2-4 underscored words capturing core shift"
+                },
+                "state_alpha": {
+                    "type": "object",
+                    "required": [
+                        "identity",
+                        "loop",
+                        "internal_monologue",
+                        "sensory_anchor"
+                    ],
+                    "properties": {
+                        "identity": {
+                            "type": "string",
+                            "pattern": "^\\(Self == .+\\)$",
+                            "description": "Identity code in format (Self == X)"
+                        },
+                        "loop": {
+                            "type": "string",
+                            "pattern": "^\\{.+ -> .+ -> .+ -> Repeat\\}$",
+                            "description": "Loop pattern in format {A -> B -> C -> Repeat}"
+                        },
+                        "internal_monologue": {
+                            "type": "string",
+                            "minLength": 15,
+                            "maxLength": 80,
+                            "description": "VERBATIM quote 5-12 words in quotes"
+                        },
+                        "sensory_anchor": {
+                            "type": "string",
+                            "minLength": 20,
+                            "maxLength": 60,
+                            "description": "Specific physical detail 5-10 words"
+                        }
+                    }
+                },
+                "the_abyss": {
+                    "type": "object",
+                    "required": [
+                        "event",
+                        "sensation",
+                        "realization"
+                    ],
+                    "properties": {
+                        "event": {
+                            "type": "string",
+                            "pattern": "^[A-Z][A-Za-z_]+$",
+                            "description": "CAPSLOCK event name with underscores"
+                        },
+                        "sensation": {
+                            "type": "string",
+                            "pattern": "^\\(.+, .+\\)$",
+                            "description": "Tuple of physical sensations"
+                        },
+                        "realization": {
+                            "type": "string",
+                            "minLength": 15,
+                            "maxLength": 100,
+                            "description": "VERBATIM insight quote 5-15 words"
+                        }
+                    }
+                },
+                "the_spark": {
+                    "type": "object",
+                    "required": [
+                        "trigger",
+                        "shift_type",
+                        "insight_quote"
+                    ],
+                    "properties": {
+                        "trigger": {
+                            "type": "string",
+                            "description": "Coach-related moment"
+                        },
+                        "shift_type": {
+                            "type": "string",
+                            "enum": [
+                                "Logic_Collapse",
+                                "Permission_Granted",
+                                "Mirror_Moment",
+                                "Root_Cause_Reveal",
+                                "Framework_Gift"
+                            ],
+                            "description": "Type of psychological shift"
+                        },
+                        "insight_quote": {
+                            "type": "string",
+                            "pattern": ".+\\(\\d{1,2}:\\d{2}\\)$",
+                            "description": "VERBATIM quote with timestamp (HH:MM)"
+                        }
+                    }
+                },
+                "state_omega": {
+                    "type": "object",
+                    "required": [
+                        "identity",
+                        "action",
+                        "result"
+                    ],
+                    "properties": {
+                        "identity": {
+                            "type": "string",
+                            "pattern": "^\\(Self == .+\\)$",
+                            "description": "New identity code in format (Self == X)"
+                        },
+                        "action": {
+                            "type": "string",
+                            "minLength": 20,
+                            "maxLength": 60,
+                            "description": "What they do differently 5-10 words"
+                        },
+                        "result": {
+                            "type": "string",
+                            "pattern": ".*\\d+.*",
+                            "description": "MEASURABLE outcome with NUMBER (e.g., 'Energy from 3/10 to 8/10')"
+                        }
+                    }
+                },
+                "sensory_anchors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 20,
+                        "maxLength": 60
+                    },
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "description": "Array of exactly 3 physical details (BEFORE, TURNING POINT, NOW)"
+                },
+                "coach_role": {
+                    "type": "object",
+                    "required": [
+                        "function",
+                        "method_named",
+                        "presence_type"
+                    ],
+                    "properties": {
+                        "function": {
+                            "type": "string",
+                            "enum": [
+                                "Framework",
+                                "Permission",
+                                "Mirror",
+                                "Challenge",
+                                "Witness",
+                                "Safe_Harbor"
+                            ],
+                            "description": "Coach's primary function"
+                        },
+                        "method_named": {
+                            "type": "string",
+                            "description": "Specific technique from transcript or NULL"
+                        },
+                        "presence_type": {
+                            "type": "string",
+                            "enum": [
+                                "Guide",
+                                "Challenger",
+                                "Witness",
+                                "Safe_Harbor",
+                                "Teacher",
+                                "Healer"
+                            ],
+                            "description": "Coach's presence archetype"
+                        }
+                    }
+                },
+                "spr_text": {
+                    "type": "string",
+                    "minLength": 180,
+                    "maxLength": 400,
+                    "description": "48-60 word Sparse Priming Representation for latent space activation. Must be 4-6 emotionally grounded sentences using transcript language."
+                }
+            }
+        }
+    }
+}

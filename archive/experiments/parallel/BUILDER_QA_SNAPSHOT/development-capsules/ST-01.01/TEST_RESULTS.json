@@ -1,0 +1,84 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-01.01",
+  "generated_on": "2026-07-15",
+  "runtime": {
+    "language": "Python",
+    "version": "3.12.0",
+    "third_party_dependencies": []
+  },
+  "authoritative_command": "python -B -c \"import sys, unittest; sys.path.insert(0, 'src'); suite=unittest.defaultTestLoader.discover('tests'); result=unittest.TextTestRunner(verbosity=1).run(suite); raise SystemExit(0 if result.wasSuccessful() else 1)\"",
+  "test_first_evidence": {
+    "preimplementation_result": "EXPECTED_FAIL",
+    "reason": "Five test modules failed import because cmf_builder did not yet exist.",
+    "production_files_present_at_failure": 0
+  },
+  "runs": [
+    {"name": "story_suite_verbose", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.275, "result": "PASS"},
+    {"name": "full_regression_run_1", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.294, "result": "PASS"},
+    {"name": "full_regression_run_2", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.243, "result": "PASS"},
+    {"name": "final_receipt_validation", "tests": 20, "passed": 20, "failed": 0, "errors": 0, "duration_seconds": 0.288, "result": "PASS"}
+  ],
+  "required_test_ids": {
+    "ST-01.01-acceptance": "PASS",
+    "ST-01.01-failure": "PASS",
+    "ST-01.01-authority": "PASS",
+    "ST-01.01-receipt": "PASS"
+  },
+  "executed_tests": [
+    "test_st_01_01_acceptance_creates_one_format02_run",
+    "test_st_01_01_acceptance_identical_command_is_idempotent",
+    "test_st_01_01_acceptance_legal_transition_emits_one_event",
+    "test_st_01_01_acceptance_rejects_external_and_conversational_execution",
+    "test_st_01_01_acceptance_rejects_zero_multiple_and_unknown_targets",
+    "test_domain_does_not_import_application_or_adapters",
+    "test_governed_contract_inputs_are_hash_valid_and_read_only",
+    "test_source_files_import_no_external_product_or_runtime_dependency",
+    "test_st_01_01_authority_agent_cannot_commit_even_with_grant",
+    "test_st_01_01_authority_expired_and_production_waivers_fail_closed",
+    "test_st_01_01_authority_human_can_issue_bounded_waiver_receipt",
+    "test_st_01_01_authority_unauthorized_actor_cannot_create",
+    "test_st_01_01_failure_corrupt_only_checkpoint_blocks_resume",
+    "test_st_01_01_failure_invalid_transition_does_not_mutate",
+    "test_st_01_01_failure_reused_command_with_new_payload_rejects",
+    "test_st_01_01_failure_stale_version_does_not_mutate",
+    "test_st_01_01_receipt_is_deterministic_in_fresh_contexts",
+    "test_st_01_01_receipt_rejects_discontinuous_event_stream",
+    "test_st_01_01_receipt_resume_preserves_identity_and_human_decision",
+    "test_st_01_01_receipt_uses_older_valid_checkpoint_when_newer_is_corrupt"
+  ],
+  "acceptance_criteria": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "PASS",
+    "AC-09": "PASS"
+  },
+  "schema_and_contract_validation": {
+    "constitutional_evaluation_schema_json_parse": "PASS",
+    "ConstitutionalReadinessReceipt_definition_present": true,
+    "governed_input_hashes": "PASS_4_OF_4",
+    "format02_profile_contract": "PASS",
+    "format02_compatibility_state": "contract_compatible",
+    "format02_production_certified": false,
+    "delegation_rc4_bound": false,
+    "capsule_manifest_hashes": "PASS_16_OF_16"
+  },
+  "determinism": {
+    "two_clean_regression_runs_passed": true,
+    "fresh_context_receipts_equal": true,
+    "fresh_context_event_payloads_equal": true,
+    "replay_state_equal": true
+  },
+  "rollback_probes": {
+    "src_disabled_import_probe": "PASS_MODULE_ABSENT",
+    "src_reenabled_import_probe": "PASS_VERSION_1.2.0-st01.01",
+    "destructive_rollback_executed": false,
+    "reason": "Capsule prohibits automatic deletion; rollback was demonstrated non-destructively by removing src from the import boundary."
+  },
+  "overall_result": "PASS"
+}

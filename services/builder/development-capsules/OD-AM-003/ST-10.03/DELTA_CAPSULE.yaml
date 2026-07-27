@@ -1,0 +1,30 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-003
+story_id: ST-10.03
+title: EVIDENCE_AND_SYNTAX_INSPECTION_BEHIND_DECISIONS
+outcome: deterministic_inspection_projection_for_evidence_syntax_and_decision_explanations
+authority:
+  amendment_path: docs/implementation/offline-development/OD_AM_003.yaml
+  implementation_gate_only: true
+  production_authority: false
+  certification_authority: false
+allowed_files:
+  production:
+    - src/cmf_builder/application/decision_inspection.py
+  tests:
+    - tests/stories/st_10_03/test_decision_inspection.py
+  governance:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    - development-capsules/OD-AM-003/ST-10.03/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-003/ST-10.03/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-003/ST-10.03/TEST_RESULTS.json
+    - development-capsules/OD-AM-003/ST-10.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+requirements:
+  - preserve raw source, normalized observation, syntax, grammar, category, Activative, wrong-reading, authority, decision, evaluation and repair distinctions
+  - represent active supporting, conflicting, excluded, invalidated, redacted, missing, stale and not-applicable evidence states
+  - produce structured decision explanation without becoming semantic authority
+  - reject hidden conflicting evidence, missing authority lineage and false certification display
+prohibited:
+  - reinterpret_syntax_for_display
+  - agent_generated_authority_claims
+  - production_or_certification_claims

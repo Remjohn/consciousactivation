@@ -1,0 +1,18 @@
+scenario_id: SCN-09
+title: Compatibility migration
+purpose: Proves semantic migration, pinned profile and compatibility evidence.
+contracts:
+- type: compatibility-manifest
+  example_ref: ../../../contracts/examples/compatibility-manifest.example.yaml
+- type: contract-migration
+  example_ref: ../../../contracts/examples/contract-migration.example.yaml
+- type: visual-asset-submission
+  example_ref: ../../../contracts/examples/visual-asset-submission.example.yaml
+expected_shared_states:
+- DRAFT
+- SUBMITTED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

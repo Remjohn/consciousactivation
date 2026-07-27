@@ -1,0 +1,202 @@
+version: 1.0.0-draft
+messages:
+- message_type: delegation_envelope
+  title: Delegation Envelope
+  producer: boundary_service
+  consumer: all_products
+  purpose: Common metadata and integrity wrapper for protocol messages.
+  lifecycle_effect: none
+  schema: contracts/schemas/delegation-envelope.schema.yaml
+  example: contracts/examples/delegation-envelope.example.yaml
+- message_type: visual_asset_demand
+  title: Visual Asset Demand
+  producer: content_harness
+  consumer: visual_asset_editor
+  purpose: Authoritative immutable visual demand resource.
+  lifecycle_effect: DRAFT
+  schema: contracts/schemas/visual-asset-demand.schema.yaml
+  example: contracts/examples/visual-asset-demand.example.yaml
+- message_type: visual_asset_submission
+  title: Visual Asset Submission
+  producer: content_harness
+  consumer: delegation_protocol
+  purpose: Submits one demand under an execution policy.
+  lifecycle_effect: DRAFT→SUBMITTED
+  schema: contracts/schemas/visual-asset-submission.schema.yaml
+  example: contracts/examples/visual-asset-submission.example.yaml
+- message_type: submission_receipt
+  title: Submission Receipt
+  producer: delegation_protocol_or_vae
+  consumer: content_harness
+  purpose: Accepts or rejects a submission after validation and admission.
+  lifecycle_effect: SUBMITTED→ACCEPTED|REJECTED
+  schema: contracts/schemas/submission-receipt.schema.yaml
+  example: contracts/examples/submission-receipt.example.yaml
+- message_type: visual_asset_event
+  title: Visual Asset Event
+  producer: visual_asset_editor
+  consumer: delegation_protocol_and_content_harness
+  purpose: Projects VAE progress or exceptions into the shared lifecycle.
+  lifecycle_effect: ACCEPTED|IN_PROGRESS
+  schema: contracts/schemas/visual-asset-event.schema.yaml
+  example: contracts/examples/visual-asset-event.example.yaml
+- message_type: delegation_set
+  title: Delegation Set
+  producer: content_harness
+  consumer: delegation_protocol_and_vae
+  purpose: Coordinates related independent demands under shared constraints.
+  lifecycle_effect: none
+  schema: contracts/schemas/delegation-set.schema.yaml
+  example: contracts/examples/delegation-set.example.yaml
+- message_type: budget_authorization
+  title: Budget Authorization
+  producer: content_harness
+  consumer: delegation_protocol_and_vae
+  purpose: Authorizes Budget Program, ceilings, and escalation policy.
+  lifecycle_effect: none
+  schema: contracts/schemas/budget-authorization.schema.yaml
+  example: contracts/examples/budget-authorization.example.yaml
+- message_type: budget_escalation_request
+  title: Budget Escalation Request
+  producer: visual_asset_editor
+  consumer: content_harness
+  purpose: Requests additional authorized production envelope.
+  lifecycle_effect: →COST_APPROVAL_REQUIRED
+  schema: contracts/schemas/budget-escalation-request.schema.yaml
+  example: contracts/examples/budget-escalation-request.example.yaml
+- message_type: budget_escalation_response
+  title: Budget Escalation Response
+  producer: content_harness
+  consumer: visual_asset_editor
+  purpose: Approves or denies a budget extension.
+  lifecycle_effect: COST_APPROVAL_REQUIRED→IN_PROGRESS|CAPABILITY_GAP
+  schema: contracts/schemas/budget-escalation-response.schema.yaml
+  example: contracts/examples/budget-escalation-response.example.yaml
+- message_type: cancellation_request
+  title: Cancellation Request
+  producer: content_harness
+  consumer: visual_asset_editor
+  purpose: Authoritatively requests safe cancellation.
+  lifecycle_effect: →CANCELLATION_REQUESTED
+  schema: contracts/schemas/cancellation-request.schema.yaml
+  example: contracts/examples/cancellation-request.example.yaml
+- message_type: cancellation_receipt
+  title: Cancellation Receipt
+  producer: visual_asset_editor
+  consumer: content_harness
+  purpose: Records safe stop, disposition, and compute.
+  lifecycle_effect: CANCELLATION_REQUESTED→CANCELLED
+  schema: contracts/schemas/cancellation-receipt.schema.yaml
+  example: contracts/examples/cancellation-receipt.example.yaml
+- message_type: constraint_conflict
+  title: Constraint Conflict
+  producer: visual_asset_editor
+  consumer: content_harness
+  purpose: Reports infeasibility without mutating demand.
+  lifecycle_effect: →AMENDMENT_REQUIRED|CAPABILITY_GAP
+  schema: contracts/schemas/constraint-conflict.schema.yaml
+  example: contracts/examples/constraint-conflict.example.yaml
+- message_type: amendment_proposal
+  title: Amendment Proposal
+  producer: visual_asset_editor
+  consumer: content_harness
+  purpose: Proposes typed non-binding field-level changes.
+  lifecycle_effect: →AMENDMENT_REQUIRED
+  schema: contracts/schemas/amendment-proposal.schema.yaml
+  example: contracts/examples/amendment-proposal.example.yaml
+- message_type: amendment_response
+  title: Amendment Response
+  producer: content_harness
+  consumer: visual_asset_editor
+  purpose: Accepts, rejects, or requests alternatives.
+  lifecycle_effect: AMENDMENT_REQUIRED
+  schema: contracts/schemas/amendment-response.schema.yaml
+  example: contracts/examples/amendment-response.example.yaml
+- message_type: demand_supersession
+  title: Demand Supersession
+  producer: content_harness
+  consumer: delegation_protocol_and_vae
+  purpose: Links a new demand version and declares changed authority fields.
+  lifecycle_effect: old→SUPERSEDED
+  schema: contracts/schemas/demand-supersession.schema.yaml
+  example: contracts/examples/demand-supersession.example.yaml
+- message_type: selective_invalidation_receipt
+  title: Selective Invalidation Receipt
+  producer: visual_asset_editor
+  consumer: content_harness
+  purpose: Explains reuse, invalidation, and resume point after change.
+  lifecycle_effect: none
+  schema: contracts/schemas/selective-invalidation-receipt.schema.yaml
+  example: contracts/examples/selective-invalidation-receipt.example.yaml
+- message_type: asset_result_contract
+  title: Asset Result Contract
+  producer: visual_asset_editor
+  consumer: content_harness
+  purpose: Returns production-accepted assets, geometry, evaluations, and receipts.
+  lifecycle_effect: IN_PROGRESS→RESULT_READY|PARTIAL_RESULT_READY
+  schema: contracts/schemas/asset-result-contract.schema.yaml
+  example: contracts/examples/asset-result-contract.example.yaml
+- message_type: result_acknowledgement
+  title: Result Acknowledgement
+  producer: content_harness
+  consumer: delegation_protocol_and_vae
+  purpose: Accepts or rejects current downstream consumption compatibility.
+  lifecycle_effect: RESULT_READY→COMPLETED|RESULT_REJECTED
+  schema: contracts/schemas/result-acknowledgement.schema.yaml
+  example: contracts/examples/result-acknowledgement.example.yaml
+- message_type: invalidation_notice
+  title: Invalidation Notice
+  producer: owning_product
+  consumer: delegation_protocol_and_consumers
+  purpose: Requires revalidation because dependencies or authority context changed.
+  lifecycle_effect: COMPLETED→INVALIDATED
+  schema: contracts/schemas/invalidation-notice.schema.yaml
+  example: contracts/examples/invalidation-notice.example.yaml
+- message_type: revocation_notice
+  title: Revocation Notice
+  producer: visual_asset_editor_or_integrity_authority
+  consumer: delegation_protocol_and_consumers
+  purpose: Blocks new/active consumption for a critical defect or integrity issue.
+  lifecycle_effect: COMPLETED→REVOKED
+  schema: contracts/schemas/revocation-notice.schema.yaml
+  example: contracts/examples/revocation-notice.example.yaml
+- message_type: replacement_notice
+  title: Replacement Notice
+  producer: owning_product
+  consumer: delegation_protocol_and_consumers
+  purpose: Proposes a governed replacement result or asset.
+  lifecycle_effect: INVALIDATED|REVOKED→REPLACED after ack
+  schema: contracts/schemas/replacement-notice.schema.yaml
+  example: contracts/examples/replacement-notice.example.yaml
+- message_type: delegation_failure
+  title: Delegation Failure
+  producer: detecting_product_or_protocol
+  consumer: decision_owner
+  purpose: Carries stable failure family, code, responsibility, retry, and invalidation semantics.
+  lifecycle_effect: exception-dependent
+  schema: contracts/schemas/delegation-failure.schema.yaml
+  example: contracts/examples/delegation-failure.example.yaml
+- message_type: delegation_audit_receipt
+  title: Delegation Audit Receipt
+  producer: delegation_protocol
+  consumer: audit_consumers
+  purpose: Append-only chained validation and transition evidence.
+  lifecycle_effect: none
+  schema: contracts/schemas/delegation-audit-receipt.schema.yaml
+  example: contracts/examples/delegation-audit-receipt.example.yaml
+- message_type: compatibility_manifest
+  title: Compatibility Manifest
+  producer: content_harness_or_vae
+  consumer: delegation_protocol
+  purpose: Declares supported protocol/message versions, features, profiles, and limitations.
+  lifecycle_effect: none
+  schema: contracts/schemas/compatibility-manifest.schema.yaml
+  example: contracts/examples/compatibility-manifest.example.yaml
+- message_type: contract_migration
+  title: Contract Migration
+  producer: authorized_migration_service
+  consumer: delegation_protocol_and_products
+  purpose: Creates a new immutable contract representation with equivalence evidence.
+  lifecycle_effect: none
+  schema: contracts/schemas/contract-migration.schema.yaml
+  example: contracts/examples/contract-migration.example.yaml

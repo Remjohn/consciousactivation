@@ -1,0 +1,77 @@
+schema_version: cmf-builder-empty-skill-registry-policy/v1
+policy_id: builder-core-empty-skill-registry-policy-v1
+version: 1.0.0
+status: APPROVED_ACTIVE_LIMITED_SCOPE
+approved_on: "2026-07-15"
+authority:
+  approved_by: current_thread_human_product_authority
+  approval_statement: governed_empty_skill_registry_policy_as_stated_in_current_human_directive
+  constitutional_authority: Activative Intelligence Constitution V1.1
+  product_authority: Builder PRD V1.2
+scope:
+  branch_id: ST-01.01-SYNTHETIC-PROOF
+  track: BUILDER_CORE
+  proof_kind: repository_owned_category_neutral_synthetic_validation
+  applies_to_production_harnesses: false
+  applies_to_real_category_profiles: false
+  applies_to_Format_02: false
+  applies_to_conversational_profiles: false
+policy_conditions:
+  - condition_id: ESK-001
+    rule: required behavior is completely provided by code-owned deterministic Builder capabilities
+  - condition_id: ESK-002
+    rule: no external or dynamically discovered skill is required
+  - condition_id: ESK-003
+    rule: the empty registry is explicit, versioned, and hash-pinned
+  - condition_id: ESK-004
+    rule: the compiled Harness declares that no external skills are required
+  - condition_id: ESK-005
+    rule: undeclared skill use fails closed
+  - condition_id: ESK-006
+    rule: adding an external skill later requires a new immutable Harness version
+  - condition_id: ESK-007
+    rule: the policy applies only to the synthetic Builder Core proof and does not imply that production Harnesses never require skills
+enforcement:
+  allowed_registry_state:
+    skills: []
+    external_skills_required: false
+    dynamic_skill_discovery_allowed: false
+  required_capability_ownership: builder_code
+  required_capability_determinism: deterministic
+  undeclared_skill_behavior: FAIL_CLOSED
+  later_skill_addition_behavior: NEW_IMMUTABLE_HARNESS_VERSION_REQUIRED
+  certification_effect: none
+  production_inference: PROHIBITED
+canonical_fixture:
+  path: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  schema:
+    path: governance/schemas/empty-skill-registry.schema.json
+    sha256: e76be265d96df3c902a26989fa2c08309f6964bf96e4ac17ce850684de44f1c7
+failure_behavior:
+  - reject any non-empty skill entry under this policy
+  - reject any capability not owned by Builder code
+  - reject nondeterministic capability ownership
+  - reject external or dynamic skill discovery
+  - reject a Harness that omits the no-external-skills declaration
+  - reject reuse of the same Harness identity after adding a skill
+  - reject any production, benchmark, category, or certification inference
+amendment_procedure:
+  immutable_versions: true
+  change_requires:
+    - new policy version
+    - new canonical fixture hash
+    - new validation receipt
+    - human approval
+  existing_compiled_harnesses_mutated: false
+bd_010_effect:
+  disposition: CLOSED
+  closed_subscope: builder_core_synthetic_proof_empty_registry
+  remaining_subscopes: OPEN
+  does_not_close:
+    - real skill registry seeding
+    - Format 02 skill selection or evaluation
+    - conversational capability skills
+    - external or dynamically discovered skills
+    - production Harness skill requirements
+validation_receipt: governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json

@@ -1,0 +1,95 @@
+{
+  "$id": "https://contracts.conscious-activations.dev/vae/comfyui_graph_bundle/1.0.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bundle_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "bundle_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "compiler_claim": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "graph": {
+      "type": "object"
+    },
+    "graph_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "node_lock": {
+      "type": "object"
+    },
+    "plan_ref": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "Immutable reference",
+      "type": "object"
+    },
+    "runtime_execution_authorized": {
+      "type": "boolean"
+    },
+    "workcell_ref": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "Immutable reference",
+      "type": "object"
+    }
+  },
+  "required": [
+    "bundle_id",
+    "bundle_version",
+    "graph_sha256",
+    "plan_ref",
+    "workcell_ref",
+    "node_lock",
+    "graph",
+    "runtime_execution_authorized",
+    "compiler_claim"
+  ],
+  "title": "ComfyUI Graph Bundle",
+  "type": "object"
+}

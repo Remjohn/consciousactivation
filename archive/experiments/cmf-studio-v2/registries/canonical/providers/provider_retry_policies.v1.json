@@ -1,0 +1,26 @@
+{
+  "registry_id": "registry.providers.provider_retry_policies.v1",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "normalized_error_code": "rate_limited",
+      "retry_decision": "retry"
+    },
+    {
+      "normalized_error_code": "server_error",
+      "retry_decision": "retry"
+    },
+    {
+      "normalized_error_code": "timeout",
+      "retry_decision": "retry"
+    },
+    {
+      "normalized_error_code": "moderation_blocked",
+      "retry_decision": "repair_then_retry"
+    },
+    {
+      "normalized_error_code": "bad_request",
+      "retry_decision": "repair_then_retry"
+    }
+  ]
+}

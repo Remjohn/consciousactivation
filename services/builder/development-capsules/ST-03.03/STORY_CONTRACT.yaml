@@ -1,0 +1,66 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-03.03
+primary_epic: EP-03
+title: Maintain One Provenance-Rich Canonical Harness IR
+active_mode: PRE_RATIFIED_SYNTHETIC_INPUT
+readiness_status: READY
+implementation_authorized: false
+primary_outcome: >-
+  All downstream artifacts share one source of truth with explicit schema
+  evolution and Activative lineage.
+bounded_outcome: >-
+  Deterministic Builder code compiles one immutable HarnessIR revision from the
+  exact completed synthetic Source Lock, frozen atomic boundary, attributable
+  human ratification, and Draft Harness Model. Every material node preserves
+  authority, knowledge status, provenance, dependency impact, and explicit
+  non-applicability; canonical serialization and a receipt make the snapshot
+  independently reproducible without creating Workflow IR or generated artifacts.
+owned_obligations:
+  - ADR-002
+  - D011
+  - FR-051
+  - FR-052
+  - FR-053
+  - NFR-COMPAT-002
+  - NFR-COMPAT-003
+  - NFR-TRACE-001
+direct_dependency:
+  story_id: ST-02.05
+  required_receipt: ST-02.05:StoryCompletionReceipt
+  status: SATISFIED
+conditional_path:
+  amendment_id: BF-AM-004
+  selected_branch: PRE_RATIFIED_SYNTHETIC_INPUT
+  direct_dependencies: [ST-02.05]
+  applicable_blockers: []
+  inactive_branches:
+    INTERACTIVE_GENESIS:
+      direct_dependencies: [ST-03.02]
+    EXTERNAL_TARGET_FIELDS:
+      additional_blockers: [BD-014]
+component_boundary: >-
+  Builder-owned canonical Harness IR value contracts, deterministic compilation,
+  canonical serialization, explicit compatibility policy, immutable snapshot,
+  atomic commit, replay, invalidation linkage, observations, and receipt for one
+  repository-owned synthetic run.
+authority_split:
+  human: prior_atomic_boundary_ratification_only
+  code: validate_compile_canonicalize_hash_persist_replay_and_emit_receipt
+  agent: no_authoritative_write_or_semantic_promotion
+failure_behavior:
+  - missing_stale_invalidated_or_mismatched_upstream_refs_fail_closed
+  - missing_provenance_or_authority_metadata_fails_closed
+  - unsupported_or_unknown_schema_version_fails_closed_without_migration
+  - workflow_orchestration_fields_in_HarnessIR_fail_closed
+  - product_semantics_outside_the_canonical_IR_fail_closed
+  - concurrency_idempotency_or_atomic_commit_failure_leaves_no_partial_snapshot
+compatibility:
+  schema_id: cmf-builder-harness-ir/v1
+  write_version: 1.0.0
+  readable_versions: [1.0.0]
+  prior_version_migrations: []
+  unsupported_version_behavior: BLOCK_MISSING_EXPLICIT_MIGRATION
+  category_binding: none_test_only
+  production_eligible: false
+  certified: false
+completion_receipt_identity_rule: ST-03.03:StoryCompletionReceipt:sha256_of_canonical_receipt_payload

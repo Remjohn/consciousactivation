@@ -1,0 +1,173 @@
+experience_primitive_id: "EXP-FRC-003"
+canonical_name: "The B=MAP Friction Audit"
+aliases:
+  - "The Ability Chain"
+  - "Ruthless Reduction"
+  - "Friction Eradication"
+
+experience_family: "friction_ability"
+mechanic_role: "system"
+moment_role: "ux_optimization"
+implementation_role: "architectural"
+
+source_audits:
+  - audit_file: "AUDIT_Persuasive_Technology_BJ_Fogg.md"
+    primitive_name_in_audit: "The B=MAP Friction Audit"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Persuasive_Technology_BJ_Fogg.md"
+
+book_reference:
+  title: "Persuasive Technology / Tiny Habits"
+  author: "BJ Fogg"
+  chapters:
+    - "Chapter 3: How Behavior Works"
+    - "Chapter 4: The Ability Chain"
+  key_pages: "60-85"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Tiny Habits The Small Changes That Change Everything - BJ Fogg.md"
+
+summary: >
+  The B=MAP Friction Audit requires that every feature be systematically evaluated
+  against Fogg's 6 elements of simplicity (Time, Money, Physical Effort, Brain Cycles,
+  Social Deviance, Non-Routine) to maximize 'Ability'. If Motivation is low, the
+  behavior will only occur if Ability is exceptionally high.
+
+core_move: >
+  Systematically identify and remove any requirement that demands excessive time,
+  physical taps, mental analysis, or social risk from the core 'Record a Reaction' loop.
+
+why_it_works: >
+  BJ Fogg's behavior model (B=MAP) dictates that Behavior = Motivation x Ability x Prompt.
+  When a coach is tired, their Motivation plummets. Fogg explicitly warns against trying
+  to artificially boost motivation; instead, you must increase Ability. By auditing
+  and removing Brain Cycles (not making them think of a topic) and Physical Effort
+  (reducing a 4-click flow to 1-click), we ensure the action falls above the action
+  line even on their worst days.
+
+examples:
+  - context: "BOOK: Tiny Habits - The Flossing Reduction"
+    application: >
+      Instead of flossing all teeth (high time, high effort), the target behavior is
+      reduced to 'floss one tooth'. The physical and mental ability required drops to
+      near zero, guaranteeing compliance.
+    effect: >
+      The habit forms because it is literally too easy to fail.
+
+  - context: "CCP: The Auto-Quoted Counter-Take (Brain Cycles)"
+    application: >
+      When responding to a debate, the user does not have to summarize the opponent.
+      The system automatically plays a 3-second snippet of the opponent's audio,
+      pre-loading the context. Brain Cycles required = 0.
+    effect: >
+      Removes the cognitive friction of formulating an opening statement.
+
+  - context: "CCP: The Inline Telegram Web App (Physical Effort)"
+    application: >
+      The user does not open an App Store, download an app, log in, and navigate to
+      a menu. They tap a single inline button in Telegram, and the Web App pops up
+      instantly with the microphone primed. Physical Effort = 1 tap.
+    effect: >
+      Massive reduction in drop-off between prompt and execution.
+
+  - context: "CCP: The 60-Second Cap (Time)"
+    application: >
+      The system hard-caps all reactions at 60 seconds. This removes the 'Time' friction.
+      The user knows this task will not take 10 minutes, making it easy to slip into
+      a busy schedule.
+    effect: >
+      High compliance even during busy workdays.
+
+  - context: "CCP: The Sandbox Mode (Social Deviance)"
+    application: >
+      For their first 7 days, a new coach's audio is entirely private (Sandbox Mode).
+      This removes the 'Social Deviance' fear of looking stupid in public.
+    effect: >
+      Removes the massive psychological friction of public speaking anxiety.
+
+anti_examples:
+  - description: >
+      A prompt that says: 'Log into the web portal, navigate to the Law28 curriculum,
+      find Day 4, read the PDF, and upload a 5-minute video of your thoughts.'
+    why_it_fails: >
+      Fails across the board. High physical effort (login/navigate), high time (5 mins),
+      high brain cycles (read PDF). Ability is catastrophically low. Behavior fails.
+
+experience_stage_fit:
+  entry: 1.0
+  activation: 1.0
+  recording: 1.0
+  scoring: 0.8
+  social_spread: 0.9
+  recovery: 0.8
+  retention: 0.9
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 1.0
+  score_card: 0.9
+  share_asset: 0.9
+  voice_prompt: 0.8
+  push_nudge: 1.0
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.1
+  clarity: 1.0
+  safety: 0.9
+  status: 0.2
+  belonging: 0.4
+  curiosity: 0.6
+  replay_desire: 0.8
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.9
+  challenge_progression: 1.0
+  silent_referral: 1.0
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.6
+  onboarding_activation: 1.0
+  social_economy: 0.8
+  content_extraction: 0.9
+
+activation_conditions:
+  - "During the design phase of any new feature or UI flow"
+  - "When telemetry detects a high drop-off rate at a specific step in the funnel"
+
+suppression_conditions:
+  - "During 'Epic Win' capstone events where high effort is intentionally required to create meaning and status."
+
+misuse_modes:
+  - "Eliminating Meaning — making the task so easy (e.g., 'just tap this button for points') that it no longer requires actual speaking practice."
+  - "Ignoring Context — reducing 'Time' but ignoring 'Social Risk' (e.g., asking them to do a 10-second scream in a public coffee shop)."
+
+synergizes_with:
+  - "EXP-TRG-001" # Bounded Async Request (Limits the 'Time' and 'Brain Cycles')
+  - "EXP-FRC-001" # Evolved UI (Limits the 'Physical Effort')
+
+conflicts_with:
+  - "EXP-PRG-003" # Go for an Epic Win (Epic wins require high ability friction to feel earned)
+
+implementation_targets:
+  frontend_components:
+    - "OneTapRecordCore — the entire Mini App architecture must support a maximum of 2 clicks from Telegram prompt to active recording"
+  backend_rules:
+    - "auth_engine: utilize Telegram seamless authorization so the user never sees a login screen"
+  telemetry_events:
+    - "clicks_to_record"
+    - "time_to_record_ms"
+  experiments:
+    - "A/B test: Requiring a headline for the audio vs Auto-generating the headline to save Brain Cycles"
+
+experience_metrics:
+  entry_rate: 1.0
+  react_rate: 1.0
+  completion_rate: 1.0
+  share_rate: 0.8
+  comeback_rate: 0.8
+  day7_retention: 0.9
+  upgrade_signal: 0.7
+
+crosswalk_id: "XW-FRC-BMAP"
+crosswalk_note: >
+  This is the ultimate 'QA' filter for all design decisions in CCP.

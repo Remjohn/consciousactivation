@@ -1,0 +1,48 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-07.03
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/domain/external_handoff_contracts.py
+    role: immutable Builder-local VAE and Delegation request, lineage, lock and local validation contracts
+  - path: src/cmf_builder/application/external_handoff_commands.py
+    role: governed transactional local-only ports, mappings, test doubles, acknowledgements and observations
+  - path: tests/stories/st_07_03/test_external_handoff_contracts.py
+    role: request, source, lineage, parent and wrong-reading-lock contract tests
+  - path: tests/stories/st_07_03/test_local_ports_and_acknowledgements.py
+    role: local-only port, replay, authority and atomicity tests
+  - path: tests/stories/st_07_03/test_failure_authority_compatibility.py
+    role: pin, receipt, cross-link and external-boundary adversarial tests
+files_modified:
+  - path: development-capsules/OD-AM-001/ST-07.03/TEST_RESULTS.json
+    role: focused and affected test evidence
+  - path: development-capsules/OD-AM-001/ST-07.03/FILE_CHANGE_MANIFEST.yaml
+    role: allowlist evidence
+  - path: development-capsules/OD-AM-001/ST-07.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    role: pending integrator completion receipt
+shared_files_changed_by_lane: []
+shared_files_changed_by_canonical_integrator:
+  - path: src/cmf_builder/application/authority.py
+    sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+    role: additive COMPILE_EXTERNAL_HANDOFFS action registration
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+    role: additive exact source ownership registration
+shared_change_requests:
+  - id: CR-ST0703-001
+    sha256: 21fee86cdbd32c4ebc15fe4a239eba6144a71a4515c388394ac4b8480a4270c6
+paths_outside_capsule_allowlist_changed_by_lane: []
+prohibited_files_changed_by_lane: []
+external_dependencies_added: []
+validation:
+  production_or_test_code_changed: true
+  path_ownership_conformant: true
+  shared_contract_fork_created: false
+  external_runtime_or_transport_added: false
+  external_acceptance_claimed: false
+  external_compatibility_claimed: false
+  production_or_certification_claim_added: false
+  exact_ST_07_02_parent_object_version_hash_authority_tuple: PASS
+  focused_tests: 21/21_PASS
+  affected_tests: 44/44_PASS
+  architecture_tests: 12/12_PASS

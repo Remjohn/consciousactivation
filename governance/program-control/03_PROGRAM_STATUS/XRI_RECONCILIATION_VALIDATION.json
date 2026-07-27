@@ -1,0 +1,117 @@
+{
+  "schema_version": "conscious-activations-xri-reconciliation-validation/v1",
+  "validated_at": "2026-07-15",
+  "scope": {
+    "identifiers": ["XRI-001", "XRI-002"],
+    "full_convergence_audit_rerun": false
+  },
+  "result": "PASS",
+  "canonical_registry": {
+    "path": "CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml",
+    "sha256": "sha256:44be5ec2598c2b6ca56af06356ddacab27e083a151276ab826041bd1979d8015",
+    "canonical_record_count": 2,
+    "controlled_status_vocabulary_valid": true,
+    "records": {
+      "XRI-001": {
+        "canonical_status": "resolved",
+        "active_canonical_meaning_count": 1,
+        "active_canonical_status_count": 1
+      },
+      "XRI-002": {
+        "canonical_status": "resolved",
+        "active_canonical_meaning_count": 1,
+        "active_canonical_status_count": 1
+      }
+    }
+  },
+  "occurrence_inventory": {
+    "path": "CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REFERENCE_MAP.csv",
+    "sha256": "sha256:87bd1516623a13d5920febda0a31d00e2caaf5ce4952c81d093d85001a573171",
+    "file_identifier_rows": 78,
+    "unique_files": 41,
+    "xri_001_rows": 38,
+    "xri_002_rows": 40,
+    "self_inventory_exclusion": "XRI_REFERENCE_MAP.csv",
+    "unclassified_source_pairs": 0
+  },
+  "repository_local_replacements": {
+    "DLG-ISSUE-001": {
+      "status": "open",
+      "historical_mistaken_alias": "XRI-001",
+      "redefines_program_issue": false
+    },
+    "DLG-ISSUE-002": {
+      "status": "open",
+      "historical_mistaken_alias": "XRI-002",
+      "redefines_program_issue": false
+    }
+  },
+  "status_export_conformance": {
+    "builder": {
+      "path": "01_ATOMIC_HARNESS_BUILDER/PROGRAM_STATUS_EXPORT.yaml",
+      "current_release": "1.1.0-rc.4",
+      "active_contradictory_xri_definition_found": false,
+      "status": "PASS"
+    },
+    "visual_asset_editor": {
+      "path": "02_VISUAL_ASSET_EDITOR/PROGRAM_STATUS_EXPORT.yaml",
+      "current_release": "1.1.0-rc.4",
+      "active_contradictory_xri_definition_found": false,
+      "status": "PASS"
+    },
+    "delegation_protocol": {
+      "path": "03_DELEGATION_PROTOCOL/PROGRAM_STATUS_EXPORT.yaml",
+      "sha256": "sha256:5522e7cb4bc0515f2c35c8b795423dc53b11e0a8ee49d96bdfc4326ceb3fd8f2",
+      "current_release": "1.1.0-rc.4",
+      "xri_001_status": "resolved",
+      "xri_002_status": "resolved",
+      "local_open_ids": ["DLG-ISSUE-001", "DLG-ISSUE-002"],
+      "status": "PASS"
+    },
+    "program_control": {
+      "path": "CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/STATUS_TRUTH_RECONCILIATION.yaml",
+      "current_release": "1.1.0-rc.4",
+      "xri_001_status": "resolved",
+      "xri_002_status": "resolved",
+      "status": "PASS"
+    }
+  },
+  "release_byte_preservation": {
+    "version": "1.1.0-rc.4",
+    "file_count_each_distribution": 164,
+    "delegation_tree_digest_before": "sha256:e4d221336755352fa196662c66d0b17109ddf92b6c2a25fd2233f1148a02dce2",
+    "delegation_tree_digest_after": "sha256:e4d221336755352fa196662c66d0b17109ddf92b6c2a25fd2233f1148a02dce2",
+    "program_control_tree_digest_before": "sha256:e4d221336755352fa196662c66d0b17109ddf92b6c2a25fd2233f1148a02dce2",
+    "program_control_tree_digest_after": "sha256:e4d221336755352fa196662c66d0b17109ddf92b6c2a25fd2233f1148a02dce2",
+    "release_digest": "sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44",
+    "release_receipt_sha256": "sha256:042ab1ad99a4e5a4f8ff3a08c559b410db9c17cbade48ef05e92d6170dddc25f",
+    "release_manifest_sha256": "sha256:7a23c0896f215c008bd2f9f0f7079cb97c23d05d100ac5a4b60691bb8abb9882",
+    "distributions_byte_identical": true,
+    "status": "PASS"
+  },
+  "checks": [
+    {"id": "XRI-V01", "name": "one canonical meaning per scoped XRI", "status": "PASS"},
+    {"id": "XRI-V02", "name": "one canonical status per scoped XRI", "status": "PASS"},
+    {"id": "XRI-V03", "name": "repository-local records do not redefine scoped program issues", "status": "PASS"},
+    {"id": "XRI-V04", "name": "historical rejected releases remain traceable", "status": "PASS"},
+    {"id": "XRI-V05", "name": "RC4 remains current and unchanged", "status": "PASS"},
+    {"id": "XRI-V06", "name": "resolved defects are not active open blockers", "status": "PASS"},
+    {"id": "XRI-V07", "name": "production trust and signing remain separate and open", "status": "PASS"},
+    {"id": "XRI-V08", "name": "Program Control and repository status exports agree", "status": "PASS"},
+    {"id": "XRI-V09", "name": "all observed XRI-001 and XRI-002 source pairs classified", "status": "PASS"},
+    {"id": "XRI-V10", "name": "prohibited artifact classes unchanged", "status": "PASS"}
+  ],
+  "active_contradictory_reference_count_after_reconciliation": 0,
+  "production_trust_and_signing_concern": {
+    "identifier": "CRC-403",
+    "status": "open",
+    "conflated_with_scoped_xri": false
+  },
+  "artifacts": {
+    "report_sha256": "sha256:477da02525af31eee53012b852633e9847aaf6e582152da6e1ef9bc30b0f6403",
+    "status_conformance_sha256": "sha256:ad467f84cee7bd61f615f7766bf9df46527a0ef0b116cbc575785597dedd7d65",
+    "delegation_issue_register_sha256": "sha256:5ab0b6957a7ecbc8f9afea0a680e7a555cf9f9c1964fabb6b8a1f1a2318037fc"
+  },
+  "prerequisites_for_fresh_read_only_convergence_audit": "satisfied",
+  "authorization_effect": "none"
+}

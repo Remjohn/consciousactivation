@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "THE_EVIDENCE",
+  "scene_number": 14,
+  "name": "The Evidence",
+  "version": "1.0",
+  "function": "Low-noise proof scene that transfers attention from visual claim to remembered fact.",
+  "compatible_containers": [
+    "CHALLENGE"
+  ],
+  "cls_footprint": {
+    "typical": 2.0,
+    "max": 2.5
+  },
+  "required_asset_types": [
+    "TEXT",
+    "DATA_VISUAL",
+    "A_ROLL"
+  ],
+  "template_variants": [
+    "single_clean_number",
+    "proof_card",
+    "chart_with_voiceover"
+  ],
+  "effect_dependencies": [
+    "minimal_callout",
+    "slow_reveal"
+  ],
+  "selection_signals": [
+    "proof_density",
+    "memory_transfer",
+    "claim_support"
+  ],
+  "audio_profile": {
+    "score_role": "authenticate",
+    "energy_band": "low_medium",
+    "mode": "restrained",
+    "prosodic_hint": "precise_authoritative",
+    "prosodic_contour_target": {
+      "pitch_shape": "falling",
+      "stress_placement": "initial",
+      "rate_wpm": { "min": 145, "max": 175 },
+      "emotional_register": "authority"
+    }
+  },
+  "fallback_behavior": "Reduce to a single strong proof point if the data story is noisy."
+}

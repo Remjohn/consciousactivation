@@ -1,0 +1,57 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-11.01",
+  "active_mode": "SYNTHETIC_BUILDER_PROOF",
+  "governed_pythonpath": "src;.",
+  "preimplementation": {
+    "command": "$env:PYTHONPATH='src;.'; python -m pytest -q",
+    "passed": 450,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 71.66,
+    "verdict": "PASS"
+  },
+  "source_compilation": {"files": 45, "verdict": "PASS"},
+  "story_suite": {
+    "command": "$env:PYTHONPATH='src;.'; python -m pytest tests/stories/st_11_01 -q",
+    "first_run": {"passed": 25, "failed": 0, "skipped": 0, "seconds": 12.75},
+    "reproduction_run": {"passed": 25, "failed": 0, "skipped": 0, "seconds": 10.61},
+    "verdict": "PASS"
+  },
+  "campaign_full_regression": {
+    "command": "$env:PYTHONPATH='src;.'; python -m pytest -q",
+    "fresh_process_1": {"passed": 475, "failed": 0, "skipped": 0, "seconds": 81.00},
+    "fresh_process_2": {"passed": 475, "failed": 0, "skipped": 0, "seconds": 80.71},
+    "verdict": "PASS"
+  },
+  "acceptance_criteria": {
+    "AC-01": "PASS", "AC-02": "PASS", "AC-03": "PASS", "AC-04": "PASS",
+    "AC-05": "PASS", "AC-06": "PASS", "AC-07": "PASS", "AC-08": "PASS",
+    "AC-09": "PASS", "AC-10": "PASS", "AC-11": "PASS", "AC-12": "PASS"
+  },
+  "fresh_context_end_to_end": {
+    "runs": 2,
+    "capsule_hash": "sha256:b08be1af6e06aeef59b9fb65fbadf42819f5821e39448f8f04207392afac0e58",
+    "receipt_hash": "sha256:f9d41574239c4a38119acc5634b287256eab40f9b24e64398d34768eb77da9f9",
+    "byte_equality": "PASS",
+    "portable": true,
+    "production_eligible": false,
+    "certified": false
+  },
+  "validated_behaviors": [
+    "complete_versioned_traceable_capsule_generation",
+    "six_obligation_traceability",
+    "fifteen_required_sections",
+    "twenty_five_hash_pinned_references",
+    "justified_scaffolding",
+    "typed_contract_versions_examples_fixtures_and_tests",
+    "authority_and_complete_lineage",
+    "deterministic_portable_fresh_context_reproduction",
+    "synthetic_nonproduction_noncertification_enforcement",
+    "typed_failure_and_atomic_zero_partial_state",
+    "replay_resume_idempotency_invalidation_and_historical_reproduction",
+    "observability_and_architecture_boundaries"
+  ],
+  "warnings": ["pre_existing_pytest_asyncio_default_fixture_loop_scope_deprecation_warning"],
+  "overall_verdict": "PASS"
+}

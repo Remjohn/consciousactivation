@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf://vae/readiness/protected-regression-set/1.0",
+  "title": "Protected Regression Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["classification", "set_id", "version", "profile_ref", "status", "cases", "non_overlap_evidence", "access_control", "seal_digest"],
+  "properties": {
+    "classification": {"const": "non_production_readiness_proof"},
+    "set_id": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "profile_ref": {"type": "string", "minLength": 1},
+    "status": {"enum": ["unsealed_design_only", "sealed", "retired"]},
+    "cases": {"type": "array", "items": {"type": "object"}},
+    "non_overlap_evidence": {"type": ["string", "null"]},
+    "access_control": {"type": ["string", "null"]},
+    "seal_digest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "note": {"type": "string"}
+  },
+  "allOf": [{
+    "if": {"properties": {"status": {"const": "sealed"}}},
+    "then": {"properties": {"cases": {"minItems": 1}, "non_overlap_evidence": {"type": "string", "minLength": 1}, "access_control": {"type": "string", "minLength": 1}, "seal_digest": {"type": "string"}}}
+  }]
+}

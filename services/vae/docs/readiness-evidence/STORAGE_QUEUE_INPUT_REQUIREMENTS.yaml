@@ -1,0 +1,127 @@
+package: vae_storage_queue_readiness_inputs
+version: 1.0.0
+classification: non_production_readiness_proof
+status: awaiting_operator_endpoints
+production_platform_design: false
+
+operator_supplied:
+  environment_id: null
+  provider_or_implementation: null
+  account_or_namespace: null
+  region_or_locality: null
+  proof_controller_identity_ref: null
+  worker_identity_ref: null
+  evaluator_identity_ref: null
+  credential_references: []
+
+object_storage:
+  endpoint_ref: null
+  input_container_ref: null
+  output_container_ref: null
+  checkpoint_container_ref: null
+  evidence_container_ref: null
+  encryption_key_reference: null
+  versioning: required
+  content_addressing: sha256
+  conditional_create_or_compare_and_swap: required
+  accepted_artifact_immutability: required
+  checksum_on_upload_and_retrieval: required
+  retention_days: null
+  lifecycle_policy_ref: null
+  allowed_operations:
+    proof_controller:
+      - put_immutable_request
+      - read_result_and_evidence
+      - request_retention
+    worker:
+      - read_approved_input
+      - write_versioned_checkpoint
+      - conditional_commit_output
+    evaluator:
+      - read_approved_candidate_and_context
+      - conditional_commit_evaluation
+
+job_queue:
+  endpoint_ref: null
+  queue_ref: null
+  dead_letter_ref: null
+  delivery_semantics: at_least_once
+  idempotency_key_required: true
+  fencing_token_required: true
+  visibility_timeout_seconds: null
+  heartbeat_interval_seconds: null
+  maximum_delivery_attempts: null
+  dead_letter_retention_days: null
+  duplicate_delivery_test_required: true
+
+status_events:
+  endpoint_ref: null
+  stream_or_topic_ref: null
+  ordering_key: job_id
+  append_only: true
+  required_states:
+    - CREATED
+    - QUOTED
+    - RESERVED
+    - QUEUED
+    - LEASED
+    - PULLING
+    - RUNNING
+    - CHECKPOINTING
+    - SUCCEEDED
+    - RETRYABLE_FAILED
+    - TERMINAL_FAILED
+    - CANCELLATION_REQUESTED
+    - CANCELLED
+    - ORPHANED
+    - RECOVERING
+  required_events:
+    - ComputeQuoted
+    - JobQueued
+    - WorkerLeased
+    - JobStarted
+    - CheckpointCommitted
+    - JobRecovered
+    - JobFailed
+    - JobCancelled
+    - OutputCommitted
+    - WorkerQuarantined
+
+result_retrieval:
+  result_manifest_ref_pattern: null
+  requires_output_commit_event: true
+  requires_content_hash_match: true
+  requires_compute_receipt: true
+  requires_runtime_attestation: true
+
+cancellation:
+  authorized_identity_ref: null
+  route_or_operation_ref: null
+  must_be_idempotent: true
+  partial_output_promotion_forbidden: true
+  final_state_required: true
+
+checkpoint_persistence:
+  interval_or_stage_policy: null
+  manifest_schema_ref: null
+  content_hash_required: true
+  runtime_and_workflow_hash_required: true
+  cross_provider_restore_required: true
+  accepted_artifact_overwrite_forbidden: true
+
+security:
+  secrets_in_repository: forbidden
+  credentials: short_lived_or_workload_identity
+  network_default: deny
+  audit_events: required
+  sanitized_repository_evidence_only: true
+
+acceptance_evidence:
+  - object_versioning_and_hash_round_trip
+  - duplicate_delivery_exactly_once_effect
+  - ordered_status_and_terminal_state
+  - cancellation_receipt
+  - checkpoint_restore_receipt
+  - cross_provider_result_retrieval
+  - accepted_artifact_preservation
+

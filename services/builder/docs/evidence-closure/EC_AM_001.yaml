@@ -1,0 +1,59 @@
+schema_version: cmf-builder-ec-am-001/v1
+campaign_id: EC-AM-001
+title: RELEASE_CANDIDATE_1_AND_EVIDENCE_READINESS
+campaign_type: POST_IMPLEMENTATION_STABILIZATION
+issued_on: "2026-07-17"
+implementation_story_scope: NONE
+new_confirmed_story_ids: []
+production_authority_granted: false
+certification_authority_granted: false
+external_execution_authorized: false
+cloud_spend_authorized: false
+human_evidence_collection_authorized: false
+governing_inputs:
+  od_am_005_amendment:
+    path: docs/implementation/offline-development/OD_AM_005.yaml
+    sha256: cbf969f57e6dac58a7c10492f2644a556ff3278e105fff44acd3ca09ce28ef79
+  od_am_005_receipt:
+    path: docs/implementation/offline-development/OD_AM_005_RECEIPT.yaml
+    sha256: 0d25af39618994aec6f20df9c9837bd87fdf8b470c8350923462fa6ac5a3d4c2
+  od_am_005_campaign_state:
+    path: docs/implementation/offline-development/OD_AM_005_CAMPAIGN_STATE.yaml
+    sha256: 5602c455b1719cb84ab3853096baae71d79ee578f6895e3c3d08e1f284139335
+  model_neutral_handoff:
+    path: docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+    sha256: 120cee9ee6f5fa03872fdbc5a83e6db871d64020918d7ae4a2127e2b030f13fc
+  terminal_summary:
+    path: docs/implementation/offline-development/OFFLINE_IMPLEMENTATION_TERMINAL_SUMMARY.yaml
+    sha256: 5a02b52deda8c8801084a0d05155ba8e74e060575b1ce3cce290bf124e52e3d5
+validated_terminal_state:
+  offline_implementation_coverage: 69/69
+  full_evidence_closure: 27/69_or_higher_only_from_real_evidence
+  latest_full_regression: 1890/1890_PASS_TWICE
+  mandatory_skips: 0
+  source_tree_sha256: e4b199fced4083ab22c62bf38e0eafa2e358284c3c5cb0b49f61b58c4434418a
+boundaries:
+  no_story_inventory_change: true
+  no_story_implementation_receipts_issued: true
+  no_offline_receipts_reclassified_as_evidence_closure: true
+  no_cloud_or_provider_execution: true
+  no_external_product_runtime_execution: true
+  no_human_participants: true
+  production_ready: false
+  certified: false
+workstreams:
+  - terminal_state_reconciliation
+  - release_candidate_1_freeze
+  - clean_environment_acceptance
+  - operator_path_acceptance
+  - persistence_recovery_migration_acceptance
+  - security_and_supply_chain_audit
+  - local_performance_baseline
+  - complete_story_evidence_closure_matrix
+  - bd007_execution_readiness_pack
+  - bd008_protected_evidence_readiness
+  - external_product_validation_readiness
+  - human_evidence_pilot_readiness
+  - production_readiness_gap_report
+  - certification_claim_ceiling
+

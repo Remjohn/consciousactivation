@@ -1,0 +1,31 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AHP-002
+spec_path: 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-AHP-002.md
+spec_sha256: 3e76ee7e4ec8f3b288a58bb8b8eb886195d9ad17097c67ded613c22fbb3dccd4
+phase: PHASE_03
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 14
+  direct_aggregate_test_evidence: 6
+  implementation_without_direct_ac_test: 8
+  unimplemented_or_nonbehavior: 0
+implementation_paths:
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/intake/package_verifier.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/intake/definition_intake.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/intake/graph_reconciler.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/bindings/compiler.py
+test_evidence:
+- tests/phase3/test_intake_and_bindings.py::IntakeBindingTests::test_safe_archive_rejects_traversal
+- tests/phase3/test_intake_and_bindings.py::IntakeBindingTests::test_import_reconcile_and_exact_binding
+- tests/phase3/test_intake_and_bindings.py::IntakeBindingTests::test_binding_denies_missing_and_ambiguous_candidates
+- tests/phase3/test_intake_and_bindings.py::IntakeBindingTests::test_format02_is_rejected
+open_gap_ids:
+- GAP-REAL-BUILDER-PACKAGE-CORPUS
+- GAP-BINDING-INVALIDATION-E2E
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

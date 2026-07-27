@@ -1,0 +1,32 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-002
+story_id: ST-09.07
+title: WORKFLOW_PROFILE_LIFECYCLE
+outcome: offline_development_workflow_profile_versioning_migration_rollback_hotfix_and_invalidation
+authority:
+  amendment_path: docs/implementation/offline-development/OD_AM_002.yaml
+  implementation_gate_only: true
+  production_authority: false
+  certification_authority: false
+allowed_files:
+  production:
+    - src/cmf_builder/workflow/profile_lifecycle.py
+  tests:
+    - tests/stories/st_09_07/test_workflow_profile_lifecycle.py
+  governance:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    - development-capsules/OD-AM-002/ST-09.07/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-002/ST-09.07/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-002/ST-09.07/TEST_RESULTS.json
+    - development-capsules/OD-AM-002/ST-09.07/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+requirements:
+  - represent workflow profile identity, version, predecessor, compatibility, migration, promotion, rollback, hotfix, invalidation and affected descendants
+  - require attributable human authority for promotion, rollback and hotfix actions
+  - reject agent approval as human approval
+  - reject in-place mutation and false production or certification claims
+  - preserve historical reproducibility and non-destructive lineage
+prohibited:
+  - production deployment
+  - certification
+  - provider execution
+  - ST-10.02_or_later_behavior

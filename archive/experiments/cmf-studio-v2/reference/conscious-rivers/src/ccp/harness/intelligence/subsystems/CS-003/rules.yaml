@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-003
+enabled: true
+priority:
+  tier: quality
+  rank: 3
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - CHALLENGE
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: gaze_overlay_mismatch_degrees
+    operator: gt
+    value: 25
+route_hints:
+  correct:
+    - align_overlay_with_eye_line
+    - switch_to_averted_gaze
+    - sequence_face_and_text

@@ -1,0 +1,184 @@
+experience_primitive_id: "EXP-PRG-002"
+canonical_name: "Discover -> On-board -> Immerse -> Master -> Replay"
+aliases:
+  - "The 5-Phase Journey"
+  - "Lifecycle Scaffolding"
+  - "Evolving Complexity"
+
+experience_family: "progression_replay"
+mechanic_role: "system"
+moment_role: "lifecycle_routing"
+implementation_role: "architectural"
+
+source_audits:
+  - audit_file: "AUDIT_The_Gamification_Design_Handbook_Andrzej_Marczewski.md"
+    primitive_name_in_audit: "Discover -> On-board -> Immerse -> Master -> Replay"
+    mcda_score: 178
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_The_Gamification_Design_Handbook_Andrzej_Marczewski.md"
+
+book_reference:
+  title: "The Gamification Design Handbook"
+  author: "Andrzej Marczewski"
+  chapters:
+    - "Chapter 3: User Journey"
+    - "Chapter 5: Flow"
+  key_pages: "45-60, 85-95"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/The Gamification Design Handbook - Andrzej Marczewski.md"
+
+summary: >
+  Discover -> On-board -> Immerse -> Master -> Replay dictates that the UI
+  and the demands placed on the user must explicitly evolve as they age in the
+  system. A Day 1 user should not see the same interface, metrics, or
+  challenges as a Day 30 user. In CCP, we do not drop a new prospect into a
+  complex 'Ranked Debate Jury'. We route them through Discovery (a viral link),
+  On-boarding (a simple Voice DNA baseline), Immersion (the 7-Day challenge),
+  Mastery (Supervisor status), and Replay (Live-ops debates). This prevents
+  progression walls and early churn.
+
+core_move: >
+  Architect the platform as a state-changing progression system where the
+  available features, required skill level, and visible metrics unlock
+  sequentially based on the user's maturity phase.
+
+why_it_works: >
+  Andrzej Marczewski and Yu-kai Chou both warn that if you show a user the
+  'Mastery' endgame (e.g., complex analytics dashboards, global leaderboards)
+  during 'On-boarding', they experience cognitive overload and bounce. Conversely,
+  if a veteran user only ever experiences the 'On-boarding' loop, they experience
+  'Replay Fatigue' and churn out of boredom. By explicitly designing the 5-phase
+  journey, the system continuously scales its complexity to match the user's
+  growing skill, keeping them in the Flow Channel indefinitely.
+
+examples:
+  - context: "BOOK: The Gamification Design Handbook - The RPG Skill Tree"
+    application: >
+      In a role-playing game, you do not start with 50 spells. You start with
+      one. You only unlock the menu for the other 49 after you have mastered the
+      first one. The interface literally grows with you.
+    effect: >
+      Maintains perfect engagement by balancing challenge and skill at every moment.
+
+  - context: "CCP: The Discovery to On-board Handoff"
+    application: >
+      A prospect clicks a Silent Referral link (Discovery). They are not asked to
+      buy anything. They are asked to swipe 'Agree/Disagree' on a take, which
+      soft-lands them into recording a simple baseline response (On-boarding).
+    effect: >
+      Converts cold traffic with near-zero friction.
+
+  - context: "CCP: The Immersion Phase (7-Day Challenge)"
+    application: >
+      Once baselined, the user enters Immersion. The UI strips away extraneous
+      features like the 'Jury Mode' or 'Coach OS' settings. The only focus is
+      completing one daily 60-second drill for 7 days.
+    effect: >
+      Prevents feature bloat from destroying early habit formation.
+
+  - context: "CCP: The Mastery Unlock (Law28)"
+    application: >
+      After Day 7, the UI evolves. The 'Analytics' tab appears, revealing granular
+      pacing and conviction metrics. The user is invited into the 28-day mastery
+      track, utilizing the skills built during Immersion.
+    effect: >
+      Provides a massive 'Level Up' moment that justifies the $29/mo upgrade.
+
+  - context: "CCP: The Replay Phase (Coach OS)"
+    application: >
+      A veteran coach has completed Law28. To prevent churn, they transition to
+      Replay. The UI unlocks 'Operator Mode,' allowing them to launch their own
+      topics and judge their own communities.
+    effect: >
+      The user transitions from playing the game to owning a piece of the arena,
+      securing long-term $99/mo retention.
+
+anti_examples:
+  - description: >
+      Dropping a Day 1 user into a dashboard containing 15 different features,
+      a complex analytics graph, and a list of 50 active debates.
+    why_it_fails: >
+      Complete cognitive overload. The user has no idea what the 'core action'
+      is, feels intimidated by the complexity, and abandons the app immediately.
+      Progression is destroyed by a lack of scaffolding.
+
+experience_stage_fit:
+  entry: 0.9
+  activation: 0.9
+  recording: 0.6
+  scoring: 0.4
+  social_spread: 0.8
+  recovery: 0.3
+  retention: 1.0
+  conversion: 0.9
+
+surface_fit:
+  telegram_message: 0.8
+  mini_app: 1.0
+  score_card: 0.7
+  share_asset: 0.6
+  voice_prompt: 0.6
+  push_nudge: 0.4
+
+user_state_effects:
+  confidence: 0.9
+  urgency: 0.4
+  clarity: 1.0
+  safety: 0.8
+  status: 0.7
+  belonging: 0.6
+  curiosity: 0.9
+  replay_desire: 0.8
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 1.0
+  challenge_progression: 1.0
+  silent_referral: 0.8
+  coach_os_deployment: 1.0
+  premium_trust_architecture: 0.9
+  onboarding_activation: 1.0
+  social_economy: 0.7
+  content_extraction: 0.4
+
+activation_conditions:
+  - "User account is created (triggers On-boarding)"
+  - "User completes a major milestone, like the 7-Day Challenge (triggers Mastery unlock)"
+
+suppression_conditions:
+  - "User is currently in the middle of a phase; do not prematurely show them features from the next phase."
+
+misuse_modes:
+  - "The Endless Tutorial — trapping users in the On-boarding phase for so long that they get bored and quit before experiencing the real product."
+  - "Feature Hiding as a Bug — making the UI so minimal that users don't even know what the product is supposed to do."
+
+synergizes_with:
+  - "EXP-SOC-004" # Balanced Social Status Architecture (Status must evolve with the journey)
+  - "EXP-SOC-005" # Collaborative Role Architecture (Roles map to journey phases)
+
+conflicts_with:
+  - "None. This is the foundational architectural scaffold for all experiences."
+
+implementation_targets:
+  frontend_components:
+    - "PhaseRouter — a top-level component that completely alters the navigation and available UI based on the user's `journey_phase`"
+    - "ProgressiveDisclosureMenu — hiding advanced settings until Mastery is reached"
+  backend_rules:
+    - "journey_engine: automatically promote users from `onboard` -> `immerse` after 3 successful baselines"
+  telemetry_events:
+    - "journey_phase_advanced"
+    - "mastery_feature_unlocked"
+    - "replay_loop_entered"
+  experiments:
+    - "A/B test: Unlocking analytics on Day 3 vs Day 7 of the Immersion phase"
+
+experience_metrics:
+  entry_rate: 0.9
+  react_rate: 0.6
+  completion_rate: 0.9
+  share_rate: 0.4
+  comeback_rate: 0.9
+  day7_retention: 1.0
+  upgrade_signal: 1.0
+
+crosswalk_id: "XW-PRG-JOURNEY"
+crosswalk_note: >
+  This defines the entire product roadmap mapping free traffic to the $99/mo tier.

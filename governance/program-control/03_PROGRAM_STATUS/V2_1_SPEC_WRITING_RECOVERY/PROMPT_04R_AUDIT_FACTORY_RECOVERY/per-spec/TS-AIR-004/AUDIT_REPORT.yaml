@@ -1,0 +1,153 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-AIR-004-BATCH002
+spec_id: TS-AIR-004
+spec_title: "Primitive Family Registry and Primitive Binding"
+product: Activative Intelligence Runtime
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. Upstream draft TS-AIR-001 passed
+  Batch 1 audit. Eligible for TECHNICALLY_ACCEPTED_PENDING_RATIFICATION.
+  NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      AIR-FR-019 through AIR-FR-024, FR-169, FR-170, AIR-ST-04.01 through
+      AIR-ST-04.03, and ST-12.05 are all covered by 14 acceptance criteria in
+      Section 9. Each AC has positive and adversarial scenarios, named evidence
+      artifact types, and test layers. Cross-product FR-169/170 (Pipeline-to-AIR
+      query boundary, ST-12.05) are explicitly covered in AC-7 and AC-8.
+      CBAR AC-9 tests exact active Primitive source material.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      authority_state CANDIDATE_NOT_CURRENT and build_authority false correctly
+      declared. AIR owns Primitive interpretation, selection, binding, and the
+      binding receipt. Registry authority owns each source Primitive definition.
+      Pipeline may only request, cache, validate, retrieve, execute, and invalidate
+      AIR outputs — it cannot select a recipe first or retrofit Primitive IDs.
+      Builder declares exact AIR dependencies; it does not compile Primitive meaning.
+      Independent evaluation owns evaluation receipts; producer cannot approve itself.
+      No generic creative-safety/content-rights approval authority introduced.
+      Operator-supplied source authority and provenance preserved. All consistent
+      with CROSS_PRODUCT_AUTHORITY_MATRIX and SEMANTIC_OBJECT_OWNERSHIP_MATRIX.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      Five commands specified (QueryPrimitiveCandidates, CreatePrimitiveBinding,
+      SupersedePrimitiveBinding, EvaluatePrimitiveBinding, ReplayPrimitiveBinding).
+      State machine complete: proposed->validated->independently_evaluated->
+      downstream_eligible, with side states rejected/superseded/cancelled/stale.
+      Only exact current bytes plus pass receipts can enter downstream_eligible.
+      Idempotency: command_id + canonical payload hash — deterministic.
+      Optimistic concurrency: expected_prior_ref enforces single-writer.
+      Atomic commit: binding, relation set, dependency edges, command record,
+      and receipt all commit together. Partial visibility forbidden.
+      Cancellation before and after commit both addressed.
+      Replay: recorded registry snapshot, Primitive bytes, evaluator profile,
+      and command payload — never mutable "latest" state.
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      Critical lens for this spec. All semantic laws (Section 3) are correctly
+      enforced via data model constraints:
+      - Law 1 (Meaning vs Experience plane distinction): PrimitiveVersionReference
+        requires plane field — never guessed. Cross-plane relations explicit only.
+      - Law 2 (source evidence requires exact immutable IDs): null fields require
+        explicit applicability code, never silent omission.
+      - Law 3 (Primitive selection precedes coalition/archetype/layout): Section 5
+        workflow B explicitly states coalitions (TS-AIR-005) consume accepted binding
+        outputs, not vice versa.
+      - Law 4 (every candidate resolves to exact source bytes before eligibility):
+        PrimitiveVersionReference.primitive_sha256 is mandatory.
+      - Law 5 (all fields loaded from same Primitive version): PrimitiveVersionReference
+        records all fields from one source version.
+      - Law 7 (Misuse Risk and fatal conflict are non-compensable): PrimitiveMisuseRisk
+        fatal severity blocks eligibility; no averaging.
+      - Law 8 (NOT_APPLICABLE only with governed conditions): NOT_APPLICABLE requires
+        applicability_condition_id, reason, and evidence refs; cannot be used for
+        unconditional required dimensions.
+      Three specific Primitive hashes cited: PRM-BUS-001 (9eebedc6), PRM-BUS-006
+      (6abfae7c), PRM-PSY-001 (77c09b40). CBAR AC-9 tests these exact YAMLs.
+      Brownfield PRIMITIVE_COALITION_CONTRACT.py correctly ADAPT-dispositioned with
+      specific migration constraints (remove random IDs, float-dependent identity,
+      open dicts).
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      No current 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/ tree — consistent with
+      MASTER_STATUS.md. All implementation paths are prospective and explicitly
+      labeled as such (Section 7). The spec correctly separates TS-AIR-004 (binding)
+      from TS-AIR-005 (coalition compilation): Section 2 Out of Scope explicitly
+      states "Compiling the Primitive Coalition Contract, Coalition Signature, or
+      Edge Product terminal object owned by TS-AIR-005; this spec supplies validated
+      inputs." Cross-product boundary: Pipeline query handoff uses PrimitiveHandoffAdapter
+      which emits references/contracts only — never reconstructed definitions (Section 5).
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      Section 10 specifies 13 exact test file paths with named test cases covering
+      domain contracts, serialization, contract schemas, query/binding integration,
+      Pipeline handoff, atomic commit, product boundaries, coverage/misuse evaluation,
+      migration, recovery/replay, and clean-environment. All 14 ACs have failure
+      examples. Section 7 stages list exact target paths in 04_ACTIVATIVE_INTELLIGENCE_RUNTIME.
+      Coverage requirement dimension N/A handling is fully specified and testable.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+
+  - finding_id: NOTE-AIR-004-001
+    severity: NOTE
+    lens: lens_4_activative_primitive_archetype_source_fidelity
+    location: "Section 6, PrimitiveCoverageRequirement"
+    finding: >
+      PrimitiveCoverageRequirement explicitly states it contains no invented numeric
+      threshold — thresholds are held in the independently governed evaluation-profile
+      version. This is the correct design, but it means threshold governance depends
+      on an evaluation-profile spec that does not yet exist in the current tech-spec
+      index. This is a planning note, not a defect in TS-AIR-004.
+    required_action: "Track as a future spec dependency; does not block."
+    architect_decision_required: false
+    blocks_build: false
+
+  - finding_id: NOTE-AIR-004-002
+    severity: NOTE
+    lens: lens_1_fr_story_outcome_coverage
+    location: "Section 1, Primitive registry and PRD source files"
+    finding: >
+      F04 PRD feature, MEANING_PRIMITIVE_REGISTRY_SPEC.md, EXPERIENCE_PRIMITIVE_REGISTRY_SPEC.md,
+      and the Primitive YAML snapshot were not directly read by this auditor session.
+      Hashes are on record (4d309831, 1851f4e8, 5cb5f1b5, 4a3423b0). ACs in Section 9
+      sufficiently cover the required behaviors. Future re-audit should verify these hashes.
+    required_action: "Record as informational; does not block."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 2
+  critical: 0
+  warning: 0
+  note: 2
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION

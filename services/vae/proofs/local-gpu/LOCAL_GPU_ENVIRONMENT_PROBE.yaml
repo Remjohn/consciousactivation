@@ -1,0 +1,33 @@
+classification: non_production_readiness_proof
+proof_id: VAE-LOCAL-GPU-PROBE-2026-07-15
+status: FAIL_docker_engine_unhealthy_or_inaccessible
+host_gpu:
+  name: NVIDIA GeForce GTX 960M
+  driver_version: '576.02'
+  vram_total_mib: 2048
+  vram_free_at_probe_mib: 2002
+docker:
+  client_version: 28.3.3
+  context: desktop-linux
+  desktop_start_attempted: true
+  engine_status: unhealthy_or_inaccessible
+  sandbox_probe_error: open //./pipe/docker_engine - access denied
+  escalated_probe_error: Docker Desktop Linux Engine returned HTTP 500 for /v1.51/info
+  gpu_container_probe_executed: false
+required_runtime_binding:
+  container_digest: null
+  comfyui_version: null
+  custom_node_lockfile: null
+  model_hashes: []
+  vae_hashes: []
+  lora_hashes: []
+  workflow_hash: null
+execution:
+  api_request: not_sent
+  api_response: not_available
+  execution_events: []
+  produced_candidate: null
+  deterministic_receipt: null
+  execution_latency_ms: null
+  execution_cost_usd: 0.0
+conclusion: No local Docker GPU execution occurred; synthetic Format 02 fixtures are not GPU proof.

@@ -1,0 +1,141 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-02.05",
+  "active_mode": "DECLARED_BOUNDARY",
+  "executed_on": "2026-07-15",
+  "environment": {
+    "python": "C:\\Python312\\python.exe",
+    "pythonpath": "src",
+    "network_used": false,
+    "external_runtime_used": false
+  },
+  "capsule_validation": {
+    "manifest_sha256": "afabe8c69a5cffaa03582fca7d906667c4f1166edb369d8d9c9b1cebe5eda120",
+    "immutable_inputs": "PASS_19_OF_19",
+    "bundle_digest_expected": "e86ee808e1fd4f7c54eae4c6fb1a84486f05612c59d29758c693d72d42f298b8",
+    "bundle_digest_observed": "e86ee808e1fd4f7c54eae4c6fb1a84486f05612c59d29758c693d72d42f298b8",
+    "verdict": "PASS"
+  },
+  "dependency_receipts": {
+    "ST-01.01": "PASS_ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b",
+    "ST-01.01-SYNTHETIC-PROOF": "PASS_58ae069c277e4256633db258a639e4901b44cdeb3d5e36b06464aa80d2700418",
+    "ST-01.02": "PASS_47706d905e3dbebf967a1a2124aa0f678f398f1826fe3fb0900ef878977526f6"
+  },
+  "runs": [
+    {
+      "name": "preimplementation_repository_regression",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q",
+      "result": "PASS",
+      "passed": 57,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "test_first_red",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_02_05",
+      "result": "EXPECTED_RED",
+      "collection_errors": 5,
+      "reason": "the three capsule-authorized ST-02.05 source modules did not yet exist"
+    },
+    {
+      "name": "story_suite_green_run_1",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_02_05",
+      "result": "PASS",
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "story_suite_fresh_context_run_2",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_02_05",
+      "result": "PASS",
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "story_suite_fresh_context_run_3",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_02_05",
+      "result": "PASS",
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "original_ST_01_01",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_01_01",
+      "result": "PASS",
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "supplemental_synthetic_proof",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_01_01_synthetic_proof",
+      "result": "PASS",
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ST_01_02",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q tests/stories/st_01_02",
+      "result": "PASS",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "architecture_boundary_subset",
+      "result": "PASS",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "full_repository_regression",
+      "command": "$env:PYTHONPATH='src'; C:\\Python312\\python.exe -m pytest -q",
+      "result": "PASS",
+      "passed": 84,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "acceptance_criteria": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "PASS",
+    "AC-09": "PASS",
+    "AC-10": "PASS",
+    "AC-11": "PASS"
+  },
+  "contract_validation": {
+    "DeclaredBoundaryInput": "PASS",
+    "AtomicityDecision": "PASS",
+    "DeclaredAtomicBoundary": "PASS",
+    "AtomicityRatification": "PASS",
+    "DraftHarnessModel": "PASS",
+    "BoundaryInvalidation": "PASS",
+    "AtomicityDecisionReceipt": "PASS",
+    "HG-003": "PASS_ON_VALID_RATIFICATION_FAIL_OTHERWISE"
+  },
+  "architecture_validation": {
+    "standard_library_only": true,
+    "external_product_imports": [],
+    "external_dependencies_added": [],
+    "schemas_changed": [],
+    "task_execution_added": false,
+    "later_story_behavior_added": false,
+    "verdict": "PASS"
+  },
+  "mandatory_test_skips": 0,
+  "warnings": [
+    "Pre-existing pytest-asyncio default fixture loop scope deprecation warning; no test or behavior impact."
+  ],
+  "verdict": "PASS"
+}

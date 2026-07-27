@@ -1,0 +1,35 @@
+suite_id: "PMS-DP-0001"
+label: "Dead Polish Render Flattening Suite"
+target_failure_class: "dead_polish"
+target_surfaces: ["RENDER_RELEASE", "LONG_FORM_AUTHORITY"]
+operations:
+  - operation_id: "PMO-DP-0001"
+    kind: "OVER_SMOOTHING"
+    label: "Over Smoothing"
+    description: "Remove hard edges and normalize verbal texture until the output sounds professionally dead."
+    severity: 0.8
+    config: {}
+  - operation_id: "PMO-DP-0002"
+    kind: "PAUSE_WEIGHT_REMOVAL"
+    label: "Pause Weight Removal"
+    description: "Erase pauses and interruptions so human delivery cues collapse into one clean surface."
+    severity: 0.6
+    config: {}
+  - operation_id: "PMO-DP-0003"
+    kind: "RHYTHM_NORMALIZATION"
+    label: "Rhythm Normalization"
+    description: "Force sentence rhythm into uniform lengths and predictable pacing."
+    severity: 0.7
+    config: {}
+expectation_bundle:
+  expected_status: "EXPECT_DOWNGRADE"
+  minimum_human_congruence_drop: 0.10
+  minimum_memorability_drop: 0.00
+  minimum_symbolic_density_drop: 0.00
+  minimum_contrast_clarity_drop: 0.05
+  minimum_overexplanation_risk_rise: 0.00
+  minimum_synthetic_smoothness_rise: 0.10
+  route_block_surfaces: ["COMMERCIAL_TRUST_TRANSFER", "PHASE0_AUDIT_PROOF"]
+  route_review_surfaces: ["RENDER_RELEASE", "LONG_FORM_AUTHORITY"]
+  rationale: "Render-target corruption should degrade release confidence when the voice becomes too smooth, too even, and too controlled."
+notes: "Primary dead-polish suite for CMF surfaces."

@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: FRAME_AND_CONTRAST
+enabled: true
+selection_priority:
+  tier: premium
+  rank: 9
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - CHALLENGE
+  stages:
+    - scene_builder
+incompatibilities:
+  - mushy_problem_framing
+warn_conditions:
+  - metric: binary_legibility_score
+    operator: lt
+    value: 0.8
+route_hints:
+  select:
+    - use_when_clear_opposition_is_needed
+    - use_when_the_enemy_must_be_named_visually

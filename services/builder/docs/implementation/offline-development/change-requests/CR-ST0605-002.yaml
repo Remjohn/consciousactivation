@@ -1,0 +1,25 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0605-002
+story_id: ST-06.05
+calling_lane: CATEGORY_AND_TARGET_LANE
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: Action.WITHDRAW_CONVERSATIONAL_FEEDBACK_CONSENT
+required_additive_change: >-
+  Add the exact conversational-consent withdrawal action and classify it as
+  human-only authority.
+preconditions:
+  - ST-06.04 ImplementationCompletionReceipt is IMPLEMENTED_DEVELOPMENT_PASS
+  - the ST-06.05 branch remains structural, non-personal and uncertified
+  - no human response payload or human-owned evidence issuance is authorized
+postconditions:
+  - WITHDRAW_CONSENT uses a distinct human-only authority action
+  - non-human Builder actors cannot impersonate consent withdrawal authority
+  - other structural transitions retain COMPILE_CONVERSATIONAL_FEEDBACK
+invariants:
+  - no production or certification authority is introduced
+  - no shared-contract or human-truth ownership changes
+  - existing human-only actions remain enforced
+focused_tests:
+  - tests/stories/st_06_05/test_failure_authority_and_commands.py
+  - tests/stories/st_06_05/test_feedback_state_machine.py
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR

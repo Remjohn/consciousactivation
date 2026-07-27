@@ -1,0 +1,48 @@
+schema_version: cmf-builder-bd007-resource-teardown-plan/v1
+plan_id: BD007-CLOUD-RESOURCE-TEARDOWN-v1
+recorded_on: "2026-07-17"
+status: PREPARED_NO_RESOURCES_EXIST
+triggers:
+  - experiment_complete
+  - evidence_closure_failed
+  - model_or_container_hash_drift
+  - health_or_context_qualification_failed
+  - authority_revoked
+  - security_boundary_failed
+  - budget_soft_stop_without_safe_continuation
+  - budget_hard_stop_risk
+  - endpoint_lifetime_approaches_180_minutes
+order:
+  - disable_new_Builder_invocations
+  - wait_for_or_cancel_in_flight_call_without_retry
+  - capture_redacted_endpoint_and_call_state
+  - undeploy_and_delete_GPU_endpoint
+  - delete_endpoint_configuration_or_deployed_model_binding
+  - stop_or_delete_temporary_build_resources
+  - revoke_temporary_invocation_and_serving_grants
+  - retain_only_approved_versioned_model_container_and_encrypted_evidence
+  - verify_no_public_endpoint_or_billable_GPU_remains
+  - issue_resource_inventory_uptime_and_cost_receipt
+AWS:
+  delete_or_stop: [SageMaker_endpoint, endpoint_configuration, temporary_build_compute, temporary_network_access, temporary_role_sessions]
+  retain_if_approved: [versioned_encrypted_S3_model_prefix, ECR_image_digest, encrypted_evidence_prefix, minimal_redacted_logs]
+  final_checks: [DescribeEndpoint_absent, no_billable_GPU_endpoint, no_temporary_build, budget_actuals_recorded]
+GCP:
+  delete_or_stop: [Vertex_endpoint_deployment, unused_endpoint, temporary_Cloud_Build_resources, temporary_network_access, temporary_service_account_tokens]
+  retain_if_approved: [versioned_encrypted_GCS_model_prefix, Artifact_Registry_image_digest, encrypted_evidence_prefix, minimal_redacted_logs]
+  final_checks: [no_deployed_model, no_billable_GPU_endpoint, no_temporary_build, billing_actuals_recorded]
+rollback_evidence:
+  required:
+    - trigger_and_timestamp
+    - resource_ids_without_credentials
+    - deletion_or_retention_disposition
+    - final_running_resource_list
+    - endpoint_uptime_minutes
+    - actual_cost_usd
+    - unresolved_cleanup_failure
+  cleanup_failure_effect: BLOCK_CAMPAIGN_AND_ESCALATE_OPERATOR
+current_state:
+  resources_created: 0
+  resources_running: 0
+  teardown_required_now: false
+  spend_incurred_usd: 0

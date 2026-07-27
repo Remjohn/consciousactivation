@@ -1,0 +1,14 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-004
+story_id: ST-10.05
+title: SKILLS_RECIPES_AND_RUNTIME_CAPSULE_INSPECTION
+outcome: governed_skill_recipe_runtime_capsule_trace_projection
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_004.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files:
+  production: [src/cmf_builder/application/skill_runtime_inspection.py]
+  tests: [tests/stories/st_10_05/test_skill_runtime_inspection.py]
+requirements:
+  - preserve skill, recipe, JIT capsule, pinned runtime, disposed, invalidated and historical reproduction classes distinctly
+  - trace capability to skill decision to skill version to recipe to capsule lifecycle
+  - reject unpinned runtime use, missing anchors, invalidated-active, disposed-loaded, excess context and certification claims
+prohibited: [mutation_of_lifecycle_state, production_or_certification_claims, provider_execution]

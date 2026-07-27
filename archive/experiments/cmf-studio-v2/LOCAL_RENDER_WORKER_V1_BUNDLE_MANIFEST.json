@@ -1,0 +1,26 @@
+{
+  "bundle_id": "ccp_local_render_worker_v1_patch",
+  "version": "1.0.0",
+  "purpose": "Local render worker registration, queue, lease, heartbeat, fake results, and health checks.",
+  "integration_mode": "repo_overlay_milestone_commits",
+  "contains": {
+    "architecture_docs": 9,
+    "contract_files": 1,
+    "repository_files": 1,
+    "service_files": 7,
+    "registries": 8,
+    "skill_manifests": 9,
+    "tests": 1,
+    "apply_instructions": 1
+  },
+  "hard_laws": [
+    "Do not call Remotion.",
+    "Do not call FFmpeg.",
+    "Do not call providers.",
+    "Do not shell out to external runtimes.",
+    "V1 results are fake/deterministic only.",
+    "Capabilities must be enabled and tested before available.",
+    "Lease only to healthy workers with required capabilities.",
+    "Final video render requires final_timeline_locked=True."
+  ]
+}

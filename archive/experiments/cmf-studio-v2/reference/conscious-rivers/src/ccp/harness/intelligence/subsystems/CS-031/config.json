@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-031",
+  "name": "Scene Type Selector",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Synthesized from Neurocinematics",
+    "Kuleshov",
+    "Peak-End",
+    "System architecture"
+  ],
+  "inputs": [
+    "container_contracts",
+    "component_library",
+    "asset_inventory",
+    "variation_history",
+    "subsystem_constraints"
+  ],
+  "outputs": [
+    "selected_component_template_pair",
+    "selection_rationale",
+    "verdict"
+  ],
+  "thresholds": {
+    "biological_fit_weight": 0.6,
+    "novelty_weight": 0.3,
+    "preference_weight": 0.1,
+    "require_subsystem_consultation": true
+  },
+  "default_action_on_fail": "REVISE"
+}

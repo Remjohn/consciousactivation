@@ -1,0 +1,28 @@
+version: 0.1.0-draft
+status: architecture_tunable
+slos:
+- id: SLO-01
+  name: Valid submission receipt
+  objective: p99 <= 1000 ms
+- id: SLO-02
+  name: Idempotent duplicate resolution
+  objective: p99 <= 750 ms
+- id: SLO-03
+  name: Accepted event delivery
+  objective: '>= 99.9%'
+- id: SLO-04
+  name: Lifecycle projection freshness
+  objective: p99 <= 5 seconds
+- id: SLO-05
+  name: Automatic result acknowledgement
+  objective: '>= 99% within 10 seconds when eligible'
+- id: SLO-06
+  name: Critical invalidation/revocation propagation
+  objective: p99 <= 10 seconds
+- id: SLO-07
+  name: Audit receipt completeness
+  objective: 100%
+- id: SLO-08
+  name: Unauthorized state mutation
+  objective: '0'
+note: Exact thresholds must be confirmed by Architecture and Format 02 load/chaos tests.

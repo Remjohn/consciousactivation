@@ -1,0 +1,109 @@
+version: 1.0.0-draft
+families:
+  contract_failure:
+    owner: delegation_protocol
+    quality_round: false
+    codes:
+    - SCHEMA_INVALID
+    - MISSING_REQUIRED_FIELD
+    - UNSUPPORTED_CONTRACT_VERSION
+    - PAYLOAD_HASH_MISMATCH
+    - INVALID_REFERENCE
+    default_action: correct_and_resubmit
+  authority_failure:
+    owner: delegation_protocol
+    quality_round: false
+    codes:
+    - UNAUTHORIZED_DEMAND_MUTATION
+    - UNAUTHORIZED_BUDGET_PROGRAM
+    - UNAUTHORIZED_DEGRADED_ACCEPTANCE
+    - UNAUTHORIZED_CANCELLATION
+    - INVALID_AMENDMENT_AUTHOR
+    default_action: reject_and_audit
+  compatibility_failure:
+    owner: delegation_protocol
+    quality_round: false
+    codes:
+    - UNSUPPORTED_DEMAND_PROFILE
+    - INCOMPATIBLE_RESULT_VERSION
+    - UNSUPPORTED_ASSET_FAMILY
+    - INCOMPATIBLE_GEOMETRY_PROFILE
+    - CATEGORY_PROFILE_NOT_CERTIFIED
+    default_action: migrate_route_or_block
+  dependency_staleness_failure:
+    owner: owning_product
+    quality_round: false
+    codes:
+    - STALE_DEMAND_VERSION
+    - STALE_SEQUENCE_VERSION
+    - STALE_COMPOSITION_VERSION
+    - DEPENDENCY_INVALIDATED
+    - RESULT_SUPERSEDED
+    - ASSET_REFERENCE_UNAVAILABLE
+    default_action: supersede_invalidate_or_revalidate
+  feasibility_failure:
+    owner: visual_asset_editor_diagnoses_content_harness_decides
+    quality_round: false
+    codes:
+    - COMPOSITION_CONSTRAINT_CONFLICT
+    - CONTRADICTORY_DEMAND_CONSTRAINTS
+    - INSUFFICIENT_REFERENCE_EVIDENCE
+    - CAPABILITY_GAP
+    - UNSUPPORTED_CONTINUITY_REQUIREMENT
+    - DELEGATION_SET_CONSTRAINT_CONFLICT
+    default_action: constraint_conflict_or_amendment
+  production_infrastructure_failure:
+    owner: visual_asset_editor
+    quality_round: false
+    codes:
+    - GPU_UNAVAILABLE
+    - CONTAINER_START_FAILED
+    - MODEL_LOAD_FAILED
+    - CUSTOM_NODE_MISSING
+    - PROVIDER_TIMEOUT
+    - OBJECT_STORAGE_UNAVAILABLE
+    - WORKER_LOST
+    default_action: operational_retry_resume_or_fallback
+  quality_failure:
+    owner: visual_asset_editor
+    quality_round: true
+    codes:
+    - SEMANTIC_FIDELITY_FAILED
+    - ACTIVATIVE_FIDELITY_FAILED
+    - COMPOSITION_EFFECTIVENESS_FAILED
+    - IDENTITY_CONTINUITY_FAILED
+    - TEMPORAL_STABILITY_FAILED
+    - TECHNICAL_QUALITY_FAILED
+    - WRONG_READING_LOCK_TRIGGERED
+    - CROSS_ASSET_INTERACTION_MISMATCH
+    default_action: causal_targeted_repair
+  budget_timing_exception:
+    owner: shared_by_contract
+    quality_round: false
+    codes:
+    - COST_APPROVAL_REQUIRED
+    - BUDGET_EXHAUSTED
+    - HARD_DEADLINE_REACHED
+    - DELEGATION_EXPIRED
+    - QUEUE_SLA_EXCEEDED
+    default_action: approval_checkpoint_or_stop
+  human_exception:
+    owner: operator_or_content_harness_policy
+    quality_round: false
+    codes:
+    - QUALITY_FAILURE_AFTER_MAX_REPAIRS
+    - UNRESOLVED_EVALUATOR_CONTRADICTION
+    - UNSUPPORTED_CAPABILITY_DECISION
+    - DEGRADED_ACCEPTANCE_DECISION_REQUIRED
+    default_action: typed_exception_resolution
+  security_integrity_failure:
+    owner: delegation_security_controls
+    quality_round: false
+    codes:
+    - SIGNATURE_INVALID
+    - IDENTITY_UNVERIFIED
+    - RESOURCE_INTEGRITY_FAILED
+    - PROTOCOL_REPLAY_DETECTED
+    - EXECUTION_ISOLATION_VIOLATION
+    - MESSAGE_EXPIRED
+    default_action: block_and_incident

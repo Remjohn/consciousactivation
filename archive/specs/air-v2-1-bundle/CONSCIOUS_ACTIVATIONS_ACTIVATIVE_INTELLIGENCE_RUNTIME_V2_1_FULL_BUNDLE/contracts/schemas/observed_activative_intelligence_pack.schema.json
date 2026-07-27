@@ -1,0 +1,370 @@
+{
+  "$defs": {
+    "ApplicabilityEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "audience_segments": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Audience Segments",
+          "type": "array"
+        },
+        "coach_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Coach Ids",
+          "type": "array"
+        },
+        "exclusions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "formats": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Formats",
+          "type": "array"
+        },
+        "platforms": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Platforms",
+          "type": "array"
+        },
+        "pressure_domains": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Pressure Domains",
+          "type": "array"
+        },
+        "relationship_stages": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Relationship Stages",
+          "type": "array"
+        }
+      },
+      "title": "ApplicabilityEnvelope",
+      "type": "object"
+    },
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "IdentityDNACandidateObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "applicability": {
+          "$ref": "#/$defs/ApplicabilityEnvelope"
+        },
+        "audience_fit": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Audience Fit",
+          "type": "number"
+        },
+        "coach_fit": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coach Fit",
+          "type": "number"
+        },
+        "coach_id": {
+          "title": "Coach Id",
+          "type": "string"
+        },
+        "contradictions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Contradictions",
+          "type": "array"
+        },
+        "epistemic_state": {
+          "$ref": "#/$defs/EpistemicState"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ImmutableRef"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "observation_id": {
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "profile_resolution_status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected",
+            "superseded"
+          ],
+          "title": "Profile Resolution Status",
+          "type": "string"
+        },
+        "proposed_dimension": {
+          "enum": [
+            "identity_role",
+            "stance",
+            "edge",
+            "emotional_range",
+            "visual_world",
+            "negative_space",
+            "lived_proof"
+          ],
+          "title": "Proposed Dimension",
+          "type": "string"
+        },
+        "proposed_value": {
+          "title": "Proposed Value",
+          "type": "string"
+        },
+        "recurrence_count": {
+          "minimum": 1,
+          "title": "Recurrence Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "observation_id",
+        "coach_id",
+        "proposed_dimension",
+        "proposed_value",
+        "epistemic_state",
+        "evidence_refs",
+        "recurrence_count",
+        "coach_fit",
+        "audience_fit",
+        "applicability"
+      ],
+      "title": "IdentityDNACandidateObservation",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "PlannedObservedDelta": {
+      "additionalProperties": false,
+      "properties": {
+        "activated_hypothesis_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Activated Hypothesis Ids",
+          "type": "array"
+        },
+        "rejected_assumptions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Rejected Assumptions",
+          "type": "array"
+        },
+        "unexpected_edges": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Unexpected Edges",
+          "type": "array"
+        },
+        "unmet_hypothesis_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Unmet Hypothesis Ids",
+          "type": "array"
+        },
+        "unresolved_inferences": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Unresolved Inferences",
+          "type": "array"
+        }
+      },
+      "title": "PlannedObservedDelta",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "campaign_opportunities": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Campaign Opportunities",
+      "type": "array"
+    },
+    "confirmed_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Confirmed Roles",
+      "type": "array"
+    },
+    "confirmed_stakes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Confirmed Stakes",
+      "type": "array"
+    },
+    "confirmed_stances": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Confirmed Stances",
+      "type": "array"
+    },
+    "epistemic_state": {
+      "enum": [
+        "observed",
+        "operator_confirmed"
+      ],
+      "title": "Epistemic State",
+      "type": "string"
+    },
+    "expression_moment_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Expression Moment Refs",
+      "type": "array"
+    },
+    "identity_dna_candidate_observations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/IdentityDNACandidateObservation"
+      },
+      "title": "Identity Dna Candidate Observations",
+      "type": "array"
+    },
+    "lifecycle_state": {
+      "const": "resolved",
+      "default": "resolved",
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "pack_id": {
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "planned_observed_delta": {
+      "$ref": "#/$defs/PlannedObservedDelta"
+    },
+    "planned_pack_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "reaction_receipt_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Reaction Receipt Refs",
+      "type": "array"
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "transfer_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Transfer Requirements",
+      "type": "array"
+    },
+    "unresolved_inferences": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Unresolved Inferences",
+      "type": "array"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "wrong_reading_updates": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Updates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "pack_id",
+    "version",
+    "planned_pack_ref",
+    "source_package_ref",
+    "epistemic_state",
+    "reaction_receipt_refs",
+    "expression_moment_refs",
+    "confirmed_roles",
+    "confirmed_stances",
+    "confirmed_stakes",
+    "planned_observed_delta",
+    "transfer_requirements"
+  ],
+  "title": "ObservedActivativeIntelligencePack",
+  "type": "object"
+}

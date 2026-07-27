@@ -1,0 +1,52 @@
+{
+  "schema_version": "cmf-builder-synthetic-skill-necessity-input/v1",
+  "scope": "ST-05.02_SYNTHETIC_NO_SKILL_NECESSITY_ONLY",
+  "source_contract": "cmf-builder-synthetic-skill-registry-snapshot/v1@1.0.0",
+  "required_snapshot_state": {
+    "registry_ref": "builder-core-synthetic-empty-skill-registry@1.0.0",
+    "registered_skill_count": 0,
+    "required_external_skill_count": 0,
+    "external_skills_required": false,
+    "dynamic_skill_discovery_allowed": false,
+    "production_eligible": false,
+    "certified": false
+  },
+  "capability_requirements": [
+    {"capability_id": "deterministic_contract_validation", "target_failure_observed": false, "current_owner_kind": "builder_code", "selected_alternative": "deterministic_code", "adequacy": "COMPLETE"},
+    {"capability_id": "governed_run_lifecycle", "target_failure_observed": false, "current_owner_kind": "builder_code", "selected_alternative": "deterministic_code", "adequacy": "COMPLETE"},
+    {"capability_id": "governed_task_acceptance", "target_failure_observed": false, "current_owner_kind": "builder_code", "selected_alternative": "deterministic_code", "adequacy": "COMPLETE"},
+    {"capability_id": "immutable_receipt_emission", "target_failure_observed": false, "current_owner_kind": "builder_code", "selected_alternative": "deterministic_code", "adequacy": "COMPLETE"},
+    {"capability_id": "synthetic_target_profile_binding", "target_failure_observed": false, "current_owner_kind": "builder_code", "selected_alternative": "deterministic_code", "adequacy": "COMPLETE"}
+  ],
+  "governed_alternative_order": [
+    "deterministic_code",
+    "schema_or_validator",
+    "tool",
+    "inline_instruction",
+    "external_reference",
+    "human_decision",
+    "exact_canonical_reuse",
+    "harness_local_adaptation",
+    "adapter_composition",
+    "new_canonical_skill"
+  ],
+  "decision_policy": {
+    "new_skill_requires_target_failure": true,
+    "new_skill_requires_all_prior_alternatives_inadequate": true,
+    "new_skill_requires_human_authority": true,
+    "material_adaptation_requires_typed_skill_design_brief": true,
+    "new_skill_requires_typed_skill_design_brief": true,
+    "no_gap_brief_disposition": "NOT_APPLICABLE_NO_GAP",
+    "implicit_ownership": "FAIL_CLOSED",
+    "hidden_workflow_in_skill": "FAIL_CLOSED",
+    "same_version_mutation": "FAIL_CLOSED"
+  },
+  "expected_decision": "NO_NEW_SKILL_REQUIRED",
+  "expected_selected_owner": "deterministic_builder_code",
+  "expected_new_skill_count": 0,
+  "expected_adaptation_count": 0,
+  "expected_adapter_count": 0,
+  "expected_skill_design_brief_count": 0,
+  "production_eligible": false,
+  "certified": false
+}

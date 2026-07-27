@@ -1,0 +1,27 @@
+schema_version: cmf-builder-productization-receipt/v1
+unit: PZ-03
+amendment_unit: ST-10.10-BUILDER-CORE-COMMAND-SURFACE
+outcome: operator can ingest build inspect and export through a deterministic Builder-owned CLI
+authority: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+requirements: [ADR-005, UXC-002, FR-001, FR-003, FR-006, FR-007, FR-120, FR-125, FR-126]
+lanes: [CLI_AGENT, INTEGRATOR]
+lane_wall_clock_minutes:
+  CLI_AGENT: 11
+  INTEGRATOR_composition: 6
+tests:
+  CLI_lane_focused: PASS_9_OF_9
+  integrated_productization_and_architecture: PASS_68_OF_68
+  canonical_full_regression_gate: PASS_778_OF_778
+command_surface:
+  commands: [ingest, build, inspect, export]
+  output_modes: [human, json]
+  stable_exit_codes: true
+  internal_failure_redaction: true
+  durable_service_composition: true
+source_hashes:
+  src/cmf_builder/application/productization_service.py: 76bb1d593cce3d3d99fa20af2586ceec83f072e9e763eb3841748e707afbe028
+  src/cmf_builder/cli/parser.py: 7c467aefd148cf955533928c6322b4196c6241b9a99e4e73a5b11508a26407ed
+  src/cmf_builder/cli/commands.py: 91893369c9986eaa45bebaf9be25056b0509ab5ffda90b6a53a53278b354b7d5
+  src/cmf_builder/cli/exit_codes.py: e126b908b8cae830aec24004222b2aad2758f04a07b17553cc57ee52ed14af0d
+  src/cmf_builder/cli/output.py: c52d55fa4f5b7ce9492d3852aab9765b5f0150535d7a111400806ac86c158e60
+completion_verdict: PASS

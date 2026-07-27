@@ -1,0 +1,231 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 123456789,
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "14",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "5": {
+    "inputs": {
+      "width": 768,
+      "height": 1536,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image (Vertical)"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "Matthis, late 20s mixed-heritage man. Close-up portrait. 85mm lens. Kodak Portra 400 skin tones.",
+      "clip": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positive Prompt"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "blur, low quality, watermark, text, ugly, deformed",
+      "clip": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "9",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "9": {
+    "inputs": {
+      "vae_name": "ae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "10": {
+    "inputs": {
+      "clip_name": "qwen_3_4b.safetensors",
+      "type": "sdxl"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP (Qwen)"
+    }
+  },
+  "11": {
+    "inputs": {
+      "model_name": "4x-UltraSharp.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "12": {
+    "inputs": {
+      "upscale_model": [
+        "11",
+        0
+      ],
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale (UltraSharp)"
+    }
+  },
+  "14": {
+    "inputs": {
+      "unet_name": "z_image_turbo_bf16.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "20": {
+    "inputs": {
+      "smooth": 15,
+      "threshold": -5,
+      "opacity": 100,
+      "image": [
+        "12",
+        0
+      ]
+    },
+    "class_type": "LayerFilter: SkinBeauty",
+    "_meta": {
+      "title": "Effect 1: Skin Beauty"
+    }
+  },
+  "21": {
+    "inputs": {
+      "cyan_red": 0.016,
+      "magenta_green": -0.008,
+      "yellow_blue": 0.016,
+      "image": [
+        "20",
+        0
+      ]
+    },
+    "class_type": "LayerColor: ColorBalance",
+    "_meta": {
+      "title": "Effect 2: Color Balance (Warmth)"
+    }
+  },
+  "22": {
+    "inputs": {
+      "soft": 1.0,
+      "threshold": -8,
+      "opacity": 60,
+      "image": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "LayerFilter: SoftLight",
+    "_meta": {
+      "title": "Effect 3: Soft Light (Glow)"
+    }
+  },
+  "23": {
+    "inputs": {
+      "red_shift": 2,
+      "red_direction": "horizontal",
+      "green_shift": 0,
+      "green_direction": "horizontal",
+      "blue_shift": -1,
+      "blue_direction": "horizontal",
+      "image": [
+        "22",
+        0
+      ]
+    },
+    "class_type": "ChromaticAberration",
+    "_meta": {
+      "title": "Effect 4: Chromatic Aberration"
+    }
+  },
+  "25": {
+    "inputs": {
+      "intensity": 0.2,
+      "scale": 1.0,
+      "temperature": 0.0,
+      "vignette": 0.0,
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "FilmGrain",
+    "_meta": {
+      "title": "Effect 5: Film Grain"
+    }
+  },
+  "26": {
+    "inputs": {
+      "filename_prefix": "CoachAdele_Platinum",
+      "images": [
+        "25",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Final Image"
+    }
+  }
+}

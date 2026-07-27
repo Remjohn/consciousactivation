@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf.subsystem.config.schema.v1",
+  "title": "CMF Subsystem Config",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_id",
+    "subsystem_id",
+    "name",
+    "version",
+    "priority_tier",
+    "research_basis",
+    "inputs",
+    "outputs",
+    "thresholds",
+    "default_action_on_fail"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_id": {
+      "const": "cmf.subsystem.config/v1"
+    },
+    "subsystem_id": {
+      "type": "string",
+      "pattern": "^CS-[0-9]{3}$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "priority_tier": {
+      "type": "string",
+      "enum": ["survival", "encoding", "recall", "quality", "polish"]
+    },
+    "research_basis": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "thresholds": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "default_action_on_fail": {
+      "type": "string",
+      "enum": ["PASS", "REVISE", "BLOCK"]
+    }
+  },
+  "additionalProperties": true
+}

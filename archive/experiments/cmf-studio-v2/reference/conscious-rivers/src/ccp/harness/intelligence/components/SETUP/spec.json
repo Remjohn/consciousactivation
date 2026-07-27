@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "SETUP",
+  "scene_number": 2,
+  "name": "Setup",
+  "version": "1.0",
+  "function": "Contextual grounding scene that makes the viewer feel located in the story.",
+  "compatible_containers": [
+    "SETUP"
+  ],
+  "cls_footprint": {
+    "typical": 1.5,
+    "max": 2.0
+  },
+  "required_asset_types": [
+    "A_ROLL",
+    "B_ROLL"
+  ],
+  "template_variants": [
+    "contextual_backstory",
+    "environmental_grounding",
+    "vulnerability_intro"
+  ],
+  "effect_dependencies": [
+    "gentle_pan",
+    "gentle_drift"
+  ],
+  "selection_signals": [
+    "identity_context",
+    "warmth",
+    "low_information_churn"
+  ],
+  "audio_profile": {
+    "score_role": "ground",
+    "energy_band": "low",
+    "mode": "intimate",
+    "prosodic_hint": "warm_expository",
+    "prosodic_contour_target": {
+      "pitch_shape": "falling",
+      "stress_placement": "distributed",
+      "rate_wpm": { "min": 120, "max": 150 },
+      "emotional_register": "intimacy"
+    }
+  },
+  "fallback_behavior": "Use a still or gently moving contextual a-roll setup with minimal overlays."
+}

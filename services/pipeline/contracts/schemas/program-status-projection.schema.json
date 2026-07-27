@@ -1,0 +1,62 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:program_status_projection",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canonical": {
+      "type": "boolean"
+    },
+    "certified": {
+      "type": "boolean"
+    },
+    "evidence_closure": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "external_proof_complete": {
+      "type": "boolean"
+    },
+    "implementation_coverage": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "product_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "product_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "production_authorized": {
+      "type": "boolean"
+    },
+    "projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "story_completion": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "projection_id",
+    "product_id",
+    "product_version",
+    "canonical",
+    "implementation_coverage",
+    "story_completion",
+    "evidence_closure",
+    "external_proof_complete",
+    "production_authorized",
+    "certified",
+    "source_sha256"
+  ],
+  "title": "program_status_projection",
+  "type": "object"
+}

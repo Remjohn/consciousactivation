@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf://vae/readiness/evaluator-program-version-pin/1.0",
+  "title": "Evaluator and Program Version Pin Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["classification", "pin_id", "status", "profile_ref", "evaluator", "program", "independence", "determinism"],
+  "properties": {
+    "classification": {"const": "non_production_readiness_proof"},
+    "pin_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["unbound", "candidate_pinned", "release_pinned"]},
+    "profile_ref": {"type": "string", "minLength": 1},
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model_or_weight_ref", "model_or_weight_digest", "runtime_or_api_version", "credential_boundary_ref"],
+      "properties": {
+        "provider": {"type": ["string", "null"]},
+        "model_or_weight_ref": {"type": ["string", "null"]},
+        "model_or_weight_digest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "runtime_or_api_version": {"type": ["string", "null"]},
+        "credential_boundary_ref": {"type": ["string", "null"]}
+      }
+    },
+    "program": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["program_id", "version", "program_digest", "prompt_or_template_digest"],
+      "properties": {
+        "program_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "program_digest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "prompt_or_template_digest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "independence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["producer_identity_ref", "evaluator_identity_ref", "separate_credentials_required"],
+      "properties": {
+        "producer_identity_ref": {"type": ["string", "null"]},
+        "evaluator_identity_ref": {"type": ["string", "null"]},
+        "separate_credentials_required": {"const": true}
+      }
+    },
+    "determinism": {
+      "type": "object",
+      "required": ["settings", "drift_policy"],
+      "properties": {
+        "settings": {"type": "object"},
+        "drift_policy": {"const": "fail_closed"}
+      }
+    },
+    "evidence_status": {"enum": ["insufficient_evidence", "calibration_ready", "shadow_ready", "certified"]},
+    "note": {"type": "string"}
+  },
+  "allOf": [{
+    "if": {"properties": {"status": {"enum": ["candidate_pinned", "release_pinned"]}}},
+    "then": {
+      "properties": {
+        "evaluator": {"properties": {"provider": {"type": "string", "minLength": 1}, "model_or_weight_ref": {"type": "string", "minLength": 1}, "model_or_weight_digest": {"type": "string"}, "runtime_or_api_version": {"type": "string", "minLength": 1}, "credential_boundary_ref": {"type": "string", "minLength": 1}}},
+        "program": {"properties": {"program_digest": {"type": "string"}, "prompt_or_template_digest": {"type": "string"}}},
+        "independence": {"properties": {"producer_identity_ref": {"type": "string", "minLength": 1}, "evaluator_identity_ref": {"type": "string", "minLength": 1}}}
+      }
+    }
+  }]
+}

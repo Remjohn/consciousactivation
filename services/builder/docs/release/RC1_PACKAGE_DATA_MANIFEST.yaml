@@ -1,0 +1,24 @@
+schema_version: cmf-builder-rc1-package-data-manifest/v1
+runtime_assets:
+  - package_path: cmf_builder.resources.governance.CANONICAL_CATEGORY_REGISTRY.yaml
+    source_path: governance/CANONICAL_CATEGORY_REGISTRY.yaml
+    sha256: 9a836e5cc80371719cce688884ca3f071ee500862d54e6533982266d15b553b1
+    size_bytes: 2430
+    access_method: importlib.resources
+    required_by:
+      - cmf_builder.application.export_service
+    portable_outside_repository_checkout: true
+excluded_runtime_payloads:
+  tests: true
+  local_sqlite_databases: true
+  caches: true
+  bytecode: true
+  development_capsules: true
+  archive_evidence: true
+  credentials: true
+  temporary_outputs: true
+verification:
+  packaged_bytes_equal_source_bytes: PASS
+  wheel_contains_runtime_asset: PASS
+  repository_relative_runtime_access_removed: PASS
+

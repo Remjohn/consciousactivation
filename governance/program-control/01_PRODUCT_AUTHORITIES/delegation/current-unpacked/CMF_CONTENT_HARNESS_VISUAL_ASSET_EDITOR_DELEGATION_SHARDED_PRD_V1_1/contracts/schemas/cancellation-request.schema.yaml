@@ -1,0 +1,23 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Cancellation Request
+type: object
+additionalProperties: false
+required:
+- cancellation_id
+- demand_ref
+- reason
+- policy
+properties:
+  cancellation_id:
+    type: string
+    minLength: 1
+    pattern: ^CAN-
+  demand_ref:
+    type: string
+    minLength: 1
+  scope:
+    type: object
+  reason:
+    type: object
+  policy:
+    type: object

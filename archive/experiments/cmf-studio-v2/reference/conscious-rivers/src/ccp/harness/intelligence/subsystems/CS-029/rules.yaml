@@ -1,0 +1,37 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-029
+enabled: true
+priority:
+  tier: recall
+  rank: 3
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+evaluation_order:
+  after:
+    - CS-001
+    - CS-008
+    - CS-024
+    - CS-025
+    - CS-027
+    - CS-032
+warn_conditions:
+  - metric: isc_quality_score
+    operator: lt
+    value: 80
+route_hints:
+  escalate:
+    - inspect_weakest_dimensions
+    - revise_global_structure

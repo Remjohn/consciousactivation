@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-016",
+  "name": "PAD Color Vector Mapper",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Color Psychology",
+    "PAD model"
+  ],
+  "inputs": [
+    "brightness_distribution",
+    "saturation_distribution",
+    "hue_family",
+    "target_emotion",
+    "scene_role"
+  ],
+  "outputs": [
+    "pad_vector",
+    "grade_archetype_recommendation",
+    "verdict"
+  ],
+  "thresholds": {
+    "minimum_pad_alignment_score": 0.8,
+    "require_scene_metadata_palette": true,
+    "archetype_palette_required": true
+  },
+  "default_action_on_fail": "REVISE"
+}

@@ -1,0 +1,77 @@
+registry_id: CMF-VAE-BUDGET-PROGRAMS
+version: 1.0.0
+status: draft_for_architecture
+constitutional_limits:
+  maximum_quality_repair_rounds: 3
+  hard_quality_gates_immutable: true
+programs:
+- id: lean
+  display_name: Lean
+  purpose: Routine transformations, known workflows, and low-risk assets.
+  initial_candidates: 1
+  maximum_candidates: 3
+  maximum_parallel_jobs: 1
+  maximum_quality_repair_rounds: 2
+  secondary_evaluator: disabled_unless_hard_uncertainty
+  workflow_variants: 1
+  learning_capture: basic
+  experimental_capabilities: false
+- id: standard
+  display_name: Standard
+  purpose: Default production program for balanced quality, latency, and cost.
+  initial_candidates: 4
+  maximum_candidates: 10
+  maximum_parallel_jobs: 2
+  maximum_quality_repair_rounds: 3
+  secondary_evaluator: on_uncertainty
+  workflow_variants: 2
+  learning_capture: full
+  experimental_capabilities: false
+- id: premium
+  display_name: Premium
+  purpose: Hero assets, difficult continuity, and complex composition.
+  initial_candidates: 8
+  maximum_candidates: 20
+  maximum_parallel_jobs: 4
+  maximum_quality_repair_rounds: 3
+  secondary_evaluator: enabled
+  workflow_variants: 4
+  learning_capture: full
+  experimental_capabilities: shadow_only
+- id: exploration
+  display_name: Exploration
+  purpose: Controlled production experiments to discover effective steering and capability
+    routing.
+  initial_candidates: 8
+  maximum_candidates: 32
+  maximum_parallel_jobs: 6
+  maximum_quality_repair_rounds: 3
+  secondary_evaluator: enabled
+  workflow_variants: 6
+  learning_capture: experimental
+  controlled_variation_required: true
+  experimental_capabilities: sandbox
+- id: capability_learning
+  display_name: Capability Learning
+  purpose: Recurring-gap investigation and evidence for new Steering Recipes, workflows,
+    LoRAs, controls, or evaluator changes.
+  initial_candidates: 6
+  maximum_candidates: 40
+  maximum_parallel_jobs: 6
+  maximum_quality_repair_rounds: 3
+  secondary_evaluator: ensemble_or_arbitration
+  workflow_variants: 8
+  learning_capture: capability_development
+  controlled_variation_required: true
+  experimental_capabilities: sandbox
+- id: custom
+  display_name: Custom
+  purpose: Authorized program assembled from explicit ceilings and experiment policies.
+  initial_candidates: configured
+  maximum_candidates: configured
+  maximum_parallel_jobs: configured
+  maximum_quality_repair_rounds: 3
+  secondary_evaluator: configured
+  workflow_variants: configured
+  learning_capture: configured
+  experimental_capabilities: configured

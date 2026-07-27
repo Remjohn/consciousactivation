@@ -1,0 +1,32 @@
+# Folder Map
+
+```text
+CONSCIOUS_ACTIVATIONS/
+├── 00_START_HERE.md
+├── CMF_PROGRAM_CONTROL/
+│   ├── 00_CONSTITUTION/
+│   ├── 01_PRODUCT_AUTHORITIES/
+│   ├── 02_CROSS_REPO_CONTRACTS/
+│   ├── 03_PROGRAM_STATUS/
+│   ├── 04_CROSS_REPO_ISSUES/
+│   ├── 05_RELEASES/
+│   └── 99_ARCHIVE/
+├── 01_ATOMIC_HARNESS_BUILDER/
+├── 02_VISUAL_ASSET_EDITOR/
+├── 03_DELEGATION_PROTOCOL/
+├── 04_OPERATOR_MANUAL/
+└── 05_FUTURE_PRODUCTS/
+    └── INTERVIEW_EXPRESSION_HARNESS/
+```
+
+Each active repository contains:
+
+```text
+00_ALIGNMENT_START_HERE.md
+AGENTS.md
+ALIGNMENT_BATCH_A_PROMPT.md
+CURRENT_PROJECT_STATUS.md
+PROGRAM_STATUS_EXPORT.yaml
+docs/product-authority/
+docs/constitutional-alignment/
+```

@@ -1,0 +1,47 @@
+schema_version: cmf-builder-development-story-contract/v1
+story_id: ST-04.05
+primary_epic: EP-04
+title: Compile Minimum Complete Context Without Silent Truncation
+active_mode: MINIMUM_COMPLETE_CONTEXT
+primary_outcome: >-
+  A context architect can inspect a deterministic minimum-complete context and
+  complete manifest for every synthetic Builder phase, with required resources
+  protected from silent truncation and all include/exclude decisions explained.
+owned_obligations: [AG-012, AG-013, D016, D020, FR-072, FR-073, FR-074, FR-075, FR-076, FR-077, FR-078, FR-079, FR-080]
+relevant_frs: [FR-072, FR-073, FR-074, FR-075, FR-076, FR-077, FR-078, FR-079, FR-080]
+relevant_nfrs: []
+direct_dependency: ST-04.04:StoryCompletionReceipt
+intrinsic_dependencies:
+  - active_hash_valid_internal_handoff_graph
+  - exact_accepted_builder_internal_handoff
+  - explicit_phase_context_and_reference_declarations
+conditional_dependency_disposition:
+  BD_010: CLOSED_FOR_SYNTHETIC_CORE_BY_GOVERNED_EMPTY_SKILL_REGISTRY_ONLY
+  XDEP_001: GOVERNING_READ_ONLY_AUTHORITY_INPUT_NOT_RUNTIME_DEPENDENCY
+applicable_blockers: []
+implementation_owner: context_and_reference_graph_owner
+component_boundary: >-
+  Builder domain and application contracts for versioned references, loading
+  policies, phase-local minimum-complete context, deterministic budgets,
+  explicit overflow blocking, and complete context manifests only; no model,
+  skill, phase, workflow, retrieval-provider, or external-product execution.
+typed_contracts:
+  - ReferenceDeclaration
+  - ContextBudgetPolicy
+  - PhaseContextManifest
+  - MinimumCompleteContextGraph
+  - ContextCompilationReceipt
+  - ContextGraphInvalidation
+  - CompileMinimumContextCommand
+failure_behavior: >-
+  Fail closed on missing or ghost references, unauthorized loading modes,
+  influence-boundary violations, conversation-history substitution, missing
+  required pointers, required-context overflow, silent truncation, stale or
+  invalidated handoffs, altered lineage, payload conflict, or partial commit.
+migration_or_compatibility: >-
+  Initial synthetic minimum-context contract version. Any reference identity,
+  hash, owner, authority, role, loading, influence, priority, budget, rationale,
+  truncation or phase binding change produces a new immutable graph identity.
+completion_receipt: ST-04.05:StoryCompletionReceipt
+implementation_authorized: false
+production_authorized: false

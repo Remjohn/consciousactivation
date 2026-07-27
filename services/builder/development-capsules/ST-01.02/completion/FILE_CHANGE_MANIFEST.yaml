@@ -1,0 +1,66 @@
+schema_version: cmf-builder-story-file-change-manifest/v1
+story_id: ST-01.02
+active_mode: SYNTHETIC_DEFINITION
+hash_algorithm: sha256
+implementation_existing_files:
+  - path: src/cmf_builder/domain/run.py
+    previous_sha256: be211c80ac0197a4bffa2abe7863afa3880a6c2f053dd394a2fd52574c2df34d
+    current_sha256: 16ac0f6d3fb2a25b818133887f713b98f16fe47925f43b16e059d5489eb636ba
+    exact_change: add_source_lock_reference_event_replay_and_state_hash_support
+  - path: src/cmf_builder/application/authority.py
+    previous_sha256: e4e3f724a949083547da954f29054b24c2456c3c85628cbb9a86e09d02d985cc
+    current_sha256: 03b2d68a315d0c9bc4dc79878f19e97e049eb56928ffcccd85045ce12117bbe8
+    exact_change: add_LOCK_EVIDENCE_WORKSPACE_action_only
+  - path: src/cmf_builder/application/ports.py
+    previous_sha256: 4c14ed12bffb23ad4cde48ca1d9bd599d0bf23c4f793af4f9c3650ca292fa1e4
+    current_sha256: 9ad810b41cdb513222d435e16044aef15073174e7247bde6242214900a43e0dd
+    exact_change: add_typed_source_workspace_and_atomic_source_lock_repository_ports
+  - path: src/cmf_builder/adapters/in_memory_run_repository.py
+    previous_sha256: e4dd4cd6d8dd05894fc675d6258059f4c692c8d22dfe640216a74999b8f65c9e
+    current_sha256: 1eafef538e191ab181432ddadaa06b5e1626ff65d3a6913dcff779b7de726dea
+    exact_change: add_atomic_development_test_source_lock_commit_and_query_support
+  - path: src/cmf_builder/adapters/__init__.py
+    previous_sha256: 2e8c4d8e5d5418791fd121ceda240a72dd3d9f00fd3b78fafb20a2235a1fa875
+    current_sha256: 25b40163f0e9c3c74d04e212a110e34551d0ededbd90b8347e2596fb1f9e7512
+    exact_change: add_SOURCE_DIAGNOSTIC_to_SOURCE_LOCKED_edge_and_source_lock_prerequisite_to_the_synthetic_profile_only
+  - path: tests/stories/st_01_01/test_architecture_boundary.py
+    previous_sha256: 6076b9cd253f2ad82665f85018168055f845660b00fb95f708a763e404c1de65
+    current_sha256: b01688ce196ea01304e5390283d542a086a53cad76a1951d6ed985b1d8109afc
+    exact_change: add_the_three_new_ST_01_02_source_modules_to_EXPECTED_SOURCE_FILES_only
+  - path: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    previous_sha256: e6d72db99598b5d8d0570e947c540aed78d4a4f2d4321830dd775daf87f3fc86
+    current_sha256: 9e3f853bba64d105c3158a638c78aa8a77cb58d05d40070bc6471d13d9fec422
+    exact_change: add_the_three_new_ST_01_02_source_modules_to_the_exact_expected_source_set_only
+implementation_new_files:
+  - {path: src/cmf_builder/domain/evidence_workspace.py, sha256: 7b830792d68448737a8c6da95b0e718ac777a2a9494960b732154f9607a847e4}
+  - {path: src/cmf_builder/application/evidence_commands.py, sha256: 839d7068548e98863e1ac5d6dc7f0d64a34ae71aaeffc7e347ea4f0dea508832}
+  - {path: src/cmf_builder/adapters/file_evidence_workspace.py, sha256: d1461abcabf72622d41680edc74c80b32bf5f593fac52595ff925639341738a3}
+  - {path: tests/stories/st_01_02/__init__.py, sha256: d64f3b519e460541540c5f7ca47f9d0e68e555520de844ecd5164bf4c9b60a08}
+  - {path: tests/stories/st_01_02/test_acceptance.py, sha256: f8e5a182e0a77d3e68149a3b867145e5ffd49ac08e8fdbc0338698e9e5df2056}
+  - {path: tests/stories/st_01_02/test_source_identity.py, sha256: 34cd20fe04c0523e2b9d27a52acac553ad75d7b5c0c97090733b0a66e679aed3}
+  - {path: tests/stories/st_01_02/test_archive_and_path_safety.py, sha256: 736f6d0d17e72f09668c4afff0f5caac9bad53babc0862bc0d0608bce7dd2708}
+  - {path: tests/stories/st_01_02/test_authority_and_idempotency.py, sha256: be38be61e7bbd999094e59cff41a200124d236431e34140c48f3bf69db5be260}
+  - {path: tests/stories/st_01_02/test_observability_and_rollback.py, sha256: 68c2b6124c47dbbc18142036ff0bb91eac87eeacd4f3ae83d7d4b5fbfb7a6f3f}
+  - {path: tests/stories/st_01_02/test_architecture_boundary.py, sha256: a43d22f9bd113a14338c3f6489116f1f8d55d2ac04f512f7cada7c92fe0408dc}
+authorized_capsule_amendment_files:
+  - {path: development-capsules/ST-01.02/ALLOWED_FILE_SCOPE.yaml, previous_sha256: d4ac4eb7d1cea294e852331744dc29d854cd2e03628965ba77a9ac162b9f231c, current_sha256: 4c41e8a5a94c0168422316f34c3a4e059479397a373e5296a6e3563e6760b352}
+  - {path: development-capsules/ST-01.02/CAPSULE_MANIFEST.json, previous_sha256: a06b4bae7c92a6e33e0a10030ebd811983b52837bdf60914bc89f3787180b923, current_sha256: 7cfec2f6bf15dcf6d7bd3fd2e072c2b9d21ac60231cf49fd0ac25b4beb97fc86}
+  - {path: development-capsules/ST-01.02/CAPSULE_VALIDATION_REPORT.md, previous_sha256: 047edec5aaebbdf2c882dfa82358d11492c0b1f1d0754dcbde81b4ad206a437b, current_sha256: 29c307c98f9ae9fef3d6f1f2d5784bfd5b4c47c89753f2a7a4f9aa04841e87b1}
+  - {path: development-capsules/ST-01.02/IMPLEMENTATION_AUTHORIZATION.yaml, previous_sha256: 2ab19ae9bc94438e6fef62068cdfc1a45c8610716f55458f9110539833222e27, current_sha256: eb39e4f4fb449b25fc42c5cec55f3733e17adece83e030dec5ed5a876e8a2904}
+  - {path: development-capsules/ST-01.02/IMPLEMENTATION_AUTHORIZATION_REPORT.md, previous_sha256: 5ec2390cf71b3999eafe41002bd4322944a1eabc19452b78b9fcc93cf0b080b9, current_sha256: b2ced63f733681c2831de3d17a2c7249307c94e54d06fceb65fcc6eb4fb7b825}
+completion_outputs:
+  - development-capsules/ST-01.02/completion/IMPLEMENTATION_REPORT.md
+  - development-capsules/ST-01.02/completion/TEST_RESULTS.json
+  - development-capsules/ST-01.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  - development-capsules/ST-01.02/completion/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/ST-01.02/completion/ROLLBACK_EVIDENCE.md
+  - development-capsules/ST-01.02/completion/STORY_COMPLETION_RECEIPT.yaml
+validation:
+  implementation_changed_path_count: 17
+  implementation_paths_exact_subset_of_amended_allowlist: true
+  capsule_amendment_paths_exactly_authorized: true
+  prohibited_paths_modified: []
+  external_dependencies_added: []
+  contract_or_database_schemas_modified: []
+  original_or_supplemental_completion_receipts_modified: []
+  verdict: PASS

@@ -1,0 +1,47 @@
+schema_version: cmf-builder-bounded-implementation-authorization/v1
+story_id: ST-04.01
+active_mode: SYNTHETIC_CAPABILITY_OWNERSHIP
+authorization_state: AUTHORIZED_BOUNDED_IMPLEMENTATION
+capsule:
+  manifest_path: development-capsules/ST-04.01/CAPSULE_MANIFEST.json
+  manifest_sha256: 1c672badc3b9f8fa570bb5d8df2694f9aa14201938534046dd9f74da2f777253
+  immutable_inputs: PASS_18_OF_18
+  bundle_digest: 41a8dbc87ef3e92e5632b0a8c98227ddc218122a809bd1cfc8500c8765df31f5
+dependency_gate:
+  ST_03_05_completion_receipt: PASS
+  receipt_sha256: 12fd7460b629c7d884116ad9600b5ecbdd0d5050c2f15d91ab6db34ed3797f54
+  canonical_payload_sha256: f8ed72215c5594830225432929073fc5b94c62c8341a31637bb7738c31067c5f
+  predecessor_regression: PASS_186_OF_186
+  BD_010_synthetic_core_subscope: CLOSED_LIMITED_SUBSCOPE
+readiness_gate:
+  story_status: READY
+  direct_dependencies_satisfied: true
+  applicable_blockers: []
+  acceptance_criteria_executable: PASS_12_OF_12
+  tests_defined: PASS
+  observability_defined: PASS
+  rollback_defined: PASS
+  file_scope_bounded: PASS
+  external_product_behavior_absorbed: false
+  later_story_required: false
+  one_focused_context: true
+bounded_implementation_readiness: PASS
+implementation_authorized: true
+human_authorization_required: true
+required_exact_phrase: AUTHORIZE BUILDER ST-04.01 SYNTHETIC-CAPABILITY-OWNERSHIP BOUNDED IMPLEMENTATION
+authorization_evidence:
+  supplied_phrase: AUTHORIZE BUILDER ST-04.01 SYNTHETIC-CAPABILITY-OWNERSHIP BOUNDED IMPLEMENTATION
+  phrase_match: EXACT
+  granted_on: "2026-07-15"
+  preimplementation_capsule_gate: PASS
+  predecessor_receipts: PASS_7_OF_7_INDEPENDENT_AND_HASH_VALID
+  preimplementation_regression: PASS_186_OF_186
+authorization_scope_if_granted:
+  - exact_ST_04_01_capsule_allowlist_only
+  - synthetic_capability_inventory_and_ownership_graph_only
+  - no_skill_resolution_module_phase_context_handoff_or_workflow_behavior
+  - no_ST_04_02_or_later_story
+  - no_external_product_runtime_or_production_claim
+full_release1_readiness: FAIL
+full_product_readiness: FAIL
+production_authorized: false

@@ -1,0 +1,115 @@
+package: vae_cloud_gpu_readiness_inputs
+version: 1.0.0
+classification: non_production_readiness_proof
+status: awaiting_operator_authorization
+stage5_authorized: false
+production_authorized: false
+
+operator_authorization:
+  provider: null
+  account_or_tenant_id: null
+  project_or_subscription_id: null
+  region: null
+  credential_reference: null
+  credential_scope: null
+  authorized_by: null
+  authorization_receipt_ref: null
+  permitted_gpu_class:
+    provider_sku: null
+    gpu_model_or_equivalent: null
+    minimum_vram_gib: 12
+    maximum_instance_count: 1
+  cost_ceiling:
+    currency: null
+    maximum_total: null
+    maximum_hourly: null
+    hard_budget_enforcement_method: null
+  cancellation_authority:
+    authorized_identity_ref: null
+    allowed_actions: []
+  cleanup_policy:
+    terminate_worker_after_run: true
+    delete_ephemeral_disks_after_evidence_capture: true
+    retain_object_evidence_days: null
+    revoke_temporary_credentials: true
+
+immutable_runtime:
+  must_match_self_hosted_plan: true
+  container_registry: null
+  container_repository: null
+  oci_digest: null
+  comfyui_commit: null
+  custom_node_lockfile_sha256: null
+  python_lockfile_sha256: null
+  resource_manifest_sha256: null
+  workflow_sha256: null
+  visual_production_plan_sha256: null
+  provider_bootstrap_manifest_sha256: null
+  startup_installation_allowed: false
+
+network:
+  default_egress: deny
+  approved_ingress_sources: []
+  approved_egress_destinations: []
+  private_endpoint_requirements: []
+  tls_policy_ref: null
+  public_ip_allowed: null
+
+storage:
+  provider: null
+  account_or_namespace: null
+  input_endpoint_ref: null
+  output_endpoint_ref: null
+  checkpoint_endpoint_ref: null
+  event_endpoint_ref: null
+  bucket_or_container_refs: []
+  encryption_key_reference: null
+  object_versioning_required: true
+  content_hash_verification_required: true
+
+queue:
+  provider: null
+  endpoint_ref: null
+  queue_or_topic_ref: null
+  dead_letter_ref: null
+  delivery: at_least_once
+  exactly_once_effect_via_idempotency_and_fencing: required
+  visibility_timeout_seconds: null
+  maximum_delivery_attempts: null
+
+worker_identity:
+  runtime_identity_ref: null
+  workload_identity_method: null
+  no_long_lived_embedded_credentials: true
+  permissions:
+    required:
+      - read_approved_inputs_and_resources
+      - claim_and_renew_job_lease
+      - write_versioned_checkpoints
+      - commit_content_addressed_outputs
+      - publish_status_events
+    forbidden:
+      - modify_authoritative_inputs
+      - change_budget_or_gpu_class
+      - promote_runtime_profile
+      - access_unapproved_projects_or_buckets
+
+required_cloud_evidence:
+  - provider_allocation_receipt
+  - worker_identity_attestation
+  - immutable_runtime_attestation
+  - GPU_and_VRAM_inventory
+  - object_storage_handoff_receipt
+  - queue_and_status_event_log
+  - timeout_and_cancellation_receipt
+  - checkpoint_receipt
+  - cost_receipt
+  - latency_receipt
+  - result_retrieval_receipt
+  - cleanup_receipt
+
+secret_handling:
+  repository_secrets_permitted: false
+  accepted: external_secret_manager_reference_only
+  logs_must_be_sanitized: true
+

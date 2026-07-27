@@ -1,0 +1,63 @@
+{
+  "$id": "https://contracts.conscious-activations.dev/vae/checkpoint/1.0.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_refs": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "canonical_ref": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "payload_hash": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "resource_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "version",
+          "payload_hash",
+          "canonical_ref"
+        ],
+        "title": "Resource reference",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "comfyui_graph_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "completed_stage_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "quality_round": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "completed_stage_ids",
+    "artifact_refs",
+    "comfyui_graph_sha256",
+    "quality_round"
+  ],
+  "title": "VAE Checkpoint",
+  "type": "object"
+}

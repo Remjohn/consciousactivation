@@ -1,0 +1,48 @@
+schema_version: cmf-builder-allowed-file-scope/v1
+branch_id: ST-01.01-SYNTHETIC-PROOF
+scope_policy: exact_allowlist_fail_closed
+implementation_files:
+  may_modify:
+    - src/cmf_builder/domain/target_profile.py
+    - src/cmf_builder/adapters/__init__.py
+  may_create:
+    - src/cmf_builder/adapters/synthetic_proof_target_profile_repository.py
+test_files:
+  may_create:
+    - tests/stories/st_01_01_synthetic_proof/__init__.py
+    - tests/stories/st_01_01_synthetic_proof/test_acceptance.py
+    - tests/stories/st_01_01_synthetic_proof/test_authority.py
+    - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    - tests/stories/st_01_01_synthetic_proof/test_replay_and_observability.py
+    - tests/stories/st_01_01_synthetic_proof/test_empty_skill_registry.py
+completion_evidence_files:
+  may_create:
+    - development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/IMPLEMENTATION_REPORT.md
+    - development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/TEST_RESULTS.json
+    - development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/OBSERVABILITY_EVIDENCE.yaml
+    - development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/STORY_COMPLETION_RECEIPT.yaml
+read_only_inputs:
+  - development-capsules/ST-01.01-SYNTHETIC-PROOF/**
+  - development-capsules/ST-01.01/**
+  - governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  - governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  - governance/schemas/empty-skill-registry.schema.json
+  - docs/planning/**
+  - docs/tech-specs/specs/**
+  - docs/architecture/adr/**
+  - contracts/**
+  - tests/stories/st_01_01/**
+explicitly_not_allowed:
+  - any_file_under_D:/Work/CONSCIOUS_ACTIVATIONS/02_VISUAL_ASSET_EDITOR
+  - any_file_under_D:/Work/CONSCIOUS_ACTIVATIONS/03_DELEGATION_PROTOCOL
+  - any_file_under_Program_Control
+  - any_Format02_reference_artifact
+  - docs/planning/**
+  - governance/**
+  - contracts/**
+  - development-capsules/ST-01.01/**
+  - src/cmf_builder/application/**
+  - src/cmf_builder/infrastructure/**
+  - canonical_category_or_target_registries
+scope_escape_behavior: stop_and_request_new_human_authority

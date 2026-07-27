@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-026",
+  "title": "Pipeline Job Queue",
+  "description": "FR-VID-09 §4 Stage 3 — Batch processing queue for multi-video production. FIFO with priority override. Concurrent processing limited by RunningHub capacity.",
+  "type": "object",
+  "required": ["queue_id", "concurrent_limit", "jobs"],
+  "properties": {
+    "queue_id": { "type": "string" },
+    "concurrent_limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 3
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pipeline_id", "beat_cluster_id", "priority", "status"],
+        "properties": {
+          "pipeline_id": { "type": "string" },
+          "beat_cluster_id": { "type": "string" },
+          "project_id": { "type": "string" },
+          "priority": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 50,
+            "description": "Higher = more urgent. Default 50. 100 = critical."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["QUEUED", "PROCESSING", "COMPLETED", "FAILED", "CANCELLED"]
+          },
+          "queued_at": { "type": "string", "format": "date-time" },
+          "started_at": { "type": ["string", "null"], "format": "date-time" },
+          "completed_at": { "type": ["string", "null"], "format": "date-time" },
+          "auto_approve": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "properties": {
+        "total_queued": { "type": "integer", "minimum": 0 },
+        "total_processing": { "type": "integer", "minimum": 0 },
+        "total_completed": { "type": "integer", "minimum": 0 },
+        "total_failed": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

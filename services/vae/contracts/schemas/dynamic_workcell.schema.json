@@ -1,0 +1,109 @@
+{
+  "$id": "https://contracts.conscious-activations.dev/vae/dynamic_workcell/1.0.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "evaluator_actor_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "plan_ref": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "Immutable reference",
+      "type": "object"
+    },
+    "producer_actor_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "production_authorized": {
+      "type": "boolean"
+    },
+    "provider_bindings_owned_by_vae": {
+      "type": "boolean"
+    },
+    "semantic_values_owned_by_vae": {
+      "type": "boolean"
+    },
+    "stage_bindings": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "capability_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "execution_mode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "profile_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "provider_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "stage_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "stage_id",
+          "capability_id",
+          "provider_id",
+          "execution_mode",
+          "profile_sha256"
+        ],
+        "title": "Contract",
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "workcell_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "workcell_version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "workcell_id",
+    "workcell_version",
+    "plan_ref",
+    "producer_actor_id",
+    "evaluator_actor_id",
+    "stage_bindings",
+    "semantic_values_owned_by_vae",
+    "provider_bindings_owned_by_vae",
+    "production_authorized"
+  ],
+  "title": "Dynamic Workcell",
+  "type": "object"
+}

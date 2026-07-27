@@ -1,0 +1,123 @@
+{
+  "bundle_id": "CA-PHASE02-AIR-CORE-2026-07-23",
+  "checks": [
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "tests/phase1",
+        "tests/phase2",
+        "-q"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "cmf_activative_intelligence",
+        "bootstrap",
+        "--json"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "cmf_activative_intelligence",
+        "load-registries",
+        "--json"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "cmf_activative_intelligence",
+        "demo",
+        "--json"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "cmf_activative_intelligence",
+        "export-schemas",
+        "/tmp/ca-phase2-q8wehceg/schemas",
+        "--json"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--quiet",
+        "--no-deps",
+        "--no-build-isolation",
+        "--target",
+        "/tmp/ca-phase2-q8wehceg/install",
+        "/tmp/ca-phase2-q8wehceg/build-sources/ca_contracts",
+        "/tmp/ca-phase2-q8wehceg/build-sources/ca_runtime",
+        "/tmp/ca-phase2-q8wehceg/build-sources/air"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "cmf_activative_intelligence",
+        "demo",
+        "--json"
+      ],
+      "result": "PASS",
+      "returncode": 0
+    }
+  ],
+  "claim_ceiling": "AIR_PHASE_02_CORE_IMPLEMENTED_DEVELOPMENT_PASS",
+  "clean_install": "PASS",
+  "deterministic_demo": "PASS",
+  "phase1_regression": "PASS",
+  "python_tests": {
+    "failed": 0,
+    "passed": 27,
+    "subtests_passed": 36
+  },
+  "registry": {
+    "archetype_records": 96,
+    "duplicate_collisions": 1,
+    "primitive_records": 243,
+    "unique_ids": 242
+  },
+  "result": "PASS",
+  "schema_export": {
+    "result": "PASS",
+    "schemas": 17
+  },
+  "schema_version": "ca-phase02-test-results/v1"
+}

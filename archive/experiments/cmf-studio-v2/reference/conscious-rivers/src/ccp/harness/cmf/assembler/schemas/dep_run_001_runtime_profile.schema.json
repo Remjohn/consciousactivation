@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-001",
+  "title": "Runtime Profile Config",
+  "description": "FR-VID-12 §4 Stage 1 — Declares which extensions, tool policies, and agent types apply in a runtime session. Profiles are resolved deterministically before any agent or tool execution begins.",
+  "type": "object",
+  "required": ["profile_id", "description", "mandatory_extensions", "tool_policy_id", "allowed_agent_types", "memory_domains", "write_scopes"],
+  "properties": {
+    "profile_id": {
+      "type": "string",
+      "enum": ["research", "composition", "validation", "production", "learning"],
+      "description": "Unique profile identifier. One of the five canonical runtime profiles."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the profile's purpose and scope."
+    },
+    "mandatory_extensions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ContextBootstrap",
+          "ArtifactResolver",
+          "IntelligenceLoader",
+          "DamageControl",
+          "MemoryWriter",
+          "RoutingEngine",
+          "ReviewBoardState",
+          "QueueManagerBridge",
+          "CostTelemetry"
+        ]
+      },
+      "minItems": 1,
+      "description": "Extensions that must be loaded before the primary agent takes its first turn. Missing mandatory extension aborts the command."
+    },
+    "tool_policy_id": {
+      "type": "string",
+      "description": "Reference to the DEP-RUN-004 tool policy file that governs allowed tool categories for this profile."
+    },
+    "allowed_agent_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Agent types permitted to operate under this profile."
+    },
+    "memory_domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["working", "project", "composition", "production", "review", "learning"]
+      },
+      "description": "Memory domains this profile is allowed to write to."
+    },
+    "write_scopes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Glob patterns declaring filesystem write scopes for agents running under this profile."
+    }
+  }
+}

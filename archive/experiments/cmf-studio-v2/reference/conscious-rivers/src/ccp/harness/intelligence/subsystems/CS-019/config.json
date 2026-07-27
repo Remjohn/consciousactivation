@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-019",
+  "name": "Directional Semantics",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Camera Motion",
+    "Embodied directionality research"
+  ],
+  "inputs": [
+    "motion_vector",
+    "narrative_function",
+    "cultural_profile",
+    "scene_role"
+  ],
+  "outputs": [
+    "semantic_direction_verdict",
+    "preferred_path",
+    "violations"
+  ],
+  "thresholds": {
+    "empowerment_directions": [
+      "UP",
+      "LEFT_TO_RIGHT"
+    ],
+    "challenge_directions": [
+      "DOWN",
+      "RIGHT_TO_LEFT"
+    ],
+    "max_contradiction_score": 0.2
+  },
+  "default_action_on_fail": "REVISE"
+}

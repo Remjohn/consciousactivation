@@ -1,0 +1,100 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-04.02
+primary_epic: EP-04
+active_mode: RESPONSIBILITY_CENTERED_MODULES
+receipt_type: StoryCompletionReceipt
+implemented_outcome: >-
+  The Builder deterministically compiles the exact active capability-ownership
+  graph into two immutable responsibility-centered modules with exact 3/3
+  capability coverage, explicit public contracts, authority, failure ownership,
+  dependency topology, boundary rationales, and complete public test seams.
+requirements_satisfied:
+  D015: PASS
+  FR-064: PASS
+  FR-065: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+  AC-10: PASS
+  AC-11: PASS
+  AC-12: PASS
+dependency_evidence:
+  ST_04_01_receipt_sha256: 0243c6412efc319582d26ff6d2d61784f0b9e6a008a90c3be3ac53b883611a93
+  ST_04_01_canonical_payload_sha256: 89ff6a28ef2fbd4df1e07fa0486c1a3120c914724984348ced0ea45644650606
+  predecessor_receipts_independently_validated: PASS_8_OF_8
+authorization_evidence:
+  human_phrase: AUTHORIZE BUILDER ST-04.02 RESPONSIBILITY-CENTERED-MODULES BOUNDED IMPLEMENTATION
+  capsule_manifest_sha256: 5d0ccd40eb22e1651b35f92d2d4570445677c73aed405dd55c82221de731ecf0
+  capsule_bundle_digest: cab0010e8e994aee367fd3ee0314fe3b9d39f23b5debb00403bfd09aa2e9e84a
+  immutable_inputs: PASS_18_OF_18
+files_changed:
+  source_files: 6
+  test_files: 14
+  authorization_files: 2
+  completion_files: 6
+  exact_manifest: development-capsules/ST-04.02/completion/FILE_CHANGE_MANIFEST.yaml
+tests_executed:
+  preimplementation_regression: PASS_221_OF_221
+  story_suite_first: PASS_35_OF_35
+  story_suite_second: PASS_35_OF_35
+  full_regression: PASS_256_OF_256_NO_SKIPS
+test_results: development-capsules/ST-04.02/completion/TEST_RESULTS.json
+schema_and_contract_validation:
+  schema_files_changed: []
+  typed_contracts:
+    ResponsibilityModule: PASS
+    ModulePublicContract: PASS
+    ModuleTestSeam: PASS
+    ResponsibilityModuleGraph: PASS
+    ResponsibilityModuleReceipt: PASS
+    ResponsibilityModuleInvalidation: PASS
+    CompileResponsibilityModulesCommand: PASS
+  capability_partition: PASS_3_OF_3_EXACTLY_ONCE
+  module_coverage: PASS_2_OF_2
+  deterministic_identity_and_canonical_serialization: PASS
+  external_contract_or_schema_fork: false
+observability_evidence:
+  path: development-capsules/ST-04.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  success_replay_invalidation_and_failure_events: PASS
+  payload_safety: PASS
+rollback_evidence:
+  path: development-capsules/ST-04.02/completion/ROLLBACK_EVIDENCE.md
+  injected_atomic_failure_zero_partial_state: PASS
+  seven_event_descendant_invalidation: PASS
+  active_consumption_blocked_history_preserved: PASS
+  source_rollback_defined: PASS
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_files_modified: []
+  external_dependencies_added: []
+  database_changes: []
+  external_repository_changes: []
+  later_story_behavior_implemented: false
+  production_claim: false
+unresolved_limitations:
+  - synthetic_Builder_Core_validation_only
+  - nonproduction_and_noncertified
+  - phase_graph_context_graph_handoffs_workflow_and_capsule_generation_remain_later_Stories
+  - full_Release_1_and_full_product_readiness_remain_FAIL
+newly_discovered_blockers: []
+downstream_effect:
+  ST_04_03: READY_FOR_SEPARATE_BOUNDED_CAPSULE_AFTER_RECEIPT_VALIDATION
+  implementation_authorized: false
+hashes:
+  source_bundle_sha256: 2bfb52a34073630c32fb395c9d4dd52d1d642e9f3c6c822cfa5a743f18dec161
+  test_bundle_sha256: e8eb1744112020661eb90d93128defd655d4dde9c658b392dbc903773ab194ec
+  implementation_bundle_sha256: b67ee81382856a9fced48ef8ed2246220d09d21560d9a2e99465206def477645
+  file_change_manifest_sha256: c7e158050ae335f0cd2f38385d0a9a4981f35a6394210742ea998bc1450e9adf
+  implementation_report_sha256: b5e13d9620ce43a76bdf88dbb8bcae7c9c4942ad2e8784418b0b3b5aaf6b0c67
+  test_results_sha256: 7de4bbed1084117808c1d2ad746b682176398009755668e7fcc6da718d81d415
+  observability_evidence_sha256: 0308d5a951c284f0b5367b0f1a6cf2aec00d658f309faafa6053fe918660ae4e
+  rollback_evidence_sha256: 785671ce222da50ba900c653affd9e3d4173faaed4724c7dd66a4fa17bcf220c
+  canonical_payload_sha256: 4e27273ab3af4b97cf9338c9bc4d77a3c927903356a655342a354b4914857988
+completion_verdict: PASS

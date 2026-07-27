@@ -1,0 +1,43 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-025
+enabled: true
+priority:
+  tier: survival
+  rank: 2
+enforcement:
+  mode: block_on_fail
+  default_result: BLOCK
+applies_to:
+  containers:
+    - HOOK
+  stages:
+    - scene_builder
+    - manifest_assembly
+evaluation_order:
+  after:
+    - CS-001
+block_conditions:
+  - metric: hook_asl_seconds
+    operator: outside_range
+    value:
+      min: 0.8
+      max: 1.5
+  - metric: opening_cls
+    operator: gt
+    value: 2
+  - metric: time_to_primary_signal_seconds
+    operator: gt
+    value: 1.7
+  - metric: delayed_intro
+    operator: eq
+    value: true
+warn_conditions:
+  - metric: time_to_face_seconds
+    operator: gt
+    value: 2.0
+route_hints:
+  corrective_moves:
+    - move_face_earlier
+    - move_stakes_earlier
+    - remove_logo_or_preamble

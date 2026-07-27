@@ -1,0 +1,181 @@
+experience_primitive_id: "EXP-PRG-006"
+canonical_name: "Motivation Triangle UI"
+aliases:
+  - "Belief Injection"
+  - "The Tripartite Prompt"
+  - "Hope Engineering"
+
+experience_family: "progression_replay"
+mechanic_role: "trigger"
+moment_role: "call_to_action"
+implementation_role: "copywriting"
+
+source_audits:
+  - audit_file: "AUDIT_Beyond_Belief_Nir_Eyal.md"
+    primitive_name_in_audit: "Motivation Triangle UI"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Beyond_Belief_Nir_Eyal.md"
+
+book_reference:
+  title: "Beyond Belief"
+  author: "Nir Eyal"
+  chapters:
+    - "Chapter: The Three Powers of Belief"
+  key_pages: "40-55"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Beyond Belief.md"
+
+summary: >
+  Motivation Triangle UI dictates that every Call-to-Action (CTA) or challenge
+  prompt in the system must explicitly satisfy all three sides of the motivation
+  triangle: Behavior (what to do), Benefit (why it matters), and Belief (the
+  conviction that the user can actually succeed). Standard gamification often
+  forgets 'Belief'. In CCP, we do not just say 'Record a 60-second debate take
+  to earn 50 points'. We explicitly inject belief: 'Record a 60-second debate
+  take. Coaches with your vocal profile typically score in the top 10% on this
+  topic. You have what it takes.'
+
+core_move: >
+  Rewrite every major task prompt to explicitly include a 'Belief Injector'—a
+  sentence or data point that proves to the user that success is not just
+  possible, but highly probable for someone with their specific identity.
+
+why_it_works: >
+  Nir Eyal posits that motivation collapses instantly if the 'Belief' side of
+  the triangle is missing. A coach knows *what* to do (Behavior) and *why* it
+  is good for their business (Benefit), but if their inner critic tells them
+  'I am a terrible public speaker and I will humiliate myself' (Lack of Belief),
+  they will bounce. By structurally forcing the UI to inject Belief—using local
+  social proof, their own past data, or empathetic coaching language—we
+  neutralize the inner critic right before the moment of highest friction.
+
+examples:
+  - context: "BOOK: Beyond Belief - The Voter Turnout Experiment"
+    application: >
+      Telling people 'Voting is important' (Benefit) doesn't work. Telling them
+      'People in your neighborhood with your demographic are voting in record
+      numbers' injects the Belief that 'people like me do this successfully.'
+      Turnout skyrockets.
+    effect: >
+      Identity-driven belief overcomes behavioral apathy.
+
+  - context: "CCP: The Day 1 Challenge Prompt"
+    application: >
+      Instead of: 'Day 1: Record your baseline to start.'
+      We use the Triangle: 'Record your baseline (Behavior) to unlock your Voice
+      DNA (Benefit). 95% of coaches feel anxious on Day 1, but your raw intuition
+      is enough to pass. Just speak (Belief).'
+    effect: >
+      The user feels seen, safe, and capable.
+
+  - context: "CCP: The Debate Counter-Take"
+    application: >
+      'Record a rebuttal (Behavior) to win back the Jury (Benefit). I analyzed
+      your past Takes; your Conviction Density is 15% higher than your opponent's.
+      You can win this (Belief).'
+    effect: >
+      Transforms intimidation into aggressive, confident participation.
+
+  - context: "CCP: V2WS Webinar Launch"
+    application: >
+      Before going live: 'Start the broadcast (Behavior) to pitch the cohort
+      (Benefit). You have successfully run this exact sequence in the sandbox 4
+      times flawlessly. You are ready (Belief).'
+    effect: >
+      Uses the user's own historical data to manufacture unshakeable self-belief.
+
+  - context: "CCP: Redemption Round Offer"
+    application: >
+      'Try again without the timer (Behavior) to save your streak (Benefit). You
+      already nailed the hardest part: the hook. This takes is going to be easy
+      (Belief).'
+    effect: >
+      Removes the hopelessness of the previous failure.
+
+anti_examples:
+  - description: >
+      A sterile push notification that simply says: 'Daily Drill Available. Click
+      here to complete.'
+    why_it_fails: >
+      It relies entirely on the user's pre-existing willpower. It provides no
+      Benefit and zero Belief. If the user is tired or anxious, they will ignore it.
+
+experience_stage_fit:
+  entry: 0.9
+  activation: 0.9
+  recording: 0.8
+  scoring: 0.3
+  social_spread: 0.5
+  recovery: 0.9
+  retention: 0.8
+  conversion: 0.9
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 0.9
+  score_card: 0.6
+  share_asset: 0.3
+  voice_prompt: 1.0
+  push_nudge: 1.0
+
+user_state_effects:
+  confidence: 1.0
+  urgency: 0.6
+  clarity: 0.9
+  safety: 0.9
+  status: 0.6
+  belonging: 0.7
+  curiosity: 0.7
+  replay_desire: 0.9
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 1.0
+  challenge_progression: 1.0
+  silent_referral: 0.6
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.9
+  onboarding_activation: 1.0
+  social_economy: 0.7
+  content_extraction: 0.6
+
+activation_conditions:
+  - "User is presented with a high-friction or high-anxiety task (recording audio, entering a debate)"
+  - "User is receiving a push notification designed to trigger re-entry"
+
+suppression_conditions:
+  - "User is performing a completely mindless, frictionless task (e.g., swiping a menu); don't over-engineer simple clicks."
+
+misuse_modes:
+  - "Fake Data — telling them 'your profile shows you will win' when they literally just created the account 5 seconds ago."
+  - "Patronizing Tone — making the Belief injection sound like a kindergarten teacher rather than a high-end executive coach."
+
+synergizes_with:
+  - "EXP-SOC-003" # Identity-Driven Social Proof (The strongest way to inject Belief is to show that 'people like me' succeed)
+  - "EXP-SAF-006" # The Richter Rescue (The rescue is essentially a massive Belief injection)
+
+conflicts_with:
+  - "None. All high-friction prompts require this."
+
+implementation_targets:
+  frontend_components:
+    - "DynamicPromptCard — UI component with three distinct typographic layers mapping to Behavior, Benefit, and Belief"
+  backend_rules:
+    - "prompt_engine: ensure every generated LLM prompt payload contains a `belief_injection_string` derived from the user's CA-1 history"
+  telemetry_events:
+    - "belief_injected_prompt_viewed"
+    - "conversion_post_belief_injection"
+  experiments:
+    - "A/B test: Injecting Belief via past data ('You scored 80 last time') vs social proof ('Other SaaS founders score 80 on this')"
+
+experience_metrics:
+  entry_rate: 0.9
+  react_rate: 0.9
+  completion_rate: 0.8
+  share_rate: 0.4
+  comeback_rate: 0.9
+  day7_retention: 0.8
+  upgrade_signal: 0.8
+
+crosswalk_id: "XW-PRG-BELIEF"
+crosswalk_note: >
+  This is the copywriting standard for all Telegram Agent messages.

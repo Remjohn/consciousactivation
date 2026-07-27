@@ -1,0 +1,58 @@
+{
+  "schema_version": "cmf-builder-synthetic-phase-handoff-input/v1",
+  "scope": "ST-04.04_BUILDER_INTERNAL_HANDOFF_ONLY",
+  "source_contract": "cmf-builder-phase-graph/v1@1.0.0",
+  "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+  "implicit_context_fields_allowed": false,
+  "downstream_rewrite_allowed": false,
+  "contexts": [
+    {
+      "context_id": "ratified_boundary_ready_context_v1",
+      "phase_ref": "ratified_boundary_ready",
+      "included_fields": [
+        {"field": "source_lock_ref", "owner": "cmf_builder.source_lock", "authority": "code", "mutability": "IMMUTABLE"},
+        {"field": "human_ratification_ref", "owner": "human_authority", "authority": "human", "mutability": "IMMUTABLE"}
+      ],
+      "excluded_fields": ["external_runtime_result", "production_asset"],
+      "conditional_loads": [],
+      "unload_behavior": "DROP_NON_OUTPUT_CONTEXT_AFTER_PHASE",
+      "downstream_exposure": ["frozen_atomic_boundary_ref", "boundary_validation_receipt_ref"]
+    },
+    {
+      "context_id": "governed_contract_ready_context_v1",
+      "phase_ref": "governed_contract_ready",
+      "included_fields": [
+        {"field": "frozen_atomic_boundary_ref", "owner": "cmf_builder.atomicity", "authority": "code", "mutability": "IMMUTABLE"},
+        {"field": "boundary_validation_receipt_ref", "owner": "cmf_builder.atomicity", "authority": "code", "mutability": "IMMUTABLE"},
+        {"field": "constitutional_authority_ref", "owner": "canonical_program_authority", "authority": "governing_source", "mutability": "IMMUTABLE"}
+      ],
+      "excluded_fields": ["external_runtime_result", "production_asset"],
+      "conditional_loads": [],
+      "unload_behavior": "DROP_NON_OUTPUT_CONTEXT_AFTER_PHASE",
+      "downstream_exposure": ["validated_target_contract_ref", "validation_receipt_ref"]
+    }
+  ],
+  "handoffs": [
+    {
+      "contract_id": "ratified_boundary_to_governed_contract_v1",
+      "version": "1.0.0",
+      "producer_phase": "ratified_boundary_ready",
+      "consumer_phases": ["governed_contract_ready"],
+      "required_fields": [
+        {"field": "frozen_atomic_boundary_ref", "owner": "cmf_builder.atomicity"},
+        {"field": "boundary_validation_receipt_ref", "owner": "cmf_builder.atomicity"}
+      ],
+      "optional_fields": [],
+      "provenance_required": true,
+      "authority": "cmf_builder.atomicity",
+      "validation": ["content_hash_valid", "producer_phase_active", "source_lineage_valid"],
+      "compatibility": "EXACT_MAJOR_BACKWARD_COMPATIBLE_MINOR",
+      "mutability": "IMMUTABLE_NEW_VERSION_ONLY",
+      "downstream_rewrite": "PROHIBITED",
+      "invalidation": "AFFECTED_CONSUMER_DESCENDANTS_ONLY"
+    }
+  ],
+  "external_product_handoffs": [],
+  "production_eligible": false,
+  "certified": false
+}

@@ -1,0 +1,70 @@
+schema_version: cmf-builder-allowed-file-scope/v1
+story_id: ST-01.01
+scope_mode: exact_allowlist
+production_code:
+  create_or_modify:
+    - src/cmf_builder/__init__.py
+    - src/cmf_builder/domain/__init__.py
+    - src/cmf_builder/domain/run.py
+    - src/cmf_builder/domain/target_profile.py
+    - src/cmf_builder/application/__init__.py
+    - src/cmf_builder/application/ports.py
+    - src/cmf_builder/application/run_commands.py
+    - src/cmf_builder/application/authority.py
+    - src/cmf_builder/application/checkpoints.py
+    - src/cmf_builder/adapters/__init__.py
+    - src/cmf_builder/adapters/in_memory_run_repository.py
+    - src/cmf_builder/adapters/file_target_profile_repository.py
+tests:
+  create_or_modify:
+    - tests/__init__.py
+    - tests/stories/__init__.py
+    - tests/stories/st_01_01/__init__.py
+    - tests/stories/st_01_01/test_acceptance.py
+    - tests/stories/st_01_01/test_failure.py
+    - tests/stories/st_01_01/test_authority.py
+    - tests/stories/st_01_01/test_replay.py
+    - tests/stories/st_01_01/test_architecture_boundary.py
+completion_evidence:
+  create_only:
+    - development-capsules/ST-01.01/completion/STORY_COMPLETION_RECEIPT.yaml
+    - development-capsules/ST-01.01/completion/TEST_RESULTS.json
+    - development-capsules/ST-01.01/completion/OBSERVABILITY_EVIDENCE.json
+    - development-capsules/ST-01.01/completion/FILE_CHANGE_MANIFEST.json
+    - development-capsules/ST-01.01/completion/ROLLBACK_EVIDENCE.md
+read_only_inputs:
+  - governance/COMPILATION_TARGET_REGISTRY.yaml
+  - contracts/integration/CATEGORY_PROFILE_COMPATIBILITY.yaml
+  - docs/contracts/CONTRACT_REGISTRY.yaml
+  - docs/contracts/schemas/constitutional-evaluation.schema.json
+  - docs/planning/STORY_INVENTORY.yaml
+  - docs/planning/STORY_READINESS_MATRIX_CORRECTED.csv
+  - docs/planning/BLOCKER_SCOPE_REGISTRY.yaml
+prohibited:
+  - any file not explicitly listed above
+  - AGENTS.md
+  - PROGRAM_STATUS_EXPORT.yaml
+  - CURRENT_PROJECT_STATUS.md
+  - governance/**
+  - contracts/integration/**
+  - docs/contracts/**
+  - docs/architecture/**
+  - docs/tech-specs/**
+  - docs/planning/**
+  - prd/**
+  - schemas/**
+  - api/**
+  - cli/**
+  - control_tower/**
+  - workflow/**
+  - compilers/**
+  - evidence/**
+  - visual/**
+  - genesis/**
+  - skills/**
+  - evaluation/**
+  - database migrations or deployment files
+  - dependency lockfiles or third-party dependency declarations
+scope_violation_behavior: stop_without_modifying_the_unlisted_path_and_request_human_scope_amendment
+file_deletion_allowed: false
+

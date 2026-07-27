@@ -1,0 +1,18 @@
+id: template_preview.slot_map.compile
+version: "1.0.0"
+status: active
+owner_agent: template_preview_atlas_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Compile visual read-model previews for SuperVisual, Carousel, and Format 02 templates."
+inputs:
+  - TemplateSlotMap
+  - TemplateSamplePayload
+outputs:
+  - TemplatePreviewResult
+  - TemplateVersion
+hard_gates:
+  - "Do not call providers."
+  - "Do not call renderers."
+  - "Preview must emit SVG and thumbnail URI."
+  - "Sample payload must satisfy required slots."
+  - "Template approval cannot pass with blockers."

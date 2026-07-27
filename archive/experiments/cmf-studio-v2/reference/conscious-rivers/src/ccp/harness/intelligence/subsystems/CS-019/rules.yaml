@@ -1,0 +1,28 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-019
+enabled: true
+priority:
+  tier: quality
+  rank: 6
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: contradiction_score
+    operator: gt
+    value: 0.2
+route_hints:
+  align:
+    - match_motion_to_scene_semantics
+    - reverse_conflicting_vector

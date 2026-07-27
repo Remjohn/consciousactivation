@@ -1,0 +1,59 @@
+schema_version: cmf-builder-bd007-owned-compute-migration-contract/v1
+contract_id: BD007-QWEN36-CLOUD-TO-OWNED-COMPUTE-v1
+recorded_on: "2026-07-17"
+status: FUTURE_GOVERNED_MIGRATION_ONLY
+source_identity_requirements:
+  model_repository: Qwen/Qwen3.6-27B-FP8
+  model_revision: e89b16ebf1988b3d6befa7de50abc2d76f26eb09
+  source_listing_manifest_sha256: 7178b826303a9e4c7adc58096cc8e0d19bc3784e18567c46f802f0c0ddc1cd2e
+  final_locally_verified_model_manifest: MUST_MATCH_CLOUD_RECEIPT
+  tokenizer_processor_and_chat_template: EXACT_BYTE_IDENTITY_REQUIRED
+runtime_requirements:
+  cloud_vLLM_version: 0.19.0
+  owned_compute_vLLM_version: SAME_OR_GOVERNED_MIGRATION_VERSION
+  request_contract: MUST_MATCH
+  response_contract: MUST_MATCH
+  reasoning_parser: qwen3
+  language_model_only: true
+  sampling_configuration: MUST_MATCH
+  context_and_output_limits: MUST_MATCH_OR_BE_STRICTER_WITH_NEW_RECEIPT
+  tools_enabled: false
+replay_requirements:
+  case_manifest: SAME_APPROVED_BD007_VERSION
+  frozen_case_count: 4
+  arms_per_case: 2
+  repeats_per_arm: 3
+  rubric_identity: dd5cc9bae8977ea365d4890914364e2a540eb2acdbf363d4ec024aa47ab27381
+  request_hashes: SAME_GOVERNED_REQUEST_BYTES
+  output_comparison:
+    - complete_hash_and_scorecard_capture
+    - dimension_by_dimension_comparison
+    - all_noncompensable_failures_checked
+    - stochastic_repeat_distribution_recorded
+migration_receipt:
+  required_fields:
+    - cloud_endpoint_configuration_sha256
+    - cloud_model_manifest_sha256
+    - cloud_container_digest
+    - owned_compute_hardware_identity
+    - owned_compute_model_manifest_sha256
+    - owned_compute_runtime_digest
+    - request_and_response_contract_hashes
+    - sampling_configuration_sha256
+    - replay_execution_manifest_sha256
+    - scorecard_comparison_sha256
+    - limitations
+    - verdict
+equivalence_rule:
+  assumed_before_trials: false
+  PASS_requires:
+    - exact governed byte and contract identities
+    - complete replay
+    - zero ungoverned noncompensable failures
+    - documented behavioral comparison
+    - explicit human acceptance of remaining stochastic variation
+non_claims:
+  owned_compute_ready: false
+  behavioral_equivalence_proven: false
+  production_ready: false
+  certified: false

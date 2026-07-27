@@ -1,0 +1,112 @@
+version: 1.0.0-draft
+metrics:
+- id: SM-01
+  name: Valid submission acceptance
+  definition: Share of valid, compatible, authorized submissions accepted without manual intervention.
+  target: '>= 99.5%'
+  validates:
+  - FR-001
+  - FR-017
+  - FR-113
+- id: SM-02
+  name: Unauthorized mutation rejection
+  definition: Recall for attempts to change fields outside the sender's authority.
+  target: 100% in conformance suite
+  validates:
+  - FR-009
+  - FR-014
+  - FR-106
+- id: SM-03
+  name: Duplicate production prevention
+  definition: Rate at which duplicate or replayed submissions avoid starting duplicate VAE executions.
+  target: 100%
+  validates:
+  - FR-022
+  - FR-109
+  - FR-124
+- id: SM-04
+  name: Lifecycle transition validity
+  definition: Accepted shared transitions conforming to the lifecycle machine.
+  target: 100%
+  validates:
+  - FR-027
+  - FR-030
+  - FR-119
+- id: SM-05
+  name: Automatic result acknowledgement
+  definition: Eligible RESULT_READY messages acknowledged automatically within the SLO.
+  target: '>= 99%'
+  validates:
+  - FR-043
+  - FR-046
+  - FR-120
+- id: SM-06
+  name: Selective reuse precision
+  definition: Preserved artifacts later confirmed valid after supersession or repair.
+  target: '>= 98%'
+  validates:
+  - FR-036
+  - FR-038
+- id: SM-07
+  name: Stale result prevention
+  definition: Superseded, cancelled, invalidated, or incompatible results entering current composition.
+  target: '0'
+  validates:
+  - FR-037
+  - FR-062
+  - FR-045
+- id: SM-08
+  name: Compatibility truthfulness
+  definition: Declared compatibility paths that pass semantic conformance fixtures.
+  target: 100%
+  validates:
+  - FR-081
+  - FR-088
+  - FR-121
+- id: SM-09
+  name: Audit completeness
+  definition: State-changing messages with complete chained audit receipts.
+  target: 100%
+  validates:
+  - FR-006
+  - FR-110
+  - FR-118
+- id: SM-10
+  name: Cancellation response
+  definition: Time from accepted cancellation to blocking new work and producing disposition receipt.
+  target: p99 <= 10 seconds for boundary actions
+  validates:
+  - FR-058
+  - FR-064
+- id: SM-11
+  name: Critical notice propagation
+  definition: Time to project critical revocation/invalidation to affected active consumers.
+  target: p99 <= 10 seconds
+  validates:
+  - FR-099
+  - FR-103
+  - FR-116
+- id: SM-12
+  name: Format 02 conformance
+  definition: Mandatory reference scenarios passing for the pinned product/protocol versions.
+  target: 100% before production certification
+  validates:
+  - FR-120
+  - FR-126
+- id: SM-C1
+  name: Message count
+  definition: Do not optimize for generating more messages; prefer the minimum complete auditable exchange.
+  counterbalances:
+  - SM-01
+  - SM-04
+- id: SM-C2
+  name: Adapter usage
+  definition: Do not optimize for high adapter use; direct compatible contracts are preferable.
+  counterbalances:
+  - SM-08
+- id: SM-C3
+  name: Protocol-owned decisions
+  definition: Do not optimize for more decisions inside the protocol; creative and production authority must remain
+    in products.
+  counterbalances:
+  - SM-02

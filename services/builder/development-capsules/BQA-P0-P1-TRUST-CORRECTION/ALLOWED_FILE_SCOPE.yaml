@@ -1,0 +1,57 @@
+schema_version: cmf-builder-allowed-file-scope/v1
+capsule_id: BQA-P0-P1-TRUST-CORRECTION
+rule: deny_all_except_exact_paths_below
+existing_source_files:
+  - {path: src/cmf_builder/domain/atomic_harness_definition.py, allowed_change: authority_bound_semantic_and_complete_section_reconstruction_validation}
+  - {path: src/cmf_builder/domain/target_package_validation.py, allowed_change: require_authority_bound_definition_before_report_or_receipt_validation}
+  - {path: src/cmf_builder/application/target_validation_commands.py, allowed_change: load_and_validate_exact_upstream_authority_and_commit_observation_outbox}
+  - {path: src/cmf_builder/application/ports.py, allowed_change: additive_atomic_run_command_and_observation_outbox_internal_port_methods}
+  - {path: src/cmf_builder/application/run_commands.py, allowed_change: replace_split_append_checkpoint_and_command_record_mutations_with_one_atomic_commit}
+  - {path: src/cmf_builder/adapters/in_memory_run_repository.py, allowed_change: synchronized_atomic_current_adapter_commits_failure_injection_and_observation_outbox}
+  - {path: src/cmf_builder/adapters/file_evidence_workspace.py, allowed_change: inspect_ZIP_from_the_exact_already_hashed_immutable_bytes}
+new_test_files:
+  - tests/corrections/__init__.py
+  - tests/corrections/test_bqa_p0_001_authority_binding.py
+  - tests/corrections/test_bqa_p1_003_observation_outbox.py
+  - tests/corrections/test_bqa_p1_004_atomic_concurrency.py
+  - tests/corrections/test_bqa_p1_005_run_command_atomicity.py
+  - tests/corrections/test_bqa_p1_006_zip_byte_binding.py
+  - tests/corrections/test_bqa_integration_gate.py
+completion_outputs:
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/IMPLEMENTATION_REPORT.md
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/TEST_RESULTS.json
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/OBSERVABILITY_EVIDENCE.yaml
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/ROLLBACK_EVIDENCE.md
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/STORY_SUPPLEMENTAL_CORRECTION_RECEIPTS.yaml
+  - development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/INTEGRATION_GATE_RECEIPT.yaml
+status_outputs_after_PASS_only:
+  - docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_REPORT.md
+  - docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_VERDICT.yaml
+  - docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_HASH_MATRIX.csv
+  - docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
+  - docs/implementation/FULL_BUILDER_CAMPAIGN_PROGRESS.md
+  - docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
+  - docs/implementation/FULL_BUILDER_RECEIPT_INDEX.yaml
+  - docs/planning/BUILDER_CORE_IMPLEMENTATION_SEQUENCE.yaml
+  - CURRENT_PROJECT_STATUS.md
+  - PROGRAM_STATUS_EXPORT.yaml
+existing_tests_must_run_unchanged:
+  - tests/stories/st_01_01
+  - tests/stories/st_01_01_synthetic_proof
+  - tests/stories/st_01_02
+  - tests/stories/st_07_02
+  - tests/stories/st_07_04
+  - tests/stories/st_11_01
+prohibited:
+  - any_other_source_or_test_file
+  - any_original_StoryCompletionReceipt
+  - any_original_capsule_manifest_or_completion_manifest
+  - any_schema_file
+  - any_external_repository
+  - any_new_dependency_database_transport_or_external_runtime
+mechanical_amendment_rule:
+  new_production_source_files_authorized: false
+  exact_source_set_test_edits_expected: false
+  test_deletion_or_weakening: prohibited
+

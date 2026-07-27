@@ -1,0 +1,34 @@
+set_id: DSET-SCENE-007
+version: 1
+owner:
+  system: content_harness
+  harness_id: HARNESS-F02-MCT-001
+context:
+  category: 2d_character_animation
+  format_profile: minimal_coach_theatre
+  sequence_ref: SEQ-F02-v7
+  composition_ref: COMP-SCENE-007-v4
+  visual_syntax_parse_ref: VSP-SCENE-007-v2
+members:
+- demand_ref: VAD-BG-007-v1
+  role: environment_plate
+- demand_ref: VAD-CHAR-007-v2
+  role: skeptical_listener_character
+- demand_ref: VAD-PROP-007-v1
+  role: comparison_object
+shared_constraints:
+  character_identity_ref: CHAR-LISTENER-02
+  environment_ref: ENV-MINIMAL-THEATRE-01
+  palette_ref: PAL-COACH-NEUTRAL-01
+  lighting_state: soft_left_key
+  camera_axis: theatre_axis_A
+dependencies:
+- upstream: VAD-BG-007-v1
+  downstream: VAD-CHAR-007-v2
+  relationship: lighting_and_environment_reference
+completion_policy:
+  mode: atomic_required
+  required_roles:
+  - environment_plate
+  - skeptical_listener_character
+  - comparison_object

@@ -1,0 +1,172 @@
+# Voice and Audio Intimacy — Meaning Primitive
+# Calibrated against PRM-HUM-009.yaml (Golden Anchor)
+
+primitive_id: "PRM-VOC-004"
+canonical_name: "Proofread Aloud as Broadcast Validation"
+aliases:
+  - "Read-It-Back Gate"
+  - "Being Noisy Validation"
+
+family: "voice_audio_intimacy"
+implementation_role: "gate"
+
+source_audits:
+  - audit_file: "AUDIT Better Broadcast Writing Greg Dobbs.md"
+    primitive_name_in_audit: "Proofread Aloud as Broadcast Validation"
+    mcda_score: 193
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/08_Sound_Design/AUDIT Better Broadcast Writing Greg Dobbs.md"
+
+book_reference:
+  title: "Better Broadcast Writing, Better Broadcast News"
+  author: "Greg Dobbs"
+  chapters:
+    - "Chapter 10: Proof Positive of Proofreading"
+    - "Chapter 3: Being Perfectly Clear"
+  key_pages: "143-162, 36-40"
+  book_path: "lab/Public Speeaking Coaching/08_Sound_Design/Better Broadcast Writing Better Broadcast News - Greg Dobbs.md"
+
+summary: >
+  Proofread Aloud is a quality gate primitive that mandates testing every
+  spoken line by voicing it aloud before shipping. Dobbs calls this
+  "Being Noisy" — the practice of reading your script aloud to catch
+  dead phrasing, synthetic rhythm, tongue-tripping clusters, and
+  unanswered questions that survive silent reading. The mechanism is
+  simple: the mouth discovers what the eye forgives. In CCP, this
+  translates to a mandatory post-generation review step where the Sonic
+  Scribe agent renders a preview pass and the vocal output is evaluated
+  against naturalness criteria before final delivery.
+
+core_move: >
+  Test every spoken line aloud before shipping it so dead phrasing and
+  synthetic rhythm are caught early.
+
+why_it_works: >
+  Dobbs demonstrates that silent reading misses categories of error that
+  only surface when the text is voiced. His example is devastating: a
+  sentence that raises a question ("Taylor got this job when the regular
+  carrier on the route was drafted during the war") survives silent
+  proofreading because the writer's own knowledge fills the gap — but
+  the listener stops and wonders "which war?" and loses the rest of the
+  story. Reading aloud forces the writer to experience the text as the
+  listener will — sequentially, in real time, without the ability to
+  re-scan. Additionally, vocal production reveals consonant clusters
+  that trip the tongue, breath requirements that exceed natural phrasing,
+  and rhythmic monotony that causes attention drift. The mechanism is
+  embodied cognition: engaging the vocal apparatus activates auditory
+  processing circuits that are dormant during silent reading, surfacing
+  mismatches between intent and auditory experience.
+
+examples:
+  - context: "BOOK: Better Broadcast Writing - Proof Positive"
+    application: >
+      Dobbs calls this "Being Noisy"—reading the script aloud to catch dead phrasing, synthetic rhythm, and unanswered questions. Silent reading forgives errors that vocal production exposes.
+    effect: >
+      Embodied cognition surfaces mismatches between intent and auditory experience before shipping.
+
+  - context: "CCP: CMF - Sonic Scribe Preview Render"
+    application: >
+      After generation, the system runs a preview TTS pass. It checks if any sentence exceeds 4 seconds of continuous speech or has staccato consonant clusters. Failures are rewritten.
+    effect: >
+      Dead phrasing is eliminated before the coach hears it.
+
+  - context: "CCP: Conscious Reactions - Feedback Preview"
+    application: >
+      The agent's TTS preview trips over "strategically systematize your sequencing." The gate rewrites it to "build a clear order for your sequences."
+    effect: >
+      The coach hears smooth, professional feedback devoid of robotic stutters.
+
+  - context: "CCP: CBCS - Accountability Script Review"
+    application: >
+      A script reads: "Your content output was consistent with the trajectory." Read aloud, it sounds bureaucratic. The gate rewrites it: "You did what you said you'd do."
+    effect: >
+      The delivery sounds human and direct, catching corporate-speak.
+
+  - context: "CCP: V2WS - Pre-Webinar Read-Through"
+    application: >
+      The speaker is forced by the V2WS agent to read the final 5-minute pitch out loud at full volume. A 12-word breathless sentence is identified and split.
+    effect: >
+      The speaker maintains vocal command during the critical pitch phase without gasping for air.
+
+anti_examples:
+  - description: >
+      The Sonic Scribe generates a 90-second voice note script and
+      ships it directly to TTS rendering without any aloud preview,
+      trusting that the LLM's text quality is sufficient for spoken
+      delivery.
+    why_it_fails: >
+      Dobbs's central thesis in the proofreading chapter is that no
+      amount of writing skill eliminates the need for vocal testing.
+      Even Emmy-winning broadcast writers produce lines that fail the
+      ear. Skipping the aloud step guarantees that at least one
+      synthetic phrase, one unanswered question, or one tongue-trip
+      will reach the listener.
+
+phase_fit:
+  pre_trigger: 0.1
+  post_trigger: 0.2
+  generation: 0.6
+  revision: 0.95
+  delivery: 0.8
+
+surface_fit:
+  text: 0.2
+  voice: 0.95
+  visual: 0.1
+  sonic: 0.7
+  webinar: 0.6
+  telegram: 0.8
+
+goal_bias:
+  connection: 0.7
+  surprise: 0.1
+  tension: 0.1
+  clarity: 0.85
+  memorability: 0.4
+  persuasion: 0.3
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.1
+  trigger_provocation: 0.1
+  authenticated_capture: 0.2
+  meaning_extraction: 0.3
+  content_generation: 0.7
+  edge_product_assembly: 0.6
+  delivery_coaching: 0.85
+  experience_flow: 0.4
+  premium_differentiation: 0.6
+
+trigger_conditions:
+  - "Target pipeline is routing text to TTS engine"
+  - "AST parser identifies high syllable density or complex consonant clusters"
+  - "Estimated audio duration > 30s"
+
+suppression_conditions:
+  - "Target surface is purely text-based (CBCS Web UI)"
+  - "Payload is a real-time live improvised response"
+  - "Latency budget strictly prohibits preview rendering (< 500ms required)"
+
+misuse_modes:
+  - "Reading aloud but not actually listening — going through the motions without critical evaluation"
+  - "Over-correcting natural speech patterns into broadcast-smooth sterility"
+  - "Using the gate to delay shipping indefinitely — perfectionism disguised as quality control"
+
+synergizes_with:
+  - "PRM-VOC-003"  # Writing for the Ear — the aloud test validates ear-first composition
+  - "PRM-VOC-001"  # Write for the Distracted Ear — aloud testing catches distracted-ear violations
+  - "PRM-VOC-005"  # R.E.A.L. Audio Quality Gate — the aloud test feeds the R.E.A.L. evaluation
+  - "PRM-VOC-006"  # Start Strong, End Strong — aloud testing reveals weak opens and closes
+
+conflicts_with:
+  - "PRM-VOC-010"  # The Edited Essence — aggressive compression can over-strip phrasing that needs vocal room
+
+crosswalk_id: null
+crosswalk_note: null
+
+notes: >
+  This primitive is positioned as a gate — it does not generate content
+  but validates it before release. In the Sonic Scribe pipeline, it sits
+  between script generation and final TTS rendering. The gate is
+  mechanical, not subjective: it checks for consonant clusters, breath
+  violations, unanswered questions, and rhythmic monotony. Pair with
+  PRM-VOC-003 (Writing for the Ear) for the generative step and
+  PRM-VOC-005 (R.E.A.L. Gate) for the holistic quality assessment.

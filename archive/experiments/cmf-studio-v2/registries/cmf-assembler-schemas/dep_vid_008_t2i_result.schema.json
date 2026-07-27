@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DEP-VID-008",
+  "title": "T2I Generation Result",
+  "description": "Schema for T2I generation results produced by FR-VID-02. Contains per-beat keyframe generation metadata, image URLs, and batch statistics. All 8 top-level fields are required per FR-VID-02 §5.",
+  "type": "object",
+  "required": [
+    "generation_batch_id",
+    "project_id",
+    "beat_cluster_id",
+    "model_used",
+    "vram_tier",
+    "results",
+    "batch_stats",
+    "generation_timestamp"
+  ],
+  "properties": {
+    "generation_batch_id": {
+      "type": "string",
+      "pattern": "^T2I-BATCH-\\d{8}-\\d{3}$",
+      "description": "Unique batch identifier: T2I-BATCH-{YYYYMMDD}-{NNN}"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "CMF project identifier"
+    },
+    "beat_cluster_id": {
+      "type": "string",
+      "description": "Beat cluster identifier from storyboard"
+    },
+    "model_used": {
+      "type": "string",
+      "description": "T2I model name (e.g., flux-dev-fp8, sdxl-base-1.0)"
+    },
+    "vram_tier": {
+      "type": "string",
+      "enum": ["24GB", "48GB"],
+      "description": "RunningHub VRAM tier used for this batch"
+    },
+    "results": {
+      "type": "array",
+      "description": "Per-beat generation results sorted by beat_index",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "status"],
+        "properties": {
+          "beat_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Beat position in the cluster"
+          },
+          "prompt_id": {
+            "type": ["string", "null"],
+            "description": "ComfyUI prompt_id returned on submission (null if submission failed)"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "GENERATED",
+              "T2I_SUBMISSION_FAILED",
+              "T2I_GENERATION_TIMEOUT",
+              "T2I_GENERATION_FAILED"
+            ],
+            "description": "Beat generation outcome"
+          },
+          "output_image_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://",
+            "description": "HTTPS URL of the generated keyframe image in asset storage"
+          },
+          "output_image_local_path": {
+            "type": "string",
+            "description": "Local filesystem path to the downloaded image"
+          },
+          "output_resolution": {
+            "type": "string",
+            "pattern": "^\\d+x\\d+$",
+            "description": "Generated image resolution (e.g., 1080x1920)"
+          },
+          "seed_used": {
+            "type": "integer",
+            "description": "Random seed used for this generation"
+          },
+          "prompt_used": {
+            "type": "string",
+            "description": "Visual prompt text sent to the model"
+          },
+          "negative_prompt_used": {
+            "type": "string",
+            "description": "Negative prompt text sent to the model"
+          },
+          "pssl_params_applied": {
+            "type": "object",
+            "description": "PSSL parameters applied to this beat",
+            "properties": {
+              "foundation_hue": { "type": "string" },
+              "temperature": { "type": "string" },
+              "spatial_density": { "type": "number" },
+              "pad_scores": {
+                "type": "object",
+                "properties": {
+                  "P": { "type": "number" },
+                  "A": { "type": "number" },
+                  "D": { "type": "number" }
+                }
+              }
+            }
+          },
+          "generation_time_sec": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Wall-clock time for this beat's generation in seconds"
+          },
+          "workflow_id": {
+            "type": "string",
+            "description": "DEP-VID-007 workflow ID used for generation"
+          },
+          "quality_gate_pending": {
+            "type": "boolean",
+            "description": "True until FR-VID-04 quality gate processes this beat"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if status is not GENERATED"
+          }
+        }
+      }
+    },
+    "batch_stats": {
+      "type": "object",
+      "required": [
+        "total_beats",
+        "generated",
+        "failed",
+        "total_generation_time_sec",
+        "parallel_efficiency"
+      ],
+      "properties": {
+        "total_beats": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Total beats in this batch"
+        },
+        "generated": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of beats with GENERATED status"
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of beats with non-GENERATED status"
+        },
+        "total_generation_time_sec": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total wall-clock time for the entire batch in seconds"
+        },
+        "parallel_efficiency": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Generated beats per second (higher = better parallelism)"
+        }
+      }
+    },
+    "generation_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when batch completed"
+    },
+    "receipt_chain": {
+      "type": "object",
+      "description": "Receipt chain metadata attached by the orchestrator",
+      "properties": {
+        "final_receipt_id": { "type": "string" },
+        "chain_length": { "type": "integer" },
+        "stages": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

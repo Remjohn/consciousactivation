@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-027",
+  "title": "Review UI State",
+  "description": "FR-VID-09 §4 Stage 2 — Frontend state for the review panel. Beat-level controls, approval status, regeneration tracking, and cost display.",
+  "type": "object",
+  "required": ["pipeline_id", "video_id", "review_status", "beats"],
+  "properties": {
+    "pipeline_id": { "type": "string" },
+    "video_id": { "type": "string" },
+    "review_status": {
+      "type": "string",
+      "enum": ["IN_REVIEW", "ALL_APPROVED", "REJECTED", "AUTO_APPROVED"]
+    },
+    "preview_url": { "type": ["string", "null"] },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "approval_status"],
+        "properties": {
+          "beat_index": { "type": "integer", "minimum": 0 },
+          "approval_status": {
+            "type": "string",
+            "enum": ["PENDING_REVIEW", "APPROVED", "REGENERATING", "REJECTED"]
+          },
+          "quality_score": { "type": ["number", "null"] },
+          "thumbnail_url": { "type": ["string", "null"] },
+          "regeneration_count": { "type": "integer", "minimum": 0, "default": 0 },
+          "last_revision_note": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "auto_approve_eligible": {
+      "type": "boolean",
+      "description": "True if all beats scored >= 0.8."
+    },
+    "total_cost_usd": { "type": "number", "minimum": 0 },
+    "render_final_enabled": {
+      "type": "boolean",
+      "description": "True only when all beats are approved."
+    }
+  }
+}

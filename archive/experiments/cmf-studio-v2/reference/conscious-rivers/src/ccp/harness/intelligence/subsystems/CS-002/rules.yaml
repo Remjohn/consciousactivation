@@ -1,0 +1,32 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-002
+enabled: true
+priority:
+  tier: survival
+  rank: 2
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: time_to_face_seconds
+    operator: gt
+    value: 2.0
+  - metric: face_count
+    operator: gt
+    value: 1
+route_hints:
+  prioritize:
+    - introduce_coach_face_earlier
+    - switch_to_medium_close_up
+    - reduce_secondary_faces

@@ -1,0 +1,79 @@
+schema_version: cmf-builder-synthetic-proof-target-profile/v1
+fixture_id: synthetic_text_normalization_v1
+fixture_version: "1.0.0"
+authority:
+  owner: Atomic_Harness_Builder_repository
+  authority_kind: repository_owned_test_fixture
+  governed_by: development-capsules/ST-01.01-SYNTHETIC-PROOF/BRANCH_CONTRACT.yaml
+classification:
+  synthetic: true
+  repository_owned: true
+  production_eligible: false
+  certified: false
+  benchmarked: false
+  purpose: Builder_Core_validation_only
+target:
+  compilation_target: atomic_content_harness
+  profile_id: synthetic_text_normalization_v1
+  category_binding:
+    mode: none
+    reason: category_neutral_builder_core_validation
+  canonical_category_registry_membership: false
+task_definition:
+  name: deterministic_UTF8_text_normalization_definition
+  proof_only: true
+  atomic_boundary: >-
+    Define, but do not execute, a deterministic task that normalizes UTF-8 line
+    endings to LF and ensures exactly one terminal newline.
+  input_contract:
+    media_type: text/plain
+    encoding: UTF-8
+    cardinality: one_document
+  output_contract:
+    media_type: text/plain
+    encoding: UTF-8
+    cardinality: one_normalized_document
+  side_effects: none
+  final_task_execution_by_builder: prohibited
+required_context:
+  - governed_task_definition
+  - declared_atomic_boundary
+  - input_and_output_contracts
+  - immutable_empty_skill_registry
+capabilities:
+  - id: governed_input_acceptance
+    owner: Builder_code
+  - id: atomic_boundary_declaration
+    owner: Builder_code
+  - id: target_and_output_contract_definition
+    owner: Builder_code
+  - id: deterministic_validation_and_receipt_generation
+    owner: Builder_code
+skill_registry:
+  path: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  external_skills_required: false
+  dynamically_discovered_skills_allowed: false
+required_work:
+  - lock_governed_synthetic_task_definition
+  - validate_declared_atomic_boundary
+  - compile_canonical_harness_ir
+  - compile_atomic_harness_definition
+  - validate_atomic_harness_definition
+  - compile_development_capsule
+prohibited_integrations:
+  - Format02
+  - VAE
+  - Delegation_runtime
+  - Conversational_Activation
+  - Interview_Expression
+  - ReelCast
+  - GPU_or_ComfyUI
+  - VLM_evaluator
+  - external_provider
+  - production_publication
+receipt_requirements:
+  deterministic: true
+  bind_profile_hash: true
+  bind_skill_registry_hash: true
+  mark_non_production_and_non_certified: true

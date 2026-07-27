@@ -1,0 +1,181 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Asset Demand
+description: Authoritative provider-neutral request from an Atomic Content Harness.
+type: object
+additionalProperties: false
+required:
+- request_id
+- version
+- content_harness_ref
+- asset_classification
+- semantic_intent
+- activative_function
+- composition_intent
+- delivery
+- evaluation_policy
+properties:
+  request_id:
+    type: string
+    pattern: ^VAD-
+  version:
+    type: integer
+    minimum: 1
+  supersedes:
+    type:
+    - string
+    - 'null'
+  content_harness_ref: &id001
+    type: string
+    minLength: 1
+  category_profile: *id001
+  format_profile: *id001
+  asset_classification:
+    type: object
+    additionalProperties: false
+    required:
+    - family
+    - subtype
+    - harness_role
+    - visual_syntax_role
+    properties:
+      family: &id002
+        type: string
+      subtype: *id002
+      harness_role: *id002
+      visual_syntax_role: *id002
+  semantic_intent:
+    type: object
+    required:
+    - subject
+    - recognition_target
+    - evidence_refs
+    properties:
+      subject: *id002
+      recognition_target: *id002
+      viewer_state_before: *id002
+      viewer_state_after: *id002
+      evidence_refs:
+        type: array
+        items: *id001
+  activative_function:
+    type: object
+    required:
+    - function
+    - intended_viewer_effect
+    properties:
+      function: *id002
+      intended_viewer_effect: *id002
+      sequence_position: {}
+  wrong_reading_locks:
+    type: array
+    items: *id002
+  composition_intent:
+    type: object
+    required:
+    - canvas
+    - intended_region
+    - role
+    properties:
+      canvas:
+        type: object
+        required:
+        - width
+        - height
+        - aspect_ratio
+        properties:
+          width:
+            type: integer
+            minimum: 1
+          height:
+            type: integer
+            minimum: 1
+          aspect_ratio: *id002
+      intended_region:
+        type: object
+        required:
+        - bbox_norm
+        - tolerance
+        properties:
+          bbox_norm:
+            type: array
+            minItems: 4
+            maxItems: 4
+            items:
+              type: number
+              minimum: 0
+              maximum: 1
+          tolerance:
+            type: number
+            minimum: 0
+            maximum: 0.5
+      role:
+        type: object
+        required:
+        - layer
+        - visual_weight
+        properties:
+          layer: *id002
+          visual_weight: *id002
+          depth_priority:
+            type: integer
+      directional_constraints:
+        type: object
+      reserved_regions:
+        type: array
+        items:
+          type: object
+      crop_policy:
+        type: object
+      background_policy:
+        type: object
+  identity_continuity:
+    type: object
+  reference_evidence:
+    type: array
+    items:
+      type: object
+      required:
+      - reference_id
+      - uri
+      - sha256
+      properties:
+        reference_id: *id002
+        uri: *id002
+        sha256: *id002
+        role: *id002
+  delivery:
+    type: object
+    required:
+    - width
+    - height
+    - format
+    - candidate_count
+    properties:
+      width:
+        type: integer
+      height:
+        type: integer
+      format: *id002
+      candidate_count:
+        type: integer
+        minimum: 1
+  evaluation_policy:
+    type: object
+    required:
+    - profile_ref
+    - maximum_quality_repair_rounds
+    properties:
+      profile_ref: *id001
+      maximum_quality_repair_rounds:
+        type: integer
+        minimum: 0
+        maximum: 3
+      hard_gates:
+        type: array
+        items: *id002
+  execution_policy:
+    type: object
+  notes:
+    type:
+    - string
+    - 'null'

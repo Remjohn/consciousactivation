@@ -1,0 +1,20 @@
+{
+  "schema_version": "cmf-builder-story-observability-evidence/v1",
+  "story_id": "ST-01.01",
+  "generated_on": "2026-07-15",
+  "result": "PASS",
+  "required_field_validation": {
+    "fields": ["run_id", "story_id", "artifact_identity", "authority_identity", "version", "provenance", "outcome", "failure_context", "correlation_id", "causation_id", "command_id", "target_id", "category_id", "profile_id", "stream_version"],
+    "checked_examples": 4,
+    "missing_fields": [],
+    "prohibited_data_detected": false
+  },
+  "mutation_safety": {"invalid_transition_event_count_before": 2, "invalid_transition_event_count_after": 2, "authoritative_mutation_on_rejection": false},
+  "examples": [
+    {"event_name": "ST-01.01:OutcomeVerified", "run_id": "run_019ba503-1000-76b3-9915-76b247fffff4", "story_id": "ST-01.01", "artifact_identity": "sha256:1e470377dbc40e5c221500b33584dddcbb8a1508dc47f59dda78a882a23e97e0", "authority_identity": "architect-1", "version": "cmf-builder-run-lifecycle/v1", "provenance": "ST-01.01", "outcome": "PASS", "failure_context": {}, "correlation_id": "correlation-1", "causation_id": "human-authorization-ST-01.01", "command_id": "command-create-1", "target_id": "atomic_content_harness", "category_id": "2d_character_animation", "profile_id": "format02_minimal_coach_theatre", "stream_version": 2},
+    {"event_name": "ST-01.01:OutcomeRejected", "run_id": "run_019ba503-1000-76b3-9915-76b247fffff4", "story_id": "ST-01.01", "artifact_identity": "sha256:1e470377dbc40e5c221500b33584dddcbb8a1508dc47f59dda78a882a23e97e0", "authority_identity": "architect-1", "version": "cmf-builder-run-lifecycle/v1", "provenance": "ST-01.01", "outcome": "FAIL", "failure_context": {"code": "TransitionRejected", "current_state": "CREATED", "target_state": "GENESIS"}, "correlation_id": "correlation-observation", "causation_id": "receipt_019ba503-1000-753f-b331-67f08ed2c5a9", "command_id": "invalid-observation", "target_id": "atomic_content_harness", "category_id": "2d_character_animation", "profile_id": "format02_minimal_coach_theatre", "stream_version": 2},
+    {"event_name": "ST-01.01:OutcomeRejected", "run_id": "unassigned", "story_id": "ST-01.01", "artifact_identity": "RunLifecycle", "authority_identity": "unknown-actor", "version": "cmf-builder-run-lifecycle/v1", "provenance": "ST-01.01", "outcome": "FAIL", "failure_context": {"code": "AuthorityDenied", "actor_id": "unknown-actor", "action": "CREATE_RUN"}, "correlation_id": "correlation-1", "causation_id": "human-authorization-ST-01.01", "command_id": "unauthorized-observation", "target_id": "atomic_content_harness", "category_id": "2d_character_animation", "profile_id": "format02_minimal_coach_theatre", "stream_version": 0},
+    {"event_name": "RunResumed", "run_id": "run_019ba503-1000-76b3-9915-76b247fffff4", "story_id": "ST-01.01", "artifact_identity": "sha256:8d47be0a9b083525853ae0614fc080de6b68a4b3283ce3aafae2b0ea65dd35c3", "authority_identity": "architect-1", "version": "cmf-builder-run-lifecycle/v1", "provenance": "ST-01.01", "outcome": "PASS", "failure_context": {}, "correlation_id": "correlation-observation", "causation_id": "receipt_019ba503-1000-79f7-aed6-397623d6f1b4", "command_id": "resume-observation", "target_id": "atomic_content_harness", "category_id": "2d_character_animation", "profile_id": "format02_minimal_coach_theatre", "stream_version": 4}
+  ],
+  "completion_events": {"success": "ST-01.01:OutcomeVerified", "failure": "ST-01.01:OutcomeRejected", "receipt_link": "ST-01.01:StoryCompletionReceipt"}
+}

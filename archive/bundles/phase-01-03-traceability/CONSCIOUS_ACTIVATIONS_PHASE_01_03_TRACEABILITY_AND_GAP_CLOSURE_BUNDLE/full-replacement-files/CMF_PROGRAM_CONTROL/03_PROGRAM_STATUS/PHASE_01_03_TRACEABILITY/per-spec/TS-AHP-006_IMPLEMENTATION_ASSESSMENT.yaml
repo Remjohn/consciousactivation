@@ -1,0 +1,29 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AHP-006
+spec_path: 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-AHP-006.md
+spec_sha256: abb1ded22e1d5a93eda93223d50606c8e9dcc96ab78eef147b242a550479e1d9
+phase: PHASE_03
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 6
+  direct_aggregate_test_evidence: 0
+  implementation_without_direct_ac_test: 0
+  unimplemented_or_nonbehavior: 6
+implementation_paths:
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/infrastructure/repository.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/application/run_service.py
+test_evidence:
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_deterministic_scheduler_checkpoint_and_replay
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_cancel_quarantines_late_running_result
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_pause_resume_guards_dispatch
+open_gap_ids:
+- GAP-SPEC-AC-NOT-BEHAVIORAL
+- GAP-BACKUP-RESTORE-REHEARSAL
+- GAP-MIGRATION-FAULT-INJECTION
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

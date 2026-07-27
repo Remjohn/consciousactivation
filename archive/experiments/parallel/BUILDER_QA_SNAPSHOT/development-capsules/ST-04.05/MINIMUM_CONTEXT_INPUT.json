@@ -1,0 +1,98 @@
+{
+  "schema_version": "cmf-builder-synthetic-minimum-context-input/v1",
+  "scope": "ST-04.05_SYNTHETIC_MINIMUM_COMPLETE_CONTEXT_ONLY",
+  "source_contract": "cmf-builder-phase-handoff-graph/v1@1.0.0",
+  "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+  "conversation_history_allowed": false,
+  "silent_truncation_allowed": false,
+  "runtime_loading_allowed": false,
+  "priority_order": [
+    "phase_responsibility", "output_contract", "ratified_decision", "binding",
+    "canonical_procedure", "harness_adaptation", "direct_evidence", "constraint",
+    "conditional_reference", "example", "enrichment"
+  ],
+  "references": [
+    {
+      "reference_id": "source_lock_ref_v1", "version": "1.0.0",
+      "integrity_source": "active_handoff_lineage:source_lock_ref",
+      "owner": "cmf_builder.source_lock", "authority": "code",
+      "content_role": "direct_evidence", "loading_mode": "phase_local",
+      "allowed_phases": ["ratified_boundary_ready"],
+      "may_influence": ["frozen_atomic_boundary_ref"],
+      "must_not_influence": ["constitutional_authority", "production_certification"]
+    },
+    {
+      "reference_id": "human_ratification_ref_v1", "version": "1.0.0",
+      "integrity_source": "active_handoff_lineage:ratification_ref",
+      "owner": "human_authority", "authority": "human",
+      "content_role": "ratified_decision", "loading_mode": "phase_local",
+      "allowed_phases": ["ratified_boundary_ready"],
+      "may_influence": ["frozen_atomic_boundary_ref", "boundary_validation_receipt_ref"],
+      "must_not_influence": ["constitutional_authority", "production_certification"]
+    },
+    {
+      "reference_id": "frozen_atomic_boundary_ref_v1", "version": "1.0.0",
+      "integrity_source": "accepted_internal_handoff:frozen_atomic_boundary_ref",
+      "owner": "cmf_builder.atomicity", "authority": "code",
+      "content_role": "binding", "loading_mode": "phase_local",
+      "allowed_phases": ["governed_contract_ready"],
+      "may_influence": ["validated_target_contract_ref"],
+      "must_not_influence": ["constitutional_authority", "production_certification"]
+    },
+    {
+      "reference_id": "boundary_validation_receipt_ref_v1", "version": "1.0.0",
+      "integrity_source": "accepted_internal_handoff:boundary_validation_receipt_ref",
+      "owner": "cmf_builder.atomicity", "authority": "code",
+      "content_role": "output_contract", "loading_mode": "phase_local",
+      "allowed_phases": ["governed_contract_ready"],
+      "may_influence": ["validation_receipt_ref"],
+      "must_not_influence": ["constitutional_authority", "production_certification"]
+    },
+    {
+      "reference_id": "constitutional_authority_pointer_v1", "version": "1.0.0",
+      "integrity_source": "constitutional_precedence_report:canonical_authority_ref",
+      "owner": "canonical_program_authority", "authority": "governing_source",
+      "content_role": "constraint", "loading_mode": "retrieval_only",
+      "allowed_phases": ["governed_contract_ready"],
+      "may_influence": ["validated_target_contract_ref", "validation_receipt_ref"],
+      "must_not_influence": ["source_evidence_identity"],
+      "progressive_disclosure_pointer": "canonical_authority_ref"
+    },
+    {
+      "reference_id": "synthetic_spr_v1", "version": "1.0.0",
+      "integrity_source": "literal_sha256:3f699f67d7246530b211ab63cdce4f91a65af1940dcad51f9b102da752f439d2",
+      "owner": "cmf_builder.synthetic_fixture", "authority": "code",
+      "content_role": "enrichment", "loading_mode": "forbidden_at_runtime",
+      "allowed_phases": [], "may_influence": [],
+      "must_not_influence": ["source_evidence_identity", "constitutional_authority", "production_certification"],
+      "semantic_status": "NOT_APPLICABLE"
+    }
+  ],
+  "phase_policies": [
+    {
+      "phase_ref": "ratified_boundary_ready",
+      "required_references": ["source_lock_ref_v1", "human_ratification_ref_v1"],
+      "optional_references": [],
+      "excluded_references": ["frozen_atomic_boundary_ref_v1", "boundary_validation_receipt_ref_v1", "constitutional_authority_pointer_v1", "synthetic_spr_v1"],
+      "hard_budget": {"tokens": 80, "latency_ms": 0, "cost_microunits": 0},
+      "soft_budget": {"tokens": 64, "latency_ms": 0, "cost_microunits": 0},
+      "governed_token_contributions": {"source_lock_ref_v1": 24, "human_ratification_ref_v1": 24},
+      "compression_permissions": [], "retrieval_policy": "PROHIBITED",
+      "overflow_behavior": "BLOCK_WITH_TYPED_REMEDIATION"
+    },
+    {
+      "phase_ref": "governed_contract_ready",
+      "required_references": ["frozen_atomic_boundary_ref_v1", "boundary_validation_receipt_ref_v1", "constitutional_authority_pointer_v1"],
+      "optional_references": [],
+      "excluded_references": ["source_lock_ref_v1", "human_ratification_ref_v1", "synthetic_spr_v1"],
+      "hard_budget": {"tokens": 112, "latency_ms": 0, "cost_microunits": 0},
+      "soft_budget": {"tokens": 96, "latency_ms": 0, "cost_microunits": 0},
+      "governed_token_contributions": {"frozen_atomic_boundary_ref_v1": 24, "boundary_validation_receipt_ref_v1": 24, "constitutional_authority_pointer_v1": 16},
+      "compression_permissions": [], "retrieval_policy": "POINTER_ONLY_NO_RUNTIME_FETCH",
+      "overflow_behavior": "BLOCK_WITH_TYPED_REMEDIATION"
+    }
+  ],
+  "manifest_categories": ["included", "excluded", "summarized", "retrieved", "compressed"],
+  "production_eligible": false,
+  "certified": false
+}

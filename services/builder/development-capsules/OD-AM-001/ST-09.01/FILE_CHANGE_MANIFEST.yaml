@@ -1,0 +1,23 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-09.01
+status: IMPLEMENTED_DEVELOPMENT_PASS
+production_files_changed:
+  - {path: src/cmf_builder/workflow/actor_explicit_contracts.py, sha256: 9dc8aaf8aa2085aff66adda56faf891fc260287e04e0ca0c35681934126e4399, role: actor-explicit immutable WorkflowIR and authority lifecycle}
+  - {path: src/cmf_builder/workflow/deterministic_local_adapter.py, sha256: 6cd74282f33154af6977bba3b277c3af171993562fa67cf9d321a979a42e1a39, role: execution-free deterministic local compile and routing adapter}
+test_files_changed:
+  - {path: tests/stories/st_09_01/test_actor_explicit_workflow.py, sha256: 1996273d226da7f2f233912b2dafa7626e3acc3d1beaa006e5f20aa05ac9fce9}
+  - {path: tests/stories/st_09_01/test_deterministic_local_adapter.py, sha256: c0ab88d0c5002b9108f2c0b7b261a0eeedbb355a62e24de96d1d7d6759dad185}
+  - {path: tests/stories/st_09_01/test_failure_authority_determinism.py, sha256: 1f9053124a29ac4eb375e68baf41c397f86530eb7b26b17daaeee31b02a5b9a5}
+files_modified:
+  - development-capsules/OD-AM-001/ST-09.01/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-09.01/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-09.01/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-09.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+shared_files_changed:
+  - {path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml, sha256: d739bde484c5cfa915a8f09f23dcc5e166537785a14bf51a94e08e9a58356b2f, role: exact source registration}
+paths_outside_capsule_changed: []
+prohibited_files_changed: []
+external_dependencies_added: []
+validation: {path_ownership_conformant: true, focused_tests: PASS_49_OF_49, architecture_tests: PASS_12_OF_12, latest_applicable_full_regression: PASS_1683_OF_1683_NO_MANDATORY_SKIPS, Python_source_compilation: PASS_119_SOURCE_FILES, external_execution: false, production_ready: false, certified: false}

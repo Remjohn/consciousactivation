@@ -1,0 +1,43 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:actor-ref",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Attributed actor identity with bounded workflow role.",
+  "properties": {
+    "actor_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "actor_type": {
+      "enum": [
+        "deterministic_module",
+        "model_program",
+        "human"
+      ],
+      "type": "string"
+    },
+    "product_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "workflow_role": {
+      "enum": [
+        "hunter",
+        "analyst",
+        "composer",
+        "commander",
+        "evaluator",
+        "operator"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "actor_id",
+    "actor_type",
+    "product_id",
+    "workflow_role"
+  ],
+  "title": "ActorRef",
+  "type": "object"
+}

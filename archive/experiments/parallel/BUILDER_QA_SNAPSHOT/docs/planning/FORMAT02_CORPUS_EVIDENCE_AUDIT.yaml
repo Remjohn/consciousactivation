@@ -1,0 +1,106 @@
+schema_version: cmf-builder-format02-corpus-evidence-audit/v1
+audit_id: builder-format02-bd004-audit-2026-07-15
+audited_on: "2026-07-15"
+authority:
+  builder_prd: "1.2"
+  activative_intelligence_constitution: "1.1"
+scope:
+  story_id: ST-01.02
+  blocker_id: BD-004
+  blocker_subscope: format02_minimal_coach_theatre
+  compilation_target: atomic_content_harness
+  category_id: 2d_character_animation
+  excluded:
+    - conversational_activation_expression
+    - public_comment
+    - reply_dm
+    - reelcast_expression
+    - interview_expression
+    - VAE production assets and behavior
+    - Delegation production behavior
+classification: PARTIAL
+classification_reason: >-
+  Canonical profile identity, category authority, a historical broad-archive hash,
+  derived Format 02 doctrine, and external contract fixtures exist. The referenced
+  archive bytes are not accessible in Builder or Program Control, and no governed
+  item-level Format 02 corpus, portable SourceProfile, usage authority package,
+  protected-example designation, amendment procedure, or validation receipt exists.
+authoritative_profile_evidence:
+  - path: governance/CANONICAL_CATEGORY_REGISTRY.yaml
+    sha256: 9a836e5cc80371719cce688884ca3f071ee500862d54e6533982266d15b553b1
+    finding: format02_minimal_coach_theatre belongs to 2d_character_animation
+  - path: ../CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/FORMAT02_PROFILE_ALIAS_REGISTRY.yaml
+    sha256: 21ad1a618361a14ec62576ce4e1d7ce3c7267e3bd77a1004aa8b996d51c87d57
+    finding: active canonical profile and alias behavior are governed; strongest state is contract_compatible
+candidate_source_evidence:
+  - evidence_id: SRC-004
+    registry_path: governance/SOURCE_REGISTER.json
+    registry_sha256: a5a0d5347142ac992a63cdbc16e2641615d02ada5844ad0db4f8b2cca0b9994d
+    recorded_name: VISUAL SYNTAX BUILDER (2)(2).zip
+    recorded_uri: /mnt/data/VISUAL SYNTAX BUILDER (2)(2).zip
+    recorded_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+    current_uri_resolves: false
+    archive_bytes_present_in_builder: false
+    archive_bytes_present_in_program_control: false
+    format02_item_selection_governed: false
+    disposition: reference_only_not_bindable
+  - evidence_id: program_control_vae_format02_source_summary
+    path: ../CMF_PROGRAM_CONTROL/01_PRODUCT_AUTHORITIES/visual-asset-editor/current-unpacked/CMF_VISUAL_ASSET_EDITOR_SHARDED_PRD_V1_1/reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/VISUAL_SYNTAX_SOURCE_SUMMARY.md
+    sha256: 5cffcc2db8f5779471280818795564e774c31a7b2217e22b733e583f132d6bbf
+    disposition: derived_architecture_summary_not_builder_corpus
+    exclusion_reason: externally_owned_VAE_reference_seed_without_source_bytes_or_builder_corpus_authority
+  - evidence_id: delegation_rc4_format02_scenarios
+    manifest_path: ../CMF_PROGRAM_CONTROL/02_CROSS_REPO_CONTRACTS/delegation-contracts/1.1.0-rc.4/fixtures/format02/manifest.json
+    manifest_sha256: de9007b91aed3490caf83e09058743974dd9b095233bde3bb03f2406905135c7
+    scenario_count: 10
+    disposition: delegation_contract_conformance_fixtures_not_builder_source_corpus
+corpus_completeness:
+  corpus_identifier: missing
+  corpus_version: missing
+  approved_source_profile: missing
+  accessible_source_files_or_immutable_references: missing
+  item_level_content_hashes: missing
+  item_level_provenance: missing
+  inclusion_criteria: missing
+  exclusion_criteria: missing
+  licensing_or_usage_authority: missing
+  privacy_classification: missing
+  protected_examples: missing
+  benchmark_eligibility_metadata: missing
+  known_limitations: missing
+  amendment_procedure: missing
+  validation_receipt: missing
+  historical_archive_hash: present_but_unresolvable
+profile_completeness:
+  canonical_profile_id: present
+  owning_category: present_and_authoritatively_resolved
+  target_kind: missing_from_a_portable_source_profile
+  required_roles: missing
+  recommended_roles: missing
+  optional_roles: missing
+  prohibited_roles: missing
+  allowed_media: missing
+  discovery_rules: missing
+  safety_limits: missing
+  saturation_contract_ref: missing
+  real_target_candidate_boundary: missing
+conflict_review:
+  competing_corpus_authorities_found: false
+  non_governing_status_inconsistency_found: true
+  artifact: ../CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CATEGORY_PROFILE_CONVERGENCE.yaml
+  artifact_sha256: 4b802d2da1d9b21fe06c36f59cd5ef84e08092be4e47cd9c559fe8eaefb7340a
+  inconsistent_value: Short-Form Edited Video
+  authoritative_value: 2D Character Animation
+  resolution: >-
+    The named governing alias registry and Builder canonical category registry control.
+    The status snapshot field is not a second product authority and must not be
+    propagated into the corpus package.
+closure:
+  package_created: false
+  validation_receipt_created: false
+  operator_input_required: true
+  operator_request: docs/planning/FORMAT02_CORPUS_OPERATOR_INPUT_REQUEST.md
+  owner: product_lead_and_evidence_steward
+  story_readiness_effect: ST-01.02_remains_BLOCKED_EVIDENCE
+  certification_effect: none
+

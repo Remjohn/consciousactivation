@@ -1,0 +1,10 @@
+obligation_id,type,title,implementation_effect,acceptance_evidence
+D014,LOCKED_DECISION,Phase handoffs,"Versioned typed internal contracts; no silent downstream rewrite",contract_identity_mutation_and_compatibility_tests
+FR-068,FUNCTIONAL_REQUIREMENT,Compile a phase-specific Context Graph,"Declare included governed context slots, exclusions, conditional exposure and unload semantics per phase without selecting minimum-complete context",phase_context_contract_tests
+FR-069,FUNCTIONAL_REQUIREMENT,Use versioned typed phase handoff contracts,"Declare producer, consumers, required and optional fields, provenance, authority, validation, compatibility, mutability and invalidation",handoff_contract_tests
+FR-070,FUNCTIONAL_REQUIREMENT,Prohibit silent downstream rewriting,"Downstream phases consume immutable authoritative values; changes require new upstream versions",mutation_and_lineage_tests
+FR-071,FUNCTIONAL_REQUIREMENT,Validate ownership and dependency impact,"Every field has one owner and invalidation is limited to affected descendants",ownership_and_impact_tests
+HG-004,READINESS_HARD_GATE,Unresolved Contract Contradiction,"Contradictions block commit",negative_contract_tests
+HG-005,READINESS_HARD_GATE,Silent Upstream Contract Rewrite,"Silent rewrites block commit",mutation_rejection_tests
+HG-007,READINESS_HARD_GATE,Missing Required Dependency Or Authority,"Missing phase, field, dependency or authority blocks commit",dependency_and_authority_tests
+NFR-ARCH-001,NON_FUNCTIONAL_REQUIREMENT,Explicit ownership integrity,"Every authoritative contract and field has explicit non-conflicting ownership",architecture_and_coverage_tests

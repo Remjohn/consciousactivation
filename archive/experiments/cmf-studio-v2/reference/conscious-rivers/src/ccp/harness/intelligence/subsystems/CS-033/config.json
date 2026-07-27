@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-033",
+  "name": "Prediction Error Gate",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Predictive Coding",
+    "Attention Capture",
+    "Event segmentation research"
+  ],
+  "inputs": [
+    "container_prediction_error_budget",
+    "component_prediction_error_profile",
+    "schema_familiarity_score",
+    "reveal_timing_ms",
+    "legibility_loss",
+    "surprise_resolution_seconds"
+  ],
+  "outputs": [
+    "prediction_error_score",
+    "budget_alignment_verdict",
+    "corrective_route",
+    "violations"
+  ],
+  "thresholds": {
+    "minimum_prediction_error_score": 0.35,
+    "maximum_prediction_error_score": 1.0,
+    "maximum_legibility_loss": 0.25,
+    "preferred_reveal_window_ms": {
+      "min": 250,
+      "max": 2200
+    },
+    "maximum_surprise_resolution_seconds": 3.0,
+    "require_container_budget_alignment": true
+  },
+  "default_action_on_fail": "REVISE"
+}

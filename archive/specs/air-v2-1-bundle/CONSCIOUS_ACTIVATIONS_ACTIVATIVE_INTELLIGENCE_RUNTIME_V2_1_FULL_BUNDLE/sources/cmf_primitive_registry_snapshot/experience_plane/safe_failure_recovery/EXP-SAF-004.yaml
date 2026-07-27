@@ -1,0 +1,187 @@
+experience_primitive_id: "EXP-SAF-004"
+canonical_name: "Practical Play / Safe Failure"
+aliases:
+  - "The Consequence-Free Sandbox"
+  - "Zero Real-World Harm"
+  - "Fun Failure"
+
+experience_family: "safe_failure_recovery"
+mechanic_role: "system"
+moment_role: "recording_environment"
+implementation_role: "architectural"
+
+source_audits:
+  - audit_file: "AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+    primitive_name_in_audit: "Practical Play / Safe Failure"
+    mcda_score: 168
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Reality_is_Broken_Jane_McGonigal.md"
+
+book_reference:
+  title: "Reality Is Broken"
+  author: "Jane McGonigal"
+  chapters:
+    - "Chapter 4: Fun Failure"
+  key_pages: "65-75"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Reality is Broken - Jane McGonigal.md"
+
+summary: >
+  Practical Play / Safe Failure ensures that the user is completely insulated
+  from real-world consequences when they fail inside the CCP environment.
+  In the real world, a coach who fumbles a webinar pitch loses $10,000 in sales.
+  In CCP, when a coach fumbles a V2WS pitch drill, they lose nothing except
+  a few digital points, and they immediately gain insight on how to fix it.
+  The platform must be explicitly architected so that failure is private,
+  reversible, and inherently educational, turning the anxiety of public speaking
+  into the low-stakes joy of 'Fun Failure.'
+
+core_move: >
+  Guarantee that the user controls the visibility of their failures, ensuring
+  that bad takes are never automatically published, and that the cost of failing
+  a drill is strictly contained within the game loop.
+
+why_it_works: >
+  Jane McGonigal identifies that in well-designed games, players actually spend
+  80% of their time failing, yet they remain highly engaged. This 'Fun Failure'
+  exists because the failure is safe; it provides immediate feedback without
+  ruining the player's real life. When coaches speak on LinkedIn, failure is
+  permanent and damaging (loss of reputation). If CCP feels like LinkedIn, they
+  will be too paralyzed to practice. By explicitly guaranteeing that CCP is a
+  sandbox—where their worst takes are quarantined and only their best takes
+  are clipped for CMF distribution—we remove the paralysis.
+
+examples:
+  - context: "BOOK: Reality Is Broken - Super Mario Bros"
+    application: >
+      When Mario falls in a pit, the player doesn't lose money from their bank
+      account or face public humiliation. They lose a 'life', reset instantly to
+      the beginning of the level, and use the knowledge of where the pit is to
+      jump it next time.
+    effect: >
+      The player tries risky, aggressive moves they would never try in real life.
+
+  - context: "CCP: The Quarantine Default"
+    application: >
+      A coach records a reaction and the AI scores it a 35/100 (high hedging,
+      low conviction). The system explicitly states: 'This take has been
+      quarantined to your private vault. It will not be sent to the Jury. Tap
+      to try again.'
+    effect: >
+      The coach feels immense relief and immediately tries again, knowing their
+      reputation is protected.
+
+  - context: "CCP: V2WS Sandbox Mode"
+    application: >
+      Before deploying an automated webinar, the coach records the 'Close' section
+      in the CCP Sandbox. The system flags that they sound desperate.
+    effect: >
+      They failed safely in the app, saving them from failing dangerously in front
+      of 100 live prospects.
+
+  - context: "CCP: The Draft Bin"
+    application: >
+      Users can freely abort a recording mid-sentence. The aborted take doesn't
+      count against their score or trigger a penalty. It just goes into the Draft Bin.
+    effect: >
+      Encourages users to hit the record button more frequently, knowing they can
+      always bail out if they stumble.
+
+  - context: "CCP: Ghost Mode Practice"
+    application: >
+      A coach turns on 'Ghost Mode' for Law28. Their scores are tracked for their
+      own analytics, but hidden from their Accountability Partner for 24 hours while
+      they work on a new skill.
+    effect: >
+      Removes peer-pressure friction during the messy phase of skill acquisition.
+
+anti_examples:
+  - description: >
+      Automatically posting a user's first raw audio take to the public Jury
+      pool without giving them a chance to review the score or delete it.
+    why_it_fails: >
+      This is the exact opposite of Safe Failure. It replicates the high-stakes
+      anxiety of live social media. The user will be terrified to use the app
+      because a mistake could damage their professional brand.
+
+experience_stage_fit:
+  entry: 0.9
+  activation: 0.8
+  recording: 1.0
+  scoring: 0.4
+  social_spread: 0.1
+  recovery: 0.9
+  retention: 0.9
+  conversion: 0.5
+
+surface_fit:
+  telegram_message: 0.8
+  mini_app: 1.0
+  score_card: 0.5
+  share_asset: 0.1
+  voice_prompt: 0.8
+  push_nudge: 0.4
+
+user_state_effects:
+  confidence: 0.5
+  urgency: 0.3
+  clarity: 0.8
+  safety: 1.0
+  status: 0.4
+  belonging: 0.3
+  curiosity: 0.7
+  replay_desire: 0.9
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 0.8
+  challenge_progression: 0.9
+  silent_referral: 0.2
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 1.0
+  onboarding_activation: 0.9
+  social_economy: 0.3
+  content_extraction: 0.8
+
+activation_conditions:
+  - "User is performing the core high-friction action (recording voice)"
+  - "User receives a poor score or explicitly requests to abort"
+
+suppression_conditions:
+  - "User is explicitly participating in a 'Live/No-Edit' tournament where the stakes are the entire point"
+
+misuse_modes:
+  - "Too Safe — making it so safe that the user never actually publishes anything or challenges themselves (the eternal draft)."
+  - "Fake Safety — telling them it's private but using their failed audio in platform marketing materials."
+
+synergizes_with:
+  - "EXP-SAF-001" # White Hat Sequencing (Safety is part of the White Hat recovery)
+  - "EXP-PRG-001" # Friction & Flow
+
+conflicts_with:
+  - "EXP-SOC-001" # Group Quests require public participation; you must eventually leave the safe sandbox.
+
+implementation_targets:
+  frontend_components:
+    - "QuarantineUI — explicit visual language indicating the recording is 'locked' or 'private'"
+    - "TrashTakeGesture — an incredibly satisfying, fast way to delete a bad take and instantly start over"
+  backend_rules:
+    - "privacy_engine: default all takes scoring < 60 to private/quarantine unless explicitly overridden by the user"
+  telemetry_events:
+    - "take_quarantined"
+    - "aborted_mid_recording"
+    - "safe_failure_retry_initiated"
+  experiments:
+    - "A/B test: Asking 'Publish to Jury?' vs Auto-publishing takes that score > 85"
+
+experience_metrics:
+  entry_rate: 0.9
+  react_rate: 0.9
+  completion_rate: 0.6
+  share_rate: 0.2
+  comeback_rate: 0.9
+  day7_retention: 0.9
+  upgrade_signal: 0.5
+
+crosswalk_id: "XW-SAF-SANDBOX"
+crosswalk_note: >
+  This is the primary reason coaches will choose CCP over just practicing
+  in their phone's voice memo app—the CCP fails them safely *and* tells them why.

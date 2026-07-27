@@ -1,0 +1,40 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-04.01
+primary_epic: EP-04
+active_mode: SYNTHETIC_CAPABILITY_OWNERSHIP
+outcome: >-
+  Deterministic Builder code inventories every capability declared by the exact
+  active synthetic Harness IR and emits one immutable ownership graph in which
+  every capability has an explicit owner kind, reliability evidence, cost
+  evidence, authority boundary, and failure disposition.
+owned_obligations: [D012, FR-060, FR-061, FR-062, FR-063]
+direct_dependency: ST-03.05:StoryCompletionReceipt
+implementation_owner: TS-07_Architecture_Graphs_owner
+component_boundary: Builder-owned capability inventory and ownership assignment only; module, phase, context, handoff, skill resolution, workflow, and execution behavior remain later Stories.
+typed_contracts:
+  - CapabilityOwnerKind
+  - CapabilityOwnershipDecision
+  - CapabilityOwnershipGraph
+  - CapabilityOwnershipReceipt
+  - CapabilityOwnershipInvalidation
+  - CompileCapabilityOwnershipCommand
+required_behavior:
+  - consume_only_the_exact_active_ST_03_05_validated_HarnessIR
+  - inventory_every_and_only_skills_capabilities_value_without_implicit_defaults
+  - require_explicit_owner_kind_reliability_evidence_cost_evidence_and_authority_boundary
+  - allow_code_ownership_only_for_governed_deterministic_Builder_capabilities_in_synthetic_core
+  - reject_unowned_unjustified_agent_external_or_hybrid_assignments
+  - require_explicit_handoff_responsibility_for_any_hybrid
+  - preserve_empty_skill_registry_as_policy_evidence_without_resolving_skills
+  - atomically_commit_graph_run_reference_command_record_and_receipt
+  - preserve_replay_idempotency_invalidation_and_history
+failure_behavior:
+  - missing_extra_duplicate_or_drifted_capability_fails_closed
+  - missing_reliability_or_cost_evidence_fails_closed
+  - implicit_universal_owner_default_fails_closed
+  - unsupported_owner_or_hybrid_without_handoff_fails_closed
+  - stale_invalidated_or_unconstitutionally_validated_parent_fails_closed
+  - unauthorized_writer_stale_version_payload_conflict_or_partial_commit_fails_closed
+test_seam: deterministic command graph receipt replay conflict injection and upstream invalidation through the in-memory development adapter
+compatibility: HarnessIR 1.0.0 constitutional-validation 1.0.0 and empty-registry policy 1.0.0 only; future versions require explicit compatibility.
+production_claim: false

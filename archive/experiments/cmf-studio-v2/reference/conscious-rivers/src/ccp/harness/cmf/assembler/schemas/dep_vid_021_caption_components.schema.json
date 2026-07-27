@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-021 — Rendered Caption Components",
+  "description": "Caption data output from FR-VID-07. Per-beat caption arrays with word timing, emphasis, line grouping, and style metadata. Consumed by FR-VID-08 Remotion compositions.",
+  "type": "object",
+  "required": ["video_id", "project_id", "fps", "total_frames", "beats", "font_family", "font_size_base", "font_size_emphasis"],
+  "properties": {
+    "video_id": { "type": "string" },
+    "project_id": { "type": "string" },
+    "fps": { "type": "integer", "minimum": 1 },
+    "total_frames": { "type": "integer", "minimum": 1 },
+    "font_family": {
+      "type": "string",
+      "enum": ["Inter", "Outfit", "Montserrat"]
+    },
+    "font_size_base": { "type": "integer", "minimum": 12 },
+    "font_size_emphasis": { "type": "integer", "minimum": 12 },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "style_preset", "lines", "position", "color_theme"],
+        "properties": {
+          "beat_index": { "type": "integer", "minimum": 0 },
+          "style_preset": {
+            "type": "string",
+            "enum": ["hormozi", "capcut", "cinematic", "minimal"]
+          },
+          "lines": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["words", "line_index"],
+              "properties": {
+                "line_index": { "type": "integer", "minimum": 0 },
+                "words": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["word", "start_frame", "end_frame", "emphasis"],
+                    "properties": {
+                      "word": { "type": "string" },
+                      "start_frame": { "type": "integer", "minimum": 0 },
+                      "end_frame": { "type": "integer", "minimum": 0 },
+                      "emphasis": { "type": "boolean" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "type": "object",
+            "required": ["anchor", "safe_zone"],
+            "properties": {
+              "anchor": { "type": "string", "enum": ["bottom-center"] },
+              "safe_zone": {
+                "type": "object",
+                "required": ["x_min", "x_max", "y_min", "y_max"],
+                "properties": {
+                  "x_min": { "type": "number" },
+                  "x_max": { "type": "number" },
+                  "y_max": { "type": "number" },
+                  "y_min": { "type": "number" }
+                }
+              }
+            }
+          },
+          "color_theme": {
+            "type": "object",
+            "required": ["base_text_color", "emphasis_color", "shadow_color"],
+            "properties": {
+              "base_text_color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+              "emphasis_color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+              "shadow_color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

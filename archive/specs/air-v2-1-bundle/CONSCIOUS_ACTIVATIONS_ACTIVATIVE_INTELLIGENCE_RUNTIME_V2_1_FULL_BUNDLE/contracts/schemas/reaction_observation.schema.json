@@ -1,0 +1,106 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "inferred_interpretations": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Inferred Interpretations",
+      "type": "array"
+    },
+    "modality": {
+      "enum": [
+        "lexical",
+        "vocal",
+        "visual",
+        "temporal",
+        "interactional",
+        "technical"
+      ],
+      "title": "Modality",
+      "type": "string"
+    },
+    "observation_confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Observation Confidence",
+      "type": "number"
+    },
+    "observation_id": {
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "observed_value": {
+      "title": "Observed Value",
+      "type": "string"
+    },
+    "source_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "time_end_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Time End Ms"
+    },
+    "time_start_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Time Start Ms"
+    }
+  },
+  "required": [
+    "observation_id",
+    "modality",
+    "source_ref",
+    "observed_value",
+    "observation_confidence"
+  ],
+  "title": "ReactionObservation",
+  "type": "object"
+}

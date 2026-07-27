@@ -1,0 +1,21 @@
+id: avatar_performance.audience_proxy.select
+version: "1.0.0"
+status: active
+owner_agent: avatar_performance_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Compile no-lip-sync avatar and audience proxy performance plans."
+inputs:
+  - AvatarIdentityProfile
+  - AvatarHybridDesignSpec
+  - Format02SceneProgram
+outputs:
+  - AvatarPerformancePlan
+  - AudienceProxyPerformancePlan
+  - AvatarRenderPayload
+hard_gates:
+  - "No lip sync."
+  - "No phonemes or visemes."
+  - "No face morphing."
+  - "Motion requires primitive and SFL function."
+  - "Audience proxy mocking risk cannot be high."
+  - "Avatar render payload is not final render."

@@ -1,0 +1,57 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-06.05:STRUCTURAL_NON_PERSONAL_CONVERSATIONAL
+story_id: ST-06.05
+title: Compile the Conversational Expression Feedback Chain
+development_mode: STRUCTURAL_NON_PERSONAL_UNCERTIFIED_DEVELOPMENT_BRANCH
+authority:
+  amendment_receipt:
+    path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+    sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  authority_action: COMPILE_CONVERSATIONAL_FEEDBACK
+primary_obligations: [CONST-004]
+dependency_receipts:
+  ST_06_04:
+    path: development-capsules/OD-AM-001/ST-06.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    sha256: c5b67fbd0a2c7a1cc98e1e8d03f9ea6c10ea14369c9f2b61d399cce88cf35021
+    status: IMPLEMENTED_DEVELOPMENT_PASS
+human_policy_disposition:
+  HD_006:
+    implementation: STRUCTURAL_NON_PERSONAL_CONTRACTS_ONLY
+    evidence_gate: HUMAN_POLICY_PENDING
+  HD_007:
+    implementation: STRUCTURAL_UNCERTIFIED_ONLY
+    evidence_gate: PRODUCTION_CERTIFICATION_PENDING
+  human_owned_truth: [actual_reaction, ReactionReceipt, ExpressionMoment, IdentityDNA_approval]
+outcome: >-
+  Compile immutable structural contracts and a deterministic state machine for
+  Activative Calls, attributable human-response requests, external Reaction Receipt
+  and Expression Moment applicability/references, consent, withdrawal, invalidation,
+  replay, and resume across four conversational profiles without receiving or
+  manufacturing human response evidence.
+required_behavior:
+  - preserve the fifth canonical category and all four conversational profile identities
+  - compile Activative Call constraints desired human role desired reaction and micro commitment without claiming an actual reaction
+  - make every human response request attributable to external human and consent authorities
+  - represent Reaction Receipts and Expression Moments only as external immutable references or pending applicability states
+  - require non-empty wrong-reading locks and complete governed lineage
+  - fail closed on missing consent authority provenance scripted human landing premature Identity DNA approval or external runtime behavior
+  - preserve withdrawal restriction invalidation replay resume and historical reproduction
+  - preserve Activation First as runtime law and Visual Syntax First as development law
+permitted_paths:
+  - src/cmf_builder/domain/conversational_feedback.py
+  - src/cmf_builder/application/conversational_commands.py
+  - tests/stories/st_06_05/**
+  - development-capsules/OD-AM-001/ST-06.05/**
+prohibited:
+  - actual human-response payload ingestion storage synthesis or interpretation
+  - issuance of a real Reaction Receipt or Expression Moment
+  - Identity DNA merge or amendment approval
+  - consent policy invention retention storage redaction access control or personal-data processing
+  - Interview Expression ReelCast or other conversational product runtime behavior
+  - production thresholds certification external deployment provider network database API UI or transport
+  - shared source-boundary package-export queue status or authority-file edits by this lane
+external_gates_remaining_open: [HD-006, HD-007, BD-004-broader, BD-008, BD-010-broader, external-conversational-products]
+completion_receipt_type: ImplementationCompletionReceipt
+completion_state_before_integrator_gate: PENDING_INTEGRATOR_FULL_REGRESSION
+production_ready: false
+certified: false

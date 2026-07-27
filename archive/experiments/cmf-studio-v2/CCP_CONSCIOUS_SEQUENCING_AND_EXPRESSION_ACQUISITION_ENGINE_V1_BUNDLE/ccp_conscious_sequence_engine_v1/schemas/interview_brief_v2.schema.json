@@ -1,0 +1,571 @@
+{
+  "$defs": {
+    "AssetPortfolioIntent": {
+      "additionalProperties": false,
+      "properties": {
+        "target_outputs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Target Outputs",
+          "type": "array"
+        },
+        "required_output_count": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Required Output Count"
+        },
+        "exploratory_routes_allowed": {
+          "default": true,
+          "title": "Exploratory Routes Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "target_outputs"
+      ],
+      "title": "AssetPortfolioIntent",
+      "type": "object"
+    },
+    "ExpressionAcquisitionPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "plan_id": {
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "ingredient_requirements": {
+          "items": {
+            "$ref": "#/$defs/IngredientRequirement"
+          },
+          "title": "Ingredient Requirements",
+          "type": "array"
+        },
+        "shared_requirement_groups": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Shared Requirement Groups",
+          "type": "object"
+        },
+        "visual_asset_request_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Visual Asset Request Ids",
+          "type": "array"
+        },
+        "research_task_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Research Task Ids",
+          "type": "array"
+        },
+        "pickup_policy": {
+          "default": "request_pickup_before_synthetic_repair",
+          "title": "Pickup Policy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "plan_id",
+        "ingredient_requirements"
+      ],
+      "title": "ExpressionAcquisitionPlan",
+      "type": "object"
+    },
+    "IngredientClass": {
+      "enum": [
+        "human_expression",
+        "research_evidence",
+        "audience_reality",
+        "visual",
+        "brand_continuity"
+      ],
+      "title": "IngredientClass",
+      "type": "string"
+    },
+    "IngredientRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "ingredient_requirement_id": {
+          "title": "Ingredient Requirement Id",
+          "type": "string"
+        },
+        "ingredient_role": {
+          "title": "Ingredient Role",
+          "type": "string"
+        },
+        "ingredient_class": {
+          "$ref": "#/$defs/IngredientClass"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "preferred_source": {
+          "$ref": "#/$defs/SourceType"
+        },
+        "acquisition_instrument_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Acquisition Instrument Ids",
+          "type": "array"
+        },
+        "sequence_hypothesis_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sequence Hypothesis Ids",
+          "type": "array"
+        },
+        "compatible_asset_routes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compatible Asset Routes",
+          "type": "array"
+        },
+        "acceptable_substitute_roles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Acceptable Substitute Roles",
+          "type": "array"
+        },
+        "fallback_sources": {
+          "items": {
+            "$ref": "#/$defs/SourceType"
+          },
+          "title": "Fallback Sources",
+          "type": "array"
+        },
+        "minimum_quality": {
+          "$ref": "#/$defs/QualityMinimums"
+        },
+        "status": {
+          "$ref": "#/$defs/RequirementStatus",
+          "default": "planned"
+        }
+      },
+      "required": [
+        "ingredient_requirement_id",
+        "ingredient_role",
+        "ingredient_class",
+        "preferred_source"
+      ],
+      "title": "IngredientRequirement",
+      "type": "object"
+    },
+    "InterviewState": {
+      "enum": [
+        "rapport",
+        "safety",
+        "authority",
+        "cinematic",
+        "vulnerability",
+        "reflection",
+        "teaching",
+        "humor",
+        "invitation",
+        "edge_pressure"
+      ],
+      "title": "InterviewState",
+      "type": "string"
+    },
+    "InterviewStateStep": {
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "minimum": 0,
+          "title": "Order",
+          "type": "integer"
+        },
+        "state": {
+          "$ref": "#/$defs/InterviewState"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "transition_condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transition Condition"
+        }
+      },
+      "required": [
+        "order",
+        "state",
+        "purpose"
+      ],
+      "title": "InterviewStateStep",
+      "type": "object"
+    },
+    "LiveCoveragePolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "track_ingredient_coverage": {
+          "default": true,
+          "title": "Track Ingredient Coverage",
+          "type": "boolean"
+        },
+        "prompt_when_required_ingredient_missing": {
+          "default": true,
+          "title": "Prompt When Required Ingredient Missing",
+          "type": "boolean"
+        },
+        "do_not_interrupt_emotional_peak": {
+          "default": true,
+          "title": "Do Not Interrupt Emotional Peak",
+          "type": "boolean"
+        },
+        "allow_unexpected_ingredient_substitution": {
+          "default": true,
+          "title": "Allow Unexpected Ingredient Substitution",
+          "type": "boolean"
+        },
+        "require_interviewer_confirmation_for_sensitive_followup": {
+          "default": true,
+          "title": "Require Interviewer Confirmation For Sensitive Followup",
+          "type": "boolean"
+        }
+      },
+      "title": "LiveCoveragePolicy",
+      "type": "object"
+    },
+    "QualityMinimums": {
+      "additionalProperties": false,
+      "properties": {
+        "specificity": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Specificity",
+          "type": "number"
+        },
+        "audience_relevance": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Audience Relevance",
+          "type": "number"
+        },
+        "emotional_density": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Emotional Density",
+          "type": "number"
+        },
+        "explanatory_completeness": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Explanatory Completeness",
+          "type": "number"
+        },
+        "source_integrity": {
+          "default": 1.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Source Integrity",
+          "type": "number"
+        }
+      },
+      "title": "QualityMinimums",
+      "type": "object"
+    },
+    "RequirementStatus": {
+      "enum": [
+        "planned",
+        "targeted",
+        "partial",
+        "captured",
+        "quality_passed",
+        "substituted",
+        "missing",
+        "pickup_requested",
+        "waived"
+      ],
+      "title": "RequirementStatus",
+      "type": "string"
+    },
+    "ResearchContextRefs": {
+      "additionalProperties": false,
+      "properties": {
+        "guest_dossier_id": {
+          "title": "Guest Dossier Id",
+          "type": "string"
+        },
+        "audience_reality_brief_id": {
+          "title": "Audience Reality Brief Id",
+          "type": "string"
+        },
+        "interviewer_resonance_context_id": {
+          "title": "Interviewer Resonance Context Id",
+          "type": "string"
+        },
+        "context_premise_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Context Premise Ids",
+          "type": "array"
+        },
+        "matrix_of_edging_brief_id": {
+          "title": "Matrix Of Edging Brief Id",
+          "type": "string"
+        },
+        "doctrine_bundle_id": {
+          "title": "Doctrine Bundle Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "guest_dossier_id",
+        "audience_reality_brief_id",
+        "interviewer_resonance_context_id",
+        "context_premise_ids",
+        "matrix_of_edging_brief_id",
+        "doctrine_bundle_id"
+      ],
+      "title": "ResearchContextRefs",
+      "type": "object"
+    },
+    "SequenceHypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_hypothesis_id": {
+          "title": "Sequence Hypothesis Id",
+          "type": "string"
+        },
+        "target_archetype": {
+          "title": "Target Archetype",
+          "type": "string"
+        },
+        "asset_derivative": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Derivative"
+        },
+        "target_asset_route": {
+          "title": "Target Asset Route",
+          "type": "string"
+        },
+        "format_target": {
+          "title": "Format Target",
+          "type": "string"
+        },
+        "sequence_pattern_id": {
+          "title": "Sequence Pattern Id",
+          "type": "string"
+        },
+        "central_viewer_question": {
+          "title": "Central Viewer Question",
+          "type": "string"
+        },
+        "promised_payoff": {
+          "title": "Promised Payoff",
+          "type": "string"
+        },
+        "anticipated_wrong_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anticipated Wrong Model"
+        },
+        "closure_type": {
+          "title": "Closure Type",
+          "type": "string"
+        },
+        "affinity_opportunity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Affinity Opportunity"
+        },
+        "future_value_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Future Value Key"
+        },
+        "ingredient_requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ingredient Requirement Ids",
+          "type": "array"
+        },
+        "confidence": {
+          "default": 0.5,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "sequence_hypothesis_id",
+        "target_archetype",
+        "target_asset_route",
+        "format_target",
+        "sequence_pattern_id",
+        "central_viewer_question",
+        "promised_payoff",
+        "closure_type",
+        "ingredient_requirement_ids"
+      ],
+      "title": "SequenceHypothesis",
+      "type": "object"
+    },
+    "SourceType": {
+      "enum": [
+        "guest_expression",
+        "guest_story",
+        "guest_teaching",
+        "guest_authority",
+        "live_reaction",
+        "audience_research",
+        "guest_dossier",
+        "external_research",
+        "brand_memory",
+        "visual_archive",
+        "pickup"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "interview_brief_id": {
+      "title": "Interview Brief Id",
+      "type": "string"
+    },
+    "brand_id": {
+      "title": "Brand Id",
+      "type": "string"
+    },
+    "brand_context_version_id": {
+      "title": "Brand Context Version Id",
+      "type": "string"
+    },
+    "guest_id": {
+      "title": "Guest Id",
+      "type": "string"
+    },
+    "interviewer_id": {
+      "title": "Interviewer Id",
+      "type": "string"
+    },
+    "research_context": {
+      "$ref": "#/$defs/ResearchContextRefs"
+    },
+    "asset_portfolio_intent": {
+      "$ref": "#/$defs/AssetPortfolioIntent"
+    },
+    "sequence_hypotheses": {
+      "items": {
+        "$ref": "#/$defs/SequenceHypothesis"
+      },
+      "title": "Sequence Hypotheses",
+      "type": "array"
+    },
+    "expression_acquisition_plan": {
+      "$ref": "#/$defs/ExpressionAcquisitionPlan"
+    },
+    "interview_state_sequence": {
+      "items": {
+        "$ref": "#/$defs/InterviewStateStep"
+      },
+      "title": "Interview State Sequence",
+      "type": "array"
+    },
+    "live_coverage_policy": {
+      "$ref": "#/$defs/LiveCoveragePolicy"
+    },
+    "status": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "research_complete",
+        "sequence_hypotheses_compiled",
+        "acquisition_plan_ready",
+        "operator_review",
+        "approved",
+        "active_session",
+        "superseded"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "interview_brief_id",
+    "brand_id",
+    "brand_context_version_id",
+    "guest_id",
+    "interviewer_id",
+    "research_context",
+    "asset_portfolio_intent",
+    "sequence_hypotheses",
+    "expression_acquisition_plan",
+    "interview_state_sequence",
+    "live_coverage_policy"
+  ],
+  "title": "InterviewBriefV2",
+  "type": "object"
+}

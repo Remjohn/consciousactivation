@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-010
+enabled: true
+priority:
+  tier: encoding
+  rank: 4
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: audio_preload_ms
+    operator: lt
+    value: 150
+route_hints:
+  prime:
+    - use_j_cut
+    - preload_score
+    - align_audio_mode_with_scene

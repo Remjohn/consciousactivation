@@ -1,0 +1,5143 @@
+{
+  "version": "1.0.0",
+  "corpus": {
+    "repository": "Remjohn/Carousel-compositions",
+    "slides_inspected": 118,
+    "folders_inspected": 16,
+    "aspect_ratio_distribution": {
+      "4:5": 36,
+      "3:4": 38,
+      "1:1": 44
+    },
+    "evidence_note": "The corpus is a curated favorite set. It supports composition design decisions, but social performance causality requires future metrics such as saves, shares, completion, and audience size."
+  },
+  "canonical_compositions": [
+    {
+      "composition_id": "H01",
+      "name": "Cinematic Full-Bleed Headline",
+      "family": "hook_cover",
+      "summary": "A film still or emotionally loaded photograph fills the canvas while a dominant headline occupies the clearest negative-space band.",
+      "semantic_roles": [
+        "cover_hook",
+        "provocation",
+        "story_open"
+      ],
+      "recommended_slide_positions": [
+        1
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4"
+      ],
+      "attention_path": "image subject → headline → small kicker",
+      "zones": [
+        {
+          "id": "visual",
+          "kind": "image",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.12,
+            0.86,
+            0.24
+          ],
+          "required": true,
+          "align": "left_or_center"
+        },
+        {
+          "id": "kicker",
+          "kind": "text",
+          "rect": [
+            0.55,
+            0.34,
+            0.35,
+            0.06
+          ],
+          "required": false,
+          "align": "right"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          9
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          8
+        ]
+      },
+      "visual_mode": "full_bleed_photo",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "composition_reference_or_scene",
+          "use_when": "custom cinematic scene or difficult subject/text relationship"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "only when generated scene must become editable or animated"
+        },
+        "sam3": {
+          "mode": "subject_cutout_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "image_crop",
+          "dark_or_light_scrim",
+          "display_text",
+          "optional_grain"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "wardrobe_detail",
+        "background_prop",
+        "environmental_sign"
+      ],
+      "source_references": [
+        "Carousel 1 slide 1",
+        "Carousels 2–7 quote-image series"
+      ],
+      "avoid": [
+        "headline over face",
+        "more than one dominant focal point",
+        "low-contrast copy"
+      ]
+    },
+    {
+      "composition_id": "H02",
+      "name": "Dramatic Poster Maximal",
+      "family": "hook_cover",
+      "summary": "A high-drama poster composition with oversized stacked typography, a central or lower-third hero, and a constrained cinematic palette.",
+      "semantic_roles": [
+        "cover_hook",
+        "campaign_open",
+        "case_study_open"
+      ],
+      "recommended_slide_positions": [
+        1
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "oversized title → hero face → secondary atmospheric details",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.07,
+            0.84,
+            0.36
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "hero",
+          "kind": "image",
+          "rect": [
+            0.16,
+            0.3,
+            0.72,
+            0.7
+          ],
+          "required": true
+        },
+        {
+          "id": "meta",
+          "kind": "text",
+          "rect": [
+            0.2,
+            0.93,
+            0.6,
+            0.04
+          ],
+          "required": false,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          10
+        ],
+        "headline_lines": [
+          2,
+          5
+        ],
+        "body_words": [
+          0,
+          5
+        ]
+      },
+      "visual_mode": "poster_scene",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "primary_composition_provider",
+          "use_when": "poster-like spatial drama, masks, theatrical lighting or visual metaphor"
+        },
+        "qwen_image_layered": {
+          "mode": "recommended",
+          "trigger": "hero, masks, atmospheric fragments, and background need separate layers"
+        },
+        "sam3": {
+          "mode": "hero_mask_refinement"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "poster_background",
+          "hero_cutout",
+          "title_stack",
+          "atmospheric_overlays",
+          "grain"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "costume_detail",
+        "symbolic_prop",
+        "local_brand_cue"
+      ],
+      "source_references": [
+        "Carousel 8 cover",
+        "Carousel 10 cover"
+      ],
+      "avoid": [
+        "small headline",
+        "three or more type families",
+        "decorative clutter competing with face"
+      ]
+    },
+    {
+      "composition_id": "H03",
+      "name": "Editorial Object Split Cover",
+      "family": "hook_cover",
+      "summary": "A clean editorial cover: large headline block on one side and a single surprising object or cropped body fragment on the other.",
+      "semantic_roles": [
+        "cover_hook",
+        "educational_open",
+        "concept_open"
+      ],
+      "recommended_slide_positions": [
+        1
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "headline → object → author/meta",
+      "zones": [
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.18,
+            0.48,
+            0.46
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "hero_object",
+          "kind": "image",
+          "rect": [
+            0.52,
+            0.1,
+            0.44,
+            0.78
+          ],
+          "required": true
+        },
+        {
+          "id": "meta",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.78,
+            0.4,
+            0.12
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          4,
+          12
+        ],
+        "headline_lines": [
+          2,
+          6
+        ],
+        "body_words": [
+          0,
+          18
+        ]
+      },
+      "visual_mode": "single_object_editorial",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_or_composition_reference",
+          "use_when": "object needs unusual crop or surreal placement"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "object overlaps background or must be repositioned"
+        },
+        "sam3": {
+          "mode": "object_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "highlight"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "solid_or_gradient_background",
+          "hero_object",
+          "display_text",
+          "meta_text"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "object_surface_detail",
+        "ordinary_life_object"
+      ],
+      "source_references": [
+        "Carousel LISTICLE TEMPLATE cover",
+        "Minimal Style giant-hand cover",
+        "Carousel 8 intro"
+      ],
+      "avoid": [
+        "multiple objects",
+        "centered headline with centered object",
+        "insufficient breathing room"
+      ]
+    },
+    {
+      "composition_id": "H04",
+      "name": "Portrait Split Cover",
+      "family": "hook_cover",
+      "summary": "A personal-brand cover with a clear text column and a large cutout portrait occupying the opposite half.",
+      "semantic_roles": [
+        "cover_hook",
+        "personal_brand_open",
+        "listicle_open"
+      ],
+      "recommended_slide_positions": [
+        1
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "headline → face → action cue",
+      "zones": [
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.2,
+            0.48,
+            0.56
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "portrait",
+          "kind": "image",
+          "rect": [
+            0.52,
+            0.08,
+            0.46,
+            0.9
+          ],
+          "required": true
+        },
+        {
+          "id": "action",
+          "kind": "icons_or_text",
+          "rect": [
+            0.08,
+            0.8,
+            0.34,
+            0.1
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          6,
+          24
+        ],
+        "headline_lines": [
+          3,
+          9
+        ],
+        "body_words": [
+          0,
+          14
+        ]
+      },
+      "visual_mode": "portrait_cutout",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "layout_reference_optional",
+          "use_when": "portrait gesture must interact with copy"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "required_for_portrait_cutout"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "circle",
+            "highlight"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "background",
+          "portrait_cutout",
+          "headline",
+          "social_action_icons"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "clothing_detail",
+        "handheld_object",
+        "small_accessory"
+      ],
+      "source_references": [
+        "Minimal Style slide 1",
+        "Listicle + Juxtaposition cover/CTA"
+      ],
+      "avoid": [
+        "portrait below 38% canvas width",
+        "copy crossing portrait face",
+        "weak eye-line"
+      ]
+    },
+    {
+      "composition_id": "H05",
+      "name": "Minimal Highlighted Type Cover",
+      "family": "hook_cover",
+      "summary": "A typography-led cover on paper or neutral texture, using one highlighted phrase and one directional line or rule.",
+      "semantic_roles": [
+        "cover_hook",
+        "framework_open",
+        "authority_open"
+      ],
+      "recommended_slide_positions": [
+        1
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "highlighted phrase → remaining title → continuation line",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.16,
+            0.78,
+            0.58
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "highlight",
+          "kind": "shape",
+          "rect": [
+            0.09,
+            0.32,
+            0.68,
+            0.12
+          ],
+          "required": true
+        },
+        {
+          "id": "rule",
+          "kind": "line",
+          "rect": [
+            0.78,
+            0.48,
+            0.2,
+            0.03
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          4,
+          14
+        ],
+        "headline_lines": [
+          3,
+          7
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "typography_only",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "underline",
+            "brackets"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "paper_texture",
+          "serif_or_display_text",
+          "highlight_strip",
+          "directional_rule"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "paper_note_fragment",
+        "tiny printed mark"
+      ],
+      "source_references": [
+        "Carousel 9 cover"
+      ],
+      "avoid": [
+        "more than one highlighted phrase",
+        "decorative photo added without semantic need",
+        "low type contrast"
+      ]
+    },
+    {
+      "composition_id": "H06",
+      "name": "Centered Product or Device Mockup Cover",
+      "family": "hook_cover",
+      "summary": "A bold format title sits above a centered phone, poster, screen, or product mockup on a branded field.",
+      "semantic_roles": [
+        "case_study_section",
+        "format_intro",
+        "product_open"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "format title → centered mockup → small brand mark",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.08,
+            0.8,
+            0.2
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "mockup",
+          "kind": "image",
+          "rect": [
+            0.18,
+            0.27,
+            0.64,
+            0.66
+          ],
+          "required": true
+        },
+        {
+          "id": "brand_mark",
+          "kind": "logo",
+          "rect": [
+            0.44,
+            0.02,
+            0.12,
+            0.07
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          7
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "mockup_stage",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed_for_layout",
+          "use_when": "mockup artwork itself needs generation"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "mockup artwork must be split from device/background"
+        },
+        "sam3": {
+          "mode": "mockup_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [],
+          "max_annotations": 0
+        },
+        "skia": [
+          "brand_background",
+          "format_title",
+          "mockup_image",
+          "soft_shadow"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "brand_badge",
+        "tiny UI cue"
+      ],
+      "source_references": [
+        "Carousel 10 profile and single-image slides"
+      ],
+      "avoid": [
+        "multiple competing mockups",
+        "title overlaps device",
+        "perspective inconsistency"
+      ]
+    },
+    {
+      "composition_id": "H07",
+      "name": "Portfolio Format Grid Cover",
+      "family": "hook_cover",
+      "summary": "A section title introduces two to six output examples arranged as a clean portfolio grid.",
+      "semantic_roles": [
+        "case_study_section",
+        "proof_open",
+        "format_overview"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "format title → example grid → individual thumbnails",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.06,
+            0.8,
+            0.19
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "grid",
+          "kind": "image_grid",
+          "rect": [
+            0.08,
+            0.28,
+            0.84,
+            0.62
+          ],
+          "required": true
+        },
+        {
+          "id": "brand_mark",
+          "kind": "logo",
+          "rect": [
+            0.44,
+            0.01,
+            0.12,
+            0.06
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          6
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "portfolio_grid",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "box"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "format_title",
+          "thumbnail_grid",
+          "drop_shadows"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "thumbnail_micro_detail"
+      ],
+      "source_references": [
+        "Carousel 10 carousel/reels slides"
+      ],
+      "avoid": [
+        "more than six thumbnails",
+        "unequal thumbnail treatment",
+        "no primary example"
+      ]
+    },
+    {
+      "composition_id": "H08",
+      "name": "Moodboard Grid with Central Label",
+      "family": "hook_cover",
+      "summary": "A 2×2 image grid creates instant abundance and mood while a short label spans the center seam.",
+      "semantic_roles": [
+        "list_item",
+        "moodboard",
+        "category_card",
+        "visual_listicle"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "four-image scan → central label → comparative details",
+      "zones": [
+        {
+          "id": "grid",
+          "kind": "image_grid",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "label",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.43,
+            0.76,
+            0.14
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "badge",
+          "kind": "avatar_or_icon",
+          "rect": [
+            0.03,
+            0.82,
+            0.1,
+            0.1
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          1,
+          5
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "four_image_mood_grid",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed",
+          "use_when": "individual grid images can be generated separately"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "individual_asset_crop_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "grid_crop",
+          "center_label",
+          "optional_avatar_badge"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "food_item",
+        "place_detail",
+        "ritual_object"
+      ],
+      "source_references": [
+        "Carousel Grid Mood Date",
+        "Carousel Template 1 food montage"
+      ],
+      "avoid": [
+        "different color temperatures without unifying grade",
+        "label longer than five words",
+        "busy center seam"
+      ]
+    },
+    {
+      "composition_id": "N01",
+      "name": "Solid Field Micro-Statement",
+      "family": "narrative_emotion",
+      "summary": "One short sentence is centered on a single-color field, producing a pause, conclusion, or emotional reset.",
+      "semantic_roles": [
+        "bridge",
+        "pause",
+        "conclusion",
+        "emotional_landing"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "empty field → sentence",
+      "zones": [
+        {
+          "id": "statement",
+          "kind": "text",
+          "rect": [
+            0.16,
+            0.38,
+            0.68,
+            0.24
+          ],
+          "required": true,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          11
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "solid_color_text",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "solid_fill",
+          "serif_or_display_statement"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "none_or_tiny_signature_mark"
+      ],
+      "source_references": [
+        "Carousel 1 red conclusion slides"
+      ],
+      "avoid": [
+        "body copy",
+        "more than one sentence",
+        "decorative image"
+      ]
+    },
+    {
+      "composition_id": "N02",
+      "name": "Manifesto Left Column",
+      "family": "narrative_emotion",
+      "summary": "A vertically paced list or manifesto sits in the upper-left quadrant with abundant negative space.",
+      "semantic_roles": [
+        "manifesto",
+        "pressure_build",
+        "rules",
+        "internal_monologue"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "top line → downward rhythm → open field",
+      "zones": [
+        {
+          "id": "manifesto",
+          "kind": "text",
+          "rect": [
+            0.13,
+            0.18,
+            0.48,
+            0.65
+          ],
+          "required": true,
+          "align": "left"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          18,
+          70
+        ],
+        "headline_lines": [
+          6,
+          18
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "typographic_manifesto",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "brackets",
+            "underline"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "paper_or_solid_background",
+          "manifesto_text"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "tiny icon_or_symbol_at_end"
+      ],
+      "source_references": [
+        "Carousel 1 “Harder. Faster...”"
+      ],
+      "avoid": [
+        "center alignment",
+        "dense full-width block",
+        "inconsistent line rhythm"
+      ]
+    },
+    {
+      "composition_id": "N03",
+      "name": "Minimal Gradient Statement",
+      "family": "narrative_emotion",
+      "summary": "A restrained statement floats on a soft gradient or neutral field; bold weight marks the semantic turn.",
+      "semantic_roles": [
+        "statement",
+        "reflection",
+        "challenge",
+        "bridge"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "first clause → bold phrase → silence",
+      "zones": [
+        {
+          "id": "statement",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.34,
+            0.76,
+            0.33
+          ],
+          "required": true,
+          "align": "left_or_center"
+        },
+        {
+          "id": "signature",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.84,
+            0.32,
+            0.05
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          5,
+          24
+        ],
+        "headline_lines": [
+          2,
+          7
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "minimal_gradient_text",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "gradient_fill",
+          "statement_text",
+          "signature"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "none"
+      ],
+      "source_references": [
+        "Minimal Style text-only slides"
+      ],
+      "avoid": [
+        "extra ornaments",
+        "more than two emphasis changes",
+        "small type"
+      ]
+    },
+    {
+      "composition_id": "N04",
+      "name": "Dark Inversion Punchline",
+      "family": "narrative_emotion",
+      "summary": "A dark interstitial interrupts a light sequence, carrying one strong corrective or confrontational line.",
+      "semantic_roles": [
+        "pattern_interrupt",
+        "warning",
+        "hard_truth",
+        "contrast_reset"
+      ],
+      "recommended_slide_positions": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "black field → white statement → bold ending",
+      "zones": [
+        {
+          "id": "statement",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.34,
+            0.76,
+            0.32
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "signature",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.84,
+            0.32,
+            0.05
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          7,
+          26
+        ],
+        "headline_lines": [
+          2,
+          7
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "dark_text_interstitial",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "dark_fill",
+          "statement_text",
+          "signature"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "none"
+      ],
+      "source_references": [
+        "Minimal Style black slide"
+      ],
+      "avoid": [
+        "using more than once per short carousel",
+        "low-contrast gray text",
+        "multiple colors"
+      ]
+    },
+    {
+      "composition_id": "N05",
+      "name": "Cinematic Scene with Bottom Caption Shell",
+      "family": "narrative_emotion",
+      "summary": "A coherent cinematic scene occupies the frame while a bottom gradient shell carries a large episodic caption.",
+      "semantic_roles": [
+        "memory",
+        "story_beat",
+        "nostalgia_item",
+        "episodic_list"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5"
+      ],
+      "attention_path": "scene action → highlighted character → caption",
+      "zones": [
+        {
+          "id": "scene",
+          "kind": "image",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "caption_scrim",
+          "kind": "gradient",
+          "rect": [
+            0,
+            0.66,
+            1,
+            0.34
+          ],
+          "required": true
+        },
+        {
+          "id": "caption",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.77,
+            0.8,
+            0.18
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "series_progress",
+          "kind": "dots",
+          "rect": [
+            0.35,
+            0.965,
+            0.3,
+            0.015
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          5,
+          16
+        ],
+        "headline_lines": [
+          2,
+          4
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "cinematic_series_scene",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "primary_scene_provider",
+          "use_when": "custom recurring-character story world"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "scene needs parallax or character/background edits"
+        },
+        "sam3": {
+          "mode": "character_and_prop_mask_refinement"
+        },
+        "rough_notation": {
+          "allowed": [],
+          "max_annotations": 0
+        },
+        "skia": [
+          "scene_image",
+          "character_emphasis",
+          "bottom_scrim",
+          "caption",
+          "progress_dots"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "era_specific_object",
+        "household_ritual",
+        "technology_artifact",
+        "clothing_cue"
+      ],
+      "source_references": [
+        "Carousel 11 slides 1–18"
+      ],
+      "avoid": [
+        "caption over important action",
+        "style drift across slides",
+        "inconsistent character scale"
+      ]
+    },
+    {
+      "composition_id": "N06",
+      "name": "Full-Bleed Photo Quote Overlay",
+      "family": "narrative_emotion",
+      "summary": "A contextual photograph or meme image carries a bold quote in the strongest negative-space region.",
+      "semantic_roles": [
+        "affirmation",
+        "insight",
+        "quote",
+        "identity_statement"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "context image → quote → kicker",
+      "zones": [
+        {
+          "id": "photo",
+          "kind": "image",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "quote",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.24,
+            0.86,
+            0.31
+          ],
+          "required": true,
+          "align": "center_or_left"
+        },
+        {
+          "id": "kicker",
+          "kind": "text",
+          "rect": [
+            0.4,
+            0.52,
+            0.5,
+            0.07
+          ],
+          "required": false,
+          "align": "right"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          13
+        ],
+        "headline_lines": [
+          1,
+          4
+        ],
+        "body_words": [
+          0,
+          8
+        ]
+      },
+      "visual_mode": "photo_quote",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_generation_optional",
+          "use_when": "no suitable contextual image exists"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "subject_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "photo",
+          "contrast_scrim_optional",
+          "quote_text",
+          "kicker"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "clothing_cue",
+        "brand_object",
+        "location_cue",
+        "ordinary_life_prop"
+      ],
+      "source_references": [
+        "Carousels 2–7"
+      ],
+      "avoid": [
+        "generic stock photo",
+        "text over busy area",
+        "more than one idea"
+      ]
+    },
+    {
+      "composition_id": "N07",
+      "name": "Meme Label Metaphor",
+      "family": "narrative_emotion",
+      "summary": "An existing or generated scene becomes a compact metaphor by labeling two actors, objects, or forces.",
+      "semantic_roles": [
+        "humor",
+        "relatable_conflict",
+        "micro_contradiction",
+        "reaction"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "scene gag → label A → label B",
+      "zones": [
+        {
+          "id": "scene",
+          "kind": "image",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "label_a",
+          "kind": "text",
+          "rect": [
+            0.18,
+            0.1,
+            0.3,
+            0.1
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "label_b",
+          "kind": "text",
+          "rect": [
+            0.42,
+            0.42,
+            0.5,
+            0.12
+          ],
+          "required": true,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          8
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "meme_scene_labels",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "scene_or_asset_generation_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "labels refer to movable objects or character layers"
+        },
+        "sam3": {
+          "mode": "object_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "arrow",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "scene",
+          "labels",
+          "optional_arrows"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "recognizable_clothing",
+        "platform_object",
+        "local_brand_cue"
+      ],
+      "source_references": [
+        "Carousel 3 old habits",
+        "Carousel 7 me/negativity"
+      ],
+      "avoid": [
+        "three or more labels",
+        "explanation paragraph",
+        "gag requiring caption to understand"
+      ]
+    },
+    {
+      "composition_id": "N08",
+      "name": "Conceptual Metaphor in Negative Space",
+      "family": "narrative_emotion",
+      "summary": "A sparse conceptual visual—hands, silhouette, lone object, unusual scale—carries the emotional or intellectual metaphor beside short copy.",
+      "semantic_roles": [
+        "conceptual_bridge",
+        "reflection",
+        "question",
+        "metaphor"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "text → metaphor object → implied relationship",
+      "zones": [
+        {
+          "id": "copy",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.3,
+            0.58,
+            0.36
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "metaphor",
+          "kind": "image",
+          "rect": [
+            0.56,
+            0.02,
+            0.44,
+            0.96
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          6,
+          28
+        ],
+        "headline_lines": [
+          2,
+          8
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "sparse_conceptual_visual",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "primary_visual_provider",
+          "use_when": "surreal object relationship or unusual crop is the idea"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "separate hands, object, and background for motion/editing"
+        },
+        "sam3": {
+          "mode": "object_mask_refinement"
+        },
+        "rough_notation": {
+          "allowed": [
+            "arrow",
+            "underline"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "background",
+          "metaphor_asset",
+          "copy",
+          "optional_shadow"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "ordinary_object_with_symbolic_role"
+      ],
+      "source_references": [
+        "Minimal Style hands/silhouette",
+        "Carousel 2 mountain-computer surreal image"
+      ],
+      "avoid": [
+        "literal illustration of the sentence",
+        "centered object with no relationship to text",
+        "visual clutter"
+      ]
+    },
+    {
+      "composition_id": "N09",
+      "name": "Social Post or Article Card",
+      "family": "narrative_emotion",
+      "summary": "A screenshot-like editorial card mimics a native social post or short article with avatar, headline, body copy, and action icons.",
+      "semantic_roles": [
+        "authority_post",
+        "excerpt",
+        "longform_summary",
+        "social_proof"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "identity header → headline → body → social actions",
+      "zones": [
+        {
+          "id": "identity",
+          "kind": "avatar_header",
+          "rect": [
+            0.06,
+            0.04,
+            0.7,
+            0.1
+          ],
+          "required": true
+        },
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.06,
+            0.15,
+            0.88,
+            0.18
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "body",
+          "kind": "text",
+          "rect": [
+            0.06,
+            0.34,
+            0.88,
+            0.48
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "actions",
+          "kind": "icons",
+          "rect": [
+            0.06,
+            0.86,
+            0.88,
+            0.08
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          6,
+          16
+        ],
+        "headline_lines": [
+          2,
+          4
+        ],
+        "body_words": [
+          45,
+          110
+        ]
+      },
+      "visual_mode": "native_social_card",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "underline"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "card_background",
+          "avatar_header",
+          "headline",
+          "body",
+          "action_icons"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "profile_photo",
+        "tiny platform_mark"
+      ],
+      "source_references": [
+        "Carousel Template 1 slide 5"
+      ],
+      "avoid": [
+        "body below readable size",
+        "more than 110 words",
+        "fake UI controls that dominate content"
+      ]
+    },
+    {
+      "composition_id": "F01",
+      "name": "Two-Column Explainer with Hero Card",
+      "family": "framework_education",
+      "summary": "The slide divides into a structured text column and a large illustrative card or artifact column.",
+      "semantic_roles": [
+        "lesson",
+        "bias",
+        "principle",
+        "explanation"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "lesson title → examples → hero card",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.06,
+            0.86,
+            0.18
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "copy",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.24,
+            0.45,
+            0.6
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "hero_card",
+          "kind": "image",
+          "rect": [
+            0.55,
+            0.25,
+            0.38,
+            0.58
+          ],
+          "required": true
+        },
+        {
+          "id": "progress",
+          "kind": "icons",
+          "rect": [
+            0.36,
+            0.91,
+            0.28,
+            0.04
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          10
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          25,
+          80
+        ],
+        "bullets": [
+          2,
+          7
+        ]
+      },
+      "visual_mode": "educational_two_column",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_generation_for_hero_card",
+          "use_when": "custom symbolic card or artifact"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "hero card must be edited or animated independently"
+        },
+        "sam3": {
+          "mode": "card_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "crossed-off",
+            "circle"
+          ],
+          "max_annotations": 3
+        },
+        "skia": [
+          "background",
+          "title",
+          "section_labels",
+          "body_copy",
+          "hero_card",
+          "progress_icons"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "symbolic_prop_inside_card"
+      ],
+      "source_references": [
+        "Carousel 8 bias slides"
+      ],
+      "avoid": [
+        "copy column wider than hero column without reason",
+        "more than seven bullets",
+        "weak title hierarchy"
+      ]
+    },
+    {
+      "composition_id": "F02",
+      "name": "Definition Spine with Branch List",
+      "family": "framework_education",
+      "summary": "A highlighted term and short definition connect to a vertical spine carrying six to eight branches.",
+      "semantic_roles": [
+        "framework_component",
+        "taxonomy",
+        "mechanism",
+        "definition"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "highlighted term → definition → branch scan",
+      "zones": [
+        {
+          "id": "term",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.36,
+            0.3,
+            0.18
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "definition",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.54,
+            0.3,
+            0.16
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "spine",
+          "kind": "diagram",
+          "rect": [
+            0.42,
+            0.08,
+            0.52,
+            0.8
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          1,
+          5
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          35,
+          95
+        ],
+        "bullets": [
+          5,
+          9
+        ]
+      },
+      "visual_mode": "branch_diagram",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "brackets"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "paper_texture",
+          "term_highlight",
+          "definition",
+          "spine_lines",
+          "branch_text"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "tiny icon_at_branch",
+        "paper_texture_detail"
+      ],
+      "source_references": [
+        "Carousel 9 component slides"
+      ],
+      "avoid": [
+        "unrelated branch lengths",
+        "more than nine branches",
+        "tiny serif type"
+      ]
+    },
+    {
+      "composition_id": "F03",
+      "name": "Radial Framework Hub",
+      "family": "framework_education",
+      "summary": "A central hub or axis radiates to numbered framework components, making the system visible at a glance.",
+      "semantic_roles": [
+        "framework_overview",
+        "system_map",
+        "recap"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "center hub → numbered spokes → component labels",
+      "zones": [
+        {
+          "id": "hub",
+          "kind": "diagram",
+          "rect": [
+            0.05,
+            0.25,
+            0.48,
+            0.5
+          ],
+          "required": true
+        },
+        {
+          "id": "components",
+          "kind": "text",
+          "rect": [
+            0.15,
+            0.15,
+            0.8,
+            0.7
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          0,
+          4
+        ],
+        "headline_lines": [
+          0,
+          2
+        ],
+        "body_words": [
+          20,
+          60
+        ],
+        "bullets": [
+          4,
+          7
+        ]
+      },
+      "visual_mode": "radial_diagram",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "paper_texture",
+          "hub_lines",
+          "number_tags",
+          "component_labels"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "number_badge_style"
+      ],
+      "source_references": [
+        "Carousel 9 five-part framework diagram"
+      ],
+      "avoid": [
+        "more than seven spokes",
+        "unequal label hierarchy",
+        "unexplained center"
+      ]
+    },
+    {
+      "composition_id": "F04",
+      "name": "Timeline Curve and Opportunity Bracket",
+      "family": "framework_education",
+      "summary": "A horizontal time axis uses a curve, milestone, or event peak plus a bracketed consequence/opportunity period.",
+      "semantic_roles": [
+        "timeline",
+        "progress",
+        "before_after_over_time",
+        "experience_to_opportunity"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "axis → peak/milestone → bracket implication",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.18,
+            0.14,
+            0.3,
+            0.08
+          ],
+          "required": false
+        },
+        {
+          "id": "timeline",
+          "kind": "diagram",
+          "rect": [
+            0.1,
+            0.28,
+            0.82,
+            0.38
+          ],
+          "required": true
+        },
+        {
+          "id": "bracket",
+          "kind": "diagram",
+          "rect": [
+            0.45,
+            0.6,
+            0.42,
+            0.14
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          0,
+          6
+        ],
+        "headline_lines": [
+          0,
+          2
+        ],
+        "body_words": [
+          6,
+          20
+        ]
+      },
+      "visual_mode": "timeline_infographic",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "brackets",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "background",
+          "axis",
+          "curve",
+          "labels",
+          "bracket"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "tiny milestone_icon"
+      ],
+      "source_references": [
+        "Carousel 1 experience/opportunities timeline"
+      ],
+      "avoid": [
+        "decorative graph with no meaning",
+        "too many dates",
+        "unlabeled peak"
+      ]
+    },
+    {
+      "composition_id": "F05",
+      "name": "Numbered Lesson with Before/After Mini-Panels",
+      "family": "framework_education",
+      "summary": "A consistent lesson shell contains a small sequence number, large title, concise explanation, and two comparison mini-panels.",
+      "semantic_roles": [
+        "listicle_item",
+        "design_lesson",
+        "mistake_fix",
+        "before_after"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "number → lesson title → explanation → comparison pair",
+      "zones": [
+        {
+          "id": "number",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.04,
+            0.12,
+            0.07
+          ],
+          "required": true
+        },
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.12,
+            0.8,
+            0.18
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "explanation",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.3,
+            0.8,
+            0.12
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "comparison",
+          "kind": "two_panel",
+          "rect": [
+            0.07,
+            0.5,
+            0.86,
+            0.36
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          10
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          10,
+          34
+        ]
+      },
+      "visual_mode": "numbered_lesson_shell",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed_for_shell",
+          "use_when": "mini-panel visuals require generation"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "mini_panel_cutout_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "highlight",
+            "crossed-off"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "pastel_background",
+          "number",
+          "title",
+          "explanation",
+          "two_mini_panels",
+          "do_dont_labels"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "tiny example_detail"
+      ],
+      "source_references": [
+        "Carousel LISTICLE TEMPLATE slides 1–9"
+      ],
+      "avoid": [
+        "different structure between lessons",
+        "explanation longer than three lines",
+        "mini-panels too small"
+      ]
+    },
+    {
+      "composition_id": "F06",
+      "name": "Examples and Test Stack with Hero Card",
+      "family": "framework_education",
+      "summary": "A teaching slide organizes colored subheads, examples, tests, and corrections in a narrow column beside a symbolic hero card.",
+      "semantic_roles": [
+        "examples",
+        "diagnostic",
+        "weak_strong",
+        "bias_lesson"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5"
+      ],
+      "attention_path": "topic title → subhead labels → examples → hero card",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.06,
+            0.86,
+            0.18
+          ],
+          "required": true
+        },
+        {
+          "id": "example_stack",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.25,
+            0.47,
+            0.58
+          ],
+          "required": true
+        },
+        {
+          "id": "hero_card",
+          "kind": "image",
+          "rect": [
+            0.56,
+            0.27,
+            0.37,
+            0.54
+          ],
+          "required": true
+        },
+        {
+          "id": "progress",
+          "kind": "icons",
+          "rect": [
+            0.36,
+            0.9,
+            0.28,
+            0.04
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          11
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          35,
+          100
+        ],
+        "bullets": [
+          3,
+          8
+        ]
+      },
+      "visual_mode": "labeled_example_stack",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "hero_card_asset_provider"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional"
+        },
+        "sam3": {
+          "mode": "card_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "crossed-off",
+            "circle"
+          ],
+          "max_annotations": 4
+        },
+        "skia": [
+          "title",
+          "colored_subheads",
+          "bullets",
+          "hero_card",
+          "progress"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "archetypal_symbol"
+      ],
+      "source_references": [
+        "Carousel 8 curiosity/social currency/authority/loss slides"
+      ],
+      "avoid": [
+        "uncolored section hierarchy",
+        "more than four subhead types",
+        "hero card smaller than examples"
+      ]
+    },
+    {
+      "composition_id": "F07",
+      "name": "Data Chart with Companion Card",
+      "family": "framework_education",
+      "summary": "A short formula or step list is paired with a compact chart and a symbolic card, turning evidence into a visual system.",
+      "semantic_roles": [
+        "data_story",
+        "formula",
+        "evidence",
+        "behavior_curve"
+      ],
+      "recommended_slide_positions": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "formula → chart curve → symbolic card",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.06,
+            0.86,
+            0.18
+          ],
+          "required": true
+        },
+        {
+          "id": "formula",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.25,
+            0.43,
+            0.28
+          ],
+          "required": true
+        },
+        {
+          "id": "chart",
+          "kind": "chart",
+          "rect": [
+            0.07,
+            0.56,
+            0.43,
+            0.26
+          ],
+          "required": true
+        },
+        {
+          "id": "hero_card",
+          "kind": "image",
+          "rect": [
+            0.56,
+            0.26,
+            0.37,
+            0.56
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          10
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          20,
+          55
+        ],
+        "bullets": [
+          3,
+          7
+        ]
+      },
+      "visual_mode": "formula_chart_card",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "card_asset_provider"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "circle",
+            "highlight"
+          ],
+          "max_annotations": 3
+        },
+        "skia": [
+          "title",
+          "formula",
+          "chart",
+          "hero_card",
+          "progress"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "symbolic_card_detail"
+      ],
+      "source_references": [
+        "Carousel 8 dopamine scheduling"
+      ],
+      "avoid": [
+        "chart without labels",
+        "tiny chart",
+        "data unsupported by source"
+      ]
+    },
+    {
+      "composition_id": "F08",
+      "name": "Action Plan Card Grid",
+      "family": "framework_education",
+      "summary": "A compact grid maps days, stages, or actions to individual visual cards and labels.",
+      "semantic_roles": [
+        "action_plan",
+        "schedule",
+        "recap",
+        "multi_step_plan"
+      ],
+      "recommended_slide_positions": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "action headline → grid scan → day/action labels",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.04,
+            0.8,
+            0.17
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "grid",
+          "kind": "card_grid",
+          "rect": [
+            0.08,
+            0.24,
+            0.84,
+            0.62
+          ],
+          "required": true
+        },
+        {
+          "id": "progress",
+          "kind": "icons",
+          "rect": [
+            0.36,
+            0.92,
+            0.28,
+            0.04
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          4,
+          12
+        ],
+        "headline_lines": [
+          2,
+          4
+        ],
+        "body_words": [
+          14,
+          45
+        ]
+      },
+      "visual_mode": "multi_card_grid",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_provider_for_cards"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional",
+          "trigger": "cards need independent motion or replacement"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "box",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "title",
+          "card_grid",
+          "card_labels",
+          "progress"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "day_specific_icon"
+      ],
+      "source_references": [
+        "Carousel 8 weekly action plan"
+      ],
+      "avoid": [
+        "more than eight cards",
+        "unequal card sizes without hierarchy",
+        "labels detached from cards"
+      ]
+    },
+    {
+      "composition_id": "F09",
+      "name": "Stacked Steps with Numbered Bands",
+      "family": "framework_education",
+      "summary": "A large count or number anchors the slide while horizontal colored bands reveal steps in sequence.",
+      "semantic_roles": [
+        "tips",
+        "steps",
+        "checklist",
+        "how_to"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "giant number → band 1 → band 2 → band 3 → guide character",
+      "zones": [
+        {
+          "id": "count",
+          "kind": "text",
+          "rect": [
+            0.05,
+            0.05,
+            0.36,
+            0.32
+          ],
+          "required": true
+        },
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.38,
+            0.08,
+            0.54,
+            0.24
+          ],
+          "required": true
+        },
+        {
+          "id": "steps",
+          "kind": "stacked_bands",
+          "rect": [
+            0.35,
+            0.38,
+            0.58,
+            0.42
+          ],
+          "required": true
+        },
+        {
+          "id": "avatar",
+          "kind": "image",
+          "rect": [
+            0.03,
+            0.44,
+            0.32,
+            0.48
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          8
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          6,
+          30
+        ],
+        "bullets": [
+          3,
+          5
+        ]
+      },
+      "visual_mode": "numbered_bands",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "composition_reference_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional"
+        },
+        "sam3": {
+          "mode": "avatar_cutout_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "arrow",
+            "underline",
+            "circle"
+          ],
+          "max_annotations": 4
+        },
+        "skia": [
+          "paper_background",
+          "count",
+          "title",
+          "step_bands",
+          "avatar",
+          "decorations"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "wardrobe_detail",
+        "tiny_mascot_prop"
+      ],
+      "source_references": [
+        "Paper-cut “3 Quick Tips” reference direction"
+      ],
+      "avoid": [
+        "more than five steps",
+        "equal emphasis on count and every band",
+        "too many decorations"
+      ]
+    },
+    {
+      "composition_id": "F10",
+      "name": "Question with Evidence Object Row",
+      "family": "framework_education",
+      "summary": "A provocative question occupies the upper half while a quiet row of repeated objects visualizes accumulation, decay, or evidence.",
+      "semantic_roles": [
+        "question",
+        "evidence",
+        "quantity",
+        "reflection"
+      ],
+      "recommended_slide_positions": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "question → bold phrase → evidence row",
+      "zones": [
+        {
+          "id": "question",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.22,
+            0.76,
+            0.34
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "evidence",
+          "kind": "image_row",
+          "rect": [
+            0.12,
+            0.65,
+            0.76,
+            0.22
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          8,
+          28
+        ],
+        "headline_lines": [
+          3,
+          8
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "question_evidence_row",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_generation_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "object_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "gradient_background",
+          "question",
+          "evidence_objects"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "everyday_discarded_object",
+        "receipt",
+        "saved_item_symbol"
+      ],
+      "source_references": [
+        "Minimal Style wilted flowers slide"
+      ],
+      "avoid": [
+        "evidence row too literal",
+        "more than one row",
+        "tiny objects without silhouette"
+      ]
+    },
+    {
+      "composition_id": "J01",
+      "name": "Bad vs Good Side-by-Side",
+      "family": "comparison_juxtaposition",
+      "summary": "Two equally sized examples are compared beneath a numbered lesson and marked with a red rejection and green approval.",
+      "semantic_roles": [
+        "before_after",
+        "mistake_fix",
+        "quality_comparison"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "lesson title → bad panel → good panel → verdict icons",
+      "zones": [
+        {
+          "id": "lesson",
+          "kind": "text",
+          "rect": [
+            0.06,
+            0.1,
+            0.88,
+            0.2
+          ],
+          "required": true
+        },
+        {
+          "id": "bad",
+          "kind": "image",
+          "rect": [
+            0.06,
+            0.4,
+            0.42,
+            0.38
+          ],
+          "required": true
+        },
+        {
+          "id": "good",
+          "kind": "image",
+          "rect": [
+            0.52,
+            0.4,
+            0.42,
+            0.38
+          ],
+          "required": true
+        },
+        {
+          "id": "verdicts",
+          "kind": "icons",
+          "rect": [
+            0.18,
+            0.8,
+            0.64,
+            0.08
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          4,
+          12
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          20
+        ]
+      },
+      "visual_mode": "do_dont_comparison",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "optional_mask_for_examples"
+        },
+        "rough_notation": {
+          "allowed": [
+            "crossed-off",
+            "box"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "background",
+          "lesson_title",
+          "bad_panel",
+          "good_panel",
+          "verdict_icons"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "micro_detail_inside_examples"
+      ],
+      "source_references": [
+        "Carousel LISTICLE + JUXTAPOSITION slides 1,3,9,10"
+      ],
+      "avoid": [
+        "different panel sizes",
+        "no clear verdict",
+        "more than one comparison dimension"
+      ]
+    },
+    {
+      "composition_id": "J02",
+      "name": "Say / Don’t Say Split",
+      "family": "comparison_juxtaposition",
+      "summary": "The canvas is divided into opposing tinted halves with mirrored content and explicit verbal alternatives.",
+      "semantic_roles": [
+        "language_reframe",
+        "wrong_right",
+        "script_rewrite"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "left label → left examples → right label → right alternatives",
+      "zones": [
+        {
+          "id": "left",
+          "kind": "panel",
+          "rect": [
+            0,
+            0,
+            0.5,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "right",
+          "kind": "panel",
+          "rect": [
+            0.5,
+            0,
+            0.5,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "left_label",
+          "kind": "text",
+          "rect": [
+            0.06,
+            0.08,
+            0.38,
+            0.12
+          ],
+          "required": true
+        },
+        {
+          "id": "right_label",
+          "kind": "text",
+          "rect": [
+            0.56,
+            0.08,
+            0.38,
+            0.12
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          8
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          20,
+          70
+        ]
+      },
+      "visual_mode": "vertical_split_reframe",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "background_asset_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "crossed-off",
+            "underline"
+          ],
+          "max_annotations": 3
+        },
+        "skia": [
+          "split_background",
+          "labels",
+          "example_text",
+          "footer_icons"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "background_scene_detail"
+      ],
+      "source_references": [
+        "Carousel Template 1 slide 6"
+      ],
+      "avoid": [
+        "different copy lengths per side",
+        "weak tint contrast",
+        "center seam clutter"
+      ]
+    },
+    {
+      "composition_id": "J03",
+      "name": "Contextual Photo A/B Choice",
+      "family": "comparison_juxtaposition",
+      "summary": "Two photo-driven alternatives share the same message, demonstrating how context, gaze, or whitespace changes meaning.",
+      "semantic_roles": [
+        "choice",
+        "context_comparison",
+        "visual_flow"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "instruction → option A → option B → verdict",
+      "zones": [
+        {
+          "id": "instruction",
+          "kind": "text",
+          "rect": [
+            0.06,
+            0.1,
+            0.88,
+            0.18
+          ],
+          "required": true
+        },
+        {
+          "id": "option_a",
+          "kind": "image",
+          "rect": [
+            0.06,
+            0.38,
+            0.42,
+            0.4
+          ],
+          "required": true
+        },
+        {
+          "id": "option_b",
+          "kind": "image",
+          "rect": [
+            0.52,
+            0.38,
+            0.42,
+            0.4
+          ],
+          "required": true
+        },
+        {
+          "id": "verdicts",
+          "kind": "icons",
+          "rect": [
+            0.18,
+            0.81,
+            0.64,
+            0.07
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          4,
+          14
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          18
+        ]
+      },
+      "visual_mode": "photo_choice_comparison",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_generation_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "subject_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "arrow",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "background",
+          "instruction",
+          "option_a",
+          "option_b",
+          "verdicts"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "gaze_direction",
+        "clothing_detail",
+        "environment_prop"
+      ],
+      "source_references": [
+        "Carousel LISTICLE + JUXTAPOSITION slides 4 and 8"
+      ],
+      "avoid": [
+        "options with different crop ratios",
+        "text obscured by subject",
+        "ambiguous verdict"
+      ]
+    },
+    {
+      "composition_id": "J04",
+      "name": "Weak / Strong or Old / New Contrast Cards",
+      "family": "comparison_juxtaposition",
+      "summary": "Two cards show the same idea under different contrast, hierarchy, wording, or stylistic treatment.",
+      "semantic_roles": [
+        "weak_strong",
+        "old_new",
+        "contrast_effect",
+        "design_comparison"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "3:4",
+        "4:5"
+      ],
+      "attention_path": "contrast label → card A → card B → principle",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.06,
+            0.08,
+            0.88,
+            0.18
+          ],
+          "required": true
+        },
+        {
+          "id": "card_a",
+          "kind": "image",
+          "rect": [
+            0.08,
+            0.38,
+            0.4,
+            0.38
+          ],
+          "required": true
+        },
+        {
+          "id": "card_b",
+          "kind": "image",
+          "rect": [
+            0.52,
+            0.38,
+            0.4,
+            0.38
+          ],
+          "required": true
+        },
+        {
+          "id": "verdicts",
+          "kind": "icons",
+          "rect": [
+            0.18,
+            0.79,
+            0.64,
+            0.08
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          12
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          18
+        ]
+      },
+      "visual_mode": "contrast_cards",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "crossed-off"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "title",
+          "card_pair",
+          "labels",
+          "verdicts"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "tiny difference_cue"
+      ],
+      "source_references": [
+        "Carousel LISTICLE + JUXTAPOSITION contrast/color slides"
+      ],
+      "avoid": [
+        "different underlying message",
+        "too many changed variables",
+        "no explanatory title"
+      ]
+    },
+    {
+      "composition_id": "J05",
+      "name": "Quad Collage Comparison",
+      "family": "comparison_juxtaposition",
+      "summary": "Four equal images provide variations of one category, object, event, or mood for rapid comparative scanning.",
+      "semantic_roles": [
+        "visual_examples",
+        "variation_set",
+        "category_comparison"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "upper-left → upper-right → lower-left → lower-right → label",
+      "zones": [
+        {
+          "id": "grid",
+          "kind": "image_grid",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "label",
+          "kind": "text",
+          "rect": [
+            0.32,
+            0.44,
+            0.36,
+            0.12
+          ],
+          "required": false,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          0,
+          4
+        ],
+        "headline_lines": [
+          0,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "four_up_collage",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "individual_crop_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "box"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "four_image_grid",
+          "optional_center_label"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "object_variant",
+        "ritual_detail"
+      ],
+      "source_references": [
+        "Carousel Template 1 food slides",
+        "Grid Mood Date"
+      ],
+      "avoid": [
+        "one image dominating accidentally",
+        "inconsistent white balance",
+        "unrelated categories"
+      ]
+    },
+    {
+      "composition_id": "J06",
+      "name": "Dominant Exception Contrast",
+      "family": "comparison_juxtaposition",
+      "summary": "One subject is visually isolated by color, scale, or uniqueness among repeated or desaturated peers.",
+      "semantic_roles": [
+        "identity_contrast",
+        "exception",
+        "rare_vs_common",
+        "hero_selection"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "pattern field → exception subject → headline",
+      "zones": [
+        {
+          "id": "pattern",
+          "kind": "image",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.28,
+            0.84,
+            0.22
+          ],
+          "required": true,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          11
+        ],
+        "headline_lines": [
+          1,
+          3
+        ],
+        "body_words": [
+          0,
+          8
+        ]
+      },
+      "visual_mode": "exception_in_pattern",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "primary_composition_provider",
+          "use_when": "one colored hero among repeated/gray figures"
+        },
+        "qwen_image_layered": {
+          "mode": "recommended",
+          "trigger": "hero and crowd should be independently editable"
+        },
+        "sam3": {
+          "mode": "hero_and_crowd_masks"
+        },
+        "rough_notation": {
+          "allowed": [
+            "circle",
+            "arrow"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "pattern_background",
+          "exception_subject",
+          "headline",
+          "optional_scrim"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "distinctive_clothing_or_object_on_hero"
+      ],
+      "source_references": [
+        "Carousel 5 black sheep",
+        "Carousel 11 yellow hero among gray peers"
+      ],
+      "avoid": [
+        "exception too subtle",
+        "multiple exceptions",
+        "headline obscuring exception"
+      ]
+    },
+    {
+      "composition_id": "B01",
+      "name": "Social Profile Mockup",
+      "family": "identity_brand",
+      "summary": "A branded social profile is displayed inside a device mockup beneath a clear format title.",
+      "semantic_roles": [
+        "case_study",
+        "brand_system",
+        "profile_showcase"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "title → device → profile details",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.08,
+            0.76,
+            0.18
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "device",
+          "kind": "image",
+          "rect": [
+            0.18,
+            0.25,
+            0.64,
+            0.72
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          5
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "device_profile_showcase",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "device_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [
+            "circle"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "title",
+          "device_mockup",
+          "shadow"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "profile_avatar",
+        "highlight_icon"
+      ],
+      "source_references": [
+        "Carousel 10 Instagram Profile"
+      ],
+      "avoid": [
+        "illegible UI",
+        "device too small",
+        "title competing with mockup"
+      ]
+    },
+    {
+      "composition_id": "B02",
+      "name": "Content Portfolio Grid",
+      "family": "identity_brand",
+      "summary": "Two to six branded content outputs are shown as a coherent portfolio under a format heading.",
+      "semantic_roles": [
+        "case_study",
+        "proof",
+        "content_system"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "format title → first thumbnail → second thumbnail → system coherence",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.08,
+            0.76,
+            0.18
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "portfolio",
+          "kind": "image_grid",
+          "rect": [
+            0.08,
+            0.28,
+            0.84,
+            0.63
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          5
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "portfolio_showcase",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "box"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "title",
+          "portfolio_grid",
+          "shadows"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "consistent_brand_mark_in_thumbnails"
+      ],
+      "source_references": [
+        "Carousel 10 Instagram Carousel/Reels"
+      ],
+      "avoid": [
+        "mixed brands",
+        "unequal thumbnail resolution",
+        "too many examples"
+      ]
+    },
+    {
+      "composition_id": "B03",
+      "name": "Palette Swatches with Avatar",
+      "family": "identity_brand",
+      "summary": "Large color swatches communicate the visual system while a character cutout overlaps them for identity and scale.",
+      "semantic_roles": [
+        "brand_palette",
+        "visual_constitution",
+        "identity_showcase"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "title → swatches → avatar → color codes",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.18,
+            0.08,
+            0.64,
+            0.15
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "swatches",
+          "kind": "swatch_grid",
+          "rect": [
+            0.1,
+            0.25,
+            0.8,
+            0.6
+          ],
+          "required": true
+        },
+        {
+          "id": "avatar",
+          "kind": "image",
+          "rect": [
+            0.3,
+            0.36,
+            0.42,
+            0.6
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          1,
+          4
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          8
+        ]
+      },
+      "visual_mode": "palette_identity",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "avatar_asset_provider_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "avatar_cutout_required"
+        },
+        "rough_notation": {
+          "allowed": [
+            "box"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "title",
+          "swatches",
+          "hex_codes",
+          "avatar_cutout"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "costume_or_accessory_brand_cue"
+      ],
+      "source_references": [
+        "Carousel 10 Colors"
+      ],
+      "avoid": [
+        "avatar hiding all swatches",
+        "unlabeled colors",
+        "more than six primary swatches"
+      ]
+    },
+    {
+      "composition_id": "B04",
+      "name": "Single Asset Mockup Stage",
+      "family": "identity_brand",
+      "summary": "One finished content asset is centered and framed as a portfolio artifact against a quiet branded background.",
+      "semantic_roles": [
+        "case_study",
+        "asset_showcase",
+        "proof"
+      ],
+      "recommended_slide_positions": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "format title → single asset → fine details",
+      "zones": [
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.08,
+            0.76,
+            0.18
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "asset",
+          "kind": "image",
+          "rect": [
+            0.22,
+            0.28,
+            0.56,
+            0.62
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          6
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "single_asset_showcase",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "asset_generation_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "box"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "title",
+          "asset_mockup",
+          "shadow"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "tiny watermark_or_brand_stamp"
+      ],
+      "source_references": [
+        "Carousel 10 Single Image slides"
+      ],
+      "avoid": [
+        "small asset",
+        "decorative clutter",
+        "background stronger than artifact"
+      ]
+    },
+    {
+      "composition_id": "B05",
+      "name": "Character Brand Hero",
+      "family": "identity_brand",
+      "summary": "A recognizable character or branded avatar anchors the composition with a bold identity-led title.",
+      "semantic_roles": [
+        "brand_intro",
+        "persona_case_study",
+        "identity_hook"
+      ],
+      "recommended_slide_positions": [
+        1,
+        2,
+        3
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "3:4",
+        "1:1"
+      ],
+      "attention_path": "face → title → costume/brand cues",
+      "zones": [
+        {
+          "id": "hero",
+          "kind": "image",
+          "rect": [
+            0.12,
+            0.18,
+            0.76,
+            0.82
+          ],
+          "required": true
+        },
+        {
+          "id": "title",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.54,
+            0.76,
+            0.3
+          ],
+          "required": true,
+          "align": "center_or_left"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          11
+        ],
+        "headline_lines": [
+          2,
+          5
+        ],
+        "body_words": [
+          0,
+          5
+        ]
+      },
+      "visual_mode": "character_identity_poster",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "primary_character_composition_provider"
+        },
+        "qwen_image_layered": {
+          "mode": "recommended"
+        },
+        "sam3": {
+          "mode": "hero_cutout_refinement"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "hero_cutout",
+          "title",
+          "glow_or_symbol"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "costume",
+        "badge",
+        "wand_or_tool",
+        "hair_or_accessory"
+      ],
+      "source_references": [
+        "Carousel 10 Ron Weasley hero slides"
+      ],
+      "avoid": [
+        "generic character",
+        "missing identity prop",
+        "headline hiding face"
+      ]
+    },
+    {
+      "composition_id": "C01",
+      "name": "Portrait and Social Actions CTA",
+      "family": "cta_closing",
+      "summary": "A large portrait sits beside a direct question or continuation prompt with social action icons below.",
+      "semantic_roles": [
+        "cta",
+        "part_two_prompt",
+        "discussion_prompt"
+      ],
+      "recommended_slide_positions": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5"
+      ],
+      "attention_path": "question → face → action icons",
+      "zones": [
+        {
+          "id": "prompt",
+          "kind": "text",
+          "rect": [
+            0.07,
+            0.2,
+            0.45,
+            0.44
+          ],
+          "required": true,
+          "align": "left"
+        },
+        {
+          "id": "portrait",
+          "kind": "image",
+          "rect": [
+            0.52,
+            0.08,
+            0.46,
+            0.9
+          ],
+          "required": true
+        },
+        {
+          "id": "actions",
+          "kind": "icons",
+          "rect": [
+            0.07,
+            0.78,
+            0.36,
+            0.12
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          5,
+          18
+        ],
+        "headline_lines": [
+          2,
+          7
+        ],
+        "body_words": [
+          0,
+          12
+        ]
+      },
+      "visual_mode": "portrait_cta",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "portrait_cutout_required"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "arrow"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "background",
+          "prompt",
+          "portrait",
+          "action_icons"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "clothing_detail",
+        "small_profile_badge"
+      ],
+      "source_references": [
+        "Listicle CTA slides"
+      ],
+      "avoid": [
+        "generic “follow for more” only",
+        "portrait too small",
+        "icons without prompt"
+      ]
+    },
+    {
+      "composition_id": "C02",
+      "name": "Keyword Comment CTA with Portrait",
+      "family": "cta_closing",
+      "summary": "A highlighted keyword command sits above a portrait framed by a hand-drawn aura or circle.",
+      "semantic_roles": [
+        "lead_magnet_cta",
+        "comment_keyword",
+        "resource_offer"
+      ],
+      "recommended_slide_positions": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "setup → highlighted keyword → portrait → offer detail",
+      "zones": [
+        {
+          "id": "setup",
+          "kind": "text",
+          "rect": [
+            0.14,
+            0.05,
+            0.72,
+            0.1
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "keyword",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.16,
+            0.8,
+            0.14
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "portrait",
+          "kind": "image",
+          "rect": [
+            0.24,
+            0.32,
+            0.52,
+            0.63
+          ],
+          "required": true
+        },
+        {
+          "id": "detail",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.28,
+            0.76,
+            0.08
+          ],
+          "required": false,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          2,
+          8
+        ],
+        "headline_lines": [
+          1,
+          2
+        ],
+        "body_words": [
+          8,
+          24
+        ]
+      },
+      "visual_mode": "keyword_portrait_cta",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "portrait_cutout_required"
+        },
+        "rough_notation": {
+          "allowed": [
+            "highlight",
+            "circle"
+          ],
+          "max_annotations": 3
+        },
+        "skia": [
+          "paper_texture",
+          "setup",
+          "keyword_highlight",
+          "portrait",
+          "scribble_aura"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "profile_accessory"
+      ],
+      "source_references": [
+        "Carousel 9 comment NINJA CTA"
+      ],
+      "avoid": [
+        "multiple keywords",
+        "weak offer",
+        "portrait without eye contact"
+      ]
+    },
+    {
+      "composition_id": "C03",
+      "name": "Repost / Share Arrow CTA",
+      "family": "cta_closing",
+      "summary": "A creator portrait, large directional/repost icon, and supporting cards create an explicit share action.",
+      "semantic_roles": [
+        "share_cta",
+        "repost_cta",
+        "save_cta"
+      ],
+      "recommended_slide_positions": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5"
+      ],
+      "attention_path": "share headline → face → arrow/repost symbol → proof card",
+      "zones": [
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.04,
+            0.8,
+            0.19
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "portrait",
+          "kind": "image",
+          "rect": [
+            0.02,
+            0.32,
+            0.58,
+            0.66
+          ],
+          "required": true
+        },
+        {
+          "id": "symbol",
+          "kind": "icon",
+          "rect": [
+            0.5,
+            0.34,
+            0.34,
+            0.25
+          ],
+          "required": true
+        },
+        {
+          "id": "proof_card",
+          "kind": "image",
+          "rect": [
+            0.58,
+            0.58,
+            0.25,
+            0.3
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          4,
+          13
+        ],
+        "headline_lines": [
+          2,
+          4
+        ],
+        "body_words": [
+          0,
+          8
+        ]
+      },
+      "visual_mode": "repost_portrait_cta",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional"
+        },
+        "sam3": {
+          "mode": "portrait_cutout_required"
+        },
+        "rough_notation": {
+          "allowed": [
+            "arrow",
+            "circle"
+          ],
+          "max_annotations": 2
+        },
+        "skia": [
+          "headline",
+          "portrait",
+          "repost_symbol",
+          "proof_card"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "held_card_detail",
+        "wardrobe_cue"
+      ],
+      "source_references": [
+        "Carousel 8 repost CTA"
+      ],
+      "avoid": [
+        "small action symbol",
+        "ambiguous action",
+        "too many supporting cards"
+      ]
+    },
+    {
+      "composition_id": "C04",
+      "name": "Character Pair Share CTA",
+      "family": "cta_closing",
+      "summary": "Two recognizable characters or creator/character pairings support a large emotional share request.",
+      "semantic_roles": [
+        "share_cta",
+        "community_invitation",
+        "case_study_close"
+      ],
+      "recommended_slide_positions": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "4:5",
+        "1:1"
+      ],
+      "attention_path": "share request → character pair → brand symbol",
+      "zones": [
+        {
+          "id": "headline",
+          "kind": "text",
+          "rect": [
+            0.08,
+            0.08,
+            0.84,
+            0.3
+          ],
+          "required": true,
+          "align": "center"
+        },
+        {
+          "id": "characters",
+          "kind": "image",
+          "rect": [
+            0.06,
+            0.32,
+            0.88,
+            0.65
+          ],
+          "required": true
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          5,
+          18
+        ],
+        "headline_lines": [
+          2,
+          5
+        ],
+        "body_words": [
+          0,
+          6
+        ]
+      },
+      "visual_mode": "character_pair_cta",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "character_composition_provider"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional"
+        },
+        "sam3": {
+          "mode": "character_masks_required"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "brand_background",
+          "headline",
+          "character_pair",
+          "symbolic_backdrop"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "costume",
+        "shared_symbol",
+        "franchise_or_tribal_cue"
+      ],
+      "source_references": [
+        "Carousel 10 share slides"
+      ],
+      "avoid": [
+        "characters at unrelated scales",
+        "copy over faces",
+        "weak relationship between pair"
+      ]
+    },
+    {
+      "composition_id": "C05",
+      "name": "Text-Only Final Challenge",
+      "family": "cta_closing",
+      "summary": "A minimal final line creates urgency or a behavioral challenge with no visual distraction.",
+      "semantic_roles": [
+        "final_challenge",
+        "behavioral_cta",
+        "closing_punchline"
+      ],
+      "recommended_slide_positions": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "supported_aspect_ratios": [
+        "1:1",
+        "4:5",
+        "3:4"
+      ],
+      "attention_path": "short statement → emphasized final word",
+      "zones": [
+        {
+          "id": "statement",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.36,
+            0.76,
+            0.26
+          ],
+          "required": true,
+          "align": "left_or_center"
+        },
+        {
+          "id": "signature",
+          "kind": "text",
+          "rect": [
+            0.12,
+            0.84,
+            0.32,
+            0.05
+          ],
+          "required": false
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          3,
+          12
+        ],
+        "headline_lines": [
+          1,
+          4
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "minimal_final_statement",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "not_needed"
+        },
+        "qwen_image_layered": {
+          "mode": "not_needed"
+        },
+        "sam3": {
+          "mode": "not_needed"
+        },
+        "rough_notation": {
+          "allowed": [
+            "underline",
+            "highlight"
+          ],
+          "max_annotations": 1
+        },
+        "skia": [
+          "solid_or_gradient_fill",
+          "statement",
+          "signature"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "none"
+      ],
+      "source_references": [
+        "Carousel 1 final statement",
+        "Minimal Style “Now!”"
+      ],
+      "avoid": [
+        "generic CTA",
+        "secondary paragraph",
+        "decorative image"
+      ]
+    },
+    {
+      "composition_id": "C06",
+      "name": "Scene-Based Brand Promise Close",
+      "family": "cta_closing",
+      "summary": "The same cinematic series shell closes on a brand promise, transformation statement, or invitation rather than another list item.",
+      "semantic_roles": [
+        "brand_promise",
+        "service_positioning",
+        "emotional_close"
+      ],
+      "recommended_slide_positions": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "supported_aspect_ratios": [
+        "3:4",
+        "4:5"
+      ],
+      "attention_path": "scene → creator action → brand promise",
+      "zones": [
+        {
+          "id": "scene",
+          "kind": "image",
+          "rect": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "required": true
+        },
+        {
+          "id": "scrim",
+          "kind": "gradient",
+          "rect": [
+            0,
+            0.64,
+            1,
+            0.36
+          ],
+          "required": true
+        },
+        {
+          "id": "promise",
+          "kind": "text",
+          "rect": [
+            0.1,
+            0.76,
+            0.8,
+            0.19
+          ],
+          "required": true,
+          "align": "center"
+        }
+      ],
+      "text_budget": {
+        "headline_words": [
+          6,
+          18
+        ],
+        "headline_lines": [
+          2,
+          5
+        ],
+        "body_words": [
+          0,
+          0
+        ]
+      },
+      "visual_mode": "cinematic_brand_close",
+      "tool_routing": {
+        "ideogram_4": {
+          "mode": "scene_provider_optional"
+        },
+        "qwen_image_layered": {
+          "mode": "conditional"
+        },
+        "sam3": {
+          "mode": "subject_mask_optional"
+        },
+        "rough_notation": {
+          "allowed": [],
+          "max_annotations": 0
+        },
+        "skia": [
+          "scene",
+          "bottom_scrim",
+          "promise",
+          "brand_mark"
+        ]
+      },
+      "micro_semiotic_anchor_slots": [
+        "production_tool",
+        "memory_object",
+        "brand_signature"
+      ],
+      "source_references": [
+        "Carousel 11 final slide"
+      ],
+      "avoid": [
+        "abrupt style change",
+        "generic follow CTA",
+        "promise disconnected from series"
+      ]
+    }
+  ],
+  "sequence_grammars": [
+    {
+      "sequence_id": "S01",
+      "name": "Minimal Motivation Arc",
+      "recommended_length": [
+        5,
+        7
+      ],
+      "beats": [
+        "H01 or H05 cover",
+        "N01/N03 premise",
+        "N02 pressure or rules",
+        "F04 mechanism/timeline",
+        "C05 landing"
+      ],
+      "source": "Carousel 1"
+    },
+    {
+      "sequence_id": "S02",
+      "name": "Photo Quote Micro-Series",
+      "recommended_length": [
+        3,
+        6
+      ],
+      "beats": [
+        "N06 hook",
+        "N06 reinforcement",
+        "N07 or N08 twist",
+        "C05 optional close"
+      ],
+      "source": "Carousels 2–7"
+    },
+    {
+      "sequence_id": "S03",
+      "name": "Psychology Listicle with Artifact Cards",
+      "recommended_length": [
+        9,
+        12
+      ],
+      "beats": [
+        "H02 cover",
+        "H03 premise",
+        "F06 lessons × N",
+        "F07 evidence lesson optional",
+        "F08 action plan",
+        "C03 share CTA"
+      ],
+      "source": "Carousel 8"
+    },
+    {
+      "sequence_id": "S04",
+      "name": "Framework Decomposition",
+      "recommended_length": [
+        7,
+        9
+      ],
+      "beats": [
+        "H05 cover",
+        "F03 framework overview",
+        "F02 component slides × N",
+        "C02 keyword CTA"
+      ],
+      "source": "Carousel 9"
+    },
+    {
+      "sequence_id": "S05",
+      "name": "Brand Case Study",
+      "recommended_length": [
+        7,
+        10
+      ],
+      "beats": [
+        "H02/B05 hook",
+        "B01 profile",
+        "B02 portfolio formats",
+        "B03 palette",
+        "B04 hero assets",
+        "C04 share close"
+      ],
+      "source": "Carousel 10"
+    },
+    {
+      "sequence_id": "S06",
+      "name": "Nostalgia Memory Roll",
+      "recommended_length": [
+        8,
+        20
+      ],
+      "beats": [
+        "N05 hook memory",
+        "N05 recurring memory beats × N",
+        "C06 brand promise"
+      ],
+      "source": "Carousel 11"
+    },
+    {
+      "sequence_id": "S07",
+      "name": "Moodboard List",
+      "recommended_length": [
+        5,
+        10
+      ],
+      "beats": [
+        "H08 category beats × N",
+        "C05 question or save CTA"
+      ],
+      "source": "Carousel Grid Mood Date"
+    },
+    {
+      "sequence_id": "S08",
+      "name": "Do/Don’t Educational Guide",
+      "recommended_length": [
+        7,
+        11
+      ],
+      "beats": [
+        "H04 cover",
+        "J01/J03/J04 lessons × N",
+        "C01 continuation CTA"
+      ],
+      "source": "Carousel LISTICLE + JUXTAPOSITION"
+    },
+    {
+      "sequence_id": "S09",
+      "name": "Numbered Design Lesson Listicle",
+      "recommended_length": [
+        7,
+        11
+      ],
+      "beats": [
+        "H03 cover",
+        "F05 numbered lesson × N",
+        "C01 part-two CTA"
+      ],
+      "source": "Carousel LISTICLE TEMPLATE"
+    },
+    {
+      "sequence_id": "S10",
+      "name": "Minimal Confrontation Arc",
+      "recommended_length": [
+        7,
+        10
+      ],
+      "beats": [
+        "H04 or H03 hook",
+        "N03 recognition",
+        "N04 hard truth",
+        "F10 evidence/question",
+        "N03 resolution",
+        "C05 action"
+      ],
+      "source": "Minimal Style CAROUSEL"
+    },
+    {
+      "sequence_id": "S11",
+      "name": "Visual Taxonomy / System Breakdown",
+      "recommended_length": [
+        6,
+        9
+      ],
+      "beats": [
+        "H05 cover",
+        "F03 overview",
+        "F02 definitions",
+        "F04 timeline optional",
+        "F08 action plan",
+        "C02 resource CTA"
+      ],
+      "source": "Cross-corpus synthesis"
+    },
+    {
+      "sequence_id": "S12",
+      "name": "Mixed-Media Personal Brand Explainer",
+      "recommended_length": [
+        6,
+        10
+      ],
+      "beats": [
+        "H04 personal hook",
+        "N08 metaphor",
+        "F01/F06 teaching",
+        "J03 contrast",
+        "F09 steps",
+        "C01/C03 CTA"
+      ],
+      "source": "CCP target paper-cut system"
+    }
+  ],
+  "folder_findings": {
+    "Carousel 1": "Cinematic opener followed by radical typographic restraint: solid fields, manifesto rhythm, and one clean timeline. Its strength is pacing through contrast rather than visual novelty on every slide.",
+    "Carousel 2": "Three full-bleed quote images use culturally familiar, whimsical scenes. Copy is short and the image supplies most of the emotional argument.",
+    "Carousel 3": "A relationship/identity quote series combining cosmic scale, animal humor, and a labeled meme. The recurring law is one visual joke or emotional metaphor per slide.",
+    "Carousel 4": "Four affirmation slides with recognizable characters and animals. Large text is placed where the photograph already has silence; the image is never merely decorative.",
+    "Carousel 5": "An exception/rarity theme: black sheep, child attitude, cartoon calm, and dog romance. Strongest compositional device is the obvious visual metaphor that can be read before the text.",
+    "Carousel 6": "Privacy/self-protection series using high-recognition pop-culture imagery and short central statements. Repetition of type treatment creates the carousel identity.",
+    "Carousel 7": "Hope/confidence sequence using humorous situational photography. Two slides use explicit meme labeling while others rely on scene–copy incongruity.",
+    "Carousel 8": "The most complete high-density educational sequence: dramatic poster cover, clean white lesson shell, colored sectional hierarchy, symbolic cards, one chart slide, one action-plan grid, and a creator-led CTA.",
+    "Carousel 9": "A highly coherent editorial framework system. Paper texture, serif typography, orange highlight blocks, and line-based diagrams provide repeatable structure without template fatigue.",
+    "Carousel 10": "A brand case-study carousel rather than a topic carousel. It proves that profile, palette, formats, mockups, and character identity can be composed as one narrative system.",
+    "Carousel 11": "A 19-slide episodic narrative with fixed shell and variable scenes. The colored protagonist among gray secondary characters creates instant focus; bottom caption and progress dots establish series continuity.",
+    "Carousel Grid Mood Date": "Eight 2×2 mood grids. Repetition, simple category labels, and image abundance make this ideal for saveable lists and cultural identification.",
+    "Carousel LISTICLE + JUXTAPOSITION": "A meta-educational comparison system. The strongest recurring grammar is title above, paired examples below, and binary verdict at the bottom.",
+    "Carousel LISTICLE TEMPLATE": "A disciplined numbered listicle shell. The cover and CTA differ, while every interior lesson retains number, title, explanation, and mini comparison pair.",
+    "Carousel Template 1": "Contains two distinct grammars: a repeated 2×2 category collage, a native-post/article card, and a strong vertical “don’t say / say” split.",
+    "Minimal Style CAROUSEL": "A soft-gradient, text-led sequence using large negative space, occasional surreal body fragments, one dark pattern interrupt, and a restrained action close."
+  }
+}

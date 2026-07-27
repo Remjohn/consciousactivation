@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dep_vid_030_project_metadata",
+  "title": "CMF Project Metadata",
+  "description": "Project-level data model for the CMF Project Management system (FR-VID-11). Represents a single video project with its organizational metadata, pipeline state summary, and asset counts.",
+  "type": "object",
+  "required": [
+    "project_id",
+    "title",
+    "arc_type",
+    "beat_count",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "pattern": "^PROJ-\\d{8}-\\d{3,}$",
+      "description": "Unique project identifier. Format: PROJ-YYYYMMDD-NNN."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Human-readable project title. Operator-editable."
+    },
+    "client": {
+      "type": ["string", "null"],
+      "maxLength": 100,
+      "description": "Client or campaign name for grouping. Nullable."
+    },
+    "folder_id": {
+      "type": ["string", "null"],
+      "pattern": "^FOLD-\\d{3,}$",
+      "description": "FK to Folder. Null means project is at root level."
+    },
+    "folder_path": {
+      "type": ["string", "null"],
+      "description": "Computed full folder path for display (e.g., '/Clients/Tony/Q2 Campaign'). Read-only."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "maxItems": 20,
+      "default": [],
+      "description": "Free-form tags for cross-folder filtering. Convention: 'key:value' pairs encouraged."
+    },
+    "arc_type": {
+      "type": "string",
+      "enum": ["witness", "transformation", "discovery"],
+      "description": "Narrative arc type from the source beat cluster (DEP-VID-001)."
+    },
+    "beat_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Number of beats in the project's beat cluster."
+    },
+    "total_duration_sec": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Total video duration in seconds. Computed from manifest. Null before manifest exists."
+    },
+    "thumbnail_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "URL to the project thumbnail (typically first beat's keyframe). Presigned S3 URL."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "GENERATING", "REVIEW", "APPROVED", "PUBLISHED", "ARCHIVED"],
+      "description": "High-level project status. Derived from pipeline state but simplified for dashboard display."
+    },
+    "pipeline_id": {
+      "type": ["string", "null"],
+      "description": "Linked pipeline instance ID (DEP-VID-025). Null if pipeline not yet started."
+    },
+    "manifest_id": {
+      "type": ["string", "null"],
+      "description": "Linked Remotion manifest ID (DEP-VID-002). Null before manifest is constructed."
+    },
+    "beat_cluster_id": {
+      "type": ["string", "null"],
+      "description": "Source beat cluster ID (DEP-VID-001). Null if project created empty."
+    },
+    "pipeline_state": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "PENDING",
+        "GENERATING_T2I",
+        "PROCESSING_AUDIO",
+        "AUDIO_COMPLETE",
+        "QUALITY_GATE",
+        "GENERATING_I2V",
+        "FINGERPRINTING",
+        "ASSEMBLING_MANIFEST",
+        "GENERATING_CAPTIONS",
+        "RENDERING_PREVIEW",
+        "READY_FOR_REVIEW",
+        "REGENERATING",
+        "RENDERING_FINAL",
+        "APPROVED",
+        "PUBLISHED",
+        "FAILED"
+      ],
+      "description": "Current pipeline state from DEP-VID-025 (16-state enum). Null if no pipeline started. Must match DEP-VID-025 current_state enum exactly."
+    },
+    "review_progress": {
+      "type": ["object", "null"],
+      "properties": {
+        "total_beats": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pending": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "regenerating": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["total_beats", "approved", "pending", "regenerating"],
+      "description": "Beat-level review progress summary from DEP-VID-027."
+    },
+    "total_cost_usd": {
+      "type": "number",
+      "minimum": 0,
+      "default": 0,
+      "description": "Total generation cost in USD, rolled up from pipeline."
+    },
+    "total_regenerations": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Count of beat regenerations triggered for this project."
+    },
+    "has_active_editor_session": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if an FR-VID-10 editor session (DEP-VID-028) is currently active for this project."
+    },
+    "asset_counts": {
+      "type": ["object", "null"],
+      "properties": {
+        "source": { "type": "integer", "minimum": 0 },
+        "keyframes": { "type": "integer", "minimum": 0 },
+        "clips": { "type": "integer", "minimum": 0 },
+        "renders": { "type": "integer", "minimum": 0 },
+        "audio": { "type": "integer", "minimum": 0 }
+      },
+      "description": "Counts of generated assets by category. Computed from S3 listing."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 creation timestamp."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 last modification timestamp."
+    },
+    "archived_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 archive timestamp. Null if not archived."
+    }
+  },
+  "additionalProperties": false
+}

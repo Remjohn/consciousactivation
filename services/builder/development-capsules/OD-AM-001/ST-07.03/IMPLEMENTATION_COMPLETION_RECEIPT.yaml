@@ -1,0 +1,92 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-07.03:LOCAL_EXTERNAL_HANDOFFS:28c02a9a8361
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-07.03
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder compiles deterministic, typed, structurally lossless VAE and
+  Delegation handoff requests and validates them through sealed transactional
+  local test doubles without implementing or claiming any external behavior.
+primary_obligations_implemented:
+  - ADR-018
+  - CONST-005
+  - FR-172
+  - FR-173
+dependency_receipts:
+  satisfied:
+    - ST-07.02:StoryCompletionReceipt:ee13f9b6601ab1b166f16d2d30fb043f1441745d9e8146248d2d6d7d08caa681
+  pending: []
+source_files:
+  - src/cmf_builder/domain/external_handoff_contracts.py
+  - src/cmf_builder/application/external_handoff_commands.py
+test_files:
+  - tests/stories/st_07_03/test_external_handoff_contracts.py
+  - tests/stories/st_07_03/test_local_ports_and_acknowledgements.py
+  - tests/stories/st_07_03/test_failure_authority_compatibility.py
+tests:
+  status: PASS_ALL_GOVERNED_GATES
+  focused: 21/21_PASS
+  affected_ST_07_02_and_ST_07_03: 44/44_PASS
+  architecture_boundaries: 12/12_PASS
+  full_repository_regression: 1269/1269_PASS_NO_MANDATORY_SKIPS
+  results_path: development-capsules/OD-AM-001/ST-07.03/TEST_RESULTS.json
+deterministic_identity_evidence: >-
+  Exact governed inputs produce byte-identical requests, acknowledgements,
+  local validation receipts and result boundaries; forged fields or bytes fail closed.
+authority_and_boundary_evidence:
+  OD_AM_001_receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  ST_07_02_receipt_sha256: ee13f9b6601ab1b166f16d2d30fb043f1441745d9e8146248d2d6d7d08caa681
+  ST_07_02_definition_hash: sha256:086b1273b9a5cdb60c84f2bd3694c21e2af356646a2b918ecefb8c22ff441adc
+  ST_07_02_definition_receipt_hash: sha256:cc7c85739cf7bb256b7f19646bac1d7026520c9a4833f3e969ecfa1c6119bca5
+  ST_07_02_definition_tuple:
+    object_id: atomic-harness-definition_086b1273b9a5cdb60c84f2bd3694c21e2af356646a2b918ecefb8c22ff441adc
+    version: 1.0.0
+    sha256: 086b1273b9a5cdb60c84f2bd3694c21e2af356646a2b918ecefb8c22ff441adc
+    authority: Atomic Harness Builder
+  ST_07_02_definition_receipt_tuple:
+    object_id: atomic-harness-definition-receipt_cc7c85739cf7bb256b7f19646bac1d7026520c9a4833f3e969ecfa1c6119bca5
+    version: 1.0.0
+    sha256: cc7c85739cf7bb256b7f19646bac1d7026520c9a4833f3e969ecfa1c6119bca5
+    authority: Atomic Harness Builder
+  exact_parent_tuple_validation: PASS
+  Delegation_version: 1.1.0-rc.4
+  Delegation_release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+  Delegation_trust: local_unsigned_release_candidate
+  local_acknowledgement_authority: LOCAL_TEST_DOUBLE_ONLY
+  local_validation_authority: BUILDER_LOCAL_CONTRACT_VALIDATION_ONLY
+  structural_lineage_classification: STRUCTURAL_SYNTHETIC_LOCAL_FIXTURE_NOT_PARENT_MEANING_OR_REAL_PROFILE_EVIDENCE
+  interview_provenance_classification: NON_PERSONAL_STRUCTURAL_PLACEHOLDERS_NOT_HUMAN_TRUTH_OR_NOT_APPLICABLE
+  external_product_behavior_absorbed: false
+  shared_contract_fork_created: false
+  local_acknowledgement_is_external_acceptance: false
+rollback_evidence: PASS_ATOMIC_PORT_REPOSITORY_OBSERVATION_ROLLBACK_ZERO_PARTIAL_STATE
+observability_evidence: PASS_LOCAL_SUCCESS_REJECTION_AND_ATOMIC_FAILURE_EVENTS
+evidence_gate_status: EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - BD-014
+  - XRI-016
+  - XRI-019
+  - XDEP-001
+  - XDEP-002
+  - XDEP-003
+  - XDEP-004
+external_compatibility: EXTERNAL_VALIDATION_PENDING
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: 0299f400385b2af759ea1a3241528655b6990dce50a9d133bd8edcfcd8552b55
+  external_handoff_contracts_sha256: 28c02a9a8361db1ccef1f9e2e80cb6c0387e24a38ccc3123a5612f8e95ecfcfc
+  external_handoff_commands_sha256: a6fb9ff9ecb7cc7299513018fb946f6a429d71f93fb22dbd5f8bb41cf7e11ecc
+  test_external_handoff_contracts_sha256: c2b4e5e09dc0103c02ef7cec1e86e245986071ce695b941bf948a3dcb761f220
+  test_local_ports_and_acknowledgements_sha256: 94a4c8059252d15ac67aa58661ca1372ec3897bf0af7a352c118c07b874dc0f9
+  test_failure_authority_compatibility_sha256: a531c3d4943d1f80fb5987532189c81b117a5784839df84a3dc03ff9ef9110d8
+  test_results_sha256: 4d5e542a2a1752280dc42c75163736bc3866895e758465b6cba8d6f5d5329a7b
+  file_change_manifest_sha256: c9b2a4190deedad85c60b75bbc611c8abfeab5b08a422c60177de0359a86b0a5
+  authority_source_sha256: 71a61f146476bf518d304da6056d2e68828644cc3f89dc07064003e2f2f2617e
+  source_boundary_registry_sha256: d867611497dfeeaafb1e0493066ee49b24624dd1757d399843f794fa9cfd66a5
+  CR_ST0703_001_sha256: 21fee86cdbd32c4ebc15fe4a239eba6144a71a4515c388394ac4b8480a4270c6
+  production_source_tree_sha256: 9793ca8ed7c41c12864d2ef59a8bea6bafd542a0ae3ac757c48058e3391b0c0d
+promotion_gate: PASS_CANONICAL_FULL_REGRESSION_SOURCE_BOUNDARY_AND_EVIDENCE_VALIDATION

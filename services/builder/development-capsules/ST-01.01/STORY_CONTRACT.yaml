@@ -1,0 +1,77 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-01.01
+global_order: 1
+primary_epic:
+  epic_id: EP-01
+  title: Governed Run Intake and Evidence Readiness
+title: Start and Resume One Target-Profiled Builder Run
+confirmed_primary_outcome: the run has stable identity, explicit authority, replay-safe state, and target-specific required work
+confirmed_narrative:
+  as_a: Harness Architect
+  i_want: select exactly one compilation target and starts or resumes its governed lifecycle
+  so_that: the run has stable identity, explicit authority, replay-safe state, and target-specific required work
+release_role: RELEASE_1_FORMAT_02_REFERENCE_SUPPORT
+bounded_target:
+  compilation_target: atomic_content_harness
+  category: 2d_character_animation
+  profile_id: format02_minimal_coach_theatre
+  canonical_profile_path: 2d_character_animation/format02_minimal_coach_theatre
+  profile_state: contract_compatible
+  production_certified: false
+  human_reaction_collection: false
+owned_obligations:
+  - ADR-001
+  - AG-001
+  - AG-002
+  - D001
+  - D006
+  - FR-001
+  - FR-002
+  - FR-003
+  - FR-004
+  - FR-005
+  - FR-006
+  - FR-007
+  - FR-008
+  - NFR-REL-002
+  - NFR-SEC-003
+functional_requirements: [FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008]
+non_functional_requirements: [NFR-REL-002, NFR-SEC-003]
+other_authority: [ADR-001, AG-001, AG-002, D001, D006]
+direct_story_dependencies: []
+required_prior_story_receipts: []
+implementation_owner: run_governance_owner
+authority_owner: product_authority_and_architecture
+component_boundary:
+  owns:
+    - run identity and selected target/profile binding
+    - pure lifecycle transition validation
+    - actor/action authorization for this Story's commands
+    - immutable run events and command idempotency
+    - deterministic checkpoint eligibility and resume
+  excludes:
+    - evidence semantics and ingestion
+    - generated harness behavior
+    - target compiler behavior
+    - workflow scheduling or execution
+    - Control Tower behavior
+    - VAE and Delegation behavior
+contracts: [RunLifecycle, EvidenceWorkspace, ConstitutionalReadinessReceipt]
+schema_references:
+  - docs/contracts/schemas/constitutional-evaluation.schema.json#/$defs/ConstitutionalReadinessReceipt
+primary_tech_specs: [TS-00, TS-01, TS-02, TS-07, TS-11, TS-13, TS-14, TS-15]
+success_event: ST-01.01:OutcomeVerified
+failure_event: ST-01.01:OutcomeRejected
+completion_receipt_type: ST-01.01:StoryCompletionReceipt
+failure_behavior: reject missing or multiple targets, invalid transitions, unauthorized waivers, and resume that would replay a human decision; rejection appends no authoritative state mutation
+compatibility_effect: preserve shared lifecycle semantics while versioning target-specific source and state contracts
+confirmed_acceptance_criteria:
+  - Given all dependency outputs for ST-01.01 are accepted and the covered authority is available,
+  - When the Harness Architect selects exactly one compilation target and starts or resumes its governed lifecycle,
+  - Then the run has stable identity, explicit authority, replay-safe state, and target-specific required work
+  - "And failure behavior is explicit: Reject missing or multiple targets, invalid transitions, unauthorized waivers, and any resume that replays a human decision."
+  - And only declared authority may approve or mutate governed state; unresolved gates remain blocking where applicable.
+  - And events, receipts, evidence identity, version, provenance, and failure context are observable at the declared public seam.
+  - "And compatibility behavior is enforced: Preserve shared lifecycle semantics while versioning target-specific source and state contracts."
+one_focused_implementation_context: true
+implementation_authorized: false

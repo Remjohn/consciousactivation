@@ -1,0 +1,109 @@
+schema_version: cmf-builder-bd007-provider-adapter-contract/v1
+contract_id: BD007-DEVELOPMENT-EVIDENCE-PROVIDER-ADAPTER-v1
+authority: AUTHORIZE_BD-004_CORPUS_ADMISSION_BD-007_GOVERNED_PROVIDER_EVIDENCE_AND_ST-06-03_ST-06-04_IMPLEMENTATION_CAMPAIGN
+scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_EVIDENCE
+implementation:
+  configuration_model: src/cmf_builder/category_evidence/provider_contracts.py
+  subprocess_adapter: src/cmf_builder/category_evidence/provider_runner.py
+  production_runtime: false
+  external_product_runtime: false
+  certification_capability: false
+operations:
+  verify_configuration:
+    inputs:
+      - immutable_provider_configuration
+      - immutable_run_request
+      - executable_path_resolved_at_runtime
+      - package_path_resolved_at_runtime
+      - caller_pinned_working_directory_boundary
+      - governed_call_authority_when_billable_or_credentialed
+    postconditions:
+      - exact_configuration_hash_matches
+      - exact_executable_name_and_byte_hash_match
+      - exact_package_byte_hash_matches
+      - exact_runtime_version_probe_matches
+      - exact_model_and_deterministic_controls_match
+      - requested_tools_and_network_hosts_are_within_policy
+      - credential_environment_names_only_are_recorded
+    failure: typed_fail_closed_rejection_before_provider_invocation
+  run:
+    inputs:
+      - verified_configuration
+      - verified_request
+      - optional_bounded_authority_receipt
+      - optional_cancellation_token
+    outputs:
+      - immutable_output_capture_manifest
+      - stdout_and_stderr_hashes
+      - exact_exit_status
+      - typed_attempt_failures
+    invariants:
+      - no_credential_value_is_serialized
+      - no_live_call_without_governed_authority
+      - timeout_kills_the_child_process
+      - cancellation_kills_the_child_process
+      - retries_are_bounded_and_typed
+      - configuration_drift_is_rejected
+      - call_ordinal_cannot_exceed_authorized_maximum_calls
+      - output_format_is_validated
+configuration_contract:
+  identities:
+    - provider_identity
+    - provider_version
+    - runtime_identity
+    - runtime_version
+    - executable_name
+    - executable_sha256
+    - package_identity
+    - package_version
+    - package_sha256
+    - model_identity
+    - configuration_id
+    - configuration_hash
+  invocation:
+    - invocation_method
+    - invocation_argv
+    - version_probe_argv
+    - timeout_seconds
+    - working_directory_boundary
+  deterministic_controls:
+    - seed_and_seed_support
+    - temperature_or_equivalent
+    - repeat_count
+    - canonically_ordered_additional_controls
+  containment:
+    - allowed_tools
+    - prohibited_tools
+    - network_policy
+    - network_allowlist
+    - credential_environment_variable_names_without_values
+  behavior:
+    - retry_policy
+    - output_format
+    - stdout_policy
+    - stderr_policy
+    - accepted_exit_codes
+failure_taxonomy:
+  - AUTHORITY_MISSING
+  - AUTHORITY_SCOPE_MISMATCH
+  - CANCELLED
+  - CONFIGURATION_DRIFT
+  - CONFIGURATION_INVALID
+  - EXECUTABLE_DRIFT
+  - INVOCATION_FAILED
+  - OUTPUT_INVALID
+  - RUNTIME_VERSION_DRIFT
+  - TIMEOUT
+eligibility_boundary:
+  runner_mechanics_validation_is_provider_evidence: false
+  local_echo_fixture_is_semantic_provider: false
+  provider_configuration_eligibility_requires:
+    - exact_model_configuration
+    - exact_executable_and_package_hashes
+    - enforceable_tool_and_network_policy
+    - admitted_BD004_case_material
+    - bounded_spend_and_credential_authority
+    - governed_retention_and_data_transmission_policy
+    - complete_repeats_and_hash_bound_outputs
+production_ready: false
+certified: false

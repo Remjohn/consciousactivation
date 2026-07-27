@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: THE_VISION
+enabled: true
+selection_priority:
+  tier: critical
+  rank: 18
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - VISION
+  stages:
+    - scene_builder
+incompatibilities:
+  - delayed_cta
+warn_conditions:
+  - metric: cta_overlap_seconds
+    operator: lt
+    value: 0.5
+route_hints:
+  select:
+    - use_when_future_identity_and_action_must_bind
+    - prefer_as_default_end_vehicle

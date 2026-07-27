@@ -1,0 +1,40 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: HOOK
+enabled: true
+selection_priority:
+  tier: default
+  rank: 1
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - HOOK
+  stages:
+    - scene_builder
+incompatibilities:
+  - slow_intro
+warn_conditions:
+  - metric: stakes_clarity_score
+    operator: lt
+    value: 0.8
+route_hints:
+  select:
+    - use_when_message_is_explicit
+    - use_when_face_is_available
+selection_conditions:
+  - if:
+      metric: beat_index
+      operator: eq
+      value: 0
+    then:
+      variant: talking_head_pattern_match
+      score_adjustment: 0.15
+  - if:
+      metric: stakes_clarity_score
+      operator: lt
+      value: 0.8
+    then:
+      variant: text_first_interrupt
+      score_adjustment: 0.0

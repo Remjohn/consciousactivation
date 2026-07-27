@@ -1,0 +1,158 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Story Strategy Brief",
+    "description": "Output from the Story Doctor (Phase 1) defining the narrative strategy and arc diagnosis.",
+    "type": "object",
+    "required": [
+        "session_metadata",
+        "content_scan",
+        "arc_diagnosis",
+        "frame_strategy",
+        "handoff_instruction"
+    ],
+    "properties": {
+        "session_metadata": {
+            "type": "object",
+            "required": [
+                "project_id",
+                "analysis_date",
+                "story_doctor_version",
+                "brand_avatar_path"
+            ],
+            "properties": {
+                "project_id": {
+                    "type": "string"
+                },
+                "brand_avatar_path": {
+                    "type": "string",
+                    "description": "Absolute path or filename of the Brand Avatar image found in the project folder."
+                },
+                "analysis_date": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "story_doctor_version": {
+                    "type": "string"
+                }
+            }
+        },
+        "content_scan": {
+            "type": "object",
+            "required": [
+                "primary_speaker",
+                "dominant_emotion",
+                "structure_type",
+                "coach_presence"
+            ],
+            "properties": {
+                "primary_speaker": {
+                    "type": "string",
+                    "enum": [
+                        "Client",
+                        "Coach",
+                        "Both"
+                    ]
+                },
+                "dominant_emotion": {
+                    "type": "string"
+                },
+                "structure_type": {
+                    "type": "string",
+                    "enum": [
+                        "Before/After",
+                        "Philosophy/Teaching",
+                        "Debate/Argument",
+                        "Mixed"
+                    ]
+                },
+                "coach_presence": {
+                    "type": "string",
+                    "enum": [
+                        "High",
+                        "Medium",
+                        "Low",
+                        "None"
+                    ]
+                }
+            }
+        },
+        "arc_diagnosis": {
+            "type": "object",
+            "required": [
+                "selected_arc",
+                "confidence_score",
+                "rationale",
+                "anti_patterns"
+            ],
+            "properties": {
+                "selected_arc": {
+                    "type": "string"
+                },
+                "confidence_score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "rationale": {
+                    "type": "string"
+                },
+                "alternative_considered": {
+                    "type": "string"
+                },
+                "anti_patterns": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "frame_strategy": {
+            "type": "object",
+            "required": [
+                "protagonist_voice",
+                "unified_frame_statement",
+                "key_topics"
+            ],
+            "properties": {
+                "protagonist_voice": {
+                    "type": "string",
+                    "enum": [
+                        "Client",
+                        "Coach",
+                        "Community",
+                        "Industry/Villain"
+                    ]
+                },
+                "unified_frame_statement": {
+                    "type": "string"
+                },
+                "key_topics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "handoff_instruction": {
+            "type": "object",
+            "required": [
+                "target_agent_file",
+                "execution_mode"
+            ],
+            "properties": {
+                "target_agent_file": {
+                    "type": "string"
+                },
+                "execution_mode": {
+                    "type": "string",
+                    "enum": [
+                        "Specialized (Mode B)",
+                        "General (Mode A)"
+                    ]
+                }
+            }
+        }
+    }
+}

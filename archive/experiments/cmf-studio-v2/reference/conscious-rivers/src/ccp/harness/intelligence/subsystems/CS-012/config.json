@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-012",
+  "name": "CTA Fusion Timer",
+  "version": "1.0",
+  "priority_tier": "recall",
+  "research_basis": [
+    "Peak-End Rule",
+    "LC4MP"
+  ],
+  "inputs": [
+    "end_timestamp_seconds",
+    "cta_timestamp_seconds",
+    "gap_duration_seconds",
+    "audio_continuity"
+  ],
+  "outputs": [
+    "fusion_verdict",
+    "recommended_cta_window",
+    "violations"
+  ],
+  "thresholds": {
+    "max_cta_gap_seconds": 3.0,
+    "preferred_fusion_window_seconds": {
+      "min": 0.0,
+      "max": 3.0
+    },
+    "allow_detached_outro": false
+  },
+  "default_action_on_fail": "REVISE"
+}

@@ -1,0 +1,16 @@
+schema_version: cmf-builder-bd008-external-evidence-request/v1
+status: REQUIRED_BEFORE_BD008_CLOSURE
+requests:
+  protected_format02_evaluation:
+    required: true
+    accepted_outputs: [hash_bound_inputs, scorecards, failure_receipts, limitations]
+  vae_validation:
+    required_for_vae_claims: true
+    accepted_outputs: [version_pin, request_receipt, result_receipt, failure_containment]
+  delegation_validation:
+    required_for_delegation_claims: true
+    accepted_outputs: [contract_version, request_mapping_receipt, returned_receipt, drift_report]
+  human_review:
+    required_where_policy_applies: true
+    accepted_outputs: [attributable_review, consent_state, withdrawal_policy, redaction_policy]
+

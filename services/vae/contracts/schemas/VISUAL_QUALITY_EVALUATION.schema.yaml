@@ -1,0 +1,325 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Quality Evaluation
+description: >-
+  VAE-owned immutable evaluation receipt combining deterministic, asset,
+  composition, constitutional activation, wrong-reading, no-text, and
+  responsible-layer evidence. This is not a Delegation public contract.
+type: object
+additionalProperties: false
+required:
+  - evaluation_id
+  - candidate_ref
+  - demand_ref
+  - evaluation_profile
+  - profile_status
+  - profile_thresholds_ref
+  - deterministic_validation
+  - asset_evaluation
+  - composition_evaluation
+  - constitutional_evaluation
+  - wrong_reading_evaluation
+  - responsible_layer_summary
+  - failures
+  - verdict
+  - evaluator_identity
+properties:
+  evaluation_id:
+    type: string
+    pattern: ^VQE-
+  candidate_ref: &nonempty_string
+    type: string
+    minLength: 1
+  demand_ref: *nonempty_string
+  evaluation_profile: *nonempty_string
+  profile_status:
+    enum:
+      - specified_not_certified
+      - benchmarked
+      - shadow
+      - limited_production
+      - production_certified
+      - revoked
+  profile_thresholds_ref: *nonempty_string
+  deterministic_validation:
+    type: object
+    additionalProperties: false
+    required:
+      - verdict
+      - checks
+    properties:
+      verdict:
+        enum:
+          - pass
+          - fail
+      checks:
+        type: object
+        minProperties: 1
+        additionalProperties:
+          enum:
+            - pass
+            - fail
+            - not_applicable
+  asset_evaluation:
+    type: object
+    additionalProperties: false
+    required:
+      - verdict
+      - scores
+    properties:
+      verdict: &layer_verdict
+        enum:
+          - pass
+          - repair_required
+          - fail
+      scores:
+        type: object
+        minProperties: 1
+        additionalProperties: &score
+          type: number
+          minimum: 0
+          maximum: 1
+  composition_evaluation:
+    type: object
+    additionalProperties: false
+    required:
+      - verdict
+      - scores
+      - render_ref
+    properties:
+      verdict: *layer_verdict
+      scores:
+        type: object
+        minProperties: 1
+        additionalProperties: *score
+      render_ref: *nonempty_string
+  constitutional_evaluation:
+    type: object
+    additionalProperties: false
+    required:
+      - verdict
+      - scores
+      - feature_contract_results
+      - no_text_evaluation
+    properties:
+      verdict: *layer_verdict
+      scores:
+        type: object
+        additionalProperties: false
+        required:
+          - zero_second_hook
+          - pattern_match_strength
+          - pattern_interrupt_strength
+          - viewer_role_clarity
+          - activation_direction_fidelity
+          - prediction_gap
+          - payoff
+          - affinity
+          - anticipation_residue
+          - anti_cliche_strength
+          - feature_contract_compliance
+        properties:
+          zero_second_hook: *score
+          pattern_match_strength: *score
+          pattern_interrupt_strength: *score
+          viewer_role_clarity: *score
+          activation_direction_fidelity: *score
+          prediction_gap: *score
+          payoff: *score
+          affinity: *score
+          anticipation_residue: *score
+          anti_cliche_strength: *score
+          feature_contract_compliance: *score
+      feature_contract_results:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - feature_contract_ref
+            - applicable
+            - verdict
+            - evidence
+          properties:
+            feature_contract_ref: *nonempty_string
+            applicable:
+              type: boolean
+            verdict:
+              enum:
+                - pass
+                - repair_required
+                - fail
+                - not_applicable
+            evidence: *nonempty_string
+      no_text_evaluation:
+        type: object
+        additionalProperties: false
+        required:
+          - applicability
+          - applicability_reason
+          - verdict
+        properties:
+          applicability:
+            enum:
+              - required
+              - not_applicable
+          applicability_reason: *nonempty_string
+          verdict:
+            enum:
+              - pass
+              - repair_required
+              - fail
+              - not_applicable
+          meaning_survives:
+            type:
+              - boolean
+              - "null"
+          viewer_role_survives:
+            type:
+              - boolean
+              - "null"
+          evidence: *nonempty_string
+        allOf:
+          - if:
+              properties:
+                applicability:
+                  const: required
+            then:
+              required:
+                - meaning_survives
+                - viewer_role_survives
+                - evidence
+              properties:
+                verdict:
+                  enum:
+                    - pass
+                    - repair_required
+                    - fail
+                meaning_survives:
+                  type: boolean
+                viewer_role_survives:
+                  type: boolean
+          - if:
+              properties:
+                applicability:
+                  const: not_applicable
+            then:
+              properties:
+                verdict:
+                  const: not_applicable
+  wrong_reading_evaluation:
+    type: object
+    additionalProperties: false
+    required:
+      - verdict
+      - risk_score
+      - dominant_interpretation
+      - lock_results
+    properties:
+      verdict: *layer_verdict
+      risk_score: *score
+      dominant_interpretation: *nonempty_string
+      lock_results:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - lock
+            - triggered
+            - evidence
+          properties:
+            lock: *nonempty_string
+            triggered:
+              type: boolean
+            evidence: *nonempty_string
+  syntax_context_evaluation:
+    type: object
+  temporal_evaluation:
+    type: object
+  responsible_layer_summary:
+    type: object
+    additionalProperties: false
+    required:
+      - primary_layer
+      - repair_authority
+      - evidence
+    properties:
+      primary_layer: &responsible_layer
+        enum:
+          - none
+          - activative_lineage
+          - activation_contract
+          - visual_semantics
+          - visual_narrative
+          - feature_contract
+          - somatic_route
+          - composition_intent
+          - materialization
+          - materialization_pose_conditioning
+          - technical
+          - identity_continuity
+          - temporal
+          - evaluation_infrastructure
+      contributing_layers:
+        type: array
+        uniqueItems: true
+        items: *responsible_layer
+      repair_authority:
+        enum:
+          - vae_owned_binding
+          - upstream_amendment_required
+          - infrastructure_retry
+          - no_repair_required
+      evidence: *nonempty_string
+  failures:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - failure_code
+        - severity
+        - responsible_layer
+        - explanation
+      properties:
+        failure_code: *nonempty_string
+        severity:
+          enum:
+            - minor
+            - major
+            - critical
+        responsible_layer: *responsible_layer
+        contributing_layers:
+          type: array
+          uniqueItems: true
+          items: *responsible_layer
+        evidence_bbox:
+          type: array
+          minItems: 4
+          maxItems: 4
+          items:
+            type: number
+            minimum: 0
+            maximum: 1
+        evidence_time_range:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items:
+            type: number
+            minimum: 0
+        explanation: *nonempty_string
+  repair_contract_ref:
+    type:
+      - string
+      - "null"
+  verdict:
+    enum:
+      - accepted
+      - repair_required
+      - rejected
+      - human_review_required
+  evaluator_identity:
+    type: object
+    minProperties: 1

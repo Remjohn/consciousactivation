@@ -1,0 +1,36 @@
+schema_version: cmf-builder-release-correction-receipt/v1
+campaign_id: RC1-CF-001
+campaign_type: P1_RELEASE_CORRECTION
+verdict: BLOCKED
+corrected_finding:
+  - RC1-P1-PACKAGING-METADATA-MISSING
+p1_closed: false
+rc1_superseding_acceptance_created: false
+evidence:
+  package_identity: docs/release/RC1_PACKAGE_IDENTITY.yaml
+  dependency_classification: docs/release/RC1_DEPENDENCY_CLASSIFICATION.yaml
+  dependency_lock_receipt: docs/release/RC1_DEPENDENCY_LOCK_RECEIPT.yaml
+  package_data_manifest: docs/release/RC1_PACKAGE_DATA_MANIFEST.yaml
+  distribution_manifest: docs/release/RC1_DISTRIBUTION_MANIFEST.yaml
+  distribution_build_receipt: docs/release/RC1_DISTRIBUTION_BUILD_RECEIPT.yaml
+  clean_wheel_install_receipt: docs/release/RC1_CLEAN_WHEEL_INSTALL_RECEIPT.yaml
+  installed_product_acceptance_receipt: docs/release/RC1_INSTALLED_PRODUCT_ACCEPTANCE_RECEIPT.yaml
+  sdist_rebuild_receipt: docs/release/RC1_SDIST_REBUILD_RECEIPT.yaml
+  reproducible_build_receipt: docs/release/RC1_REPRODUCIBLE_BUILD_RECEIPT.yaml
+blocking_gate: RC1-CF-001-P1-SDIST-BUILD-BACKEND-UNAVAILABLE
+validation:
+  packaging_and_productization_focused_tests: 68/68_PASS
+  failed_architecture_rerun_after_source_registry_update: 180/180_PASS
+  full_grouped_regression: 1893/1893_PASS
+  mandatory_skips: 0
+  python_compilation: PASS
+  exact_source_registry_update:
+    path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    change: added package-resource module registrations only
+    registered_paths:
+      - src/cmf_builder/resources/__init__.py
+      - src/cmf_builder/resources/governance/__init__.py
+    assertion_weakened: false
+    architecture_boundary_relaxed: false
+production_ready: false
+certified: false

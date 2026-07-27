@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activation_transfer_contract_ref": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "object_id",
+            "version",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "artifacts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "artifact_kind": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "bytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "media_type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "uri": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "artifact_kind",
+          "bytes",
+          "media_type",
+          "sha256",
+          "uri"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "available_actions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "campaign": {
+      "type": "object"
+    },
+    "evaluations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "exception_packages": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "final_script_ref": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "object_id",
+            "version",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "knowledge": {
+      "type": "object"
+    },
+    "observed_activative_pack_ref": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "object_id",
+            "version",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "order": {
+      "type": "object"
+    },
+    "projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "projection_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "run_nodes": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "runtime_health": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "semantic_production_package_ref": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "object_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "object_id",
+            "version",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_package_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "studio_binding": {
+      "type": "object"
+    },
+    "timeline": {
+      "oneOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "projection_id",
+    "campaign",
+    "order",
+    "studio_binding",
+    "source_package_ref",
+    "observed_activative_pack_ref",
+    "semantic_production_package_ref",
+    "final_script_ref",
+    "activation_transfer_contract_ref",
+    "run_nodes",
+    "artifacts",
+    "evaluations",
+    "knowledge",
+    "runtime_health",
+    "timeline",
+    "exception_packages",
+    "available_actions",
+    "projection_sha256"
+  ],
+  "title": "ControlTowerProjection",
+  "type": "object"
+}

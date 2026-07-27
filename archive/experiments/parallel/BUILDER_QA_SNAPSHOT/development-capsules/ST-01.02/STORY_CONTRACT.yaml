@@ -1,0 +1,49 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-01.02
+primary_epic: EP-01
+title: Lock a Safe Target-Specific Evidence Workspace
+active_mode: SYNTHETIC_DEFINITION
+classification: BUILDER_CORE
+status: READY_AWAITING_HUMAN_IMPLEMENTATION_AUTHORIZATION
+primary_outcome: >-
+  An authorized category-neutral Builder run can accept the exact governed
+  repository-owned synthetic task definition, diagnose it without mutation,
+  and commit a portable immutable Source Lock whose identity, provenance,
+  authority, and failure behavior are deterministic and independently verifiable.
+owned_obligations:
+  - ADR-007
+  - D005
+  - FR-009
+  - FR-010
+  - FR-011
+  - FR-012
+  - FR-013
+  - NFR-PORT-001
+  - NFR-SEC-001
+  - NFR-SEC-002
+direct_dependencies:
+  - ST-01.01-SYNTHETIC-PROOF:SupplementalStoryCompletionReceipt
+indirect_foundation:
+  - ST-01.01:StoryCompletionReceipt
+applicable_blockers: []
+inactive_conditional_blockers:
+  BD-004: applies_to_real_profile_mode_only
+  BD-014: applies_to_external_product_mode_only
+  HD-006: applies_to_conversational_human_reaction_evidence_only
+external_runtime_dependencies: []
+delegation_contract_dependency: none
+implementation_owner: evidence_workspace_owner
+component_boundary:
+  owns:
+    - source_profile_loading_for_the_synthetic_definition
+    - read_only_file_directory_and_zip_diagnostics
+    - immutable_source_descriptors_and_aggregate_source_lock
+    - atomic_run_binding_to_the_source_lock
+    - typed_failure_and_observability_receipts
+  excludes:
+    - evidence_semantic_inference
+    - atomicity_ratification
+    - Harness_IR_or_AtomicHarnessDefinition_compilation
+    - external_product_execution
+completion_gate: ST-01.02:StoryCompletionReceipt
+implementation_authorized: false

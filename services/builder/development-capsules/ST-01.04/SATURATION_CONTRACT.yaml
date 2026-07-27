@@ -1,0 +1,28 @@
+schema_version: cmf-builder-saturation-contract/v1
+contract_id: synthetic_category_neutral_saturation_v1
+version: 1.0.0
+scope: repository_owned_synthetic_Builder_Core_validation_only
+source_profile_ref: synthetic_text_normalization_source_profile@1.0.0
+required_roles: [governed_task_definition]
+minimum_diversity:
+  distinct_source_ids: 1
+  distinct_content_hashes: 1
+  specimens_per_required_role: 1
+evidence_categories:
+  required: [descriptor_metadata, authority, license, privacy, provenance, traceability]
+  visual_syntax: NOT_APPLICABLE
+  human_reaction: NOT_APPLICABLE
+prior_art_inspection: NOT_APPLICABLE_SYNTHETIC_TASK_DEFINITION
+contradiction_policy:
+  contradictory_authority: BLOCKED_CONTRADICTORY_AUTHORITY
+  contradictory_source_identity: BLOCKED_CONTRADICTORY_AUTHORITY
+  unresolved_provenance: BLOCKED_MISSING_EVIDENCE
+stopping_rules:
+  pass_when_all_required_coverage_is_complete: true
+  critical_claim_without_active_evidence: BLOCKED_MISSING_EVIDENCE
+  sparse_but_present_target_evidence: INSUFFICIENT_TARGET_EVIDENCE
+  pass_with_limitations_requires_human_waiver: true
+allowed_outcomes: [PASS, PASS_WITH_LIMITATIONS, BLOCKED_MISSING_EVIDENCE, BLOCKED_CONTRADICTORY_AUTHORITY, INSUFFICIENT_TARGET_EVIDENCE]
+production_eligible: false
+certified: false
+amendment_rule: any_change_requires_a_new_immutable_contract_version

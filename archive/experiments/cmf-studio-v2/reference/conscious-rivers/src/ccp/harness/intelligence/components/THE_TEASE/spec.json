@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "THE_TEASE",
+  "scene_number": 10,
+  "name": "The Tease",
+  "version": "1.0",
+  "function": "Promise-first opener that withholds full explanation long enough to create curiosity.",
+  "compatible_containers": [
+    "HOOK"
+  ],
+  "cls_footprint": {
+    "typical": 1.8,
+    "max": 2.5
+  },
+  "required_asset_types": [
+    "A_ROLL",
+    "TEXT",
+    "B_ROLL"
+  ],
+  "template_variants": [
+    "redacted",
+    "out_of_context_aroll",
+    "promise_flash"
+  ],
+  "effect_dependencies": [
+    "text_flash",
+    "hard_cut"
+  ],
+  "selection_signals": [
+    "curiosity_gap",
+    "withheld_payoff",
+    "retention_pull"
+  ],
+  "audio_profile": {
+    "score_role": "withhold",
+    "energy_band": "medium_high",
+    "mode": "suspense",
+    "prosodic_hint": "whispered_rising",
+    "prosodic_contour_target": {
+      "pitch_shape": "rising",
+      "stress_placement": "medial",
+      "rate_wpm": { "min": 140, "max": 165 },
+      "emotional_register": "tension"
+    }
+  },
+  "fallback_behavior": "Revert to a direct hook if the curiosity gap becomes confusing."
+}

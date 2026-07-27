@@ -1,0 +1,99 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-02.01:OFFLINE_STRUCTURAL_DEVELOPMENT
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-02.01
+  title: Normalize Evidence into Typed Syntax Observations
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: reviewers can compare reliable geometry, components, turns, and evidence identities
+  primary_obligations:
+    - ADR-008
+    - FR-019
+    - FR-020
+    - FR-021
+    - FR-022
+    - FR-023
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-01.04
+  receipt_path: development-capsules/ST-01.04/completion/STORY_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 1ec941b24da43e8bf1046eadb8a366c521063dec3165375a342454dbc355818a
+authority_sources:
+  story_inventory:
+    path: docs/planning/STORY_INVENTORY.yaml
+    sha256: ee2f53a443b36977bd3ec352c45dbf485cef5c005fdc07d1fc6fafbff37c24fe
+  obligation_coverage:
+    path: docs/planning/STORY_REQUIREMENT_COVERAGE.csv
+    sha256: a7311578fdd5a70cf479de5156f842cfac94498f51f1bcbb280833dd5dc1f215
+  tech_spec:
+    path: docs/tech-specs/specs/TS-03-VISUAL-SYNTAX-FIRST.md
+    sha256: d2287b754e24cf7dc9350cf378f825d9a501b16d33b6fafd600f48033a218c27
+  adr:
+    path: docs/architecture/adr/ADR-008-VISUAL-INFERENCE-AND-KNOWLEDGE-STATUS.md
+    sha256: da01278f2a8a615782d82df8cac7c3633481f359f684cb33c84b3fb0079c1bd3
+implementation_scope:
+  - immutable typed source, provenance, uncertainty, applicability, governed-status, observation-status and knowledge-status contracts
+  - deterministic pixel-to-normalized geometry
+  - deterministic normalization and exact-duplicate suppression
+  - deterministic near-duplicate structural detection without support-count inflation
+  - canonical category-adapted ontology validation
+  - fail-closed rejection of unsupported, provider-only or semantically contaminated parser fields
+  - deterministic offline receipt and artifact identities
+offline_fixture_boundary:
+  repository_owned: true
+  synthetic_or_structural_only: true
+  human_reaction_material: prohibited
+  provider_execution: prohibited
+  external_transmission: prohibited
+  production_or_certification_evidence: prohibited
+blocker_scope:
+  BD-004:
+    offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    broader_evidence_gate: EVIDENCE_PENDING
+  BD-007:
+    offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    empirical_gate: EVIDENCE_PENDING
+  HD-006:
+    offline_non_personal_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    real_human_data_policy: HUMAN_POLICY_PENDING
+allowed_files:
+  - src/cmf_builder/visual/ontology.py
+  - src/cmf_builder/visual/geometry.py
+  - src/cmf_builder/visual/normalization.py
+  - tests/stories/st_02_01/test_st_02_01_observations.py
+  - tests/stories/st_02_01/test_st_02_01_failures.py
+  - tests/stories/st_02_01/test_st_02_01_determinism.py
+  - development-capsules/OD-AM-001/ST-02.01/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-02.01/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-02.01/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-02.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - shared core files
+  - package exports and __init__.py files
+  - run aggregates, ports and repository adapters
+  - exact-source architecture tests
+  - planning baselines, Stories, Epics or primary obligation ownership
+  - provider adapters, calls, credentials or network behavior
+  - external product behavior
+  - StoryCompletionReceipt
+  - EvidenceClosureReceipt
+acceptance:
+  - identical governed inputs produce byte-identical observations, result identity and receipt identity
+  - every accepted component has distinct typed status, source, provenance, uncertainty and applicability fields
+  - coordinates are normalized exactly while source dimensions remain explicit
+  - exact duplicates do not inflate accepted specimen or observation counts
+  - near duplicates are detected deterministically and do not inflate grammar support
+  - unsupported ontology/category fields fail closed
+  - provider-only and semantic-hypothesis contamination fail closed
+  - no production-readiness, certification or empirical-superiority claim is emitted
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: PENDING_INTEGRATOR_FULL_REGRESSION
+  may_unlock: ST-02.02_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

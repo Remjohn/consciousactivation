@@ -1,0 +1,80 @@
+schema_version: cmf-builder-bd007-governed-trial-plan/v1
+trial_plan_id: BD007-ST0603-NATIVE-VS-FLATTENED-TRIAL-v1
+generated_on: "2026-07-17"
+scope: development_only_non_certifying_ST-06.03_evidence
+execution_status: BLOCKED_PENDING_CORPUS_ADMISSION_AND_PROVIDER_CALL_AUTHORITY
+production_ready: false
+certified: false
+inputs:
+  archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  admitted_corpus_manifest_sha256: PENDING_FINAL_ADMISSION
+  admission_receipt_sha256: PENDING_TRUTHFUL_OPERATOR_DECLARATION
+  case_manifest: docs/implementation/category-native-evidence/BD007_CASE_MANIFEST.yaml
+  paired_template_hashes: docs/implementation/category-native-evidence/BD007_NATIVE_AND_FLATTENED_INPUT_HASHES.yaml
+  rubric_sha256: dd5cc9bae8977ea365d4890914364e2a540eb2acdbf363d4ec024aa47ab27381
+  provider_configuration_registry: docs/implementation/category-native-evidence/BD007_PROVIDER_CONFIGURATION_REGISTRY.yaml
+gates:
+  - exact_archive_hash_valid
+  - truthful_operator_declaration_receipt_valid
+  - final_admitted_corpus_manifest_valid
+  - every_case_member_in_final_admitted_manifest
+  - every_case_usage_authority_and_provenance_present
+  - provider_configuration_immutable_and_eligible
+  - provider_calls_budget_and_credential_authorized
+  - deterministic_controls_match_configuration
+  - rubric_frozen_before_results
+  - protected_expected_evidence_not_visible_to_generator
+  - output_custody_and_hash_destination_ready
+execution_design:
+  case_template_count: 4
+  arms_per_case: 2
+  arm_order: [CATEGORY_NATIVE, FLATTENED_GENERIC_CONTROL]
+  repeats_per_arm_per_configuration: 3
+  minimum_calls_per_configuration: 24
+  minimum_calls_for_two_materially_distinct_configurations: 48
+  repeat_process: fresh_process_or_governed_equivalent
+  case_order: canonical_by_case_id
+  within_case_order: canonical_by_arm_then_repeat_index
+  outlier_rule: retain_record_and_score
+  failed_call_rule: retain_as_typed_failure_never_score_as_missing
+  same_execution_budget_for_paired_arms: true
+  same_deterministic_controls_for_paired_arms: true
+  same_output_contract_for_paired_arms: true
+  same_source_and_semantic_hashes_for_paired_arms: true
+blinding_and_custody:
+  blinded_case_ids_where_practical: true
+  generator_access_to_reference_labels: prohibited
+  evaluator_input: immutable_provider_output_plus_protected_rubric_evidence
+  evaluator_may_not_change_output: true
+  raw_and_normalized_output_hashes_required: true
+  credentials_in_output_or_receipts: prohibited
+per_call_record:
+  - case_id
+  - variant
+  - provider_configuration_sha256
+  - request_sha256
+  - output_sha256
+  - repeat_index
+  - runtime_duration
+  - exit_status
+  - failure_context
+  - scorecard_identity
+closure_rule:
+  all_inputs_from_admitted_corpus: required
+  provider_configuration_eligible_and_immutable: required
+  calls_governed_and_authorized: required
+  repeats_complete: required
+  all_outputs_hash_bound: required
+  all_dimension_scorecards_complete: required
+  native_noncompensable_failures: 0
+  native_advantage_over_flattened: required_for_each_applicable_governed_case
+  limitations_explicit: required
+  production_and_certification_false: required
+  failure_to_demonstrate_advantage: RETAIN_BD007_BLOCKER
+not_executed_declarations:
+  admitted_cases: 0
+  live_calls: 0
+  outputs: 0
+  scorecards: 0
+  empirical_advantage_claimed: false
+  reason: Final corpus admission and governed provider call authority remain pending.

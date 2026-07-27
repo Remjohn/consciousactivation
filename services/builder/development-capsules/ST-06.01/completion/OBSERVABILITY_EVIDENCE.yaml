@@ -1,0 +1,22 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-06.01
+verdict: PASS
+events:
+  - ST-06.01:CategoryBindingCommitted
+  - ST-06.01:CategoryBindingReplayReturned
+  - ST-06.01:CategoryBindingRejected
+fields:
+  - outcome
+  - command_id
+  - harness_id
+  - correlation_id
+  - causation_id
+  - detail
+evidence:
+  successful_commit: tests/stories/st_06_01/test_commands_and_failures.py::test_command_commits_once_and_replay_returns_original_receipt
+  replay: tests/stories/st_06_01/test_commands_and_failures.py::test_command_commits_once_and_replay_returns_original_receipt
+  conflict_and_authority_rejection: tests/stories/st_06_01/test_commands_and_failures.py::test_conflicting_command_and_unauthorized_actor_fail_closed
+  atomic_failure: tests/stories/st_06_01/test_commands_and_failures.py::test_injected_atomic_failure_leaves_zero_partial_state
+external_runtime_observed: false
+production_signal_emitted: false
+certification_signal_emitted: false

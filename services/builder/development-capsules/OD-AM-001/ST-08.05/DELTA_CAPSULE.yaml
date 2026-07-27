@@ -1,0 +1,237 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.05:SELECTIVE_REPAIR_AND_AFFECTED_REGRESSION
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.05
+  title: Repair Selectively and Rerun Only Affected Regressions
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: the system can improve without restarting validated work or hiding recurring defects
+  primary_obligations:
+    - FR-130
+    - FR-131
+    - FR-132
+  primary_obligation_count: 3
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_OFFLINE_DEVELOPMENT_EVIDENCE_PENDING
+dependency:
+  story_id: ST-08.04
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-08.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_receipt_sha256: e7a068c5f274af7b0d251034d19120ba28d36644213bb82ed759ca3cfc976a6f
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-08.04/DELTA_CAPSULE.yaml
+    sha256: fe2ad576a83a1ec16b5fe4697c2fdd86d66bec6d5cf92be5cb0ac32df57f88f9
+    validation: PASS_IMPLEMENTED_REFERENCE
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.05
+  - docs/tech-specs/specs/TS-13-IMPLEMENTATION-AUTHORIZATION-AND-DEVELOPMENT-CAPSULE.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - EvaluationCase
+    - ConstitutionalEvaluationReceipt
+    - ConstitutionalReadinessReceipt
+    - RepairReceipt
+  schemas:
+    - docs/contracts/schemas/constitutional-evaluation.schema.json
+    - docs/contracts/schemas/conversational-expression.schema.json
+  ownership_rule: existing contracts and schemas are referenced without local fork or authority expansion
+implementation_scope_after_dependency_pass:
+  - accept only an active hash-valid ST-08.04 root-cause diagnosis and Repair and Invalidation Graph declaration
+  - derive one bounded Builder-owned repair unit from the diagnosed responsible phase or capability and permitted repair fields
+  - compute affected descendants and targeted regression requirements from immutable dependency and invalidation graphs
+  - preserve source locks, observations, ratified decisions, contracts and artifacts still supported by evidence
+  - create a new immutable repaired-version candidate without mutating or deleting prior history
+  - compile a bounded rerun plan and ingest governed local rerun results without invoking an external runtime
+  - deterministically commit, reject, invalidate or roll back the candidate and emit exact receipts
+accepted_diagnosis_gate:
+  required_status: ACCEPTED_ROOT_CAUSE
+  required_inputs:
+    - diagnosis_identity_version_and_hash
+    - failure_identity_and_stable_code
+    - reproduction_and_evidence_refs
+    - selected_root_cause_and_confidence_basis
+    - smallest_responsible_layer
+    - responsible_owner_and_authority_ref
+    - permitted_repair_fields
+    - frozen_state
+    - affected_descendant_set
+    - targeted_regression_requirements
+    - rollback_and_escalation_conditions
+  reject_when:
+    - diagnosis is unresolved, ambiguous, stale, superseded, altered or invalidated
+    - diagnosis lacks exact lineage or authority
+    - proposed repair changes a field outside the diagnosed permitted scope
+    - proposed repair is aimed only at the observed symptom
+selective_repair_contract:
+  repair_unit:
+    exactly_one_primary_responsible_unit: true
+    permitted_owners: [Builder_owned_phase, Builder_owned_capability, Builder_owned_contract_projection]
+    external_product_unit: prohibited
+  candidate_version:
+    new_immutable_identity_required: true
+    parent_version_reference_required: true
+    prior_bytes_mutation: prohibited
+    historical_deletion_or_rewrite: prohibited
+  preserved_state:
+    required_classes:
+      - source_locks
+      - measured_observations
+      - ratified_decisions
+      - authority_and_constitution_refs
+      - supported_contracts
+      - unaffected_artifacts
+      - unaffected_receipts
+    preservation_proof_required: true
+  broad_rewrite:
+    whole_run_regeneration: prohibited
+    unrelated_module_or_phase_mutation: prohibited
+    upstream_truth_rewrite: prohibited
+affected_unit_and_descendant_selection:
+  source: accepted_ST-08.04_repair_and_invalidation_graph
+  rules:
+    - affected units include the responsible unit and only demonstrated dependent descendants
+    - unaffected siblings, ancestors and independent branches remain frozen and reusable
+    - every selected descendant records the exact dependency edge that caused selection
+    - every excluded adjacent unit records why it remains valid
+    - changed graph identity requires a new repair command and receipt
+  overbroad_or_manual_guess: reject
+bounded_rerun_plan:
+  required_fields:
+    - repair_candidate_identity
+    - responsible_unit
+    - affected_descendants
+    - directly_required_tests
+    - descendant_regression_suites
+    - applicable_benchmark_refs
+    - protected_case_policy_status
+    - execution_order
+    - stop_conditions
+    - result_receipt_requirements
+  rules:
+    - scope is derived from dependency impact rather than operator guesswork
+    - required regressions may not be omitted
+    - protected cases are included only where separately authorized policy permits
+    - blocked or unavailable suites remain visibly blocked and prevent completion where required
+    - this Story compiles and validates local rerun state but does not invoke external runtimes or providers
+  completion_rule: repair is incomplete until every required local result passes or remains explicitly blocked
+escalation_policy:
+  human_review_required_when:
+    - ratified_constitutional_decision_would_change
+    - harness_boundary_would_broaden
+    - stable_canonical_skill_would_change
+    - contradictory_doctrine_is_present
+    - configured_repeat_failure_limit_is_reached
+    - responsible_layer_or_authority_is_ambiguous
+  effect:
+    - freeze further automated repair for the affected scope
+    - preserve evidence and prior attempts
+    - emit options, affected authority, required decision and escalation receipt
+  repeat_failure_limit_source: versioned_policy_reference_required_no_threshold_invented_here
+rollback_and_invalidation:
+  atomic_candidate_commit: required
+  failure_before_commit: zero candidate, event, command or receipt state
+  rollback:
+    - restore the prior active immutable version reference
+    - preserve failed candidate and evidence as non-active history where committed
+    - remove no historical receipt or observation
+  invalidation:
+    - mark only the repaired unit's affected descendants stale or invalidated
+    - keep ancestors and unaffected branches active
+    - create a new invalidation receipt rather than mutating old receipts
+  historical_reproduction: required
+lineage_and_determinism:
+  pinned_inputs:
+    - run_and_command_identity
+    - accepted_ST-08.04_diagnosis_and_graph_hashes
+    - repair_subject_and_parent_version
+    - permitted_field_set
+    - preserved_state_hashes
+    - dependency_and_descendant_graph_versions
+    - rerun_policy_and_suite_versions
+    - authority_and_escalation_policy_refs
+    - local_rerun_result_hashes
+  canonical_identity_rule: repair candidate, selection, rerun plan, decision, invalidation and rollback receipts derive only from canonical governed content
+  repeat_command: identical payload returns original outcome and receipt without duplicate mutation
+  conflicting_command: reject atomically with zero new state
+  nondeterministic_identity_inputs_prohibited:
+    - wall_clock_time
+    - random_identifier
+    - absolute_machine_path
+    - environment_specific_value
+failure_and_authority_boundary:
+  reject:
+    - repair_without_accepted_diagnosis
+    - skipped_required_regression
+    - protected_or_unaffected_upstream_state_change
+    - invalidation_broader_than_affected_descendants
+    - retry_beyond_governed_limit
+    - suppressed_required_escalation
+    - unauthorized repair, activation, invalidation or rollback
+    - external runtime, provider or product-internal execution request
+  partial_state_on_failure: prohibited
+  external_runtime_or_transport: prohibited
+  production_deployment_or_publication: prohibited
+blocker_and_evidence_gates_remaining:
+  BD-004: EVIDENCE_PENDING
+  BD-008: EVIDENCE_PENDING
+  HD-006: HUMAN_POLICY_PENDING_REAL_HUMAN_REACTION_DATA_PROHIBITED
+  HD-007: HUMAN_POLICY_PENDING_CONVERSATIONAL_THRESHOLDS_AND_CERTIFICATION
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/selective_repair.py
+  tests:
+    - tests/stories/st_08_05/test_accepted_diagnosis_and_repair_scope.py
+    - tests/stories/st_08_05/test_affected_descendants_and_targeted_regression.py
+    - tests/stories/st_08_05/test_escalation_and_failure_boundaries.py
+    - tests/stories/st_08_05/test_determinism_rollback_and_history.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.05/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.05/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.05/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  mechanical_integrator_files:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-08.04 implementation or completion evidence
+  - external runtime, transport, provider, model, credential or network behavior
+  - broad rewrite, whole-run restart, external-product repair or external-product internal behavior
+  - real protected labels, real human reactions, production thresholds, production promotion or certification
+acceptance_after_dependency_pass:
+  - only an accepted hash-valid diagnosis can authorize one bounded Builder-owned repair unit
+  - repaired candidates are new immutable versions and prior history remains byte-reproducible
+  - affected descendants and regressions are selected from exact graph edges rather than manual guesses
+  - supported upstream state, ancestors, siblings and independent branches remain unchanged
+  - required local regressions pass or remain visibly blocking; unavailable protected cases are never fabricated
+  - constitutional, boundary, stable-skill, contradictory-doctrine and repeated failures trigger human escalation
+  - identical governed inputs produce byte-identical repair, rerun, invalidation and rollback receipts
+  - unauthorized, overbroad or conflicting operations fail atomically with zero partial state
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-08.06_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  external_runtime_executed: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

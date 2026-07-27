@@ -1,0 +1,34 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Constraint Conflict
+type: object
+additionalProperties: false
+required:
+- conflict_id
+- demand_ref
+- status
+- conflict
+- preserved_authority
+properties:
+  conflict_id:
+    type: string
+    minLength: 1
+    pattern: ^VDC-
+  demand_ref:
+    type: string
+    minLength: 1
+  status:
+    type: string
+    minLength: 1
+    enum:
+    - amendment_required
+    - capability_gap
+  conflict:
+    type: object
+    required:
+    - code
+    - severity
+    - explanation
+  evidence:
+    type: object
+  preserved_authority:
+    type: object

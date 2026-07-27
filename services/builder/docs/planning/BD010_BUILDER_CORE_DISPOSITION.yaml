@@ -1,0 +1,61 @@
+schema_version: cmf-builder-bd010-core-disposition/v1
+disposition_id: bd010-builder-core-synthetic-proof-2026-07-15
+issued_on: "2026-07-15"
+blocker_id: BD-010
+authority:
+  approved_by: current_thread_human_product_authority
+  approval_basis: governed_empty_skill_registry_policy_in_current_human_directive
+  builder_prd: "1.2"
+  activative_intelligence_constitution: "1.1"
+subscope:
+  id: builder_core_synthetic_proof_empty_registry
+  branch_id: ST-01.01-SYNTHETIC-PROOF
+  track: BUILDER_CORE
+  state: CLOSED
+  closure_type: HUMAN_APPROVED_GOVERNED_EMPTY_REGISTRY
+policy:
+  path: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  sha256: 260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c
+schema:
+  path: governance/schemas/empty-skill-registry.schema.json
+  sha256: e76be265d96df3c902a26989fa2c08309f6964bf96e4ac17ce850684de44f1c7
+canonical_fixture:
+  path: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+validation_receipt:
+  path: governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json
+closure_conditions:
+  - all required proof behavior is deterministic and Builder-code-owned
+  - skills is explicitly empty and hash-pinned
+  - no external or dynamic discovery is allowed
+  - compiled output declares no external skill requirement
+  - undeclared skill use fails closed
+  - later skill addition creates a new immutable Harness version
+  - no production or category inference is permitted
+remaining_open_subscopes:
+  - real skill registry seeding
+  - Format 02 capability and skill selection
+  - conversational parsing and recompilation skills
+  - externally supplied or dynamically discovered skills
+  - production Harness skill requirements and evaluation
+story_effects:
+  ST-04.01:
+    SYNTHETIC_CORE: no_BD_010_block
+    other_modes: BD_010_open_where_applicable
+  ST-04.05:
+    SYNTHETIC_CORE: no_BD_010_block
+    other_modes: BD_010_open_where_applicable
+  ST-05.01:
+    SYNTHETIC_CORE: governed_empty_registry_allowed
+    other_modes: BD_010_open_where_applicable
+  ST-05.02:
+    SYNTHETIC_CORE: empty_specialized_skill_result_allowed_after_capability_gap_test
+    other_modes: BD_010_open_where_applicable
+non_effects:
+  - does_not_authorize_implementation
+  - does_not_close_BD_004_BD_007_BD_008_or_BD_014
+  - does_not_authorize_Format_02
+  - does_not_authorize_VAE_or_Delegation_runtime
+  - does_not_authorize_production_or_certification
+disposition: CLOSED_LIMITED_SUBSCOPE
+validation_verdict: PASS

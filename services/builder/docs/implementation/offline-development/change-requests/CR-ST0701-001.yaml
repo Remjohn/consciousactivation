@@ -1,0 +1,22 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0701-001
+story_id: ST-07.01
+calling_lane: CATEGORY_AND_TARGET_LANE
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: Action.REGISTER_COMPILATION_TARGETS
+required_additive_change: >-
+  Add the exact Builder-owned action for compiling and activating immutable
+  compilation-target registry versions.
+preconditions:
+  - ST-06.05 ImplementationCompletionReceipt is IMPLEMENTED_DEVELOPMENT_PASS
+  - exactly three target identities remain governed
+postconditions:
+  - target registry mutation requires the exact Builder-owned authority action
+  - target selection remains read-only against an authorized registry
+invariants:
+  - the action is not human-only and grants no human decision authority
+  - no external runtime, shared-schema ownership or compatibility claim is introduced
+  - production readiness and certification remain false
+focused_tests:
+  - tests/stories/st_07_01
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR

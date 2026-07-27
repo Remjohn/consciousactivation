@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-011",
+  "name": "Peak-End Budget Allocator",
+  "version": "1.0",
+  "priority_tier": "recall",
+  "research_basis": [
+    "Peak-End Rule"
+  ],
+  "inputs": [
+    "arc_positions",
+    "predicted_peak_location",
+    "ending_design",
+    "available_effect_budget",
+    "available_revision_budget"
+  ],
+  "outputs": [
+    "resource_allocation_map",
+    "peak_end_focus_score",
+    "violations"
+  ],
+  "thresholds": {
+    "peak_end_budget_multiplier": 2.0,
+    "default_focus_scenes": [
+      "TURNING_POINT",
+      "VISION"
+    ],
+    "minimum_peak_end_focus_score": 0.8
+  },
+  "default_action_on_fail": "REVISE"
+}

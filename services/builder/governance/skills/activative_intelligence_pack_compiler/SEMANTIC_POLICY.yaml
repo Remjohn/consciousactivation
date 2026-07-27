@@ -1,0 +1,96 @@
+schema_version: cmf-builder-activative-semantic-policy/v1
+policy_id: activative_intelligence_pack_compiler_semantic_policy
+policy_version: 1.0.0
+skill:
+  skill_id: activative_intelligence_pack_compiler
+  skill_version: 1.0.0
+  authority_lane: Analyst
+  maturity_ceiling: development_validated
+  package_state: development_uncertified
+  production_eligible: false
+  certified: false
+authority:
+  constitution: CCP Activative Intelligence & Visual Narrative Constitution V1.1
+  precedence: Constitution > Builder PRD > frozen interfaces > semantic policy > compiler input
+  skill_may:
+    - compile_activation_field
+    - preserve_governed_source_lineage
+  skill_must_not:
+    - manufacture_human_original_truth
+    - manufacture_human_reaction
+    - issue_Reaction_Receipt
+    - issue_Expression_Moment
+    - approve_Identity_DNA_amendment
+    - promote_audience_hypothesis_to_fact
+    - execute_external_provider
+required_semantic_fields:
+  - source_refs
+  - authority_refs
+  - identity_dna_ref
+  - audience_context_premise_ref
+  - live_premise_evidence_refs
+  - resonance_map_ref
+  - matrix_of_edging_ref
+  - edge_pressure
+  - format_goal
+  - desired_roles
+  - activative_call_constraints
+  - desired_reaction
+  - micro_commitment
+  - wrong_reading_locks
+lineage:
+  mode: per_field_non_flattened
+  required_keys: [field_path, source_ref, source_hash, authority_ref, evidence_refs]
+  generic_notes_field_allowed: false
+  missing_evidence: fail_closed
+  contradictory_authority: fail_closed
+downstream_applicability:
+  required_artifacts:
+    - reaction_receipt
+    - expression_moment
+    - visual_semantic_pack
+    - visual_narrative_program
+    - feature_contracts
+    - tv_route
+    - composition_intent
+  allowed_statuses: [APPLICABLE, NOT_APPLICABLE]
+  not_applicable_requires:
+    - governed_reason_code
+    - human_readable_reason
+    - evidence_refs
+  external_owners:
+    reaction_receipt: human_expression_source_owner
+    expression_moment: human_expression_source_owner
+    visual_semantic_pack: activative_visual_semantics_owner
+    visual_narrative_program: activative_visual_narrative_owner
+    feature_contracts: feature_contract_owner
+    tv_route: somatic_route_owner
+    composition_intent: composition_owner
+wrong_reading_locks:
+  minimum_count: 1
+  empty_or_implicit: fail_closed
+canonicalization:
+  encoding: UTF-8
+  json_keys: sorted
+  separators: compact
+  terminal_lf: required
+  identity: SHA-256 over canonical content excluding identity fields
+boundaries:
+  desired_reaction_status: intended_not_observed
+  external_provider_execution: forbidden
+  production_claim: forbidden
+  certification_claim: forbidden
+  absolute_local_paths: forbidden
+failure_codes:
+  - MISSING_EVIDENCE
+  - AUTHORITY_CONFLICT
+  - SEMANTIC_FLATTENING
+  - IDENTITY_DRIFT
+  - AUDIENCE_CONTEXT_DRIFT
+  - WRONG_READING_LOCKS_REQUIRED
+  - UNJUSTIFIED_APPLICABILITY
+  - HUMAN_TRUTH_BOUNDARY_VIOLATION
+  - EXTERNAL_PROVIDER_EXECUTION_FORBIDDEN
+  - PRODUCTION_CLAIM_FORBIDDEN
+  - NON_PORTABLE_REFERENCE
+  - HASH_MISMATCH

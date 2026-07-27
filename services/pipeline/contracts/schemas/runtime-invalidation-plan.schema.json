@@ -1,0 +1,66 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:runtime_invalidation_plan",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "affected_descendant_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "global_invalidation": {
+      "type": "boolean"
+    },
+    "historical_replay_policy": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "plan_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "plan_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "preserved_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "reason": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "replacement_refs": {
+      "type": "array"
+    },
+    "root_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "plan_id",
+    "plan_version",
+    "root_ids",
+    "reason",
+    "affected_descendant_ids",
+    "preserved_ids",
+    "replacement_refs",
+    "historical_replay_policy",
+    "global_invalidation"
+  ],
+  "title": "runtime_invalidation_plan",
+  "type": "object"
+}

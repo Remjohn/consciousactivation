@@ -1,0 +1,252 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-09.03:NODE_VALIDATION_AND_FAILURE_CONTAINMENT
+preparation_status: VALIDATED_STRUCTURE_DEPENDENCY_PENDING
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-09.03
+  title: Validate Node Outputs and Contain Failure Feedback
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: failures stay local, diagnosable, and unable to leak invalid output downstream
+  primary_obligations:
+    - AG-020
+    - FR-190
+    - FR-191
+    - FR-192
+    - FR-193
+    - HG-012
+    - HG-013
+    - NFR-REL-004
+    - NFR-WORKFLOW-004
+  primary_obligation_count: 9
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_OFFLINE_DEVELOPMENT_EXTERNAL_VALIDATION_PENDING
+dependency:
+  story_id: ST-09.02
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-09.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: NOT_ISSUED_DEPENDENCY_PENDING
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-09.02/DELTA_CAPSULE.yaml
+    sha256: 9ad2848b2262698af9a4dfe4fc0293e0d5fd2ea616ef6ee777ce7795428db26f
+    validation: PASS_PREPARATION_REFERENCE_ONLY
+  unissued_receipt_shell:
+    sha256: 1686b42848eeebae64d6540a36e938e996e94a0dd6f5a6ea4952d8a259b61e5a
+    satisfies_dependency: false
+dependency_gate:
+  satisfied: 0
+  required: 1
+  verdict: DEPENDENCY_PENDING
+  missing: [ST-09.02:ImplementationCompletionReceipt:IMPLEMENTED_DEVELOPMENT_PASS]
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-09.03
+  - docs/tech-specs/specs/TS-14-BUILDER-WORKFLOW-RUNTIME.md
+  - governance/READINESS_HARD_GATES.yaml
+  - governance/ARCHITECTURAL_PROHIBITIONS.json
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - WorkflowIR
+    - WorkflowNodeContract
+    - CheckpointReceipt
+    - PromotionReceipt
+  schema_refs: []
+  ownership_rule: Builder workflow contracts remain provider-neutral and local; no external engine or product contract is forked
+implementation_scope_after_dependency_pass:
+  - quarantine every local node output until all declared deterministic validators, semantic-evaluator receipt references, authority checks and completion criteria pass
+  - issue immutable node-validation or typed blocker receipts bound to exact node, input, output, validator and policy identities
+  - derive the minimal complete failure-feedback package and exact recipient from the active Repair and Invalidation Graph
+  - prevent unrelated nodes, ancestors and unaffected branches from receiving feedback or rerunning
+  - require reproduced localized root-cause evidence before any repair route can be marked eligible
+  - validate bounded retry, timeout, feedback-edge, circuit-breaker, terminal-state and escalation declarations without invoking an external scheduler
+  - preserve locked evidence, ratified decisions, unaffected artifacts, lineage, replay, invalidation and rollback
+node_output_quarantine:
+  initial_status: QUARANTINED_PENDING_VALIDATION
+  required_checks:
+    - deterministic_validator_results
+    - semantic_evaluator_receipt_refs_or_authoritative_NOT_APPLICABLE_basis
+    - actor_and_authority_checks
+    - input_output_contract_validation
+    - completion_criteria
+    - applicable_hard_gates
+  release_requirements:
+    - every declared check is present, active, hash-valid and PASS
+    - node, input, output, validator, evaluator-policy and Workflow IR identities agree
+    - no stale, superseded, invalidated or conflicting evidence exists
+  failure_behavior:
+    - output remains quarantined
+    - downstream scheduling eligibility remains false
+    - typed blocker and minimal failure-feedback receipt are emitted atomically
+  HG-013: any output release without declared validation forces FAIL
+node_validation_receipt:
+  required_fields:
+    - node_identity_version_and_hash
+    - Workflow_IR_and_profile_refs
+    - exact_input_and_output_hashes
+    - validator_set_version_and_result_refs
+    - semantic_evaluator_policy_and_receipt_refs
+    - authority_and_completion_results
+    - hard_gate_results
+    - release_or_block_decision
+    - failure_context_and_lineage
+  mutable_after_issue: false
+minimal_failure_feedback:
+  required_fields:
+    - failed_node_and_criterion
+    - exact_reproduction_or_evidence_refs
+    - responsible_root_cause_owner
+    - Repair_and_Invalidation_Graph_ref
+    - allowed_diagnosis_or_repair_scope
+    - frozen_state
+    - affected_descendant_refs
+    - targeted_regression_requirements
+    - escalation_conditions
+  routing_rules:
+    - route only to the graph-declared responsible node or owner
+    - do not broadcast feedback through conversational history
+    - unrelated nodes do not receive or rerun unless their contracts are explicitly invalidated
+    - missing or ambiguous owner blocks routing for human or architecture escalation
+    - failure package cannot mutate the failed output or preserved upstream state
+root_cause_before_repair:
+  required_evidence:
+    - reproduced_or_independently_evidenced_failure
+    - localized_affected_boundary
+    - working_and_failing_path_comparison
+    - testable_root_cause_hypothesis
+    - hypothesis_test_results
+    - selected_cause_and_confidence_basis
+  rules:
+    - repair proposal remains blocked until every required item is present
+    - observed symptom alone is insufficient
+    - repeated failed repair attempts trigger architecture escalation
+    - this Story validates repair eligibility but does not execute repair behavior owned by the repair subsystem
+bounded_control_flow_contract:
+  every_retryable_node_or_feedback_edge_declares:
+    - maximum_attempts
+    - backoff_or_scheduling_policy
+    - timeout
+    - retryable_failure_classes
+    - non_retryable_failure_classes
+    - circuit_breaker_condition
+    - terminal_states
+    - escalation_destination
+  additional_bounded_constructs:
+    - loop_limit
+    - fan_out_limit
+    - arbitration_limit
+    - fallback_limit
+  rules:
+    - missing or non-finite bound fails validation
+    - exhausted attempts produce typed blocked or failed terminal state
+    - open circuit breaker prohibits output release and further attempts
+    - no autonomous self-correction or feedback loop may be unbounded
+    - local tests simulate state transitions without sleeping, scheduling, network or external-engine execution
+  HG-012: any unbounded retry or feedback loop forces FAIL
+failure_isolation_and_history:
+  immutable_protected_state:
+    - source_locks
+    - locked_evidence
+    - ratified_decisions
+    - constitutional_and_authority_refs
+    - unaffected_artifacts
+    - prior_validation_and_failure_receipts
+  atomic_failure: zero partial downstream output, scheduling eligibility, feedback delivery, event or command record
+  invalidation_scope: only demonstrated dependent descendants from the active graph
+  historical_reproduction: required after invalidation or replacement
+lineage_and_determinism:
+  pinned_inputs:
+    - Workflow_IR_profile_node_and_actor_versions
+    - node_input_output_and_contract_hashes
+    - validator_set_and_semantic_evaluator_policy_versions
+    - authority_completion_and_hard_gate_refs
+    - Repair_and_Invalidation_Graph_and_root_cause_policy
+    - retry_timeout_circuit_breaker_and_escalation_policy
+    - ST-09.02_router_shadow_mapping_and_gap_receipts
+  canonical_identity_rule: validation, blocker, feedback, control-flow, invalidation and rollback receipts derive only from canonical governed content
+  repeat_command: identical payload returns the original result without duplicate state
+  conflicting_command: reject atomically with zero output release, feedback, receipt, event or command record
+failure_and_authority_boundary:
+  reject:
+    - unvalidated_node_output_release
+    - downstream_consumption_of_quarantined_output
+    - unbounded_retry_loop_feedback_fan_out_arbitration_or_fallback
+    - broad_or_conversational_failure_feedback
+    - repair_route_without_reproduced_root_cause_evidence
+    - output_or_attempt_after_circuit_breaker_opens
+    - corruption_of_locked_or_unaffected_state
+    - unauthorized validation, release, feedback, retry, invalidation or rollback
+    - external runtime, agent, scheduler, provider or product execution request
+  partial_state_on_failure: prohibited
+  external_runtime_or_transport: prohibited
+external_and_evidence_gates_remaining:
+  direct_dependency:
+    status: DEPENDENCY_PENDING
+    detail: ST-09.02 OD-AM-001 ImplementationCompletionReceipt is not issued
+  manual_shadow_evidence:
+    status: EVIDENCE_PENDING
+    detail: inherited actual expert-shadow evidence remains absent; structural fixtures do not close it
+  XDEP-001:
+    status: AUTHORITY_REMAINS_EXTERNAL
+    detail: Program Control records remain read-only
+  XDEP-005:
+    status: FUTURE_CONSUMER_NOT_IMPLEMENTATION_EVIDENCE
+    detail: Operator Manual documentation cannot substitute for runtime or fault evidence
+  ADR-006-Temporal:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: local state-transition tests do not prove Temporal public-seam or fault conformance
+  semantic_evaluator_and_production_fault_evidence:
+    status: EXTERNAL_OR_EMPIRICAL_EVIDENCE_PENDING
+  production_promotion:
+    status: PRODUCTION_EVIDENCE_AND_AUTHORITY_PENDING
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/workflow/node_validation.py
+  tests:
+    - tests/stories/st_09_03/test_node_output_validation_and_quarantine.py
+    - tests/stories/st_09_03/test_failure_feedback_and_root_cause.py
+    - tests/stories/st_09_03/test_bounded_control_flow_and_authority.py
+    - tests/stories/st_09_03/test_determinism_invalidation_and_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-09.03/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-09.03/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-09.03/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-09.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-09.02 implementation or completion evidence
+  - external workflow engine, agent, evaluator, model, provider, credential, network, scheduler, transport or external-product behavior
+  - behavior owned by ST-09.04 through ST-09.06
+  - production execution, promotion, readiness or certification
+prohibited_claims:
+  - actual_manual_shadow_parity
+  - Temporal_public_seam_conformant
+  - production_fault_tolerant
+  - external_semantic_evaluator_validated
+  - production_workflow_ready
+  - production_ready
+  - certified
+acceptance_after_dependency_pass:
+  - every node output remains quarantined until all exact declared checks pass
+  - failed validation prevents downstream scheduling and emits one immutable typed blocker
+  - minimal complete failure evidence routes only to the graph-declared responsible owner
+  - repair eligibility remains blocked without reproduced, localized and tested root-cause evidence
+  - retry, timeout, circuit-breaker, feedback and terminal conditions are finite and explicit
+  - locked evidence, ratified decisions and unaffected artifacts remain unchanged on every failure path
+  - identical governed inputs produce byte-identical validation, blocker, feedback and control-flow receipts
+  - synthetic local evidence cannot close manual-shadow, Temporal, external evaluator, production fault or promotion gates
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-09.04_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_manual_shadow_or_external_evidence_gate: false
+  production_ready: false
+  certified: false

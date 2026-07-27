@@ -1,0 +1,5728 @@
+{
+  "schema_id": "cmf.scene.intelligence.runtime/v1",
+  "asset_id": "SIRT-SCENE-BUILDER-v1",
+  "version": "1.0.0",
+  "compile_target": "SCENE_BUILDER",
+  "runtime_stage": "scene_builder",
+  "compiled_at": "2026-06-09T11:31:20.161857+00:00",
+  "validation_contract": {
+    "container_contract_schema_id": "cmf.container.contract/v1",
+    "container_rules_schema_id": "cmf.container.rules/v1",
+    "component_spec_schema_id": "cmf.component.spec/v1",
+    "component_rules_schema_id": "cmf.component.rules/v1"
+  },
+  "arc_stage_container_map": {
+    "OPENING": "HOOK",
+    "HOOK": "HOOK",
+    "SETUP": "SETUP",
+    "RISING_ACTION": "CHALLENGE",
+    "CHALLENGE": "CHALLENGE",
+    "TENSION": "CHALLENGE",
+    "TURNING_POINT": "TURNING_POINT",
+    "CLIMAX": "TURNING_POINT",
+    "RESOLUTION": "RESOLUTION",
+    "VISION": "VISION",
+    "ENDING": "VISION",
+    "OUTRO": "VISION"
+  },
+  "active_containers": [
+    "CHALLENGE",
+    "HOOK",
+    "RESOLUTION",
+    "SETUP",
+    "TURNING_POINT",
+    "VISION"
+  ],
+  "active_components": [
+    "ARCHETYPAL_MOMENT",
+    "CHALLENGE",
+    "DEMONSTRATION",
+    "ENCOURAGING_CHANGE",
+    "FRAME_AND_CONTRAST",
+    "HOOK",
+    "JUXTAPOSITION",
+    "RESOLUTION",
+    "SETUP",
+    "SYMBOLIC_ECHO",
+    "THE_COMMUNITY",
+    "THE_EVIDENCE",
+    "THE_PAUSE",
+    "THE_TEASE",
+    "THE_VIBE",
+    "THE_VISION",
+    "TURNING_POINT",
+    "VOICE_OF_TRUTH",
+    "ZEIGARNIK_LOOP"
+  ],
+  "container_component_index": {
+    "CHALLENGE": [
+      "CHALLENGE",
+      "JUXTAPOSITION",
+      "ZEIGARNIK_LOOP",
+      "FRAME_AND_CONTRAST",
+      "DEMONSTRATION",
+      "THE_EVIDENCE"
+    ],
+    "HOOK": [
+      "HOOK",
+      "JUXTAPOSITION",
+      "ZEIGARNIK_LOOP",
+      "THE_TEASE",
+      "THE_VIBE"
+    ],
+    "RESOLUTION": [
+      "RESOLUTION",
+      "ENCOURAGING_CHANGE",
+      "SYMBOLIC_ECHO",
+      "THE_PAUSE"
+    ],
+    "SETUP": [
+      "SETUP",
+      "VOICE_OF_TRUTH",
+      "ARCHETYPAL_MOMENT",
+      "THE_VIBE"
+    ],
+    "TURNING_POINT": [
+      "TURNING_POINT",
+      "JUXTAPOSITION",
+      "VOICE_OF_TRUTH",
+      "ARCHETYPAL_MOMENT"
+    ],
+    "VISION": [
+      "THE_VISION",
+      "ENCOURAGING_CHANGE",
+      "ARCHETYPAL_MOMENT",
+      "THE_COMMUNITY",
+      "THE_VIBE"
+    ]
+  },
+  "containers": {
+    "CHALLENGE": {
+      "contract": {
+        "name": "Challenge",
+        "arc_order": 3,
+        "narrative_role": "Make the cost, conflict, or opposing worldview feel concrete and urgent.",
+        "neural_targets": [
+          "amygdala",
+          "conflict_monitoring",
+          "salience_network"
+        ],
+        "transportation_state": {
+          "phase": "immersion",
+          "target_depth": 0.7,
+          "reentry_required": false
+        },
+        "cls_budget": {
+          "target": 2.5,
+          "max": 3.0
+        },
+        "asl_seconds": {
+          "min": 1.5,
+          "max": 3.0
+        },
+        "color_temperature_kelvin": {
+          "min": 4500,
+          "max": 5000
+        },
+        "pad_target": {
+          "pleasure": -0.2,
+          "arousal": 0.6,
+          "dominance": 0.2
+        },
+        "motion_palette": [
+          "lateral_conflict_move",
+          "rack_focus",
+          "hard_cut",
+          "tension_push"
+        ],
+        "duration_share_of_video": {
+          "min": 0.16,
+          "max": 0.22
+        },
+        "detection_mode": "TENSION",
+        "prediction_error_budget": {
+          "target": 0.6,
+          "max": 0.8,
+          "strategy": "conflict_escalation"
+        },
+        "compatible_components": [
+          "CHALLENGE",
+          "FRAME_AND_CONTRAST",
+          "JUXTAPOSITION",
+          "THE_EVIDENCE",
+          "DEMONSTRATION",
+          "ZEIGARNIK_LOOP"
+        ],
+        "hard_requirements": [
+          "opposition must be legible",
+          "cost of inaction must be emotionally or logically explicit",
+          "contrast with setup must be perceptible"
+        ],
+        "default_component": "CHALLENGE"
+      },
+      "rules": {
+        "priority": {
+          "tier": "structural",
+          "rank": 3
+        },
+        "enforcement": {
+          "mode": "block_on_fail",
+          "default_result": "REVISE"
+        },
+        "applies_to": {
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "required_sequence": {
+          "previous": [
+            "SETUP"
+          ],
+          "next": [
+            "TURNING_POINT"
+          ]
+        },
+        "warn_conditions": [
+          {
+            "metric": "cls_observed",
+            "operator": "gt",
+            "value": 3.0
+          },
+          {
+            "metric": "problem_clarity_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "preferred_components": [
+            "CHALLENGE",
+            "FRAME_AND_CONTRAST",
+            "JUXTAPOSITION",
+            "THE_EVIDENCE",
+            "DEMONSTRATION"
+          ],
+          "fallback": "problem_state_contrast"
+        }
+      }
+    },
+    "HOOK": {
+      "contract": {
+        "name": "Hook",
+        "arc_order": 1,
+        "narrative_role": "Win the first three seconds with a single high-contrast signal and immediate stakes.",
+        "neural_targets": [
+          "orienting_response",
+          "ventral_attention_network",
+          "fusiform_face_area"
+        ],
+        "transportation_state": {
+          "phase": "admission",
+          "target_depth": 0.35,
+          "reentry_required": false
+        },
+        "cls_budget": {
+          "target": 1.5,
+          "max": 2.0
+        },
+        "asl_seconds": {
+          "min": 0.8,
+          "max": 1.5
+        },
+        "color_temperature_kelvin": {
+          "min": 5000,
+          "max": 5500
+        },
+        "pad_target": {
+          "pleasure": 0.2,
+          "arousal": 0.7,
+          "dominance": 0.1
+        },
+        "motion_palette": [
+          "pattern_interrupt",
+          "quick_push",
+          "hard_cut",
+          "micro_punch_in"
+        ],
+        "duration_share_of_video": {
+          "min": 0.08,
+          "max": 0.12
+        },
+        "detection_mode": "TENSION",
+        "prediction_error_budget": {
+          "target": 0.9,
+          "max": 1.0,
+          "strategy": "pattern_interrupt"
+        },
+        "compatible_components": [
+          "HOOK",
+          "THE_TEASE",
+          "THE_VIBE",
+          "JUXTAPOSITION",
+          "ZEIGARNIK_LOOP"
+        ],
+        "hard_requirements": [
+          "exactly one dominant focal element in frame one",
+          "stakes or prediction error declared within three seconds",
+          "no logo-first opener"
+        ],
+        "default_component": "HOOK"
+      },
+      "rules": {
+        "priority": {
+          "tier": "structural",
+          "rank": 1
+        },
+        "enforcement": {
+          "mode": "block_on_fail",
+          "default_result": "REVISE"
+        },
+        "applies_to": {
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "required_sequence": {
+          "previous": [],
+          "next": [
+            "SETUP"
+          ]
+        },
+        "warn_conditions": [
+          {
+            "metric": "cls_observed",
+            "operator": "gt",
+            "value": 2.0
+          },
+          {
+            "metric": "asl_observed",
+            "operator": "gt",
+            "value": 1.5
+          }
+        ],
+        "route_hints": {
+          "preferred_components": [
+            "HOOK",
+            "THE_TEASE",
+            "THE_VIBE",
+            "JUXTAPOSITION"
+          ],
+          "fallback": "direct_hook"
+        }
+      }
+    },
+    "RESOLUTION": {
+      "contract": {
+        "name": "Resolution",
+        "arc_order": 5,
+        "narrative_role": "Provide closure, deceleration, and memory encoding after the peak.",
+        "neural_targets": [
+          "hippocampus",
+          "closure_recognition",
+          "parasympathetic_deceleration"
+        ],
+        "transportation_state": {
+          "phase": "consolidation",
+          "target_depth": 0.75,
+          "reentry_required": false
+        },
+        "cls_budget": {
+          "target": 1.5,
+          "max": 2.0
+        },
+        "asl_seconds": {
+          "min": 2.5,
+          "max": 4.5
+        },
+        "color_temperature_kelvin": {
+          "min": 3800,
+          "max": 4500
+        },
+        "pad_target": {
+          "pleasure": 0.6,
+          "arousal": 0.2,
+          "dominance": -0.2
+        },
+        "motion_palette": [
+          "gentle_drift",
+          "still_hold",
+          "slow_release",
+          "fade_to_warm"
+        ],
+        "duration_share_of_video": {
+          "min": 0.14,
+          "max": 0.18
+        },
+        "detection_mode": "RECOGNITION",
+        "prediction_error_budget": {
+          "target": 0.2,
+          "max": 0.35,
+          "strategy": "prediction_release"
+        },
+        "compatible_components": [
+          "RESOLUTION",
+          "SYMBOLIC_ECHO",
+          "THE_PAUSE",
+          "ENCOURAGING_CHANGE"
+        ],
+        "hard_requirements": [
+          "deceleration must be perceptible",
+          "closure cue must be present before final vision",
+          "if preceded by CLS 4, a silence-capable landing is required"
+        ],
+        "default_component": "RESOLUTION"
+      },
+      "rules": {
+        "priority": {
+          "tier": "structural",
+          "rank": 5
+        },
+        "enforcement": {
+          "mode": "block_on_fail",
+          "default_result": "REVISE"
+        },
+        "applies_to": {
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "required_sequence": {
+          "previous": [
+            "TURNING_POINT"
+          ],
+          "next": [
+            "VISION"
+          ]
+        },
+        "warn_conditions": [
+          {
+            "metric": "closure_signal_score",
+            "operator": "lt",
+            "value": 0.75
+          },
+          {
+            "metric": "cls_observed",
+            "operator": "gt",
+            "value": 2.0
+          }
+        ],
+        "route_hints": {
+          "preferred_components": [
+            "RESOLUTION",
+            "SYMBOLIC_ECHO",
+            "THE_PAUSE",
+            "ENCOURAGING_CHANGE"
+          ],
+          "fallback": "closure_landing"
+        }
+      }
+    },
+    "SETUP": {
+      "contract": {
+        "name": "Setup",
+        "arc_order": 2,
+        "narrative_role": "Establish context, identity, and psychological footing before stakes escalate.",
+        "neural_targets": [
+          "default_mode_network",
+          "narrative_self_projection"
+        ],
+        "transportation_state": {
+          "phase": "orientation",
+          "target_depth": 0.55,
+          "reentry_required": false
+        },
+        "cls_budget": {
+          "target": 1.5,
+          "max": 2.0
+        },
+        "asl_seconds": {
+          "min": 2.5,
+          "max": 5.0
+        },
+        "color_temperature_kelvin": {
+          "min": 3800,
+          "max": 4200
+        },
+        "pad_target": {
+          "pleasure": 0.4,
+          "arousal": -0.2,
+          "dominance": -0.2
+        },
+        "motion_palette": [
+          "breathing_hold",
+          "gentle_pan",
+          "gentle_drift",
+          "slow_push"
+        ],
+        "duration_share_of_video": {
+          "min": 0.16,
+          "max": 0.22
+        },
+        "detection_mode": "VULNERABILITY",
+        "prediction_error_budget": {
+          "target": 0.35,
+          "max": 0.5,
+          "strategy": "clarifying_reframe"
+        },
+        "compatible_components": [
+          "SETUP",
+          "VOICE_OF_TRUTH",
+          "ARCHETYPAL_MOMENT",
+          "THE_VIBE"
+        ],
+        "hard_requirements": [
+          "viewer orientation must be explicit before challenge escalation",
+          "cut density must remain low enough for DMN priming",
+          "avoid premature climax language"
+        ],
+        "default_component": "SETUP"
+      },
+      "rules": {
+        "priority": {
+          "tier": "structural",
+          "rank": 2
+        },
+        "enforcement": {
+          "mode": "block_on_fail",
+          "default_result": "REVISE"
+        },
+        "applies_to": {
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "required_sequence": {
+          "previous": [
+            "HOOK"
+          ],
+          "next": [
+            "CHALLENGE"
+          ]
+        },
+        "warn_conditions": [
+          {
+            "metric": "cls_observed",
+            "operator": "gt",
+            "value": 2.0
+          },
+          {
+            "metric": "asl_observed",
+            "operator": "lt",
+            "value": 2.5
+          }
+        ],
+        "route_hints": {
+          "preferred_components": [
+            "SETUP",
+            "VOICE_OF_TRUTH",
+            "ARCHETYPAL_MOMENT",
+            "THE_VIBE"
+          ],
+          "fallback": "contextual_setup"
+        }
+      }
+    },
+    "TURNING_POINT": {
+      "contract": {
+        "name": "Turning Point",
+        "arc_order": 4,
+        "narrative_role": "Deliver the felt revelation, not just the verbal explanation.",
+        "neural_targets": [
+          "ventral_attention_network",
+          "frontal_reframe",
+          "multi_network_integration"
+        ],
+        "transportation_state": {
+          "phase": "rupture",
+          "target_depth": 0.85,
+          "reentry_required": true
+        },
+        "cls_budget": {
+          "target": 4.0,
+          "max": 4.0
+        },
+        "asl_seconds": {
+          "min": 1.0,
+          "max": 2.5
+        },
+        "color_temperature_kelvin": {
+          "min": 5000,
+          "max": 6500
+        },
+        "pad_target": {
+          "pleasure": 0.3,
+          "arousal": 0.8,
+          "dominance": 0.6
+        },
+        "motion_palette": [
+          "z_parallax",
+          "orbital_rotate",
+          "zoom_burst",
+          "peak_push"
+        ],
+        "duration_share_of_video": {
+          "min": 0.14,
+          "max": 0.2
+        },
+        "detection_mode": "TENSION",
+        "prediction_error_budget": {
+          "target": 1.0,
+          "max": 1.0,
+          "strategy": "revelation_violation"
+        },
+        "compatible_components": [
+          "TURNING_POINT",
+          "JUXTAPOSITION",
+          "ARCHETYPAL_MOMENT",
+          "VOICE_OF_TRUTH"
+        ],
+        "hard_requirements": [
+          "peak must be sensory not only verbal",
+          "drop from CLS 4 toward stillness within two to five seconds",
+          "premium budget allocation is mandatory"
+        ],
+        "default_component": "TURNING_POINT"
+      },
+      "rules": {
+        "priority": {
+          "tier": "structural",
+          "rank": 4
+        },
+        "enforcement": {
+          "mode": "block_on_fail",
+          "default_result": "REVISE"
+        },
+        "applies_to": {
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "required_sequence": {
+          "previous": [
+            "CHALLENGE"
+          ],
+          "next": [
+            "RESOLUTION"
+          ]
+        },
+        "warn_conditions": [
+          {
+            "metric": "peak_signal_score",
+            "operator": "lt",
+            "value": 0.85
+          },
+          {
+            "metric": "post_peak_drop_seconds",
+            "operator": "gt",
+            "value": 5.0
+          }
+        ],
+        "route_hints": {
+          "preferred_components": [
+            "TURNING_POINT",
+            "JUXTAPOSITION",
+            "ARCHETYPAL_MOMENT",
+            "VOICE_OF_TRUTH"
+          ],
+          "fallback": "revelation_peak"
+        }
+      }
+    },
+    "VISION": {
+      "contract": {
+        "name": "Vision",
+        "arc_order": 6,
+        "narrative_role": "Bind future identity, collective belonging, and action into the remembered end-state.",
+        "neural_targets": [
+          "prospective_memory",
+          "isc_synchrony",
+          "hippocampal_end_snapshot"
+        ],
+        "transportation_state": {
+          "phase": "prospection",
+          "target_depth": 0.8,
+          "reentry_required": false
+        },
+        "cls_budget": {
+          "target": 2.0,
+          "max": 2.5
+        },
+        "asl_seconds": {
+          "min": 2.0,
+          "max": 4.0
+        },
+        "color_temperature_kelvin": {
+          "min": 4000,
+          "max": 4500
+        },
+        "pad_target": {
+          "pleasure": 0.8,
+          "arousal": 0.3,
+          "dominance": 0.2
+        },
+        "motion_palette": [
+          "upward_drift",
+          "aspirational_push",
+          "breathing_hold",
+          "premium_glide"
+        ],
+        "duration_share_of_video": {
+          "min": 0.18,
+          "max": 0.26
+        },
+        "detection_mode": "RECOGNITION",
+        "prediction_error_budget": {
+          "target": 0.45,
+          "max": 0.6,
+          "strategy": "future_state_reframe"
+        },
+        "compatible_components": [
+          "THE_VISION",
+          "THE_COMMUNITY",
+          "ENCOURAGING_CHANGE",
+          "THE_VIBE",
+          "ARCHETYPAL_MOMENT"
+        ],
+        "hard_requirements": [
+          "cta must overlap the emotional completion window",
+          "future state must feel inhabited not merely described",
+          "tribal or identity recognition should be visible when available"
+        ],
+        "default_component": "THE_VISION"
+      },
+      "rules": {
+        "priority": {
+          "tier": "structural",
+          "rank": 6
+        },
+        "enforcement": {
+          "mode": "block_on_fail",
+          "default_result": "REVISE"
+        },
+        "applies_to": {
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "required_sequence": {
+          "previous": [
+            "RESOLUTION"
+          ],
+          "next": []
+        },
+        "warn_conditions": [
+          {
+            "metric": "cta_overlap_seconds",
+            "operator": "lt",
+            "value": 0.5
+          },
+          {
+            "metric": "end_state_recall_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "preferred_components": [
+            "THE_VISION",
+            "THE_COMMUNITY",
+            "ENCOURAGING_CHANGE",
+            "THE_VIBE",
+            "ARCHETYPAL_MOMENT"
+          ],
+          "fallback": "future_state_close"
+        }
+      }
+    }
+  },
+  "components": {
+    "ARCHETYPAL_MOMENT": {
+      "spec": {
+        "scene_number": 12,
+        "name": "The Archetypal Moment",
+        "function": "Mythic or symbolic scene that activates story recognition beyond literal biography.",
+        "compatible_containers": [
+          "SETUP",
+          "TURNING_POINT",
+          "VISION"
+        ],
+        "cls_footprint": {
+          "typical": 2.0,
+          "max": 3.5
+        },
+        "required_asset_types": [
+          "B_ROLL",
+          "SYMBOLIC_IMAGE",
+          "A_ROLL"
+        ],
+        "template_variants": [
+          "foreshadow",
+          "mythic_breakthrough",
+          "mythic_resolution"
+        ],
+        "effect_dependencies": [
+          "slow_push",
+          "light_reveal",
+          "atmospheric_sound_bed"
+        ],
+        "selection_signals": [
+          "dmn_activation",
+          "symbolic_density",
+          "mythic_scale"
+        ],
+        "audio_profile": {
+          "score_role": "mythologize",
+          "energy_band": "medium",
+          "mode": "transcendent",
+          "prosodic_hint": "spacious_incantatory",
+          "prosodic_contour_target": {
+            "pitch_shape": "circumflex",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 100,
+              "max": 140
+            },
+            "emotional_register": "intimacy"
+          }
+        },
+        "fallback_behavior": "Use literal setup or vision imagery if the symbolism reads as abstract noise."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 12
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "REVIEW"
+        },
+        "applies_to": {
+          "containers": [
+            "SETUP",
+            "TURNING_POINT",
+            "VISION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "symbol_without_context"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "symbolic_readability_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_personal_vulnerability_is_not_available",
+            "use_when_mythic_framing_strengthens_identity"
+          ]
+        }
+      }
+    },
+    "CHALLENGE": {
+      "spec": {
+        "scene_number": 3,
+        "name": "Challenge",
+        "function": "Direct problem-state escalation that makes the friction or pain unavoidable.",
+        "compatible_containers": [
+          "CHALLENGE"
+        ],
+        "cls_footprint": {
+          "typical": 2.5,
+          "max": 3.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL",
+          "TEXT"
+        ],
+        "template_variants": [
+          "problem_pressure",
+          "cost_of_inaction",
+          "friction_montage"
+        ],
+        "effect_dependencies": [
+          "tension_push",
+          "hard_cut"
+        ],
+        "selection_signals": [
+          "stakes",
+          "urgency",
+          "conflict_visibility"
+        ],
+        "audio_profile": {
+          "score_role": "escalate",
+          "energy_band": "medium_high",
+          "mode": "confrontational",
+          "prosodic_hint": "compressed_urgent",
+          "prosodic_contour_target": {
+            "pitch_shape": "rising",
+            "stress_placement": "final",
+            "rate_wpm": {
+              "min": 155,
+              "max": 190
+            },
+            "emotional_register": "urgent"
+          }
+        },
+        "fallback_behavior": "State the conflict plainly with one supporting contrast cutaway."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "default",
+          "rank": 3
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "CHALLENGE"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "comfort_only"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "problem_clarity_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_problem_is_best_shown_directly",
+            "use_when_binary_framing_is_not_required"
+          ]
+        }
+      }
+    },
+    "DEMONSTRATION": {
+      "spec": {
+        "scene_number": 13,
+        "name": "The Demonstration",
+        "function": "Mechanism-proof scene that shows how the claim works in action.",
+        "compatible_containers": [
+          "CHALLENGE"
+        ],
+        "cls_footprint": {
+          "typical": 2.5,
+          "max": 3.0
+        },
+        "required_asset_types": [
+          "DEMO_CAPTURE",
+          "TEXT",
+          "A_ROLL"
+        ],
+        "template_variants": [
+          "show_the_method",
+          "before_after_process",
+          "proof_in_motion"
+        ],
+        "effect_dependencies": [
+          "callout_overlay",
+          "freeze_frame"
+        ],
+        "selection_signals": [
+          "causal_proof",
+          "mechanism_visibility",
+          "logic_support"
+        ],
+        "audio_profile": {
+          "score_role": "clarify",
+          "energy_band": "medium",
+          "mode": "procedural",
+          "prosodic_hint": "stepwise_explanatory",
+          "prosodic_contour_target": {
+            "pitch_shape": "level",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 130,
+              "max": 160
+            },
+            "emotional_register": "authority"
+          }
+        },
+        "fallback_behavior": "Use evidence scene if no clear process can be shown."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "secondary",
+          "rank": 13
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "CHALLENGE"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "text_overload"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "mechanism_visibility_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_the_process_itself_convinces",
+            "avoid_when_only abstract claims are available"
+          ]
+        }
+      }
+    },
+    "ENCOURAGING_CHANGE": {
+      "spec": {
+        "scene_number": 7,
+        "name": "Encouraging Change",
+        "function": "Hopeful forward-motion vehicle that turns insight into movement.",
+        "compatible_containers": [
+          "RESOLUTION",
+          "VISION"
+        ],
+        "cls_footprint": {
+          "typical": 1.8,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL",
+          "TEXT"
+        ],
+        "template_variants": [
+          "gentle_call_forward",
+          "small_next_step",
+          "hopeful_permission"
+        ],
+        "effect_dependencies": [
+          "upward_drift",
+          "soft_text_reveal"
+        ],
+        "selection_signals": [
+          "hope",
+          "forward_motion",
+          "low_pressure_cta"
+        ],
+        "audio_profile": {
+          "score_role": "propel",
+          "energy_band": "low_medium",
+          "mode": "hopeful",
+          "prosodic_hint": "gentle_forward",
+          "prosodic_contour_target": {
+            "pitch_shape": "rising",
+            "stress_placement": "final",
+            "rate_wpm": {
+              "min": 120,
+              "max": 145
+            },
+            "emotional_register": "aspiration"
+          }
+        },
+        "fallback_behavior": "Reduce to a direct encouraging line over warm future-state b-roll."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "secondary",
+          "rank": 7
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "RESOLUTION",
+            "VISION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "guilt_cta"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "encouragement_specificity",
+            "operator": "lt",
+            "value": 0.7
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_hopeful_transition_is_needed",
+            "use_when_vision_needs_softer_entry"
+          ]
+        }
+      }
+    },
+    "FRAME_AND_CONTRAST": {
+      "spec": {
+        "scene_number": 9,
+        "name": "Frame and Contrast",
+        "function": "Binary framing scene that makes their way versus your way unmistakable.",
+        "compatible_containers": [
+          "CHALLENGE"
+        ],
+        "cls_footprint": {
+          "typical": 2.5,
+          "max": 3.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL",
+          "TEXT",
+          "SPLIT_SCREEN"
+        ],
+        "template_variants": [
+          "their_way_vs_your_way",
+          "before_after_conflict",
+          "choice_fork"
+        ],
+        "effect_dependencies": [
+          "split_screen",
+          "contrast_text"
+        ],
+        "selection_signals": [
+          "binary_emotion",
+          "enemy_naming",
+          "side_taking"
+        ],
+        "audio_profile": {
+          "score_role": "polarize",
+          "energy_band": "medium_high",
+          "mode": "adversarial",
+          "prosodic_hint": "declarative_binary",
+          "prosodic_contour_target": {
+            "pitch_shape": "level",
+            "stress_placement": "initial",
+            "rate_wpm": {
+              "min": 140,
+              "max": 170
+            },
+            "emotional_register": "authority"
+          }
+        },
+        "fallback_behavior": "Reduce to a challenge scene with explicit verbal contrast."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 9
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "CHALLENGE"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "mushy_problem_framing"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "binary_legibility_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_clear_opposition_is_needed",
+            "use_when_the_enemy_must_be_named_visually"
+          ]
+        }
+      }
+    },
+    "HOOK": {
+      "spec": {
+        "scene_number": 1,
+        "name": "Hook",
+        "function": "Direct pattern interrupt opener with immediate stakes.",
+        "compatible_containers": [
+          "HOOK"
+        ],
+        "cls_footprint": {
+          "typical": 1.5,
+          "max": 2.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL",
+          "TEXT"
+        ],
+        "template_variants": [
+          "talking_head_pattern_match",
+          "text_first_interrupt",
+          "stakes_visual_cutaway"
+        ],
+        "effect_dependencies": [
+          "hard_cut",
+          "micro_punch_in"
+        ],
+        "selection_signals": [
+          "direct_stakes",
+          "face_credibility",
+          "fast_signal_compression"
+        ],
+        "audio_profile": {
+          "score_role": "punctuate",
+          "energy_band": "high",
+          "mode": "tense",
+          "prosodic_hint": "clipped_assertive",
+          "prosodic_contour_target": {
+            "pitch_shape": "falling",
+            "stress_placement": "initial",
+            "rate_wpm": {
+              "min": 160,
+              "max": 200
+            },
+            "emotional_register": "urgent"
+          }
+        },
+        "fallback_behavior": "Use the simplest direct-to-camera opener with one cutaway proof shot."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "default",
+          "rank": 1
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "HOOK"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "slow_intro"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "stakes_clarity_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_message_is_explicit",
+            "use_when_face_is_available"
+          ]
+        }
+      }
+    },
+    "JUXTAPOSITION": {
+      "spec": {
+        "scene_number": 4,
+        "name": "Juxtaposition",
+        "function": "Meaning-creation through collision, irony, or contrastive sequence.",
+        "compatible_containers": [
+          "HOOK",
+          "CHALLENGE",
+          "TURNING_POINT"
+        ],
+        "cls_footprint": {
+          "typical": 2.5,
+          "max": 4.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "FOUND_CLIP",
+          "B_ROLL"
+        ],
+        "template_variants": [
+          "found_clip_reframe",
+          "stylized_mismatch",
+          "match_cut_reversal",
+          "then_vs_now"
+        ],
+        "effect_dependencies": [
+          "hard_cut",
+          "match_cut",
+          "audio_contrast"
+        ],
+        "selection_signals": [
+          "kuleshov_gain",
+          "ironic_contrast",
+          "surprise_value"
+        ],
+        "audio_profile": {
+          "score_role": "destabilize",
+          "energy_band": "high",
+          "mode": "contrastive",
+          "prosodic_hint": "syncopated_counterpoint",
+          "prosodic_contour_target": {
+            "pitch_shape": "circumflex",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 140,
+              "max": 170
+            },
+            "emotional_register": "tension"
+          }
+        },
+        "fallback_behavior": "Collapse to a simpler contrast scene if sequence meaning is unclear."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 4
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "REVIEW"
+        },
+        "applies_to": {
+          "containers": [
+            "HOOK",
+            "CHALLENGE",
+            "TURNING_POINT"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "low_context_fast_sequence"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "contrast_legibility_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_prediction_error_needs_a_vehicle",
+            "use_when_found_clip_inventory_is_strong"
+          ]
+        }
+      }
+    },
+    "RESOLUTION": {
+      "spec": {
+        "scene_number": 6,
+        "name": "Resolution",
+        "function": "Direct landing scene that shows calm after the insight.",
+        "compatible_containers": [
+          "RESOLUTION"
+        ],
+        "cls_footprint": {
+          "typical": 1.5,
+          "max": 2.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL"
+        ],
+        "template_variants": [
+          "calm_after_peak",
+          "transformation_settle",
+          "direct_landing"
+        ],
+        "effect_dependencies": [
+          "gentle_drift",
+          "warm_fade"
+        ],
+        "selection_signals": [
+          "closure",
+          "deceleration",
+          "warm_return"
+        ],
+        "audio_profile": {
+          "score_role": "land",
+          "energy_band": "low",
+          "mode": "relieved",
+          "prosodic_hint": "softened_decline",
+          "prosodic_contour_target": {
+            "pitch_shape": "falling",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 100,
+              "max": 130
+            },
+            "emotional_register": "calm"
+          }
+        },
+        "fallback_behavior": "Use a simple warm a-roll closure with minimal motion."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "default",
+          "rank": 6
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "RESOLUTION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "unresolved_climax"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "closure_signal_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_simple_landing_is_sufficient",
+            "use_when_symbolic_echo_assets_are_missing"
+          ]
+        }
+      }
+    },
+    "SETUP": {
+      "spec": {
+        "scene_number": 2,
+        "name": "Setup",
+        "function": "Contextual grounding scene that makes the viewer feel located in the story.",
+        "compatible_containers": [
+          "SETUP"
+        ],
+        "cls_footprint": {
+          "typical": 1.5,
+          "max": 2.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL"
+        ],
+        "template_variants": [
+          "contextual_backstory",
+          "environmental_grounding",
+          "vulnerability_intro"
+        ],
+        "effect_dependencies": [
+          "gentle_pan",
+          "gentle_drift"
+        ],
+        "selection_signals": [
+          "identity_context",
+          "warmth",
+          "low_information_churn"
+        ],
+        "audio_profile": {
+          "score_role": "ground",
+          "energy_band": "low",
+          "mode": "intimate",
+          "prosodic_hint": "warm_expository",
+          "prosodic_contour_target": {
+            "pitch_shape": "falling",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 120,
+              "max": 150
+            },
+            "emotional_register": "intimacy"
+          }
+        },
+        "fallback_behavior": "Use a still or gently moving contextual a-roll setup with minimal overlays."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "default",
+          "rank": 2
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "SETUP"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "premature_climax"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "asl_observed",
+            "operator": "lt",
+            "value": 2.5
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_personal_context_is_available",
+            "use_when_clarity_matters_more_than_novelty"
+          ]
+        }
+      }
+    },
+    "SYMBOLIC_ECHO": {
+      "spec": {
+        "scene_number": 8,
+        "name": "Symbolic Echo",
+        "function": "Closure vehicle that reuses a transformed symbol from earlier in the story.",
+        "compatible_containers": [
+          "RESOLUTION"
+        ],
+        "cls_footprint": {
+          "typical": 1.5,
+          "max": 2.0
+        },
+        "required_asset_types": [
+          "B_ROLL",
+          "OBJECT_CALLBACK"
+        ],
+        "template_variants": [
+          "match_cut_callback",
+          "transformed_object_return",
+          "visual_rhyme_close"
+        ],
+        "effect_dependencies": [
+          "match_cut",
+          "warm_fade"
+        ],
+        "selection_signals": [
+          "closure_event",
+          "memory_anchor",
+          "callback_strength"
+        ],
+        "audio_profile": {
+          "score_role": "recall",
+          "energy_band": "low",
+          "mode": "reflective",
+          "prosodic_hint": "sparse_resolving",
+          "prosodic_contour_target": {
+            "pitch_shape": "falling",
+            "stress_placement": "final",
+            "rate_wpm": {
+              "min": 90,
+              "max": 125
+            },
+            "emotional_register": "calm"
+          }
+        },
+        "fallback_behavior": "Fall back to direct resolution if no transformed symbol exists."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 8
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "REVIEW"
+        },
+        "applies_to": {
+          "containers": [
+            "RESOLUTION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "no_callback_asset"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "callback_coherence_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_earlier_symbol_can_return_transformed",
+            "use_when_memory_encoding_is_priority"
+          ]
+        }
+      }
+    },
+    "THE_COMMUNITY": {
+      "spec": {
+        "scene_number": 15,
+        "name": "The Community",
+        "function": "Belonging scene that makes the future identity feel socially real.",
+        "compatible_containers": [
+          "VISION"
+        ],
+        "cls_footprint": {
+          "typical": 2.0,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "B_ROLL",
+          "GROUP_IMAGERY",
+          "A_ROLL"
+        ],
+        "template_variants": [
+          "tribal_belonging",
+          "shared_future",
+          "collective_arrival"
+        ],
+        "effect_dependencies": [
+          "warm_glide",
+          "group_reveal"
+        ],
+        "selection_signals": [
+          "isc_belonging",
+          "tribal_identity",
+          "shared_outcome"
+        ],
+        "audio_profile": {
+          "score_role": "bond",
+          "energy_band": "medium",
+          "mode": "warm_collective",
+          "prosodic_hint": "inclusive_rising",
+          "prosodic_contour_target": {
+            "pitch_shape": "rising_falling",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 130,
+              "max": 160
+            },
+            "emotional_register": "aspiration"
+          }
+        },
+        "fallback_behavior": "Use THE_VISION if communal imagery is unavailable or generic."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 15
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "VISION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "generic_stock_belonging"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "tribe_specificity_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_social_identity_is_the_conversion lever",
+            "use_when_belonging_visuals_are_specific"
+          ]
+        }
+      }
+    },
+    "THE_EVIDENCE": {
+      "spec": {
+        "scene_number": 14,
+        "name": "The Evidence",
+        "function": "Low-noise proof scene that transfers attention from visual claim to remembered fact.",
+        "compatible_containers": [
+          "CHALLENGE"
+        ],
+        "cls_footprint": {
+          "typical": 2.0,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "TEXT",
+          "DATA_VISUAL",
+          "A_ROLL"
+        ],
+        "template_variants": [
+          "single_clean_number",
+          "proof_card",
+          "chart_with_voiceover"
+        ],
+        "effect_dependencies": [
+          "minimal_callout",
+          "slow_reveal"
+        ],
+        "selection_signals": [
+          "proof_density",
+          "memory_transfer",
+          "claim_support"
+        ],
+        "audio_profile": {
+          "score_role": "authenticate",
+          "energy_band": "low_medium",
+          "mode": "restrained",
+          "prosodic_hint": "precise_authoritative",
+          "prosodic_contour_target": {
+            "pitch_shape": "falling",
+            "stress_placement": "initial",
+            "rate_wpm": {
+              "min": 145,
+              "max": 175
+            },
+            "emotional_register": "authority"
+          }
+        },
+        "fallback_behavior": "Reduce to a single strong proof point if the data story is noisy."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "secondary",
+          "rank": 14
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "CHALLENGE"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "dense_motion_plus_text"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "evidence_legibility_score",
+            "operator": "lt",
+            "value": 0.8
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_one_clean_fact_can_move_belief",
+            "prefer_low_motion_layouts"
+          ]
+        }
+      }
+    },
+    "THE_PAUSE": {
+      "spec": {
+        "scene_number": 16,
+        "name": "The Pause",
+        "function": "Silence container that lets residual arousal attach to stillness after the peak.",
+        "compatible_containers": [
+          "RESOLUTION"
+        ],
+        "cls_footprint": {
+          "typical": 1.0,
+          "max": 1.5
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "MEDITATIVE_B_ROLL"
+        ],
+        "template_variants": [
+          "lingering_look",
+          "meditative_broll",
+          "silent_hold"
+        ],
+        "effect_dependencies": [
+          "still_hold",
+          "silence_drop"
+        ],
+        "selection_signals": [
+          "golden_zone",
+          "excitation_transfer",
+          "low_cls_reset"
+        ],
+        "audio_profile": {
+          "score_role": "suspend",
+          "energy_band": "minimal",
+          "mode": "near_silent",
+          "prosodic_hint": "breath_and_room_tone",
+          "prosodic_contour_target": {
+            "pitch_shape": "level",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 80,
+              "max": 110
+            },
+            "emotional_register": "calm"
+          }
+        },
+        "fallback_behavior": "Use the lowest-CLS resolution beat available and strip motion and music."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "critical",
+          "rank": 16
+        },
+        "enforcement": {
+          "mode": "require_when_signaled",
+          "default_result": "REVIEW"
+        },
+        "applies_to": {
+          "containers": [
+            "RESOLUTION"
+          ],
+          "stages": [
+            "scene_builder",
+            "editor_regeneration"
+          ]
+        },
+        "incompatibilities": [
+          "dense_overlay"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "cls_observed",
+            "operator": "gt",
+            "value": 1.5
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_after_cls4_peak",
+            "preserve_silence_window"
+          ]
+        }
+      }
+    },
+    "THE_TEASE": {
+      "spec": {
+        "scene_number": 10,
+        "name": "The Tease",
+        "function": "Promise-first opener that withholds full explanation long enough to create curiosity.",
+        "compatible_containers": [
+          "HOOK"
+        ],
+        "cls_footprint": {
+          "typical": 1.8,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "TEXT",
+          "B_ROLL"
+        ],
+        "template_variants": [
+          "redacted",
+          "out_of_context_aroll",
+          "promise_flash"
+        ],
+        "effect_dependencies": [
+          "text_flash",
+          "hard_cut"
+        ],
+        "selection_signals": [
+          "curiosity_gap",
+          "withheld_payoff",
+          "retention_pull"
+        ],
+        "audio_profile": {
+          "score_role": "withhold",
+          "energy_band": "medium_high",
+          "mode": "suspense",
+          "prosodic_hint": "whispered_rising",
+          "prosodic_contour_target": {
+            "pitch_shape": "rising",
+            "stress_placement": "medial",
+            "rate_wpm": {
+              "min": 140,
+              "max": 165
+            },
+            "emotional_register": "tension"
+          }
+        },
+        "fallback_behavior": "Revert to a direct hook if the curiosity gap becomes confusing."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "secondary",
+          "rank": 10
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "HOOK"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "vague_promise"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "clarity_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_curiosity_is_strong_and_message_can_pay_off_fast",
+            "avoid_when_offer_is_already_complex"
+          ]
+        }
+      }
+    },
+    "THE_VIBE": {
+      "spec": {
+        "scene_number": 17,
+        "name": "The Vibe",
+        "function": "Atmospheric tone carrier that establishes or extends a mood state without heavy exposition.",
+        "compatible_containers": [
+          "HOOK",
+          "SETUP",
+          "VISION"
+        ],
+        "cls_footprint": {
+          "typical": 1.8,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "B_ROLL",
+          "ATMOSPHERIC_TEXTURE",
+          "A_ROLL"
+        ],
+        "template_variants": [
+          "opener_texture",
+          "tone_setting_haze",
+          "aspirational_texture"
+        ],
+        "effect_dependencies": [
+          "ambient_motion",
+          "atmospheric_grade"
+        ],
+        "selection_signals": [
+          "tone",
+          "texture",
+          "mood_extension"
+        ],
+        "audio_profile": {
+          "score_role": "atmosphere",
+          "energy_band": "low_medium",
+          "mode": "immersive",
+          "prosodic_hint": "breath_led_sparse",
+          "prosodic_contour_target": {
+            "pitch_shape": "level",
+            "stress_placement": "distributed",
+            "rate_wpm": {
+              "min": 100,
+              "max": 130
+            },
+            "emotional_register": "intimacy"
+          }
+        },
+        "fallback_behavior": "Reduce to a simple ambient b-roll bridge if tone is the only job."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "secondary",
+          "rank": 17
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "HOOK",
+            "SETUP",
+            "VISION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "atmosphere_without_message"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "specificity_score",
+            "operator": "lt",
+            "value": 0.7
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_tone_is_doing_real_structural_work",
+            "avoid_as_generic_filler"
+          ]
+        }
+      }
+    },
+    "THE_VISION": {
+      "spec": {
+        "scene_number": 18,
+        "name": "The Vision",
+        "function": "Future-state close that fuses emotional resolution with the CTA window.",
+        "compatible_containers": [
+          "VISION"
+        ],
+        "cls_footprint": {
+          "typical": 2.0,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL",
+          "TEXT",
+          "CTA"
+        ],
+        "template_variants": [
+          "future_self_mirror",
+          "dream_montage",
+          "resolved_direct_gaze"
+        ],
+        "effect_dependencies": [
+          "premium_glide",
+          "cta_overlap_caption",
+          "warm_finish"
+        ],
+        "selection_signals": [
+          "future_identity",
+          "cta_fusion",
+          "end_snapshot"
+        ],
+        "audio_profile": {
+          "score_role": "fuse_cta",
+          "energy_band": "medium",
+          "mode": "aspirational",
+          "prosodic_hint": "steady_uplift",
+          "prosodic_contour_target": {
+            "pitch_shape": "rising_falling",
+            "stress_placement": "final",
+            "rate_wpm": {
+              "min": 115,
+              "max": 145
+            },
+            "emotional_register": "aspiration"
+          }
+        },
+        "fallback_behavior": "Use a direct aspirational close with CTA beginning before the emotional peak ends."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "critical",
+          "rank": 18
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "VISION"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "delayed_cta"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "cta_overlap_seconds",
+            "operator": "lt",
+            "value": 0.5
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_future_identity_and_action_must_bind",
+            "prefer_as_default_end_vehicle"
+          ]
+        }
+      }
+    },
+    "TURNING_POINT": {
+      "spec": {
+        "scene_number": 5,
+        "name": "Turning Point",
+        "function": "Explicit revelation scene that marks the story's peak insight.",
+        "compatible_containers": [
+          "TURNING_POINT"
+        ],
+        "cls_footprint": {
+          "typical": 4.0,
+          "max": 4.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "B_ROLL",
+          "TEXT"
+        ],
+        "template_variants": [
+          "reaction_hold",
+          "kinetic_reveal",
+          "climax_montage"
+        ],
+        "effect_dependencies": [
+          "z_parallax",
+          "kinetic_typography",
+          "music_swell"
+        ],
+        "selection_signals": [
+          "revelation",
+          "peak_budget",
+          "sensory_climax"
+        ],
+        "audio_profile": {
+          "score_role": "peak",
+          "energy_band": "high",
+          "mode": "revelatory",
+          "prosodic_hint": "widening_stress_then_release",
+          "prosodic_contour_target": {
+            "pitch_shape": "circumflex",
+            "stress_placement": "final",
+            "rate_wpm": {
+              "min": 120,
+              "max": 185
+            },
+            "emotional_register": "revelatory"
+          }
+        },
+        "fallback_behavior": "Escalate a direct a-roll insight beat with premium sensory emphasis."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 5
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "TURNING_POINT"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "flat_delivery"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "peak_signal_score",
+            "operator": "lt",
+            "value": 0.85
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_the_insight_itself_is_the_event",
+            "use_when_peak_end_budget_is_available"
+          ]
+        }
+      }
+    },
+    "VOICE_OF_TRUTH": {
+      "spec": {
+        "scene_number": 11,
+        "name": "Voice of Truth",
+        "function": "Belief-anchoring testimony or external validation scene.",
+        "compatible_containers": [
+          "SETUP",
+          "TURNING_POINT"
+        ],
+        "cls_footprint": {
+          "typical": 2.0,
+          "max": 3.0
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "TESTIMONIAL",
+          "TEXT"
+        ],
+        "template_variants": [
+          "mentor_validation",
+          "external_quote",
+          "truth_bomb_testimony"
+        ],
+        "effect_dependencies": [
+          "quote_reveal",
+          "slow_push"
+        ],
+        "selection_signals": [
+          "authority_transfer",
+          "belief_shift",
+          "credibility_boost"
+        ],
+        "audio_profile": {
+          "score_role": "validate",
+          "energy_band": "medium",
+          "mode": "credible",
+          "prosodic_hint": "grounded_testimonial",
+          "prosodic_contour_target": {
+            "pitch_shape": "falling",
+            "stress_placement": "initial",
+            "rate_wpm": {
+              "min": 120,
+              "max": 150
+            },
+            "emotional_register": "authority"
+          }
+        },
+        "fallback_behavior": "Use direct coach testimony if external proof is unavailable."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "premium",
+          "rank": 11
+        },
+        "enforcement": {
+          "mode": "allow_with_checks",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "SETUP",
+            "TURNING_POINT"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "weak_source_authority"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "source_credibility_score",
+            "operator": "lt",
+            "value": 0.75
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_external_validation_solves_belief_gap",
+            "use_when_testimonial_assets_exist"
+          ]
+        }
+      }
+    },
+    "ZEIGARNIK_LOOP": {
+      "spec": {
+        "scene_number": 20,
+        "name": "Zeigarnik Loop",
+        "function": "Opens a deliberate narrative gap that creates memory-activating incompleteness, exploiting the Zeigarnik effect to sustain forward engagement through unresolved tension.",
+        "compatible_containers": [
+          "HOOK",
+          "CHALLENGE"
+        ],
+        "cls_footprint": {
+          "typical": 1.8,
+          "max": 2.5
+        },
+        "required_asset_types": [
+          "A_ROLL",
+          "TEXT"
+        ],
+        "template_variants": [
+          "open_loop_question",
+          "interrupted_revelation",
+          "promise_delayed"
+        ],
+        "effect_dependencies": [
+          "hard_cut",
+          "tension_push"
+        ],
+        "selection_signals": [
+          "incomplete_setup",
+          "open_question",
+          "loop_tension"
+        ],
+        "audio_profile": {
+          "score_role": "destabilize",
+          "energy_band": "medium_high",
+          "mode": "tense",
+          "prosodic_hint": "rising_unresolved",
+          "prosodic_contour_target": {
+            "pitch_shape": "rising",
+            "stress_placement": "medial",
+            "rate_wpm": {
+              "min": 130,
+              "max": 175
+            },
+            "emotional_register": "tension"
+          }
+        },
+        "fallback_behavior": "Use a direct question or half-completed statement that cuts before resolution."
+      },
+      "rules": {
+        "selection_priority": {
+          "tier": "tactical",
+          "rank": 8
+        },
+        "enforcement": {
+          "mode": "prefer_when_fit",
+          "default_result": "ALLOW"
+        },
+        "applies_to": {
+          "containers": [
+            "HOOK",
+            "CHALLENGE"
+          ],
+          "stages": [
+            "scene_builder"
+          ]
+        },
+        "incompatibilities": [
+          "resolved_setup",
+          "comfort_only"
+        ],
+        "warn_conditions": [
+          {
+            "metric": "stakes_clarity_score",
+            "operator": "lt",
+            "value": 0.6
+          }
+        ],
+        "route_hints": {
+          "select": [
+            "use_when_curiosity_gap_is_available",
+            "use_when_loop_will_close_in_later_beat",
+            "prefer_when_retention_over_clarity"
+          ]
+        }
+      }
+    }
+  },
+  "research_contracts": {
+    "scene_template_contract": {
+      "template_id": "string",
+      "container_id": "string",
+      "preferred_components": [
+        "string"
+      ],
+      "base_cls": "1-5",
+      "target_attention_mode": "orienting|guided_focus|schema_building|emotional_peak|reflective_release",
+      "isc_priority": "low|medium|high",
+      "memory_role": "hook_imprint|context_encoding|tension_storage|peak_snapshot|end_snapshot|transfer_prompt",
+      "av_congruence_mode": "strict|relaxed|strategic_mismatch",
+      "continuity_requirement": "invisible_cut|match_action|eyeline_match|kuleshov_bridge|intentional_disruption",
+      "text_policy": "none|keyword_only|guided_labels|explanatory",
+      "recommended_duration_seconds": {
+        "min": "number",
+        "max": "number"
+      },
+      "max_primary_visual_units": "1-3",
+      "peak_end_weight": "low|medium|high",
+      "coded_effects": [
+        "string"
+      ],
+      "editorial_techniques": [
+        "string"
+      ],
+      "selection_signals": [
+        "string"
+      ]
+    },
+    "effect_contract": {
+      "effect_id": "string",
+      "category": "motion|color|texture|light|transition|audio|graphic|text",
+      "cls_impact": "1-5",
+      "arousal": "1-10",
+      "presence": "1-10",
+      "attention_role": "orient|signal|intensify|immerse|punctuate|resolve",
+      "congruence_mode": "default_safe|conditional|mismatch_only",
+      "sync_window_ms": {
+        "min": "integer|null",
+        "max": "integer|null"
+      },
+      "text_competition_risk": "low|medium|high",
+      "best_for": [
+        "string"
+      ],
+      "avoid_when": [
+        "string"
+      ]
+    }
+  },
+  "scene_templates": {
+    "HOOK-1-AB-2": {
+      "target_attention_mode": "orienting",
+      "isc_priority": "high",
+      "memory_role": "hook_imprint",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 0.8,
+        "max": 2.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "medium",
+      "name": "The Talking Head Pattern Match",
+      "container_id": "HOOK",
+      "preferred_components": [
+        "HOOK"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "A_ROLL",
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-M-04",
+        "EFFECT-A-05"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "pattern_match",
+        "face_anchor",
+        "direct_stakes"
+      ],
+      "template_id": "HOOK-1-AB-2"
+    },
+    "HOOK-2-B-1": {
+      "target_attention_mode": "orienting",
+      "isc_priority": "high",
+      "memory_role": "hook_imprint",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 0.8,
+        "max": 2.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "medium",
+      "name": "The Cinematic Foreshadow",
+      "container_id": "HOOK",
+      "preferred_components": [
+        "HOOK",
+        "THE_VIBE"
+      ],
+      "base_cls": 1,
+      "elements": [
+        "CINEMATIC_B_ROLL"
+      ],
+      "continuity_requirement": "invisible_cut",
+      "coded_effects": [
+        "EFFECT-T-01",
+        "EFFECT-A-03"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "foreshadowing",
+        "mood_lock",
+        "cryptic_vo"
+      ],
+      "template_id": "HOOK-2-B-1"
+    },
+    "HOOK-3-BA-2": {
+      "target_attention_mode": "orienting",
+      "isc_priority": "high",
+      "memory_role": "hook_imprint",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 0.8,
+        "max": 2.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "medium",
+      "name": "The J-Cut Intrigue",
+      "container_id": "HOOK",
+      "preferred_components": [
+        "HOOK",
+        "ZEIGARNIK_LOOP"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "COACH_B_ROLL",
+        "A_ROLL"
+      ],
+      "continuity_requirement": "kuleshov_bridge",
+      "coded_effects": [
+        "EFFECT-C-01",
+        "EFFECT-A-02"
+      ],
+      "editorial_techniques": [
+        "J_CUT"
+      ],
+      "selection_signals": [
+        "audio_preload",
+        "private_moment",
+        "curiosity_gap"
+      ],
+      "template_id": "HOOK-3-BA-2"
+    },
+    "HOOK-4-BA-2": {
+      "target_attention_mode": "orienting",
+      "isc_priority": "high",
+      "memory_role": "hook_imprint",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 0.8,
+        "max": 2.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "medium",
+      "name": "The Found Clip Reframe",
+      "container_id": "HOOK",
+      "preferred_components": [
+        "HOOK",
+        "JUXTAPOSITION"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "FOUND_CLIP",
+        "A_ROLL"
+      ],
+      "continuity_requirement": "intentional_disruption",
+      "coded_effects": [
+        "EFFECT-TR-01",
+        "EFFECT-A-06"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "cultural_contrast",
+        "reframe",
+        "hard_interrupt"
+      ],
+      "template_id": "HOOK-4-BA-2"
+    },
+    "HOOK-5-AE-2": {
+      "target_attention_mode": "orienting",
+      "isc_priority": "high",
+      "memory_role": "hook_imprint",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 0.8,
+        "max": 2.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "medium",
+      "name": "The A-Roll Setup and Found Clip Reveal",
+      "container_id": "HOOK",
+      "preferred_components": [
+        "HOOK",
+        "THE_TEASE"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "A_ROLL",
+        "FOUND_CLIP"
+      ],
+      "continuity_requirement": "kuleshov_bridge",
+      "coded_effects": [
+        "EFFECT-A-06"
+      ],
+      "editorial_techniques": [
+        "L_CUT"
+      ],
+      "selection_signals": [
+        "question_setup",
+        "found_clip_punchline",
+        "smooth_bridge"
+      ],
+      "template_id": "HOOK-5-AE-2"
+    },
+    "SETUP-1-B-1": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "medium",
+      "memory_role": "context_encoding",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "low",
+      "name": "The Personal Low Visualization",
+      "container_id": "SETUP",
+      "preferred_components": [
+        "SETUP"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "CINEMATIC_B_ROLL"
+      ],
+      "continuity_requirement": "invisible_cut",
+      "coded_effects": [
+        "EFFECT-M-01",
+        "EFFECT-C-01",
+        "EFFECT-A-03"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "vulnerability",
+        "empathy",
+        "personal_low"
+      ],
+      "template_id": "SETUP-1-B-1"
+    },
+    "SETUP-2-B-Montage-3-4": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "medium",
+      "memory_role": "context_encoding",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "low",
+      "name": "The Authentic Memory Montage",
+      "container_id": "SETUP",
+      "preferred_components": [
+        "SETUP",
+        "ARCHETYPAL_MOMENT"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "COACH_B_ROLL_MONTAGE"
+      ],
+      "continuity_requirement": "kuleshov_bridge",
+      "coded_effects": [
+        "EFFECT-TR-05",
+        "EFFECT-C-03",
+        "EFFECT-A-02"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "memory_montage",
+        "authenticity",
+        "nostalgia"
+      ],
+      "template_id": "SETUP-2-B-Montage-3-4"
+    },
+    "SETUP-3-B-1": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "medium",
+      "memory_role": "context_encoding",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "low",
+      "name": "The Prop-Driven Metaphor",
+      "container_id": "SETUP",
+      "preferred_components": [
+        "SETUP",
+        "VOICE_OF_TRUTH"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-C-07"
+      ],
+      "editorial_techniques": [
+        "FOLEY"
+      ],
+      "selection_signals": [
+        "prop_metaphor",
+        "concrete_abstraction",
+        "clarity"
+      ],
+      "template_id": "SETUP-3-B-1"
+    },
+    "SETUP-4-AB-2": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "medium",
+      "memory_role": "context_encoding",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "low",
+      "name": "The L-Cut Vulnerability Drop",
+      "container_id": "SETUP",
+      "preferred_components": [
+        "SETUP",
+        "THE_VIBE"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "A_ROLL",
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "eyeline_match",
+      "coded_effects": [
+        "EFFECT-M-06"
+      ],
+      "editorial_techniques": [
+        "L_CUT"
+      ],
+      "selection_signals": [
+        "lingering_audio",
+        "reflective_b_roll",
+        "vulnerability_drop"
+      ],
+      "template_id": "SETUP-4-AB-2"
+    },
+    "CHALLENGE-1-B-Montage-3-5": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "high",
+      "memory_role": "tension_storage",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.0,
+        "max": 3.0
+      },
+      "max_primary_visual_units": 3,
+      "peak_end_weight": "medium",
+      "name": "The Struggle Montage",
+      "container_id": "CHALLENGE",
+      "preferred_components": [
+        "CHALLENGE"
+      ],
+      "base_cls": 4,
+      "elements": [
+        "B_ROLL_MONTAGE"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-M-02",
+        "EFFECT-M-03",
+        "EFFECT-TR-02",
+        "EFFECT-A-04"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "crescendo",
+        "physical_struggle",
+        "stakes_escalation"
+      ],
+      "template_id": "CHALLENGE-1-B-Montage-3-5"
+    },
+    "CHALLENGE-2-AC-2": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "high",
+      "memory_role": "tension_storage",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.0,
+        "max": 3.0
+      },
+      "max_primary_visual_units": 3,
+      "peak_end_weight": "medium",
+      "name": "The C-Roll Enemy Collage",
+      "container_id": "CHALLENGE",
+      "preferred_components": [
+        "FRAME_AND_CONTRAST",
+        "CHALLENGE"
+      ],
+      "base_cls": 4,
+      "elements": [
+        "A_ROLL",
+        "C_ROLL"
+      ],
+      "continuity_requirement": "intentional_disruption",
+      "coded_effects": [
+        "EFFECT-G-04",
+        "EFFECT-A-05"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "enemy_framing",
+        "takedown",
+        "contrast"
+      ],
+      "template_id": "CHALLENGE-2-AC-2"
+    },
+    "CHALLENGE-3-B-Montage-4-6": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "high",
+      "memory_role": "tension_storage",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.0,
+        "max": 3.0
+      },
+      "max_primary_visual_units": 3,
+      "peak_end_weight": "medium",
+      "name": "The Found Clip Chaos Montage",
+      "container_id": "CHALLENGE",
+      "preferred_components": [
+        "CHALLENGE",
+        "JUXTAPOSITION"
+      ],
+      "base_cls": 4,
+      "elements": [
+        "COACH_B_ROLL",
+        "FOUND_CLIP"
+      ],
+      "continuity_requirement": "intentional_disruption",
+      "coded_effects": [
+        "EFFECT-TR-04",
+        "EFFECT-A-06"
+      ],
+      "editorial_techniques": [
+        "GLITCH_STACK"
+      ],
+      "selection_signals": [
+        "shared_chaos",
+        "pattern_interrupt",
+        "stress_validation"
+      ],
+      "template_id": "CHALLENGE-3-B-Montage-4-6"
+    },
+    "CHALLENGE-4-B-1": {
+      "target_attention_mode": "guided_focus",
+      "isc_priority": "high",
+      "memory_role": "tension_storage",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.0,
+        "max": 3.0
+      },
+      "max_primary_visual_units": 3,
+      "peak_end_weight": "medium",
+      "name": "The Prop-Driven Struggle",
+      "container_id": "CHALLENGE",
+      "preferred_components": [
+        "CHALLENGE",
+        "DEMONSTRATION"
+      ],
+      "base_cls": 1,
+      "elements": [
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-M-01"
+      ],
+      "editorial_techniques": [
+        "DIEGETIC_FOCUS"
+      ],
+      "selection_signals": [
+        "prop_struggle",
+        "tangible_conflict",
+        "single_focus"
+      ],
+      "template_id": "CHALLENGE-4-B-1"
+    },
+    "TURNING_POINT-1-B-1": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "peak_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.2,
+        "max": 3.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Reaction Shot Hold",
+      "container_id": "TURNING_POINT",
+      "preferred_components": [
+        "TURNING_POINT"
+      ],
+      "base_cls": 1,
+      "elements": [
+        "B_ROLL"
+      ],
+      "continuity_requirement": "eyeline_match",
+      "coded_effects": [
+        "EFFECT-M-01"
+      ],
+      "editorial_techniques": [
+        "SONIC_VACUUM"
+      ],
+      "selection_signals": [
+        "reaction_hold",
+        "emotion_readability",
+        "silence_peak"
+      ],
+      "template_id": "TURNING_POINT-1-B-1"
+    },
+    "TURNING_POINT-2-B-1": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "peak_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.2,
+        "max": 3.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Prop-Driven Metaphor",
+      "container_id": "TURNING_POINT",
+      "preferred_components": [
+        "TURNING_POINT",
+        "ARCHETYPAL_MOMENT"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-C-02"
+      ],
+      "editorial_techniques": [
+        "RESONANT_SFX"
+      ],
+      "selection_signals": [
+        "symbolic_pivot",
+        "aha_moment",
+        "metaphor"
+      ],
+      "template_id": "TURNING_POINT-2-B-1"
+    },
+    "TURNING_POINT-3-BB-2": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "peak_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.2,
+        "max": 3.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Whip Pan Pivot",
+      "container_id": "TURNING_POINT",
+      "preferred_components": [
+        "TURNING_POINT",
+        "JUXTAPOSITION"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "COACH_B_ROLL",
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "intentional_disruption",
+      "coded_effects": [
+        "EFFECT-TR-03",
+        "EFFECT-A-11"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "kinetic_pivot",
+        "direction_change",
+        "momentum_reset"
+      ],
+      "template_id": "TURNING_POINT-3-BB-2"
+    },
+    "TURNING_POINT-4-BA-2": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "peak_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "none",
+      "recommended_duration_seconds": {
+        "min": 1.2,
+        "max": 3.5
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The J-Cut Aha Moment",
+      "container_id": "TURNING_POINT",
+      "preferred_components": [
+        "TURNING_POINT",
+        "VOICE_OF_TRUTH"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "COACH_B_ROLL",
+        "A_ROLL"
+      ],
+      "continuity_requirement": "kuleshov_bridge",
+      "coded_effects": [
+        "EFFECT-M-08",
+        "EFFECT-A-02"
+      ],
+      "editorial_techniques": [
+        "J_CUT"
+      ],
+      "selection_signals": [
+        "internal_realization",
+        "contemplation",
+        "audio_reveal"
+      ],
+      "template_id": "TURNING_POINT-4-BA-2"
+    },
+    "RESOLUTION-1-B-1": {
+      "target_attention_mode": "reflective_release",
+      "isc_priority": "medium",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Cinematic Release",
+      "container_id": "RESOLUTION",
+      "preferred_components": [
+        "RESOLUTION"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "CINEMATIC_B_ROLL"
+      ],
+      "continuity_requirement": "invisible_cut",
+      "coded_effects": [
+        "EFFECT-C-02",
+        "EFFECT-TR-02"
+      ],
+      "editorial_techniques": [
+        "SLOW_MOTION"
+      ],
+      "selection_signals": [
+        "release",
+        "relief",
+        "peace_image"
+      ],
+      "template_id": "RESOLUTION-1-B-1"
+    },
+    "RESOLUTION-2-C-1": {
+      "target_attention_mode": "reflective_release",
+      "isc_priority": "medium",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The C-Roll Affirmation",
+      "container_id": "RESOLUTION",
+      "preferred_components": [
+        "RESOLUTION",
+        "ENCOURAGING_CHANGE"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "C_ROLL"
+      ],
+      "continuity_requirement": "invisible_cut",
+      "coded_effects": [
+        "EFFECT-G-03",
+        "EFFECT-TXT-09"
+      ],
+      "editorial_techniques": [
+        "CHIME"
+      ],
+      "selection_signals": [
+        "affirmation",
+        "single_word",
+        "memory_landing"
+      ],
+      "template_id": "RESOLUTION-2-C-1"
+    },
+    "RESOLUTION-3-B-1": {
+      "target_attention_mode": "reflective_release",
+      "isc_priority": "medium",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Bookend B-Roll",
+      "container_id": "RESOLUTION",
+      "preferred_components": [
+        "RESOLUTION",
+        "SYMBOLIC_ECHO"
+      ],
+      "base_cls": 2,
+      "elements": [
+        "COACH_B_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-C-02"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "bookend",
+        "motif_return",
+        "resolved_state"
+      ],
+      "template_id": "RESOLUTION-3-B-1"
+    },
+    "RESOLUTION-4-A-1": {
+      "target_attention_mode": "reflective_release",
+      "isc_priority": "medium",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "keyword_only",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The A-Roll Sigh Moment",
+      "container_id": "RESOLUTION",
+      "preferred_components": [
+        "THE_PAUSE",
+        "RESOLUTION"
+      ],
+      "base_cls": 1,
+      "elements": [
+        "A_ROLL"
+      ],
+      "continuity_requirement": "eyeline_match",
+      "coded_effects": [
+        "EFFECT-M-01"
+      ],
+      "editorial_techniques": [
+        "HUMAN_BREATH"
+      ],
+      "selection_signals": [
+        "direct_relief",
+        "human_release",
+        "pause"
+      ],
+      "template_id": "RESOLUTION-4-A-1"
+    },
+    "VISION-1-B-Montage-3-4": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "guided_labels",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Dream State Montage",
+      "container_id": "VISION",
+      "preferred_components": [
+        "THE_VISION",
+        "THE_VIBE"
+      ],
+      "base_cls": 4,
+      "elements": [
+        "B_ROLL_MONTAGE"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-M-02",
+        "EFFECT-TR-05",
+        "EFFECT-L-04"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "future_montage",
+        "aspiration",
+        "smooth_future_flow"
+      ],
+      "template_id": "VISION-1-B-Montage-3-4"
+    },
+    "VISION-2-C-1": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "guided_labels",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Future Self Mirror",
+      "container_id": "VISION",
+      "preferred_components": [
+        "THE_VISION",
+        "ARCHETYPAL_MOMENT"
+      ],
+      "base_cls": 3,
+      "elements": [
+        "C_ROLL"
+      ],
+      "continuity_requirement": "invisible_cut",
+      "coded_effects": [
+        "EFFECT-M-16",
+        "EFFECT-C-12"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "future_identity",
+        "aspirational_portrait",
+        "mirror_self"
+      ],
+      "template_id": "VISION-2-C-1"
+    },
+    "VISION-3-C-1": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "guided_labels",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The Promise Text Reveal",
+      "container_id": "VISION",
+      "preferred_components": [
+        "THE_VISION",
+        "ENCOURAGING_CHANGE"
+      ],
+      "base_cls": 5,
+      "elements": [
+        "C_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-G-15"
+      ],
+      "editorial_techniques": [
+        "PROMISE_REVEAL"
+      ],
+      "selection_signals": [
+        "complex_path",
+        "promise_frame",
+        "guided_future"
+      ],
+      "template_id": "VISION-3-C-1"
+    },
+    "VISION-4-B-1": {
+      "target_attention_mode": "emotional_peak",
+      "isc_priority": "high",
+      "memory_role": "end_snapshot",
+      "av_congruence_mode": "strict",
+      "text_policy": "guided_labels",
+      "recommended_duration_seconds": {
+        "min": 1.5,
+        "max": 4.0
+      },
+      "max_primary_visual_units": 2,
+      "peak_end_weight": "high",
+      "name": "The First Person POV Experience",
+      "container_id": "VISION",
+      "preferred_components": [
+        "THE_VISION",
+        "THE_VIBE"
+      ],
+      "base_cls": 4,
+      "elements": [
+        "B_ROLL"
+      ],
+      "continuity_requirement": "match_action",
+      "coded_effects": [
+        "EFFECT-M-14",
+        "EFFECT-L-04"
+      ],
+      "editorial_techniques": [],
+      "selection_signals": [
+        "pov_future",
+        "embodied_vision",
+        "presence"
+      ],
+      "template_id": "VISION-4-B-1"
+    }
+  },
+  "container_template_index": {
+    "HOOK": [
+      "HOOK-2-B-1",
+      "HOOK-1-AB-2",
+      "HOOK-3-BA-2",
+      "HOOK-4-BA-2",
+      "HOOK-5-AE-2"
+    ],
+    "SETUP": [
+      "SETUP-1-B-1",
+      "SETUP-3-B-1",
+      "SETUP-2-B-Montage-3-4",
+      "SETUP-4-AB-2"
+    ],
+    "CHALLENGE": [
+      "CHALLENGE-4-B-1",
+      "CHALLENGE-1-B-Montage-3-5",
+      "CHALLENGE-2-AC-2",
+      "CHALLENGE-3-B-Montage-4-6"
+    ],
+    "TURNING_POINT": [
+      "TURNING_POINT-1-B-1",
+      "TURNING_POINT-2-B-1",
+      "TURNING_POINT-4-BA-2",
+      "TURNING_POINT-3-BB-2"
+    ],
+    "RESOLUTION": [
+      "RESOLUTION-4-A-1",
+      "RESOLUTION-2-C-1",
+      "RESOLUTION-3-B-1",
+      "RESOLUTION-1-B-1"
+    ],
+    "VISION": [
+      "VISION-2-C-1",
+      "VISION-1-B-Montage-3-4",
+      "VISION-4-B-1",
+      "VISION-3-C-1"
+    ]
+  },
+  "effect_library": {
+    "EFFECT-M-01": {
+      "effect_id": "EFFECT-M-01",
+      "name": "The Slow Zoom Confession",
+      "category": "motion",
+      "cls_impact": 1,
+      "arousal": 3,
+      "presence": 8,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "TURNING_POINT",
+        "RESOLUTION"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-M-02": {
+      "effect_id": "EFFECT-M-02",
+      "name": "The Speed Ramp Chaos",
+      "category": "motion",
+      "cls_impact": 5,
+      "arousal": 9,
+      "presence": 2,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "CHALLENGE",
+        "VISION"
+      ],
+      "avoid_when": [
+        "dense_text",
+        "low_frame_rate",
+        "soft_emotional_beat"
+      ]
+    },
+    "EFFECT-M-03": {
+      "effect_id": "EFFECT-M-03",
+      "name": "The Anxiety Camera Shake",
+      "category": "motion",
+      "cls_impact": 4,
+      "arousal": 9,
+      "presence": 3,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "CHALLENGE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "RESOLUTION",
+        "EVIDENCE"
+      ]
+    },
+    "EFFECT-M-04": {
+      "effect_id": "EFFECT-M-04",
+      "name": "The Emphasis Punch-In",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "EVIDENCE",
+        "DEMONSTRATION",
+        "TURNING_POINT"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-M-06": {
+      "effect_id": "EFFECT-M-06",
+      "name": "The Rack Focus Shift",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 4,
+      "presence": 5,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "SETUP",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "dense_text"
+      ]
+    },
+    "EFFECT-M-08": {
+      "effect_id": "EFFECT-M-08",
+      "name": "The Vertical Drift",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 3,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "RESOLUTION",
+        "VISION"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-M-14": {
+      "effect_id": "EFFECT-M-14",
+      "name": "The Dynamic Handheld Drift",
+      "category": "motion",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 6,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "HOOK",
+        "VISION"
+      ],
+      "avoid_when": [
+        "dense_text",
+        "explanation_heavy_beat"
+      ]
+    },
+    "EFFECT-M-16": {
+      "effect_id": "EFFECT-M-16",
+      "name": "The Immersive Z-Space Sandwich",
+      "category": "motion",
+      "cls_impact": 3,
+      "arousal": 3,
+      "presence": 10,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "VISION",
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "low_quality_source_layers"
+      ]
+    },
+    "EFFECT-C-01": {
+      "effect_id": "EFFECT-C-01",
+      "name": "The Personal Low Grade",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 2,
+      "presence": 4,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "CHALLENGE"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-C-02": {
+      "effect_id": "EFFECT-C-02",
+      "name": "The Hopeful Grade",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 3,
+      "presence": 5,
+      "attention_role": "resolve",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "RESOLUTION"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-C-03": {
+      "effect_id": "EFFECT-C-03",
+      "name": "The Nostalgic Memory Grade",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 2,
+      "presence": 4,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-C-07": {
+      "effect_id": "EFFECT-C-07",
+      "name": "The Spotlight Focus Highlight",
+      "category": "color",
+      "cls_impact": 2,
+      "arousal": 4,
+      "presence": 5,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "DEMONSTRATION",
+        "EVIDENCE"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-C-12": {
+      "effect_id": "EFFECT-C-12",
+      "name": "The Midas Touch Golden Grade",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 5,
+      "attention_role": "resolve",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "VISION"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-T-01": {
+      "effect_id": "EFFECT-T-01",
+      "name": "The Cinematic Film Grain",
+      "category": "texture",
+      "cls_impact": 1,
+      "arousal": 2,
+      "presence": 4,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "SETUP"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-L-04": {
+      "effect_id": "EFFECT-L-04",
+      "name": "The Aspirational Bloom",
+      "category": "light",
+      "cls_impact": 2,
+      "arousal": 4,
+      "presence": 7,
+      "attention_role": "resolve",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "VISION"
+      ],
+      "avoid_when": [
+        "low_contrast_source"
+      ]
+    },
+    "EFFECT-TR-01": {
+      "effect_id": "EFFECT-TR-01",
+      "name": "The Glitch Transition",
+      "category": "transition",
+      "cls_impact": 4,
+      "arousal": 8,
+      "presence": 3,
+      "attention_role": "punctuate",
+      "congruence_mode": "mismatch_only",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 80
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "RESOLUTION",
+        "reflective_moment"
+      ]
+    },
+    "EFFECT-TR-02": {
+      "effect_id": "EFFECT-TR-02",
+      "name": "The Cinematic Film Burn",
+      "category": "transition",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 5,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "dense_proof"
+      ]
+    },
+    "EFFECT-TR-03": {
+      "effect_id": "EFFECT-TR-03",
+      "name": "The Whip Pan",
+      "category": "transition",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 5,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "TURNING_POINT",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "soft_release"
+      ]
+    },
+    "EFFECT-TR-04": {
+      "effect_id": "EFFECT-TR-04",
+      "name": "The Data Corruption",
+      "category": "transition",
+      "cls_impact": 4,
+      "arousal": 9,
+      "presence": 2,
+      "attention_role": "punctuate",
+      "congruence_mode": "mismatch_only",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 80
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "RESOLUTION",
+        "clarity_first"
+      ]
+    },
+    "EFFECT-TR-05": {
+      "effect_id": "EFFECT-TR-05",
+      "name": "The Gentle Dissolve",
+      "category": "transition",
+      "cls_impact": 1,
+      "arousal": 2,
+      "presence": 4,
+      "attention_role": "resolve",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION",
+        "VISION"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-A-02": {
+      "effect_id": "EFFECT-A-02",
+      "name": "The Internal Thought Reverb",
+      "category": "audio",
+      "cls_impact": 2,
+      "arousal": 3,
+      "presence": 5,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "SETUP",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "direct_instruction"
+      ]
+    },
+    "EFFECT-A-03": {
+      "effect_id": "EFFECT-A-03",
+      "name": "The Tension Drone",
+      "category": "audio",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 4,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "SETUP"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-A-04": {
+      "effect_id": "EFFECT-A-04",
+      "name": "The Cinematic Riser",
+      "category": "audio",
+      "cls_impact": 3,
+      "arousal": 8,
+      "presence": 3,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "soft_release"
+      ]
+    },
+    "EFFECT-A-05": {
+      "effect_id": "EFFECT-A-05",
+      "name": "The Impact Hit",
+      "category": "audio",
+      "cls_impact": 2,
+      "arousal": 7,
+      "presence": 4,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 80
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "quiet_reflection"
+      ]
+    },
+    "EFFECT-A-06": {
+      "effect_id": "EFFECT-A-06",
+      "name": "The Found Clip Audio",
+      "category": "audio",
+      "cls_impact": 2,
+      "arousal": 4,
+      "presence": 4,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-A-11": {
+      "effect_id": "EFFECT-A-11",
+      "name": "The Kinetic Whoosh Accent",
+      "category": "audio",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 4,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": -20,
+        "max": 100
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "EVIDENCE",
+        "CONTRAST"
+      ],
+      "avoid_when": [
+        "reflective_moment"
+      ]
+    },
+    "EFFECT-G-03": {
+      "effect_id": "EFFECT-G-03",
+      "name": "The Kinetic Quote Card",
+      "category": "graphic",
+      "cls_impact": 2,
+      "arousal": 3,
+      "presence": 4,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "RESOLUTION",
+        "VOICE_OF_TRUTH"
+      ],
+      "avoid_when": [
+        "dense_captions"
+      ]
+    },
+    "EFFECT-G-04": {
+      "effect_id": "EFFECT-G-04",
+      "name": "The Takedown Collage",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 8,
+      "presence": 3,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "CHALLENGE",
+        "FRAME_AND_CONTRAST"
+      ],
+      "avoid_when": [
+        "low_load_scene"
+      ]
+    },
+    "EFFECT-G-15": {
+      "effect_id": "EFFECT-G-15",
+      "name": "The Isaac Gradient Flowchart",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 4,
+      "presence": 4,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "VISION",
+        "ENCOURAGING_CHANGE"
+      ],
+      "avoid_when": [
+        "fast_hook"
+      ]
+    },
+    "EFFECT-TXT-09": {
+      "effect_id": "EFFECT-TXT-09",
+      "name": "The Glow Quote Accent",
+      "category": "text",
+      "cls_impact": 1,
+      "arousal": 2,
+      "presence": 4,
+      "attention_role": "resolve",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "RESOLUTION",
+        "VOICE_OF_TRUTH"
+      ],
+      "avoid_when": []
+    },
+    "EFFECT-M-05": {
+      "effect_id": "EFFECT-M-05",
+      "name": "The Dolly Push",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION",
+        "VISION"
+      ],
+      "avoid_when": [
+        "fast_paced_montage"
+      ]
+    },
+    "EFFECT-M-07": {
+      "effect_id": "EFFECT-M-07",
+      "name": "The Reverse Moment",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "static_footage",
+        "high_information_density"
+      ]
+    },
+    "EFFECT-M-09": {
+      "effect_id": "EFFECT-M-09",
+      "name": "The Rotational Dutch Angle Roll",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "TURNING_POINT",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "dense_text",
+        "stability_critical"
+      ]
+    },
+    "EFFECT-M-10": {
+      "effect_id": "EFFECT-M-10",
+      "name": "The Object-Tracked Pin",
+      "category": "motion",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 8,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "EVIDENCE",
+        "DEMONSTRATION"
+      ],
+      "avoid_when": [
+        "unclear_subjects",
+        "fast_motion"
+      ]
+    },
+    "EFFECT-M-11": {
+      "effect_id": "EFFECT-M-11",
+      "name": "The Vertical Parallax",
+      "category": "motion",
+      "cls_impact": 4,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 1000,
+        "max": 3000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "VISION",
+        "SETUP"
+      ],
+      "avoid_when": [
+        "flat_backgrounds",
+        "rapid_editing"
+      ]
+    },
+    "EFFECT-M-12": {
+      "effect_id": "EFFECT-M-12",
+      "name": "The Breathing Effect",
+      "category": "motion",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 6,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 3000,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "high_energy_sequences"
+      ]
+    },
+    "EFFECT-M-13": {
+      "effect_id": "EFFECT-M-13",
+      "name": "The Play Pendulum Float",
+      "category": "motion",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "VISION",
+        "SETUP"
+      ],
+      "avoid_when": [
+        "critical_focus"
+      ]
+    },
+    "EFFECT-M-15": {
+      "effect_id": "EFFECT-M-15",
+      "name": "The 3D Screen Flip",
+      "category": "motion",
+      "cls_impact": 4,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 800
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "dense_text",
+        "information_critical"
+      ]
+    },
+    "EFFECT-C-04": {
+      "effect_id": "EFFECT-C-04",
+      "name": "The High-Contrast Modern Grade",
+      "category": "color",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "sensitive_skin_tones"
+      ]
+    },
+    "EFFECT-C-05": {
+      "effect_id": "EFFECT-C-05",
+      "name": "The Pro 4K Polish",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "RESOLUTION",
+        "VISION"
+      ],
+      "avoid_when": [
+        "stylized_looks"
+      ]
+    },
+    "EFFECT-C-06": {
+      "effect_id": "EFFECT-C-06",
+      "name": "The Sin City Color Isolate",
+      "category": "color",
+      "cls_impact": 4,
+      "arousal": 8,
+      "presence": 9,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "multiple_colors_important",
+        "subtle_narratives"
+      ]
+    },
+    "EFFECT-C-13": {
+      "effect_id": "EFFECT-C-13",
+      "name": "The Romantic Soft-Focus Grade",
+      "category": "color",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "clarity_critical",
+        "active_scenes"
+      ]
+    },
+    "EFFECT-C-14": {
+      "effect_id": "EFFECT-C-14",
+      "name": "The Investigative Grade",
+      "category": "color",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "EVIDENCE",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "warmth_needed",
+        "emotional_opening"
+      ]
+    },
+    "EFFECT-C-15": {
+      "effect_id": "EFFECT-C-15",
+      "name": "The Looming Shadow Grade",
+      "category": "color",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "CHALLENGE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "hopeful_moments",
+        "accessibility_critical"
+      ]
+    },
+    "EFFECT-C-16": {
+      "effect_id": "EFFECT-C-16",
+      "name": "The Playful Pop Grade",
+      "category": "color",
+      "cls_impact": 2,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "VISION"
+      ],
+      "avoid_when": [
+        "solemn_moments"
+      ]
+    },
+    "EFFECT-C-17": {
+      "effect_id": "EFFECT-C-17",
+      "name": "The Gritty Determination Grade",
+      "category": "color",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "vulnerability_moments"
+      ]
+    },
+    "EFFECT-C-18": {
+      "effect_id": "EFFECT-C-18",
+      "name": "The Authentic Raw Grade",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 6,
+      "attention_role": "orient",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "elevated_moments"
+      ]
+    },
+    "EFFECT-C-19": {
+      "effect_id": "EFFECT-C-19",
+      "name": "The Natural Daylight Grade",
+      "category": "color",
+      "cls_impact": 1,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "dramatic_moments"
+      ]
+    },
+    "EFFECT-C-20": {
+      "effect_id": "EFFECT-C-20",
+      "name": "The Fireside Chat Grade",
+      "category": "color",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "cool_tone_required"
+      ]
+    },
+    "EFFECT-C-21": {
+      "effect_id": "EFFECT-C-21",
+      "name": "The Psychedelic Trip Grade",
+      "category": "color",
+      "cls_impact": 4,
+      "arousal": 9,
+      "presence": 9,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "VISION",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "information_clarity",
+        "accessibility_critical"
+      ]
+    },
+    "EFFECT-C-22": {
+      "effect_id": "EFFECT-C-22",
+      "name": "The Graphic Novel Grade",
+      "category": "color",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "punctuate",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "naturalistic_content"
+      ]
+    },
+    "EFFECT-T-02": {
+      "effect_id": "EFFECT-T-02",
+      "name": "The Dreamlike Lens Blur",
+      "category": "texture",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "SETUP",
+        "VISION"
+      ],
+      "avoid_when": [
+        "dense_text",
+        "clarity_critical"
+      ]
+    },
+    "EFFECT-T-03": {
+      "effect_id": "EFFECT-T-03",
+      "name": "The Living Doodle Texture",
+      "category": "texture",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "SETUP",
+        "VISION"
+      ],
+      "avoid_when": [
+        "formal_presentation",
+        "serious_content"
+      ]
+    },
+    "EFFECT-T-07": {
+      "effect_id": "EFFECT-T-07",
+      "name": "The Ink Bleed Overlay",
+      "category": "texture",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 1500
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "CHALLENGE",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "clarity_needed"
+      ]
+    },
+    "EFFECT-T-08": {
+      "effect_id": "EFFECT-T-08",
+      "name": "The Blueprint Grid Overlay",
+      "category": "texture",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 5,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "DEMONSTRATION",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "emotional_moments"
+      ]
+    },
+    "EFFECT-T-09": {
+      "effect_id": "EFFECT-T-09",
+      "name": "The Archival Film Texture",
+      "category": "texture",
+      "cls_impact": 3,
+      "arousal": 5,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "modern_content"
+      ]
+    },
+    "EFFECT-L-03": {
+      "effect_id": "EFFECT-L-03",
+      "name": "The Cathedral Light Rays",
+      "category": "light",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 1000,
+        "max": 3000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "VISION"
+      ],
+      "avoid_when": [
+        "naturalistic_tone",
+        "low_key_lighting"
+      ]
+    },
+    "EFFECT-D-02": {
+      "effect_id": "EFFECT-D-02",
+      "name": "The Kaleidoscope Prism Effect",
+      "category": "distortion",
+      "cls_impact": 4,
+      "arousal": 8,
+      "presence": 9,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 1000
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "VISION",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "clarity_critical",
+        "accessibility_important"
+      ]
+    },
+    "EFFECT-D-03": {
+      "effect_id": "EFFECT-D-03",
+      "name": "The Heat-Wave Mirage",
+      "category": "distortion",
+      "cls_impact": 1,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "VISION",
+        "SETUP"
+      ],
+      "avoid_when": [
+        "clarity_needed",
+        "information_dense"
+      ]
+    },
+    "EFFECT-TR-06": {
+      "effect_id": "EFFECT-TR-06",
+      "name": "The Mask Reveal",
+      "category": "transition",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 800
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "TURNING_POINT",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "fast_pacing",
+        "smooth_flow"
+      ]
+    },
+    "EFFECT-TR-07": {
+      "effect_id": "EFFECT-TR-07",
+      "name": "The Visual Continuity Match-Cut",
+      "category": "transition",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 5,
+      "attention_role": "orient",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 0,
+        "max": 50
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "SETUP"
+      ],
+      "avoid_when": [
+        "intentional_disruption"
+      ]
+    },
+    "EFFECT-TR-08": {
+      "effect_id": "EFFECT-TR-08",
+      "name": "The MKBHD Side-Screen Swipe",
+      "category": "transition",
+      "cls_impact": 4,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 800
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "CHALLENGE",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "information_dense_moments",
+        "rapid_cuts"
+      ]
+    },
+    "EFFECT-TR-09": {
+      "effect_id": "EFFECT-TR-09",
+      "name": "The Text-Behind Depth Shift",
+      "category": "transition",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 100,
+        "max": 500
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "VISION"
+      ],
+      "avoid_when": [
+        "subtle_moments"
+      ]
+    },
+    "EFFECT-TR-10": {
+      "effect_id": "EFFECT-TR-10",
+      "name": "The Invisible Hard Cut",
+      "category": "transition",
+      "cls_impact": 1,
+      "arousal": 5,
+      "presence": 5,
+      "attention_role": "punctuate",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 0,
+        "max": 0
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "gentle_transitions",
+        "meditative_content"
+      ]
+    },
+    "EFFECT-TR-11": {
+      "effect_id": "EFFECT-TR-11",
+      "name": "The Fade to Black Narrative Punctuation",
+      "category": "transition",
+      "cls_impact": 1,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "resolve",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "fast_pacing",
+        "continuous_narratives"
+      ]
+    },
+    "EFFECT-A-01": {
+      "effect_id": "EFFECT-A-01",
+      "name": "The Standard Vocal Chain",
+      "category": "audio",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 7,
+      "attention_role": "orient",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "HOOK",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "intentional_degradation"
+      ]
+    },
+    "EFFECT-A-07": {
+      "effect_id": "EFFECT-A-07",
+      "name": "The Jesse AI Narrator",
+      "category": "audio",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "intimate_moments",
+        "emotional_content"
+      ]
+    },
+    "EFFECT-A-08": {
+      "effect_id": "EFFECT-A-08",
+      "name": "The Environmental Diegetic Layer",
+      "category": "audio",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 6,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "silence_intentional"
+      ]
+    },
+    "EFFECT-A-09": {
+      "effect_id": "EFFECT-A-09",
+      "name": "The AI Dialogue Isolation",
+      "category": "audio",
+      "cls_impact": 1,
+      "arousal": 3,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "EVIDENCE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "ambient_important"
+      ]
+    },
+    "EFFECT-A-10": {
+      "effect_id": "EFFECT-A-10",
+      "name": "The Character Voice Changer",
+      "category": "audio",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "serious_content",
+        "emotion_building"
+      ]
+    },
+    "EFFECT-A-12": {
+      "effect_id": "EFFECT-A-12",
+      "name": "The Audio Rip Extractor",
+      "category": "audio",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "intensify",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "clarity_needed"
+      ]
+    },
+    "EFFECT-G-01": {
+      "effect_id": "EFFECT-G-01",
+      "name": "The Desperation Collage",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "hopeful_tone",
+        "visual_clarity"
+      ]
+    },
+    "EFFECT-G-02": {
+      "effect_id": "EFFECT-G-02",
+      "name": "The Blueprint Reveal",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 6,
+      "presence": 8,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 1500
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "DEMONSTRATION",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "emotional_content",
+        "rapid_pacing"
+      ]
+    },
+    "EFFECT-G-05": {
+      "effect_id": "EFFECT-G-05",
+      "name": "The Animated Bar Chart",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 6,
+      "presence": 8,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 1000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "EVIDENCE",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "subtle_messaging",
+        "emotional_narrative"
+      ]
+    },
+    "EFFECT-G-06": {
+      "effect_id": "EFFECT-G-06",
+      "name": "The Symbolic Echo Reveal",
+      "category": "graphic",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "fast_pacing"
+      ]
+    },
+    "EFFECT-G-07": {
+      "effect_id": "EFFECT-G-07",
+      "name": "The Isaac-Style Flowchart",
+      "category": "graphic",
+      "cls_impact": 5,
+      "arousal": 7,
+      "presence": 9,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 2000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "VISION",
+        "DEMONSTRATION"
+      ],
+      "avoid_when": [
+        "quick_pacing",
+        "emotional_emphasis"
+      ]
+    },
+    "EFFECT-G-08": {
+      "effect_id": "EFFECT-G-08",
+      "name": "The Juxtaposition Split Collage",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "CHALLENGE",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "unified_narrative",
+        "subtle_difference"
+      ]
+    },
+    "EFFECT-G-09": {
+      "effect_id": "EFFECT-G-09",
+      "name": "The Redacted Tease",
+      "category": "graphic",
+      "cls_impact": 3,
+      "arousal": 8,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 800
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "clarity_needed",
+        "educational_content"
+      ]
+    },
+    "EFFECT-G-10": {
+      "effect_id": "EFFECT-G-10",
+      "name": "The Mentor Quote Collage",
+      "category": "graphic",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 1000,
+        "max": 3000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "RESOLUTION",
+        "SETUP"
+      ],
+      "avoid_when": [
+        "rapid_cuts"
+      ]
+    },
+    "EFFECT-G-11": {
+      "effect_id": "EFFECT-G-11",
+      "name": "The Transformation Reveal",
+      "category": "graphic",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 1000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "technical_content"
+      ]
+    },
+    "EFFECT-G-12": {
+      "effect_id": "EFFECT-G-12",
+      "name": "The Clean Icon List",
+      "category": "graphic",
+      "cls_impact": 3,
+      "arousal": 5,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 150,
+        "max": 400
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "DEMONSTRATION",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "emotional_content"
+      ]
+    },
+    "EFFECT-G-13": {
+      "effect_id": "EFFECT-G-13",
+      "name": "The VOX Animated Map Route",
+      "category": "graphic",
+      "cls_impact": 5,
+      "arousal": 6,
+      "presence": 8,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "VISION",
+        "SETUP"
+      ],
+      "avoid_when": [
+        "abstract_ideas"
+      ]
+    },
+    "EFFECT-G-14": {
+      "effect_id": "EFFECT-G-14",
+      "name": "The Underscore Animated Chart",
+      "category": "graphic",
+      "cls_impact": 4,
+      "arousal": 6,
+      "presence": 8,
+      "attention_role": "signal",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 1000
+      },
+      "text_competition_risk": "medium",
+      "best_for": [
+        "EVIDENCE",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "qualitative_content"
+      ]
+    },
+    "EFFECT-G-16": {
+      "effect_id": "EFFECT-G-16",
+      "name": "The Digital Highlighter Text Reveal",
+      "category": "graphic",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 800
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "EVIDENCE",
+        "DEMONSTRATION"
+      ],
+      "avoid_when": [
+        "distributed_emphasis"
+      ]
+    },
+    "EFFECT-G-17": {
+      "effect_id": "EFFECT-G-17",
+      "name": "The Kinetic Video-in-Text",
+      "category": "graphic",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 8,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 500,
+        "max": 2000
+      },
+      "text_competition_risk": "high",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "clarity_critical",
+        "information_dense"
+      ]
+    },
+    "EFFECT-G-18": {
+      "effect_id": "EFFECT-G-18",
+      "name": "The Segment Progress Bar",
+      "category": "graphic",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 5,
+      "attention_role": "orient",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 200,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "immersive_experience"
+      ]
+    },
+    "EFFECT-TXT-01": {
+      "effect_id": "EFFECT-TXT-01",
+      "name": "The Crisp Fade-In",
+      "category": "text",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 6,
+      "attention_role": "orient",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 500
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "RESOLUTION",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "playful_tone"
+      ]
+    },
+    "EFFECT-TXT-02": {
+      "effect_id": "EFFECT-TXT-02",
+      "name": "The Gentle Drift and Fade",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "immerse",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 400,
+        "max": 800
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "RESOLUTION",
+        "VISION"
+      ],
+      "avoid_when": [
+        "fast_pacing"
+      ]
+    },
+    "EFFECT-TXT-03": {
+      "effect_id": "EFFECT-TXT-03",
+      "name": "The Kinetic Pop",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 500
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "multiple_texts"
+      ]
+    },
+    "EFFECT-TXT-04": {
+      "effect_id": "EFFECT-TXT-04",
+      "name": "The Clarity Scale Wipe",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 400,
+        "max": 700
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "TURNING_POINT",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "rapid_succession"
+      ]
+    },
+    "EFFECT-TXT-05": {
+      "effect_id": "EFFECT-TXT-05",
+      "name": "The Quick Color Flash",
+      "category": "text",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 100,
+        "max": 500
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "CHALLENGE"
+      ],
+      "avoid_when": [
+        "calm_pacing"
+      ]
+    },
+    "EFFECT-TXT-06": {
+      "effect_id": "EFFECT-TXT-06",
+      "name": "The Ghostly Echo",
+      "category": "text",
+      "cls_impact": 3,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "immerse",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 800
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "VISION"
+      ],
+      "avoid_when": [
+        "clarity_critical"
+      ]
+    },
+    "EFFECT-TXT-07": {
+      "effect_id": "EFFECT-TXT-07",
+      "name": "The Background Dim",
+      "category": "text",
+      "cls_impact": 1,
+      "arousal": 3,
+      "presence": 5,
+      "attention_role": "orient",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "EVIDENCE",
+        "DEMONSTRATION"
+      ],
+      "avoid_when": [
+        "background_important"
+      ]
+    },
+    "EFFECT-TXT-08": {
+      "effect_id": "EFFECT-TXT-08",
+      "name": "The Subtle Rotational Settle",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 400,
+        "max": 1000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "RESOLUTION",
+        "TURNING_POINT"
+      ],
+      "avoid_when": [
+        "rapid_pacing"
+      ]
+    },
+    "EFFECT-TXT-10": {
+      "effect_id": "EFFECT-TXT-10",
+      "name": "The Character Reveal",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 800,
+        "max": 2000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "EVIDENCE"
+      ],
+      "avoid_when": [
+        "instant_readability"
+      ]
+    },
+    "EFFECT-TXT-11": {
+      "effect_id": "EFFECT-TXT-11",
+      "name": "The Tracking Expand",
+      "category": "text",
+      "cls_impact": 1,
+      "arousal": 4,
+      "presence": 6,
+      "attention_role": "intensify",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 800
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "RESOLUTION",
+        "VISION"
+      ],
+      "avoid_when": [
+        "crowded_layout"
+      ]
+    },
+    "EFFECT-TXT-12": {
+      "effect_id": "EFFECT-TXT-12",
+      "name": "The Liquid Distortion",
+      "category": "text",
+      "cls_impact": 3,
+      "arousal": 7,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "conditional",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 1000
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "CHALLENGE",
+        "HOOK"
+      ],
+      "avoid_when": [
+        "clarity_essential"
+      ]
+    },
+    "EFFECT-TXT-13": {
+      "effect_id": "EFFECT-TXT-13",
+      "name": "The Dynamic Auto-Caption System",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "orient",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": null,
+        "max": null
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "SETUP",
+        "HOOK",
+        "CHALLENGE",
+        "RESOLUTION"
+      ],
+      "avoid_when": [
+        "visual_minimalism"
+      ]
+    },
+    "EFFECT-TXT-14": {
+      "effect_id": "EFFECT-TXT-14",
+      "name": "The Isaac-Style Bounce Reveal",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 6,
+      "presence": 7,
+      "attention_role": "punctuate",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 200,
+        "max": 500
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "HOOK",
+        "VISION"
+      ],
+      "avoid_when": [
+        "solemn_tone"
+      ]
+    },
+    "EFFECT-TXT-15": {
+      "effect_id": "EFFECT-TXT-15",
+      "name": "The Contained Mask Reveal",
+      "category": "text",
+      "cls_impact": 2,
+      "arousal": 5,
+      "presence": 6,
+      "attention_role": "signal",
+      "congruence_mode": "default_safe",
+      "sync_window_ms": {
+        "min": 300,
+        "max": 800
+      },
+      "text_competition_risk": "low",
+      "best_for": [
+        "EVIDENCE",
+        "DEMONSTRATION"
+      ],
+      "avoid_when": [
+        "loose_composition"
+      ]
+    }
+  },
+  "cognitive_rhythm_validator": {
+    "schema_id": "cmf.cognitive.rhythm.validator/v1",
+    "validator_id": "CRV-SCENE-BUILDER-v1",
+    "version": "1.0.0",
+    "compile_target": "SCENE_BUILDER",
+    "runtime_stage": "scene_builder",
+    "sequence_contract": {
+      "estimated_scene_cls_field": "estimated_scene_cls",
+      "mismatch_mode_value": "strategic_mismatch",
+      "strict_mode_value": "strict",
+      "peak_end_stages": [
+        "TURNING_POINT",
+        "RESOLUTION",
+        "VISION"
+      ],
+      "reset_stage_hints": [
+        "SETUP",
+        "RESOLUTION"
+      ],
+      "max_unrecovered_high_cls_run": 1
+    },
+    "gates": [
+      {
+        "gate_id": "CR-01",
+        "name": "CLS Recovery Gate",
+        "metric": "recovery_ratio",
+        "operator": ">=",
+        "value": 0.8,
+        "block_below": 0.5,
+        "weight": 0.25,
+        "repair_hint": "Insert a low-load clarifier, release beat, or pause within one beat of each CLS 4-5 spike.",
+        "notes": "Derived from LC4MP resource-call limits and the need for recovery after dense bursts."
+      },
+      {
+        "gate_id": "CR-02",
+        "name": "Mismatch Resolution Gate",
+        "metric": "mismatch_resolution_ratio",
+        "operator": ">=",
+        "value": 1.0,
+        "block_below": 0.75,
+        "weight": 0.2,
+        "repair_hint": "Resolve strategic audio-visual mismatch by the next beat instead of sustaining it across the sequence.",
+        "notes": "Treat incongruence as a temporary interrupt, not a default mode."
+      },
+      {
+        "gate_id": "CR-03",
+        "name": "Peak-End Anchor Gate",
+        "metric": "peak_end_focus_score",
+        "operator": ">=",
+        "value": 0.8,
+        "block_below": 0.5,
+        "weight": 0.25,
+        "repair_hint": "Allocate the cleanest, most coherent scene templates and effect stacks to turning-point and ending beats.",
+        "notes": "Implements peak-end weighting for remembered moments."
+      },
+      {
+        "gate_id": "CR-04",
+        "name": "Continuity Anchor Gate",
+        "metric": "continuity_anchor_ratio",
+        "operator": ">=",
+        "value": 0.75,
+        "block_below": 0.5,
+        "weight": 0.15,
+        "repair_hint": "Add match-action, eyeline, palette, or sound-bed anchors across dense or montage-heavy runs.",
+        "notes": "Protects eye-tracking continuity and Kuleshov legibility during complex sequences."
+      },
+      {
+        "gate_id": "CR-05",
+        "name": "Cadence Reset Gate",
+        "metric": "reset_space_ratio",
+        "operator": ">=",
+        "value": 0.2,
+        "block_below": 0.1,
+        "weight": 0.15,
+        "repair_hint": "Increase the proportion of reset or bridge beats so the viewer gets perceptual breathing room.",
+        "notes": "Aligns with rhythm, shot-duration, and sequence segmentation research."
+      }
+    ],
+    "score_bands": {
+      "pass": 0.8,
+      "revise": 0.65
+    },
+    "asset_path": "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\gates\\cognitive_rhythm_validator.scene_builder.runtime.json"
+  },
+  "scoring_models": {
+    "scene_selection": {
+      "component_affinity_weight": 0.3,
+      "duration_fit_weight": 0.2,
+      "cls_fit_weight": 0.2,
+      "attention_fit_weight": 0.15,
+      "memory_fit_weight": 0.15
+    },
+    "effect_selection": {
+      "stage_fit_weight": 0.3,
+      "cls_fit_weight": 0.25,
+      "congruence_fit_weight": 0.2,
+      "text_fit_weight": 0.1,
+      "attention_fit_weight": 0.15
+    },
+    "load_estimation": {
+      "arousal_scale_divisor": 12.0,
+      "high_density_element_threshold": 3,
+      "high_density_modifier": 0.6,
+      "medium_density_modifier": 0.25,
+      "guided_label_modifier": 0.35,
+      "explanatory_text_modifier": 0.7,
+      "text_competition_modifier": {
+        "low": 0.0,
+        "medium": 0.2,
+        "high": 0.5
+      },
+      "max_scene_cls": 5.0,
+      "min_scene_cls": 1.0
+    }
+  },
+  "evidence_refs": [
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\ARCHETYPAL_MOMENT\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\ARCHETYPAL_MOMENT\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\CHALLENGE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\CHALLENGE\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\DEMONSTRATION\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\DEMONSTRATION\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\ENCOURAGING_CHANGE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\ENCOURAGING_CHANGE\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\FRAME_AND_CONTRAST\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\FRAME_AND_CONTRAST\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\HOOK\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\HOOK\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\JUXTAPOSITION\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\JUXTAPOSITION\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\RESOLUTION\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\RESOLUTION\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\SETUP\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\SETUP\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\SYMBOLIC_ECHO\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\SYMBOLIC_ECHO\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_COMMUNITY\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_COMMUNITY\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_EVIDENCE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_EVIDENCE\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_PAUSE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_PAUSE\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_TEASE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_TEASE\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_VIBE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_VIBE\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_VISION\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\THE_VISION\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\TURNING_POINT\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\TURNING_POINT\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\VOICE_OF_TRUTH\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\VOICE_OF_TRUTH\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\ZEIGARNIK_LOOP\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\components\\ZEIGARNIK_LOOP\\spec.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\CHALLENGE\\contract.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\CHALLENGE\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\HOOK\\contract.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\HOOK\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\RESOLUTION\\contract.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\RESOLUTION\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\SETUP\\contract.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\SETUP\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\TURNING_POINT\\contract.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\TURNING_POINT\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\VISION\\contract.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\containers\\VISION\\rules.yaml",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\gates\\cognitive_rhythm_validator.scene_builder.runtime.json",
+    "D:\\Work\\CCP_V7_Core\\src\\ccp\\harness\\intelligence\\scene_intelligence\\source\\scene_builder_research_overlay.json"
+  ]
+}

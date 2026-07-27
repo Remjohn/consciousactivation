@@ -1,0 +1,90 @@
+schema_version: conscious-activations-prompt02b-missing-input-report/v1
+report_id: CA-P02B-MISSING-HISTORICAL-P03-2026-07-22
+assessed_on: '2026-07-22'
+controller: /root
+result: STOP_MISSING_REQUIRED_HISTORICAL_INPUT
+requested_operation: V2.1 Spec-Writing Dependency-Stage and Repository Write-Authority Correction
+stop_reason: >-
+  The three required historical Prompt 03 gate artifacts are absent from the active
+  workspace. They cannot be byte-opened, hashed, preserved, or truthfully superseded.
+missing_required_inputs:
+  - path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_FACTORY/CONTROLLER_PREFLIGHT_REPORT.md
+    required_use: controlling Prompt 03 preflight evidence
+    observed_state: NOT_FOUND
+  - path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_FACTORY/PACKET_VALIDATION_RESULT.yaml
+    required_use: controlling Prompt 03 packet-validation evidence
+    observed_state: NOT_FOUND
+  - path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_FACTORY/FACTORY_GATE_VERDICT.yaml
+    required_use: failed gate that Prompt 02B must supersede without overwriting
+    observed_state: NOT_FOUND
+missing_container:
+  path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_FACTORY
+  observed_state: DIRECTORY_NOT_FOUND
+non_substitutable_artifact:
+  path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_AUDIT_FACTORY
+  observed_state: PRESENT
+  disposition: NOT_A_PROMPT_03_WRITING_GATE_RECORD
+search_evidence:
+  active_workspace_filename_search: NO_MATCH
+  active_program_status_inventory: V2_1_SPEC_WRITING_FACTORY_ABSENT
+  broader_D_Work_search:
+    result: NO_MATCH_OBSERVED_BEFORE_BOUNDED_SEARCH_TERMINATION
+    termination_reason: recursive_search_exceeded_bounded_runtime
+verified_available_inputs:
+  prompt02:
+    completion_receipt:
+      bytes: 1787
+      sha256: bb0057effade4074c84063a376d61e908bb636d81e93141290c4a61112456105
+    file_manifest:
+      entries: 21
+      matching_entries: 21
+      failures: 0
+      sha256: 71f7b948926586593873a1d09e65bcc0957dc32fe8035ca73df1ca3c192fa7fd
+    canonical_spec_ledger_sha256: acb0bd4b9d941c389b9a816ae00922770eafc9eafcab1ccf924f0e9b84dcbe2c
+    dependency_dag_sha256: 1cf4299781e76c9c80f4489291a92b0a5e1f666f91b8cf9476307a03da5257eb
+    one_spec_packets_sha256: 78d58372e0aab32aece23d3769a4e1382c9f4e7844c3cc301a65bddca154b1b2
+    writing_queue_sha256: 62ad5315d08dd2b205f21977e97cd7bc9623ca9f41a89f408c63788268e62082
+    lane_manifest_sha256: a647ea17d86c7c8c48075a87431332461c035189d1a2df00f03e5c81ca8611a2
+    quality_registry_sha256: 3e42691dd8c7e3600c1c5ab5160642d5a01bc02c254610bc0ab73675a6913660
+  skills:
+    lifecycle_controller_sha256: b13944fe26a150129817119b5d8f18a6ed128d4d53caba969093c745511a3f5e
+    tech_spec_writer_sha256: 45b561b2aae3e4c1f8c3f2d8fc48b375ec37856703611edecc50ff084844fbcf
+  repository_instructions:
+    builder_agents_sha256: f0a4c0ff025d2b0183c7cbfdb9e8fb0bb22de51e8155a24ed71f5843e353cd24
+    vae_agents_sha256: aab5f8134b51c7f0dfb6022755ab5b7cd365a10d4c14188caed1614ebb7604e8
+    delegation_agents_sha256: 9867cc8a24f4e80184b9b3b4042d48e29018c67ac5357dbcf8e30ea7d97685aa
+  source_archives:
+    - file: CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE.zip
+      sha256: 985227a8645f050e4789456933ac8845108a070ad44441177601fc7c0e8d7e76
+      result: MATCH
+    - file: CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED.zip
+      sha256: b85a2888e33ec9d41e6a82461ec11f4d136b4b3cd42c06a67d94a470afbf0b9d
+      result: MATCH
+    - file: THE_CMF_STUDIO(2).zip
+      sha256: 2fd48bb14f61890ffeb8d9999be6f55b79e8e1156067addc47a08d5cbb91ea4c
+      result: MATCH
+    - file: Specs_Builder_Library_CA_V2_1_1.zip
+      sha256: e40a843d0748de78fce216fbb322437707a8eab0ca649e88bbfe7ab4bc99c69e
+      result: MATCH
+additional_authority_gate:
+  current_v2_1_candidate_status: PENDING_HUMAN_RATIFICATION
+  prompt02_prior_basis: EXPLICIT_OPERATOR_PROMPT_02_ONLY
+  prompt02b_rule: authority_must_be_ratified_before_writing
+  implication: >-
+    Even after the missing Prompt 03 evidence is restored, Prompt 03 reauthorization
+    cannot become active unless an attributable exact-hash ratification receipt exists.
+actions_not_taken:
+  dependency_edges_classified: false
+  writing_waves_issued: false
+  writer_packets_corrected: false
+  vae_packet_retargeted: false
+  prompt03_gate_superseded: false
+  prompt03_reauthorized: false
+  tech_specs_written: false
+  product_files_modified: false
+  historical_records_reconstructed: false
+required_recovery:
+  - Restore the exact historical V2_1_SPEC_WRITING_FACTORY directory and its original bytes, or provide its governed current location.
+  - Verify those bytes against their original manifest before rerunning Prompt 02B.
+  - Supply an attributable exact-hash V2.1 authority ratification receipt before activating Prompt 03 WRITE authority.
+next_permitted_action: restore_and_hash_verify_required_historical_prompt03_evidence_then_rerun_prompt02b

@@ -1,0 +1,58 @@
+schema_version: cmf-builder-allowed-file-scope/v1
+story_id: ST-01.02
+active_mode: SYNTHETIC_DEFINITION
+default: DENY
+existing_files_allowed_to_modify:
+  - path: src/cmf_builder/domain/run.py
+    exact_change: add_source_lock_reference_event_replay_and_state_hash_support
+  - path: src/cmf_builder/application/authority.py
+    exact_change: add_LOCK_EVIDENCE_WORKSPACE_action_only
+  - path: src/cmf_builder/application/ports.py
+    exact_change: add_typed_source_workspace_and_atomic_source_lock_repository_ports
+  - path: src/cmf_builder/adapters/in_memory_run_repository.py
+    exact_change: add_atomic_development_test_source_lock_commit_and_query_support
+  - path: src/cmf_builder/adapters/__init__.py
+    exact_change: add_SOURCE_DIAGNOSTIC_to_SOURCE_LOCKED_edge_and_source_lock_prerequisite_to_the_synthetic_profile_only
+  - path: tests/stories/st_01_01/test_architecture_boundary.py
+    exact_change: add_the_three_new_ST_01_02_source_modules_to_EXPECTED_SOURCE_FILES_only
+  - path: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    exact_change: add_the_three_new_ST_01_02_source_modules_to_the_exact_expected_source_set_only
+new_source_files_allowed:
+  - src/cmf_builder/domain/evidence_workspace.py
+  - src/cmf_builder/application/evidence_commands.py
+  - src/cmf_builder/adapters/file_evidence_workspace.py
+new_test_files_allowed:
+  - tests/stories/st_01_02/__init__.py
+  - tests/stories/st_01_02/test_acceptance.py
+  - tests/stories/st_01_02/test_source_identity.py
+  - tests/stories/st_01_02/test_archive_and_path_safety.py
+  - tests/stories/st_01_02/test_authority_and_idempotency.py
+  - tests/stories/st_01_02/test_observability_and_rollback.py
+  - tests/stories/st_01_02/test_architecture_boundary.py
+completion_outputs_allowed:
+  - development-capsules/ST-01.02/completion/IMPLEMENTATION_REPORT.md
+  - development-capsules/ST-01.02/completion/TEST_RESULTS.json
+  - development-capsules/ST-01.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  - development-capsules/ST-01.02/completion/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/ST-01.02/completion/ROLLBACK_EVIDENCE.md
+  - development-capsules/ST-01.02/completion/STORY_COMPLETION_RECEIPT.yaml
+read_only_required_inputs:
+  - development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+  - development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/STORY_COMPLETION_RECEIPT.yaml
+  - development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml
+  - governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  - governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json
+  - governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  - development-capsules/ST-01.02/SYNTHETIC_SOURCE_PROFILE.json
+explicitly_prohibited:
+  - requirements_Epics_or_other_Story_definitions
+  - PRDs_constitution_ADRs_or_technical_specifications
+  - canonical_category_or_compilation_target_registries
+  - contract_or_database_schemas
+  - Format02_reference_artifacts
+  - VAE_Delegation_or_Program_Control_files
+  - external_dependencies_or_lockfiles
+  - network_provider_GPU_ComfyUI_or_evaluator_code
+  - original_or_supplemental_completion_receipts
+  - files_for_ST_01_02_or_any_later_Story_outside_this_allowlist
+scope_validation_rule: every_changed_path_must_equal_one_listed_write_path_and_every_existing_file_delta_must_match_its_exact_change

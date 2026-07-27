@@ -1,0 +1,53 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-08.03
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/evaluation/independent_scoring.py
+    role: deterministic authority-bound independent scoring, controlled mutation and lifecycle receipts
+    sha256: 2a185d0f88bd72e3353c5a92610d83de4b1a88900eaee78a60b20266915ef8e6
+  - path: tests/stories/st_08_03/test_independent_dimension_scoring.py
+    role: independent dimension, category/profile, downstream and claim-ceiling tests
+    sha256: f7403061d22d3f65575f35c8ea516e2b576d673b1f524354fab24c03b18d8bba
+  - path: tests/stories/st_08_03/test_controlled_mutations.py
+    role: one-variable mutation, lineage, deterministic identity and tamper tests
+    sha256: ebc14f04deff871be9e85d7d226701bf062f32af7a74b15307a4d3ecc5e2b8f0
+  - path: tests/stories/st_08_03/test_non_compensable_gates.py
+    role: exact hard-gate dominance, leakage and protected-label rejection tests
+    sha256: e5bc52d56ce0509cc4c14b77e698012ed1c2ce8eab5f1afe59a99b29d8edf4f9
+  - path: tests/stories/st_08_03/test_lineage_determinism_and_rollback.py
+    role: authority, idempotency, fresh-process, invalidation and rollback tests
+    sha256: 4110907760f7de2064218a320988b240b6bd4935563d4ecf34787c53b5856b57
+files_modified:
+  - development-capsules/OD-AM-001/ST-08.03/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-08.03/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-08.03/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-08.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+production_files_changed:
+  - src/cmf_builder/evaluation/independent_scoring.py
+test_files_changed:
+  - tests/stories/st_08_03/test_independent_dimension_scoring.py
+  - tests/stories/st_08_03/test_controlled_mutations.py
+  - tests/stories/st_08_03/test_non_compensable_gates.py
+  - tests/stories/st_08_03/test_lineage_determinism_and_rollback.py
+shared_files_changed:
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    sha256: 49e369efe9830d70cbf6e7b296bfdb552bf2147c3ee7e4bb5a1ba5e164006a67
+    role: campaign-authorized mechanical exact-source registration for ST-08.03
+paths_outside_capsule_changed: []
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  capsule_files_only: false
+  production_or_test_code_changed: true
+  path_ownership_conformant: true
+  focused_tests: PASS_95_OF_95
+  affected_tests: PASS_166_OF_166
+  architecture_tests: PASS_12_OF_12
+  full_repository_regression: PASS_1405_OF_1405_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS_113_SOURCE_FILES
+  absolute_path_and_secret_scan: PASS
+  external_evaluator_or_provider_used: false
+  protected_or_real_human_evidence_created: false
+  production_or_certification_status_created: false

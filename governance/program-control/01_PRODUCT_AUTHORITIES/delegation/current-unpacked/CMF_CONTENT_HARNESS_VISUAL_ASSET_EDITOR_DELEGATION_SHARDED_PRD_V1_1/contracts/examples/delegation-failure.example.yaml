@@ -1,0 +1,28 @@
+failure_id: FAIL-F02-00971
+classification:
+  family: quality_failure
+  code: COMPOSITION_EFFECTIVENESS_FAILED
+  severity: major
+  terminal: false
+authority:
+  detected_by: visual_asset_editor
+  responsible_system: visual_asset_editor
+  decision_owner: visual_asset_editor
+retry:
+  permitted: true
+  retry_class: targeted_quality_repair
+  consumes_quality_round: true
+  maximum_remaining_rounds: 1
+invalidation:
+  affected_contracts:
+  - RESULT-CANDIDATE-F02-C07
+  affected_nodes:
+  - composition_evaluation
+  - candidate_generation
+  preserve:
+  - identity_reference
+  - background_plate
+next_actions:
+- compile_visual_repair_contract
+- rerun_invalidated_nodes
+diagnostics_ref: diagnostic://vae/FAIL-F02-00971

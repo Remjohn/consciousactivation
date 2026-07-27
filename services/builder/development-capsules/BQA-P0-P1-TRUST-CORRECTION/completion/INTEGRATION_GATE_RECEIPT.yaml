@@ -1,0 +1,61 @@
+schema_version: cmf-builder-bqa-integration-gate-receipt/v1
+receipt_id: bqa-p0-p1-trust-correction-integration-gate-2026-07-16
+capsule_id: BQA-P0-P1-TRUST-CORRECTION
+evaluated_on: "2026-07-16"
+human_authority:
+  phrase: AUTHORIZE BUILDER BQA-P0-P1 TRUST CORRECTION PACKAGE AND OVERRIDE THE CONSTITUTIONAL-INCOMPATIBILITY CAMPAIGN STOP FOR THIS BOUNDED CORRECTION ONLY
+  scope: bounded_P0_P1_trust_correction_and_conditional_campaign_resumption
+capsule_validation:
+  immutable_inputs: PASS_18_OF_18
+  manifest_sha256: 89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7
+  bundle_digest: 84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f
+correction_receipt:
+  path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/STORY_SUPPLEMENTAL_CORRECTION_RECEIPTS.yaml
+  sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+  verdict: PASS
+findings:
+  - {id: BQA-P0-001, verdict: CLOSED_PASS, repair: authority_bound_semantic_and_complete_section_reconstruction}
+  - {id: BQA-P1-003, verdict: CLOSED_PASS, repair: durable_observation_outbox_and_committed_command_result}
+  - {id: BQA-P1-004, verdict: CLOSED_PASS, repair: synchronized_atomic_optimistic_commit}
+  - {id: BQA-P1-005, verdict: CLOSED_PASS, repair: single_atomic_run_event_checkpoint_command_receipt_commit}
+  - {id: BQA-P1-006, verdict: CLOSED_PASS, repair: archive_inspection_bound_to_exact_hashed_bytes}
+validation:
+  correction_suite_fresh_process_1: PASS_125_OF_125
+  correction_suite_fresh_process_2: PASS_125_OF_125
+  full_repository_fresh_process_1: PASS_600_OF_600_NO_MANDATORY_SKIPS
+  full_repository_fresh_process_2: PASS_600_OF_600_NO_MANDATORY_SKIPS
+  python_compilation: PASS_178_OF_178
+  constitutional_precedence: PASS
+  authority_boundaries: PASS
+  replay_and_idempotency: PASS
+  invalidation: PASS
+  atomic_rollback: PASS
+  portable_output_scan: PASS
+  independent_bqa_recheck: PASS_NO_OPEN_P0_OR_P1
+historical_evidence:
+  original_story_receipts_modified: false
+  original_story_receipts_remain_independently_reproducible: true
+  compromised_active_descendants_revalidated: true
+  historical_reproduction: PASS
+post_pass_status_outputs:
+  - {path: docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_REPORT.md, sha256: c4a62a1ff3892e0891c32fb9227607caa77bc4acdc975c494498a1f76fa8f204}
+  - {path: docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_VERDICT.yaml, sha256: ec5b7551ab40dd828678a84848fa665db841b8b792040c5e335a13ad2fb2f928}
+  - {path: docs/validation/SYNTHETIC_BUILDER_DEMONSTRATION_HASH_MATRIX.csv, sha256: 285ff6fe1d7c303e7d7ed395821dea828fc3257c8aad17b2bbfb782ff47386bf}
+  - {path: docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml, sha256: 8f484a80fdf5cf06b63276292486ffad8324d6acdc36e6e19a46747af9553963}
+  - {path: docs/implementation/FULL_BUILDER_CAMPAIGN_PROGRESS.md, sha256: 20036054b6eecf9e27de8be81044701dc41d82bd142e51389b57646d799d7123}
+  - {path: docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml, sha256: 4d130911636ef9e9508ee09370a709799e6ba650046882c2946f4476d6d8889c}
+  - {path: docs/implementation/FULL_BUILDER_RECEIPT_INDEX.yaml, sha256: 813f245ecb04d0e33c65b8485b7f3ab7c948163d897b0623c03c9e74b66f1368}
+  - {path: docs/planning/BUILDER_CORE_IMPLEMENTATION_SEQUENCE.yaml, sha256: 34c6ac03e65bce8d15747078acced2a851cad8823d53ac18f5ec49c3d1a01cf4}
+  - {path: CURRENT_PROJECT_STATUS.md, sha256: a7c76cc8bfef3f67dbe7a05eea5b1cf9a9edda3b9651911a9f6f7e264c7f3a4e}
+  - {path: PROGRAM_STATUS_EXPORT.yaml, sha256: aa43315adc41c989de48edfabb183025d1b7b704034339c5f37efe11154bcba5}
+remaining_findings:
+  p0_p1: []
+  deferred_non_blocking: [BQA-P2-007, BQA-P2-008, BQA-P2-009, BQA-P3-010]
+campaign_resumption:
+  constitutional_incompatibility_stop_cleared: true
+  standing_campaign_authority_active: true
+  next_selected_story: ST-01.03
+  next_story_status: READY
+production_ready: false
+full_product_ready: false
+integration_gate_verdict: PASS

@@ -1,0 +1,195 @@
+schema_version: cmf-builder-story-amendment-proposal/v1
+generated_on: "2026-07-15"
+status: CONFIRMED_APPLIED
+human_confirmation:
+  phrase: CONFIRM BUILDER-FIRST CORE TRACK AND STORY AMENDMENTS
+  received_on: "2026-07-15"
+  authority: current_thread_human_product_authority
+  confirmation_effect: apply_all_nine_conditional_amendments_without_implementation_authority
+application:
+  active_inventory: docs/planning/STORY_INVENTORY.yaml#active_builder_first_amendment_overlay
+  amendment_receipt: docs/planning/BUILDER_FIRST_STORY_AMENDMENT_RECEIPT.yaml
+  validation: docs/planning/BUILDER_FIRST_STORY_AMENDMENT_VALIDATION.json
+  implementation_sequence: docs/planning/BUILDER_CORE_IMPLEMENTATION_SEQUENCE.yaml
+scope_boundary:
+  epic_redesign: false
+  story_inventory_regenerated: false
+  story_ids_added: []
+  story_ids_removed: []
+  story_splits_proposed: []
+  obligation_ownership_changes: []
+  implementation_code_changed: false
+preservation:
+  obligation_count: 410
+  unique_primary_obligation_assignments: 410
+  epic_count: 12
+  story_count: 69
+  confirmed_dependency_edges_preserved_as_historical_evidence: 103
+  ST_01_01_original_completion_receipt_preserved: true
+  ST_01_01_original_completion_receipt_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+amendments:
+  - amendment_id: BF-AM-001
+    story_ids: [ST-01.01]
+    type: ADDITIVE_CONDITIONAL_ACCEPTANCE
+    reason: the generic run lifecycle is complete, but executable selection is hard-limited to Format 02
+    preserve:
+      - original outcome and 15 owned obligations
+      - original Format 02 acceptance and PASS completion receipt
+      - fail-closed external and conversational behavior
+    propose:
+      - add a test-only synthetic category-neutral proof binding for atomic_content_harness
+      - do not register a sixth category or production profile
+      - issue a separate additive BuilderCoreProofAmendmentReceipt
+    dependency_change: none
+    reconfirmation_required: true
+  - amendment_id: BF-AM-002
+    story_ids: [ST-01.02]
+    type: CONDITIONAL_ACCEPTANCE_AND_GATE_ACTIVATION
+    reason: immutable source-lock behavior is generic; BD-004 applies only to real profile corpora
+    preserve:
+      - all 10 owned obligations
+      - archive safety, authority, immutability, portability, and failure behavior
+    propose:
+      synthetic_definition_mode:
+        direct_dependencies: [ST-01.01]
+        applicable_blockers: []
+        source: repository-owned synthetic task definition
+      real_profile_mode:
+        direct_dependencies: [ST-01.01]
+        applicable_blockers: [BD-004]
+      external_or_conversational_modes:
+        applicable_blockers: [BD-014, HD-006]
+    reconfirmation_required: true
+  - amendment_id: BF-AM-003
+    story_ids: [ST-02.05]
+    type: CONDITIONAL_DEPENDENCY
+    reason: a governed task may arrive with a predeclared atomic boundary and need validation/ratification without syntax induction
+    preserve:
+      - all 6 owned obligations
+      - one ratified and frozen Draft Harness boundary outcome
+      - original discovered-boundary path
+    propose:
+      DECLARED_BOUNDARY:
+        direct_dependencies: [ST-01.02]
+        applicable_blockers: []
+      DISCOVERED_BOUNDARY:
+        direct_dependencies: [ST-02.04]
+        applicable_blockers: [BD-004, BD-007]
+      CONVERSATIONAL_DISCOVERY:
+        additional_blockers: [HD-006]
+    backward_only: true
+    reconfirmation_required: true
+  - amendment_id: BF-AM-004
+    story_ids: [ST-03.03]
+    type: CONDITIONAL_DEPENDENCY_AND_GATE_ACTIVATION
+    reason: canonical Harness IR can compile a complete pre-ratified synthetic decision package without interactive Genesis or external-target fields
+    preserve:
+      - all 8 owned obligations
+      - original interactive Genesis path through ST-03.02
+      - Activative lineage and schema-evolution rules
+    propose:
+      PRE_RATIFIED_SYNTHETIC_INPUT:
+        direct_dependencies: [ST-02.05]
+        applicable_blockers: []
+      INTERACTIVE_GENESIS:
+        direct_dependencies: [ST-03.02]
+      EXTERNAL_TARGET_FIELDS:
+        additional_blockers: [BD-014]
+    backward_only: true
+    reconfirmation_required: true
+  - amendment_id: BF-AM-005
+    story_ids: [ST-04.04]
+    type: CONDITIONAL_GATE_ACTIVATION
+    reason: Builder-internal phase/context handoffs do not require external VAE or Delegation interface authority
+    preserve:
+      - all 9 owned obligations
+      - typed ownership, mutation limits, invalidation, and no-silent-rewrite behavior
+    propose:
+      BUILDER_INTERNAL_HANDOFF:
+        direct_dependencies: [ST-04.03]
+        applicable_blockers: []
+      EXTERNAL_PRODUCT_HANDOFF:
+        direct_dependencies: [ST-04.03]
+        applicable_blockers: [BD-014]
+    reconfirmation_required: true
+  - amendment_id: BF-AM-006
+    story_ids: [ST-04.01, ST-04.05, ST-05.01, ST-05.02]
+    type: CONDITIONAL_SKILL_POLICY_GATE
+    reason: generic capability/skill requirement compilation needs BD-010 but not corpus, conversational, or production-certification evidence
+    preserve:
+      - every existing primary obligation owner
+      - full evaluated-skill branches for later profiles
+    propose:
+      SYNTHETIC_CORE:
+        applicable_blockers: [BD-010]
+        minimum_policy: approved empty registry with deterministic code-owned capabilities
+      REAL_PROFILE_OR_CERTIFICATION:
+        retain_current_profile_and_certification_blockers: true
+    reconfirmation_required: true
+  - amendment_id: BF-AM-007
+    story_ids: [ST-07.02]
+    type: CONDITIONAL_DEPENDENCY_AND_ACCEPTANCE
+    reason: the Atomic Content Harness target compiler must be provable before category adapters and external target registration
+    preserve:
+      - all 4 owned obligations
+      - original category-native production-profile path
+      - prohibition on borrowed VAE or Delegation authority
+    propose:
+      GENERIC_ATOMIC_CONTENT_HARNESS:
+        direct_dependencies: [ST-03.05, ST-04.05, ST-05.02]
+        category_adapter_ref: not_applied_synthetic_proof
+        applicable_blockers: []
+        required_marker: synthetic_not_certifiable
+      CATEGORY_NATIVE_ATOMIC_CONTENT_HARNESS:
+        direct_dependencies: [ST-07.01]
+        retain_original_acceptance: true
+    backward_only: true
+    reconfirmation_required: true
+  - amendment_id: BF-AM-008
+    story_ids: [ST-07.04]
+    type: CONDITIONAL_DEPENDENCY_AND_ACCEPTANCE
+    reason: Builder-owned Atomic Harness validation must not wait for VAE/Delegation handoff compilation
+    preserve:
+      - all 4 owned obligations
+      - cross-target non-flattening and external compatibility branch
+    propose:
+      ATOMIC_CONTENT_HARNESS_ONLY:
+        direct_dependencies: [ST-07.02]
+        applicable_blockers: []
+      EXTERNAL_TARGET_COMPATIBILITY:
+        direct_dependencies: [ST-07.03]
+        applicable_blockers: [BD-014]
+    backward_only: true
+    reconfirmation_required: true
+  - amendment_id: BF-AM-009
+    story_ids: [ST-11.01]
+    type: CONDITIONAL_DEPENDENCY_AND_AUTHORIZATION_SCOPE
+    reason: Development Capsule generation is a primary Builder product outcome and cannot require the complete Control Tower, production certification, or external integration first
+    preserve:
+      - all 6 owned obligations
+      - original full-product capsule branch and hash/trace failure behavior
+    propose:
+      SYNTHETIC_BUILDER_PROOF:
+        direct_dependencies: [ST-03.05, ST-04.05, ST-05.02, ST-07.04]
+        applicable_blockers: []
+        authorization_outcome: PROTOTYPE_PROOF_ONLY
+      FULL_PRODUCT_OR_REFERENCE_PROFILE:
+        retain_original_direct_dependencies: true
+        retain_original_blockers: true
+    backward_only: true
+    reconfirmation_required: true
+split_analysis:
+  split_required: false
+  rationale: >-
+    Every affected Story still has one stable primary outcome. The coupling is
+    caused by activation and dependency rules, not by two independently valuable
+    outcomes that require separate Story identities. Conditional modes are the
+    narrowest correction and preserve all historical Story evidence.
+traceability_validation:
+  obligations_lost: []
+  obligations_duplicated: []
+  obligations_reassigned: []
+  forward_edges_proposed: []
+  historical_confirmation_rewritten: false
+confirmation_satisfied: true
+implementation_authorized: false

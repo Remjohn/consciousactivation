@@ -1,0 +1,99 @@
+schema_version: cmf-builder-story-amendment-proposal/v1
+proposal_id: PX-AM-001
+generated_on: "2026-07-16"
+status: COMPLETE_PASS
+trigger: >-
+  The confirmed queue has no dependency-ready Story, while the locally usable
+  synthetic proof still lacks the earliest operator-facing and durable capabilities
+  required by the standing campaign priority order.
+authority_effect:
+  constitution_changed: false
+  PRD_changed: false
+  confirmed_69_story_inventory_changed: false
+  confirmed_410_obligations_added_removed_or_reassigned: false
+  historical_receipts_changed: false
+gap_proof:
+  generic_operator_task_ingestion:
+    current_evidence: ST-01.02 accepts only the governed repository-owned synthetic definition path
+    inventory_basis: [FR-009, FR-010, FR-011, FR-012, FR-013, FR-014, FR-015, FR-016, FR-017, FR-018]
+    current_primary_owner: ST-01.02
+    gap: no confirmed dependency-ready outcome accepts an operator-supplied category-neutral task manifest
+  durable_governed_persistence:
+    current_evidence: current implementation adapter is explicitly in-memory and non-production
+    inventory_basis: [ADR-001, ADR-005, FR-002, FR-003, FR-006, FR-007, FR-050, NFR-REL-002]
+    current_primary_owners: [ST-01.01, ST-03.02]
+    gap: persistence semantics exist but no confirmed early independent Story proves cross-process durable resume
+  operator_command_surface:
+    current_evidence: TS-01 specifies CLI adapters while confirmed command UI ownership is late in the blocked Control Tower chain
+    inventory_basis: [ADR-005, UXC-002, FR-001, FR-003, FR-006, FR-007, FR-120, FR-125, FR-126]
+    current_primary_owners: [ST-01.01, ST-10.10, ST-10.13]
+    gap: no dependency-ready generic operator command surface can ingest compile inspect or export a Builder run
+  generic_nonfixture_compilation:
+    current_evidence: ST-07.02 PASS compiles exactly synthetic_text_normalization_v1
+    inventory_basis: [ADR-004, FR-051, FR-052, FR-053, FR-054, FR-055, FR-056, FR-057, FR-058, FR-059, FR-171, FR-177]
+    current_primary_owners: [ST-03.03, ST-03.04, ST-07.02, ST-07.04]
+    gap: no confirmed dependency-ready outcome compiles a second operator-supplied category-neutral task
+proposed_supplemental_units:
+  - unit_id: ST-01.02-GENERIC-TASK-INGESTION
+    parent_story: ST-01.02
+    outcome: an operator-supplied category-neutral task manifest is validated and source-locked without a repository-owned fixed fixture
+    dependencies: [ST-01.02]
+    primary_obligation_ownership_change: false
+    traceability_mode: supplemental_subscope_of_existing_primary_owner
+    prohibited: [Format02, conversational_data, external_runtime, production_claim]
+  - unit_id: ST-01.01-DURABLE-RUN-PERSISTENCE
+    parent_story: ST-01.01
+    outcome: one governed run and its command receipts survive a fresh process and resume without identity drift
+    dependencies: [ST-01.01]
+    primary_obligation_ownership_change: false
+    traceability_mode: supplemental_subscope_of_existing_primary_owner
+    prohibited: [production_database_claim, cloud_service, external_transport]
+  - unit_id: ST-10.10-BUILDER-CORE-COMMAND-SURFACE
+    parent_story: ST-10.10
+    outcome: an operator can ingest compile inspect and export one category-neutral Builder run through a bounded command surface
+    dependencies: [ST-01.02-GENERIC-TASK-INGESTION, ST-01.01-DURABLE-RUN-PERSISTENCE]
+    conditional_dependency_correction: bypass_late_Control_Tower_visual_shell_for_Builder_Core_command_only_mode
+    primary_obligation_ownership_change: false
+    traceability_mode: supplemental_subscope_of_existing_primary_owner
+    prohibited: [Control_Tower_UI, external_product_commands, production_claim]
+  - unit_id: ST-07.02-GENERIC-TASK-COMPILATION
+    parent_story: ST-07.02
+    outcome: a second governed operator-supplied category-neutral task compiles to a portable AtomicHarnessDefinition package
+    dependencies: [ST-10.10-BUILDER-CORE-COMMAND-SURFACE, ST-07.02, ST-07.04, ST-11.01]
+    primary_obligation_ownership_change: false
+    traceability_mode: supplemental_subscope_of_existing_primary_owner
+    prohibited: [Format02, real_profile_certification, VAE, Delegation_runtime, external_provider]
+dependency_integrity:
+  backward_only: true
+  completed_parent_receipts_preserved: true
+  external_product_authority_absorbed: false
+  new_obligations_required: false
+implementation_authorization:
+  current: COMPLETE_PASS
+  rule: fulfilled_by_path_owned_PX_AM_001_campaign_capsule_and_receipts
+human_confirmation:
+  required: false_completed
+  exact_phrase: CONFIRM BUILDER PRODUCTIZATION SUPPLEMENTAL STORY AMENDMENT PX-AM-001
+  received: true_by_subsequent_explicit_PX_AM_001_execution_authority
+  effect_of_confirmation: authorize planning overlay and capsule preparation only under the existing standing campaign; no production or certification claim
+execution_authorization:
+  phrase: AUTHORIZE PX-AM-001 PATH-OWNED PARALLEL PRODUCTIZATION EXECUTION
+  received_on: "2026-07-16"
+  scope: PZ_01_through_PZ_04_only
+  canonical_repository: D:/Work/CONSCIOUS_ACTIVATIONS/01_ATOMIC_HARNESS_BUILDER
+  path_owned_parallel_writes: authorized
+  production_or_certification_claims: prohibited
+validation_verdict: PASS_CONFIRMED_AMENDMENT
+completion:
+  PZ_01: PASS
+  PZ_02: PASS
+  PZ_03: PASS
+  PZ_04: PASS
+  primary_obligation_ownership_changed: false
+  production_ready: false
+  certified: false
+  receipts:
+    PZ_01: development-capsules/PX-AM-001/receipts/PZ-01_RECEIPT.yaml
+    PZ_02: development-capsules/PX-AM-001/receipts/PZ-02_RECEIPT.yaml
+    PZ_03: development-capsules/PX-AM-001/receipts/PZ-03_RECEIPT.yaml
+    PZ_04: development-capsules/PX-AM-001/receipts/PZ-04_RECEIPT.yaml

@@ -1,0 +1,27 @@
+schema_version: cmf-builder-empty-skill-policy-reference/v1
+branch_id: ST-01.01-SYNTHETIC-PROOF
+policy:
+  path: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  sha256: 260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c
+  disposition: docs/planning/BD010_BUILDER_CORE_DISPOSITION.yaml
+  scope: synthetic_builder_core_proof_only
+registry:
+  path: governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  version: "1.0.0"
+  skills: []
+schema:
+  path: governance/schemas/empty-skill-registry.schema.json
+  sha256: e76be265d96df3c902a26989fa2c08309f6964bf96e4ac17ce850684de44f1c7
+receipt:
+  path: governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json
+  sha256: 79164fa7418d3750ffefee116264b1ca44533c8073afb5485b84089ebd945ee1
+enforcement:
+  code_owned_deterministic_capabilities_only: true
+  external_skills_required: false
+  dynamic_discovery_allowed: false
+  undeclared_skill_use: fail_closed
+  adding_external_skill_requires_new_immutable_harness_version: true
+non_inheritance:
+  production_harnesses_need_no_skills: false
+  other_BD_010_subscopes_closed: false

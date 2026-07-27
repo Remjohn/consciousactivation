@@ -1,0 +1,5 @@
+from ccp_studio.contracts.studio_pipeline_recipe_harness import PipelineApprovalStatus, PipelineRunSummary, PipelineStepStatus
+class PipelineRunSummaryService:
+    def summarize(self, run):
+        total=len(run.step_runs); succeeded=len([s for s in run.step_runs if s.status==PipelineStepStatus.SUCCEEDED]); failed=len([s for s in run.step_runs if s.status==PipelineStepStatus.FAILED]); blocked=len([s for s in run.step_runs if s.status==PipelineStepStatus.BLOCKED]); pending=len([g for g in run.approval_gates if g.required and g.status==PipelineApprovalStatus.PENDING]); next_step=next((s.step_id for s in run.step_runs if s.status in {PipelineStepStatus.PLANNED, PipelineStepStatus.BLOCKED, PipelineStepStatus.APPROVAL_REQUIRED}), None)
+        return PipelineRunSummary(pipeline_run_id=run.pipeline_run_id, recipe_id=run.recipe_id, status=run.status, total_steps=total, succeeded_steps=succeeded, failed_steps=failed, blocked_steps=blocked, pending_approval_count=pending, artifact_count=len(run.input_artifacts)+sum(len(s.output_artifact_ids) for s in run.step_runs), blockers=run.blockers, next_step_id=next_step)

@@ -1,0 +1,226 @@
+{
+  "$defs": {
+    "CoverageItem": {
+      "additionalProperties": false,
+      "properties": {
+        "ingredient_requirement_id": {
+          "title": "Ingredient Requirement Id",
+          "type": "string"
+        },
+        "ingredient_role": {
+          "title": "Ingredient Role",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/RequirementStatus"
+        },
+        "provisional_quality": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provisional Quality"
+        },
+        "source_segment_hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Segment Hint"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "ingredient_requirement_id",
+        "ingredient_role",
+        "status"
+      ],
+      "title": "CoverageItem",
+      "type": "object"
+    },
+    "InterviewState": {
+      "enum": [
+        "rapport",
+        "safety",
+        "authority",
+        "cinematic",
+        "vulnerability",
+        "reflection",
+        "teaching",
+        "humor",
+        "invitation",
+        "edge_pressure"
+      ],
+      "title": "InterviewState",
+      "type": "string"
+    },
+    "LiveCue": {
+      "additionalProperties": false,
+      "properties": {
+        "cue_id": {
+          "title": "Cue Id",
+          "type": "string"
+        },
+        "cue_type": {
+          "title": "Cue Type",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "ingredient_role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ingredient Role"
+        },
+        "proposed_at_tick": {
+          "minimum": 0,
+          "title": "Proposed At Tick",
+          "type": "integer"
+        },
+        "suppressed": {
+          "default": false,
+          "title": "Suppressed",
+          "type": "boolean"
+        },
+        "suppression_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suppression Reason"
+        },
+        "accepted_by_interviewer": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accepted By Interviewer"
+        }
+      },
+      "required": [
+        "cue_id",
+        "cue_type",
+        "text",
+        "proposed_at_tick"
+      ],
+      "title": "LiveCue",
+      "type": "object"
+    },
+    "RequirementStatus": {
+      "enum": [
+        "planned",
+        "targeted",
+        "partial",
+        "captured",
+        "quality_passed",
+        "substituted",
+        "missing",
+        "pickup_requested",
+        "waived"
+      ],
+      "title": "RequirementStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "expression_session_id": {
+      "title": "Expression Session Id",
+      "type": "string"
+    },
+    "interview_brief_id": {
+      "title": "Interview Brief Id",
+      "type": "string"
+    },
+    "active_contract_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Active Contract Id"
+    },
+    "current_interview_state": {
+      "$ref": "#/$defs/InterviewState"
+    },
+    "emotional_peak_active": {
+      "default": false,
+      "title": "Emotional Peak Active",
+      "type": "boolean"
+    },
+    "coverage_items": {
+      "items": {
+        "$ref": "#/$defs/CoverageItem"
+      },
+      "title": "Coverage Items",
+      "type": "array"
+    },
+    "cues": {
+      "items": {
+        "$ref": "#/$defs/LiveCue"
+      },
+      "title": "Cues",
+      "type": "array"
+    },
+    "last_updated_tick": {
+      "minimum": 0,
+      "title": "Last Updated Tick",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "expression_session_id",
+    "interview_brief_id",
+    "current_interview_state",
+    "coverage_items",
+    "last_updated_tick"
+  ],
+  "title": "LiveIngredientCoverageState",
+  "type": "object"
+}

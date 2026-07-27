@@ -1,0 +1,40 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-03.05
+active_mode: CONSTITUTIONAL_PRECEDENCE_VALIDATION
+verdict: PASS
+success_path:
+  required_events:
+    - ST-03.05:ConstitutionalValidationCompleted
+    - ST-03.05:CrossArtifactCompletenessValidated
+    - ST-03.05:ConstitutionalPrecedenceValidated
+    - ST-03.05:OutcomeVerified
+  observed_in_deterministic_success_context: PASS_4_OF_4
+replay_conflict_and_invalidation:
+  ST-03.05:ValidationReplayReturned: PASS
+  ST-03.05:ConstitutionalConflictDetected: PASS
+  ST-03.05:ConstitutionalValidationInvalidated: PASS
+  ST-03.05:OutcomeRejected: PASS
+required_fields:
+  run_story_ir_artifact_set_manifest: PASS
+  policy_constitution_and_builder_PRD_hashes: PASS
+  report_receipt_authority_and_versions: PASS
+  correlation_causation_command_and_stream: PASS
+  finding_codes_artifact_paths_and_IR_nodes: PASS
+  coverage_count: PASS_21
+  rich_lineage_disposition: EXPLICIT_NOT_APPLICABLE_SEPARATE_KEYS
+  compatibility: PASS_HARNESS_IR_1_0_0_AND_MANIFEST_1_0_0
+  invalidation_reference: PASS
+payload_boundaries:
+  artifact_payloads_logged: false
+  source_content_logged: false
+  personal_data_logged: false
+  secrets_or_tokens_logged: false
+  model_prompts_logged: false
+  external_telemetry_used: false
+  production_claim_emitted: false
+deterministic_evidence:
+  report_id: constitutional-report_36ea35248e047164699e5bd0c5cf594ccd62be41df7d2a371f7048f530ca3297
+  report_hash: sha256:36ea35248e047164699e5bd0c5cf594ccd62be41df7d2a371f7048f530ca3297
+  receipt_id: constitutional-receipt_695a2645fd89ccba5f070a90fd0b81a07d0f51218e59693413cebfd09af13c2f
+  receipt_hash: sha256:695a2645fd89ccba5f070a90fd0b81a07d0f51218e59693413cebfd09af13c2f
+  report_and_receipt_fresh_context_equality: PASS

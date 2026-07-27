@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "anti_cliche_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Anti Cliche Score",
+      "type": "number"
+    },
+    "audience_fit": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Audience Fit",
+      "type": "number"
+    },
+    "audience_semiotic_evidence": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Audience Semiotic Evidence",
+      "type": "array"
+    },
+    "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "coach_identity_fit": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Coach Identity Fit",
+      "type": "number"
+    },
+    "recognition_carrier": {
+      "title": "Recognition Carrier",
+      "type": "string"
+    },
+    "recognition_intent": {
+      "title": "Recognition Intent",
+      "type": "string"
+    },
+    "role_activation_map": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Role Activation Map",
+      "type": "object"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    },
+    "zero_second_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Zero Second Score",
+      "type": "number"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "recognition_intent",
+    "recognition_carrier",
+    "audience_semiotic_evidence",
+    "role_activation_map",
+    "wrong_reading_locks",
+    "zero_second_score",
+    "anti_cliche_score",
+    "coach_identity_fit",
+    "audience_fit"
+  ],
+  "title": "VisualSemanticCandidate",
+  "type": "object"
+}

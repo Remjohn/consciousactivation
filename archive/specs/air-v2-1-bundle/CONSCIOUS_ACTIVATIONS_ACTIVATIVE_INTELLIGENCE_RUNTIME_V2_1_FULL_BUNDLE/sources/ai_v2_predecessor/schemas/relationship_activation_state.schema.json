@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "last_call_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "last_reaction_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "next_allowed_transitions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Next Allowed Transitions",
+      "type": "array"
+    },
+    "prospect_id": {
+      "title": "Prospect Id",
+      "type": "string"
+    },
+    "smallest_useful_commitment": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Smallest Useful Commitment"
+    },
+    "source_message_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Source Message Refs",
+      "type": "array"
+    },
+    "stage": {
+      "enum": [
+        "unobserved",
+        "observed",
+        "publicly_recognized",
+        "replied",
+        "idea_elevated",
+        "micro_committed",
+        "reelcast_proposed",
+        "scheduled",
+        "recorded",
+        "asset_delivered",
+        "offer_revealed",
+        "client"
+      ],
+      "title": "Stage",
+      "type": "string"
+    },
+    "state_id": {
+      "title": "State Id",
+      "type": "string"
+    },
+    "wrong_reading_locks": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "state_id",
+    "prospect_id",
+    "stage",
+    "next_allowed_transitions"
+  ],
+  "title": "RelationshipActivationState",
+  "type": "object"
+}

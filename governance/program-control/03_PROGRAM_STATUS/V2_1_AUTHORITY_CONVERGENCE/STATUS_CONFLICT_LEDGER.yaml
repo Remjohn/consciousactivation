@@ -1,0 +1,77 @@
+schema_version: conscious-activations-status-conflict-ledger/v1
+ledger_id: CA-PC-V2.1-CONFLICTS-2026-07-22
+status: RECONCILED_WITH_NONBLOCKING_GATES_OPEN
+conflicts:
+  - id: STC-V2.1-001
+    owner: atomic_harness_builder
+    class: stale_active_status
+    conflict: active_PROGRAM_STATUS_EXPORT_reported_OD_AM_001_14_of_22_while_terminal_summary_and_handoff_report_OD_AM_005_69_of_69
+    higher_current_evidence:
+      - 01_ATOMIC_HARNESS_BUILDER/docs/implementation/offline-development/OFFLINE_IMPLEMENTATION_TERMINAL_SUMMARY.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/docs/evidence-closure/TERMINAL_STATE_RECONCILIATION.yaml
+    correction: active_export_terminal_overlay_added_and_old_campaign_section_marked_historical
+    status: resolved
+
+  - id: STC-V2.1-002
+    owner: atomic_harness_builder
+    class: stale_active_status
+    conflict: current_long_form_status_ended_at_ST_08_05_while_terminal_summary_records_OD_AM_005_complete
+    correction: terminal_status_overlay_appended_without_removing_checkpoints
+    status: resolved
+
+  - id: STC-V2.1-003
+    owner: program_control
+    class: stale_program_projection
+    conflict: Program_Control_reported_Builder_Step_4_not_started_after_Builder_export_recorded_Step_4_complete_and_later_bounded_campaigns
+    correction: master_dashboard_and_stage_registry_reconciled_to_step_4_complete_and_terminal_offline_coverage
+    status: resolved
+
+  - id: STC-V2.1-004
+    owner: visual_asset_editor
+    class: stale_program_reconciliation_reference
+    conflict: active_VAE_status_and_readiness_surfaces_reported_CRC_401_and_CRC_402_Program_Control_reconciliation_pending_after_canonical_resolution
+    correction: active_current_overlays_now_reference_resolved_canonical_records
+    status: resolved
+
+  - id: STC-V2.1-005
+    owner: program_control
+    class: historical_record_not_conflict
+    conflict: V2_1_MISSING_INPUT_REPORT_records_a_prior_stop_while_all_inputs_are_now_present
+    correction: none_historical_record_preserved_and_current_source_lock_explicitly_supersedes_preflight
+    status: historical_valid
+
+  - id: STC-V2.1-006
+    owner: program_control
+    class: authority_state_guard
+    conflict: current_V1_1_authority_chain_and_new_V2_1_draft_documents_coexist
+    correction: V2_1_documents_registered_as_candidates_only_pending_attributable_ratification
+    status: resolved_no_authority_collision
+
+  - id: STC-V2.1-007
+    owner: atomic_harness_builder
+    class: product_identity_guard
+    conflict: structural_capability_name_activative_intelligence_pack_compiler_can_be_misread_as_the_semantic_runtime
+    correction: registry_and_matrices_explicitly_state_Activative_Contract_Compiler_not_equal_to_AIR;_behavior_and_historical_receipts_unchanged
+    status: contained_pending_post_ratification_naming_or_documentation_work
+
+  - id: STC-V2.1-008
+    owner: conscious_activations_studio
+    class: authority_precedence
+    conflict: Studio_reference_archive_describes_Format_02_as_the_strongest_brownfield_slice_while_V2_1_candidate_defers_Format_02_activation
+    correction: Studio_archive_classified_reference_only;current_Format_02_state_remains_contract_compatible_not_certified;candidate_deferral_requires_ratification
+    status: resolved_no_current_authority_collision
+
+  - id: STC-V2.1-009
+    owner: program_control
+    class: dated_historical_status_projection
+    conflict: 2026_07_15_STATUS_TRUTH_RECONCILIATION_and_prior_convergence_outputs_contain_truth_that_was_current_on_their_record_dates
+    correction: records_preserved_unmodified;MASTER_STATUS_stage_registry_dependency_map_and_this_2026_07_22_package_are_the_current_projection
+    status: historical_valid_not_current
+
+open_nonblocking_matters:
+  - CA_V2_1_human_ratification_pending
+  - Delegation_RC4_unsigned_and_unpublished
+  - Builder_external_evidence_and_packaging_release_gate_open
+  - VAE_evaluator_compute_recovery_real_Format02_and_Stage5_gates_open
+historical_evidence_modified: false

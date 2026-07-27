@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-021
+enabled: true
+priority:
+  tier: quality
+  rank: 8
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: full_width_pan_seconds
+    operator: lt
+    value: 7.0
+route_hints:
+  corrective_moves:
+    - slow_pan
+    - shorten_traverse
+    - cut_to_new_frame

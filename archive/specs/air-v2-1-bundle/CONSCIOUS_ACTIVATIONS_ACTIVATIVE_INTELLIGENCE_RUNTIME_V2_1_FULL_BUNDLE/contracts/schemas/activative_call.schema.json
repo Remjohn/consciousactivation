@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "ActivationDomain": {
+      "enum": [
+        "source",
+        "relationship",
+        "audience"
+      ],
+      "title": "ActivationDomain",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "title": "Call Id",
+      "type": "string"
+    },
+    "call_text": {
+      "title": "Call Text",
+      "type": "string"
+    },
+    "domain": {
+      "$ref": "#/$defs/ActivationDomain"
+    },
+    "edge": {
+      "title": "Edge",
+      "type": "string"
+    },
+    "intended_reaction": {
+      "title": "Intended Reaction",
+      "type": "string"
+    },
+    "interview_asset_contract_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "pressure_dose": {
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Pressure Dose",
+      "type": "integer"
+    },
+    "recognized_premise": {
+      "title": "Recognized Premise",
+      "type": "string"
+    },
+    "relationship_state_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "smallest_useful_commitment": {
+      "title": "Smallest Useful Commitment",
+      "type": "string"
+    },
+    "source_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "target_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Target Roles",
+      "type": "array"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "call_id",
+    "domain",
+    "source_refs",
+    "recognized_premise",
+    "edge",
+    "target_roles",
+    "pressure_dose",
+    "call_text",
+    "intended_reaction",
+    "smallest_useful_commitment",
+    "wrong_reading_locks"
+  ],
+  "title": "ActivativeCall",
+  "type": "object"
+}

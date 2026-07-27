@@ -1,0 +1,22 @@
+schema_version: cmf-builder-rc1-receipt/v1
+rc_id: atomic-harness-builder-rc1-offline-69of69
+issued_on: "2026-07-17"
+verdict: BLOCKED_P1_RELEASE_PACKAGING_METADATA_MISSING
+blocking_findings:
+  - id: RC1-P1-PACKAGING-METADATA-MISSING
+    severity: P1
+    class: INSTALLABILITY
+    required_correction: Add governed package metadata and dependency declarations, then rerun clean-environment installation and full regression twice.
+nonblocking_validations:
+  source_tree_hash: PASS
+  od_am_005_terminal_hashes: PASS
+  operator_path_from_source: PASS
+  persistence_backup_restore_from_source: PASS
+  python_compilation: PASS
+  full_regression_pass_1: PASS_1890_OF_1890_NO_MANDATORY_SKIPS_74_SHARDS
+  full_regression_pass_2: PASS_1890_OF_1890_NO_MANDATORY_SKIPS_74_SHARDS
+  path_and_secret_scan: PASS_ONLY_GOVERNANCE_TERMS_NO_VALUES
+claim_boundary:
+  release_candidate_1: BLOCKED_WITH_EXACT_FINDINGS
+  production_ready: false
+  certified: false

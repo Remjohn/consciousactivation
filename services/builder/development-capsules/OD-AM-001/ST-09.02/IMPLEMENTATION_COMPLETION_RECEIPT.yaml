@@ -1,0 +1,86 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-09.02:MANUAL_SHADOW_BEFORE_AUTOMATION:e683846cd884
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-09.02
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder can route a workflow through a governed manual-shadow review before
+  automation using immutable input snapshots, proposed automated outputs,
+  synthetic reviewer fixtures, divergence classification, actor-boundary checks,
+  receipt identity, invalidation and rollback. The branch is structural,
+  repository-owned, synthetic and explicitly not real human approval.
+primary_obligations_implemented:
+  - FR-186
+  - FR-187
+  - FR-188
+  - FR-189
+  - NFR-PORT-002
+dependency_receipts:
+  satisfied:
+    - ST-09.01:ImplementationCompletionReceipt:e9aa03001b4815526f03fa2a269b074201b5ac97e514c99817370753ffc7bb1f
+  pending: []
+source_files:
+  - path: src/cmf_builder/workflow/manual_shadow_routing.py
+    sha256: e683846cd884cba9c1aec47a5244a7530911d97ca7a19f69e28a490f0ad3c2d2
+test_files:
+  - path: tests/stories/st_09_02/test_router_and_shadow_trace.py
+    sha256: d6b65098f66567b3011532d4581618acb7efd6bb1b47da2b82fdf98f823e572f
+  - path: tests/stories/st_09_02/test_actor_separation_and_capsule_binding.py
+    sha256: 624f510873c3013e23b9fcb7ef75286d41807137361a41f40526caad6fee4c2d
+  - path: tests/stories/st_09_02/test_failure_authority_boundaries.py
+    sha256: ed477001a2161034c2e149972abd7a5be2d21cdd1c04f536fc7172367cb93b52
+  - path: tests/stories/st_09_02/test_determinism_invalidation_and_rollback.py
+    sha256: 566935a0c8f26366cd7b64e46fac336dd6050ea5887ec5ade4e5ed66f9715a94
+tests:
+  focused: PASS_33_OF_33
+  workflow_pair: PASS_82_OF_82
+  affected_st08_predecessors: PASS_444_OF_444
+  architecture_boundary: PASS_12_OF_12
+  latest_applicable_complete_repository_regression: PASS_1765_OF_1765_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  mandatory_skips: 0
+authority_and_boundary_evidence:
+  synthetic_fixture_marker: SYNTHETIC_SHADOW_FIXTURE_NOT_HUMAN_APPROVAL
+  exact_agreement_fixture: PASS
+  acceptable_bounded_difference_fixture: PASS
+  semantic_divergence_rejection: PASS
+  authority_violation_rejection: PASS
+  missing_reviewer_rejection: PASS
+  withdrawn_reviewer_rejection: PASS
+  stale_input_rejection: PASS
+  failed_proposed_output_rejection: PASS
+  deterministic_code_boundary: PASS
+  governed_agent_capsule_boundary: PASS
+  human_approval_issued: false
+  real_manual_shadow_evidence_created: false
+  automation_promotion_available: false
+  workflow_or_agent_execution: false
+  external_provider_execution: false
+  production_ready: false
+  certified: false
+rollback_evidence: PASS_NON_DESTRUCTIVE_INVALIDATION_AND_ROLLBACK_RECEIPTS_PRESERVE_HISTORY
+observability_evidence: PASS_DETERMINISTIC_RECEIPT_IDENTITIES_AND_TYPED_DIVERGENCE_CLASSES
+evidence_gate_status: MANUAL_SHADOW_AND_EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - manual_shadow_expert_behavior_evidence
+  - XDEP-001
+  - XDEP-005
+  - ADR-006-Temporal-public-seam-conformance
+  - production_automation_authority_and_evidence
+deterministic_identity_evidence:
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_file_count: 120
+  production_source_tree_sha256: e1a421e0641e4093c12c39ed8cd848e98bea0d28b4965f609774f8c8a66d3f00
+equivalent_to_StoryCompletionReceipt: false
+hashes:
+  delta_capsule_sha256: b39ab3dd2f7f35432a007a04d9a7b0e9170d0a3fd2b78077628068ee8f8e5717
+  test_results_sha256: 2c29ac4647b3fdcb20ef598f1defe937dbea10dd17bc035e53224426944f31d4
+  file_change_manifest_sha256: ac3d83bc2c436c197727dd3fb5053909c321b2540cdd21a1f6075621423c9907
+  source_boundary_registry_sha256: 763b32a3c38747856abdfe86d522c8065b46313e7517cbd30f1dd994b4454fd7
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-09.03_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true
+production_ready: false
+certified: false

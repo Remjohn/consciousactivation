@@ -1,0 +1,178 @@
+experience_primitive_id: "EXP-FRC-001"
+canonical_name: "Evolved UI + Glowing Choice"
+aliases:
+  - "Zero-Thought Onboarding"
+  - "The Billboard Interface"
+  - "Satisficing Path"
+
+experience_family: "friction_ability"
+mechanic_role: "system"
+moment_role: "ui_navigation"
+implementation_role: "frontend"
+
+source_audits:
+  - audit_file: "AUDIT_Dont_Make_Me_Think_Steve_Krug.md"
+    primitive_name_in_audit: "Zero-Thought Onboarding"
+    mcda_score: 180
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Dont_Make_Me_Think_Steve_Krug.md"
+  - audit_file: "AUDIT_Actionable_Gamification_Yu_kai_Chou.md"
+    primitive_name_in_audit: "Evolved UI + Glowing Choice"
+    mcda_score: 191
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Actionable_Gamification_Yu_kai_Chou.md"
+
+book_reference:
+  title: "Don't Make Me Think"
+  author: "Steve Krug"
+  chapters:
+    - "Chapter 1: Don't make me think!"
+    - "Chapter 3: Billboard Design 101"
+  key_pages: "10-25"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Dont make me think - Steve Krug.md"
+
+summary: >
+  Evolved UI + Glowing Choice dictates that an interface must be brutally simplified
+  to remove all cognitive load, highlighting exactly one undeniable action. It
+  leverages Krug's 'billboard scanning' and Chou's 'Glowing Choice' to ensure the
+  user never has to pause to figure out what to do next.
+
+core_move: >
+  Eliminate visual noise, delete all instructional "happy talk," and highlight the
+  single most important next action with a massive, unambiguous visual cue (the
+  Glowing Choice) to ensure zero-thought progression.
+
+why_it_works: >
+  Steve Krug's 'Don't Make Me Think' law establishes that any cognitive effort spent
+  deciphering an interface drains the user's goodwill. By minimizing text (omitting
+  needless words) and creating a dominant visual hierarchy (the Glowing Choice), we
+  cater to the user's natural instinct to 'satisfice'—they will instantly click the
+  first reasonable option rather than reading a manual, reducing cognitive friction
+  to zero.
+
+examples:
+  - context: "BOOK: Don't Make Me Think - The Omit Needless Words Law"
+    application: >
+      A website had a 3-paragraph welcome message explaining how to use a search bar.
+      Krug advised deleting all of it, leaving only the search bar and a massive
+      'Search' button.
+    effect: >
+      Users found the tool instantly because cognitive load was eliminated.
+
+  - context: "CCP: The Conscious Reactions Mini App Entry"
+    application: >
+      When a coach clicks a Telegram link for a 'Reaction Duel', there are no onboarding
+      sliders or instructions. The screen shows the topic image and a massive, glowing
+      red 'Hold to Record' button.
+    effect: >
+      The coach moves from clicking the link to recording audio in under 1 second.
+
+  - context: "CCP: The Satisficing Vote"
+    application: >
+      Before asking a new user to record a complex audio take, the UI presents a simple,
+      binary 'Agree/Disagree' swipe slider. It is the only interactive element on the screen.
+    effect: >
+      Provides a mindless, low-friction entry point that hooks them into the loop.
+
+  - context: "CCP: V2WS Presenter Dashboard"
+    application: >
+      During a live automated webinar, the coach's UI does not have 15 different analytics
+      toggles. It has one glowing prompt that says 'Deploy Pitch Now' when the AI detects
+      peak audience retention.
+    effect: >
+      Preserves the coach's mental bandwidth for their vocal delivery, not software operation.
+
+  - context: "CCP: Silent Referral Prompt"
+    application: >
+      After a 95/100 Delivery Score, the success screen features a single pulsing button
+      that says 'Challenge a Peer'. No settings, no secondary options.
+    effect: >
+      Capitalizes on the dopamine hit by providing a frictionless, single-click referral path.
+
+anti_examples:
+  - description: >
+      A new user opens the Mini App and sees a 'Welcome' paragraph, a tutorial video,
+      a settings gear icon, and four equally sized buttons for different debate modes.
+    why_it_fails: >
+      Complete violation of Krug's law. The user is forced to think, analyze, and
+      choose. Their cognitive load spikes, friction overwhelms them, and they bounce.
+
+experience_stage_fit:
+  entry: 0.9
+  activation: 1.0
+  recording: 0.8
+  scoring: 0.2
+  social_spread: 0.8
+  recovery: 0.6
+  retention: 0.4
+  conversion: 0.9
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 1.0
+  score_card: 0.6
+  share_asset: 0.8
+  voice_prompt: 0.4
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.1
+  clarity: 1.0
+  safety: 0.9
+  status: 0.4
+  belonging: 0.2
+  curiosity: 0.4
+  replay_desire: 0.6
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.7
+  challenge_progression: 0.9
+  silent_referral: 1.0
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.6
+  onboarding_activation: 1.0
+  social_economy: 0.8
+  content_extraction: 0.7
+
+activation_conditions:
+  - "User opens any Telegram Mini App surface for the first time"
+  - "User is asked to perform the core loop action (e.g., Recording)"
+
+suppression_conditions:
+  - "User is in the 'Analytics' or 'Mastery' phase where they explicitly want to explore detailed data."
+
+misuse_modes:
+  - "The Glowing Trap — making the 'Glowing Choice' a dark pattern that tricks the user into a paid upgrade they didn't intend to click."
+  - "Over-Simplification — hiding crucial functionality so deeply that the user literally cannot find how to change their microphone settings."
+
+synergizes_with:
+  - "EXP-FRC-004" # Friction-Zero Ability (The glowing choice is the UI manifestation of zero ability)
+  - "EXP-TRG-001" # The Bounded Async Request (The trigger leads directly to the glowing choice)
+
+conflicts_with:
+  - "EXP-PRG-002" # Discover -> Master (In mastery, the UI evolves to have more options, relaxing the absolute minimalism)
+
+implementation_targets:
+  frontend_components:
+    - "MonolithicCTA — a single, massive button that occupies at least 30% of the screen's interactive real estate"
+    - "InstructionPurgeLayer — stripping all explanatory <p> tags from the recording view"
+  backend_rules:
+    - "navigation_engine: disable all secondary routing paths when user is in an active recording state"
+  telemetry_events:
+    - "time_to_first_click_ms"
+    - "bounce_rate_on_prompt"
+  experiments:
+    - "A/B test: 'Hold to Record' button vs 'Tap to Record' button for error rate reduction"
+
+experience_metrics:
+  entry_rate: 0.9
+  react_rate: 1.0
+  completion_rate: 0.9
+  share_rate: 0.7
+  comeback_rate: 0.6
+  day7_retention: 0.8
+  upgrade_signal: 0.6
+
+crosswalk_id: "XW-FRC-GLOWING"
+crosswalk_note: >
+  This is the defining UI philosophy for the Telegram Mini App. If they have to read, we failed.

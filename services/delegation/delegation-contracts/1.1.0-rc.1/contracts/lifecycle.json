@@ -1,0 +1,279 @@
+{
+  "package_version": "1.1.0-rc.1",
+  "serialization_scope": "correlation_id",
+  "terminal_states": [
+    "REJECTED",
+    "SUPERSEDED",
+    "CANCELLED",
+    "COMPLETED",
+    "INVALIDATED",
+    "REVOKED",
+    "REPLACED"
+  ],
+  "transitions": [
+    {
+      "from_state": "DRAFT",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "to_state": "SUBMITTED",
+      "trigger": "submission_validation_accepted"
+    },
+    {
+      "from_state": "DRAFT",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "to_state": "REJECTED",
+      "trigger": "submission_validation_rejected"
+    },
+    {
+      "from_state": "SUBMITTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "ACCEPTED",
+      "trigger": "admission_accepted"
+    },
+    {
+      "from_state": "SUBMITTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "REJECTED",
+      "trigger": "admission_rejected"
+    },
+    {
+      "from_state": "SUBMITTED",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "to_state": "REJECTED",
+      "trigger": "contract_rejected"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "IN_PROGRESS",
+      "trigger": "execution_started"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "AMENDMENT_REQUIRED",
+      "trigger": "amendment_proposed"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "AMENDMENT_REQUIRED",
+      "trigger": "amendment_proposed"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "COST_APPROVAL_REQUIRED",
+      "trigger": "budget_escalation_requested"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "COST_APPROVAL_REQUIRED",
+      "trigger": "budget_escalation_requested"
+    },
+    {
+      "from_state": "COST_APPROVAL_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "IN_PROGRESS",
+      "trigger": "budget_escalation_approved"
+    },
+    {
+      "from_state": "COST_APPROVAL_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "CAPABILITY_GAP",
+      "trigger": "budget_escalation_denied"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "CAPABILITY_GAP",
+      "trigger": "capability_gap_reported"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "CAPABILITY_GAP",
+      "trigger": "capability_gap_reported"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "HUMAN_REVIEW_REQUIRED",
+      "trigger": "human_review_requested"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "HUMAN_REVIEW_REQUIRED",
+      "trigger": "human_review_requested"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "RESULT_READY",
+      "trigger": "result_declared"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "PARTIAL_RESULT_READY",
+      "trigger": "partial_result_declared"
+    },
+    {
+      "from_state": "RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "COMPLETED",
+      "trigger": "result_accepted"
+    },
+    {
+      "from_state": "RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "COMPLETED",
+      "trigger": "result_accepted_with_concerns"
+    },
+    {
+      "from_state": "RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "RESULT_REJECTED",
+      "trigger": "result_rejected"
+    },
+    {
+      "from_state": "RESULT_REJECTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "IN_PROGRESS",
+      "trigger": "revalidation_started"
+    },
+    {
+      "from_state": "PARTIAL_RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "COMPLETED",
+      "trigger": "partial_result_accepted"
+    },
+    {
+      "from_state": "PARTIAL_RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "RESULT_REJECTED",
+      "trigger": "partial_result_rejected"
+    },
+    {
+      "from_state": "PARTIAL_RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "IN_PROGRESS",
+      "trigger": "partial_continuation_authorized"
+    },
+    {
+      "from_state": "SUBMITTED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "CANCELLATION_REQUESTED",
+      "trigger": "cancellation_requested"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "CANCELLATION_REQUESTED",
+      "trigger": "cancellation_requested"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "CANCELLATION_REQUESTED",
+      "trigger": "cancellation_requested"
+    },
+    {
+      "from_state": "CANCELLATION_REQUESTED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "CANCELLED",
+      "trigger": "cancellation_receipted"
+    },
+    {
+      "from_state": "AMENDMENT_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "CAPABILITY_GAP",
+      "trigger": "amendment_rejected_capability_gap"
+    },
+    {
+      "from_state": "AMENDMENT_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "CANCELLED",
+      "trigger": "amendment_rejected_cancelled"
+    },
+    {
+      "from_state": "COMPLETED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "INVALIDATED",
+      "trigger": "result_invalidated"
+    },
+    {
+      "from_state": "COMPLETED",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "to_state": "REVOKED",
+      "trigger": "result_revoked"
+    },
+    {
+      "from_state": "COMPLETED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "REPLACED",
+      "trigger": "replacement_acknowledged"
+    },
+    {
+      "from_state": "INVALIDATED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "REPLACED",
+      "trigger": "replacement_acknowledged"
+    },
+    {
+      "from_state": "REVOKED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "REPLACED",
+      "trigger": "replacement_acknowledged"
+    },
+    {
+      "from_state": "SUBMITTED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "ACCEPTED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "IN_PROGRESS",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "AMENDMENT_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "COST_APPROVAL_REQUIRED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "RESULT_REJECTED",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    },
+    {
+      "from_state": "PARTIAL_RESULT_READY",
+      "principal_type": "CONTENT_HARNESS",
+      "to_state": "SUPERSEDED",
+      "trigger": "demand_superseded"
+    }
+  ]
+}

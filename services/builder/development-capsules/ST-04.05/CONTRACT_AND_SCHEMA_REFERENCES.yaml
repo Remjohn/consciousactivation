@@ -1,0 +1,16 @@
+schema_version: cmf-builder-capsule-contract-references/v1
+story_id: ST-04.05
+consumed_contracts:
+  - {id: PhaseHandoffGraph, contract: cmf-builder-phase-handoff-graph/v1@1.0.0, authority: ST-04.04, mutation: prohibited}
+  - {id: InternalHandoffDecision, contract: cmf-builder-internal-handoff-decision/v1, authority: ST-04.04, required_action: ACCEPTED}
+  - {id: EmptySkillRegistry, contract: cmf-builder-empty-skill-registry/v1, authority: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml, mutation: prohibited}
+produced_typed_contracts: [ReferenceDeclaration, ContextBudgetPolicy, PhaseContextManifest, MinimumCompleteContextGraph, ContextCompilationReceipt, ContextGraphInvalidation, CompileMinimumContextCommand]
+governed_input:
+  path: development-capsules/ST-04.05/MINIMUM_CONTEXT_INPUT.json
+  schema: cmf-builder-synthetic-minimum-context-input/v1
+schema_file_change: prohibited
+database_schema_change: prohibited
+external_contract_ownership: unchanged
+Delegation_pin_required: false
+VAE_contract_required: false
+compatibility_rule: changed_reference_loading_influence_priority_budget_or_manifest_semantics_requires_new_immutable_version

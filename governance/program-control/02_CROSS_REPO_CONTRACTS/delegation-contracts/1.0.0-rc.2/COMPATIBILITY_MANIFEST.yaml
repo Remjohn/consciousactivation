@@ -1,0 +1,50 @@
+schema_version: 1
+manifest_id: cmf-delegation-contracts-1-0-0-rc-2
+owner: CMF_DELEGATION_PROTOCOL
+package_name: cmf-delegation-contract-baseline
+package_version: 1.0.0-rc.2
+protocol_versions:
+  - "1.0"
+release_status: RELEASE_CANDIDATE
+readiness:
+  local_stage4_gates: PASS
+  overall_stage4_verdict: FAIL
+  stage5_authorized: false
+canonical_registry: packages/contracts/registry.json
+release_manifest: packages/contracts/release-manifest.json
+compatibility_package: packages/compatibility/manifest.json
+publication:
+  publishable: false
+  git_tag: null
+  immutable_release_uri: null
+  blockers:
+    - XRI-001
+    - XRI-002
+    - XRI-013
+    - XRI-014
+    - XRI-015
+    - XRI-016
+    - XRI-017
+    - LOCAL-NO-VALID-GIT-REPOSITORY
+features:
+  - authority.registry
+  - canonical-json.rfc8785-safe-integer-profile
+  - closed.schemas
+  - format02.fixtures
+  - lifecycle.transitions
+  - sha256.integrity
+required_signature_algorithms:
+  - Ed25519
+legacy_inputs:
+  submission-receipt@0.1: EXPLICIT_MIGRATION_REQUIRED
+  demand_ref:string@0.1: LOSSLESS_WITH_PINNED_CONTEXT
+authority_corrections:
+  submission_validation_receipt_owner: DELEGATION_PROTOCOL
+  admission_receipt_owner: VISUAL_ASSET_EDITOR
+  result_owner: VISUAL_ASSET_EDITOR
+  result_consumption_authority_owner: CONTENT_HARNESS
+integrity:
+  canonicalization: RFC8785_SAFE_INTEGER_PROFILE
+  digest: SHA-256
+  signature_status: UNSIGNED
+  signature_required_for_publication: true

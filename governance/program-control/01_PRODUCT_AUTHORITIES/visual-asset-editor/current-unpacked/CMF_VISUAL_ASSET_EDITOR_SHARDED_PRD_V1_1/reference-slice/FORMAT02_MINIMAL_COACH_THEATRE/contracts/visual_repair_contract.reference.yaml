@@ -1,0 +1,53 @@
+repair_id: REPAIR-F02-0001-R1
+candidate_ref: ASSET-F02-0001-C03
+evaluation_ref: VQE-F02-0001-C03
+quality_round: 1
+failure:
+  code: WEAK_VISIBLE_ACTION
+  severity: major
+  responsible_layer: pose_conditioning
+  evidence_bbox:
+  - 0.55
+  - 0.42
+  - 0.22
+  - 0.18
+  explanation: Gesture does not support the skeptical reaction.
+preserve:
+- character_identity
+- facial_expression
+- leftward_gaze
+- foreground_right_geometry
+- palette
+- alpha_background
+permitted_changes:
+- hand_pose_control
+- arm_angle
+- regional_conditioning
+- pose_control_strength
+prohibited_changes:
+- semantic_intent
+- activative_function
+- character_id
+- sequence_role
+- composition_slot
+invalidated_nodes:
+- compile_pose_and_geometry_controls
+- generate_candidate_portfolio
+- evaluate_assets
+- simulate_and_evaluate_composition
+reusable_outputs:
+- identity_reference
+- scene_template
+- composition_mask
+- runtime_binding
+success_evidence:
+- gesture_reads_as_restrained_skepticism
+- identity_continuity_gte_0_94
+- composition_effectiveness_gte_0_90
+binding_deltas:
+  pose_control_strength:
+    from: 0.62
+    to: 0.78
+  gesture_profile:
+    from: open_palm_explanation
+    to: restrained_folded_hand

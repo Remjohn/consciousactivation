@@ -1,0 +1,481 @@
+{
+  "$defs": {
+    "AffinityContract": {
+      "additionalProperties": false,
+      "properties": {
+        "authentic_human_presence_required": {
+          "default": true,
+          "title": "Authentic Human Presence Required",
+          "type": "boolean"
+        },
+        "preferred_cues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preferred Cues",
+          "type": "array"
+        },
+        "forbidden_cues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Cues",
+          "type": "array"
+        }
+      },
+      "title": "AffinityContract",
+      "type": "object"
+    },
+    "DoctrineConstraints": {
+      "additionalProperties": false,
+      "properties": {
+        "no_false_open_loop": {
+          "default": true,
+          "title": "No False Open Loop",
+          "type": "boolean"
+        },
+        "no_fabricated_conflict": {
+          "default": true,
+          "title": "No Fabricated Conflict",
+          "type": "boolean"
+        },
+        "no_trauma_sensationalization": {
+          "default": true,
+          "title": "No Trauma Sensationalization",
+          "type": "boolean"
+        },
+        "payoff_must_be_source_grounded": {
+          "default": true,
+          "title": "Payoff Must Be Source Grounded",
+          "type": "boolean"
+        },
+        "guest_meaning_may_not_be_distorted": {
+          "default": true,
+          "title": "Guest Meaning May Not Be Distorted",
+          "type": "boolean"
+        },
+        "no_synthetic_guest_claim": {
+          "default": true,
+          "title": "No Synthetic Guest Claim",
+          "type": "boolean"
+        }
+      },
+      "title": "DoctrineConstraints",
+      "type": "object"
+    },
+    "FutureValueContract": {
+      "additionalProperties": false,
+      "properties": {
+        "scope": {
+          "enum": [
+            "asset_signal",
+            "package",
+            "series"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "category_promise": {
+          "title": "Category Promise",
+          "type": "string"
+        },
+        "continuity_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Continuity Keys",
+          "type": "array"
+        }
+      },
+      "required": [
+        "scope",
+        "category_promise"
+      ],
+      "title": "FutureValueContract",
+      "type": "object"
+    },
+    "ProgramStatus": {
+      "enum": [
+        "draft",
+        "source_validated",
+        "doctrine_validated",
+        "format_adapted",
+        "awaiting_review",
+        "approved",
+        "frozen",
+        "rendered",
+        "evaluated",
+        "published"
+      ],
+      "title": "ProgramStatus",
+      "type": "string"
+    },
+    "SequenceBeat": {
+      "additionalProperties": false,
+      "properties": {
+        "beat_id": {
+          "title": "Beat Id",
+          "type": "string"
+        },
+        "order": {
+          "minimum": 0,
+          "title": "Order",
+          "type": "integer"
+        },
+        "viewer_state": {
+          "$ref": "#/$defs/ViewerState"
+        },
+        "semantic_role": {
+          "title": "Semantic Role",
+          "type": "string"
+        },
+        "ingredient_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ingredient Ids",
+          "type": "array"
+        },
+        "information_state": {
+          "title": "Information State",
+          "type": "string"
+        },
+        "primitive_coalition": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Primitive Coalition",
+          "type": "array"
+        },
+        "composition_function": {
+          "title": "Composition Function",
+          "type": "string"
+        },
+        "emotional_state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Emotional State"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "slide_index": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slide Index"
+        },
+        "attention_order": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attention Order"
+        }
+      },
+      "required": [
+        "beat_id",
+        "order",
+        "viewer_state",
+        "semantic_role",
+        "ingredient_ids",
+        "information_state",
+        "composition_function"
+      ],
+      "title": "SequenceBeat",
+      "type": "object"
+    },
+    "SequenceLoop": {
+      "additionalProperties": false,
+      "properties": {
+        "loop_id": {
+          "title": "Loop Id",
+          "type": "string"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "opened_at_beat_id": {
+          "title": "Opened At Beat Id",
+          "type": "string"
+        },
+        "closed_at_beat_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Closed At Beat Id"
+        },
+        "closure_required": {
+          "default": true,
+          "title": "Closure Required",
+          "type": "boolean"
+        },
+        "policy": {
+          "default": "must_close",
+          "enum": [
+            "must_close",
+            "discussion_open",
+            "series_deferred"
+          ],
+          "title": "Policy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "loop_id",
+        "question",
+        "opened_at_beat_id"
+      ],
+      "title": "SequenceLoop",
+      "type": "object"
+    },
+    "SequenceScope": {
+      "enum": [
+        "single_asset",
+        "asset_package",
+        "series"
+      ],
+      "title": "SequenceScope",
+      "type": "string"
+    },
+    "ViewerJourney": {
+      "additionalProperties": false,
+      "properties": {
+        "entry_state": {
+          "title": "Entry State",
+          "type": "string"
+        },
+        "target_exit_state": {
+          "title": "Target Exit State",
+          "type": "string"
+        },
+        "central_question": {
+          "title": "Central Question",
+          "type": "string"
+        },
+        "promised_payoff": {
+          "title": "Promised Payoff",
+          "type": "string"
+        },
+        "future_value_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Future Value Key"
+        }
+      },
+      "required": [
+        "entry_state",
+        "target_exit_state",
+        "central_question",
+        "promised_payoff"
+      ],
+      "title": "ViewerJourney",
+      "type": "object"
+    },
+    "ViewerState": {
+      "enum": [
+        "perceptual_entry",
+        "relevant_open_question",
+        "active_prediction",
+        "truthful_payoff",
+        "human_affinity",
+        "expected_future_value"
+      ],
+      "title": "ViewerState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sequence_program_id": {
+      "title": "Sequence Program Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/ProgramStatus"
+    },
+    "scope": {
+      "$ref": "#/$defs/SequenceScope",
+      "default": "single_asset"
+    },
+    "brand_id": {
+      "title": "Brand Id",
+      "type": "string"
+    },
+    "brand_context_version_id": {
+      "title": "Brand Context Version Id",
+      "type": "string"
+    },
+    "doctrine_bundle_id": {
+      "title": "Doctrine Bundle Id",
+      "type": "string"
+    },
+    "interview_brief_id": {
+      "title": "Interview Brief Id",
+      "type": "string"
+    },
+    "expression_session_id": {
+      "title": "Expression Session Id",
+      "type": "string"
+    },
+    "ingredient_inventory_id": {
+      "title": "Ingredient Inventory Id",
+      "type": "string"
+    },
+    "target_archetype": {
+      "title": "Target Archetype",
+      "type": "string"
+    },
+    "asset_derivative": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Asset Derivative"
+    },
+    "format_target": {
+      "title": "Format Target",
+      "type": "string"
+    },
+    "sequence_pattern_id": {
+      "title": "Sequence Pattern Id",
+      "type": "string"
+    },
+    "viewer_journey": {
+      "$ref": "#/$defs/ViewerJourney"
+    },
+    "loops": {
+      "items": {
+        "$ref": "#/$defs/SequenceLoop"
+      },
+      "title": "Loops",
+      "type": "array"
+    },
+    "beats": {
+      "items": {
+        "$ref": "#/$defs/SequenceBeat"
+      },
+      "title": "Beats",
+      "type": "array"
+    },
+    "affinity_contract": {
+      "$ref": "#/$defs/AffinityContract"
+    },
+    "future_value_contract": {
+      "$ref": "#/$defs/FutureValueContract"
+    },
+    "doctrine_constraints": {
+      "$ref": "#/$defs/DoctrineConstraints"
+    },
+    "evaluation_requirement_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evaluation Requirement Ids",
+      "type": "array"
+    },
+    "operator_approval_status": {
+      "default": "not_reviewed",
+      "enum": [
+        "not_reviewed",
+        "needs_revision",
+        "approved",
+        "rejected"
+      ],
+      "title": "Operator Approval Status",
+      "type": "string"
+    },
+    "program_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Program Sha256"
+    }
+  },
+  "required": [
+    "sequence_program_id",
+    "version",
+    "status",
+    "brand_id",
+    "brand_context_version_id",
+    "doctrine_bundle_id",
+    "interview_brief_id",
+    "expression_session_id",
+    "ingredient_inventory_id",
+    "target_archetype",
+    "format_target",
+    "sequence_pattern_id",
+    "viewer_journey",
+    "loops",
+    "beats",
+    "affinity_contract",
+    "future_value_contract"
+  ],
+  "title": "ContentSequenceProgram",
+  "type": "object"
+}

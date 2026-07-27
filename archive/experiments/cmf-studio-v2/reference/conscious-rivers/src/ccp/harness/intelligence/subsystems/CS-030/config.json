@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-030",
+  "name": "Neural Phase Router",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Neurocinematics",
+    "Peak-End",
+    "Narrative processing research"
+  ],
+  "inputs": [
+    "container_type",
+    "target_neural_phase",
+    "scene_parameters",
+    "emotional_function"
+  ],
+  "outputs": [
+    "neural_phase_consistency_verdict",
+    "consistency_score",
+    "violations"
+  ],
+  "thresholds": {
+    "minimum_neural_phase_consistency_score": 0.8,
+    "parameters_inherit_from_container": true
+  },
+  "default_action_on_fail": "REVISE"
+}

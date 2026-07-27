@@ -1,0 +1,43 @@
+schema_version: cmf-builder-story-dependency-receipt/v1
+story_id: ST-01.02
+active_mode: SYNTHETIC_DEFINITION
+validated_on: "2026-07-15"
+dependencies:
+  original_ST_01_01:
+    path: development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+    file_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+    canonical_payload_sha256: d82529f484971ef80bbd94ea29f685c9adfe3e50969aaf78367472695ea8add9
+    root_file_manifest_sha256: 5ef0480e11e26363f918049bad584b69e43428b620e6086e435faea7460990d2
+    capsule_files_validated: 16_of_16
+    fresh_regression: PASS_20_OF_20
+    verdict: PASS
+  supplemental_synthetic_proof:
+    path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/STORY_COMPLETION_RECEIPT.yaml
+    file_sha256: 58ae069c277e4256633db258a639e4901b44cdeb3d5e36b06464aa80d2700418
+    canonical_payload_sha256: 62bec99526a72fe83cefbd5dd30bab77f29b8d45556bfa83feaf73486314bdf9
+    file_change_manifest_sha256: 4d64b9ba8552b0e8e6757928fca9136582236f8365f800d229037ae75aea3f3d
+    capsule_manifest_sha256: 4917fbce9295255f8a71f61eb9031679cd2d9dd1729cf15a771f3da24be6174f
+    capsule_bundle_digest: 2e15bb0d795813e927bc60190a79978c675e0abae3037b7529f914d4e6f70ff3
+    capsule_files_validated: 20_of_20
+    fresh_regression: PASS_18_OF_18
+    verdict: PASS
+  empty_skill_registry_policy:
+    policy_sha256: 260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c
+    fixture_sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+    validation_receipt_sha256: 79164fa7418d3750ffefee116264b1ca44533c8073afb5485b84089ebd945ee1
+    validation: PASS
+separate_receipt_reproducibility:
+  receipt_paths_distinct: true
+  receipt_types_distinct: true
+  canonical_payloads_independently_verified: true
+  supplemental_delta_bridge_exact: true
+  bridged_preexisting_files:
+    - src/cmf_builder/domain/target_profile.py
+    - src/cmf_builder/adapters/__init__.py
+  lineage_gap: false
+prohibited_change_validation:
+  out_of_scope_paths: []
+  prohibited_files_modified: []
+  external_dependencies_added: []
+applicable_unresolved_blockers: []
+verdict: PASS

@@ -1,0 +1,72 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-08.07:STRUCTURAL_CONVERSATIONAL_EVALUATION:8a55143745bf
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-08.07
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+maturity: development_validated
+implemented_outcome: >-
+  The Builder evaluates the four governed conversational profiles only through a
+  repository-owned synthetic structural non-personal uncertified branch, preserves
+  all eleven dimensions independently, rejects dominant wrong readings without
+  score compensation, and keeps consent, actual reactions, Reaction Receipts,
+  Expression Moments and Identity amendments attributable to humans.
+primary_obligations_implemented: [CONST-007, CONST-008]
+dependency_receipts:
+  satisfied: [ST-08.06:ImplementationCompletionReceipt:53755c6d79e7eb4e69d8e26f014a3abcd28992d462665643962e14c5d066d1bc]
+  pending: []
+source_files:
+  - {path: src/cmf_builder/evaluation/structural_conversational_evaluation.py, sha256: 8a55143745bf79947f52e83b1e5611ef5cfe861ebb60bcd5e38b990603768491}
+test_files:
+  - {path: tests/stories/st_08_07/test_wrong_reading_rejection.py, sha256: 8f8cb7faaf6b2dd13e9f2cad6e0370e6bcf4d7d1babfee7ada92de58683014f2}
+  - {path: tests/stories/st_08_07/test_structural_conversational_dimensions.py, sha256: 22608fbfd4ec81f5006bf69e350bc90cfb8c3fc1fa4e6f06067b58eae1c8c7a8}
+  - {path: tests/stories/st_08_07/test_human_ownership_boundaries.py, sha256: aecf013c58e56b83518489d05ce7ca37c88ba782a586ebe004c9b5911ebf69e1}
+  - {path: tests/stories/st_08_07/test_lineage_determinism_and_invalidation.py, sha256: bba11bc0c3e21dce56d946827836b8dbbdfc766f622632f70eb840c4cfd301aa}
+tests:
+  focused: PASS_49_OF_49
+  combined_ST_08_wave: PASS_444_OF_444
+  affected_ST_06_and_ST_07: PASS_234_OF_234
+  architecture_boundary: PASS_12_OF_12
+  complete_repository_regression: PASS_1683_OF_1683_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS_117_SOURCE_FILES
+  mandatory_skips: 0
+branch_classification:
+  structural: true
+  synthetic: true
+  non_personal: true
+  uncertified: true
+  production_ready: false
+authority_and_boundary_evidence:
+  dominant_wrong_reading_lock_required: PASS
+  wrong_reading_hard_rejection_non_compensable: PASS
+  exact_eleven_independent_dimensions: PASS
+  category_and_profile_non_flattening: PASS
+  consent_from_silence_rejected: PASS
+  withdrawn_evidence_inactive: PASS
+  response_ownership_human_external: PASS
+  Reaction_Receipts_created: false
+  Expression_Moments_created: false
+  Identity_DNA_amendments_created_or_approved: false
+  human_truth_or_reaction_inferred: false
+  deterministic_replay_and_nested_tamper_detection: PASS
+  invalidation_and_historical_reproduction: PASS
+  external_evaluator_or_provider_used: false
+  production_threshold_or_certification_authority: false
+rollback_evidence: PASS_HISTORY_PRESERVED_WITHDRAWN_OR_INVALIDATED_EVIDENCE_INACTIVE_ZERO_PARTIAL_STATE
+observability_evidence: PASS_INDEPENDENT_DIMENSION_LOCK_REJECTION_AND_INVALIDATION_RECEIPTS
+evidence_gate_status: EVIDENCE_AND_HUMAN_POLICY_GATES_REMAIN_OPEN
+external_gates_remaining_open: [BD-008, HD-006, HD-007, XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: 454d79cddaa5b4c0d133c832ba2e332346441fb3eaef0da1e6eda37a0a7163ff
+  test_results_sha256: 1d701c0bc3f55bf648d9bbccbff3c1672da405d50ee25468d257305fa9029ef6
+  file_change_manifest_sha256: f302c19ddedb8dc5e4669cfd5253960aef0b530f19e3f9b0b152c2eb4bd1ce90
+  source_boundary_registry_sha256: 6a346be4f7c414352cb1f74e348d3196b28304842e690341bfe267139135a154
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_tree_sha256: 09e8b1a1231543f1ed00cab26b44c0f24a88e6e63e15feeba93116c2593910bd
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-09.01_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true

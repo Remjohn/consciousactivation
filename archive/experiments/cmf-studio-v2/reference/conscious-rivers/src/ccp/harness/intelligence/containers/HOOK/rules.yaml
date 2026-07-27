@@ -1,0 +1,32 @@
+schema: ../../schemas/container-rules.schema.json
+schema_id: cmf.container.rules/v1
+container_id: HOOK
+enabled: true
+priority:
+  tier: structural
+  rank: 1
+enforcement:
+  mode: block_on_fail
+  default_result: REVISE
+applies_to:
+  stages:
+    - scene_builder
+    - editor_regeneration
+required_sequence:
+  previous: []
+  next:
+    - SETUP
+warn_conditions:
+  - metric: cls_observed
+    operator: gt
+    value: 2.0
+  - metric: asl_observed
+    operator: gt
+    value: 1.5
+route_hints:
+  preferred_components:
+    - HOOK
+    - THE_TEASE
+    - THE_VIBE
+    - JUXTAPOSITION
+  fallback: direct_hook

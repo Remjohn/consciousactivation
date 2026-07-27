@@ -1,0 +1,127 @@
+plan_id: VPP-F02-0001
+version: 1
+demand_ref: VAD-F02-0001-v1
+objective:
+  asset_family: human_character_assets
+  asset_role: skeptical_listener_reaction
+  activative_function: recognition_before_explanation
+route:
+  strategy: hybrid
+  routes:
+  - reuse
+  - generate
+  - transform
+production_constraints:
+  preserve:
+  - semantic_intent
+  - character_identity
+  - skeptical_not_contemptuous_expression
+  - leftward_gaze
+  - foreground_right_role
+  - palette
+  mutable:
+  - hand_position
+  - camera_distance_within_tolerance
+  - pose_control_strength
+  - lora_strength
+  - denoise
+  - background_cleanup
+capability_requirements:
+- character_identity_conditioning
+- pose_control
+- expression_control
+- regional_conditioning
+- transparent_subject_extraction
+- composition_simulation
+- independent_vlm_evaluation
+stages:
+- node_id: retrieve_continuity_assets
+  actor_type: asset_intelligence_hunter
+  inputs:
+  - visual_asset_memory
+  - demand
+  outputs:
+  - reuse_candidates
+  - identity_reference
+  dependencies: []
+  checkpoint: true
+- node_id: compile_pose_and_geometry_controls
+  actor_type: hybrid
+  inputs:
+  - demand
+  - identity_reference
+  - VSP-F02-SCENE-004
+  outputs:
+  - pose_control
+  - composition_mask
+  dependencies:
+  - retrieve_continuity_assets
+  checkpoint: true
+- node_id: generate_candidate_portfolio
+  actor_type: comfyui_execution
+  inputs:
+  - production_binding
+  - pose_control
+  - composition_mask
+  outputs:
+  - candidate_asset_set
+  dependencies:
+  - compile_pose_and_geometry_controls
+  checkpoint: true
+- node_id: evaluate_assets
+  actor_type: vlm_evaluation
+  inputs:
+  - candidate_asset_set
+  - demand
+  outputs:
+  - asset_evaluations
+  dependencies:
+  - generate_candidate_portfolio
+  checkpoint: true
+- node_id: simulate_and_evaluate_composition
+  actor_type: composition_simulation
+  inputs:
+  - eligible_candidates
+  - scene_template
+  outputs:
+  - composition_evaluations
+  - geometry_packs
+  dependencies:
+  - evaluate_assets
+  checkpoint: true
+- node_id: promote_and_package
+  actor_type: deterministic_transform
+  inputs:
+  - selected_candidate
+  - geometry_pack
+  - receipts
+  outputs:
+  - accepted_master
+  - delivery_variants
+  - asset_result
+  dependencies:
+  - simulate_and_evaluate_composition
+  checkpoint: true
+evaluation_policy:
+  profile_ref: character-scene-composition-v1
+  maximum_quality_repair_rounds: 3
+  minimum_scores:
+    semantic_fidelity: 0.92
+    activative_fidelity: 0.88
+    composition_effectiveness: 0.9
+    identity_continuity: 0.94
+  maximum_wrong_reading_risk: 0.1
+budget:
+  program: standard
+  maximum_candidates: 10
+  maximum_parallel_jobs: 2
+  maximum_gpu_seconds: 480
+  maximum_estimated_cost_usd: 2.5
+fallback_routes:
+- route: reuse_plus_transform
+  condition: memory_candidate_passes_identity_and_role
+- route: composite_registered_head_and_pose_body
+  condition: generation_identity_drift_after_round_2
+provider_bindings:
+  status: architecture_pending
+  required_profile: comfy-format02-character-prod

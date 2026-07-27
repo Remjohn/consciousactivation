@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {
+      "type": "object"
+    },
+    "autonomy_policy": {
+      "type": "object"
+    },
+    "budget_units": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "deadline_utc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "format_profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "harness_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "initial_seed": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "objective": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "operator_actor": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "actor_type": {
+          "enum": [
+            "deterministic_module",
+            "model_program",
+            "human"
+          ],
+          "type": "string"
+        },
+        "product_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "workflow_role": {
+          "enum": [
+            "hunter",
+            "analyst",
+            "composer",
+            "commander",
+            "evaluator",
+            "operator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_id",
+        "actor_type",
+        "product_id",
+        "workflow_role"
+      ],
+      "type": "object"
+    },
+    "order_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "output_targets": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "project_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_kind": {
+      "enum": [
+        "CANONICAL_INTERVIEW_SOURCE_PACKAGE",
+        "ASSET_PACKAGE_SPEC"
+      ],
+      "type": "string"
+    },
+    "source_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "taste_direction": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "workspace_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "order_id",
+    "workspace_id",
+    "project_id",
+    "source_kind",
+    "source_ref",
+    "harness_ref",
+    "category_id",
+    "format_profile_id",
+    "objective",
+    "initial_seed",
+    "taste_direction",
+    "output_targets",
+    "budget_units",
+    "deadline_utc",
+    "autonomy_policy",
+    "operator_actor",
+    "authority"
+  ],
+  "title": "CampaignOrder",
+  "type": "object"
+}

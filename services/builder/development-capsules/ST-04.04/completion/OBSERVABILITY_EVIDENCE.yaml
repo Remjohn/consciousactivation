@@ -1,0 +1,48 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-04.04
+verdict: PASS
+deterministic_sample:
+  phase_handoff_graph_id: phase-handoff-graph_50dc8cc2fbb4494664fe445be9d4d676cc6f7fb2eb212579f847174030350b81
+  phase_handoff_graph_hash: sha256:50dc8cc2fbb4494664fe445be9d4d676cc6f7fb2eb212579f847174030350b81
+  context_graph_id: phase-context-graph_2cd9cf21015954c389aafb6291332ecaf08903cc0a039db3a576f5172b58802d
+  context_graph_hash: sha256:2cd9cf21015954c389aafb6291332ecaf08903cc0a039db3a576f5172b58802d
+  graph_canonical_bytes: 4432
+  compile_receipt_id: phase-handoff-receipt_7d1388d8a9d6337a968c1aa23aac1fde223e59725bc2c9c7ed556e39caeb773b
+  compile_receipt_hash: sha256:7d1388d8a9d6337a968c1aa23aac1fde223e59725bc2c9c7ed556e39caeb773b
+  internal_handoff_id: internal-handoff_093ffa737f9a6662113ae8bd2c6927d05e0c0b5eaf2557e96a3d980ff7c0be2a
+  internal_handoff_hash: sha256:093ffa737f9a6662113ae8bd2c6927d05e0c0b5eaf2557e96a3d980ff7c0be2a
+  acceptance_decision_id: internal-handoff-decision_6bd44ba29b067c83811ad78216221f2803eeb875dfeb04df66491e559b827a84
+  acceptance_decision_hash: sha256:6bd44ba29b067c83811ad78216221f2803eeb875dfeb04df66491e559b827a84
+  acceptance_receipt_id: internal-handoff-receipt_0cbad25aa4e73c698769c3c7c72f4f326bba8b8fef1da5e6a34fe951eedf718e
+  acceptance_receipt_hash: sha256:0cbad25aa4e73c698769c3c7c72f4f326bba8b8fef1da5e6a34fe951eedf718e
+  completed_run_state_hash: sha256:118adcc4f4c87060087606c1bc79d4e050fe166b4de00a756a42d18b8525b8ea
+  completed_stream_version: 19
+coverage:
+  phase_contexts: 2
+  handoff_contracts: 1
+  required_artifacts: 2
+  sender_phases: 1
+  receiver_phases: 1
+  external_product_handoffs: 0
+success_events:
+  - ST-04.04:ContextGraphCompiled
+  - ST-04.04:HandoffContractsCompiled
+  - ST-04.04:OwnershipAndMutationLimitsValidated
+  - ST-04.04:InternalHandoffIssued
+  - ST-04.04:ArtifactIdentityAndLineageValidated
+  - ST-04.04:InternalHandoffAccepted
+  - ST-04.04:InternalHandoffRejected
+  - ST-04.04:OutcomeVerified
+replay_event: ST-04.04:CommandReplayReturned
+invalidation_event: ST-04.04:PhaseHandoffsInvalidated
+failure_event: ST-04.04:OutcomeRejected
+required_fields_validated:
+  - run_story_command_correlation_causation_and_stream_identity
+  - source_lock_boundary_ratification_model_ir_artifact_constitutional_capability_module_and_phase_lineage
+  - context_handoff_graph_contract_artifact_decision_and_receipt_identity
+  - sender_receiver_module_phase_authority_status_and_typed_failure_context
+payload_safety:
+  raw_source_or_artifact_payload_logged: false
+  personal_data_secrets_or_prompts_logged: false
+  timestamps_random_ids_machine_paths_in_identity: false
+  external_telemetry_added: false

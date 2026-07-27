@@ -1,0 +1,972 @@
+{
+  "$defs": {
+    "AuthorityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string"
+        },
+        "field_scopes": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "principal": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "action",
+        "principal",
+        "field_scopes"
+      ],
+      "type": "object"
+    },
+    "BoundingBoxBasisPoints": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "width": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "x": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "y": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "ChangeItem": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "REPLACE"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "value_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "operation",
+        "value_ref",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "DemandIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "request_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "request_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "EvidenceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceIdentityRef"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verdict": {
+          "enum": [
+            "PASS",
+            "CONCERNS",
+            "FAIL"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "verdict",
+        "evidence_refs",
+        "note"
+      ],
+      "type": "object"
+    },
+    "ExecutionIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "demand": {
+          "$ref": "#/$defs/DemandIdentityRef"
+        },
+        "execution_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "plan_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef"
+        }
+      },
+      "required": [
+        "execution_id",
+        "demand",
+        "plan_ref"
+      ],
+      "type": "object"
+    },
+    "FailureSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "VALIDATION",
+            "AUTHORITY",
+            "COMPATIBILITY",
+            "BUDGET",
+            "EXECUTION",
+            "INTEGRITY",
+            "LIFECYCLE",
+            "CAPABILITY",
+            "HUMAN_REVIEW",
+            "SECURITY"
+          ],
+          "type": "string"
+        },
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "field_paths": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "message": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "category",
+        "message",
+        "retryable",
+        "field_paths"
+      ],
+      "type": "object"
+    },
+    "IntegrityProof": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issued_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "key_id": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "nonce": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9_-]{86}$",
+          "type": "string"
+        },
+        "signer": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_id",
+        "signer",
+        "signature",
+        "issued_at",
+        "expires_at",
+        "nonce"
+      ],
+      "type": "object"
+    },
+    "MoneyAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "type": "string"
+        },
+        "minor_units": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "minor_units"
+      ],
+      "type": "object"
+    },
+    "PrincipalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "principal_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "principal_type": {
+          "enum": [
+            "CONTENT_HARNESS",
+            "DELEGATION_PROTOCOL",
+            "VISUAL_ASSET_EDITOR",
+            "CONTROL_TOWER"
+          ],
+          "type": "string"
+        },
+        "product_version": {
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "principal_id",
+        "principal_type",
+        "product_version"
+      ],
+      "type": "object"
+    },
+    "ResourceIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "resource_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "resource_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "ResultIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "result_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "result_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "State": {
+      "enum": [
+        "DRAFT",
+        "SUBMITTED",
+        "REJECTED",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "RESULT_READY",
+        "RESULT_REJECTED",
+        "COMPLETED",
+        "AMENDMENT_REQUIRED",
+        "SUPERSEDED",
+        "COST_APPROVAL_REQUIRED",
+        "CAPABILITY_GAP",
+        "HUMAN_REVIEW_REQUIRED",
+        "CANCELLATION_REQUESTED",
+        "CANCELLED",
+        "PARTIAL_RESULT_READY",
+        "INVALIDATED",
+        "REVOKED",
+        "REPLACED"
+      ],
+      "type": "string"
+    }
+  },
+  "$id": "https://contracts.cmf.dev/delegation/visual-asset-demand/1.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "CMF delegation protocol visual-asset-demand message.",
+  "properties": {
+    "activative_intent": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_effect": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "function": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "sequence_position": {
+          "minimum": 0,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "function",
+        "expected_effect",
+        "sequence_position"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "asset_classification": {
+      "additionalProperties": false,
+      "properties": {
+        "family": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "harness_role": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "subtype": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "visual_syntax_role": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "family",
+        "subtype",
+        "harness_role",
+        "visual_syntax_role"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "category_profile": {
+      "$ref": "#/$defs/ResourceIdentityRef",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "composition": {
+      "additionalProperties": false,
+      "properties": {
+        "canvas_height_px": {
+          "maximum": 32768,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "canvas_width_px": {
+          "maximum": 32768,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "gaze_direction": {
+          "enum": [
+            "LEFT",
+            "RIGHT",
+            "CENTER",
+            "NONE"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "intended_region": {
+          "$ref": "#/$defs/BoundingBoxBasisPoints",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "layer_role": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "reserved_regions": {
+          "items": {
+            "$ref": "#/$defs/BoundingBoxBasisPoints",
+            "x-cmf-value-owner": "CONTENT_HARNESS"
+          },
+          "type": "array",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "tolerance_basis_points": {
+          "maximum": 2500,
+          "minimum": 0,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "visual_weight": {
+          "enum": [
+            "PRIMARY",
+            "SECONDARY",
+            "SUPPORTING"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "canvas_width_px",
+        "canvas_height_px",
+        "intended_region",
+        "tolerance_basis_points",
+        "layer_role",
+        "visual_weight",
+        "reserved_regions",
+        "gaze_direction"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "content_harness_ref": {
+      "$ref": "#/$defs/ResourceIdentityRef",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "delivery": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_count": {
+          "maximum": 16,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "height_px": {
+          "maximum": 32768,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "media_type": {
+          "enum": [
+            "image/png",
+            "image/jpeg",
+            "image/webp"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "width_px": {
+          "maximum": 32768,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "width_px",
+        "height_px",
+        "media_type",
+        "candidate_count"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "evaluation_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "hard_gate_codes": {
+          "items": {
+            "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+            "type": "string",
+            "x-cmf-value-owner": "CONTENT_HARNESS"
+          },
+          "type": "array",
+          "uniqueItems": true,
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "maximum_rounds": {
+          "maximum": 20,
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "profile_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "profile_ref",
+        "maximum_rounds",
+        "hard_gate_codes"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "execution_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "budget_authorization_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "priority": {
+          "enum": [
+            "LOW",
+            "NORMAL",
+            "HIGH",
+            "CRITICAL"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "budget_authorization_ref",
+        "priority"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "format_profile": {
+      "$ref": "#/$defs/ResourceIdentityRef",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "identity_continuity": {
+      "additionalProperties": false,
+      "properties": {
+        "character_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef",
+              "x-cmf-value-owner": "CONTENT_HARNESS"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "environment_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef",
+              "x-cmf-value-owner": "CONTENT_HARNESS"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "character_ref",
+        "environment_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "maxLength": 2048,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "reference_evidence": {
+      "items": {
+        "$ref": "#/$defs/ResourceIdentityRef",
+        "x-cmf-value-owner": "CONTENT_HARNESS"
+      },
+      "minItems": 1,
+      "type": "array",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "request_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "semantic_intent": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceIdentityRef",
+            "x-cmf-value-owner": "CONTENT_HARNESS"
+          },
+          "minItems": 1,
+          "type": "array",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "recognition_target": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "subject": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "viewer_end_state": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "viewer_start_state": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "subject",
+        "recognition_target",
+        "viewer_start_state",
+        "viewer_end_state",
+        "evidence_refs"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DemandIdentityRef",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "version": {
+      "minimum": 1,
+      "type": "integer",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "wrongness_locks": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string",
+        "x-cmf-value-owner": "CONTENT_HARNESS"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true,
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    }
+  },
+  "required": [
+    "request_id",
+    "version",
+    "supersedes",
+    "content_harness_ref",
+    "category_profile",
+    "format_profile",
+    "asset_classification",
+    "semantic_intent",
+    "activative_intent",
+    "wrongness_locks",
+    "composition",
+    "identity_continuity",
+    "reference_evidence",
+    "delivery",
+    "evaluation_policy",
+    "execution_policy",
+    "notes"
+  ],
+  "title": "Visual Asset Demand",
+  "type": "object",
+  "x-cmf-authority": {
+    "allowed_producers": [
+      "CONTENT_HARNESS"
+    ],
+    "path_kind": "JSON_POINTER_TEMPLATE",
+    "value_owner_by_path": {
+      "/activative_intent": "CONTENT_HARNESS",
+      "/activative_intent/expected_effect": "CONTENT_HARNESS",
+      "/activative_intent/function": "CONTENT_HARNESS",
+      "/activative_intent/sequence_position": "CONTENT_HARNESS",
+      "/asset_classification": "CONTENT_HARNESS",
+      "/asset_classification/family": "CONTENT_HARNESS",
+      "/asset_classification/harness_role": "CONTENT_HARNESS",
+      "/asset_classification/subtype": "CONTENT_HARNESS",
+      "/asset_classification/visual_syntax_role": "CONTENT_HARNESS",
+      "/category_profile": "CONTENT_HARNESS",
+      "/category_profile/canonical_ref": "CONTENT_HARNESS",
+      "/category_profile/payload_hash": "CONTENT_HARNESS",
+      "/category_profile/resource_id": "CONTENT_HARNESS",
+      "/category_profile/version": "CONTENT_HARNESS",
+      "/composition": "CONTENT_HARNESS",
+      "/composition/canvas_height_px": "CONTENT_HARNESS",
+      "/composition/canvas_width_px": "CONTENT_HARNESS",
+      "/composition/gaze_direction": "CONTENT_HARNESS",
+      "/composition/intended_region": "CONTENT_HARNESS",
+      "/composition/intended_region/height": "CONTENT_HARNESS",
+      "/composition/intended_region/width": "CONTENT_HARNESS",
+      "/composition/intended_region/x": "CONTENT_HARNESS",
+      "/composition/intended_region/y": "CONTENT_HARNESS",
+      "/composition/layer_role": "CONTENT_HARNESS",
+      "/composition/reserved_regions": "CONTENT_HARNESS",
+      "/composition/reserved_regions/{index}": "CONTENT_HARNESS",
+      "/composition/reserved_regions/{index}/height": "CONTENT_HARNESS",
+      "/composition/reserved_regions/{index}/width": "CONTENT_HARNESS",
+      "/composition/reserved_regions/{index}/x": "CONTENT_HARNESS",
+      "/composition/reserved_regions/{index}/y": "CONTENT_HARNESS",
+      "/composition/tolerance_basis_points": "CONTENT_HARNESS",
+      "/composition/visual_weight": "CONTENT_HARNESS",
+      "/content_harness_ref": "CONTENT_HARNESS",
+      "/content_harness_ref/canonical_ref": "CONTENT_HARNESS",
+      "/content_harness_ref/payload_hash": "CONTENT_HARNESS",
+      "/content_harness_ref/resource_id": "CONTENT_HARNESS",
+      "/content_harness_ref/version": "CONTENT_HARNESS",
+      "/delivery": "CONTENT_HARNESS",
+      "/delivery/candidate_count": "CONTENT_HARNESS",
+      "/delivery/height_px": "CONTENT_HARNESS",
+      "/delivery/media_type": "CONTENT_HARNESS",
+      "/delivery/width_px": "CONTENT_HARNESS",
+      "/evaluation_policy": "CONTENT_HARNESS",
+      "/evaluation_policy/hard_gate_codes": "CONTENT_HARNESS",
+      "/evaluation_policy/hard_gate_codes/{index}": "CONTENT_HARNESS",
+      "/evaluation_policy/maximum_rounds": "CONTENT_HARNESS",
+      "/evaluation_policy/profile_ref": "CONTENT_HARNESS",
+      "/evaluation_policy/profile_ref/canonical_ref": "CONTENT_HARNESS",
+      "/evaluation_policy/profile_ref/payload_hash": "CONTENT_HARNESS",
+      "/evaluation_policy/profile_ref/resource_id": "CONTENT_HARNESS",
+      "/evaluation_policy/profile_ref/version": "CONTENT_HARNESS",
+      "/execution_policy": "CONTENT_HARNESS",
+      "/execution_policy/budget_authorization_ref": "CONTENT_HARNESS",
+      "/execution_policy/budget_authorization_ref/canonical_ref": "CONTENT_HARNESS",
+      "/execution_policy/budget_authorization_ref/payload_hash": "CONTENT_HARNESS",
+      "/execution_policy/budget_authorization_ref/resource_id": "CONTENT_HARNESS",
+      "/execution_policy/budget_authorization_ref/version": "CONTENT_HARNESS",
+      "/execution_policy/priority": "CONTENT_HARNESS",
+      "/format_profile": "CONTENT_HARNESS",
+      "/format_profile/canonical_ref": "CONTENT_HARNESS",
+      "/format_profile/payload_hash": "CONTENT_HARNESS",
+      "/format_profile/resource_id": "CONTENT_HARNESS",
+      "/format_profile/version": "CONTENT_HARNESS",
+      "/identity_continuity": "CONTENT_HARNESS",
+      "/identity_continuity/character_ref": "CONTENT_HARNESS",
+      "/identity_continuity/character_ref/canonical_ref": "CONTENT_HARNESS",
+      "/identity_continuity/character_ref/payload_hash": "CONTENT_HARNESS",
+      "/identity_continuity/character_ref/resource_id": "CONTENT_HARNESS",
+      "/identity_continuity/character_ref/version": "CONTENT_HARNESS",
+      "/identity_continuity/environment_ref": "CONTENT_HARNESS",
+      "/identity_continuity/environment_ref/canonical_ref": "CONTENT_HARNESS",
+      "/identity_continuity/environment_ref/payload_hash": "CONTENT_HARNESS",
+      "/identity_continuity/environment_ref/resource_id": "CONTENT_HARNESS",
+      "/identity_continuity/environment_ref/version": "CONTENT_HARNESS",
+      "/notes": "CONTENT_HARNESS",
+      "/reference_evidence": "CONTENT_HARNESS",
+      "/reference_evidence/{index}": "CONTENT_HARNESS",
+      "/reference_evidence/{index}/canonical_ref": "CONTENT_HARNESS",
+      "/reference_evidence/{index}/payload_hash": "CONTENT_HARNESS",
+      "/reference_evidence/{index}/resource_id": "CONTENT_HARNESS",
+      "/reference_evidence/{index}/version": "CONTENT_HARNESS",
+      "/request_id": "CONTENT_HARNESS",
+      "/semantic_intent": "CONTENT_HARNESS",
+      "/semantic_intent/evidence_refs": "CONTENT_HARNESS",
+      "/semantic_intent/evidence_refs/{index}": "CONTENT_HARNESS",
+      "/semantic_intent/evidence_refs/{index}/canonical_ref": "CONTENT_HARNESS",
+      "/semantic_intent/evidence_refs/{index}/payload_hash": "CONTENT_HARNESS",
+      "/semantic_intent/evidence_refs/{index}/resource_id": "CONTENT_HARNESS",
+      "/semantic_intent/evidence_refs/{index}/version": "CONTENT_HARNESS",
+      "/semantic_intent/recognition_target": "CONTENT_HARNESS",
+      "/semantic_intent/subject": "CONTENT_HARNESS",
+      "/semantic_intent/viewer_end_state": "CONTENT_HARNESS",
+      "/semantic_intent/viewer_start_state": "CONTENT_HARNESS",
+      "/supersedes": "CONTENT_HARNESS",
+      "/supersedes/canonical_ref": "CONTENT_HARNESS",
+      "/supersedes/payload_hash": "CONTENT_HARNESS",
+      "/supersedes/request_id": "CONTENT_HARNESS",
+      "/supersedes/version": "CONTENT_HARNESS",
+      "/version": "CONTENT_HARNESS",
+      "/wrongness_locks": "CONTENT_HARNESS",
+      "/wrongness_locks/{index}": "CONTENT_HARNESS"
+    }
+  },
+  "x-cmf-consumers": [
+    "DELEGATION_PROTOCOL",
+    "VISUAL_ASSET_EDITOR",
+    "CONTROL_TOWER"
+  ],
+  "x-cmf-idempotency": "REQUIRED",
+  "x-cmf-lifecycle-effects": [
+    "demand_recorded"
+  ],
+  "x-cmf-message-type": "visual-asset-demand",
+  "x-cmf-message-version": "1.0"
+}

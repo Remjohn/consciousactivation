@@ -1,0 +1,154 @@
+schema_version: conscious-activations-xri-namespace-conformance/v1
+validated_at: '2026-07-15T03:46:27+02:00'
+scope: XRI-003_through_XRI-021
+result: PASS
+convergence_audit_rerun: false
+production_authorized: false
+
+classification_counts:
+  PROGRAM_XRI: 18
+  DELEGATION_LOCAL: 1
+  HISTORICAL_ONLY: 0
+  DUPLICATE_OR_ALIAS: 0
+  INVALID_OR_UNUSED: 0
+
+canonical_registry:
+  authority: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+  canonical_program_record_count: 20
+  retained_scope_records: 18
+  retired_identifier_count: 1
+  duplicate_identifiers: 0
+  undefined_active_references: 0
+  controlled_status_only: true
+  status_counts:
+    resolved: 12
+    open: 5
+    in_remediation: 3
+    closed: 0
+    superseded: 0
+    accepted_risk: 0
+
+scope_classification:
+  PROGRAM_XRI:
+    - XRI-003
+    - XRI-004
+    - XRI-005
+    - XRI-006
+    - XRI-007
+    - XRI-008
+    - XRI-009
+    - XRI-010
+    - XRI-011
+    - XRI-012
+    - XRI-013
+    - XRI-014
+    - XRI-015
+    - XRI-016
+    - XRI-017
+    - XRI-019
+    - XRI-020
+    - XRI-021
+  DELEGATION_LOCAL:
+    XRI-018:
+      replacement_identifier: DLG-ISSUE-018
+      status: closed
+      historical_identifiers: [XRI-018]
+      renamed_because: reserved_program_namespace
+  HISTORICAL_ONLY: []
+  DUPLICATE_OR_ALIAS: []
+  INVALID_OR_UNUSED: []
+
+canonical_status_projection:
+  resolved:
+    - XRI-001
+    - XRI-002
+    - XRI-003
+    - XRI-004
+    - XRI-005
+    - XRI-006
+    - XRI-007
+    - XRI-008
+    - XRI-009
+    - XRI-010
+    - XRI-011
+    - XRI-012
+  open:
+    - XRI-013
+    - XRI-014
+    - XRI-015
+    - XRI-016
+    - XRI-017
+  in_remediation:
+    - XRI-019
+    - XRI-020
+    - XRI-021
+
+delegation_status:
+  canonical_registry_pointer: ../CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+  status_source: registry_only
+  active_canonical_blockers:
+    - XRI-013
+    - XRI-014
+    - XRI-015
+    - XRI-016
+    - XRI-017
+    - XRI-019
+    - XRI-020
+    - XRI-021
+  local_issues:
+    DLG-ISSUE-001: open
+    DLG-ISSUE-002: open
+    DLG-ISSUE-018: closed
+  resolved_xri_listed_as_active_blocker: false
+  undefined_xri_reference: false
+  independent_xri_definition: false
+
+validation_requirements:
+  every_active_xri_exists_in_program_control:
+    status: PASS
+    evidence: all syntactic workspace identifiers XRI-001 through XRI-021 resolve to a canonical or retired registry record
+  no_repository_independently_defines_xri:
+    status: PASS
+    evidence: Delegation issue register contains only DLG-ISSUE definitions and exact Program Control references
+  delegation_local_issues_namespaced:
+    status: PASS
+    evidence: DLG-ISSUE-001, DLG-ISSUE-002 and DLG-ISSUE-018
+  no_duplicate_active_issue_identity:
+    status: PASS
+    evidence: 20 unique canonical records and three unique local records
+  historical_aliases_traceable:
+    status: PASS
+    evidence: XRI-018 maps to DLG-ISSUE-018; prior XRI-001/XRI-002 mistaken uses remain mapped to DLG-ISSUE-001/DLG-ISSUE-002
+  delegation_export_no_undefined_xri:
+    status: PASS
+    evidence: every canonical_program_issue_reference resolves to XRI_REGISTRY.yaml
+  xri_001_and_xri_002_unchanged:
+    status: PASS
+    record_hashes:
+      XRI-001: sha256:38bf3053ef8af0427dd7375f299fb3a91b50a244f223e022ab871551aab08b17
+      XRI-002: sha256:78b5f228d17d1239689ee99b6c619b41bcc8ec2ae6e751027ede5e163dbf0ef7
+  rc4_byte_identity:
+    status: PASS
+    program_control_files: 164
+    delegation_files: 164
+    byte_differences: 0
+    release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+  modification_scope:
+    status: PASS
+    product_contract_schema_implementation_files_modified: 0
+    immutable_release_files_modified: 0
+  status_truth:
+    status: PASS
+    builder_or_vae_status_export_change_required: false
+    note: Builder and VAE exports contain no active affected XRI references.
+
+inventory:
+  file: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_003_021_INVENTORY.csv
+  occurrence_rows: 375
+  source_files: 40
+  snapshot: pre_reconciliation
+
+prerequisites_for_fresh_read_only_convergence_audit:
+  satisfied: true
+  next_action: rerun_read_only_cross_repository_convergence_audit_against_unchanged_rc4
+  authorization_effect: none

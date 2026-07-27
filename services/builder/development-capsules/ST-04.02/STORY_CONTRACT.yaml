@@ -1,0 +1,43 @@
+schema_version: cmf-builder-development-story-contract/v1
+story_id: ST-04.02
+primary_epic: EP-04
+title: Compile Responsibility-Centered Modules with Test Seams
+active_mode: RESPONSIBILITY_CENTERED_MODULES
+primary_outcome: >-
+  A maintainer can inspect and independently test responsibility-centered
+  modules compiled from the exact active capability ownership graph without
+  recreating horizontal technical layers.
+owned_obligations: [D015, FR-064, FR-065]
+relevant_frs: [FR-064, FR-065]
+relevant_nfrs: []
+direct_dependency: ST-04.01:StoryCompletionReceipt
+intrinsic_dependencies:
+  - active_hash_valid_capability_ownership_graph
+  - exact_capability_coverage_and_owner_lineage
+  - resolved_architecture_preservation_contract_BD_001
+applicable_blockers: []
+implementation_owner: graph_and_contract_owner
+component_boundary: >-
+  Builder domain and application contracts for responsibility-centered module
+  compilation only; no Phase Graph, Context Graph, Handoff execution, Workflow
+  IR, Control Tower, external runtime, or production persistence.
+typed_contracts:
+  - ResponsibilityModule
+  - ModulePublicContract
+  - ModuleTestSeam
+  - ResponsibilityModuleGraph
+  - ResponsibilityModuleReceipt
+  - ResponsibilityModuleInvalidation
+  - CompileResponsibilityModulesCommand
+failure_behavior: >-
+  Fail closed on incomplete capability coverage, mixed owner-kind authority,
+  technology-layer-only boundaries, hidden side effects, missing public
+  contracts/invariants/exclusions/dependencies/failure ownership/test seams,
+  stale lineage, invalid authority, payload conflict, or partial atomic commit.
+migration_or_compatibility: >-
+  Initial synthetic contract version. Any changed capability assignment,
+  module boundary, public contract, dependency, or test seam produces a new
+  immutable graph identity; no in-place mutation or silent rewrite is allowed.
+completion_receipt: ST-04.02:StoryCompletionReceipt
+implementation_authorized: false
+production_authorized: false

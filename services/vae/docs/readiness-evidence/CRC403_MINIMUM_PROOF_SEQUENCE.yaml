@@ -1,0 +1,175 @@
+plan_id: VAE-CRC403-MINIMUM-PROOF-SEQUENCE-001
+version: 1.0.0
+classification: non_production_readiness_proof
+concern_id: CRC-403
+current_state: WAITING_FOR_OPERATOR_INFRASTRUCTURE
+stage5_authorized: false
+production_implementation_authorized: false
+automatic_proof_continuation: prohibited
+objective: close_the_six_VAE_empirical_readiness_gaps_with_the_shortest_dependency_safe_proof_chain
+
+existing_evidence:
+  - id: E01
+    state: complete
+    evidence: validation/DELEGATION_RC4_CONSUMER_VALIDATION_2026-07-15.md
+    sha256: sha256:1290036d5035b7e232cbff331069e9814489b09574a0f276e60716d46e4886f4
+    result: RC4_consumer_integration_PASS_14_of_14
+  - id: E02
+    state: complete_foundation_only
+    evidence:
+      - governance/VISUAL_EVALUATION_PROFILE_REGISTRY.yaml
+      - proofs/evaluator/EVALUATION_PROGRAM_F02_V1_1.yaml
+      - proofs/evaluator/EVALUATION_PROMPT_TEMPLATE_F02_V1_1.md
+      - proofs/evaluator/validate_evaluator_foundation.py
+    result: evaluator_profile_and_program_pinned_foundation_PASS_identity_unbound
+  - id: E03
+    state: incomplete_empirical_evidence
+    evidence:
+      - proofs/evaluator/labeled-calibration-seed.yaml
+      - proofs/evaluator/protected-regression-set.seed.yaml
+      - docs/readiness-evidence/EVALUATOR_CALIBRATION_RUNBOOK.md
+    result: 12_case_provisional_seed_and_6_unsealed_slots_insufficient_evidence
+  - id: E04
+    state: failed_environment_probe
+    evidence:
+      - docs/readiness-evidence/LOCAL_GPU_PROOF.md
+      - docs/readiness-evidence/SELF_HOSTED_GPU_REQUIREMENTS.yaml
+      - docs/readiness-evidence/SELF_HOSTED_GPU_ACCEPTANCE_TESTS.md
+    result: GTX_960M_2_GiB_not_proof_capable_no_Docker_GPU_execution
+  - id: E05
+    state: failed_authorization_probe
+    evidence:
+      - docs/readiness-evidence/CLOUD_GPU_PROOF.md
+      - docs/readiness-evidence/CLOUD_GPU_REQUIREMENTS.yaml
+      - docs/readiness-evidence/CLOUD_GPU_AUTHORIZATION_CHECKLIST.md
+    result: no_authorized_cloud_identity_worker_or_spend
+  - id: E06
+    state: complete_contract_simulation_only
+    evidence:
+      - proofs/recovery/RECOVERY_ROLLBACK_SCENARIO.yaml
+      - proofs/recovery/verify_recovery_scenario.py
+      - docs/readiness-evidence/RECOVERY_REHEARSAL_RUNBOOK.md
+    result: recovery_invariants_PASS_executable_rehearsal_FAIL
+  - id: E07
+    state: complete_fixture_chain_only
+    evidence:
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/contracts/visual_asset_demand.reference.yaml
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/contracts/visual_production_plan.reference.yaml
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/proofs/FORMAT02_CONTROLLED_PROOF.yaml
+      - reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/proofs/verify_format02_controlled_proof.py
+    result: controlled_RC4_Format02_chain_PASS_real_compute_evaluator_and_consumer_path_FAIL
+  - id: E08
+    state: complete_operator_design
+    evidence:
+      - docs/readiness-evidence/OPERATOR_READINESS_INPUT_CHECKLIST.md
+      - docs/readiness-evidence/PROOF_RUNTIME_TOPOLOGY.md
+      - docs/readiness-evidence/STORAGE_QUEUE_INPUT_REQUIREMENTS.yaml
+    result: requirements_and_runbooks_exist_no_external_endpoints_or_credentials
+
+responsibility_split:
+  codex_can_perform_now:
+    - revalidate_existing_RC4_evaluator_fixture_and_recovery_baselines
+    - verify_operator_supplied_non_secret_identifiers_hashes_and_endpoint_reachability
+    - assemble_sanitized_run_manifests_and_validate_receipts
+    - execute_one_explicitly_authorized_proof_then_stop
+    - report_pass_fail_or_missing_evidence_without_inventing_thresholds
+  operator_decisions:
+    - evaluator_provider_model_runtime_and_independent_identity
+    - calibration_corpus_and_protected_set_approval
+    - self_hosted_and_cloud_worker_authorization
+    - cloud_cost_cancellation_and_cleanup_authority
+    - Format02_source_fixture_approval
+    - recovery_fault_injection_and_rollback_authorization
+    - evaluator_calibration_shadow_and_certification_decisions
+  credentials_or_infrastructure_required:
+    - evaluator_credential_reference_and_invocation_method
+    - proof_capable_self_hosted_Docker_GPU_worker
+    - authorized_cloud_Docker_GPU_worker
+    - versioned_object_storage
+    - fenced_job_queue_or_transport_and_status_events
+    - versioned_checkpoint_storage
+    - external_secret_manager_or_workload_identity
+  real_world_executions:
+    - evaluator_runtime_and_governed_corpus
+    - self_hosted_pinned_Format02_workflow
+    - cloud_execution_of_the_same_plan
+    - worker_interruption_checkpoint_restore_provider_fallback_and_rollback
+    - actual_proof_runtime_Format02_chain_with_independent_evaluation
+  evidence_required_human_decisions:
+    - approve_or_reject_calibration_ready
+    - approve_or_reject_shadow_ready
+    - approve_or_reject_certified
+    - approve_or_reject_non_compensable_gates_and_empirical_thresholds
+    - approve_or_reject_compute_recovery_and_Format02_readiness
+
+minimum_dependency_graph:
+  input_gate:
+    id: I0
+    kind: non_executable_admission_gate
+    requires: all_required_fields_in_CRC403_OPERATOR_INPUTS
+    current_result: STOP
+    stop_state: WAITING_FOR_OPERATOR_INFRASTRUCTURE
+  proofs:
+    - id: P1
+      name: governed_evaluator_runtime_and_calibration_evidence
+      first_executable_proof: true
+      depends_on: [I0]
+      reason_first: lowest_cost_fail_fast_gate_and_prerequisite_for_independent_Format02_evaluation
+      uses_existing:
+        - docs/readiness-evidence/EVALUATOR_CALIBRATION_RUNBOOK.md
+        - docs/readiness-evidence/CALIBRATION_LABELING_GUIDE.md
+        - docs/readiness-evidence/PROTECTED_SET_SEALING_PROCEDURE.md
+      required_outputs:
+        - immutable_evaluator_and_program_identity_receipt
+        - independent_producer_and_evaluator_identity_proof
+        - governed_minimum_30_case_calibration_results
+        - false_positive_false_negative_and_abstention_analysis
+        - protected_set_seal_and_blind_run_receipt
+        - candidate_threshold_evidence_without_unapproved_final_thresholds
+        - rollback_evaluator_baseline
+      automatic_certification: forbidden
+      stop_after: required
+    - id: H1
+      name: evaluator_authority_decision
+      kind: human_gate
+      depends_on: [P1]
+      allowed_results: [insufficient_evidence, calibration_ready, shadow_ready, certified]
+      rule: certified_requires_all_existing_profile_evidence_and_signed_evaluation_and_product_authority_receipts
+    - id: P2
+      name: self_hosted_Format02_compute_and_storage_queue_proof
+      depends_on: [I0]
+      uses_existing:
+        - docs/readiness-evidence/SELF_HOSTED_GPU_SETUP_RUNBOOK.md
+        - docs/readiness-evidence/SELF_HOSTED_GPU_ACCEPTANCE_TESTS.md
+        - docs/readiness-evidence/STORAGE_QUEUE_INPUT_REQUIREMENTS.yaml
+      required_outputs: [16_of_16_worker_acceptance, pinned_runtime_receipt, real_candidate, storage_queue_checkpoint_and_cancellation_receipts]
+      stop_after: required
+    - id: P3
+      name: cloud_execution_of_identical_provider_neutral_plan
+      depends_on: [P2]
+      uses_existing:
+        - docs/readiness-evidence/CLOUD_GPU_AUTHORIZATION_CHECKLIST.md
+        - docs/readiness-evidence/CLOUD_GPU_EXECUTION_RUNBOOK.md
+      required_outputs: [cloud_runtime_attestation, local_cloud_plan_equivalence, cost_cancellation_result_and_cleanup_receipts]
+      stop_after: required
+    - id: P4
+      name: executable_recovery_and_rollback_rehearsal
+      depends_on: [P2, P3]
+      uses_existing: [docs/readiness-evidence/RECOVERY_REHEARSAL_RUNBOOK.md]
+      required_outputs: [worker_interruption, checkpoint_restore, zero_quality_round_infrastructure_retry, provider_fallback, failed_promotion, rollback, artifact_preservation]
+      stop_after: required
+    - id: P5
+      name: real_non_production_Format02_end_to_end_readiness_proof
+      depends_on: [P1, H1, P2, P3, P4]
+      required_evaluator_state: certified
+      required_outputs: [validated_demand, real_production_plan_execution, candidate_portfolio, deterministic_and_independent_evaluation, one_targeted_repair, accepted_non_production_result, controlled_acknowledgement, usage_receipt]
+      production_authority_effect: none
+      stop_after: required
+
+stop_policy:
+  infrastructure_absent: WAITING_FOR_OPERATOR_INFRASTRUCTURE
+  inputs_complete: GO_P1_ONLY
+  after_any_proof: STOP_FOR_REVIEW_AND_EXPLICIT_NEXT_AUTHORIZATION
+  later_proofs_run_automatically: false
+  stage5_state_after_all_proofs: unchanged_until_separate_formal_authorization
+

@@ -1,0 +1,41 @@
+schema_version: cmf-builder-development-story-contract/v1
+story_id: ST-04.03
+primary_epic: EP-04
+title: Order Work Through an Executable Phase Graph
+active_mode: PHASE_GRAPH
+primary_outcome: >-
+  A maintainer can inspect an immutable acyclic phase graph compiled from the
+  exact active responsibility-module graph and determine what is runnable now,
+  blocked by prerequisites, or explicitly safe to run in parallel.
+owned_obligations: [D013, FR-066, FR-067]
+relevant_frs: [FR-066, FR-067]
+relevant_nfrs: []
+direct_dependency: ST-04.02:StoryCompletionReceipt
+intrinsic_dependencies:
+  - active_hash_valid_responsibility_module_graph
+  - explicit_module_contract_and_dependency_topology
+  - resolved_architecture_preservation_contract_BD_001
+applicable_blockers: []
+implementation_owner: graph_and_contract_owner
+component_boundary: >-
+  Builder domain and application contracts for deterministic phase-graph
+  compilation only; no execution, routing, retry, context graph, handoff,
+  Workflow IR, Control Tower, external runtime, or production persistence.
+typed_contracts:
+  - PhaseNode
+  - PhaseExecutionPlan
+  - PhaseGraph
+  - PhaseGraphReceipt
+  - PhaseGraphInvalidation
+  - CompilePhaseGraphCommand
+failure_behavior: >-
+  Fail closed on cycles, unresolved or self dependencies, undeclared modules,
+  default or asymmetric parallelism, gate bypass, stale lineage, invalid
+  authority, payload conflict, or partial atomic commit.
+migration_or_compatibility: >-
+  Initial synthetic contract version. Changed phase topology, dependency,
+  parallelism, gate, entry, exit, or failure ownership produces a new immutable
+  graph identity; no in-place mutation is allowed.
+completion_receipt: ST-04.03:StoryCompletionReceipt
+implementation_authorized: false
+production_authorized: false

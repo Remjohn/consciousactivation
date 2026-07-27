@@ -1,0 +1,23 @@
+scenario_id: SCN-05
+title: Constraint conflict and amendment
+purpose: Proves non-binding proposals and new demand versions.
+contracts:
+- type: constraint-conflict
+  example_ref: ../../../contracts/examples/constraint-conflict.example.yaml
+- type: amendment-proposal
+  example_ref: ../../../contracts/examples/amendment-proposal.example.yaml
+- type: amendment-response
+  example_ref: ../../../contracts/examples/amendment-response.example.yaml
+- type: demand-supersession
+  example_ref: ../../../contracts/examples/demand-supersession.example.yaml
+- type: selective-invalidation-receipt
+  example_ref: ../../../contracts/examples/selective-invalidation-receipt.example.yaml
+expected_shared_states:
+- IN_PROGRESS
+- AMENDMENT_REQUIRED
+- SUPERSEDED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

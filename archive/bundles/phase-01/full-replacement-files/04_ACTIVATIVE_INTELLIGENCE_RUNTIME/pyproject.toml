@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cmf-activative-intelligence-runtime"
+version = "0.1.0.dev1"
+description = "Development-only Phase 1 shell for Activative Intelligence Runtime."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["ca-runtime==0.1.0.dev1"]
+
+[project.scripts]
+cmf-air = "cmf_activative_intelligence.entrypoint:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["cmf_activative_intelligence*"]

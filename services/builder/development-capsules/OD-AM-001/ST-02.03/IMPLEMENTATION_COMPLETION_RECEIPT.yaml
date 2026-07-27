@@ -1,0 +1,72 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_type: ImplementationCompletionReceipt
+receipt_id: OD-AM-001:ST-02.03:PROVISIONAL_GRAMMAR
+story_id: ST-02.03
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+recorded_on_utc: "2026-07-17"
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+completion_verdict: PASS
+authority:
+  amendment_receipt: {path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml, sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44}
+  delta_capsule: {path: development-capsules/OD-AM-001/ST-02.03/DELTA_CAPSULE.yaml, sha256: d2831cb1e8f24a5a152b76259b33f1112bc99740b78b7bdee0ebec401a20e7cb}
+dependency:
+  story_id: ST-02.02
+  receipt: {path: development-capsules/OD-AM-001/ST-02.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml, sha256: 59ab5dd5dd7feb5e736faa2cd30724afa6653e6816636c72c5688fd0ff07197c}
+  status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  Induce immutable provisional substrate-specific grammar motifs only after
+  supported ST-02.02 syntax graphs, while retaining rich source references and
+  keeping unsupported function, sequence-effect and Activative meaning visibly
+  provisional.
+owned_obligations:
+  - {id: AG-006, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: AG-007, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: D007, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-028, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-029, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-030, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-031, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+verification:
+  story_tests: {result: PASS, passed: 40, failed: 0, skipped: 0, mandatory_skips: 0}
+  lane_predecessor_regression: {result: PASS, passed: 99, failed: 0, skipped: 0, mandatory_skips: 0}
+  python_syntax_parse: {result: PASS, passed: 7, failed: 0}
+  cross_specimen_support: PASS_FOCUSED
+  rich_source_lineage: PASS_FOCUSED
+  provisional_knowledge_boundary: PASS_FOCUSED
+  deterministic_versioning: PASS_FOCUSED
+  authority_atomicity_and_rollback: PASS_FOCUSED
+  canonical_commit_revalidation: PASS_FOCUSED
+  exact_receipt_binding: PASS_FOCUSED
+  same_identity_different_payload_rejection: PASS_FOCUSED
+  duplicate_and_relabelled_source_support_rejection: PASS_FOCUSED
+  exact_graph_edge_observation_provenance_lineage: PASS_FOCUSED
+  file_scope: PASS_LANE_SCOPE
+  integrator_full_regression: PASS_1152_OF_1152_NO_MANDATORY_SKIPS
+  source_boundary_registration: PASS_GOVERNED_REGISTRY
+evidence:
+  test_results: {path: development-capsules/OD-AM-001/ST-02.03/TEST_RESULTS.json, sha256: ef88292b3764f5b028b9aea0f3884e50aac13548e0fb7c8752699b879e83e925}
+  file_change_manifest: {path: development-capsules/OD-AM-001/ST-02.03/FILE_CHANGE_MANIFEST.yaml, sha256: 50d8ea1aed227e2cd87d4a796b1f0f657622bb03504887ddd6878b6595f6e855}
+blocker_scope_preserved:
+  BD-004: EVIDENCE_PENDING_OUTSIDE_OFFLINE_BRANCH
+  BD-007: EVIDENCE_PENDING_OUTSIDE_OFFLINE_BRANCH
+  BD-008: REAL_PROFILE_EVIDENCE_PENDING_OUTSIDE_PROVISIONAL_OFFLINE_BRANCH
+  HD-006: HUMAN_POLICY_PENDING_OUTSIDE_NON_PERSONAL_OFFLINE_BRANCH
+claims:
+  story_completion_receipt_issued: false
+  evidence_closure_receipt_issued: false
+  human_truth_or_reaction_invented: false
+  production_ready: false
+  certified: false
+  empirical_superiority_claimed: false
+integrator_gate:
+  exact_source_registrations:
+    - src/cmf_builder/visual/grammar_contracts.py
+    - src/cmf_builder/visual/induction.py
+  completed_actions:
+    - registered both source paths without weakening source-boundary assertions
+    - passed the canonical full repository regression at 1152/1152
+    - validated all receipt and evidence hashes
+    - closed the pre-promotion P0/P1 findings with eight adversarial regressions
+  transitioned_to: IMPLEMENTED_DEVELOPMENT_PASS
+  may_unlock: ST-02.04_OD_AM_001_OFFLINE_DEVELOPMENT
+  current_unlock_state: ALLOWED_BY_IMPLEMENTATION_GATE_ONLY

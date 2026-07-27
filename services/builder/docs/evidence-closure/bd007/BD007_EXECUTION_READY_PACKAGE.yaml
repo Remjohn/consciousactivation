@@ -1,0 +1,37 @@
+schema_version: cmf-builder-bd007-execution-ready-package/v1
+status: NOT_READY_EXACT_GAPS_RECORDED
+no_cloud_execution_performed: true
+model_contract:
+  configuration_id: BD007-QWEN36-27B-FP8-CLOUD-v1
+  model_repository: Qwen/Qwen3.6-27B-FP8
+  immutable_revision: MISSING_LATER_CLOUD_CAMPAIGN_REQUIRED
+  model_manifest_identity: MISSING_LATER_MODEL_DOWNLOAD_AND_HASH_REQUIRED
+  license: Apache-2.0_REQUIRES_LATER_VERIFICATION_AGAINST_PINNED_REVISION
+runtime_contract:
+  serving_runtime: vLLM
+  minimum_version: "0.19.0"
+  protocol: OpenAI-compatible chat completions
+  reasoning_parser: qwen3
+  language_model_only: true
+  tools_enabled: false
+experiment_contract:
+  cases: 4
+  arms_per_case: 2
+  repeats_per_arm: 3
+  total_semantic_calls: 24
+  dimensions: 17
+  non_compensable_failures: 9
+  cloud_calls_authorized_by_ec_am_001: 0
+missing_prerequisites:
+  - configured AWS account or Google Cloud project
+  - selected region with visible GPU quota
+  - immutable model revision and file manifest
+  - built and pinned vLLM container digest
+  - complete case evidence bindings approved for mixed governed sources
+  - cloud budget and teardown authority
+  - semantic trial execution and scorecards
+claim_boundary:
+  bd007_closed: false
+  production_ready: false
+  certified: false
+

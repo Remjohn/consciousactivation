@@ -1,0 +1,43 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-09.06
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/workflow/observability_recovery.py
+    role: local queue projection, telemetry, budget, public-seam and recovery contracts
+  - path: tests/stories/st_09_06/test_queue_projection_and_telemetry.py
+    role: queue-state and telemetry coverage
+  - path: tests/stories/st_09_06/test_budget_and_public_seam_reconstruction.py
+    role: budget and public-seam reconstruction coverage
+  - path: tests/stories/st_09_06/test_fault_injection_and_recovery.py
+    role: deterministic injected-fault recovery coverage
+  - path: tests/stories/st_09_06/test_authority_invalidation_rollback_and_boundaries.py
+    role: repeat, authority, invalidation and rollback coverage
+files_modified:
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    role: mechanical exact-source registration for ST-09.06 source
+  - path: development-capsules/OD-AM-001/ST-09.06/TEST_RESULTS.json
+    role: compact test evidence
+  - path: development-capsules/OD-AM-001/ST-09.06/FILE_CHANGE_MANIFEST.yaml
+    role: compact file-scope evidence
+  - path: development-capsules/OD-AM-001/ST-09.06/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    role: OD-AM-001 terminal implementation completion receipt
+production_files_changed:
+  - src/cmf_builder/workflow/observability_recovery.py
+test_files_changed:
+  - tests/stories/st_09_06/test_queue_projection_and_telemetry.py
+  - tests/stories/st_09_06/test_budget_and_public_seam_reconstruction.py
+  - tests/stories/st_09_06/test_fault_injection_and_recovery.py
+  - tests/stories/st_09_06/test_authority_invalidation_rollback_and_boundaries.py
+shared_files_changed:
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+status_files_changed:
+  - docs/implementation/offline-development/OVERNIGHT_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  path_ownership_conformant: true
+  external_engine_provider_model_network_sandbox_or_product_execution: false
+  production_or_certification_status_created: false
+  file_scope_verdict: PASS

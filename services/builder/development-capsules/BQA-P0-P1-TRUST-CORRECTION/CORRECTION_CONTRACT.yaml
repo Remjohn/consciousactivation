@@ -1,0 +1,33 @@
+schema_version: cmf-builder-bqa-trust-correction-contract/v1
+capsule_id: BQA-P0-P1-TRUST-CORRECTION
+correction_type: BOUNDED_EXISTING_STORY_INVARIANT_REPAIR
+owned_findings: [BQA-P0-001, BQA-P1-003, BQA-P1-004, BQA-P1-005, BQA-P1-006]
+confirmed_story_owners:
+  ST-01.01: [BQA-P1-004, BQA-P1-005]
+  ST-01.02: [BQA-P1-006]
+  ST-07.02: [BQA-P0-001]
+  ST-07.04: [BQA-P0-001, BQA-P1-003]
+outcome: >-
+  The Builder rejects semantically forged governed definitions, preserves an
+  unambiguous committed outcome when observation delivery degrades, makes current
+  run-repository commands concurrency-safe and atomic, and binds ZIP identity and
+  descriptors to one immutable byte sequence.
+preservation:
+  story_ids_added: []
+  obligations_added: []
+  original_completion_receipts_modified: false
+  external_contracts_modified: false
+  schemas_modified: false
+  external_dependencies_added: false
+completion_receipts:
+  - ST-01.01-TRUST-CORRECTION
+  - ST-01.02-TRUST-CORRECTION
+  - ST-07.02-ST-07.04-TRUST-CORRECTION
+  - BQA-P0-P1-TRUST-CORRECTION-INTEGRATION-GATE
+completion_gate:
+  all_findings_closed: true
+  affected_story_suites_pass: true
+  full_regression_twice: true
+  integration_gate_rerun: PASS_required
+  production_or_certification_claim: false
+

@@ -1,0 +1,67 @@
+schema_version: cmf-builder-activative-lineage-mapping/v1
+mapping_id: builder-target-artifacts-to-delegation-rc4
+status: ACTIVE
+contract_pin: DELEGATION_CONTRACT_PIN.yaml#builder-delegation-1.1.0-rc.4
+preservation_policy:
+  required_lineage_is_structured: true
+  flatten_into_generic_notes: prohibited
+  lossless_only: true
+  immutable_content_authority: true
+  missing_required_lineage: reject
+mappings:
+  - builder_artifact: Activative Intelligence Pack
+    delegation_field: /activative_semantic_lineage/activative_intelligence_pack_ref
+    cardinality: exactly_one
+  - builder_artifact: Identity DNA
+    delegation_field: /activative_semantic_lineage/identity_dna_ref
+    cardinality: exactly_one
+  - builder_artifact: Context Premise
+    delegation_field: /activative_semantic_lineage/context_premise_ref
+    cardinality: exactly_one
+  - builder_artifact: Resonance Map
+    delegation_field: /activative_semantic_lineage/resonance_map_ref
+    cardinality: exactly_one
+  - builder_artifact: Matrix of Edging
+    delegation_field: /activative_semantic_lineage/matrix_edge_product_ref
+    cardinality: exactly_one
+    compatibility_note: RC4 preserves the structured Matrix of Edging product as matrix_edge_product_ref
+  - builder_artifact: Activative Call
+    delegation_field: /activative_semantic_lineage/activative_call_refs
+    cardinality: one_or_more_when_applicable
+  - builder_artifact: Reaction Receipt
+    delegation_field: /activative_semantic_lineage/reaction_receipt_refs
+    cardinality: one_or_more_for_interview_expression_otherwise_optional
+  - builder_artifact: Expression Moment
+    delegation_field: /activative_semantic_lineage/expression_moment_refs
+    cardinality: one_or_more_for_interview_expression_otherwise_optional
+  - builder_artifact: Activation Contract
+    delegation_field: /activation_contract
+    cardinality: exactly_one_structured_object
+  - builder_artifact: Visual Semantic Pack
+    delegation_field: /visual_semantic_pack
+    cardinality: exactly_one_structured_object
+  - builder_artifact: Visual Narrative Program
+    delegation_field: /visual_narrative_program
+    cardinality: exactly_one_structured_object
+  - builder_artifact: Feature Contracts
+    delegation_field: /feature_contracts
+    cardinality: one_or_more
+  - builder_artifact: T/V route
+    delegation_field: /somatic_route_request
+    cardinality: exactly_one_structured_object
+    required_subfields: [t_codes, v_codes]
+  - builder_artifact: Composition Intent
+    delegation_field: /composition_intent
+    cardinality: exactly_one_structured_object
+validation_rules:
+  structured_field_count: 14
+  generic_notes_target_count: 0
+  interview_expression_requires_reaction_and_expression_refs: true
+  semantic_domain_drop: reject
+  semantic_domain_weaken: reject
+  semantic_domain_synthesize: reject
+  semantic_domain_flatten: reject
+  semantic_domain_reinterpret: reject
+planning_traceability:
+  obligations: [CONST-005, CONST-007, CONST-008, FR-137, FR-171, FR-173, FR-177, FR-179, FR-180, NFR-TRACE-001, NFR-TRACE-003]
+  stories: [ST-03.03, ST-06.01, ST-07.01, ST-07.03, ST-07.04, ST-08.02, ST-08.03, ST-12.03]

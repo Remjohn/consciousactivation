@@ -1,0 +1,36 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: EXPERIMENT-CR-001
+calling_lane: EXPERIMENT_AND_EVALUATION_AGENT
+status: APPLIED
+change_class: AUTHORIZED_MECHANICAL_EXACT_SOURCE_SET_ADDITION
+target_file: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+exact_symbol: SyntheticProofFailureBoundaryTests.test_architecture_boundary_keeps_original_source_set_and_no_external_imports
+required_additive_change:
+  add_expected_source_paths:
+    - src/cmf_builder/category_evidence/experiment_contracts.py
+    - src/cmf_builder/category_evidence/experiment_evaluation.py
+preconditions:
+  - Both source paths are exclusively owned and implemented by EXPERIMENT_AND_EVALUATION_AGENT under the active campaign lock.
+  - Each module uses only the Python standard library and contains no provider execution adapter.
+  - Focused experiment tests pass.
+postconditions:
+  - The exact-source assertion recognizes the two authorized evidence-infrastructure modules.
+  - The prohibited-import scan still evaluates both modules without modification.
+invariants:
+  assertions_weakened: false
+  tests_deleted: false
+  prohibited_import_set_changed: false
+  architecture_boundary_relaxed: false
+  external_runtime_added: false
+  provider_execution_added: false
+focused_tests:
+  - tests/category_native_evidence/experiment/test_contracts.py
+  - tests/category_native_evidence/experiment/test_evaluation.py
+  - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+integrator_disposition:
+  verdict: ACCEPTED_AND_APPLIED
+  applied_change: The two requested experiment source paths were added to the historical exact-source set without changing the requested semantic scope.
+  assertions_weakened: false
+  tests_deleted: false
+  architecture_boundary_relaxed: false
+  note: The integrator separately registered provider evidence modules under its own review; that additive action does not alter EXPERIMENT-CR-001.

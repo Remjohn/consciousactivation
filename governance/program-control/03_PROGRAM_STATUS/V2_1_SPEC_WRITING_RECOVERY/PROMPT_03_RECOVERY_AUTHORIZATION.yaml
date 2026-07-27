@@ -1,0 +1,79 @@
+schema_version: conscious-activations-prompt03-recovery-authorization/v1
+authorization_id: CA-P03-RECOVERY-AUTH-2026-07-22
+issued_on: '2026-07-22'
+status: ACTIVE_SPECIFICATION_WRITING_ONLY
+authorization_chain:
+  prompt01_completion_receipt:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_AUTHORITY_CONVERGENCE/COMPLETION_RECEIPT.yaml
+    sha256: 032b90b449fd5bafd96685ae40370f652bdfba38fdec1d0761be115c069f528f
+  prompt02_gate_receipt:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_RECONCILIATION/PROMPT_02_GATE_RECEIPT.yaml
+    sha256: 01f054b4e3efa67345a3fbd4b33fadc4f26b0174ffdfaa44d5090051cc214709
+  prompt02_completion_receipt:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_RECONCILIATION/COMPLETION_RECEIPT.yaml
+    sha256: bb0057effade4074c84063a376d61e908bb636d81e93141290c4a61112456105
+  recovery_specification_work_receipt:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/SPECIFICATION_WORK_AUTHORIZATION_RECEIPT.yaml
+    sha256: 4b4b32b29e8e1e47ddad27d4ea2eb144313e5e06c2575f25de2e1102afac1e25
+governed_execution_inputs:
+  current_spec_factory_root: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY
+  corrected_packet_registry:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/ONE_SPEC_EXECUTION_PACKETS_RECOVERY.yaml
+    sha256: ff5fa32389458a94e437c2af06a7ce7c1ce2ab9b30cd8da53010f11b7503d345
+    packet_count: 60
+  dependency_edge_ledger:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/SPEC_DEPENDENCY_EDGE_CLASSIFICATION.yaml
+    sha256: 4d4a30f4001bf5051ac74c361a921603442021e0c43270e35390e20b5afcb4f8
+    edge_count: 118
+  writing_wave_dag:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/SPEC_WRITING_WAVE_DAG.yaml
+    sha256: 24b26b9820a0f2cab0cd01ab4c46e9aca476219f496644c063533ee602ccff60
+    wave_count: 23
+  packet_validation:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/SPEC_WRITER_PACKET_VALIDATION.yaml
+    sha256: ea173b8045942220ad917945da5997a420fd01e71daa29725ce14466e2e982ff
+    result: PASS_60_OF_60_STRUCTURALLY_VALID
+  write_authority_matrix:
+    path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/SPEC_PACKET_WRITE_AUTHORITY_MATRIX.csv
+    sha256: 3fa4793ea2baca46dcfbf8e123d039a59ab2467e5814471d49b3daf65e588a73
+workflow_law:
+  version: '3.3.0'
+  workflow_archive_sha256: 0bcd1e957301dbd8fc03dd6b74684a6d6b7fff148bd1401134f19db760c69eb7
+  lifecycle_controller_sha256: 63b2ff363c4dc3457438f1bd693d29cf18adb6c4b2e66ebb7c093b0d765f59ae
+  tech_spec_writer_sha256: 191d8d1b7fc41aef94a366a79f632c65a8c2d1af7a7030c8bfc3a29dc81d4520
+dispatch:
+  wave_0:
+    status: AUTHORIZED_TO_DISPATCH
+    spec_ids:
+      - TS-AHP-001
+      - TS-AIR-001
+      - TS-REL-001
+  later_waves:
+    status: CONDITIONALLY_AUTHORIZED
+    unlock_condition: every required upstream draft has WRITTEN_PENDING_AUDIT or REVISED_PENDING_REAUDIT receipt and exact SHA-256
+  accepted_for_build_required_during_writing: false
+  build_state_blocks_writing: false
+vae_boundary:
+  spec_id: TS-VAE-BOUND-001
+  output_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/cross-product-proposals/TS-VAE-BOUND-001.md
+  output_path_class: PROGRAM_CONTROL_CROSS_PRODUCT_PROPOSAL
+  target_product: 02_VISUAL_ASSET_EDITOR
+  proposed_adoption_path: 02_VISUAL_ASSET_EDITOR/docs/tech-specs/TS-VAE-BOUND-001.md
+  adoption_status: PRODUCT_ADOPTION_REQUIRED
+  build_status: NOT_BUILD_READY
+authority_ceiling:
+  candidate_authority_state: CANDIDATE_NOT_CURRENT
+  human_ratification: PENDING
+  maximum_pre_ratification_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+  accepted_for_build: false
+  development_capsule: false
+  implementation: false
+  production: false
+  certification: false
+prohibitions:
+  - do_not_use_absent_ephemeral_prompt03_logs_as_gate_inputs
+  - do_not_represent_candidate_authority_as_current
+  - do_not_write_VAE_product_local_spec_path
+  - do_not_issue_acceptance_for_build_or_development_capsules
+  - do_not_create_or_modify_product_code_schemas_or_contract_releases
+next_permitted_action: execute V3.3 dependency-safe Prompt 03 beginning with Wave 0

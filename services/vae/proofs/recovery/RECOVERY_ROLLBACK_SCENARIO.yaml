@@ -1,0 +1,28 @@
+classification: non_production_readiness_proof
+scenario_id: VAE-RECOVERY-ROLLBACK-SIM-001
+execution_mode: deterministic_contract_simulation
+runtime_execution: not_performed
+quality_round_at_start: 1
+prior_runtime_profile: runtime-f02@0.9.0
+promotion_candidate: runtime-f02@1.0.0-proof
+accepted_evidence:
+  asset_ref: ASSET-F02-CONTROLLED-R1
+  asset_hash: sha256:4d73edffdfe138562750f9be2501a1489c2d770c45afaaa31e7a2d1c1d02042a
+  receipt_hash: sha256:3c96b4f0599defd9c5ef47b30c7aadeca24ecd2f514a8b223a1e8d874136553f
+events:
+  - {sequence: 1, type: accepted_asset_recorded, quality_round: 1}
+  - {sequence: 2, type: checkpoint_saved, checkpoint_ref: CP-F02-001, quality_round: 1}
+  - {sequence: 3, type: worker_interrupted, reason: synthetic_worker_loss, quality_round: 1}
+  - {sequence: 4, type: checkpoint_restored, checkpoint_ref: CP-F02-001, quality_round: 1}
+  - {sequence: 5, type: infrastructure_retry_started, retry_ref: INFRA-RETRY-001, quality_round: 1}
+  - {sequence: 6, type: provider_fallback_selected, from: local-proof, to: cloud-proof, quality_round: 1}
+  - {sequence: 7, type: runtime_promotion_attempted, profile: runtime-f02@1.0.0-proof, quality_round: 1}
+  - {sequence: 8, type: runtime_promotion_failed, reason: synthetic_receipt_mismatch, quality_round: 1}
+  - {sequence: 9, type: rollback_applied, profile: runtime-f02@0.9.0, quality_round: 1}
+  - {sequence: 10, type: accepted_asset_verified, asset_hash: sha256:4d73edffdfe138562750f9be2501a1489c2d770c45afaaa31e7a2d1c1d02042a, receipt_hash: sha256:3c96b4f0599defd9c5ef47b30c7aadeca24ecd2f514a8b223a1e8d874136553f, quality_round: 1}
+expected_invariants:
+  checkpoint_restored_after_interruption: true
+  infrastructure_retry_does_not_consume_quality_round: true
+  provider_fallback_recorded: true
+  failed_promotion_rolls_back_to_prior_runtime: true
+  accepted_asset_and_receipt_preserved: true

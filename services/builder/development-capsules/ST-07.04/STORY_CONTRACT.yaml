@@ -1,0 +1,38 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-07.04
+primary_epic: EP-07
+title: Validate Target Artifacts, Gates, and Compatibility
+active_mode: ATOMIC_CONTENT_HARNESS_ONLY
+amendment_id: BF-AM-008
+primary_outcome: >-
+  The exact active synthetic AtomicHarnessDefinition is independently validated
+  as a complete, internally compatible, target-separated, deterministic and
+  explicitly non-certifiable Atomic Content Harness package.
+adds_beyond_ST_07_02:
+  ST_07_02: compiles_and_receipts_the_definition
+  ST_07_04: independently_validates_artifact_completeness_target_gates_non_flattening_compatibility_scope_and_non_certification
+owned_obligations: [FR-177, FR-178, FR-179, FR-180]
+direct_dependencies:
+  - ST-07.02:StoryCompletionReceipt
+applicable_blockers: []
+conditional_scope:
+  atomic_content_harness_validation: REQUIRED
+  external_target_compatibility: NOT_EVALUATED_EXTERNAL_TARGET_BRANCH
+  BD_014: NOT_APPLICABLE_ATOMIC_CONTENT_HARNESS_ONLY
+  ST_07_03: NOT_A_DEPENDENCY_IN_THIS_MODE
+component_boundary: >-
+  Builder-owned validation of the compiled synthetic Atomic Content Harness
+  definition only; VAE and Delegation schemas, packages, runtime and compatibility
+  authority remain external and deferred.
+implementation_owner: category_and_target_compiler_owner
+implementation_gate_status: READY_PENDING_EXACT_HUMAN_AUTHORIZATION
+completion_effect:
+  validates_initial_compilation_milestone: true
+  completes_full_synthetic_demonstration: false
+  unblocks_after_PASS: ST-11.01/SYNTHETIC_BUILDER_PROOF
+prohibited_claims:
+  - production_ready
+  - certified
+  - external_target_compatibility_PASS
+  - Format_02_validation
+  - full_product_readiness

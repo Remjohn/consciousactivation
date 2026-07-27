@@ -1,0 +1,27 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: THE_VIBE
+enabled: true
+selection_priority:
+  tier: secondary
+  rank: 17
+enforcement:
+  mode: allow_with_checks
+  default_result: ALLOW
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - VISION
+  stages:
+    - scene_builder
+incompatibilities:
+  - atmosphere_without_message
+warn_conditions:
+  - metric: specificity_score
+    operator: lt
+    value: 0.7
+route_hints:
+  select:
+    - use_when_tone_is_doing_real_structural_work
+    - avoid_as_generic_filler

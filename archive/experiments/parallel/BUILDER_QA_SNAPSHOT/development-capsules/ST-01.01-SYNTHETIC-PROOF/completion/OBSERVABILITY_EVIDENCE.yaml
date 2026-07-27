@@ -1,0 +1,102 @@
+schema_version: cmf-builder-supplemental-observability-evidence/v1
+branch_id: ST-01.01-SYNTHETIC-PROOF
+generated_on: "2026-07-15"
+result: PASS
+deterministic_context:
+  clock: "2026-07-15T14:00:00+00:00"
+  id_provider_seed: ST-01.01-SYNTHETIC-PROOF
+  correlation_id: synthetic-proof-correlation-1
+  causation_id: human-authorization-ST-01.01-SYNTHETIC-PROOF
+successful_trace:
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  target_id: atomic_content_harness
+  category_id: none_test_only
+  profile_id: synthetic_text_normalization_v1
+  profile_version: 1.0.0
+  profile_hash: sha256:3f88934152082e2447dd94ae998bfc62d0a73f354c10352ab7460ac24e4ad9c8
+  profile_source_sha256: 82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b
+  skill_registry_id: builder-core-synthetic-empty-skill-registry
+  skill_registry_version: 1.0.0
+  skill_registry_sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  actor_id: architect-1
+  actor_kind: HUMAN
+  authority_rule: human_commit_authority_with_active_grant
+  authority_result: PASS
+  prior_state: CREATED
+  resulting_state: SOURCE_DIAGNOSTIC
+  checkpoint_id: checkpoint_019ba503-1000-7002-8d56-2632b66ccec6
+  resume_checkpoint_id: checkpoint_019ba503-1000-7002-8d56-2632b66ccec6
+  replayed_human_decision_count: 0
+  stream_version: 5
+  event_ids:
+    - event_019ba503-1000-7417-9c7d-c4e8e2c844df
+    - event_019ba503-1000-74aa-8c0d-1d698b20ad86
+    - event_019ba503-1000-7ffd-8bf0-68a1a0afd330
+    - event_019ba503-1000-7c74-84aa-d9125d28fa8c
+    - event_019ba503-1000-79c6-be43-1be7bb4aead0
+  event_types:
+    - RunCreated
+    - TargetProfileSelected
+    - LifecycleTransitioned
+    - CheckpointCreated
+    - RunResumed
+  command_ids:
+    - synthetic-create-1
+    - synthetic-create-1
+    - synthetic-transition-1
+    - synthetic-checkpoint-1
+    - synthetic-resume-1
+  classification:
+    synthetic: true
+    repository_owned: true
+    non_production: true
+    non_certified: true
+    builder_core_validation_only: true
+    category_binding_mode: none
+    canonical_category_registry_membership: false
+  event_stream_sha256: ead0edb854a62bf3fe1aca70c6be10a646eb00ba657645411995e4327dd574b0
+replay_trace:
+  reconstructed_run_equals_current_run: true
+  duplicate_resume_receipt_equals_original: true
+  duplicate_resume_added_authoritative_event: false
+  duplicate_command_observation_emitted: true
+failure_traces:
+  unauthorized_actor:
+    command_id: synthetic-create-1
+    actor_id: unknown-actor
+    result: FAIL_CLOSED
+    error_code: AuthorityDenied
+    action: CREATE_RUN
+    authoritative_stream_count: 0
+    success_event_emitted: false
+  fixture_drift:
+    command_id: synthetic-create-1
+    result: FAIL_CLOSED
+    error_code: RegistryIntegrityError
+    artifact: development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml
+    expected_sha256: 82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b
+    observed_test_mutation_sha256: 2c1fb61d20cb20cbf0dfac3cb3050f0052fc9af4809ae5054be64e3a0ab8c9a7
+    authoritative_stream_count: 0
+    success_event_emitted: false
+  undeclared_skill:
+    skill_id: future_external_skill
+    dynamically_discovered: false
+    result: FAIL_CLOSED
+    error_code: UndeclaredSkillUseRejected
+    registry_id: builder-core-synthetic-empty-skill-registry
+    registry_version: 1.0.0
+external_boundary_evidence:
+  Format02_content_invoked: false
+  VAE_invoked: false
+  Delegation_runtime_invoked: false
+  ComfyUI_or_GPU_invoked: false
+  conversational_activation_invoked: false
+  Interview_Expression_invoked: false
+  external_provider_invoked: false
+  Control_Tower_invoked: false
+  production_publication_invoked: false
+later_story_evidence:
+  ST_01_02_started: false
+  AtomicHarnessDefinition_compiled: false
+  task_DevelopmentCapsule_generated: false
+  synthetic_task_executed: false

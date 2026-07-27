@@ -1,0 +1,14 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-004
+story_id: ST-10.08
+title: WORKFLOW_INCIDENT_COST_AND_CONTEXT_MONITORING
+outcome: deterministic_local_monitoring_projections
+authority: {amendment_path: docs/implementation/offline-development/OD_AM_004.yaml, implementation_gate_only: true, production_authority: false, certification_authority: false}
+allowed_files:
+  production: [src/cmf_builder/application/monitoring_projections.py]
+  tests: [tests/stories/st_10_08/test_monitoring_projections.py]
+requirements:
+  - preserve workflow queue incident resource-cost and context monitor families distinctly
+  - represent stale partial disconnected redacted invalidated simulated and context states
+  - reject inferred root cause, real cloud cost without real evidence and excluded context selection
+prohibited: [live_cloud_monitoring, external_telemetry_dependency, production_or_certification_claims]

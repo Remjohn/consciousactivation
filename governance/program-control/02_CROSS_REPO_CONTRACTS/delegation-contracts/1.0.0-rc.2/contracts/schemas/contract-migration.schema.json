@@ -1,0 +1,664 @@
+{
+  "$defs": {
+    "AuthorityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string"
+        },
+        "field_scopes": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "principal": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "action",
+        "principal",
+        "field_scopes"
+      ],
+      "type": "object"
+    },
+    "BoundingBoxBasisPoints": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "width": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "x": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "y": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    "ChangeItem": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "REPLACE"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "value_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "operation",
+        "value_ref",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "DemandIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "request_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "request_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "EvidenceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceIdentityRef"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verdict": {
+          "enum": [
+            "PASS",
+            "CONCERNS",
+            "FAIL"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "verdict",
+        "evidence_refs",
+        "note"
+      ],
+      "type": "object"
+    },
+    "ExecutionIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "demand": {
+          "$ref": "#/$defs/DemandIdentityRef"
+        },
+        "execution_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "plan_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef"
+        }
+      },
+      "required": [
+        "execution_id",
+        "demand",
+        "plan_ref"
+      ],
+      "type": "object"
+    },
+    "FailureSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "VALIDATION",
+            "AUTHORITY",
+            "COMPATIBILITY",
+            "BUDGET",
+            "EXECUTION",
+            "INTEGRITY",
+            "LIFECYCLE",
+            "CAPABILITY",
+            "HUMAN_REVIEW",
+            "SECURITY"
+          ],
+          "type": "string"
+        },
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "field_paths": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "message": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "category",
+        "message",
+        "retryable",
+        "field_paths"
+      ],
+      "type": "object"
+    },
+    "IntegrityProof": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issued_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "key_id": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "nonce": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9_-]{86}$",
+          "type": "string"
+        },
+        "signer": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_id",
+        "signer",
+        "signature",
+        "issued_at",
+        "expires_at",
+        "nonce"
+      ],
+      "type": "object"
+    },
+    "MoneyAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "type": "string"
+        },
+        "minor_units": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "minor_units"
+      ],
+      "type": "object"
+    },
+    "PrincipalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "principal_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "principal_type": {
+          "enum": [
+            "CONTENT_HARNESS",
+            "DELEGATION_PROTOCOL",
+            "VISUAL_ASSET_EDITOR",
+            "CONTROL_TOWER"
+          ],
+          "type": "string"
+        },
+        "product_version": {
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "principal_id",
+        "principal_type",
+        "product_version"
+      ],
+      "type": "object"
+    },
+    "ResourceIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "resource_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        }
+      },
+      "required": [
+        "resource_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "ResultIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "result_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "result_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "State": {
+      "enum": [
+        "DRAFT",
+        "SUBMITTED",
+        "REJECTED",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "RESULT_READY",
+        "RESULT_REJECTED",
+        "COMPLETED",
+        "AMENDMENT_REQUIRED",
+        "SUPERSEDED",
+        "COST_APPROVAL_REQUIRED",
+        "CAPABILITY_GAP",
+        "HUMAN_REVIEW_REQUIRED",
+        "CANCELLATION_REQUESTED",
+        "CANCELLED",
+        "PARTIAL_RESULT_READY",
+        "INVALIDATED",
+        "REVOKED",
+        "REPLACED"
+      ],
+      "type": "string"
+    }
+  },
+  "$id": "https://contracts.cmf.dev/delegation/contract-migration/1.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "CMF delegation protocol contract-migration message.",
+  "properties": {
+    "authority_effect_analysis": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "effect": {
+            "enum": [
+              "PRESERVED",
+              "SPLIT_WITH_EVIDENCE"
+            ],
+            "type": "string",
+            "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+          },
+          "target_path": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string",
+            "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+          },
+          "value_owner": {
+            "enum": [
+              "CONTENT_HARNESS",
+              "DELEGATION_PROTOCOL",
+              "VISUAL_ASSET_EDITOR",
+              "CONTROL_TOWER"
+            ],
+            "type": "string",
+            "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+          }
+        },
+        "required": [
+          "target_path",
+          "value_owner",
+          "effect"
+        ],
+        "type": "object",
+        "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+      },
+      "minItems": 1,
+      "type": "array",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "equivalence": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ResourceIdentityRef",
+        "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+      },
+      "minItems": 1,
+      "type": "array",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "lossless": {
+      "type": "boolean",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "migrated_at": {
+      "format": "date-time",
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "migration_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "ordered_transformations": {
+      "items": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+        "type": "string",
+        "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+      },
+      "minItems": 1,
+      "type": "array",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "output_ref": {
+      "$ref": "#/$defs/ResourceIdentityRef",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "source_message_type": {
+      "pattern": "^[a-z][a-z0-9-]{2,63}$",
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "source_payload_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "source_validation": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "source_version": {
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "target_artifacts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "canonical_ref": {
+            "format": "uri",
+            "type": "string",
+            "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+          },
+          "message_type": {
+            "pattern": "^[a-z][a-z0-9-]{2,63}$",
+            "type": "string",
+            "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+          },
+          "payload_hash": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": "string",
+            "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+          }
+        },
+        "required": [
+          "message_type",
+          "payload_hash",
+          "canonical_ref"
+        ],
+        "type": "object",
+        "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+      },
+      "minItems": 1,
+      "type": "array",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "target_validation": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ],
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    },
+    "target_version": {
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "type": "string",
+      "x-cmf-value-owner": "DELEGATION_PROTOCOL"
+    }
+  },
+  "required": [
+    "migration_id",
+    "source_message_type",
+    "source_version",
+    "target_version",
+    "source_payload_hash",
+    "target_artifacts",
+    "ordered_transformations",
+    "authority_effect_analysis",
+    "source_validation",
+    "target_validation",
+    "equivalence",
+    "output_ref",
+    "evidence_refs",
+    "lossless",
+    "migrated_at"
+  ],
+  "title": "Contract Migration Record",
+  "type": "object",
+  "x-cmf-authority": {
+    "allowed_producers": [
+      "DELEGATION_PROTOCOL"
+    ],
+    "path_kind": "JSON_POINTER_TEMPLATE",
+    "value_owner_by_path": {
+      "/authority_effect_analysis": "DELEGATION_PROTOCOL",
+      "/authority_effect_analysis/{index}": "DELEGATION_PROTOCOL",
+      "/authority_effect_analysis/{index}/effect": "DELEGATION_PROTOCOL",
+      "/authority_effect_analysis/{index}/target_path": "DELEGATION_PROTOCOL",
+      "/authority_effect_analysis/{index}/value_owner": "DELEGATION_PROTOCOL",
+      "/equivalence": "DELEGATION_PROTOCOL",
+      "/evidence_refs": "DELEGATION_PROTOCOL",
+      "/evidence_refs/{index}": "DELEGATION_PROTOCOL",
+      "/evidence_refs/{index}/canonical_ref": "DELEGATION_PROTOCOL",
+      "/evidence_refs/{index}/payload_hash": "DELEGATION_PROTOCOL",
+      "/evidence_refs/{index}/resource_id": "DELEGATION_PROTOCOL",
+      "/evidence_refs/{index}/version": "DELEGATION_PROTOCOL",
+      "/lossless": "DELEGATION_PROTOCOL",
+      "/migrated_at": "DELEGATION_PROTOCOL",
+      "/migration_id": "DELEGATION_PROTOCOL",
+      "/ordered_transformations": "DELEGATION_PROTOCOL",
+      "/ordered_transformations/{index}": "DELEGATION_PROTOCOL",
+      "/output_ref": "DELEGATION_PROTOCOL",
+      "/output_ref/canonical_ref": "DELEGATION_PROTOCOL",
+      "/output_ref/payload_hash": "DELEGATION_PROTOCOL",
+      "/output_ref/resource_id": "DELEGATION_PROTOCOL",
+      "/output_ref/version": "DELEGATION_PROTOCOL",
+      "/source_message_type": "DELEGATION_PROTOCOL",
+      "/source_payload_hash": "DELEGATION_PROTOCOL",
+      "/source_validation": "DELEGATION_PROTOCOL",
+      "/source_version": "DELEGATION_PROTOCOL",
+      "/target_artifacts": "DELEGATION_PROTOCOL",
+      "/target_artifacts/{index}": "DELEGATION_PROTOCOL",
+      "/target_artifacts/{index}/canonical_ref": "DELEGATION_PROTOCOL",
+      "/target_artifacts/{index}/message_type": "DELEGATION_PROTOCOL",
+      "/target_artifacts/{index}/payload_hash": "DELEGATION_PROTOCOL",
+      "/target_validation": "DELEGATION_PROTOCOL",
+      "/target_version": "DELEGATION_PROTOCOL"
+    }
+  },
+  "x-cmf-consumers": [
+    "CONTENT_HARNESS",
+    "DELEGATION_PROTOCOL",
+    "VISUAL_ASSET_EDITOR",
+    "CONTROL_TOWER"
+  ],
+  "x-cmf-idempotency": "REQUIRED",
+  "x-cmf-lifecycle-effects": [
+    "contract_migration_recorded"
+  ],
+  "x-cmf-message-type": "contract-migration",
+  "x-cmf-message-version": "1.0"
+}

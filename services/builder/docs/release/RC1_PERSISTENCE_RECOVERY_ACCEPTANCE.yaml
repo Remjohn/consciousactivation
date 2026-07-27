@@ -1,0 +1,21 @@
+schema_version: cmf-builder-rc1-persistence-recovery-acceptance/v1
+verdict: PASS_SOURCE_TREE_DURABLE_STORAGE_CHECKS_WITH_RC1_INSTALL_BLOCKED
+database:
+  adapter: SQLiteProductizationRepository
+  schema_version: 1
+  migration_digest: sha256:80abf18497db19c55f32f3398d823811ec744b12a0e71bd00f4cfb086d2e70b5
+validated:
+  process_restart_persistence: PASS
+  command_idempotency: COVERED_BY_EXISTING_REGRESSION
+  duplicate_command_containment: COVERED_BY_EXISTING_REGRESSION
+  event_preservation: COVERED_BY_EXISTING_REGRESSION
+  checkpoint_restoration: COVERED_BY_EXISTING_REGRESSION
+  workflow_resume: COVERED_BY_EXISTING_REGRESSION
+  queue_recovery: COVERED_BY_EXISTING_REGRESSION
+  cancellation: COVERED_BY_EXISTING_REGRESSION
+  rollback: COVERED_BY_EXISTING_REGRESSION
+  profile_migration: COVERED_BY_EXISTING_REGRESSION
+  unsupported_schema_version_failure: COVERED_BY_EXISTING_REGRESSION
+limitations:
+  - Evidence was produced from the source tree because clean installation is blocked.
+

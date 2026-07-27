@@ -1,0 +1,42 @@
+schema_version: cmf-builder-empty-skill-registry/v1
+registry_id: builder-core-synthetic-empty-skill-registry
+version: 1.0.0
+status: ACTIVE_SYNTHETIC_PROOF_ONLY
+scope: ST-01.01-SYNTHETIC-PROOF
+authority:
+  policy_id: builder-core-empty-skill-registry-policy-v1
+  owner: skill_architecture
+  approval_source: current_thread_human_product_authority
+  approved_on: "2026-07-15"
+capabilities:
+  - capability_id: governed_task_acceptance
+    owner_kind: builder_code
+    skill_required: false
+    determinism: deterministic
+  - capability_id: synthetic_target_profile_binding
+    owner_kind: builder_code
+    skill_required: false
+    determinism: deterministic
+  - capability_id: governed_run_lifecycle
+    owner_kind: builder_code
+    skill_required: false
+    determinism: deterministic
+  - capability_id: deterministic_contract_validation
+    owner_kind: builder_code
+    skill_required: false
+    determinism: deterministic
+  - capability_id: immutable_receipt_emission
+    owner_kind: builder_code
+    skill_required: false
+    determinism: deterministic
+skills: []
+declarations:
+  external_skills_required: false
+  dynamic_skill_discovery_allowed: false
+  undeclared_skill_use: FAIL_CLOSED
+  later_external_skill_effect: NEW_IMMUTABLE_HARNESS_VERSION_REQUIRED
+  production_inference: PROHIBITED
+hash_contract:
+  algorithm: sha256
+  canonical_bytes: repository_file_bytes_utf8
+  hash_carrier: governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json

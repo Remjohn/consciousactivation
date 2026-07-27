@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "broad_signal_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "consequence": {
+      "title": "Consequence",
+      "type": "string"
+    },
+    "counteractivation_risks": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Counteractivation Risks",
+      "type": "array"
+    },
+    "edge_product_id": {
+      "title": "Edge Product Id",
+      "type": "string"
+    },
+    "epistemic_state": {
+      "$ref": "#/$defs/EpistemicState"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "hidden_pressure": {
+      "title": "Hidden Pressure",
+      "type": "string"
+    },
+    "matrix_of_edging_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "psychological_role": {
+      "title": "Psychological Role",
+      "type": "string"
+    },
+    "stance": {
+      "title": "Stance",
+      "type": "string"
+    },
+    "surviving_edge": {
+      "title": "Surviving Edge",
+      "type": "string"
+    },
+    "tension": {
+      "title": "Tension",
+      "type": "string"
+    }
+  },
+  "required": [
+    "edge_product_id",
+    "broad_signal_ref",
+    "matrix_of_edging_ref",
+    "hidden_pressure",
+    "surviving_edge",
+    "stance",
+    "psychological_role",
+    "tension",
+    "consequence",
+    "evidence_refs",
+    "epistemic_state"
+  ],
+  "title": "EdgeProduct",
+  "type": "object"
+}

@@ -1,0 +1,73 @@
+matrix_id: VAE-CRC403-STOP-GO-001
+version: 1.0.0
+classification: non_production_readiness_proof
+current_state: WAITING_FOR_OPERATOR_INFRASTRUCTURE
+current_action: STOP
+stage5_authorized: false
+production_implementation_authorized: false
+automatic_continuation: false
+
+input_admission:
+  evaluator_identity_and_runtime_complete: false
+  evaluator_credential_reference_resolvable: false
+  calibration_corpus_governed_and_adjudicated: false
+  protected_set_sealed: false
+  self_hosted_GPU_worker_proof_capable: false
+  cloud_GPU_worker_authorized: false
+  cloud_cost_and_cancellation_authorized: false
+  object_storage_reachable_and_versioned: false
+  queue_events_and_checkpoint_transport_reachable: false
+  Format02_source_fixtures_approved: false
+  recovery_and_rollback_rehearsal_authorized: false
+
+rules:
+  - condition: any_required_infrastructure_or_credential_reference_absent
+    action: STOP
+    state: WAITING_FOR_OPERATOR_INFRASTRUCTURE
+  - condition: operator_values_present_but_identity_hash_authority_or_reachability_preflight_fails
+    action: STOP
+    state: WAITING_FOR_OPERATOR_INFRASTRUCTURE
+  - condition: all_operator_inputs_complete_and_preflight_PASS
+    action: GO
+    permitted_proof: P1_only
+    state: GO_P1_ONLY
+  - condition: P1_result_FAIL_or_insufficient_evidence
+    action: STOP
+    state: P1_EVIDENCE_NOT_READY
+  - condition: P1_evidence_complete_but_human_evaluator_decision_absent
+    action: STOP
+    state: WAITING_FOR_EVALUATOR_AUTHORITY_DECISION
+  - condition: P1_and_required_evaluator_authority_decision_PASS
+    action: STOP
+    state: WAITING_FOR_EXPLICIT_P2_AUTHORIZATION
+  - condition: P2_local_compute_PASS
+    action: STOP
+    state: WAITING_FOR_EXPLICIT_P3_AUTHORIZATION
+  - condition: P3_cloud_equivalence_PASS
+    action: STOP
+    state: WAITING_FOR_EXPLICIT_P4_AUTHORIZATION
+  - condition: P4_recovery_and_rollback_PASS
+    action: STOP
+    state: WAITING_FOR_EXPLICIT_P5_AUTHORIZATION
+  - condition: P5_real_non_production_Format02_proof_PASS
+    action: STOP
+    state: CRC403_EVIDENCE_READY_FOR_FORMAL_READINESS_REVIEW
+
+non_compensable_stops:
+  - mutable_or_unverifiable_evaluator_identity
+  - producer_and_evaluator_not_independent
+  - ungoverned_or_unsealed_calibration_evidence
+  - unapproved_threshold_or_certification_claim
+  - self_hosted_worker_below_admission_floor
+  - mutable_or_mismatched_runtime_workflow_or_resource_hash
+  - absent_cloud_spend_cancellation_or_cleanup_authority
+  - repository_stored_secret
+  - storage_queue_checkpoint_or_result_receipt_not_enforceable
+  - infrastructure_retry_consumes_quality_repair_round
+  - recovery_or_rollback_cannot_preserve_accepted_artifacts_and_receipts
+  - Format02_semantic_lineage_wrong_reading_locks_or_feature_contracts_not_enforced
+
+authorization_effect:
+  passing_any_or_all_proofs_changes_stage5_authorization: false
+  passing_any_or_all_proofs_changes_production_authorization: false
+  formal_readiness_rerun_and_human_authorization_still_required: true

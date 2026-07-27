@@ -1,0 +1,23 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0204-001
+story_id: ST-02.04
+calling_lane: SYNTAX_AND_ATOMICITY_LANE
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: Action.COMPARE_ATOMIC_BOUNDARIES
+required_additive_change: >-
+  Add the exact Builder-owned action used to authenticate bounded atomic-boundary
+  comparison commits and rollback operations through the existing deny-by-default
+  AuthorityService.
+preconditions:
+  - ST-02.03 has a validated OD-AM-001 ImplementationCompletionReceipt
+  - comparison remains provisional, unratified and non-Genesis-authorizing
+postconditions:
+  - commit and rollback require an independently registered actor and active exact grant
+  - self-asserted packet authority strings cannot authorize state changes
+invariants:
+  - this action cannot ratify, freeze, revise or reopen an atomic boundary
+  - the action is not human-only and grants no human decision authority
+  - production readiness and certification remain false
+focused_tests:
+  - tests/stories/st_02_04
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR

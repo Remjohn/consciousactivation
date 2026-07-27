@@ -1,0 +1,61 @@
+schema_version: cmf-builder-release1-execution-sequence-corrected/v1
+generated_on: "2026-07-15"
+authority:
+  builder_prd: "1.2"
+  activative_intelligence_constitution: "1.1"
+  confirmed_story_inventory: docs/planning/STORY_INVENTORY.yaml
+  unchanged_dependency_graph: docs/planning/STORY_DEPENDENCY_GRAPH.csv
+  scope_registry: docs/planning/BLOCKER_SCOPE_REGISTRY.yaml
+target:
+  category: 2d_character_animation
+  profile_id: format02_minimal_coach_theatre
+  compilation_target: atomic_content_harness
+  strongest_current_state: contract_compatible
+  human_reaction_collection: false
+verdicts:
+  planning_completeness: CONCERNS
+  bounded_format02_story_readiness: PASS
+  bounded_format02_implementation_authorization: PENDING_EXPLICIT_CAPSULE_AND_HUMAN_AUTHORITY
+  full_release1_implementation_readiness: FAIL
+  full_product_implementation_readiness: FAIL
+classification_counts:
+  READY: 1
+  BLOCKED_HUMAN_DECISION: 2
+  BLOCKED_EVIDENCE: 62
+  BLOCKED_EXTERNAL_DEPENDENCY: 4
+  DEFERRED: 0
+  NOT_RELEASE1: 0
+earliest_dependency_safe_format02_sequence:
+  status: NON_EMPTY_READY_PREFIX
+  story_count: 1
+  story_ids: [ST-01.01]
+  validation:
+    all_members_ready: true
+    all_dependencies_satisfied_by_prior_members_or_empty: true
+    blocked_stories_excluded: true
+    conversational_only_stories_excluded: true
+  authorization:
+    ready_for_bounded_capsule: true
+    capsule_issued: false
+    implementation_authorized: false
+    remaining_authorization_gates: [EG-EPIC-HASH, EG-DEVELOPMENT-CAPSULE, explicit_human_implementation_authority]
+conditional_dependency_rules:
+  - rule_id: CDR-001
+    applies_to: format02_minimal_coach_theatre
+    rule: HD-006 and XDEP-004 do not activate because the profile collects no Human Reaction material and does not execute Interview Expression or ReelCast.
+  - rule_id: CDR-002
+    applies_to: [ST-06.05, ST-08.07]
+    rule: Conversational Story outcomes remain blocked and are not prerequisites for the bounded Format 02 execution prefix.
+  - rule_id: CDR-003
+    applies_to: implementation-produced evidence
+    rule: Missing StoryCompletionReceipts and executable-test evidence block dependent execution and completion, not the pre-start readiness of ST-01.01.
+next_frontier:
+  story_id: ST-01.02
+  blocker: BD-004
+  scoped_part: authoritative Format 02 corpus and source profile
+  status: BLOCKED_EVIDENCE
+stop:
+  production_implementation_started: false
+  automatic_implementation: prohibited
+
+

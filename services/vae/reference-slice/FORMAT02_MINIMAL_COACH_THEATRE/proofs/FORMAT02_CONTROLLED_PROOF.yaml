@@ -1,0 +1,138 @@
+classification: non_production_readiness_proof
+proof_id: VAE-F02-CONTROLLED-CHAIN-001
+status: PARTIAL_FIXTURE_PROOF_RUNTIME_INCOMPLETE
+delegation:
+  package_version: 1.1.0-rc.4
+  release_digest: sha256:c614a4d9b705e382456f4d6cd1cd6b7bcbc892517a22b358950db7404e3b4c44
+  trust_status: local_unsigned_release_candidate
+demand:
+  path: D:/Work/CONSCIOUS_ACTIVATIONS/CMF_PROGRAM_CONTROL/02_CROSS_REPO_CONTRACTS/delegation-contracts/1.1.0-rc.4/contracts/examples/visual-asset-demand.example.json
+  sha256: sha256:930e93d11bb511790135f669df082b1c003d4205ffa114a92cb5b74f3ff973ad
+  typed_source_kind: interview_expression
+  reaction_receipt_refs_present: true
+  expression_moment_refs_present: true
+vae_boundary_validation:
+  mode: released_rc4_validator_plus_lossless_deep_copy_check
+  expected: PASS
+derivative_lock_inheritance:
+  contract_version: "1.0"
+  fixture_path: D:/Work/CONSCIOUS_ACTIVATIONS/CMF_PROGRAM_CONTROL/02_CROSS_REPO_CONTRACTS/delegation-contracts/1.1.0-rc.4/fixtures/compatibility/derivative-locks/stricter-addition.valid.json
+  fixture_sha256: sha256:878069064eca6e53613c6522a1a460f91a46cdaffd7e12c9260fa45a728aefe2
+  expected_status: LOCK_INHERITANCE_VALID
+  expected_valid: true
+visual_production_plan:
+  path: reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/contracts/visual_production_plan.reference.yaml
+  sha256: sha256:5b8acfb1b16a18ab829ed434b3fa98ffddb5dcd6a9ade801c7554feccf0a4b31
+  schema_validation: PASS
+production_workflow:
+  status: FAIL_not_pinned_or_executed
+  container_digest: null
+  comfyui_version: null
+  workflow_hash: null
+  note: The synthetic candidates below test downstream proof contracts only and are not workflow output.
+candidate_portfolio:
+  portfolio_id: PORTFOLIO-F02-CONTROLLED-001
+  candidates:
+    - candidate_ref: ASSET-F02-CONTROLLED-R0
+      path: reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/proofs/assets/controlled-coach-r0.svg
+      sha256: sha256:16c2d109d561e6ba65ca8f4168984785e2f1dfbd20cf31608c843e9c71b81d9a
+      role: pre_repair_wrong_visible_action
+    - candidate_ref: ASSET-F02-CONTROLLED-R1
+      path: reference-slice/FORMAT02_MINIMAL_COACH_THEATRE/proofs/assets/controlled-coach-r1.svg
+      sha256: sha256:4d73edffdfe138562750f9be2501a1489c2d770c45afaaa31e7a2d1c1d02042a
+      role: targeted_repair_result
+deterministic_validation:
+  verdict: PASS_fixture_only
+  checks:
+    asset_hashes: pass
+    dimensions_1080x1920: pass
+    svg_well_formed: pass
+    no_text_payload: pass
+    candidate_identity_is_distinct: pass
+independent_evaluator:
+  status: insufficient_evidence
+  evaluator_pin_ref: EVAL-PIN-F02-CANDIDATE-001
+  producer_identity: controlled-svg-fixture-author
+  evaluator_identity: deterministic-categorical-proof-oracle
+  separate_identity: true
+  decisions:
+    - candidate_ref: ASSET-F02-CONTROLLED-R0
+      verdict: repair_required
+      failure: wrong_visible_action
+      responsible_layer: materialization_pose_conditioning
+    - candidate_ref: ASSET-F02-CONTROLLED-R1
+      verdict: accepted_for_fixture_chain_only
+      wrong_reading_locks: pass
+      no_text_survival: pass
+      feature_contract_compliance: pass
+targeted_repair:
+  input_candidate_ref: ASSET-F02-CONTROLLED-R0
+  output_candidate_ref: ASSET-F02-CONTROLLED-R1
+  payload:
+    repair_id: REPAIR-F02-CONTROLLED-R1
+    candidate_ref: ASSET-F02-CONTROLLED-R0
+    evaluation_ref: VQE-F02-CONTROLLED-R0
+    quality_round: 1
+    failure:
+      code: WRONG_VISIBLE_ACTION
+      severity: major
+      responsible_layer: materialization_pose_conditioning
+      explanation: Open palm reads as explanation rather than skeptical withholding.
+    preserve: [character_identity, leftward_gaze, foreground_right_geometry, palette, transparent_background]
+    permitted_changes: [hand_pose, arm_angle]
+    prohibited_changes: [semantic_intent, activation_contract, visual_narrative_program, feature_contracts, wrong_reading_locks]
+    invalidated_nodes: [pose_binding, candidate_materialization, independent_evaluation]
+    reusable_outputs: [identity_reference, composition_mask]
+    success_evidence: [folded_hand_pose_visible, no_text_role_survives, wrong_reading_locks_pass]
+asset_result:
+  payload:
+    execution_id: VAE-PROOF-F02-CONTROLLED-001
+    request_id: req-format02-001
+    demand_version: 1
+    status: completed
+    accepted_assets:
+      - asset_ref: ASSET-F02-CONTROLLED-R1
+        role: controlled_readiness_fixture
+        master_uri: proof://FORMAT02_MINIMAL_COACH_THEATRE/assets/controlled-coach-r1.svg
+        sha256: sha256:4d73edffdfe138562750f9be2501a1489c2d770c45afaaa31e7a2d1c1d02042a
+        delivery_variants: []
+    composition_geometry_ref: GEOM-F02-CONTROLLED-001
+    evaluation_receipt_ref: VQE-F02-CONTROLLED-R1
+    production_receipt_ref: VPR-F02-CONTROLLED-SIMULATED-001
+    syntax_usage_context_ref: VSUR-F02-CONTROLLED-001
+    budget_receipt:
+      program: readiness_sandbox
+      candidates_created: 2
+      quality_repair_rounds: 1
+      gpu_seconds: 0
+      actual_cost_usd: 0.0
+    limitations: [synthetic_fixture, no_gpu_execution, evaluator_not_certified, not_production_authorized]
+    authorized_for_composition: false
+production_acceptance:
+  mode: simulated_non_authoritative
+  status: simulated_only_not_production_acceptance
+  production_authority: false
+simulated_consumption_acknowledgement:
+  acknowledgement_id: ACK-F02-CONTROLLED-001
+  consumer: synthetic_format02_consumer
+  consumed: true
+  asset_hash_verified: true
+  production_authority: false
+syntax_aware_usage_receipt:
+  receipt_id: VSUR-F02-CONTROLLED-001
+  asset_ref: ASSET-F02-CONTROLLED-R1
+  visual_syntax_role: primary_subject
+  geometry_role: foreground_right
+  gaze_direction: left
+  recurrence_classification: first_controlled_use
+  no_text_survival_checked: true
+  wrong_reading_locks_preserved: true
+  status: simulated_fixture_usage
+final_gates:
+  fixture_contract_chain: PASS
+  delegation_rc4_boundary_and_derivative_locks: PASS
+  pinned_comfyui_workflow_execution: FAIL
+  independent_evaluator_certification: FAIL
+  real_production_acceptance: FAIL
+  real_downstream_consumption: FAIL
+  end_to_end_proof: FAIL

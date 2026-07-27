@@ -1,0 +1,168 @@
+# Primitive: PRM-HUM-007 — Production Over-Saturation
+# Source: How to Write Funny (Scott Dikkers)
+# MCDA: 170
+
+primitive_id: "PRM-HUM-007"
+canonical_name: "Production Over-Saturation"
+aliases:
+  - "Quantity Yields Quality"
+  - "The 90% Junk Rule"
+  - "Flood-Then-Prune Pipeline"
+
+family: "humor_distortion"
+implementation_role: "supporting"
+
+source_audits:
+  - audit_file: "Audit_How_to_Write_Funny_CCP.md"
+    primitive_name_in_audit: "Production Over-Saturation (Quantity to Yield Quality)"
+    mcda_score: 170
+    audit_path: "lab/Public Speeaking Coaching/01_Humor_and_Comedy/Audit_How_to_Write_Funny_CCP.md"
+
+book_reference:
+  title: "How to Write Funny"
+  author: "Scott Dikkers"
+  chapters:
+    - "Chapter 2: Your Brain's Comedy Engine (Tip #2)"
+    - "Chapter 1: Introduction (Tip #1 — Concept Is King)"
+  key_pages: "Tip #2 lines 435-445, Tip #12 lines 2470-2492"
+  book_path: "lab/Public Speeaking Coaching/01_Humor_and_Comedy/How_to_Write_Funny__Your_Serious_Step-By-_-_Scott_Dikkers.md"
+
+summary: >
+  Production Over-Saturation is the volume-first primitive that mandates
+  generating an overwhelming quantity of material — accepting that 90% is
+  junk — in order to harvest the 10% gold. Dikkers states that "the best
+  comedy writers write dozens and dozens — sometimes hundreds — of jokes,
+  and then carefully select only the best ones" (Tip #2). The primitive
+  directly exploits the CCP's cheap SLM inference overhead: instead of
+  prompting a frontier model to write one perfect hook, the system instructs
+  lightweight models to generate 50-100 constrained variations. The
+  Epistemic Friction Swarm then acts as Editor, discarding the bottom 90-95%
+  and surfacing only the highest-potential outputs for coach review.
+
+core_move: >
+  Generate 10-100x more material than needed, then ruthlessly prune
+  to the top 5-10% using objective evaluation criteria.
+
+why_it_works: >
+  Dikkers explains that "by writing more, you produce a larger pool of
+  raw material to draw quality ideas from" and explicitly debunks the myth
+  of the genius who "cranks out a perfect piece of writing in one draft"
+  (lines 438-445). The mechanism is combinatorial discovery: humor relies
+  on unexpected combinations of Subtext, Filter, and phrasing. A single
+  generation pass samples one point in the combinatorial space. 100
+  generations sample 100 points, dramatically increasing the probability
+  of finding a surprising, non-centroid combination. Dikkers warns "don't
+  fall in love" with any single output (Tip #12, line 2470) — the volume
+  approach prevents ego-attachment to mediocre first drafts.
+
+examples:
+  - context: "BOOK: How to Write Funny - Quantity Yields Quality"
+    application: >
+      Dikkers mandates generating an overwhelming quantity of material, accepting that 90% is junk, to harvest the 10% gold. Comedy relies on unexpected combinations; writing dozens of variations increases the probability of finding the perfect, non-obvious angle.
+    effect: >
+      Prevents ego-attachment to mediocre first drafts. Combinatorial discovery surfaces edge-case humor that a single-pass generation would miss.
+
+  - context: "CCP: CMF - The Flood-Then-Prune Pipeline"
+    application: >
+      The CMF deploys an SLM to generate 100 hook variations for a topic, constrained by different Funny Filters. The Critic agent scores all 100 against the MCDA rubric, discarding the bottom 95% and presenting only 5 finalists to the coach.
+    effect: >
+      The coach chooses from 5 distinct, high-quality options rather than accepting a safe, centrist first draft. Creative confidence increases.
+
+  - context: "CCP: CBCS - The Volume Exercise"
+    application: >
+      A coach submits one overly-crafted story. The agent prescribes volume: 'Record 10 one-minute voice notes telling this story from different emotional angles. Don't evaluate them.'
+    effect: >
+      The 7th take—tired and unguarded—contains the most authentic energy. The volume constraint bypasses the coach's internal Editor, producing raw material the careful draft couldn't match.
+
+  - context: "CCP: V2WS - The 'Bad Idea' Brainstorm"
+    application: >
+      When struggling to find the core webinar premise, the system forces the coach to generate 20 intentionally terrible, offensive, or absurd webinar titles in 5 minutes.
+    effect: >
+      By deliberately generating 'junk', the pressure of perfection is removed. Often, a 'terrible' idea contains the seed of a brilliant, highly-differentiated Subtext.
+
+  - context: "CCP: CCF - Naming Conventions"
+    application: >
+      When a coach needs a name for their new framework, the agent refuses to accept the first 5 inputs. It locks the UI until the coach inputs 30 distinct name variations.
+    effect: >
+      Forces the coach past the obvious, cliché industry standard names (e.g., 'The Profit Accelerator') into weird, memorable, proprietary territory.
+
+anti_examples:
+  - description: >
+      The CMF generates 100 hook variations using the same SLM but without
+      any Filter Constraints — all 100 are unconstrained 'be funny' prompts.
+    why_it_fails: >
+      Volume without constraint produces 100 variations of the same
+      statistical centroid. Over-Saturation requires combinatorial diversity,
+      not repetitive sampling. Without varying the Filter assignment across
+      batches, the 100 outputs cluster around the model's default humor
+      mode, producing quantity without variety.
+
+phase_fit:
+  pre_trigger: 0.2
+  post_trigger: 0.3
+  generation: 0.9
+  revision: 0.3
+  delivery: 0.1
+
+surface_fit:
+  text: 0.9
+  voice: 0.6
+  visual: 0.3
+  sonic: 0.1
+  webinar: 0.4
+  telegram: 0.3
+
+goal_bias:
+  connection: 0.2
+  surprise: 0.8
+  tension: 0.1
+  clarity: 0.2
+  memorability: 0.3
+  persuasion: 0.1
+
+ccp_workflow_fit:
+  research_signal_discovery: 0.2
+  trigger_provocation: 0.3
+  authenticated_capture: 0.3
+  meaning_extraction: 0.2
+  content_generation: 0.9
+  edge_product_assembly: 0.7
+  delivery_coaching: 0.2
+  experience_flow: 0.1
+  premium_differentiation: 0.4
+
+trigger_conditions:
+  - "System detects a single-pass generation architecture for a highly creative task; must upgrade to multi-pass swarm"
+  - "Telemetry indicates content quality has plateaued despite correct Subtext and Filter assignment, indicating a need for broader combinatorial sampling"
+  - "AST analysis reveals the coach is repeatedly editing a single short text block instead of generating raw volume"
+
+suppression_conditions:
+  - "Inference budget is severely constrained and volume generation would exceed cost thresholds"
+  - "Content is being adapted from pre-existing authenticated capture — the raw material already exists and does not need generation"
+
+misuse_modes:
+  - "Volume-without-Editor — generating 100 variations but presenting all 100 to the coach without pruning, causing decision paralysis"
+  - "Centroid clustering — generating high volume without combinatorial diversity (varying Filters, tones, angles), producing 100 versions of the same mediocre output"
+  - "Coach overwhelm — prescribing volume exercises to coaches who are already producing but need quality coaching, not quantity mandates"
+
+synergizes_with:
+  - "PRM-HUM-001"  # Dual-Processor Engine — Over-Saturation IS the Clown phase at maximum intensity
+  - "PRM-HUM-003"  # Filter Constraints — varying Filters across the volume batch ensures combinatorial diversity
+  - "PRM-HUM-002"  # Irreducible Truth — the Editor phase uses Subtext quality as the primary pruning criterion
+
+conflicts_with:
+  - "PRM-HUM-002"  # Irreducible Truth — in a paradoxical relationship: Over-Saturation without Subtext gating produces high-volume slop, but Over-Saturation WITH Subtext gating produces high-volume quality
+
+crosswalk_id: null
+crosswalk_note: null
+
+notes: >
+  This primitive has the highest Algorithmic Determinism score in the audit
+  (50/50) — it is trivially automatable via batch-compute. Its MCDA (170)
+  reflects ceiling execution safety because the volume-then-prune model
+  eliminates risk at the output layer rather than the input layer. Float note:
+  goal_bias.surprise is ceiling (0.8) because combinatorial sampling is
+  specifically designed to discover surprising combinations. All other
+  goal_bias values are low because the primitive operates at the pipeline
+  level, not the audience-facing level — it produces surprise indirectly
+  by increasing the probability of discovering a surprising output.

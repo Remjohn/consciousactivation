@@ -1,0 +1,32 @@
+schema_version: cmf-builder-compact-delta-capsule/v1
+amendment_id: OD-AM-002
+story_id: ST-09.08
+title: WORKFLOW_OUTCOMES_AND_ANTI_MONOLITH_VISIBILITY
+outcome: independent_workflow_outcome_dimensions_and_anti_monolith_rejection
+authority:
+  amendment_path: docs/implementation/offline-development/OD_AM_002.yaml
+  implementation_gate_only: true
+  production_authority: false
+  certification_authority: false
+allowed_files:
+  production:
+    - src/cmf_builder/workflow/workflow_outcomes.py
+  tests:
+    - tests/stories/st_09_08/test_workflow_outcomes.py
+  governance:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    - development-capsules/OD-AM-002/ST-09.08/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-002/ST-09.08/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-002/ST-09.08/TEST_RESULTS.json
+    - development-capsules/OD-AM-002/ST-09.08/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+requirements:
+  - represent completion, correctness, authority, semantic preservation, category preservation, node validation, checkpoint recovery, retry, cancellation, elapsed duration, simulated resource usage, context usage, failure containment, human intervention and external boundary independently
+  - reject aggregate pass states that hide open gates
+  - reject provider validation without provider evidence
+  - flag monolithic workflow structures and hidden human or external behavior
+  - keep simulated resource evidence labeled simulated
+prohibited:
+  - real provider validation
+  - production readiness
+  - certification
+  - monolithic orchestration blobs

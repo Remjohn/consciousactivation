@@ -1,0 +1,94 @@
+schema_version: cmf-builder-bd004-required-operator-input/v1
+request_id: BD-004-FORMAT02-INPUT-001
+status: REMAINS_BLOCKED_OPERATOR_INPUT
+owner:
+  - product_lead
+  - evidence_steward
+placement: reference-corpora/format02_minimal_coach_theatre/operator-input/
+applies_to:
+  - category_native_development_validation_against_real_specimens
+  - format02_reference_profile_validation
+  - production_benchmark_corpus_governance
+  - production_certification_corpus_governance
+does_not_block:
+  - ST-06.01_structural_uncertified_category_binding
+required_files:
+  - file: SOURCE_PROFILE.yaml
+    purpose: >-
+      Ratified portable Format 02 Source Profile with profile/version, target,
+      category, authority owner, required/recommended/optional/prohibited roles,
+      allowed media, discovery and safety rules, saturation reference and real
+      target-candidate boundary.
+  - file: CORPUS_MANIFEST.yaml
+    purpose: >-
+      One record per byte or immutable reference with identity, relative path or
+      URI, size, SHA-256, content type, evidence role, provenance, authority,
+      usage rights, privacy, inclusion/exclusion rationale, protection state,
+      benchmark eligibility, limitations and redaction requirements.
+  - file: OPERATOR_DECISIONS.yaml
+    purpose: >-
+      Attributable product-lead and evidence-steward decisions for corpus
+      adoption, source-profile approval, example inclusion, permitted uses,
+      protected-label custody, SRC-004 adoption/supersession, limitations and
+      amendment procedure.
+  - file: OWNERSHIP_AND_USAGE_EVIDENCE.yaml
+    purpose: >-
+      Per-item ownership or license evidence covering Builder development,
+      evaluation, protected evaluation, benchmark design, derivative/test rights,
+      distribution limits and expiry where applicable.
+  - file: KNOWN_LIMITATIONS.md
+    purpose: Approved limitations, exclusions and non-certification boundary.
+  - file: AMENDMENT_PROCEDURE.yaml
+    purpose: Versioning, authority, invalidation and replacement procedure.
+historical_archive_decision:
+  recorded_source_id: SRC-004
+  recovered_path: D:/Work/Conscious_Rivers/THE CMF STUDIO/VISUAL SYNTAX BUILDER (2).zip
+  required_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  required_size_bytes: 355535097
+  operator_must_decide_one_of:
+    - adopt_exact_archive
+    - select_an_attributable_subset
+    - supersede_with_a_new_governed_bundle
+  current_state: EXACT_IDENTITY_RECOVERED_BUT_NOT_ADOPTED
+minimum_examples:
+  total: 3
+  included_format02_examples: 2
+  inclusion_requirement: >-
+    Distinct attributable scene or sequence situations with an inspectable final
+    reference and available source material needed to understand the Format 02
+    role.
+  exclusion_or_boundary_examples: 1
+  exclusion_requirement: >-
+    A non-Format-02 or invalid candidate plus the authoritative rejection reason.
+  note: This intake minimum is not a benchmark-size or certification claim.
+accepted_formats:
+  video_audio: [mp4, mov, webm, wav, mp3]
+  images_design: [png, jpg, jpeg, svg, pdf]
+  text_structured: [md, txt, json, yaml, yml, csv]
+  bundles: [zip]
+  immutable_remote: versioned_URI_plus_SHA256_size_retrieval_authority
+  prohibited:
+    - mutable_latest_URI
+    - screenshot_substitution_when_original_is_available
+    - undeclared_nested_archive
+    - item_without_SHA256
+required_human_decisions:
+  - authoritative_corpus_or_subset
+  - source_profile_and_role_taxonomy
+  - two_inclusion_and_one_exclusion_examples
+  - per_item_permitted_uses
+  - protected_examples_and_label_access
+  - SRC_004_adopt_select_or_supersede
+  - known_limitations_and_amendment_procedure
+acceptance_bar:
+  - all_references_resolve
+  - all_hashes_verify
+  - authority_and_usage_evidence_covers_every_item
+  - source_profile_is_internally_consistent
+  - product_lead_and_evidence_steward_issue_attributable_approval
+closure_does_not_imply:
+  - benchmarked
+  - limited_production_certified
+  - production_certified
+  - production_authorized
+

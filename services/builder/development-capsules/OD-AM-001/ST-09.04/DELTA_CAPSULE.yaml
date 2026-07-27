@@ -1,0 +1,268 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-09.04:CHECKPOINT_ISOLATION_AND_SAFE_RESUME
+preparation_status: VALIDATED_STRUCTURE_DEPENDENCY_PENDING
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-09.04
+  title: Checkpoint, Isolate, and Resume Work Safely
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: the workflow can resume after failure without duplicating side effects or widening access
+  primary_obligations:
+    - ADR-012
+    - AG-021
+    - FR-194
+    - FR-195
+    - FR-196
+    - FR-197
+    - NFR-PERF-004
+    - NFR-SEC-004
+    - NFR-WORKFLOW-005
+    - NFR-WORKFLOW-006
+    - NFR-WORKFLOW-007
+    - NFR-WORKFLOW-008
+  primary_obligation_count: 12
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_LOCAL_POLICY_AND_RESUME_EXTERNAL_CONFORMANCE_PENDING
+dependency:
+  story_id: ST-09.03
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-09.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: NOT_ISSUED_DEPENDENCY_PENDING
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-09.03/DELTA_CAPSULE.yaml
+    sha256: 9a83b9e977323798dc98f968c277295fcbe781fe171d9624eca38c7ec59b6e75
+    validation: PASS_PREPARATION_REFERENCE_ONLY
+  unissued_receipt_shell:
+    sha256: eff9e0a16c0c079b7b8146f061075215c2d49087322593799e59ce0319271142
+    satisfies_dependency: false
+dependency_gate:
+  satisfied: 0
+  required: 1
+  verdict: DEPENDENCY_PENDING
+  missing: [ST-09.03:ImplementationCompletionReceipt:IMPLEMENTED_DEVELOPMENT_PASS]
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-09.04
+  - docs/architecture/adr/ADR-012-SANDBOX-AND-LEAST-PRIVILEGE.md
+  - docs/tech-specs/specs/TS-14-BUILDER-WORKFLOW-RUNTIME.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - WorkflowIR
+    - WorkflowNodeContract
+    - CheckpointReceipt
+    - PromotionReceipt
+  schema_refs: []
+  ownership_rule: Builder workflow contracts remain local and provider-neutral; external engine, isolation platform and product contracts are not forked
+two_gate_boundary:
+  implementation_gate:
+    scope: deterministic local checkpoint, resume, sandbox-policy and dependency-safe parallel-plan mechanisms
+    closes_external_conformance: false
+  evidence_gate:
+    status: TEMPORAL_PROVIDER_ISOLATION_AND_EXTERNAL_VALIDATION_PENDING
+    actual_durable_engine_resume_evidence: false
+    actual_provider_or_container_isolation_evidence: false
+    production_authority: false
+implementation_scope_after_dependency_pass:
+  - compile immutable local checkpoints for committed node inputs, outputs, validation receipts, declared side effects, selected profile and next eligible nodes
+  - validate idempotent resume against exact workflow, profile, dependency, node, attempt-policy and input identities
+  - reuse only still-valid committed deterministic results and invalidate only affected checkpoints after dependency changes
+  - compile deny-by-default sandbox policy declarations for the three ADR-012 classes without launching a process, container, worktree or provider call
+  - validate least-privilege source, tool, secret-reference, filesystem, network, storage, compute, lifetime, output, logging and disposal declarations
+  - prove dependency-independent parallel eligibility and deterministic cancellation, merge and conflict plans without executing concurrent external work
+  - preserve locked sources, ratified decisions, protected benchmarks, unaffected branches, history, rollback and failure evidence
+checkpoint_contract:
+  required_fields:
+    - checkpoint_id_and_version
+    - run_id
+    - Workflow_IR_and_profile_hashes
+    - completed_node_identities
+    - committed_input_and_output_hashes
+    - node_validation_receipt_refs
+    - declared_side_effect_idempotency_records
+    - event_stream_positions
+    - next_eligible_nodes
+    - checkpoint_parent_and_invalidation_refs
+    - authority_and_provenance
+  atomic_commit: required
+  mutable_after_commit: false
+  partial_checkpoint_on_failure: prohibited
+resume_contract:
+  idempotency_key_fields:
+    - run_id
+    - workflow_hash
+    - node_id
+    - attempt_policy_hash
+    - input_hash
+  rules:
+    - selected profile cannot change silently
+    - committed successful side effects are not repeated
+    - ratified human actions are not replayed
+    - only incomplete or invalidated nodes become eligible
+    - reused outputs require exact active dependencies and versions
+    - stale, altered, superseded, invalidated or conflicting checkpoint fails closed
+    - identical resume returns the original externally visible local result and receipt
+  external_engine_reconstruction: NOT_IMPLEMENTED_EXTERNAL_VALIDATION_PENDING
+sandbox_policy_contract:
+  policy_classes:
+    - deterministic_process_sandbox
+    - provider_call_sandbox
+    - isolated_implementation_task_sandbox
+  deny_by_default: true
+  required_declarations:
+    - immutable_environment_or_image_ref
+    - read_only_evidence_mounts
+    - writable_staging_paths
+    - allowed_tools
+    - network_allowlist
+    - ephemeral_secret_reference_names_without_values
+    - CPU_memory_and_time_limits
+    - output_contract
+    - logging_and_redaction_policy
+    - disposal_policy
+    - isolation_mechanism_class
+  rules:
+    - any undeclared capability is denied
+    - credentials and provider-secret values are never accepted, serialized, logged, hashed or persisted
+    - unrelated sources, archives, repositories and protected labels remain inaccessible
+    - provider_call_sandbox is declaration-only and performs no provider or network call
+    - isolated task policy performs no actual process, worktree or container creation in this Story
+  platform_conformance: EXTERNAL_VALIDATION_PENDING
+dependency_safe_parallel_plan:
+  permitted_work_classes:
+    - deterministic_scan
+    - candidate_generation_declaration
+    - evaluator_repetition_declaration
+    - implementation_task_declaration
+  required_proof:
+    - no dependency path between concurrent units
+    - disjoint or explicitly governed write sets
+    - explicit concurrency_limit
+    - budget_limit
+    - cancellation_policy
+    - merge_policy
+    - conflict_policy
+    - terminal_states
+  rules:
+    - parallelism is opt-in and never default
+    - dependency, shared-write or authority conflict blocks parallel eligibility
+    - cancellation of one planned branch cannot invalidate a completed independent sibling
+    - candidate or evaluator declarations do not invoke providers or external runtimes
+  actual_parallel_execution: prohibited
+failure_containment_rollback_and_history:
+  protected_state:
+    - locked_sources_and_evidence
+    - ratified_decisions
+    - protected_benchmark_refs
+    - unaffected_workflow_branches
+    - prior_checkpoints_events_and_receipts
+  failure_rules:
+    - failed node, tool, sandbox, profile or resume leaves protected state unchanged
+    - failed resume leaves no duplicate side effect or new active checkpoint
+    - failed parallel-plan validation leaves no scheduled or merged work
+    - rollback restores the prior active checkpoint reference without rewriting history
+  historical_reproduction: required
+lineage_and_determinism:
+  pinned_inputs:
+    - Workflow_IR_profile_node_and_dependency_versions
+    - ST-09.03_validation_failure_and_control_flow_receipts
+    - checkpoint_parent_inputs_outputs_and_side_effect_records
+    - sandbox_policy_and_node_contract_versions
+    - parallel_dependency_write_budget_merge_and_conflict_policies
+    - authority_and_invalidation_refs
+  canonical_identity_rule: checkpoint, resume, sandbox-policy, parallel-plan, invalidation and rollback receipts derive only from canonical governed content
+  repeat_command: identical payload returns original result without duplicate state
+  conflicting_command: reject atomically with zero checkpoint, eligibility, receipt, event or command record
+failure_and_authority_boundary:
+  reject:
+    - duplicate_side_effect_or_ratified_human_action_replay
+    - silent_profile_change
+    - unsafe_or_undeclared_sandbox_capability
+    - credential_or_provider_secret_value_input
+    - network_tool_source_path_or_write_access_outside_node_contract
+    - dependency_unsafe_or_shared_write_parallelism
+    - corrupted_locked_or_unaffected_state
+    - unauthorized checkpoint, resume, capability, parallel-plan, invalidation or rollback mutation
+    - external engine, provider, container, worktree, network or product execution request
+  partial_state_on_failure: prohibited
+external_and_evidence_gates_remaining:
+  direct_dependency:
+    status: DEPENDENCY_PENDING
+    detail: ST-09.03 OD-AM-001 ImplementationCompletionReceipt is not issued
+  manual_shadow_evidence:
+    status: EVIDENCE_PENDING
+    detail: inherited actual expert-shadow evidence remains absent
+  XDEP-001:
+    status: AUTHORITY_REMAINS_EXTERNAL
+    detail: Program Control records remain read-only
+  XDEP-005:
+    status: FUTURE_CONSUMER_NOT_IMPLEMENTATION_EVIDENCE
+    detail: Operator Manual documentation cannot substitute for runtime, resume or isolation evidence
+  ADR-006-Temporal:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: local checkpoint simulation does not prove durable Temporal checkpoint, resume, restart or fault behavior
+  ADR-012-isolation-platform:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: policy validation does not prove OS, worktree, process or container isolation conformance
+  provider_boundary:
+    status: PROVIDER_EXECUTION_AND_OUTAGE_EVIDENCE_PENDING
+    detail: no credential, API call, model execution, provider fault or provider sandbox conformance is performed
+  external_product_boundary:
+    status: EXTERNAL_PRODUCT_RUNTIME_AND_ACCEPTANCE_REMAIN_EXTERNAL
+  production_promotion:
+    status: PRODUCTION_EVIDENCE_AND_AUTHORITY_PENDING
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/workflow/checkpoint_isolation.py
+  tests:
+    - tests/stories/st_09_04/test_checkpoint_resume_idempotency.py
+    - tests/stories/st_09_04/test_sandbox_least_privilege.py
+    - tests/stories/st_09_04/test_dependency_safe_parallel_plan.py
+    - tests/stories/st_09_04/test_failure_authority_invalidation_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-09.04/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-09.04/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-09.04/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-09.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-09.03 implementation or completion evidence
+  - external engine, scheduler, agent, evaluator, model, provider, credential, network, process, container, worktree, transport or external-product behavior
+  - behavior owned by ST-09.05 or ST-09.06
+  - production execution, promotion, readiness or certification
+prohibited_claims:
+  - actual_manual_shadow_parity
+  - durable_Temporal_checkpoint_or_resume
+  - Temporal_public_seam_or_fault_conformance
+  - provider_sandbox_or_provider_outage_validated
+  - OS_process_container_or_worktree_isolation_conformant
+  - real_secret_injection_or_disposal_validated
+  - production_parallel_execution_safe
+  - external_product_compatible
+  - production_workflow_ready
+  - production_ready
+  - certified
+acceptance_after_dependency_pass:
+  - checkpoints atomically bind committed node state, side-effect records, profile and next eligibility
+  - resume reuses only exact valid committed work without repeating side effects or ratified human actions
+  - sandbox policies are deny-by-default and contain no credential or provider-secret values
+  - parallel eligibility requires dependency independence, governed writes, concurrency, budget, cancellation, merge and conflict policies
+  - failures preserve locked sources, ratified decisions, protected benchmarks, unaffected branches and historical receipts
+  - identical governed inputs produce byte-identical checkpoint, resume, policy, parallel-plan and rollback receipts
+  - local structural evidence cannot close manual-shadow, Temporal, provider, isolation-platform, external-product or production gates
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-09.05_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ca-runtime"
+version = "0.1.0.dev1"
+description = "Shared local development runtime foundation for Conscious Activations products."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["ca-contracts==0.1.0.dev1"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ca_runtime*"]
+
+[tool.setuptools.package-data]
+"ca_runtime.migrations" = ["*.sql"]
+"ca_runtime" = ["py.typed"]

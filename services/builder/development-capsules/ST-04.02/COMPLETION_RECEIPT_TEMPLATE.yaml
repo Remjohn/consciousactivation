@@ -1,0 +1,34 @@
+schema_version: cmf-builder-story-completion-receipt-template/v1
+story_id: ST-04.02
+primary_epic: EP-04
+active_mode: RESPONSIBILITY_CENTERED_MODULES
+receipt_type: StoryCompletionReceipt
+issuance_state: PENDING_STORY_COMPLETION
+owned_obligations_required:
+  D015: PASS_REQUIRED
+  FR-064: PASS_REQUIRED
+  FR-065: PASS_REQUIRED
+acceptance_criteria_required: [AC-01, AC-02, AC-03, AC-04, AC-05, AC-06, AC-07, AC-08, AC-09, AC-10, AC-11, AC-12]
+required_evidence:
+  - authorization_and_capsule_identity
+  - exact_ST_04_01_parent
+  - capability_partition_and_module_graph
+  - public_contract_boundary_and_test_seam_validation
+  - files_changed_with_hashes
+  - tests_observability_and_rollback
+  - limitations_blockers_and_boundary_validation
+required_validations:
+  predecessor_regression: PASS_221_OF_221
+  story_tests: PASS_ALL_TWICE
+  full_regression: PASS_ALL_NO_SKIPS
+  capability_partition: PASS_3_OF_3_EXACTLY_ONCE
+  file_scope: PASS_EXACT_ALLOWLIST
+  external_dependencies_added: []
+  schema_changes: []
+  later_story_behavior: false
+  production_claim: false
+downstream_effect:
+  ST_04_03: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_ONLY
+  implementation_authorized: false
+completion_verdict_allowed: [PASS, FAIL]
+canonicalization: sha256_of_canonical_JSON_with_receipt_hash_field_omitted

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-024",
+  "title": "Render Quality Presets",
+  "description": "FR-VID-08 §3 TD3 — Three-tier render quality presets: preview (480p, fast), review (720p, medium), final (1080p, production).",
+  "type": "object",
+  "required": ["presets"],
+  "properties": {
+    "presets": {
+      "type": "object",
+      "required": ["preview", "review", "final"],
+      "properties": {
+        "preview": { "$ref": "#/definitions/quality_preset" },
+        "review": { "$ref": "#/definitions/quality_preset" },
+        "final": { "$ref": "#/definitions/quality_preset" }
+      }
+    }
+  },
+  "definitions": {
+    "quality_preset": {
+      "type": "object",
+      "required": ["tier", "width", "height", "codec", "bitrate_kbps", "crf"],
+      "properties": {
+        "tier": {
+          "type": "string",
+          "enum": ["preview", "review", "final"]
+        },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "codec": {
+          "type": "string",
+          "enum": ["h264", "h265"]
+        },
+        "bitrate_kbps": { "type": "integer", "minimum": 100 },
+        "crf": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 51,
+          "description": "Constant Rate Factor — lower = better quality."
+        },
+        "pixel_format": {
+          "type": "string",
+          "default": "yuv420p"
+        },
+        "audio_bitrate_kbps": {
+          "type": "integer",
+          "default": 128
+        }
+      }
+    }
+  }
+}

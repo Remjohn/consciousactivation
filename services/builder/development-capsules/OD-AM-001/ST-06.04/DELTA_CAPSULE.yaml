@@ -1,0 +1,49 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-06.04:CATEGORY_OPERATING_RULES
+story_id: ST-06.04
+title: Own Category Runtime Evaluation Repair and Migration Rules
+development_mode: OFFLINE_DECLARATIVE_CATEGORY_OPERATING_RULES
+authority:
+  amendment_receipt:
+    path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+    sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+  authority_action: COMPILE_CATEGORY_POLICY
+primary_obligations: [FR-148, FR-149, FR-150, NFR-MAINT-003]
+dependency_receipts:
+  ST_06_03:
+    path: development-capsules/OD-AM-001/ST-06.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    sha256: 89d2f10aca87399e25f0f2115562bd4ac2c1bc2bb1f0c4621540a25e0c15569b
+    status: IMPLEMENTED_DEVELOPMENT_PASS
+outcome: >-
+  Compile deterministic Builder-owned category operating rules for declarative
+  runtime plans, validation, evaluation contracts, diagnostics, repair selection,
+  selective rerun, migration, compatibility, invalidation, rollback, and external
+  handoff boundaries without executing any runtime or absorbing an external product.
+required_behavior:
+  - preserve all five category identities and exact profile ownership
+  - preserve Activation First and Visual Syntax First at their separate scopes
+  - bind every ruleset to the exact immutable ST-06.03 syntax and sequence hashes
+  - assign explicit evaluator repair migration and compatibility ownership
+  - reject cross-category repair atomic ownership transfer and incompatible migration
+  - require new immutable versions for migration and forbid certification inheritance
+  - define selective rerun only for declared category-owned units
+  - define invalidation and non-destructive rollback without mutating predecessors
+  - keep external handoff as a Builder contract boundary with validation pending
+  - preserve explicit generic NOT_APPLICABLE behavior
+permitted_paths:
+  - src/cmf_builder/domain/category_runtime_rules.py
+  - src/cmf_builder/application/category_policy_commands.py
+  - tests/stories/st_06_04/**
+  - development-capsules/OD-AM-001/ST-06.04/**
+prohibited:
+  - workflow phase or provider execution
+  - VAE Delegation Interview Expression ReelCast or conversational product internals
+  - external transport network credentials persistence or deployment
+  - production benchmark external-adoption certification or threshold claims
+  - creation inference or approval of human truth Reaction Receipts Expression Moments or Identity DNA changes
+  - shared source-boundary package-export queue status or authority-file edits by this lane
+evidence_gates_remaining_open: [BD-004-broader, BD-007, BD-008, BD-010-broader, BD-014, HD-006, HD-007]
+completion_receipt_type: ImplementationCompletionReceipt
+completion_state_before_integrator_gate: PENDING_INTEGRATOR_FULL_REGRESSION
+production_ready: false
+certified: false

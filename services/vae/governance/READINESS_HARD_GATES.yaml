@@ -1,0 +1,137 @@
+product: CMF Visual Asset Editor
+version: 1.0.0
+status: binding
+authorization_states:
+- PRD_DRAFT
+- PRD_APPROVED
+- ARCHITECTURE_IN_PROGRESS
+- ARCHITECTURE_VALIDATED
+- CONTRACT_FIXTURES_READY
+- REFERENCE_SLICE_READY
+- IMPLEMENTATION_AUTHORIZED
+- LIMITED_PRODUCTION_CERTIFIED
+- PRODUCTION_CERTIFIED
+implementation_authorization_gates:
+- id: GATE-IA-001
+  name: Product requirements approved
+  requires:
+  - 28 locked decisions
+  - all FR/NFR mechanically valid
+  - anti-goals approved
+  - Release 1 scope frozen
+- id: GATE-IA-002
+  name: Architecture preservation
+  requires:
+  - ARCHITECTURE_PRESERVATION_CONTRACT passes
+  - no upstream constitutional collision
+- id: GATE-IA-003
+  name: Architecture validated
+  requires:
+  - Visual Production Plan IR
+  - runtime graph
+  - registries
+  - compute fabric
+  - evaluation
+  - memory/retrieval
+  - service
+  - Control Tower architecture
+- id: GATE-IA-004
+  name: Representative contracts ready
+  requires:
+  - Visual Asset Demand
+  - Submission Receipt
+  - Events
+  - Production Plan
+  - Quality Evaluation
+  - Repair
+  - Constraint Conflict
+  - Geometry
+  - Result
+  - Budget
+  - Compatibility fixtures
+- id: GATE-IA-005
+  name: Format 02 reference slice ready
+  requires:
+  - identity
+  - pose
+  - expression
+  - gesture
+  - gaze
+  - environment
+  - composition
+  - continuity
+  - syntax role
+  - Activative function
+  - wrong-reading fixtures
+- id: GATE-IA-006
+  name: Compute proof planned and executable
+  requires:
+  - local/self-hosted Docker GPU profile
+  - cloud Docker GPU profile
+  - pinned ComfyUI, nodes, weights, workflow, API, receipts
+- id: GATE-IA-007
+  name: Evaluation readiness
+  requires:
+  - initial labeled evaluator set
+  - profile definitions
+  - hard gates
+  - repair mappings
+  - recurrence cases
+- id: GATE-IA-008
+  name: Budget programs defined
+  requires:
+  - Lean
+  - Standard
+  - Premium
+  - Exploration
+  - Capability Learning
+  - Custom semantics and limits
+- id: GATE-IA-009
+  name: Benchmark manifest approved
+  requires:
+  - representative
+  - golden
+  - failure
+  - adversarial
+  - mutation
+  - repair
+  - recovery
+  - evaluator
+  - compatibility cases
+- id: GATE-IA-010
+  name: Development Capsule complete
+  requires:
+  - PRD
+  - decision/requirement registries
+  - Architecture
+  - contracts
+  - fixtures
+  - benchmark plan
+  - epics/stories
+  - feature specs
+  - compatibility
+  - readiness receipt
+production_hard_gates:
+- production_validity
+- semantic_fidelity
+- activative_fidelity
+- composition_effectiveness
+- visual_syntax_conformance
+- identity_and_continuity_when_required
+- temporal_stability_when_required
+- provenance_and_reproducibility
+- repair_precision
+- evaluator_accuracy
+- runtime_isolation_and_recovery
+blockers:
+- upstream architecture mutation
+- silent demand relaxation
+- producer self-approval
+- required evaluator not certified
+- more than three autonomous quality repairs
+- unregistered or uncertified capability
+- unresolved blocking conflict
+- budget exceeded without authority
+- provider artifact treated as canonical plan
+- uncertified asset family claimed as production
+- routine manual ComfyUI operation required

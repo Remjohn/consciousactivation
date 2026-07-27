@@ -1,0 +1,65 @@
+schema_version: cmf-builder-activative-skill-path-locks/v1
+campaign: ACTIVATIVE_INTELLIGENCE_REAL_SKILL_AND_JIT_CAPSULE
+canonical_repository: D:/Work/CONSCIOUS_ACTIVATIONS/01_ATOMIC_HARNESS_BUILDER
+lock_rule: one_active_writer_per_path
+claims:
+  ACTIVATIVE_SEMANTIC_CONTRACT_AGENT:
+    status: COMPLETE_RELEASED
+    paths:
+      - src/cmf_builder/skills/activative_contracts.py
+      - governance/skills/activative_intelligence_pack_compiler/SEMANTIC_POLICY.yaml
+      - tests/skills/activative_semantics/
+      - docs/implementation/skills/change-requests/ACTIVATIVE_SEMANTIC_CONTRACT_AGENT.yaml
+  SKILL_PACKAGE_AGENT:
+    status: COMPLETE_RELEASED
+    paths:
+      - src/cmf_builder/skills/portable_package.py
+      - skill-packages/activative_intelligence_pack_compiler/1.0.0/
+      - tests/skills/portable_package/
+      - docs/implementation/skills/change-requests/SKILL_PACKAGE_AGENT.yaml
+  SKILL_EVALUATION_AGENT:
+    status: COMPLETE_RELEASED
+    paths:
+      - evaluation/skills/activative_intelligence_pack_compiler/
+      - tests/skills/activative_evaluation/
+      - docs/implementation/skills/change-requests/SKILL_EVALUATION_AGENT.yaml
+  CANONICAL_INTEGRATOR:
+    status: COMPLETE_RELEASED
+    paths:
+      - src/cmf_builder/skills/__init__.py
+      - src/cmf_builder/skills/necessity.py
+      - src/cmf_builder/skills/jit_capsule.py
+      - src/cmf_builder/skills/capsule_lifecycle.py
+      - src/cmf_builder/application/activative_skill_commands.py
+      - src/cmf_builder/application/jit_capsule_commands.py
+      - src/cmf_builder/application/capsule_lifecycle_commands.py
+      - src/cmf_builder/domain/__init__.py
+      - src/cmf_builder/application/__init__.py
+      - src/cmf_builder/adapters/in_memory_run_repository.py
+      - tests/stories/st_05_03/
+      - tests/stories/st_05_04/
+      - tests/stories/st_05_05/
+      - tests/stories/*/test_architecture_boundary.py
+      - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+      - development-capsules/ST-05.03/
+      - development-capsules/ST-05.04/
+      - development-capsules/ST-05.05/
+      - docs/implementation/skills/ST0503_BLOCKER_SCOPE_AUDIT.md
+      - docs/implementation/skills/ST0503_BLOCKER_DISPOSITION.yaml
+      - docs/implementation/skills/FROZEN_INTERFACES.yaml
+      - docs/implementation/skills/PATH_OWNERSHIP_LOCKS.yaml
+      - docs/implementation/skills/CAMPAIGN_PROGRESS.md
+      - docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
+      - docs/implementation/FULL_BUILDER_CAMPAIGN_PROGRESS.md
+      - docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
+      - docs/implementation/FULL_BUILDER_RECEIPT_INDEX.yaml
+      - docs/planning/BUILDER_CORE_IMPLEMENTATION_SEQUENCE.yaml
+      - CURRENT_PROJECT_STATUS.md
+      - PROGRAM_STATUS_EXPORT.yaml
+conflicts: []
+lane_timing_minutes:
+  ACTIVATIVE_SEMANTIC_CONTRACT_AGENT: 12
+  SKILL_PACKAGE_AGENT: 12
+  SKILL_EVALUATION_AGENT: 15
+  CANONICAL_INTEGRATOR: 42
+validation: PASS_NO_OVERLAPPING_NON_SHARED_WRITERS_ALL_LOCKS_RELEASED

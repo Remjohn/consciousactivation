@@ -1,0 +1,63 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Demand Constraint Conflict
+description: ''
+type: object
+additionalProperties: false
+required:
+- conflict_id
+- execution_id
+- demand_ref
+- status
+- conflict
+- preserved_authority
+- proposed_amendments
+properties:
+  conflict_id:
+    type: string
+    pattern: ^VDC-
+  execution_id: &id001
+    type: string
+  demand_ref:
+    type: string
+    minLength: 1
+  status:
+    enum:
+    - amendment_required
+    - capability_gap
+    - cost_approval_required
+    - human_review_required
+  conflict:
+    type: object
+    required:
+    - code
+    - severity
+    - explanation
+    - evidence_refs
+    properties:
+      code: *id001
+      severity: *id001
+      explanation: *id001
+      evidence_refs:
+        type: array
+        items: *id001
+      failed_quality_rounds:
+        type: integer
+        maximum: 3
+  preserved_authority:
+    type: object
+  proposed_amendments:
+    type: array
+    items:
+      type: object
+      required:
+      - amendment_id
+      - type
+      - proposed_change
+      - expected_effect
+      properties:
+        amendment_id: *id001
+        type: *id001
+        proposed_change:
+          type: object
+        expected_effect:
+          type: object

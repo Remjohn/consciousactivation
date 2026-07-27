@@ -1,0 +1,65 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:brownfield_source_record",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "archive_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "byte_length": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "dependency_manifest_ref": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "disposition_decision_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "license_evidence_refs": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "origin_repository": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "relative_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_class": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_record_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_record_id",
+    "archive_id",
+    "relative_path",
+    "byte_length",
+    "sha256",
+    "source_class",
+    "origin_repository",
+    "license_evidence_refs",
+    "dependency_manifest_ref",
+    "disposition_decision_id"
+  ],
+  "title": "brownfield_source_record",
+  "type": "object"
+}

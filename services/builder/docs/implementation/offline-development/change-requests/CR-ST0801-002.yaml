@@ -1,0 +1,27 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0801-002
+story_id: ST-08.01
+calling_lane: EVALUATION_AND_REPAIR
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR
+target_file: src/cmf_builder/application/authority.py
+exact_symbol: AuthorityService.authorize_exact
+required_additive_change: >-
+  Add a deny-by-default exact-resource authorization operation that preserves
+  existing wildcard-aware authorize behavior for prior callers while allowing
+  ST-08.01 to reject wildcard grants where the governed plan identity itself
+  must be the granted resource.
+preconditions:
+  - actor registration and actor-kind boundaries remain unchanged
+  - action membership and expiry remain required
+  - AuthorityService.authorize wildcard behavior remains backward compatible
+postconditions:
+  - authorize_exact accepts only a grant whose resource_id exactly equals the requested resource
+  - wildcard-only authority fails closed
+  - no existing authorization boundary is weakened
+invariants:
+  - HUMAN_ONLY_ACTIONS semantics unchanged
+  - no external dependency or product authority introduced
+  - exact grant expiry is checked against the supplied governed time
+focused_tests:
+  - tests/stories/st_08_01/test_determinism_and_authority.py
+  - tests/stories/st_08_01/test_failure_boundaries.py

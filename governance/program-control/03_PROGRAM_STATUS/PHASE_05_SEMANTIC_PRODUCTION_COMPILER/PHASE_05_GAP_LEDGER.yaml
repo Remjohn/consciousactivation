@@ -1,0 +1,132 @@
+schema_version: ca-phase05-gap-ledger/v1
+gaps:
+- gap_id: P5-GAP-HYPOTHESIS-REPAIR-HISTORY
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-003
+  finding: Bounded portfolio creation, hard gates, comparison, stopping, and promotion
+    exist, but repaired-candidate successor flow, complete rejected/superseded history
+    projection, cancellation/late-result handling, and legacy migration are incomplete.
+  next_action: Add repaired-candidate commands, full state-chain projection, cancellation/late-result
+    fixtures, and V2.1 migration evidence.
+- gap_id: P5-GAP-HYPOTHESIS-SEARCH-CONTROLLER
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-003
+  finding: The deterministic service accepts candidate portfolios and stop evidence
+    but does not operate an external or iterative candidate-generation/evaluation
+    controller.
+  next_action: Integrate bounded model programs and independent evaluator execution
+    in the later Programmed Model phase.
+- gap_id: P5-GAP-ATOMIC-FAULT-CONCURRENCY
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-003
+  - TS-AIR-015
+  - TS-AIR-016
+  finding: Repository idempotency and optimistic revisions exist, but fault injection
+    at every Phase 5 multi-record commit member and concurrent writer races are not
+    fully demonstrated.
+  next_action: Add transactional fault-injection and concurrency acceptance suites
+    before full Spec completion.
+- gap_id: P5-GAP-FRESH-PROCESS-PORTABILITY
+  severity: MEDIUM
+  status: OPEN
+  affected_specs:
+  - TS-AIR-003
+  - TS-AIR-015
+  - TS-AIR-016
+  finding: The reference demo is deterministic in local execution, but complete multi-process,
+    changed-root, locale, clock, order, and environment hash matrices are not yet
+    recorded.
+  next_action: Add two-process clean-root canonical-byte comparison tests and absolute-path
+    scans.
+- gap_id: P5-GAP-DERIVATIVE-ELIGIBILITY-BREADTH
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-015
+  finding: The source-led short, Carousel, SuperVisual, and non-Format-02 animation
+    program forms are demonstrated, but complete category/profile compatibility, every
+    transformation class, N/A evidence, and all wrong-reading inheritance cases are
+    not directly tested.
+  next_action: Add category/profile registry integration and criterion-specific derivative
+    fixtures.
+- gap_id: P5-GAP-DERIVATIVE-SUPERSESSION-INVALIDATION
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-015
+  finding: Immutable revisions and lineage exist, but material upstream supersession
+    and descendant-only invalidation of scripts/scenes/packages are not fully implemented
+    end to end.
+  next_action: Connect AIR invalidation events to AHP dependency traversal and add
+    historical replay fixtures.
+- gap_id: P5-GAP-TRANSFER-FIVE-CHECKPOINTS
+  severity: CRITICAL
+  status: OPEN
+  affected_specs:
+  - TS-AIR-016
+  finding: "The Phase 5 reference demonstrates source/script transfer evidence, not\
+    \ complete source\u2192Moment\u2192script\u2192composition\u2192render\u2192platform\
+    \ checkpoint evidence."
+  next_action: "Complete the remaining checkpoints in Phases 6\u20139 using real Composition\
+    \ IR, VideoEditProgram, rendered artifacts, and publication profiles."
+- gap_id: P5-GAP-TRANSFER-REPAIR-ATTRIBUTION
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-016
+  finding: Transfer failure and repair-request schemas exist, but contested attribution,
+    owning-product execution, selective invalidation, and post-repair reevaluation
+    are not complete.
+  next_action: Integrate AIR failure attribution with AHP, VAE, and Studio repair
+    flows.
+- gap_id: P5-GAP-EVALUATOR-CALIBRATION
+  severity: EXTERNAL
+  status: DEFERRED
+  affected_specs:
+  - TS-AIR-003
+  - TS-AIR-015
+  - TS-AIR-016
+  finding: Independent evaluator identities and receipts are structurally represented,
+    but no external evaluator, calibration profile, protected set, or certified threshold
+    is executed.
+  next_action: Close through separately authorized evaluation and Programmed Model
+    evidence.
+- gap_id: P5-GAP-PER-SPEC-TESTS
+  severity: HIGH
+  status: OPEN
+  affected_specs:
+  - TS-AIR-003
+  - TS-AIR-015
+  - TS-AIR-016
+  finding: Phase 5 supplies aggregate and selected criterion-level tests, but 30 implemented
+    criteria still lack direct criterion-specific tests and no full Spec completion
+    is claimed.
+  next_action: Add exact per-criterion suites and later acceptance receipts before
+    full completion claims.
+- gap_id: P5-GAP-REAL-HUMAN-PRODUCTION-EVIDENCE
+  severity: EXTERNAL
+  status: DEFERRED
+  affected_specs:
+  - TS-AIR-003
+  - TS-AIR-015
+  - TS-AIR-016
+  finding: No real interview, human approval study, external model/provider, rendered
+    media, or production deployment evidence is claimed.
+  next_action: Close only with separately authorized real-source and production evidence.
+- gap_id: P5-GAP-AUTHORITY-RATIFICATION
+  severity: GOVERNANCE
+  status: DEFERRED
+  affected_specs:
+  - TS-AIR-003
+  - TS-AIR-015
+  - TS-AIR-016
+  finding: V2.1 authority remains candidate and no production/certification authority
+    exists.
+  next_action: Preserve candidate and development claim ceilings until attributable
+    ratification and later release authority.

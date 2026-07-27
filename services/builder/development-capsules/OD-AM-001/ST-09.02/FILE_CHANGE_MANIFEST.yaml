@@ -1,0 +1,51 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-09.02
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/workflow/manual_shadow_routing.py
+    role: deterministic manual-shadow routing, synthetic review, actor-boundary and receipt contracts
+  - path: tests/stories/st_09_02/test_router_and_shadow_trace.py
+    role: routing, manual-shadow trace and fixture-classification coverage
+  - path: tests/stories/st_09_02/test_actor_separation_and_capsule_binding.py
+    role: deterministic-code and governed-agent boundary coverage
+  - path: tests/stories/st_09_02/test_failure_authority_boundaries.py
+    role: synthetic fixture, stale input, missing reviewer and authority rejection coverage
+  - path: tests/stories/st_09_02/test_determinism_invalidation_and_rollback.py
+    role: idempotency, invalidation, rollback and deterministic identity coverage
+  - path: development-capsules/OD-AM-001/ST-09.02/DELTA_CAPSULE.yaml
+    role: compact governed delta capsule
+  - path: development-capsules/OD-AM-001/ST-09.02/TEST_RESULTS.json
+    role: compact test and regression evidence
+  - path: development-capsules/OD-AM-001/ST-09.02/FILE_CHANGE_MANIFEST.yaml
+    role: compact file-scope evidence
+  - path: development-capsules/OD-AM-001/ST-09.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    role: OD-AM-001 implementation completion receipt
+files_modified: []
+production_files_changed:
+  - src/cmf_builder/workflow/manual_shadow_routing.py
+test_files_changed:
+  - tests/stories/st_09_02/test_router_and_shadow_trace.py
+  - tests/stories/st_09_02/test_actor_separation_and_capsule_binding.py
+  - tests/stories/st_09_02/test_failure_authority_boundaries.py
+  - tests/stories/st_09_02/test_determinism_invalidation_and_rollback.py
+shared_files_changed: []
+status_files_changed:
+  - docs/implementation/offline-development/OVERNIGHT_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+paths_outside_capsule_changed:
+  - src/cmf_builder/workflow/manual_shadow_routing.py
+  - tests/stories/st_09_02/test_router_and_shadow_trace.py
+  - tests/stories/st_09_02/test_actor_separation_and_capsule_binding.py
+  - tests/stories/st_09_02/test_failure_authority_boundaries.py
+  - tests/stories/st_09_02/test_determinism_invalidation_and_rollback.py
+  - docs/implementation/offline-development/OVERNIGHT_CAMPAIGN_STATE.yaml
+  - docs/implementation/offline-development/MODEL_NEUTRAL_HANDOFF.yaml
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  path_ownership_conformant: true
+  real_manual_shadow_evidence_created: false
+  external_or_agent_runtime_created: false
+  production_or_certification_status_created: false
+  file_scope_verdict: PASS

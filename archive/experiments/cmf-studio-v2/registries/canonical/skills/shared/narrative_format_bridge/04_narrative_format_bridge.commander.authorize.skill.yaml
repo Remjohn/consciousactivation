@@ -1,0 +1,17 @@
+id: narrative_format_bridge.commander.authorize
+version: "1.0.0"
+status: active
+owner_agent: narrative_format_bridge_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Bridge Narrative Story Doctor packets into Format Intelligence programs."
+inputs:
+  - NarrativePacketBridgeRef
+  - NarrativeToFormatBridgeRequest
+outputs:
+  - FormatIntelligenceProgram
+  - EngineAdapterPayload
+hard_gates:
+  - "Do not read raw transcripts."
+  - "Do not invent source spans."
+  - "Require brand_context_version_id."
+  - "Require commander authorization before engine payload."

@@ -1,0 +1,27 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-01.03
+primary_epic: EP-01
+active_mode: CATEGORY_NEUTRAL_EVIDENCE_INDEX
+required_receipt_sections:
+  - implemented_outcome
+  - owned_obligations_with_verdicts
+  - acceptance_criteria_with_verdicts
+  - dependency_receipts_and_hashes
+  - exact_files_changed_and_hashes
+  - tests_executed_with_counts_and_process_identity
+  - contract_and_architecture_validation
+  - observability_evidence_and_hash
+  - rollback_and_invalidation_evidence_and_hash
+  - unresolved_limitations
+  - production_and_certification_boundaries
+  - completion_verdict
+issuance_rules:
+  acceptance_criteria: all_PASS
+  story_tests: all_PASS_twice
+  predecessor_regression: PASS
+  correction_regression: PASS
+  full_repository_regression: PASS_no_mandatory_skips
+  file_scope: exact_allowlist_PASS
+  unauthorized_dependencies_or_schemas: none
+  completion_verdict: PASS_or_FAIL_from_evidence
+historical_rule: receipt_is_immutable_after_issuance_and_later_corrections_use_supplemental_receipts

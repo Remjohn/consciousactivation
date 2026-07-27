@@ -1,0 +1,37 @@
+id: narrative.cluster_meaning_graph.compile
+version: "1.0.0"
+status: active
+name: "Narrative Cluster_Meaning_Graph Compile"
+owner_agent: narrative_story_doctor_agent
+skill_type: dspy_plus_pydantic
+purpose: "Shared extraction/compiler skill for Narrative Story Doctor and Content Extraction Intelligence V1."
+inputs:
+  - LayerAwareExtractionContext
+  - ExtractionSourcePacket
+  - InterviewBriefBinding
+outputs:
+  - typed_extraction_object
+  - receipt
+required_contracts:
+  - QuestionProductionContract
+  - ExpectedIngredientGraph
+  - NarrativeCluster
+  - ArchetypeMeaningProgram
+  - PrimitiveCoalitionCandidate
+  - FormatExpressionProgram
+  - EngineExtractionPacket
+required_registries:
+  - registry.narrative_story_doctor.extraction_modes.v1
+  - registry.narrative_story_doctor.expected_ingredient_types.v1
+  - registry.narrative_story_doctor.engine_packet_targets.v1
+hard_gates:
+  - "brand_context_version_id is required."
+  - "The Interview Brief is a prior, not evidence."
+  - "Verbatim source spans must not be paraphrased into evidence."
+  - "Engine packets require source references."
+  - "Brief expectations cannot become extracted facts without source spans."
+runtime_accuracy:
+  pydantic_validation: required
+  deterministic_guards: required
+  dspy_reasoning: allowed_for_interpretive_scoring_only
+  receipt: required

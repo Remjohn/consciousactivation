@@ -1,0 +1,106 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-AIR-017-BATCH009
+spec_id: TS-AIR-017
+spec_title: "Visual Activation, Composition-Before-Editing, and Production Handoff"
+product: Activative Intelligence Runtime
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. Upstream draft dependencies
+  (TS-AIR-015, TS-AIR-016) passed audits in Batch 8 and Batch 9.
+  F17 PRD owner table conflict correctly identified and resolved via candidate Program Control ownership matrices.
+  Eligible for TECHNICALLY_ACCEPTED_PENDING_RATIFICATION. NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      AIR-FR-097 through 102, AIR-ST-17.01 through 17.03 covered.
+      Composition-before-editing sequence strictly defined.
+      Result reparse vs intent explicitly specified.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      authority_state CANDIDATE_NOT_CURRENT and build_authority false correctly declared.
+      Upstream TS-AIR-015 (58946bef) and TS-AIR-016 (5e4437ba) DRAFT_DEPENDENCY_NOT_ACCEPTED, both verified.
+      AIR owns visual activation, Visual Semantic Pack, Visual Narrative Program, semantic Feature Contracts,
+      and semantic Composition Intent.
+      Pipeline owns exact category-native execution, exact BBOX/WHY, and authoritative VAD emission.
+      VAE owns Visual Production Plan, method selection, generation, production evaluation, repair, delivery.
+      Section 3.1 explicitly resolves F17 PRD owner table conflict using candidate Program Control ownership matrices.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      Complete data models: ImmutableRef, SourceSpanRef, VisualActivationCase, VisualReferenceEvidence,
+      VisualSemanticCandidate, VisualSemanticPack, VisualNarrativeProgram, CompositionIntent, BBOXIntent,
+      FeatureContract (15 feature_kind values), VisualRequirementIntent, VisualActivationHandoff,
+      VisualResultObservation, VisualReparseReceipt.
+      Commands (15), events (13), repository port, state machine (11 states), atomicity, idempotency,
+      concurrency, cancellation, replay, selective invalidation.
+      Monotonic wrong-reading lock inheritance.
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      PRM-VSG-001 (568cd440), PRM-VSG-024 (8289b196), PRM-VSG-021 (06c75355), PRM-BUS-006 (6abfae7c)
+      cited with exact hashes.
+      PRM-VSG-001: deliberate eye path, no forced over-engineering.
+      PRM-VSG-024: environment/space carries psychological relationship; void/claustrophobia/flat-Z tested.
+      PRM-VSG-021: protect source-backed felt truth without manufactured messiness.
+      PRM-BUS-006: distinct semantic weights route attention.
+      NOT_APPLICABLE closed and evidence-bearing.
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      TS-AIR-015 and TS-AIR-016 interfaces consumed consistently with Batch 8/9 audit findings.
+      Donor TS-AIR-017 ADAPT disposition specific and correct.
+      AI2 predecessor schema (SRC-AI2-VISUAL-001) ADAPTED.
+      Composition IR doctrine (SRC-AHP-F09-001) and VAE delegation doctrine (SRC-AHP-F15-001)
+      REUSED_AS_INTERFACE_EVIDENCE.
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      8 implementation stages with proposed paths. Falsifiable ACs.
+      Typed failure codes in Section 8.1 with owner attribution.
+      Testing evidence, clean environment tests, and reparse validation specified.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+  - finding_id: NOTE-AIR-017-001
+    severity: NOTE
+    lens: lens_2_authority_ownership_sovereignty
+    location: "Section 3.1, Decision 2"
+    finding: >
+      Spec correctly identifies and resolves stale F17 PRD owner table using candidate Program Control
+      ownership matrices: AIR owns semantic Composition Intent & Feature Contracts; Pipeline owns
+      exact Composition IR & VAD emission; VAE owns Visual Production Plan & realization.
+      This resolution is clean and consistent across cross-product boundaries.
+    required_action: "Record as informational."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 1
+  critical: 0
+  warning: 0
+  note: 1
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION

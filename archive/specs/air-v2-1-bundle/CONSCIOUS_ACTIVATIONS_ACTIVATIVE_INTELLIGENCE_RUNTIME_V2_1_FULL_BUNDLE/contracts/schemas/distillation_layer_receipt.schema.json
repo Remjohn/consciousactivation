@@ -1,0 +1,127 @@
+{
+  "$defs": {
+    "DistillationLayer": {
+      "enum": [
+        "saturation",
+        "collision",
+        "compression",
+        "evaluation",
+        "recursion"
+      ],
+      "title": "DistillationLayer",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "decisions": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Decisions",
+      "type": "array"
+    },
+    "edge_product_preserved": {
+      "title": "Edge Product Preserved",
+      "type": "boolean"
+    },
+    "input_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Input Refs",
+      "type": "array"
+    },
+    "layer": {
+      "$ref": "#/$defs/DistillationLayer"
+    },
+    "output_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Output Refs",
+      "type": "array"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "rejection_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Rejection Refs",
+      "type": "array"
+    },
+    "role_tension_preserved": {
+      "title": "Role Tension Preserved",
+      "type": "boolean"
+    },
+    "visual_dna_preserved": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Visual Dna Preserved"
+    },
+    "voice_dna_preserved": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Voice Dna Preserved"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "layer",
+    "input_refs",
+    "output_refs",
+    "decisions",
+    "edge_product_preserved",
+    "role_tension_preserved"
+  ],
+  "title": "DistillationLayerReceipt",
+  "type": "object"
+}

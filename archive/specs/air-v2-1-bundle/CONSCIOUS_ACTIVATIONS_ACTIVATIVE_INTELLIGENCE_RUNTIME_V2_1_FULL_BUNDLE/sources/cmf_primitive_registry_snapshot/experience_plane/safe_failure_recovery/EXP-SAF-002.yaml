@@ -1,0 +1,186 @@
+experience_primitive_id: "EXP-SAF-002"
+canonical_name: "Possible-Win Scarcity"
+aliases:
+  - "The Winnable Retry"
+  - "Finite Redemptions"
+  - "Urgent Optimism"
+
+experience_family: "safe_failure_recovery"
+mechanic_role: "trigger"
+moment_role: "retry_prompt"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Actionable_Gamification_Yu_kai_Chou.md"
+    primitive_name_in_audit: "Possible-Win Scarcity"
+    mcda_score: 186
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Actionable_Gamification_Yu_kai_Chou.md"
+
+book_reference:
+  title: "Actionable Gamification"
+  author: "Yu-kai Chou"
+  chapters:
+    - "Chapter 10: Core Drive 6: Scarcity & Impatience"
+  key_pages: "215-225"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Actionable Gamification - Yu-kai Chou.md"
+
+summary: >
+  Possible-Win Scarcity dictates that after a failure, the opportunity to retry
+  must be perceived as both finite (scarce) and achievable (possible). If the
+  retry is infinite, the user procrastinates and eventually forgets. If the
+  retry feels impossible, the user enters denial and abandons the platform.
+  In CCP, when a coach fails a drill, they do not get an unlimited "Try Again"
+  button. They are granted a single "Redemption Round" that expires in 15
+  minutes, creating intense focus and 'Urgent Optimism.'
+
+core_move: >
+  Gate retries behind a finite constraint (time, quantity, or specific condition)
+  while explicitly adjusting the difficulty or providing a hint to ensure the user
+  believes the win is now within reach.
+
+why_it_works: >
+  Jane McGonigal defines "Urgent Optimism" as the desire to act immediately to
+  tackle an obstacle, combined with the belief that we have a reasonable hope of
+  success. Yu-kai Chou warns that Scarcity (Black Hat) only motivates if the
+  goal feels attainable; otherwise, the brain protects the ego by entering
+  'sour grapes' denial ("I didn't care anyway"). By granting exactly *one* retry
+  that expires shortly, we trigger the Scarcity drive. By explicitly pointing
+  out exactly what to fix ("Just slow down your pacing by 10%"), we satisfy the
+  Possible-Win condition.
+
+examples:
+  - context: "BOOK: Actionable Gamification - Waze and the monster"
+    application: >
+      Waze occasionally spawns a 'monster' on the map. The user knows it will
+      disappear soon (scarcity) but also knows they just need to drive a few
+      blocks out of their way to get it (possible win).
+    effect: >
+      The user acts immediately because the constraint is tight but the effort is low.
+
+  - context: "CCP: The 15-Minute Redemption Round"
+    application: >
+      A coach fails a reaction. The system says: 'I've held the topic open for
+      you. You have 15 minutes to record a Redemption Take before your original
+      score becomes permanent.'
+    effect: >
+      The coach cannot put it off until 'tomorrow.' They act while they are
+      still in the flow state, utilizing the feedback just received.
+
+  - context: "CCP: The Debate Counter-Strike"
+    application: >
+      A coach is losing a debate. The system offers a 'Counter-Strike': 'You can
+      record one final 30-second rebuttal. It costs your daily wildcard.'
+    effect: >
+      The scarcity (only one wildcard) makes the coach think deeply before recording,
+      increasing the quality of the content and the intensity of the engagement.
+
+  - context: "CCP: V2WS Webinar Sandbox"
+    application: >
+      During the webinar setup, a coach fails to articulate their CA-1 hook. The
+      system allows a maximum of 3 retries. The UI displays 3 'lives.'
+    effect: >
+      The coach treats each attempt with high seriousness, rather than mindlessly
+      recording 20 sloppy takes.
+
+  - context: "CCP: The Guided Retry"
+    application: >
+      After failing due to excessive hedging, the retry screen highlights the
+      exact words they hedged on in the transcript and says: 'Read it again, but
+      skip the red words.'
+    effect: >
+      The win is now explicitly 'possible,' transforming frustration into laser focus.
+
+anti_examples:
+  - description: >
+      A standard 'Try Again' button that is always available, forever, allowing
+      the user to fail 50 times in a row without consequence.
+    why_it_fails: >
+      There is zero scarcity. The user will mindlessly click it, get frustrated
+      by repeated failures, and blame the app for being 'stupid' or 'broken'
+      because they haven't stopped to actually absorb the feedback.
+
+experience_stage_fit:
+  entry: 0.3
+  activation: 0.5
+  recording: 0.8
+  scoring: 0.9
+  social_spread: 0.2
+  recovery: 1.0
+  retention: 0.7
+  conversion: 0.6
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 0.9
+  score_card: 0.8
+  share_asset: 0.1
+  voice_prompt: 0.7
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.6
+  urgency: 1.0
+  clarity: 0.8
+  safety: 0.5
+  status: 0.4
+  belonging: 0.3
+  curiosity: 0.6
+  replay_desire: 1.0
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 1.0
+  challenge_progression: 0.8
+  silent_referral: 0.3
+  coach_os_deployment: 0.6
+  premium_trust_architecture: 0.8
+  onboarding_activation: 0.7
+  social_economy: 0.5
+  content_extraction: 0.8
+
+activation_conditions:
+  - "User fails a task that requires cognitive or physical effort"
+  - "The system can definitively identify exactly what went wrong"
+  - "The user has not exhausted their retry quota for the session"
+
+suppression_conditions:
+  - "User is experiencing technical failure (e.g., mic broken); do not enforce scarcity on hardware issues"
+  - "User is explicitly in a 'sandbox/practice' mode where infinite retries are the point"
+
+misuse_modes:
+  - "Fake Scarcity — creating a countdown timer that resets every time they refresh the page, destroying trust."
+  - "Impossible Win — giving them a 5-second retry for a task that mathematically takes 10 seconds."
+
+synergizes_with:
+  - "EXP-SAF-001" # White Hat Emotional Sequencing (The retry is the White Hat transition)
+  - "EXP-TRG-002" # Hook Cycle Velocity
+
+conflicts_with:
+  - "EXP-SAF-004" # Practical Play (If the scarcity is too punishing, the play is no longer safe)
+
+implementation_targets:
+  frontend_components:
+    - "RedemptionTimerUI — a clean, stress-inducing but elegant countdown clock"
+    - "GuidedRetryOverlay — showing exactly what to fix before they hit record"
+  backend_rules:
+    - "scarcity_engine: lock the specific drill/topic if the redemption window expires without a submission"
+  telemetry_events:
+    - "redemption_round_offered"
+    - "redemption_round_accepted"
+    - "redemption_round_won"
+  experiments:
+    - "A/B test: 5-minute redemption window vs 15-minute redemption window"
+
+experience_metrics:
+  entry_rate: 0.2
+  react_rate: 0.9
+  completion_rate: 0.8
+  share_rate: 0.1
+  comeback_rate: 0.9
+  day7_retention: 0.8
+  upgrade_signal: 0.6
+
+crosswalk_id: "XW-SAF-SCARCITY"
+crosswalk_note: >
+  Essential for preventing "spam recording" where users try to brute-force
+  a high score without actually improving their delivery.

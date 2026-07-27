@@ -1,0 +1,104 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:runtime_workflow_definition",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "binding_manifest_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "edges": {
+      "type": "array"
+    },
+    "evaluation_requirements": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "nodes": {
+      "type": "array"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "purpose": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "repair_laws": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "runtime_projection_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "semantic_dependency_refs": {
+      "type": "array"
+    },
+    "semantic_parity_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "topological_order": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "workflow_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "workflow_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "workflow_id",
+    "workflow_version",
+    "source_projection_id",
+    "binding_manifest_id",
+    "category_id",
+    "profile_id",
+    "purpose",
+    "semantic_dependency_refs",
+    "nodes",
+    "edges",
+    "topological_order",
+    "runtime_projection_digest",
+    "semantic_parity_digest",
+    "wrong_reading_locks",
+    "evaluation_requirements",
+    "repair_laws"
+  ],
+  "title": "runtime_workflow_definition",
+  "type": "object"
+}

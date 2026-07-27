@@ -1,0 +1,119 @@
+schema_version: cmf-builder-story-completion-receipt/v1
+story_id: ST-01.02
+primary_epic: EP-01
+active_mode: SYNTHETIC_DEFINITION
+completed_on: "2026-07-15"
+implemented_outcome: >-
+  An authorized category-neutral Builder run can accept the exact governed
+  repository-owned synthetic task definition, diagnose it without mutation,
+  and commit a portable immutable Source Lock whose identity, provenance,
+  authority, and failure behavior are deterministic and independently verifiable.
+owned_obligations:
+  ADR-007: PASS
+  D005: PASS
+  FR-009: PASS
+  FR-010: PASS
+  FR-011: PASS
+  FR-012: PASS
+  FR-013: PASS
+  NFR-PORT-001: PASS
+  NFR-SEC-001: PASS
+  NFR-SEC-002: PASS
+acceptance_criteria:
+  AC-01: PASS
+  AC-02: PASS
+  AC-03: PASS
+  AC-04: PASS
+  AC-05: PASS
+  AC-06: PASS
+  AC-07: PASS
+  AC-08: PASS
+  AC-09: PASS
+  AC-10: PASS
+source_profile:
+  id: synthetic_task_definition_source_v1
+  version: 1.0.0
+  sha256: cf036f38d26b37624c10e24094401e93c4f74e512d11613182a29cb859fbcd3d
+  target_candidate_sha256: 82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b
+dependencies:
+  original_ST_01_01_completion_receipt_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+  supplemental_completion_receipt_sha256: 58ae069c277e4256633db258a639e4901b44cdeb3d5e36b06464aa80d2700418
+  supplemental_capsule_manifest_sha256: 4917fbce9295255f8a71f61eb9031679cd2d9dd1729cf15a771f3da24be6174f
+  empty_skill_registry_policy_sha256: 260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c
+  empty_skill_registry_sha256: a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114
+  validation: PASS_8_OF_8
+capsule:
+  manifest_sha256: 7cfec2f6bf15dcf6d7bd3fd2e072c2b9d21ac60231cf49fd0ac25b4beb97fc86
+  bundle_digest: 23e9236078fbcc3dab921f75cf103540c6a63eb5d5a17fe4dcc76b698ff1307c
+  immutable_inputs: PASS_18_OF_18
+  implementation_authorization_sha256: eb39e4f4fb449b25fc42c5cec55f3733e17adece83e030dec5ed5a876e8a2904
+  implementation_authorized: true
+  one_file_amendment:
+    path: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    scope: add_three_ST_01_02_modules_to_exact_expected_source_set_only
+    validation: PASS
+files_changed:
+  manifest_path: development-capsules/ST-01.02/completion/FILE_CHANGE_MANIFEST.yaml
+  manifest_sha256: c4a1f73b391b884edf2086c05920c25eae3a91b482114075b59c54fedfde2ad2
+  implementation_path_count: 17
+  exact_amended_allowlist: PASS
+  prohibited_paths_modified: []
+tests:
+  ST_01_02_clean_run_1: PASS_19_OF_19
+  ST_01_02_clean_run_2: PASS_19_OF_19
+  original_ST_01_01: PASS_20_OF_20
+  supplemental_branch: PASS_18_OF_18
+  combined_regression: PASS_57_OF_57
+  repository_regression: PASS_57_OF_57
+  skipped_mandatory_tests: 0
+  results_path: development-capsules/ST-01.02/completion/TEST_RESULTS.json
+  results_sha256: 6e7e2c8161c1d0c54c69bb34a6af4d7a5d3573b7f36e74e6235e1a0241800f6f
+schema_and_contract_validation:
+  SourceProfile: PASS
+  SourceDescriptor: PASS
+  SourceLock: PASS
+  EvidenceWorkspaceReceipt: PASS
+  capsule_manifest: PASS
+  authorization_receipt: PASS
+  local_schema_change: false
+  database_schema_change: false
+  external_dependency_added: false
+observability_evidence:
+  path: development-capsules/ST-01.02/completion/OBSERVABILITY_EVIDENCE.yaml
+  sha256: 39fe0ddce78eac934ac37c5b2261da55916e77ebc5228c4a3fc009b7faa7e54b
+  required_events_and_fields: PASS
+  deterministic_receipt_hash: PASS
+rollback_evidence:
+  path: development-capsules/ST-01.02/completion/ROLLBACK_EVIDENCE.md
+  sha256: 30c7dcd1ddc68f5ec489f1a976c76a438e3005dde03ad5019329de7631c0376e
+  injected_atomic_failure: PASS
+  source_immutability: PASS
+  cleanup: PASS
+unresolved_limitations:
+  - non_production_non_certified
+  - development_test_persistence_only
+  - no_Harness_compilation_or_execution
+  - no_external_runtime_or_conversational_behavior
+boundary_validation:
+  Format02_behavior_implemented: false
+  VAE_behavior_implemented: false
+  Delegation_runtime_behavior_implemented: false
+  conversational_behavior_implemented: false
+  GPU_provider_or_evaluator_behavior_implemented: false
+  later_Story_behavior_implemented: false
+completion_artifacts:
+  implementation_report_sha256: b8f1f24d578eb60bec1ea9145b96cf47e66f63b92ff6a51fa8ed3d5ced94721b
+  test_results_sha256: 6e7e2c8161c1d0c54c69bb34a6af4d7a5d3573b7f36e74e6235e1a0241800f6f
+  observability_evidence_sha256: 39fe0ddce78eac934ac37c5b2261da55916e77ebc5228c4a3fc009b7faa7e54b
+  file_change_manifest_sha256: c4a1f73b391b884edf2086c05920c25eae3a91b482114075b59c54fedfde2ad2
+  rollback_evidence_sha256: 30c7dcd1ddc68f5ec489f1a976c76a438e3005dde03ad5019329de7631c0376e
+hashes:
+  canonicalization: sha256_of_canonical_JSON_with_hashes.canonical_payload_sha256_omitted
+  canonical_payload_sha256: 644c740d70b3f156b2c87c42f7b7673744a7f0012c6b7338ead09db4f4b850a3
+completion_verdict: PASS
+downstream_effect:
+  ST_02_05_readiness_reevaluation_eligible: true
+  ST_02_05_implementation_authorized: false
+  full_release1_readiness: FAIL
+  full_product_readiness: FAIL
+  production_authorized: false

@@ -1,0 +1,141 @@
+{
+  "$defs": {
+    "EpistemicState": {
+      "enum": [
+        "planned",
+        "observed",
+        "inferred",
+        "operator_confirmed",
+        "rejected",
+        "superseded"
+      ],
+      "title": "EpistemicState",
+      "type": "string"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    },
+    "PrimitivePlane": {
+      "enum": [
+        "meaning_plane",
+        "experience_plane"
+      ],
+      "title": "PrimitivePlane",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "activation_evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Activation Evidence Refs",
+      "type": "array"
+    },
+    "binding_id": {
+      "minLength": 1,
+      "title": "Binding Id",
+      "type": "string"
+    },
+    "conflicts_with": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Conflicts With",
+      "type": "array"
+    },
+    "core_move": {
+      "minLength": 1,
+      "title": "Core Move",
+      "type": "string"
+    },
+    "epistemic_state": {
+      "$ref": "#/$defs/EpistemicState"
+    },
+    "family": {
+      "minLength": 1,
+      "title": "Family",
+      "type": "string"
+    },
+    "local_function": {
+      "minLength": 1,
+      "title": "Local Function",
+      "type": "string"
+    },
+    "misuse_modes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Misuse Modes",
+      "type": "array"
+    },
+    "plane": {
+      "$ref": "#/$defs/PrimitivePlane"
+    },
+    "primitive_id": {
+      "minLength": 1,
+      "title": "Primitive Id",
+      "type": "string"
+    },
+    "primitive_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Primitive Sha256",
+      "type": "string"
+    },
+    "primitive_version": {
+      "minLength": 1,
+      "title": "Primitive Version",
+      "type": "string"
+    },
+    "suppression_conditions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Suppression Conditions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "binding_id",
+    "primitive_id",
+    "primitive_version",
+    "primitive_sha256",
+    "plane",
+    "family",
+    "core_move",
+    "local_function",
+    "activation_evidence_refs",
+    "epistemic_state"
+  ],
+  "title": "PrimitiveBinding",
+  "type": "object"
+}

@@ -1,0 +1,148 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audience_segment": {
+      "title": "Audience Segment",
+      "type": "string"
+    },
+    "creative_degrees_of_freedom": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Creative Degrees Of Freedom",
+      "type": "array"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "expression_moment_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Expression Moment Refs",
+      "type": "array"
+    },
+    "must_remain_true": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Must Remain True",
+      "type": "array"
+    },
+    "observed_pack_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "original_activation_generator": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Original Activation Generator",
+      "type": "array"
+    },
+    "permitted_compression": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Permitted Compression",
+      "type": "array"
+    },
+    "prohibited_collapses": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Prohibited Collapses",
+      "type": "array"
+    },
+    "required_changes": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Changes",
+      "type": "array"
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "source_role": {
+      "title": "Source Role",
+      "type": "string"
+    },
+    "target_audience_roles": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Target Audience Roles",
+      "type": "array"
+    },
+    "target_format": {
+      "title": "Target Format",
+      "type": "string"
+    },
+    "transfer_id": {
+      "title": "Transfer Id",
+      "type": "string"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "transfer_id",
+    "observed_pack_ref",
+    "source_package_ref",
+    "expression_moment_refs",
+    "original_activation_generator",
+    "source_role",
+    "target_audience_roles",
+    "must_remain_true",
+    "prohibited_collapses",
+    "wrong_reading_locks",
+    "target_format",
+    "audience_segment",
+    "evaluation_contract_ref"
+  ],
+  "title": "ActivationTransferContract",
+  "type": "object"
+}

@@ -1,0 +1,183 @@
+schema_version: 1
+authority:
+  previous: Delegation V1 plus local 1.0.0-rc.2
+  current: CMF_CONTENT_HARNESS_VISUAL_ASSET_EDITOR_DELEGATION_SHARDED_PRD_V1_1
+  constitution: CCP Activative Intelligence and Visual Narrative Constitution 1.1.0
+artifact_scope_source: docs/constitutional-alignment/ARTIFACT_IMPACT_MATRIX.csv
+automatic_continuation: false
+release_target:
+  package: 1.1.0-rc.1
+  publish_authorized: false
+  publication_gate: B C and E must pass and existing external publication signing and owner-ratification blockers must close
+batches:
+  A:
+    name: authority_requirements_and_impact_analysis
+    status: complete_with_concerns
+    verdict: CONCERNS
+    allowed_writes:
+      - docs/constitutional-alignment/
+      - PROGRAM_STATUS_EXPORT.yaml
+    outputs:
+      - docs/constitutional-alignment/AUTHORITY_DELTA.md
+      - docs/constitutional-alignment/REQUIREMENT_DELTA.csv
+      - docs/constitutional-alignment/ARTIFACT_IMPACT_MATRIX.csv
+      - docs/constitutional-alignment/PATCH_BATCHES.yaml
+      - docs/constitutional-alignment/HUMAN_DECISIONS_REQUIRED.yaml
+      - docs/constitutional-alignment/VALIDATION_REPORT.md
+      - docs/constitutional-alignment/ALIGNMENT_RECEIPT.yaml
+      - PROGRAM_STATUS_EXPORT.yaml
+    stop_after: true
+  B:
+    name: contracts_schemas_generated_types_and_fixtures
+    status: blocked_by_human_decisions
+    prerequisites:
+      - HD-001
+      - HD-002
+      - HD-003
+      - HD-004
+      - HD-005
+    exact_scope:
+      matrix_selection:
+        required_batch: B
+        verdicts: [PATCH_REQUIRED, NEW_ARTIFACT]
+      includes:
+        - Strengthen local FR-011 and machine-readable constitutional governance.
+        - Merge V1.1 semantic objects into the stronger closed 1.0.0-rc.2 contract baseline.
+        - Preserve exact resource identity version payload hash canonical reference and full-payload hashing.
+        - Add the explicit immutable V1-to-V1.1 demand migration without synthesis.
+        - Expand compatibility manifests to preservation enforcement evaluation and evaluator-profile evidence.
+        - Regenerate schemas examples authority registry bindings registries reference manifests fixture hashes and release hashes.
+        - Reissue contract baseline reports and release metadata as an unpublished candidate.
+      controlling_paths:
+        - contracts/schemas/visual-asset-demand.schema.yaml
+        - contracts/schemas/compatibility-manifest.schema.yaml
+        - contracts/schemas/contract-migration.schema.yaml
+        - packages/contracts/src/common.py
+        - packages/contracts/src/catalog.py
+        - packages/contracts/tools/build_baseline.py
+        - packages/contracts/registry.json
+        - packages/contracts/authority-registry.json
+        - packages/contracts/release-manifest.json
+        - packages/compatibility/manifest.json
+        - COMPATIBILITY_MANIFEST.yaml
+        - CONTRACT_CHANGELOG.md
+    required_proof:
+      - visual_asset_demand requires every ratified V1.1 domain
+      - wrong_reading_locks is non_empty
+      - all constitutional references use the ratified exact identity shape
+      - every generated value path resolves to exactly one owner
+      - lossy migration vectors fail
+      - generated schema example registry and manifest hashes pass
+    prohibitions:
+      - no reference protocol implementation changes
+      - no Content Harness creativity or VAE production behavior
+      - no publication or signing
+    stop_after: true
+  C:
+    name: technical_specifications_adrs_and_conformance_contracts
+    status: pending_B_and_human_decisions
+    prerequisites:
+      - B_pass
+      - HD-001
+      - HD-002
+      - HD-003
+      - HD-004
+      - HD-005
+    exact_scope:
+      matrix_selection:
+        required_batch: C
+        verdicts: [PATCH_REQUIRED, NEW_ARTIFACT]
+      includes:
+        - Patch TS-DLG-01 02 03 04 05 08 09 and 10 only where the V1.1 delta changes requirements.
+        - Add ADR decisions for version signaling lineage shape alias migration and behavioral capability evidence.
+        - Update ownership requirement coverage architecture inventory source and handoff registers.
+        - Define the five required authority compatibility resilience and Format 02 conformance cases.
+        - Preserve all unrelated Stage 2 decisions specifications lifecycle behavior and baselines.
+      controlling_paths:
+        - docs/tech-specs/CONTRACT_OWNERSHIP_REGISTER.yaml
+        - docs/tech-specs/DELEGATION_REQUIREMENT_COVERAGE_MATRIX.csv
+        - docs/tech-specs/DELTA_ADR_REGISTER.md
+        - conformance/authority-tests/CASES.yaml
+        - conformance/compatibility-tests/CASES.yaml
+        - conformance/resilience-tests/CASES.yaml
+        - conformance/format02-end-to-end/EXPECTED_SCENARIOS.yaml
+    required_proof:
+      - every changed clause traces to a Batch A requirement delta
+      - no specification broad rewrite
+      - no lifecycle or creative-authority expansion
+      - conformance cases identify input verdict failure code state effect and audit evidence
+    prohibitions:
+      - no implementation changes
+      - no epics stories or planning-baseline edits
+      - no publication
+    stop_after: true
+  D:
+    name: planning_and_readiness_baselines
+    status: deferred_not_authorized_by_batch_A_prompt
+    exact_scope:
+      matrix_selection:
+        required_batch: D
+        verdicts: [DEFERRED]
+    rule: Requires separate human authorization after B and C; it is not an automatic next batch.
+  E:
+    name: reference_implementation_validators_tests_and_conformance
+    status: pending_B_C_and_human_decisions
+    prerequisites:
+      - B_pass
+      - C_pass
+      - HD-001
+      - HD-002
+      - HD-003
+      - HD-004
+      - HD-005
+    exact_scope:
+      matrix_selection:
+        required_batch: E
+        verdicts: [PATCH_REQUIRED, NEW_ARTIFACT, UNCHANGED]
+      includes:
+        - Patch compatibility negotiation and the protocol admission gate for ratified enforcement/evaluator evidence.
+        - Keep generic schema authority canonical and storage code unchanged unless executable proof exposes a concrete gap.
+        - Add constitutional compatibility migration authority replay and evaluator fixtures and tests.
+        - Refresh only Format 02 scenarios whose demand migration authority or resilience evidence changes.
+        - Re-run the existing 24-test Stage 5 regression floor plus all new constitutional tests.
+        - Reissue verification manifest and readiness reports without claiming production authorization.
+      controlling_paths:
+        - packages/validators/cmf_delegation_validators/compatibility.py
+        - packages/protocol/cmf_delegation_protocol/engine.py
+        - packages/validators/tests/test_contracts.py
+        - packages/validators/tests/test_authority.py
+        - packages/validators/tests/test_compatibility.py
+        - packages/validators/tests/test_fixtures.py
+        - packages/protocol/tests/test_reference_protocol.py
+        - packages/protocol/tests/test_conformance_fixtures.py
+        - packages/fixtures/compatibility/constitutional/
+        - packages/fixtures/format02/manifest.json
+        - docs/implementation/IMPLEMENTATION_READINESS.md
+        - LOCAL_VERIFICATION.json
+        - MANIFEST.json
+    required_proof:
+      - existing 24 Stage 5 tests still pass
+      - adapter dropping Expression Moment reference fails
+      - parse_only wrong_reading support fails compatibility
+      - Activative Intelligence Pack version and hash lineage survive migration and replay
+      - VAE mutation of recognition role stance or narrative fails with no state or production effect
+      - evaluator gap fails before admission
+      - full contract validator protocol and manifest suites pass
+    prohibitions:
+      - no Content Harness creativity or Activative compiler
+      - no VAE production planning generation ranking or repair
+      - no production authorization
+      - no publication until every later gate and external blocker closes
+    stop_after: true
+conditional_version_blast_radius:
+  condition: If HD-001 changes the envelope protocol version rather than only the demand message version
+  additional_scope:
+    - all packages/contracts/schemas/*.schema.json schema identifiers and message versions
+    - all packages/contracts/examples/*.example.json envelope and principal version fields where applicable
+    - packages/contracts/registry.json
+    - packages/contracts/release-manifest.json
+    - all packages/fixtures/format02/scenarios/*.json protocol projections
+    - packages/protocol/tests/helpers.py
+    - packages/protocol/tests/test_reference_protocol.py
+  rule: Batch B must expand the artifact matrix with exact generated paths before editing if this condition is selected.
+

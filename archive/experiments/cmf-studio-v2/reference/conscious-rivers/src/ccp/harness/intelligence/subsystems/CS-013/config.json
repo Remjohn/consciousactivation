@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-013",
+  "name": "Variation Engine",
+  "version": "1.0",
+  "priority_tier": "recall",
+  "research_basis": [
+    "Excitation Transfer",
+    "Film Editing rhythm research",
+    "Habituation logic"
+  ],
+  "inputs": [
+    "last_n_videos",
+    "component_history",
+    "timing_signatures",
+    "effect_history",
+    "tribe_response"
+  ],
+  "outputs": [
+    "novelty_score",
+    "substitution_recommendations",
+    "verdict"
+  ],
+  "thresholds": {
+    "recent_history_window_videos": 3,
+    "minimum_novelty_score": 0.7,
+    "forbid_identical_component_pattern_consecutive": true,
+    "forbid_identical_timing_pattern_consecutive": true
+  },
+  "default_action_on_fail": "REVISE"
+}

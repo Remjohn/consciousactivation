@@ -1,0 +1,87 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evidence_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "misuse_mode": {
+      "title": "Misuse Mode",
+      "type": "string"
+    },
+    "prevention_gate": {
+      "title": "Prevention Gate",
+      "type": "string"
+    },
+    "primitive_id": {
+      "title": "Primitive Id",
+      "type": "string"
+    },
+    "probable_wrong_reading": {
+      "title": "Probable Wrong Reading",
+      "type": "string"
+    },
+    "risk_id": {
+      "title": "Risk Id",
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "low",
+        "moderate",
+        "high",
+        "fatal"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "trigger_condition": {
+      "title": "Trigger Condition",
+      "type": "string"
+    }
+  },
+  "required": [
+    "risk_id",
+    "primitive_id",
+    "misuse_mode",
+    "trigger_condition",
+    "probable_wrong_reading",
+    "severity",
+    "prevention_gate"
+  ],
+  "title": "PrimitiveMisuseRisk",
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: TURNING_POINT
+enabled: true
+selection_priority:
+  tier: premium
+  rank: 5
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - TURNING_POINT
+  stages:
+    - scene_builder
+incompatibilities:
+  - flat_delivery
+warn_conditions:
+  - metric: peak_signal_score
+    operator: lt
+    value: 0.85
+route_hints:
+  select:
+    - use_when_the_insight_itself_is_the_event
+    - use_when_peak_end_budget_is_available

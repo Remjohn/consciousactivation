@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "failure_attribution_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "frozen_upstream_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Frozen Upstream Refs",
+      "type": "array"
+    },
+    "invalidated_descendant_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Invalidated Descendant Refs",
+      "type": "array"
+    },
+    "object_to_change_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "repair_id": {
+      "title": "Repair Id",
+      "type": "string"
+    },
+    "required_change": {
+      "title": "Required Change",
+      "type": "string"
+    },
+    "rerun_nodes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rerun Nodes",
+      "type": "array"
+    },
+    "stop_condition": {
+      "title": "Stop Condition",
+      "type": "string"
+    }
+  },
+  "required": [
+    "repair_id",
+    "failure_attribution_ref",
+    "frozen_upstream_refs",
+    "object_to_change_ref",
+    "required_change",
+    "invalidated_descendant_refs",
+    "rerun_nodes",
+    "evaluation_contract_ref",
+    "stop_condition"
+  ],
+  "title": "RepairProgram",
+  "type": "object"
+}

@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-033 - CBAR Gate Pack",
+  "description": "Compiled runtime gate pack derived from CBAR Gates for Editing Wisdom Constraints.",
+  "type": "object",
+  "required": [
+    "gate_pack_id",
+    "version",
+    "compile_target",
+    "entrypoint",
+    "required_context",
+    "gates",
+    "output_contract",
+    "failure_policy"
+  ],
+  "properties": {
+    "gate_pack_id": { "type": "string" },
+    "version": { "type": "string" },
+    "compile_target": {
+      "type": "string",
+      "enum": ["SCENE_BUILDER", "EDITOR_REGENERATION"]
+    },
+    "entrypoint": { "type": "string" },
+    "required_context": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["gate_id", "name", "lineage", "questions", "cascade_lock"],
+        "properties": {
+          "gate_id": { "type": "string" },
+          "name": { "type": "string" },
+          "lineage": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Source markdown section or upstream gate IDs from which this runtime gate was compiled."
+          },
+          "applies_to": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "questions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "question_id",
+                "constraint_a",
+                "constraint_b",
+                "tension",
+                "failure_scenario",
+                "resolution_demands",
+                "downstream_proof",
+                "downstream_consumer",
+                "resolution_contract",
+                "automated_checks"
+              ],
+              "properties": {
+                "question_id": { "type": "string" },
+                "constraint_a": {
+                  "type": "object",
+                  "required": ["rule_id", "statement"],
+                  "properties": {
+                    "rule_id": { "type": "string" },
+                    "statement": { "type": "string" },
+                    "source": { "type": "string" }
+                  }
+                },
+                "constraint_b": {
+                  "type": "object",
+                  "required": ["rule_id", "statement"],
+                  "properties": {
+                    "rule_id": { "type": "string" },
+                    "statement": { "type": "string" },
+                    "source": { "type": "string" }
+                  }
+                },
+                "tension": { "type": "string" },
+                "failure_scenario": { "type": "string" },
+                "resolution_demands": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string" }
+                },
+                "downstream_proof": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string" }
+                },
+                "downstream_consumer": {
+                  "type": "object",
+                  "required": ["module_id", "expected_input"],
+                  "properties": {
+                    "module_id": { "type": "string" },
+                    "expected_input": { "type": "string" },
+                    "failure_mode": { "type": "string" }
+                  }
+                },
+                "resolution_contract": {
+                  "type": "object",
+                  "required": ["must_derive", "required_fields"],
+                  "properties": {
+                    "must_derive": { "type": "boolean" },
+                    "required_fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "winning_constraint",
+                          "precedence_rule_id",
+                          "precedence_reasoning",
+                          "chosen_action",
+                          "downstream_impact"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "automated_checks": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["check_id", "field", "operator", "value", "failure_code"],
+                    "properties": {
+                      "check_id": { "type": "string" },
+                      "field": { "type": "string" },
+                      "operator": { "type": "string" },
+                      "value": {},
+                      "failure_code": { "type": "string" },
+                      "repair_hint": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "cascade_lock": {
+            "type": "object",
+            "required": ["question_id", "review_scope", "required_outputs"],
+            "properties": {
+              "question_id": { "type": "string" },
+              "review_scope": {
+                "type": "string",
+                "enum": ["ALL_PRIOR_QUESTIONS", "ALL_PRIOR_GATES"]
+              },
+              "required_outputs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "consistency_verdict",
+                    "contradiction_list",
+                    "secondary_resolution_required",
+                    "constraint_manifest_ready"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["result_schema", "per_gate_shape", "proof_receipt_stage_name"],
+      "properties": {
+        "result_schema": { "type": "string" },
+        "per_gate_shape": { "type": "string" },
+        "proof_receipt_stage_name": { "type": "string" }
+      }
+    },
+    "failure_policy": {
+      "type": "object",
+      "required": ["question_fail", "gate_fail"],
+      "properties": {
+        "question_fail": {
+          "type": "string",
+          "enum": ["BLOCK", "REVISE", "ESCALATE"]
+        },
+        "gate_fail": {
+          "type": "string",
+          "enum": ["BLOCK", "REVISE", "ESCALATE"]
+        }
+      }
+    }
+  }
+}

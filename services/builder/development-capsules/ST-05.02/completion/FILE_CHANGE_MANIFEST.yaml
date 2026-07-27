@@ -1,0 +1,52 @@
+schema_version: cmf-builder-story-file-change-manifest/v1
+story_id: ST-05.02
+active_mode: SYNTHETIC_NO_SKILL_NECESSITY
+bundle_algorithm: sha256_of_UTF8_sorted_path_pipe_file_sha256_lines_without_trailing_newline
+implementation_files:
+  - {path: src/cmf_builder/domain/skill_registry.py, change: modified, sha256: 2671b5cf716b093e48e658c9aec9922619ee04a8da6da9680a515fcbaefd4da8, bytes: 59640}
+  - {path: src/cmf_builder/application/skill_commands.py, change: modified, sha256: 66d5a6d7f4ff9b1fcd92025dfbc08deba33b4ab57dcd675771a6b84697df0fa0, bytes: 65204}
+  - {path: src/cmf_builder/domain/run.py, change: modified, sha256: 41d38ffa436885dd6e5cd147209dccb656bb9e9a578843026d1c4fcdcb8a5c7e, bytes: 81258}
+  - {path: src/cmf_builder/application/atomicity_commands.py, change: modified, sha256: 07c554901e245a892814a66ba59e18ceb50bc82305fbfbca1392898edcd16afe, bytes: 75903}
+  - {path: src/cmf_builder/application/ports.py, change: modified, sha256: 6fd8ddfae4b41d6a4bd2b4c8e268d73c04603bc380ffb1e66fe9e6e2cf9d22c9, bytes: 26291}
+  - {path: src/cmf_builder/adapters/in_memory_run_repository.py, change: modified, sha256: e3529465447955972556f17ac810f8a10c29e9f978814c9e62a9f06fc85e3ec4, bytes: 90805}
+test_files:
+  - {path: tests/stories/st_05_02/__init__.py, change: created, sha256: eb90530cdf275f424decb98fc218755c558443b8ecd33457e1da2dab78ed28e8, bytes: 3565}
+  - {path: tests/stories/st_05_02/test_acceptance.py, change: created, sha256: f10759a84b0529bca124e0fc7ffbfd20545dd104e0f6a0f43f581d3c4ab3dc3f, bytes: 4368}
+  - {path: tests/stories/st_05_02/test_necessity_integrity.py, change: created, sha256: 8b717b9d2dde695dd3eb506d897d41b51e156bdd79e27231ec2b200122241596, bytes: 4111}
+  - {path: tests/stories/st_05_02/test_failure.py, change: created, sha256: 47c6dd21b98478a92b74f34c2f6414ec7c0dc25848a3a0624b838d442d690317, bytes: 4913}
+  - {path: tests/stories/st_05_02/test_replay_invalidation_and_receipt.py, change: created, sha256: 08d19ff9eaacd789e5cb93522a7c97825584b28a5bcaf340a12d22f5ed5ca5eb, bytes: 7158}
+  - {path: tests/stories/st_05_02/test_architecture_boundary.py, change: created, sha256: 216c998eae121cea74847c2c697ace34ab13ec4e7d8d4fc8ec22567b908b1214, bytes: 2520}
+completion_files_created_before_manifest:
+  - {path: development-capsules/ST-05.02/completion/IMPLEMENTATION_REPORT.md, sha256: 656cc18728c96320451387f2052be0a2686e687bf64764593db90151ad25296c, bytes: 3919}
+  - {path: development-capsules/ST-05.02/completion/TEST_RESULTS.json, sha256: e022341060263f32788c78dfb38ce25adaf42ff2857beac4b9bc12df5406d732, bytes: 2286}
+  - {path: development-capsules/ST-05.02/completion/OBSERVABILITY_EVIDENCE.yaml, sha256: 2d253895b5a7980411035750dda86768058e7bc761852eb7ee8dc4185d4e42cd, bytes: 2214}
+  - {path: development-capsules/ST-05.02/completion/ROLLBACK_EVIDENCE.md, sha256: 15aa15f4bdcd7a54550d67a7b8bab36274830c764f74919afd35f70312c43d1c, bytes: 1992}
+bundles:
+  source_bundle_sha256: 7f0b6b6f099db0b06e8f62553b3ea76a37d3ac6613d0f7d2d9db2686db342413
+  test_bundle_sha256: fcb2398baa617ceed82726666ec02148a283997173018aa2292bb369ac42f156
+  implementation_bundle_sha256: a3efb6d5a07f656559fb2d4fd9773c0c187c3632005d733307d673bbecf55056
+counts:
+  source_files: 6
+  test_files: 6
+  implementation_and_test_files: 12
+  completion_files_total: 6
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_paths_modified: []
+  external_dependency_added: false
+  schema_file_changed: false
+  database_changed: false
+  transport_or_network_added: false
+  external_repository_changed: false
+  implementation_scope_source_set:
+    - skill_necessity_domain_contracts
+    - skill_necessity_application_service
+    - run_state_replay_and_descendant_invalidation
+    - atomicity_invalidation
+    - typed_ports_and_observations
+    - in_memory_development_repository
+repository_note: >-
+  This Builder workspace has no Git metadata at its root. Scope validation uses
+  the bounded session change ledger, exact path hashes, architecture source-set
+  tests, and the capsule allowlist. Generated Python cache files are excluded.
+verdict: PASS

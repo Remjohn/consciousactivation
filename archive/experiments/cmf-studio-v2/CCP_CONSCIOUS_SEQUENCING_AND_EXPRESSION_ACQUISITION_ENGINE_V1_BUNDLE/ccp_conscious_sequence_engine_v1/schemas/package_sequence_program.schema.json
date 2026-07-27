@@ -1,0 +1,103 @@
+{
+  "$defs": {
+    "PackageAssetRef": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "sequence_program_id": {
+          "title": "Sequence Program Id",
+          "type": "string"
+        },
+        "format_target": {
+          "title": "Format Target",
+          "type": "string"
+        },
+        "relationship_role": {
+          "title": "Relationship Role",
+          "type": "string"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "asset_id",
+        "sequence_program_id",
+        "format_target",
+        "relationship_role",
+        "order"
+      ],
+      "title": "PackageAssetRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "package_sequence_program_id": {
+      "title": "Package Sequence Program Id",
+      "type": "string"
+    },
+    "brand_id": {
+      "title": "Brand Id",
+      "type": "string"
+    },
+    "brand_context_version_id": {
+      "title": "Brand Context Version Id",
+      "type": "string"
+    },
+    "package_type": {
+      "title": "Package Type",
+      "type": "string"
+    },
+    "category_promise": {
+      "title": "Category Promise",
+      "type": "string"
+    },
+    "assets": {
+      "items": {
+        "$ref": "#/$defs/PackageAssetRef"
+      },
+      "title": "Assets",
+      "type": "array"
+    },
+    "diversity_requirements": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Diversity Requirements",
+      "type": "object"
+    },
+    "status": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "evaluated",
+        "approved",
+        "scheduled",
+        "completed"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "package_sequence_program_id",
+    "brand_id",
+    "brand_context_version_id",
+    "package_type",
+    "category_promise",
+    "assets"
+  ],
+  "title": "PackageSequenceProgram",
+  "type": "object"
+}

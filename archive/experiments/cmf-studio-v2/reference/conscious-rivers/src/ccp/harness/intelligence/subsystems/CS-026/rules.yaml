@@ -1,0 +1,28 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-026
+enabled: true
+priority:
+  tier: quality
+  rank: 9
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: dominant_face_count
+    operator: gt
+    value: 1
+route_hints:
+  reduce:
+    - decorative_secondary_faces
+    - unnecessary_testimony_cuts

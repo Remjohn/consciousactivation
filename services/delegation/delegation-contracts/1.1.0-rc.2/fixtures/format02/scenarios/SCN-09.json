@@ -1,0 +1,227 @@
+{
+  "assertions": {
+    "audit": {
+      "accepted_and_rejected_actions_receipted": true,
+      "committed_sequence_is_ordering_authority": true,
+      "expected_sequence": [
+        {
+          "audit_sequence": 1,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-09-msg-001",
+          "message_type": "compatibility-manifest",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        },
+        {
+          "audit_sequence": 2,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-09-msg-002",
+          "message_type": "compatibility-manifest",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        },
+        {
+          "audit_sequence": 3,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-09-msg-003",
+          "message_type": "contract-migration",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        },
+        {
+          "audit_sequence": 4,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-09-msg-004",
+          "message_type": "visual-asset-submission",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        },
+        {
+          "audit_sequence": 5,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-09-msg-005",
+          "message_type": "submission-validation-receipt",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        }
+      ],
+      "receipt_chain_required": true
+    },
+    "authority": [
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "compatibility-manifest",
+        "principal_type": "CONTENT_HARNESS"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "compatibility-manifest",
+        "principal_type": "VISUAL_ASSET_EDITOR"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "contract-migration",
+        "principal_type": "DELEGATION_PROTOCOL"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "visual-asset-submission",
+        "principal_type": "CONTENT_HARNESS"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "submission-validation-receipt",
+        "principal_type": "DELEGATION_PROTOCOL"
+      }
+    ],
+    "constitutional": [
+      "v1_to_v1_1_migration_is_lossless_and_traceable",
+      "parse_only_or_missing_evaluator_support_is_incompatible"
+    ],
+    "effect_counts": {
+      "admissions_before_pin": 0,
+      "migration_outputs": 2,
+      "negotiated_profiles": 1
+    },
+    "identity": [
+      "exact_demand_identity_is_preserved",
+      "correlation_and_causation_are_deterministic",
+      "pinned_profile_does_not_silently_upgrade"
+    ],
+    "negative_variants": [
+      "lossy_wrongness_lock",
+      "forged_manifest",
+      "ambiguous_adapter_path"
+    ],
+    "outbox": {
+      "accepted_effects_publish_after_atomic_commit": true,
+      "delivery_redrive_must_not_duplicate_domain_effect": true,
+      "expected_deliveries": [
+        {
+          "audit_sequence": 1,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-09-msg-001"
+        },
+        {
+          "audit_sequence": 2,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-09-msg-002"
+        },
+        {
+          "audit_sequence": 3,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-09-msg-003"
+        },
+        {
+          "audit_sequence": 4,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-09-msg-004"
+        },
+        {
+          "audit_sequence": 5,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-09-msg-005"
+        }
+      ]
+    },
+    "prohibited_effects": [
+      "silent_upgrade",
+      "dropped_wrongness_lock",
+      "migration_authority_transfer"
+    ],
+    "projection": [
+      {
+        "correlation_id": "scn-09-member-corr-001",
+        "expected_state": "SUBMITTED",
+        "protocol_version": "1.0",
+        "source_audit_sequence": 5
+      },
+      {
+        "assertion": "denied_or_stale_effects_are_visible_without_becoming_authority"
+      }
+    ],
+    "race_variants": [
+      "new_release_during_pinned_correlation",
+      "repeated_identical_migration"
+    ]
+  },
+  "expected_initial_state": "DRAFT",
+  "expected_terminal_state": "SUBMITTED",
+  "fixture_profile": "FORMAT02_REFERENCE",
+  "lifecycle_sequence": [
+    {
+      "from_state": "DRAFT",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "sequence": 1,
+      "to_state": "SUBMITTED",
+      "trigger": "submission_validation_accepted"
+    }
+  ],
+  "member_correlations": [
+    "scn-09-member-corr-001"
+  ],
+  "message_sequence": [
+    {
+      "causation_id": null,
+      "correlation_id": "scn-09-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:538b18a2a2deb0b7398b8d606b39e83046eee2b07522cef24857e9c56fa61fb9",
+      "fixture_ref": "contracts/examples/compatibility-manifest.example.json",
+      "message_id": "scn-09-msg-001",
+      "message_type": "compatibility-manifest",
+      "principal_type": "CONTENT_HARNESS",
+      "sequence": 1
+    },
+    {
+      "causation_id": "scn-09-msg-001",
+      "correlation_id": "scn-09-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:538b18a2a2deb0b7398b8d606b39e83046eee2b07522cef24857e9c56fa61fb9",
+      "fixture_ref": "contracts/examples/compatibility-manifest.example.json",
+      "message_id": "scn-09-msg-002",
+      "message_type": "compatibility-manifest",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "sequence": 2
+    },
+    {
+      "causation_id": "scn-09-msg-002",
+      "correlation_id": "scn-09-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:2a3041a29c3b9a1d8d0bb2bff580c011ea66a0d8ccf4694787c46a4f9ac12660",
+      "fixture_ref": "contracts/examples/contract-migration.example.json",
+      "message_id": "scn-09-msg-003",
+      "message_type": "contract-migration",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "sequence": 3
+    },
+    {
+      "causation_id": "scn-09-msg-003",
+      "correlation_id": "scn-09-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:2359678c0b42d57ea26f28532d28cb54760a213ae49bb0376f892164dc1eae45",
+      "fixture_ref": "contracts/examples/visual-asset-submission.example.json",
+      "message_id": "scn-09-msg-004",
+      "message_type": "visual-asset-submission",
+      "principal_type": "CONTENT_HARNESS",
+      "sequence": 4
+    },
+    {
+      "causation_id": "scn-09-msg-004",
+      "correlation_id": "scn-09-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:fa42b5dec4df2ab18999f5be11280b652fdb365476d3ff039e5b1e0f539a33fa",
+      "fixture_ref": "contracts/examples/submission-validation-receipt.example.json",
+      "message_id": "scn-09-msg-005",
+      "message_type": "submission-validation-receipt",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "sequence": 5
+    }
+  ],
+  "scenario_id": "SCN-09",
+  "title": "Compatibility migration"
+}

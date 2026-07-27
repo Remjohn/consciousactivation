@@ -1,0 +1,64 @@
+schema_version: ca-audit-report/v1
+receipt_id: CA-P04R-AUDIT-TS-DEL-001-REPORT-2026-07-23
+auditor: INDEPENDENT_AUDITOR_CONTROLLER
+spec_id: TS-DEL-001
+spec_title: Source-Grounded Visual Asset Demand, Asset Result, Geometry, and Usage Acknowledgement
+product: Atomic Harness Pipeline
+batch: 11
+issued_on: "2026-07-23"
+
+independence_declaration:
+  auditor_is_spec_writer: false
+  auditor_is_controller: false
+  conflicts_of_interest: NONE
+
+spec_identity:
+  hash_on_record: "aba43b66766795436b2073b528a486e7dbdb4cc48638ca21a1642c0e36e6d751"
+  quality_state_claimed: WRITTEN_PENDING_AUDIT
+  authority_state_claimed: CANDIDATE_NOT_CURRENT
+  build_authority_claimed: false
+  build_state_claimed: NOT_BUILD_READY
+  ceiling_claimed: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+  writing_wave: 12
+
+outcome: AUDIT_PASS
+quality_state_after_audit: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+audit_pass_is_accepted_for_build: false
+audit_pass_is_production_eligible: false
+
+lens_results:
+  lens_1_fr_story_outcome_coverage: PASS
+  lens_2_authority_ownership_sovereignty: PASS
+  lens_3_contract_lifecycle_completeness: PASS
+  lens_4_activative_primitive_archetype_source_fidelity: PASS
+  lens_5_brownfield_cross_spec_consistency: PASS
+  lens_6_build_readiness_testability: PASS
+
+blocking_findings: 0
+warnings: 0
+notes: 1
+
+findings:
+  - id: NOTE-DEL-001-001
+    lens: 2
+    severity: NOTE
+    title: "Delegation README RC2 banner conflict explicitly resolved in favor of RC4 release bytes"
+    description: >
+      Section 3.1 item 4 and section 4 note that Delegation's README.md carries a stale RC2 banner
+      while actual Program Control release bytes are delegation-contracts@1.1.0-rc.4 (digest c614a4d9...).
+      The spec explicitly resolves this conflict by anchoring all contract pins to the RC4 release bytes
+      and ignoring the stale README banner. This is the correct governance decision. Recorded as a note
+      to ensure the Delegation team updates their README banner during their next release cycle.
+    action: None required at this stage.
+
+upstream_draft_dependency_status:
+  - spec_id: TS-AHP-002
+    edge_id: SDE-056
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "3e76ee7e4ec8f3b288a58bb8b8eb886195d9ad17097c67ded613c22fbb3dccd4"
+    revision_impact: "Sections 3, 5, 6, 8, 9, 10"
+  - spec_id: TS-AIR-017
+    edge_id: SDE-057
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "0e87466a326eac865a66609d2609a1fc8006f5b32a5a847bd01e36e488363a81"
+    revision_impact: "Sections 3, 5, 6, 8, 9, 10"

@@ -1,0 +1,71 @@
+schema_version: cmf-builder-allowed-file-scope/v1
+story_id: ST-02.05
+active_mode: DECLARED_BOUNDARY
+rule: deny_all_except_exact_paths_below
+existing_source_files:
+  - path: src/cmf_builder/domain/run.py
+    allowed_change: add_boundary_model_refs_events_replay_state_hash_and_formal_invalidation_support
+  - path: src/cmf_builder/application/authority.py
+    allowed_change: add_human_only_RATIFY_REVISE_REJECT_REOPEN_ATOMIC_BOUNDARY_actions
+  - path: src/cmf_builder/application/ports.py
+    allowed_change: add_typed_atomicity_repository_and_declared_boundary_input_ports
+  - path: src/cmf_builder/adapters/in_memory_run_repository.py
+    allowed_change: add_atomic_development_test_boundary_model_decision_receipt_commit_query_and_failure_injection
+  - path: src/cmf_builder/adapters/__init__.py
+    allowed_change: add_SOURCE_LOCKED_to_ATOMICITY_RATIFICATION_edge_and_prerequisite_to_synthetic_profile_only
+new_source_files:
+  - path: src/cmf_builder/domain/atomicity.py
+    purpose: typed_boundary_decision_ratification_model_invalidation_gate_and_receipt_contracts
+  - path: src/cmf_builder/application/atomicity_commands.py
+    purpose: vertical_human_decision_and_deterministic_compile_command_service
+  - path: src/cmf_builder/adapters/file_declared_boundary_repository.py
+    purpose: safe_repository_local_hash_verified_JSON_input_adapter
+existing_architecture_tests_requiring_exact_source_set_updates:
+  paths:
+    - tests/stories/st_01_01/test_architecture_boundary.py
+    - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    - tests/stories/st_01_02/test_architecture_boundary.py
+  exact_change_only: add_the_three_ST_02_05_source_modules_to_expected_source_sets_and_preserve_external_import_bans
+new_test_files:
+  - tests/stories/st_02_05/__init__.py
+  - tests/stories/st_02_05/test_acceptance.py
+  - tests/stories/st_02_05/test_authority.py
+  - tests/stories/st_02_05/test_failure.py
+  - tests/stories/st_02_05/test_replay_and_receipt.py
+  - tests/stories/st_02_05/test_architecture_boundary.py
+authorization_state_outputs:
+  paths:
+    - development-capsules/ST-02.05/IMPLEMENTATION_AUTHORIZATION.yaml
+    - development-capsules/ST-02.05/IMPLEMENTATION_AUTHORIZATION_REPORT.md
+  allowed_change: record_exact_human_phrase_and_granted_state_only
+completion_outputs:
+  - development-capsules/ST-02.05/completion/IMPLEMENTATION_REPORT.md
+  - development-capsules/ST-02.05/completion/TEST_RESULTS.json
+  - development-capsules/ST-02.05/completion/OBSERVABILITY_EVIDENCE.yaml
+  - development-capsules/ST-02.05/completion/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/ST-02.05/completion/ROLLBACK_EVIDENCE.md
+  - development-capsules/ST-02.05/completion/STORY_COMPLETION_RECEIPT.yaml
+read_only_inputs:
+  - development-capsules/ST-01.01/**
+  - development-capsules/ST-01.01-SYNTHETIC-PROOF/**
+  - development-capsules/ST-01.02/**
+  - development-capsules/ST-02.05/*_INPUT.json
+  - governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  - governance/fixtures/synthetic-core/empty-skill-registry.yaml
+  - docs/planning/**
+prohibited_globs:
+  - docs/product-authority/**
+  - docs/tech-specs/**
+  - docs/architecture/**
+  - docs/contracts/**
+  - contracts/**
+  - governance/**
+  - reference-corpora/**
+  - PROGRAM_STATUS_EXPORT.yaml
+  - CURRENT_PROJECT_STATUS.md
+  - ../02_VISUAL_ASSET_EDITOR/**
+  - ../03_DELEGATION_PROTOCOL/**
+  - ../CMF_PROGRAM_CONTROL/**
+external_dependency_addition: prohibited
+schema_change: prohibited
+database_change: prohibited

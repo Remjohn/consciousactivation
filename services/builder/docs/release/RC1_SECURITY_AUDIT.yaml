@@ -1,0 +1,29 @@
+schema_version: cmf-builder-rc1-security-audit/v1
+verdict: PASS_WITH_RELEASE_PACKAGING_P1_AND_INFORMATIONAL_LIMITATIONS
+network_behavior:
+  ec_am_001_network_calls: 0
+  cloud_calls: 0
+  provider_calls: 0
+findings:
+  - id: RC1-P1-PACKAGING-METADATA-MISSING
+    severity: P1
+    class: INSTALLABILITY
+    blocks_rc1_acceptance: true
+    finding: Release cannot be clean-installed from governed package metadata.
+  - id: RC1-P2-PROJECT-LICENSE-METADATA-UNDECLARED
+    severity: P2
+    class: SUPPORT
+    blocks_rc1_acceptance: false
+    finding: Project license is not declared in package metadata because package metadata is absent.
+checks:
+  unsafe_archive_extraction: COVERED_BY_EXISTING_BD004_ARCHIVE_SECURITY_EVIDENCE
+  path_traversal: COVERED_BY_EXISTING_REGRESSION
+  sql_injection_boundaries: COVERED_BY_PARAMETERIZED_SQL_AND_REGRESSION
+  command_injection_boundaries: NO_SHELL_EXECUTION_IN_CLI_COMMANDS
+  unsafe_deserialization: NO_PICKLE_OR_DYNAMIC_DESERIALIZATION_IDENTIFIED_IN_RELEASE_PATH
+  secret_leakage: PASS_ONLY_INTENTIONAL_NEGATIVE_TEST_FIXTURES_MATCHED
+  absolute_paths_in_portable_exports: PASS_SOURCE_BASED_EXPORTS
+claim_boundary:
+  vulnerability_free: false
+  production_ready: false
+

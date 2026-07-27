@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-016
+enabled: true
+priority:
+  tier: encoding
+  rank: 6
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: pad_alignment_score
+    operator: lt
+    value: 0.8
+route_hints:
+  calibrate:
+    - adjust_brightness
+    - adjust_saturation
+    - switch_grade_archetype

@@ -1,0 +1,31 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-006
+enabled: true
+priority:
+  tier: quality
+  rank: 4
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: focal_shift_pct_frame_width
+    operator: gt
+    value: 15
+route_hints:
+  corrective_moves:
+    - align_incoming_focal_point
+    - reframe_b_roll
+    - add_reorientation_cue

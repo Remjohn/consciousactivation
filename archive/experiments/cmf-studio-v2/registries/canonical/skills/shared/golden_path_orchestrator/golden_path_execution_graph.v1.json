@@ -1,0 +1,54 @@
+{
+  "graph_id": "golden_path_execution_graph.v1",
+  "version": "1.0.0",
+  "nodes": [
+    "golden_path.format02.run",
+    "golden_path.fixture.load",
+    "golden_path.extraction.compile",
+    "golden_path.format_program.compile",
+    "golden_path.composition_scenes.compile",
+    "golden_path.avatar_plans.compile",
+    "golden_path.video_timeline.compile",
+    "golden_path.fake_render.compile",
+    "golden_path.eval.run",
+    "golden_path.export.compile"
+  ],
+  "edges": [
+    [
+      "golden_path.format02.run",
+      "golden_path.fixture.load"
+    ],
+    [
+      "golden_path.fixture.load",
+      "golden_path.extraction.compile"
+    ],
+    [
+      "golden_path.extraction.compile",
+      "golden_path.format_program.compile"
+    ],
+    [
+      "golden_path.format_program.compile",
+      "golden_path.composition_scenes.compile"
+    ],
+    [
+      "golden_path.composition_scenes.compile",
+      "golden_path.avatar_plans.compile"
+    ],
+    [
+      "golden_path.avatar_plans.compile",
+      "golden_path.video_timeline.compile"
+    ],
+    [
+      "golden_path.video_timeline.compile",
+      "golden_path.fake_render.compile"
+    ],
+    [
+      "golden_path.fake_render.compile",
+      "golden_path.eval.run"
+    ],
+    [
+      "golden_path.eval.run",
+      "golden_path.export.compile"
+    ]
+  ]
+}

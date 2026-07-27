@@ -1,0 +1,29 @@
+schema_version: cmf-builder-rc1-sdist-rebuild-receipt/v1
+source_distribution:
+  path: dist/atomic_harness_builder-0.1.0rc1.tar.gz
+  sha256: 206c7db2c9edb61d0ae495e84e52f3af1b595279cc8f7cb8881c57ca1e079863
+required_build_backend:
+  name: setuptools
+  version: 80.9.0
+third_clean_environment:
+  created_outside_repository_source_tree: true
+  source_checkout_used: false
+  pyproject_build_system_detected: true
+  setuptools_available_initially: false
+  governed_local_backend_wheel_available: false
+  package_index_download_authorized: false
+failure:
+  id: RC1-CF-001-P1-SDIST-BUILD-BACKEND-UNAVAILABLE
+  class: BLOCKED_BUILD_TOOLING_EVIDENCE
+  summary: >-
+    The clean source-distribution rebuild could not proceed because the isolated
+    environment could not install the pinned build backend setuptools==80.9.0
+    from a governed local lock or wheelhouse. No external package-index download
+    was available in this execution.
+verdict: BLOCKED
+rc1_p1_closure_allowed: false
+required_next_action: >-
+  Provide a governed local wheelhouse containing setuptools==80.9.0, or authorize
+  a package-index download for the exact pinned build backend, then rerun the
+  sdist rebuild acceptance and downstream RC1 P1 closure gates.
+

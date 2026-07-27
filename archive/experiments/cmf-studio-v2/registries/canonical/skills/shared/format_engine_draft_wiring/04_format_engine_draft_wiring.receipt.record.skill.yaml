@@ -1,0 +1,19 @@
+id: format_engine_draft_wiring.receipt.record
+version: "1.2.0"
+status: active
+owner_agent: format_engine_draft_wiring_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Convert authorized SuperVisual/Carousel format adapter inputs into draft engine state."
+inputs:
+  - SuperVisualBuilderFormatAdapterInput
+  - CarouselEngineFormatAdapterInput
+outputs:
+  - SuperVisualDraftState
+  - CarouselDraftVariantState
+  - FormatEngineDraftWiringReceipt
+hard_gates:
+  - "Do not call providers."
+  - "Do not render."
+  - "Preserve brand_context_version_id."
+  - "Preserve source_span_refs."
+  - "Draft state is not final state."

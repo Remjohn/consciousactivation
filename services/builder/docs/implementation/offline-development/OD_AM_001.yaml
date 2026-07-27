@@ -1,0 +1,81 @@
+schema_version: cmf-builder-offline-development-amendment/v1
+amendment_id: OD-AM-001
+name: OFFLINE_DEVELOPMENT_IMPLEMENTATION_BRANCH
+effective_date_utc: "2026-07-17"
+status: CONFIRMED_BOUNDED_IMPLEMENTATION_AUTHORITY
+operator:
+  governed_operator_id: emilio-conscious-elite-internal-dev
+  display_name: Emilio
+  authority_role: authorized_internal_development_operator
+  represented_organization: Conscious Elite
+  authority_basis: authorized internal development for Conscious Elite
+  attached_authority_sha256: 8e7b4aec8f61cd448d46e0b8e77f1fb9d64f29badd39b3ef654e741981fba4b8
+preservation:
+  confirmed_story_ids: PASS_69_OF_69_UNCHANGED
+  confirmed_epics: PASS_12_OF_12_UNCHANGED
+  primary_obligations: PASS_410_OF_410_UNCHANGED
+  target_primary_obligations: PASS_134_UNIQUE_OF_134
+  primary_obligation_reassignment: false
+  original_dependency_edges_deleted: false
+  historical_receipts_rewritten: false
+two_gate_model:
+  implementation_gate:
+    passing_status: IMPLEMENTED_DEVELOPMENT_PASS
+    receipt: ImplementationCompletionReceipt
+    meaning: complete deterministic bounded implementation for the OD-AM-001 development mode
+    obligation_status: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+    may_unlock: next OD_AM_001_development_mode_dependency_only
+  evidence_gate:
+    receipt: EvidenceClosureReceipt
+    allowed_pending_statuses:
+      - EVIDENCE_PENDING
+      - EXTERNAL_VALIDATION_PENDING
+      - HUMAN_POLICY_PENDING
+      - CERTIFICATION_NOT_CLAIMED
+      - NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH
+    issuance_during_campaign: prohibited_without_real_evidence
+  prohibited_equivalence:
+    - ImplementationCompletionReceipt_is_not_StoryCompletionReceipt
+    - implementation_coverage_is_not_full_evidence_closure
+    - implementation_coverage_is_not_production_readiness
+    - implementation_coverage_is_not_certification
+dependency_mode:
+  name: OD_AM_001_OFFLINE_DEVELOPMENT
+  rule: >-
+    A target may consume a predecessor PASS StoryCompletionReceipt or a predecessor
+    OD-AM-001 PASS ImplementationCompletionReceipt. Original production, certification,
+    benchmark, external-adoption and full Story dependency modes remain unchanged.
+target_stories:
+  lane_A: [ST-02.01, ST-02.02, ST-02.03, ST-02.04]
+  lane_B: [ST-06.03, ST-06.04, ST-06.05, ST-07.01, ST-07.03]
+  lane_C: [ST-08.01, ST-08.02, ST-08.03, ST-08.04, ST-08.05, ST-08.06, ST-08.07]
+  lane_D: [ST-09.01, ST-09.02, ST-09.03, ST-09.04, ST-09.05, ST-09.06]
+target_count: 22
+exact_stop_exclusions:
+  - ST-09.07
+  - ST-09.08
+  - ST-10.*
+  - ST-12.*
+branch_dispositions:
+  BD_007:
+    implementation: OFFLINE_STRUCTURAL_IMPLEMENTATION_EVIDENCE_PENDING
+    evidence_gate: EVIDENCE_PENDING
+    prohibited_claims: [empirical_superiority, provider_validation, benchmark_threshold, production_ready, certified]
+  HD_006_HD_007:
+    implementation: STRUCTURAL_NON_PERSONAL_UNCERTIFIED_DEVELOPMENT_BRANCH
+    evidence_gate: HUMAN_POLICY_PENDING
+    human_owned_truth: [actual_reaction, ReactionReceipt, ExpressionMoment, IdentityDNA_approval]
+  BD_014_external_products:
+    implementation_scope: [Builder_owned_ports, request_mapping, result_mapping, validation, local_fixtures, deterministic_test_doubles, failure_handling, compatibility_declarations]
+    evidence_gate: EXTERNAL_VALIDATION_PENDING
+    prohibited: [VAE_internal_behavior, Delegation_runtime_or_transport, external_deployment, publication, external_product_acceptance]
+no_cloud_no_spend:
+  cloud_authentication: prohibited
+  cloud_resource_creation: prohibited
+  model_weight_download: prohibited
+  paid_provider_call: prohibited
+  API_credential_use: prohibited
+  external_spend: prohibited
+  admitted_corpus_external_transmission: prohibited
+production_ready: false
+certified: false

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DEP-VID-005",
+  "title": "Ducking Curve JSON",
+  "description": "Schema for per-frame music ducking curve produced by FR-VID-06 Stage 3. Contains one float per frame at project FPS. Value 1.0 = full music volume, ducking_target (default 0.15) = ducked. Per FR-VID-06 §5.",
+  "type": "object",
+  "required": [
+    "curve_id",
+    "total_frames",
+    "fps",
+    "ducking_target",
+    "ease_frames",
+    "values"
+  ],
+  "properties": {
+    "curve_id": {
+      "type": "string",
+      "pattern": "^DC-\\d{8}-[a-f0-9]+$",
+      "description": "Unique ducking curve identifier: DC-{YYYYMMDD}-{hex}"
+    },
+    "total_frames": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total number of frames (must equal len(values))"
+    },
+    "fps": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Project frames per second"
+    },
+    "ducking_target": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Target volume during voiceover segments (default 0.15)"
+    },
+    "ease_frames": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of frames for cosine easing transitions (default 6)"
+    },
+    "pad_before_frames": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Frames of pre-sentence ducking padding (default 3)"
+    },
+    "pad_after_frames": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Frames of post-sentence ducking padding (default 6)"
+    },
+    "total_duration_sec": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total audio duration in seconds"
+    },
+    "values": {
+      "type": "array",
+      "description": "Per-frame volume values. Length must equal total_frames. Each value in [0.0, 1.0].",
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      }
+    }
+  }
+}

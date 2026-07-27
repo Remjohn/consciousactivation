@@ -1,0 +1,27 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: JUXTAPOSITION
+enabled: true
+selection_priority:
+  tier: premium
+  rank: 4
+enforcement:
+  mode: allow_with_checks
+  default_result: REVIEW
+applies_to:
+  containers:
+    - HOOK
+    - CHALLENGE
+    - TURNING_POINT
+  stages:
+    - scene_builder
+incompatibilities:
+  - low_context_fast_sequence
+warn_conditions:
+  - metric: contrast_legibility_score
+    operator: lt
+    value: 0.8
+route_hints:
+  select:
+    - use_when_prediction_error_needs_a_vehicle
+    - use_when_found_clip_inventory_is_strong

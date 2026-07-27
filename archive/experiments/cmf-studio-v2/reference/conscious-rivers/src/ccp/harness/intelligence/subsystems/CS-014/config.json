@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-014",
+  "name": "Emotional Beat Limiter",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Kuleshov",
+    "Affective sequencing",
+    "Memory constraints"
+  ],
+  "inputs": [
+    "scene_emotional_tags",
+    "valence_transitions",
+    "beat_count",
+    "runtime_seconds"
+  ],
+  "outputs": [
+    "emotional_complexity_score",
+    "allowed_vector_map",
+    "verdict"
+  ],
+  "thresholds": {
+    "primary_vector_count": 1,
+    "secondary_vector_count": 1,
+    "max_emotional_beats": 3
+  },
+  "default_action_on_fail": "REVISE"
+}

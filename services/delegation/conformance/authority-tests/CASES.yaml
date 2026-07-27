@@ -1,0 +1,65 @@
+cases:
+- case_id: AUTH-01
+  title: Content Harness creates owned demand
+  principal_type: content_harness
+  action: create_visual_asset_demand
+  expected: allow
+- case_id: AUTH-02
+  title: VAE attempts semantic mutation
+  principal_type: visual_asset_editor
+  action: mutate_semantic_intent
+  expected: reject
+- case_id: AUTH-03
+  title: Protocol attempts creative ranking
+  principal_type: delegation_boundary_service
+  action: rank_amendment_options
+  expected: reject
+- case_id: AUTH-04
+  title: Content Harness emits production acceptance
+  principal_type: content_harness
+  action: emit_production_acceptance
+  expected: reject
+- case_id: AUTH-05
+  title: VAE emits production acceptance
+  principal_type: visual_asset_editor
+  action: emit_production_acceptance
+  expected: allow
+- case_id: AUTH-06
+  title: Content Harness acknowledges current result
+  principal_type: content_harness
+  action: acknowledge_result
+  expected: allow
+- case_id: AUTH-07
+  title: Unowned harness cancels delegation
+  principal_type: other_content_harness
+  action: request_cancellation
+  expected: reject
+- case_id: AUTH-08
+  title: Authorized operator approves Premium extension
+  principal_type: operator_policy
+  action: approve_budget_extension
+  expected: allow
+- case_id: AUTH-09
+  title: Composition runtime creates semantic demand
+  principal_type: composition_runtime
+  action: create_visual_asset_demand
+  expected: reject
+- case_id: AUTH-10
+  title: Protocol validates and routes message
+  principal_type: delegation_boundary_service
+  action: validate_and_route
+  expected: allow
+- case_id: AUTH-CONSTITUTION-001
+  title: VAE cannot mutate protected demand meaning
+  input_fixture: packages/contracts/examples/visual-asset-demand.example.json
+  principal_type: visual_asset_editor
+  attempted_paths:
+  - /visual_semantic_pack/recognition_intent
+  - /activation_contract/viewer_roles
+  - /activation_contract/stance
+  - /visual_narrative_program
+  expected_verdict: REJECTED
+  failure_code: AUTHORITY_DENIED
+  state_effect: NONE
+  production_effect: NONE
+  audit_evidence: rejection_receipt_with_principal_and_attempted_paths

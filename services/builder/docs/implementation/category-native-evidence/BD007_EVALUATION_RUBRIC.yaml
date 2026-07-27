@@ -1,0 +1,62 @@
+schema_version: cmf-builder-bd007-evaluation-rubric/v1
+rubric_id: BD007-ST0603-EVALUATION-RUBRIC-v1
+rubric_sha256: dd5cc9bae8977ea365d4890914364e2a540eb2acdbf363d4ec024aa47ab27381
+generated_on: "2026-07-17"
+status: FROZEN_BEFORE_EMPIRICAL_RESULTS
+scope: development_uncertified_category_native_compilation
+serialization: canonical_JSON_UTF8_sorted_keys_no_insignificant_whitespace
+score_scale:
+  0: contradiction_invention_or_missing_required_evidence
+  1: major_semantic_loss_or_category_flattening
+  2: partial_preservation_with_material_gaps
+  3: complete_development_result_with_recorded_noncritical_limitations
+  4: complete_precise_traceable_development_result
+not_applicable_rule:
+  explicit_justification_required: true
+  score_must_be_null: true
+  evidence_hashes_must_be_empty: true
+  excluded_from_aggregate: true
+score_requirements:
+  independent_dimension_scores: true
+  textual_justification: true
+  immutable_evidence_hashes: true
+  scorecard_version: 1.0.0
+  evaluator_may_not_rewrite_provider_output: true
+dimensions:
+  - {id: category_identity_preservation, applicability: category_profiles_or_explicit_NOT_APPLICABLE_control}
+  - {id: category_native_syntax, applicability: constitutional_category_profiles}
+  - {id: spatial_structure, applicability: spatial_profiles}
+  - {id: temporal_structure, applicability: sequence_bearing_profiles}
+  - {id: reading_order_integrity, applicability: visual_or_ordered_profiles}
+  - {id: conversational_turn_integrity, applicability: structural_conversational_profiles}
+  - {id: identity_fidelity, applicability: activative_profiles}
+  - {id: audience_context_fidelity, applicability: activative_profiles}
+  - {id: edge_pressure_preservation, applicability: activative_profiles}
+  - {id: activative_call_integrity, applicability: activative_profiles}
+  - {id: desired_human_role_integrity, applicability: activative_profiles}
+  - {id: desired_reaction_integrity, applicability: activative_profiles}
+  - {id: micro_commitment_integrity, applicability: activative_profiles}
+  - {id: wrong_reading_resistance, applicability: all_cases_with_governed_locks}
+  - {id: semantic_lineage_completeness, applicability: all_cases}
+  - {id: non_invention_of_human_truth, applicability: all_cases}
+  - {id: output_contract_compliance, applicability: all_cases}
+paired_repeat_decision:
+  native_noncompensable_failure: NATIVE_NONCOMPENSABLE_FAILURE
+  flattened_control_noncompensable_failure: FLATTENED_CONTROL_NONCOMPENSABLE_FAILURE
+  governed_non_activative_control:
+    condition: category_native_syntax_and_wrong_reading_resistance_are_explicitly_NOT_APPLICABLE_in_both_arms
+    outcome: GOVERNED_NON_ACTIVATIVE_CONTROL_NO_ADVANTAGE_CLAIM
+    restriction: This control cannot establish or contribute a category-native advantage claim.
+  development_advantage_observed_when:
+    - native_category_native_syntax_score_strictly_exceeds_flattened
+    - native_wrong_reading_resistance_score_strictly_exceeds_flattened
+    - native_has_zero_noncompensable_failures
+  otherwise: NO_GOVERNED_DEVELOPMENT_ADVANTAGE_FOR_REPEAT
+campaign_decision:
+  threshold_status: NOT_ESTABLISHED_WITHOUT_COMPLETE_ADMITTED_TRIALS
+  rubric_may_not_be_tuned_after_results: true
+  any_change_requires_new_rubric_version_and_new_trials: true
+  production_threshold: NOT_AUTHORIZED
+  certification_threshold: NOT_AUTHORIZED
+production_ready: false
+certified: false

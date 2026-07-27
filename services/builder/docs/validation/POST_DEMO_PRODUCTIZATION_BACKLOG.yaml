@@ -1,0 +1,53 @@
+schema_version: cmf-builder-post-demo-productization-backlog/v1
+generated_on: "2026-07-16"
+activation_state: NOT_ACTIVE_FINAL_INTEGRATION_GATE_FAILED
+scope_rule: >-
+  This backlog records only nonblocking P2 and P3 work. The five open P0 or P1
+  corrections are prerequisites in the integration-gate report and are not
+  deferred into productization.
+items:
+  - finding_id: BQA-P2-007
+    priority: P2
+    title: make_checkpoint_identities_immutable
+    owner: later_productization
+    recommended_correction: >-
+      enforce same-or-absent checkpoint identity and provide an explicit
+      test-only corruption injection seam
+    production_authorized: false
+  - finding_id: BQA-P2-008
+    priority: P2
+    title: centralize_exact_source_architecture_inventory
+    owner: later_productization
+    recommended_correction: >-
+      retain import and layer protection while replacing duplicated historical
+      filename lists with one governed architecture inventory
+    production_authorized: false
+  - finding_id: BQA-P2-009
+    priority: P2
+    title: remove_active_machine_specific_absolute_paths
+    owner: later_productization
+    evidence:
+      files_with_windows_absolute_paths: 17
+      occurrences: 62
+      generated_definition_or_capsule_path_leak: false
+    recommended_correction: >-
+      replace active dependency and evidence-generator paths with repository
+      coordinates or operator inputs; retain explicit historical path evidence
+      only where provenance requires it
+    production_authorized: false
+  - finding_id: BQA-P3-010
+    priority: P3
+    title: pin_pytest_asyncio_fixture_loop_scope
+    owner: later_productization
+    recommended_correction: >-
+      set the governed pytest asyncio fixture loop scope before dependency upgrade
+    production_authorized: false
+gate_dependencies:
+  blocking_correction_evidence_required_before_activation:
+    - BQA-P0-001
+    - BQA-P1-003
+    - BQA-P1-004
+    - BQA-P1-005
+    - BQA-P1-006
+  separate_human_authorization_required: true
+  productization_started: false

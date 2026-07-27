@@ -1,0 +1,43 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-05.01
+primary_epic: EP-05
+title: Operate a Versioned Canonical Skill Registry
+active_mode: SYNTHETIC_EMPTY_SKILL_REGISTRY_CONSUMPTION
+readiness_status: READY
+outcome: >-
+  Consume the exact governed, versioned, and hash-pinned empty skill registry
+  for the category-neutral synthetic Builder Core, classify every code-owned
+  deterministic capability without inventing skills, and emit an immutable
+  deterministic snapshot and receipt that distinguish canonical skills,
+  local adaptations, and experimental capabilities as three empty sets.
+primary_owner: skill_registry_owner
+component_boundary: >-
+  Builder-owned deterministic domain contracts and application commands for
+  registry consumption, capability classification, validation, immutable
+  storage, observations, receipts, replay, idempotency, and invalidation.
+owned_obligations: [D021, FR-081, FR-082, FR-083, NFR-MAINT-002]
+governing_specs: [TS-08]
+governing_adrs: [ADR-009]
+direct_dependencies:
+  - story_id: ST-04.05
+    artifact: StoryCompletionReceipt
+    receipt_sha256: 28a3412acbbe19983e627372b670e0d3720debc76befc3422ef96f3c2788a3b7
+    canonical_payload_sha256: 0904a65269b872c2a46b0fce11f80d5a003c638612f5189bdf1946682f251eb8
+conditional_authority:
+  amendment: BF-AM-006
+  disposition: BD-010_CLOSED_FOR_SYNTHETIC_CORE_EMPTY_REGISTRY_ONLY
+  real_profile_skill_registry: DEFERRED_BLOCKED_BY_EXISTING_GATES
+failure_behavior:
+  - reject any nonempty, altered, unpinned, stale, superseded, or invalidated registry
+  - reject duplicate or conflicting capability ownership claims
+  - reject a maturity claim without an exact evaluator receipt
+  - reject stale evaluator pins and active skill sediment
+  - reject undeclared skill use, dynamic discovery, skill mutation, or unauthorized actor commands
+  - reject altered lineage, authority, policy, schema, validation receipt, or minimum-context graph
+  - commit no partial snapshot, receipt, event, command record, or run reference on failure
+compatibility: >-
+  Preserve the canonical skill taxonomy and version/hash semantics while
+  representing the synthetic proof as an explicit empty registry consumption;
+  adding any external skill requires a new immutable registry and Harness version.
+completion_receipt: development-capsules/ST-05.01/completion/STORY_COMPLETION_RECEIPT.yaml
+implementation_authorized: false

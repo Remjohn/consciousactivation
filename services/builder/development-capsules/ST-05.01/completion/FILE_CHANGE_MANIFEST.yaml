@@ -1,0 +1,66 @@
+schema_version: cmf-builder-story-file-change-manifest/v1
+story_id: ST-05.01
+active_mode: SYNTHETIC_EMPTY_SKILL_REGISTRY_CONSUMPTION
+bundle_algorithm: sha256_of_UTF8_sorted_path_pipe_file_sha256_lines
+implementation_files:
+  - {path: src/cmf_builder/domain/run.py, change: modified, sha256: 4900c25c8a8d3de44e6061d1a937b99800434608de4c2a41b799fffc99ace882, bytes: 75540}
+  - {path: src/cmf_builder/application/atomicity_commands.py, change: modified, sha256: 78a96b571c23f91d4129c7b84edc5a7f36da781c370a59299523f9adfa3b2155, bytes: 69516}
+  - {path: src/cmf_builder/application/ports.py, change: modified, sha256: 9fd62e3017bece358b06fb8ba956e478b20911b12272d28f0b074c44f267bdd1, bytes: 24313}
+  - {path: src/cmf_builder/adapters/in_memory_run_repository.py, change: modified, sha256: e7e1ba13a4e9474dfcda55d3212399833729499934d572235014dca2ffc9b820, bytes: 84192}
+  - {path: src/cmf_builder/domain/skill_registry.py, change: created, sha256: 42d7e67cff1c53458832bf145dd0f081158ecc49509cd339a567351cc5626ea5, bytes: 28840}
+  - {path: src/cmf_builder/application/skill_commands.py, change: created, sha256: 8011ab4a2937c5f5790689010ca79ffcf31dc89a79640571117f442a72d40943, bytes: 32090}
+test_files:
+  - {path: tests/stories/st_01_01/test_architecture_boundary.py, change: modified, sha256: eb57dbc78a3d3717bb0f06717d3d300d1663cdf7ebcb8fbdf8ff7825b26f2c10, bytes: 5650}
+  - {path: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py, change: modified, sha256: 6e2f77d333877654e438d5cc67829d82ff76b006ae2e1372fcd2c4e60658085e, bytes: 8027}
+  - {path: tests/stories/st_01_02/test_architecture_boundary.py, change: modified, sha256: 3205998ef84dda89f7cc85d2e73777d7cf01d78744f6125b92d34a205803920e, bytes: 4362}
+  - {path: tests/stories/st_02_05/test_architecture_boundary.py, change: modified, sha256: f062652c360e1f5abdedc84008f222f29122eb8b9c74e50fd847842c8b4de42d, bytes: 4581}
+  - {path: tests/stories/st_03_03/test_architecture_boundary.py, change: modified, sha256: 288665e95655b76cfceb6c8bbdf2dbcad82ca91f6996fdd846891695a59e2dd8, bytes: 4414}
+  - {path: tests/stories/st_05_01/__init__.py, change: created, sha256: 36db5cc3e60b50a2c3470542b1b4c49286837d08090800e2b63804c703849a15, bytes: 4599}
+  - {path: tests/stories/st_05_01/test_acceptance.py, change: created, sha256: 9b2646e72fb28ef5707e1e74648661840ca93aa74295a6cefb127fdf37b6df67, bytes: 3847}
+  - {path: tests/stories/st_05_01/test_registry_integrity.py, change: created, sha256: 9f976354491c75278fb3ab82bd765fd3809368b1dfdb51053e5b3cbca8aed725, bytes: 3307}
+  - {path: tests/stories/st_05_01/test_failure.py, change: created, sha256: 52ab395e2fe0184c048c71456178661cbef0a1339b6370dc1fb33008343a9bd6, bytes: 5003}
+  - {path: tests/stories/st_05_01/test_replay_invalidation_and_receipt.py, change: created, sha256: 87ff41727c34bc2a384142bcd96b082ccd0cac95601ed2516edf07e09768f23d, bytes: 5415}
+  - {path: tests/stories/st_05_01/test_architecture_boundary.py, change: created, sha256: 8aeff53a6bb5864247ce55c1428e11ffcf3c64480e0e9468ffbe6200d49c2a3d, bytes: 2683}
+completion_files_created_before_manifest:
+  - {path: development-capsules/ST-05.01/completion/IMPLEMENTATION_REPORT.md, sha256: 37a710d58b2a05f0ff662b87c6ae7508d874d071ee644fe858f96508586aaf1a, bytes: 3616}
+  - {path: development-capsules/ST-05.01/completion/TEST_RESULTS.json, sha256: f3d4329174f7de273563d382952128764ad72d1210aad110dafad2ecc74b1661, bytes: 2982}
+  - {path: development-capsules/ST-05.01/completion/OBSERVABILITY_EVIDENCE.yaml, sha256: 054a8bf1412baaf9ba0bd87798fced3d5bd7a180bbb8931af6f1ae4b0d50d229, bytes: 2632}
+  - {path: development-capsules/ST-05.01/completion/ROLLBACK_EVIDENCE.md, sha256: 2f5d4734f370197f94501a16f9f13eb4e5caf54cc480644c3255fae468dfab45, bytes: 2067}
+bundles:
+  source_bundle_sha256: 7d74075f4c7f797719828e518081b7eaa13c477bd705d462c7eba106d84e3d95
+  test_bundle_sha256: 0f2772aa1546b90db921eb022ae16da8087f0f5e7a2919fd35950999807d3bbf
+  implementation_bundle_sha256: 0a505050f9955ef047a9889048cfbba53d5fc77ed9331be06937fff5f3fb83ba
+counts:
+  source_files: 6
+  test_files: 11
+  implementation_and_test_files: 17
+  completion_files_total: 6
+scope_validation:
+  exact_allowlist: PASS
+  prohibited_paths_modified: []
+  external_dependency_added: false
+  schema_file_changed: false
+  database_changed: false
+  transport_or_network_added: false
+  external_repository_changed: false
+  implementation_scope_source_set:
+    - run_state_and_descendant_invalidation
+    - atomicity_invalidation
+    - typed_ports
+    - in_memory_development_repository
+    - skill_registry_domain
+    - skill_registry_application
+  unused_allowed_architecture_test_entries:
+    - tests/stories/st_03_04/test_architecture_boundary.py
+    - tests/stories/st_03_05/test_architecture_boundary.py
+    - tests/stories/st_04_01/test_architecture_boundary.py
+    - tests/stories/st_04_02/test_architecture_boundary.py
+    - tests/stories/st_04_03/test_architecture_boundary.py
+    - tests/stories/st_04_04/test_architecture_boundary.py
+    - tests/stories/st_04_05/test_architecture_boundary.py
+  unused_allowlist_reason: these_story_local_tests_do_not_assert_the_global_exact_source_set
+repository_note: >-
+  This Builder workspace has no Git metadata at its root. Scope validation uses
+  the bounded session change ledger, exact path hashes, architecture source-set
+  tests, and the capsule allowlist. Generated Python cache files are excluded.
+verdict: PASS

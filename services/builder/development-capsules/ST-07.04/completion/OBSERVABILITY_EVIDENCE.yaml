@@ -1,0 +1,51 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-07.04
+verdict: PASS
+deterministic_success_observations:
+  count: 10
+  events:
+    - atomic_content_harness_validation_started
+    - atomic_content_harness_dimension_artifact_set_completeness
+    - atomic_content_harness_dimension_authority_and_lineage
+    - atomic_content_harness_dimension_certification_scope
+    - atomic_content_harness_dimension_determinism_and_portability
+    - atomic_content_harness_dimension_evaluation_and_authorization_gates
+    - atomic_content_harness_dimension_internal_compatibility
+    - atomic_content_harness_dimension_target_profile_separation
+    - atomic_content_harness_dimension_universal_profile_non_flattening
+    - atomic_content_harness_validation_committed
+replay_observation: atomic_content_harness_validation_replayed
+rejection_observation: atomic_content_harness_validation_rejected
+invalidation_observation: atomic_content_harness_validation_invalidated
+required_fields:
+  - run_and_command_identity
+  - authority_identity
+  - definition_identity_and_hash
+  - validation_report_identity_and_hash
+  - validation_receipt_identity_and_hash
+  - target_and_profile
+  - dimension_and_section_counts
+  - internal_compatibility
+  - external_compatibility_disposition
+  - certification_scope
+  - outcome_and_replay_state
+representative_evidence:
+  report_id: atomic-content-harness-validation_2d4c90df10a2faf8c81f7741ec3012e557eaf52edaf970cf15bcfab6d290b97c
+  report_hash: sha256:2d4c90df10a2faf8c81f7741ec3012e557eaf52edaf970cf15bcfab6d290b97c
+  receipt_id: atomic-content-harness-validation-receipt_8e34e44b1c8f69e32a59937095e6a2dd9fee6b1e6b495773dd07b94a6f71ed6e
+  receipt_hash: sha256:8e34e44b1c8f69e32a59937095e6a2dd9fee6b1e6b495773dd07b94a6f71ed6e
+  report_canonical_bytes: 8025
+  receipt_canonical_bytes: 926
+  validation_dimensions: 8
+  required_sections: 20
+  internal_compatibility: PASS
+  external_target_compatibility: NOT_EVALUATED_EXTERNAL_TARGET_BRANCH
+  production_eligible: false
+  certified: false
+  synthetic_not_certifiable: true
+failure_observation_rules:
+  typed_context_without_secrets_or_local_paths: PASS
+  injected_atomic_commit_failure_emits_no_partial_observation: PASS
+  failed_commit_persists_no_events_or_command_records: PASS
+portable_path_free_payloads: PASS
+external_runtime_or_product_data_emitted: false

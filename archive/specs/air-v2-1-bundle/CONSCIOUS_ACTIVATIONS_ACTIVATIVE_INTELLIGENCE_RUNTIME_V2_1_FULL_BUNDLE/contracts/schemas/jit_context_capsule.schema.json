@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_actions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Actions",
+      "type": "array"
+    },
+    "capsule_id": {
+      "title": "Capsule Id",
+      "type": "string"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "forbidden_actions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Forbidden Actions",
+      "type": "array"
+    },
+    "object_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Object Refs",
+      "type": "array"
+    },
+    "output_schema_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "rendered_context": {
+      "additionalProperties": true,
+      "title": "Rendered Context",
+      "type": "object"
+    },
+    "role": {
+      "enum": [
+        "hunter",
+        "analyst",
+        "composer",
+        "commander",
+        "live_assistant",
+        "profile_resolver",
+        "learning_curator"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "task": {
+      "title": "Task",
+      "type": "string"
+    }
+  },
+  "required": [
+    "capsule_id",
+    "role",
+    "task",
+    "object_refs",
+    "rendered_context",
+    "allowed_actions",
+    "forbidden_actions",
+    "output_schema_ref",
+    "evaluation_contract_ref"
+  ],
+  "title": "JITContextCapsule",
+  "type": "object"
+}

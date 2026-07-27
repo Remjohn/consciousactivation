@@ -1,0 +1,191 @@
+experience_primitive_id: "EXP-TRG-001"
+canonical_name: "External to Internal Trigger Mapping"
+aliases:
+  - "Boredom to Record Trigger"
+  - "Notification to Emotion Shift"
+  - "The Internal Hook"
+
+experience_family: "trigger_timing"
+mechanic_role: "loop"
+moment_role: "entry_initiation"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Hooked_Ryan_Hoover.md"
+    primitive_name_in_audit: "External to Internal Trigger Mapping"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Hooked_Ryan_Hoover.md"
+
+book_reference:
+  title: "Hooked"
+  author: "Nir Eyal"
+  chapters:
+    - "Chapter 2: Triggers"
+    - "Chapter 3: Action"
+  key_pages: "39-60"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Hooked - Ryan Hoover.md"
+
+summary: >
+  External to Internal Trigger Mapping governs the transition from relying
+  on system-generated push notifications (external triggers) to relying on
+  the user's own emotional states (internal triggers) to prompt app usage.
+  In CCP, we must design the product so that after repeated external prompting
+  by the Telegram bot, the act of recording a reaction becomes mentally associated
+  with the relief of a specific negative valence emotion (like boredom, anxiety
+  before a big speech, or the desire for validation).
+
+core_move: >
+  Systematically pair external notifications with moments where the user is likely
+  experiencing a specific internal emotional pain point, until the external prompt
+  is no longer needed.
+
+why_it_works: >
+  Nir Eyal's Hook Model reveals that products only become habits when they attach
+  to an internal trigger, which is almost always a negative valence emotion
+  (uncertainty, boredom, loneliness). External triggers (like push notifications)
+  are necessary early on, but if they don't solve an emotional itch, they become
+  annoying. By timing external Telegram prompts exactly when the coach is feeling
+  isolated or uncertain about their authority, the act of recording a Conscious
+  Reaction becomes the neurological salve for that uncertainty. Over time, the
+  emotion alone triggers the desire to record.
+
+examples:
+  - context: "BOOK: Hooked - Instagram's internal trigger"
+    application: >
+      Instagram initially used external triggers like email and push notifications
+      to bring users back. But they explicitly paired the core action (taking a photo)
+      with the internal trigger of 'fear of losing a memory' or 'boredom'. Eventually,
+      whenever users felt bored, they instinctively opened the app without needing a notification.
+    effect: >
+      Achieved true habit-forming daily active usage (DAU) by anchoring to an internal state.
+
+  - context: "CCP: Conscious Reactions Topic Drop"
+    application: >
+      A high-charge industry debate topic is pushed via Telegram (external trigger)
+      at 4:00 PM, a time when coaches typically experience end-of-day boredom or anxiety
+      about their pipeline. The prompt offers a chance to assert authority (relieving the anxiety).
+    effect: >
+      The coach associates the relief of taking a stance with the CCP Mini App.
+
+  - context: "CCP: Law28 Morning Drill Push"
+    application: >
+      The daily Law28 drill notification explicitly names the internal fear:
+      'Are you hedging today? Record a 60-second baseline to prove your conviction.'
+      It attaches the external trigger to the internal anxiety of impostor syndrome.
+    effect: >
+      The coach uses the morning recording as an emotional grounding ritual.
+
+  - context: "CCP: Post-Webinar Recovery Trigger"
+    application: >
+      Following the conclusion of a V2WS webinar, the system sends an external trigger
+      asking for a voice note reflection. The internal trigger here is post-performance
+      adrenaline and the need for processing/validation.
+    effect: >
+      The user relies on the CCP bot as an emotional processing tool after high-stakes events.
+
+  - context: "CCP: Silent Referral Jury Vote"
+    application: >
+      A peer receives an external trigger (a link to vote on a debate). The internal
+      trigger is the fear of missing out on a tribal industry conversation or the desire
+      to support a friend.
+    effect: >
+      The user enters the Free Proof layer naturally to satisfy social curiosity.
+
+anti_examples:
+  - description: >
+      Sending generic 'Don't forget to practice today!' push notifications at random
+      times that have no relationship to the coach's emotional state.
+    why_it_fails: >
+      It functions purely as a nagging external trigger without addressing an internal itch.
+      The user quickly develops notification blindness and never forms the habit loop.
+
+experience_stage_fit:
+  entry: 0.9
+  activation: 0.8
+  recording: 0.4
+  scoring: 0.2
+  social_spread: 0.3
+  recovery: 0.6
+  retention: 0.9
+  conversion: 0.5
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 0.7
+  score_card: 0.2
+  share_asset: 0.4
+  voice_prompt: 0.6
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.4
+  urgency: 0.8
+  clarity: 0.5
+  safety: 0.6
+  status: 0.3
+  belonging: 0.5
+  curiosity: 0.8
+  replay_desire: 0.7
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.9
+  cbcs_accountability: 0.8
+  challenge_progression: 0.7
+  silent_referral: 0.6
+  coach_os_deployment: 0.9
+  premium_trust_architecture: 0.4
+  onboarding_activation: 0.8
+  social_economy: 0.5
+  content_extraction: 0.3
+
+activation_conditions:
+  - "User is in the early stages of habit formation (requires external triggers)"
+  - "System has telemetry on the user's likely emotional state or time-of-day patterns"
+  - "User has opted into Telegram notifications"
+
+suppression_conditions:
+  - "User is already exhibiting spontaneous, internally triggered usage"
+  - "User is actively recording or in-flow"
+
+misuse_modes:
+  - "Notification spamming without an emotional hook"
+  - "Confusing an external trigger with the actual motivation to act"
+
+synergizes_with:
+  - "EXP-TRG-002" # Hook Cycle Velocity
+  - "EXP-TRG-006" # Context-Aware System Triggers
+
+conflicts_with:
+  - "EXP-SAF-002" # If triggers become too intrusive, it violates safe recovery boundaries
+
+implementation_targets:
+  frontend_components:
+    - "TelegramNotification — customized payload targeting specific emotional cues"
+    - "MiniAppEntry — seamless transition from notification to recording interface"
+  backend_rules:
+    - "trigger_timing_engine: deploy notifications based on inferred user time-pockets, not rigid cron jobs"
+  telemetry_events:
+    - "external_trigger_delivered"
+    - "internal_trigger_activated"
+    - "spontaneous_session_started"
+  experiments:
+    - "A/B test: emotion-focused copy vs action-focused copy in Telegram push notifications"
+
+experience_metrics:
+  entry_rate: 0.9
+  react_rate: 0.8
+  completion_rate: 0.5
+  share_rate: 0.3
+  comeback_rate: 0.9
+  day7_retention: 0.9
+  upgrade_signal: 0.4
+
+crosswalk_id: "XW-TRG-EXT-INT"
+crosswalk_note: >
+  Directly impacts the Daily Active Usage (DAU) metrics by converting
+  borrowed attention (notifications) into owned attention (habit).
+
+notes: >
+  This primitive is the foundation of turning CCP from a 'tool' into a 'habit'.
+  We must rigorously track the ratio of externally-prompted sessions vs.
+  spontaneous sessions to measure the successful installation of the internal trigger.

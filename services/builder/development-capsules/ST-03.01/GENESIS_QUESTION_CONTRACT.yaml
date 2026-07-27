@@ -1,0 +1,15 @@
+schema_version: cmf-builder-genesis-question-contract/v1
+contract_id: category_neutral_dependency_ready_question_v1
+version: 1.0.0
+entry_state:
+  saturation_outcome: [PASS, PASS_WITH_LIMITATIONS]
+  boundary_status: FROZEN
+  DraftHarnessModel_status: UNRATIFIED_CONSTITUTIONAL_FIELDS
+decision_definition_required_fields: [decision_id, version, target_profile_applicability, question, rationale, required_evidence, dependencies, options, recommendation_policy, authority_owner, affected_ir_paths, invalidation_edges, completion_rule]
+selection: {maximum_active_questions: 1, order: priority_then_decision_id, locked_nodes_visible: true}
+recommendation_required_fields: [recommended_option, facts, inferences, evidence_refs, alternatives, tradeoffs, downstream_consequences, risks, authority_statement]
+authority: {selection_and_validation: CODE, recommendation: BOUNDED_AGENT_OR_DETERMINISTIC_FIXTURE, final_decision: HUMAN}
+forbidden_output_fields: [human_answer, final_value, ratified, signed_at, HarnessIR_mutation]
+production_eligible: false
+certified: false
+amendment_rule: any_semantic_change_requires_a_new_immutable_contract_version

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atomic-harness-builder"
+version = "0.1.0rc1"
+description = "Bounded local release candidate for the Atomic Harness Builder."
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Build Tools",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = [
+  "pytest==8.3.4",
+]
+
+[project.scripts]
+cmf-builder = "cmf_builder.cli.bootstrap:local_main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["cmf_builder*"]
+exclude = ["tests*", "development-capsules*", "docs*"]
+
+[tool.setuptools.package-data]
+"cmf_builder.resources.governance" = ["*.yaml"]
+

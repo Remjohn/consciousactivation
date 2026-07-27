@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-002",
+  "name": "Face Recognition Window",
+  "version": "1.0",
+  "priority_tier": "survival",
+  "research_basis": [
+    "Attention Capture",
+    "Eye Tracking"
+  ],
+  "inputs": [
+    "face_count",
+    "shot_scale",
+    "face_bounding_boxes",
+    "face_position",
+    "time_to_face_seconds"
+  ],
+  "outputs": [
+    "recognition_anchor_score",
+    "verdict",
+    "framing_recommendation"
+  ],
+  "thresholds": {
+    "recognition_window_seconds": {
+      "min": 1.5,
+      "max": 2.5
+    },
+    "max_time_to_face_seconds": 2.0,
+    "preferred_face_count": 1,
+    "preferred_top_band_pct": {
+      "min": 15,
+      "max": 25
+    },
+    "require_visible_eyes_and_mouth": true
+  },
+  "default_action_on_fail": "REVISE"
+}

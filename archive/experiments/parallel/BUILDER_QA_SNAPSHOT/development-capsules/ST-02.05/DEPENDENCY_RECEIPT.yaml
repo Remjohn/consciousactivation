@@ -1,0 +1,60 @@
+schema_version: cmf-builder-development-capsule-dependency-receipt/v1
+story_id: ST-02.05
+active_mode: DECLARED_BOUNDARY
+validated_on: "2026-07-15"
+verdict: PASS
+direct_dependencies:
+  - story_id: ST-01.02
+    completion_receipt:
+      path: development-capsules/ST-01.02/completion/STORY_COMPLETION_RECEIPT.yaml
+      file_sha256: 47706d905e3dbebf967a1a2124aa0f678f398f1826fe3fb0900ef878977526f6
+      canonical_payload_sha256: 644c740d70b3f156b2c87c42f7b7673744a7f0012c6b7338ead09db4f4b850a3
+      verdict: PASS
+    capsule_manifest:
+      path: development-capsules/ST-01.02/CAPSULE_MANIFEST.json
+      sha256: 7cfec2f6bf15dcf6d7bd3fd2e072c2b9d21ac60231cf49fd0ac25b4beb97fc86
+      bundle_digest: 23e9236078fbcc3dab921f75cf103540c6a63eb5d5a17fe4dcc76b698ff1307c
+      immutable_inputs: PASS_18_OF_18
+    changed_file_manifest:
+      path: development-capsules/ST-01.02/completion/FILE_CHANGE_MANIFEST.yaml
+      sha256: c4a1f73b391b884edf2086c05920c25eae3a91b482114075b59c54fedfde2ad2
+      current_files: PASS_17_OF_17
+    regression_evidence:
+      path: development-capsules/ST-01.02/completion/TEST_RESULTS.json
+      sha256: 6e7e2c8161c1d0c54c69bb34a6af4d7a5d3573b7f36e74e6235e1a0241800f6f
+    observability_evidence:
+      path: development-capsules/ST-01.02/completion/OBSERVABILITY_EVIDENCE.yaml
+      sha256: 39fe0ddce78eac934ac37c5b2261da55916e77ebc5228c4a3fc009b7faa7e54b
+    rollback_evidence:
+      path: development-capsules/ST-01.02/completion/ROLLBACK_EVIDENCE.md
+      sha256: 30c7dcd1ddc68f5ec489f1a976c76a438e3005dde03ad5019329de7631c0376e
+dependency_lineage_independently_validated:
+  original_ST_01_01:
+    receipt_path: development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+    canonical_payload_sha256: d82529f484971ef80bbd94ea29f685c9adfe3e50969aaf78367472695ea8add9
+    capsule_manifest_sha256: 779c9b6610b07451c37b6ffa773eaeff4ed046058b1d9ebfbe295bbdfd5bc6d9
+    result: PASS
+  supplemental_synthetic_proof:
+    receipt_path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/STORY_COMPLETION_RECEIPT.yaml
+    receipt_sha256: 58ae069c277e4256633db258a639e4901b44cdeb3d5e36b06464aa80d2700418
+    canonical_payload_sha256: 62bec99526a72fe83cefbd5dd30bab77f29b8d45556bfa83feaf73486314bdf9
+    capsule_manifest_sha256: 4917fbce9295255f8a71f61eb9031679cd2d9dd1729cf15a771f3da24be6174f
+    capsule_bundle_digest: 2e15bb0d795813e927bc60190a79978c675e0abae3037b7529f914d4e6f70ff3
+    result: PASS
+current_repository_validation:
+  command: "$env:PYTHONPATH='src'; python -m pytest -q"
+  result: PASS_57_OF_57
+  architecture_boundary_subset: PASS_5_OF_5
+  invocation_note: bare_pytest_lacks_src_import_path_and_is_not_a_test_failure
+applicable_blockers: []
+inactive_reference_or_external_gates:
+  - BD-004
+  - BD-007
+  - HD-006
+  - Format02_reference_evidence
+  - VAE_runtime
+  - Delegation_runtime
+  - GPU
+  - evaluator_certification
+  - production_certification

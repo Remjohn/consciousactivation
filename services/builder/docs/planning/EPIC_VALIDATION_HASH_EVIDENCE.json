@@ -1,0 +1,90 @@
+{
+  "schema_version": "cmf-builder-epic-validation-hash-evidence/v1",
+  "generated_on": "2026-07-15",
+  "verdict": "RECONCILED_NON_SEMANTIC",
+  "report": {
+    "path": "docs/planning/EPIC_DESIGN_VALIDATION_REPORT.json",
+    "confirmation_time_expected_sha256": "f6306221a8d891fb497638b8156b6469cf275da7854017c29eab72043b62f989",
+    "current_observed_sha256": "dac666f0ee991926f9407d3289ae99d746dd965d78a7240a4af6b52a84f7728b",
+    "current_size_bytes": 4284,
+    "current_last_write_time_utc": "2026-07-15T08:13:00.8683247Z"
+  },
+  "hash_records": [
+    {
+      "path": "docs/planning/EPIC_DESIGN_FILE_MANIFEST.yaml",
+      "sha256": "699ecb0bd31e0b794f68dd2fcae4e7e7143babc5ef4115781fee4063fd1d3022",
+      "records_expected_report_hash": true
+    },
+    {
+      "path": "docs/planning/EPIC_INVENTORY_CONFIRMATION_RECEIPT.yaml",
+      "sha256": "8e1b22a39674dab06b521255e9b94a47990ba3049b751d0a739c05923f64bffd",
+      "records_expected_report_hash": true
+    },
+    {
+      "path": "docs/planning/STORY_INVENTORY_CONFIRMATION_RECEIPT.yaml",
+      "sha256": "b2d888f7d17df7bde365f676450979463abf33f9e69662acf751bedbf3180941",
+      "records_expected_and_observed_report_hashes": true
+    },
+    {
+      "path": "docs/planning/EPIC_STEP_2_AUTHORIZATION_RECEIPT.yaml",
+      "sha256": "bf6f342e690f05f0dc184bc5c97d5028a552d92762a78fad7d96c4103ace32f3"
+    },
+    {
+      "path": "docs/planning/V1_2_INVENTORY_CONFIRMATION_RECEIPT.yaml",
+      "sha256": "c54b90abd43de9965b9723ebef5e1671daec5f6f69c410dcbb9813e9b130f755"
+    }
+  ],
+  "confirmed_content_hash_validation": [
+    {
+      "path": "docs/planning/EPIC_INVENTORY.yaml",
+      "expected_sha256": "c6f800e6708576f19934d52eae21e8e3915c05cec9bd550060132f430fbd3a6d",
+      "observed_sha256": "c6f800e6708576f19934d52eae21e8e3915c05cec9bd550060132f430fbd3a6d",
+      "result": "PASS"
+    },
+    {
+      "path": "docs/planning/EPIC_REQUIREMENT_COVERAGE.csv",
+      "expected_sha256": "dd72de0876f93fe071a08e009e153a3b0f38c558b3b51f4ad058cbde13eb975a",
+      "observed_sha256": "dd72de0876f93fe071a08e009e153a3b0f38c558b3b51f4ad058cbde13eb975a",
+      "result": "PASS"
+    },
+    {
+      "path": "docs/planning/EPIC_DESIGN_PROPOSAL.md",
+      "expected_sha256": "e0e174fb45d767d038b68913214c4fd78d719c5bb225dc0c7498cbe48d6c558d",
+      "observed_sha256": "e0e174fb45d767d038b68913214c4fd78d719c5bb225dc0c7498cbe48d6c558d",
+      "result": "PASS"
+    }
+  ],
+  "semantic_comparison": {
+    "reconstruction": "Set status to PASS and errors to an empty array in the current report; serialize with the existing JSON layout and CRLF line endings.",
+    "reconstructed_sha256": "f6306221a8d891fb497638b8156b6469cf275da7854017c29eab72043b62f989",
+    "reconstruction_matches_expected": true,
+    "changed_paths": ["status", "errors[0]", "errors[1]"],
+    "unchanged_assertions": {
+      "confirmed_obligations": 410,
+      "primary_assignments": 410,
+      "unique_primary_assignments": 410,
+      "missing_primary_assignments": [],
+      "duplicate_primary_assignments": [],
+      "epic_count": 12,
+      "dependency_edges": 46,
+      "dependency_order_validation": "PASS",
+      "canonical_category_count": 5,
+      "conversational_profile_count": 4,
+      "compilation_target_count": 3
+    }
+  },
+  "validator_cause": {
+    "path": "docs/planning/tools/validate_epic_design.py",
+    "phase_sensitive_checks": [
+      "program status must report epic_step_2_complete_pending_human_confirmation",
+      "vertical Story authoring must remain unauthorized"
+    ],
+    "current_program_phase_has_advanced": true,
+    "epic_semantic_drift": false
+  },
+  "gate_effect": {
+    "gate": "EG-EPIC-HASH",
+    "state": "CLOSED_BY_GOVERNED_DISPOSITION",
+    "reconfirmation_required": false
+  }
+}

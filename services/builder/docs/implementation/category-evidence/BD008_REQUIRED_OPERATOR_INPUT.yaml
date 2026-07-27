@@ -1,0 +1,113 @@
+schema_version: cmf-builder-bd008-required-operator-input/v1
+request_id: bd008-real-profile-operator-input-2026-07-16
+status: REMAINS_BLOCKED_OPERATOR_INPUT
+purpose: >-
+  Supply one complete, genuinely non-synthetic, authority-valid Activative profile
+  for development-only evaluation of activative_intelligence_pack_compiler@1.0.0.
+submission_location: operator-input/category-evidence/bd008-real-profile/
+required_top_level_files:
+  - path: manifest.yaml
+    source: copy_and_complete_docs/implementation/category-evidence/BD008_REAL_PROFILE_INPUT_MANIFEST_TEMPLATE.yaml
+  - path: compiler_input.json
+    contract: skill-packages/activative_intelligence_pack_compiler/1.0.0/contracts/input.schema.json
+  - path: artifacts/
+    description: immutable source and profile evidence named by manifest.yaml
+accepted_artifact_forms:
+  structured: [.json, .yaml, .yml]
+  text: [.md, .txt]
+  fixed_document: [.pdf]
+  rule: >-
+    Files must be UTF-8 where text-based, unencrypted, locally readable and listed
+    individually with exact SHA-256. Links without retained immutable bytes are not accepted.
+minimum_examples:
+  complete_real_profiles: 1
+  original_source_records: 1
+  identity_dna_snapshots: 1
+  audience_context_snapshots: 1
+  resonance_maps: 1
+  matrix_of_edging_records: 1
+  live_premise_evidence_records: 1
+  governed_activation_decision_packages: 1
+  required_negative_examples_from_operator: 0
+  negative_test_rule: >-
+    Corruption and omission variants may be generated mechanically from the supplied
+    immutable package for rejection tests; no new semantic content may be invented.
+required_artifact_types:
+  - original_source_record
+  - identity_dna_snapshot
+  - audience_context_premise_snapshot
+  - coach_audience_resonance_map
+  - matrix_of_edging
+  - live_premise_evidence
+  - activation_decision_authority
+required_profile_fields:
+  - immutable profile_id and profile_version
+  - category_id from the five canonical categories
+  - explicit non_synthetic classification
+  - profile owner or authorized steward
+  - exact usage grant for Builder development validation
+  - source_refs
+  - authority_refs
+  - identity_dna_ref
+  - audience_context_premise_ref
+  - live_premise_evidence_refs
+  - resonance_map_ref
+  - matrix_of_edging_ref
+  - edge_pressure
+  - format_goal
+  - desired_roles
+  - activative_call_constraints
+  - desired_reaction
+  - micro_commitment
+  - non-empty wrong_reading_locks
+  - explicit downstream applicability decisions
+  - field-level semantic lineage
+provenance_requirements:
+  - every artifact has a repository-relative path and SHA-256
+  - every derived field cites exact immutable source and authority references
+  - source spans are identified where the source form supports spans
+  - derivation and operator-ratification decisions are attributable
+  - supersession, amendment and revocation state is explicit
+  - no profile reference points only to a mutable URL or local absolute path
+usage_authority_requirements:
+  - grantor identity and authority role
+  - grantee or governed system scope
+  - permission to retain and use the supplied material for Builder development validation
+  - permitted outputs and prohibited disclosures
+  - effective date and any expiry
+  - withdrawal or revocation procedure
+  - whether protected benchmark use is allowed; omission means not allowed
+minimum_human_decisions:
+  - confirm the profile is genuinely non-synthetic and may be used for development validation
+  - approve the exact Identity DNA version without authorizing an amendment
+  - approve the exact Audience Context and source-evidence versions
+  - ratify Edge Pressure, desired role, desired reaction, micro-commitment and wrong-reading locks
+  - declare applicability for Reaction Receipt and Expression Moment without manufacturing either artifact
+  - declare whether any supplied labels may be protected benchmark labels; default is no
+human_truth_boundary:
+  operator_must_supply_or_ratify: true
+  builder_may_invent: false
+  reaction_receipt_may_be_created_by_this_evidence_lane: false
+  expression_moment_may_be_created_by_this_evidence_lane: false
+  identity_dna_amendment_may_be_approved_by_this_evidence_lane: false
+exact_validation_sequence: |-
+  $env:PYTHONPATH='src'
+  python -c "import hashlib,json,pathlib,yaml; from jsonschema import Draft202012Validator; r=pathlib.Path('operator-input/category-evidence/bd008-real-profile'); m=yaml.safe_load((r/'manifest.yaml').read_text(encoding='utf-8')); assert m['submission_status']=='OPERATOR_SUPPLIED_PENDING_VALIDATION'; assert m['profile']['classification']=='genuine_non_synthetic'; required={'original_source_record','identity_dna_snapshot','audience_context_premise_snapshot','coach_audience_resonance_map','matrix_of_edging','live_premise_evidence','activation_decision_authority'}; artifacts=m['artifacts']; assert required <= {a['artifact_type'] for a in artifacts}; assert all((r/a['relative_path']).is_file() and hashlib.sha256((r/a['relative_path']).read_bytes()).hexdigest()==a['sha256'] for a in artifacts); schema=json.loads(pathlib.Path('skill-packages/activative_intelligence_pack_compiler/1.0.0/contracts/input.schema.json').read_text(encoding='utf-8')); payload=json.loads((r/'compiler_input.json').read_text(encoding='utf-8')); Draft202012Validator(schema).validate(payload); print('BD008_OPERATOR_INPUT_PREFLIGHT_PASS')"
+  python -m pytest -q tests/skills/activative_semantics tests/skills/activative_evaluation tests/stories/st_05_03
+validation_after_preflight:
+  required: true
+  owner: CATEGORY_INTEGRATOR
+  actions:
+    - bind supplied artifacts to the typed ActivativeCompilerInput with full field lineage
+    - compile twice from fresh processes and prove byte-identical pack identity
+    - run corrupted, incomplete, wrong-reading-lock, identity-drift and audience-drift rejection cases
+    - verify no human truth, Reaction Receipt or Expression Moment was invented
+    - issue at most development_validated_real_profile
+prohibited_interpretations:
+  - a completed manifest is not certification
+  - the PZ Activative fixture is not real-profile evidence
+  - constitutional examples alone are not usage authority
+  - an inaccessible archive record is not source evidence
+  - synthetic or generated content cannot be relabeled as a human source
+production_ready: false
+certified: false

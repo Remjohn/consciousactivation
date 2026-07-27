@@ -1,0 +1,61 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-08.04",
+  "status": "IMPLEMENTED_DEVELOPMENT_PASS",
+  "dependency_gate": {
+    "required": 1,
+    "satisfied": 1,
+    "receipt": "ST-08.03:ImplementationCompletionReceipt:35244ad32a35ba68e66ad86d8bca773e142bc75c944a9bdda125eb394dc2d24b",
+    "missing": []
+  },
+  "tests": [
+    {"path": "tests/stories/st_08_04/test_typed_root_cause_diagnosis.py", "status": "PASS"},
+    {"path": "tests/stories/st_08_04/test_layer_localization_and_graph.py", "status": "PASS"},
+    {"path": "tests/stories/st_08_04/test_failure_authority_boundaries.py", "status": "PASS"},
+    {"path": "tests/stories/st_08_04/test_lineage_determinism_and_rollback.py", "status": "PASS"}
+  ],
+  "story_tests": {"executed": 84, "passed": 84, "failed": 0, "mandatory_skips": 0},
+  "affected_tests": {
+    "executed": 250,
+    "passed": 250,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "suites": ["tests/stories/st_08_01", "tests/stories/st_08_02", "tests/stories/st_08_03", "tests/stories/st_08_04"],
+    "invocation": "python -m pytest --import-mode=importlib tests/stories/st_08_01 tests/stories/st_08_02 tests/stories/st_08_03 tests/stories/st_08_04 -q"
+  },
+  "architecture_tests": {"executed": 12, "passed": 12, "failed": 0, "mandatory_skips": 0, "result": "PASS"},
+  "python_source_compilation": "PASS_114_SOURCE_FILES",
+  "complete_repository_regression": {
+    "execution_mode": "TWO_DEFAULT_IMPORT_SHARDS_DUE_TO_CAPSULE_MANDATED_DUPLICATE_TEST_BASENAMES",
+    "base_shard": {"executed": 1405, "passed": 1405, "failed": 0, "duration_seconds": 189.82},
+    "st_08_04_shard": {"executed": 84, "passed": 84, "failed": 0, "duration_seconds": 2.58},
+    "aggregate": {"executed": 1489, "passed": 1489, "failed": 0, "mandatory_skips": 0, "result": "PASS"}
+  },
+  "trust_validation": {
+    "exact_fourteen_class_failure_taxonomy": "PASS",
+    "all_eight_diagnostic_layers": "PASS",
+    "unknown_requires_typed_triage": "PASS",
+    "competing_hypothesis_evidence_retained": "PASS",
+    "symptom_is_not_root_cause": "PASS",
+    "smallest_supported_layer_localization": "PASS",
+    "exact_descendant_only_invalidation": "PASS",
+    "unaffected_upstream_truth_frozen": "PASS",
+    "authority_command_payload_and_resource_binding": "PASS",
+    "predecessor_scoring_lineage_binding": "PASS",
+    "fresh_process_byte_equality": "PASS",
+    "repeat_command_idempotency": "PASS",
+    "atomic_rejection_zero_partial_state": "PASS",
+    "non_destructive_invalidation_and_rollback": "PASS",
+    "source_boundary_registry_mechanical_registration": "PASS"
+  },
+  "repair_executed": false,
+  "artifacts_mutated": false,
+  "external_provider_calls": 0,
+  "real_human_reactions_ingested": 0,
+  "production_thresholds_defined": 0,
+  "certification_claims": 0,
+  "production_ready": false,
+  "certified": false,
+  "verdict": "PASS"
+}

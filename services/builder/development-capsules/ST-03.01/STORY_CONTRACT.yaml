@@ -1,0 +1,22 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-03.01
+primary_epic: EP-03
+title: Ask Only Dependency-Ready Constitutional Questions
+active_mode: CATEGORY_NEUTRAL_GENESIS_QUESTION_SELECTION
+classification: BUILDER_CORE
+status: READY_AUTHORIZED_BY_STANDING_CAMPAIGN
+primary_outcome: human attention is spent on the next consequential dependency-ready question with complete evidence-backed rationale
+owned_obligations: [D009, D010, FR-041, FR-042, FR-043, FR-044, HG-001]
+direct_dependencies: [ST-01.04:StoryCompletionReceipt, ST-02.05:StoryCompletionReceipt]
+applicable_blockers: []
+inactive_conditional_blockers:
+  BD-004: real_profile_corpus_only
+  BD-008: production_certification_only
+  XDEP-001: canonical_constitution_is_referenced_not_modified
+  XDEP-006: external_product_execution_is_not_active
+implementation_owner: genesis_owner
+component_boundary:
+  owns: [typed_decision_definitions, dependency_eligibility, one_question_selection, evidence_backed_recommendation_package, immutable_receipt_replay_and_invalidation]
+  excludes: [human_answer_or_final_decision, Harness_IR_mutation, external_product_behavior, certification]
+completion_gate: ST-03.01:StoryCompletionReceipt
+implementation_authorized: true

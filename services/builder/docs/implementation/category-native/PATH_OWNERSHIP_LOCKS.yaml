@@ -1,0 +1,82 @@
+schema_version: cmf-builder-category-native-path-ownership/v1
+campaign: BD-004_BD-007_EVIDENCE_QUALIFICATION_AND_CATEGORY_NATIVE_COMPILATION
+canonical_repository: D:/Work/CONSCIOUS_ACTIVATIONS/01_ATOMIC_HARNESS_BUILDER
+baseline: docs/implementation/category-native/CAMPAIGN_BASELINE.yaml
+policy:
+  one_active_writer_per_path: true
+  lane_agents_may_not_modify_shared_existing_files: true
+  integrator_exclusively_owns_shared_files: true
+  violations_fail_campaign: true
+claims:
+  BD004_ARCHIVE_QUALIFICATION_AGENT:
+    status: RELEASED_COMPLETE
+    owned_paths:
+      - docs/implementation/category-native/BD004_ARCHIVE_INVENTORY.yaml
+      - docs/implementation/category-native/BD004_ARCHIVE_SECURITY_REPORT.md
+      - docs/implementation/category-native/BD004_PROVENANCE_GRAPH.yaml
+      - docs/implementation/category-native/BD004_AUTHORITY_RECEIPT.yaml
+      - docs/implementation/category-native/BD004_ST0603_DISPOSITION.yaml
+      - docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_DECISION.yaml
+    prohibited_paths:
+      - src/**
+      - tests/**
+      - development-capsules/**
+      - CURRENT_PROJECT_STATUS.md
+      - PROGRAM_STATUS_EXPORT.yaml
+  BD007_EMPIRICAL_BASELINE_AGENT:
+    status: RELEASED_COMPLETE
+    owned_paths:
+      - docs/implementation/category-native/BD007_PROVIDER_INVENTORY.yaml
+      - docs/implementation/category-native/BD007_BASELINE_PROTOCOL.yaml
+      - docs/implementation/category-native/BD007_CASE_MANIFEST.yaml
+      - docs/implementation/category-native/BD007_RESULTS.json
+      - docs/implementation/category-native/BD007_OUTPUT_HASHES.yaml
+      - docs/implementation/category-native/BD007_LIMITATIONS.md
+      - docs/implementation/category-native/BD007_ST0603_DISPOSITION.yaml
+    prohibited_paths:
+      - src/**
+      - tests/**
+      - development-capsules/**
+      - CURRENT_PROJECT_STATUS.md
+      - PROGRAM_STATUS_EXPORT.yaml
+  ST0603_CAPSULE_AND_TEST_AGENT:
+    status: RELEASED_COMPLETE
+    owned_paths:
+      - development-capsules/ST-06.03/**
+      - tests/stories/st_06_03/**
+    prohibited_paths:
+      - src/**
+      - docs/implementation/category-native/**
+      - CURRENT_PROJECT_STATUS.md
+      - PROGRAM_STATUS_EXPORT.yaml
+  CATEGORY_INTEGRATOR:
+    status: RELEASED_COMPLETE
+    owned_paths:
+      - src/**
+      - tests/stories/st_01_01/test_architecture_boundary.py
+      - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+      - tests/stories/st_01_02/test_architecture_boundary.py
+      - tests/stories/st_02_05/test_architecture_boundary.py
+      - tests/stories/st_03_03/test_architecture_boundary.py
+      - docs/implementation/category-native/CAMPAIGN_BASELINE.yaml
+      - docs/implementation/category-native/PATH_OWNERSHIP_LOCKS.yaml
+      - docs/implementation/category-native/ST0603_BLOCKER_CLOSURE_GATE.yaml
+      - docs/implementation/category-native/ST0604_BLOCKER_CLOSURE_GATE.yaml
+      - docs/implementation/category-native/ST0605_FUTURE_HUMAN_DECISION_AUDIT.md
+      - docs/implementation/category-native/CAMPAIGN_COMPLETION_REPORT.md
+      - docs/implementation/category-native/CAMPAIGN_COMPLETION_RECEIPT.yaml
+      - docs/implementation/FULL_BUILDER_EXECUTION_QUEUE.yaml
+      - docs/implementation/FULL_BUILDER_BLOCKER_REGISTER.yaml
+      - docs/implementation/FULL_BUILDER_RECEIPT_INDEX.yaml
+      - docs/implementation/FULL_BUILDER_CAMPAIGN_PROGRESS.md
+      - CURRENT_PROJECT_STATUS.md
+      - PROGRAM_STATUS_EXPORT.yaml
+    shared_file_authority: EXCLUSIVE
+conflicts_detected: 0
+unauthorized_writes: 0
+final_validation:
+  evidence_lane_hashes: PASS
+  cross_lane_archive_identity: PASS
+  ST0603_capsule: PASS_CONDITIONAL_BLOCKED_EVIDENCE
+  full_regression: PASS_909_OF_909_TWICE_NO_MANDATORY_SKIPS
+  product_or_test_source_changes: 0

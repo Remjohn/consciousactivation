@@ -1,0 +1,578 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://contracts.cmf.dev/delegation/compatibility-manifest/1.0/schema.json
+title: Compatibility Manifest
+description: CMF delegation protocol compatibility-manifest message.
+x-cmf-message-type: compatibility-manifest
+x-cmf-message-version: '1.0'
+type: object
+additionalProperties: false
+properties:
+  manifest_id:
+    type: string
+    pattern: ^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  package_version:
+    type: string
+    pattern: ^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  protocol_versions:
+    type: array
+    items: &id001
+      type: string
+      pattern: ^[0-9]+\.[0-9]+$
+      x-cmf-value-owner: SIGNING_PRINCIPAL
+    minItems: 1
+    uniqueItems: true
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  message_versions:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        message_type:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{2,63}$
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        version: *id001
+      required:
+      - message_type
+      - version
+      x-cmf-value-owner: SIGNING_PRINCIPAL
+    minItems: 1
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  features:
+    type: array
+    items:
+      type: string
+      pattern: ^[a-z][a-z0-9._-]{2,95}$
+      x-cmf-value-owner: SIGNING_PRINCIPAL
+    minItems: 1
+    uniqueItems: true
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  required_semantic_domains:
+    type: array
+    items:
+      type: string
+      enum:
+      - source_provenance
+      - activative_semantic_lineage
+      - activation_contract
+      - visual_semantic_pack
+      - visual_narrative_program
+      - feature_contracts
+      - somatic_route_request
+      - expression_moment_lineage
+      - wrong_reading_locks
+      - derivative_lock_inheritance
+      x-cmf-value-owner: SIGNING_PRINCIPAL
+    minItems: 10
+    uniqueItems: true
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  semantic_capabilities:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        domain:
+          type: string
+          enum:
+          - source_provenance
+          - activative_semantic_lineage
+          - activation_contract
+          - visual_semantic_pack
+          - visual_narrative_program
+          - feature_contracts
+          - somatic_route_request
+          - expression_moment_lineage
+          - wrong_reading_locks
+          - derivative_lock_inheritance
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        support_modes:
+          type: array
+          items:
+            type: string
+            enum:
+            - PARSE
+            - PRESERVE
+            - ENFORCE
+            - EVALUATE
+            x-cmf-value-owner: SIGNING_PRINCIPAL
+          minItems: 1
+          uniqueItems: true
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        evaluator_profile_refs:
+          type: array
+          items:
+            $ref: '#/$defs/ResourceIdentityRef'
+            x-cmf-value-owner: SIGNING_PRINCIPAL
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        feature_contract_families:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+            x-cmf-value-owner: SIGNING_PRINCIPAL
+          uniqueItems: true
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        evidence_refs:
+          type: array
+          items:
+            $ref: '#/$defs/ResourceIdentityRef'
+            x-cmf-value-owner: SIGNING_PRINCIPAL
+          minItems: 1
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+      required:
+      - domain
+      - support_modes
+      - evaluator_profile_refs
+      - feature_contract_families
+      - evidence_refs
+      x-cmf-value-owner: SIGNING_PRINCIPAL
+    minItems: 10
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  adapter_policy:
+    type: object
+    additionalProperties: false
+    properties:
+      lossless_required:
+        type: boolean
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+      prohibited_effects:
+        type: array
+        items:
+          type: string
+          enum:
+          - DROP
+          - WEAKEN
+          - SYNTHESIZE
+          - FLATTEN
+          - REINTERPRET
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        minItems: 5
+        uniqueItems: true
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+    required:
+    - lossless_required
+    - prohibited_effects
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  derivative_asset_flows:
+    type: object
+    additionalProperties: false
+    properties:
+      supported:
+        type: boolean
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+      lock_inheritance_modes:
+        type: array
+        items:
+          type: string
+          enum:
+          - PARSE
+          - PRESERVE
+          - ENFORCE
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        minItems: 1
+        uniqueItems: true
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+      evidence_refs:
+        type: array
+        items:
+          $ref: '#/$defs/ResourceIdentityRef'
+          x-cmf-value-owner: SIGNING_PRINCIPAL
+        minItems: 1
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+    required:
+    - supported
+    - lock_inheritance_modes
+    - evidence_refs
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  required_signature_algorithms:
+    type: array
+    items:
+      type: string
+      enum:
+      - Ed25519
+      x-cmf-value-owner: SIGNING_PRINCIPAL
+    minItems: 1
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  status:
+    type: string
+    enum:
+    - RELEASE_CANDIDATE
+    - PUBLISHED
+    - DEPRECATED
+    - REVOKED
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  published_at:
+    type: string
+    format: date-time
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+required:
+- manifest_id
+- package_version
+- protocol_versions
+- message_versions
+- features
+- required_semantic_domains
+- semantic_capabilities
+- adapter_policy
+- derivative_asset_flows
+- required_signature_algorithms
+- status
+- published_at
+$defs:
+  PrincipalRef:
+    type: object
+    additionalProperties: false
+    properties:
+      principal_id: &id002
+        type: string
+        pattern: ^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+      principal_type:
+        type: string
+        enum:
+        - CONTENT_HARNESS
+        - DELEGATION_PROTOCOL
+        - VISUAL_ASSET_EDITOR
+        - CONTROL_TOWER
+      product_version:
+        type: string
+        pattern: ^[0-9]+\.[0-9]+$
+    required:
+    - principal_id
+    - principal_type
+    - product_version
+  DemandIdentityRef:
+    type: object
+    additionalProperties: false
+    properties:
+      request_id: *id002
+      version:
+        type: integer
+        minimum: 1
+      payload_hash: &id003
+        type: string
+        pattern: ^sha256:[0-9a-f]{64}$
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+      canonical_ref: &id004
+        type: string
+        format: uri
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+    required:
+    - request_id
+    - version
+    - payload_hash
+    - canonical_ref
+  ResourceIdentityRef:
+    type: object
+    additionalProperties: false
+    properties:
+      resource_id: *id002
+      version:
+        type: string
+        minLength: 1
+        maxLength: 64
+        x-cmf-value-owner: SIGNING_PRINCIPAL
+      payload_hash: *id003
+      canonical_ref: *id004
+    required:
+    - resource_id
+    - version
+    - payload_hash
+    - canonical_ref
+    x-cmf-value-owner: SIGNING_PRINCIPAL
+  ResultIdentityRef:
+    type: object
+    additionalProperties: false
+    properties:
+      result_id: *id002
+      version:
+        type: integer
+        minimum: 1
+      payload_hash: *id003
+      canonical_ref: *id004
+    required:
+    - result_id
+    - version
+    - payload_hash
+    - canonical_ref
+  ExecutionIdentityRef:
+    type: object
+    additionalProperties: false
+    properties:
+      execution_id: *id002
+      demand:
+        $ref: '#/$defs/DemandIdentityRef'
+      plan_ref:
+        $ref: '#/$defs/ResourceIdentityRef'
+    required:
+    - execution_id
+    - demand
+    - plan_ref
+  AuthorityClaim:
+    type: object
+    additionalProperties: false
+    properties:
+      action:
+        type: string
+        minLength: 1
+        maxLength: 96
+      principal:
+        $ref: '#/$defs/PrincipalRef'
+      field_scopes:
+        type: array
+        items: &id006
+          type: string
+          pattern: ^(?:/(?:[^~/]|~0|~1)*)*$
+        minItems: 1
+        uniqueItems: true
+    required:
+    - action
+    - principal
+    - field_scopes
+  IntegrityProof:
+    type: object
+    additionalProperties: false
+    properties:
+      algorithm:
+        type: string
+        const: Ed25519
+      key_id: *id004
+      signer:
+        $ref: '#/$defs/PrincipalRef'
+      signature:
+        type: string
+        pattern: ^[A-Za-z0-9_-]{86}$
+      issued_at: &id005
+        type: string
+        format: date-time
+      expires_at:
+        anyOf:
+        - *id005
+        - type: 'null'
+      nonce: *id002
+    required:
+    - algorithm
+    - key_id
+    - signer
+    - signature
+    - issued_at
+    - expires_at
+    - nonce
+  FailureSummary:
+    type: object
+    additionalProperties: false
+    properties:
+      code:
+        type: string
+        pattern: ^[A-Z][A-Z0-9_]{2,63}$
+      category:
+        type: string
+        enum:
+        - VALIDATION
+        - AUTHORITY
+        - COMPATIBILITY
+        - BUDGET
+        - EXECUTION
+        - INTEGRITY
+        - LIFECYCLE
+        - CAPABILITY
+        - HUMAN_REVIEW
+        - SECURITY
+      message:
+        type: string
+        minLength: 1
+        maxLength: 1024
+      retryable:
+        type: boolean
+      field_paths:
+        type: array
+        items: *id006
+        uniqueItems: true
+    required:
+    - code
+    - category
+    - message
+    - retryable
+    - field_paths
+  MoneyAmount:
+    type: object
+    additionalProperties: false
+    properties:
+      currency:
+        type: string
+        pattern: ^[A-Z]{3}$
+      minor_units:
+        type: integer
+        minimum: 0
+    required:
+    - currency
+    - minor_units
+  BoundingBoxBasisPoints:
+    type: object
+    additionalProperties: false
+    properties:
+      x:
+        type: integer
+        minimum: 0
+        maximum: 10000
+      y:
+        type: integer
+        minimum: 0
+        maximum: 10000
+      width:
+        type: integer
+        minimum: 1
+        maximum: 10000
+      height:
+        type: integer
+        minimum: 1
+        maximum: 10000
+    required:
+    - x
+    - y
+    - width
+    - height
+  EvidenceFinding:
+    type: object
+    additionalProperties: false
+    properties:
+      code:
+        type: string
+        pattern: ^[A-Z][A-Z0-9_]{2,63}$
+      verdict:
+        type: string
+        enum:
+        - PASS
+        - CONCERNS
+        - FAIL
+      evidence_refs:
+        type: array
+        items:
+          $ref: '#/$defs/ResourceIdentityRef'
+        minItems: 1
+      note:
+        anyOf:
+        - type: string
+          maxLength: 1024
+        - type: 'null'
+    required:
+    - code
+    - verdict
+    - evidence_refs
+    - note
+  ChangeItem:
+    type: object
+    additionalProperties: false
+    properties:
+      path: *id006
+      operation:
+        type: string
+        enum:
+        - ADD
+        - REMOVE
+        - REPLACE
+      value_ref:
+        anyOf:
+        - $ref: '#/$defs/ResourceIdentityRef'
+        - type: 'null'
+      reason:
+        type: string
+        minLength: 1
+        maxLength: 1024
+    required:
+    - path
+    - operation
+    - value_ref
+    - reason
+  State:
+    type: string
+    enum:
+    - DRAFT
+    - SUBMITTED
+    - REJECTED
+    - ACCEPTED
+    - IN_PROGRESS
+    - RESULT_READY
+    - RESULT_REJECTED
+    - COMPLETED
+    - AMENDMENT_REQUIRED
+    - SUPERSEDED
+    - COST_APPROVAL_REQUIRED
+    - CAPABILITY_GAP
+    - HUMAN_REVIEW_REQUIRED
+    - CANCELLATION_REQUESTED
+    - CANCELLED
+    - PARTIAL_RESULT_READY
+    - INVALIDATED
+    - REVOKED
+    - REPLACED
+x-cmf-authority:
+  allowed_producers:
+  - CONTENT_HARNESS
+  - DELEGATION_PROTOCOL
+  - VISUAL_ASSET_EDITOR
+  - CONTROL_TOWER
+  path_kind: JSON_POINTER_TEMPLATE
+  value_owner_by_path:
+    /adapter_policy: SIGNING_PRINCIPAL
+    /adapter_policy/lossless_required: SIGNING_PRINCIPAL
+    /adapter_policy/prohibited_effects: SIGNING_PRINCIPAL
+    /adapter_policy/prohibited_effects/{index}: SIGNING_PRINCIPAL
+    /derivative_asset_flows: SIGNING_PRINCIPAL
+    /derivative_asset_flows/evidence_refs: SIGNING_PRINCIPAL
+    /derivative_asset_flows/evidence_refs/{index}: SIGNING_PRINCIPAL
+    /derivative_asset_flows/evidence_refs/{index}/canonical_ref: SIGNING_PRINCIPAL
+    /derivative_asset_flows/evidence_refs/{index}/payload_hash: SIGNING_PRINCIPAL
+    /derivative_asset_flows/evidence_refs/{index}/resource_id: SIGNING_PRINCIPAL
+    /derivative_asset_flows/evidence_refs/{index}/version: SIGNING_PRINCIPAL
+    /derivative_asset_flows/lock_inheritance_modes: SIGNING_PRINCIPAL
+    /derivative_asset_flows/lock_inheritance_modes/{index}: SIGNING_PRINCIPAL
+    /derivative_asset_flows/supported: SIGNING_PRINCIPAL
+    /features: SIGNING_PRINCIPAL
+    /features/{index}: SIGNING_PRINCIPAL
+    /manifest_id: SIGNING_PRINCIPAL
+    /message_versions: SIGNING_PRINCIPAL
+    /message_versions/{index}: SIGNING_PRINCIPAL
+    /message_versions/{index}/message_type: SIGNING_PRINCIPAL
+    /message_versions/{index}/version: SIGNING_PRINCIPAL
+    /package_version: SIGNING_PRINCIPAL
+    /protocol_versions: SIGNING_PRINCIPAL
+    /protocol_versions/{index}: SIGNING_PRINCIPAL
+    /published_at: SIGNING_PRINCIPAL
+    /required_semantic_domains: SIGNING_PRINCIPAL
+    /required_semantic_domains/{index}: SIGNING_PRINCIPAL
+    /required_signature_algorithms: SIGNING_PRINCIPAL
+    /required_signature_algorithms/{index}: SIGNING_PRINCIPAL
+    /semantic_capabilities: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/domain: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evaluator_profile_refs: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evaluator_profile_refs/{index}: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evaluator_profile_refs/{index}/canonical_ref: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evaluator_profile_refs/{index}/payload_hash: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evaluator_profile_refs/{index}/resource_id: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evaluator_profile_refs/{index}/version: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evidence_refs: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evidence_refs/{index}: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evidence_refs/{index}/canonical_ref: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evidence_refs/{index}/payload_hash: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evidence_refs/{index}/resource_id: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/evidence_refs/{index}/version: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/feature_contract_families: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/feature_contract_families/{index}: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/support_modes: SIGNING_PRINCIPAL
+    /semantic_capabilities/{index}/support_modes/{index}: SIGNING_PRINCIPAL
+    /status: SIGNING_PRINCIPAL
+x-cmf-consumers:
+- CONTENT_HARNESS
+- DELEGATION_PROTOCOL
+- VISUAL_ASSET_EDITOR
+- CONTROL_TOWER
+x-cmf-idempotency: PROHIBITED
+x-cmf-lifecycle-effects:
+- compatibility_manifest_published

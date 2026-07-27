@@ -1,0 +1,47 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-09.04",
+  "status": "PASS",
+  "development_mode": "OD_AM_001_OFFLINE_DEVELOPMENT",
+  "focused_story_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_04 -q",
+    "passed": 14,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "workflow_batch_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_01 tests/stories/st_09_02 tests/stories/st_09_03 tests/stories/st_09_04 --import-mode=importlib -q",
+    "passed": 112,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "architecture_boundary_tests": {
+    "passed": 12,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "full_repository_regression": {
+    "status": "PASS",
+    "aggregate_passed": 1795,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "shards": [
+      {"name": "base_without_duplicate_import_story_dirs", "passed": 1312},
+      {"name": "st_02_03", "passed": 40},
+      {"name": "st_07_01_and_st_07_03", "passed": 53},
+      {"name": "st_08_04_through_st_09_04_importlib", "passed": 390}
+    ]
+  },
+  "python_source_compilation": {
+    "command": "python -m compileall -q src",
+    "status": "PASS"
+  },
+  "external_engine_or_provider_calls": 0,
+  "process_container_or_worktree_created": 0,
+  "production_or_certification_claims": 0,
+  "verdict": "PASS"
+}

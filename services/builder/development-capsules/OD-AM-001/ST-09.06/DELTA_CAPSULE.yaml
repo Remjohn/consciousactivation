@@ -1,0 +1,266 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-09.06:QUEUE_OBSERVABILITY_AND_LOCAL_RECOVERY_PROOF
+preparation_status: VALIDATED_STRUCTURE_DEPENDENCY_PENDING
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-09.06
+  title: Observe Queues and Prove Workflow Recovery
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: operators can see cost, latency, quality, interventions, and recovery behavior at public seams
+  primary_obligations:
+    - FR-202
+    - FR-203
+    - FR-204
+    - FR-205
+    - NFR-PERF-002
+    - NFR-PERF-003
+    - NFR-TEST-001
+    - NFR-WORKFLOW-010
+    - NFR-WORKFLOW-011
+  primary_obligation_count: 9
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_LOCAL_PUBLIC_SEAM_AND_FAULT_FIXTURES_EXTERNAL_CONFORMANCE_PENDING
+dependency:
+  story_id: ST-09.05
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-09.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: NOT_ISSUED_DEPENDENCY_PENDING
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-09.05/DELTA_CAPSULE.yaml
+    sha256: a82e6d2dd1fa6c40bd421c7738ac2f78ae08ea9f87735026f323ae103c9874ea
+    validation: PASS_PREPARATION_REFERENCE_ONLY
+  unissued_receipt_shell:
+    sha256: c2d335c33f3a99d691ecd758d2a316fcc6cb1925f77e057dc54e117876842078
+    satisfies_dependency: false
+dependency_gate:
+  satisfied: 0
+  required: 1
+  verdict: DEPENDENCY_PENDING
+  missing: [ST-09.05:ImplementationCompletionReceipt:IMPLEMENTED_DEVELOPMENT_PASS]
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-09.06
+  - docs/architecture/adr/ADR-002-SEPARATE-HARNESS-IR-AND-WORKFLOW-IR.md
+  - docs/architecture/adr/ADR-006-WORKFLOW-ENGINE-ADAPTER.md
+  - docs/architecture/adr/ADR-012-SANDBOX-AND-LEAST-PRIVILEGE.md
+  - docs/architecture/adr/ADR-016-DEPLOYMENT-AND-OBSERVABILITY.md
+  - docs/architecture/adr/ADR-017-RELEASE-1-WORKFLOW-PROFILES.md
+  - docs/tech-specs/specs/TS-14-BUILDER-WORKFLOW-RUNTIME.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles: [WorkflowIR, WorkflowNodeContract, CheckpointReceipt, PromotionReceipt]
+  schema_refs: []
+  ownership_rule: Builder owns deterministic local queue, telemetry, public-seam and injected-fault contracts; external engines, providers, isolation platforms and products retain runtime authority
+two_gate_boundary:
+  implementation_gate:
+    scope: deterministic local queue projection, telemetry, public-seam reconstruction and injected-fault recovery mechanisms
+    closes_external_conformance: false
+  evidence_gate:
+    status: MANUAL_SHADOW_TEMPORAL_PROVIDER_ISOLATION_AND_EXTERNAL_VALIDATION_PENDING
+    actual_durable_runtime_or_provider_fault_evidence: false
+    actual_manual_shadow_parity_evidence: false
+    production_authority: false
+implementation_scope_after_dependency_pass:
+  - project immutable queue and node status from canonical local workflow events with one non-conflicting authoritative state per node
+  - expose why a node is queued, ineligible, waiting-human, blocked, retrying, cancelled, passed, failed or superseded
+  - emit deterministic node and route observations for actor, versions, latency inputs, compute, token and cost inputs, tools, retries, cache, sandbox refs, artifacts, validation and final state
+  - reconstruct local execution, cost, latency, quality, intervention, retry, cancellation and recovery history from the public event seam
+  - enforce expected and hard context, token, latency, cost and deterministic-compute budgets without silent overflow
+  - run deterministic injected-fault fixtures through local public seams and prove contained state, repair or escalation route, resume eligibility and rollback
+  - preserve exact workflow, profile, route, candidate, checkpoint, authority, budget, artifact, provenance and invalidation lineage
+queue_projection_contract:
+  authoritative_states:
+    - queued
+    - eligible
+    - running
+    - waiting_human
+    - blocked
+    - retrying
+    - cancelled
+    - passed
+    - failed
+    - superseded
+  required_fields:
+    - workflow_profile_node_and_attempt_identity
+    - current_state_and_transition_sequence
+    - transition_reason_and_causal_event_refs
+    - unmet_dependency_gate_or_budget_refs
+    - actor_and_authority
+    - checkpoint_and_artifact_refs
+    - version_provenance_and_invalidation
+  rules:
+    - a node cannot be authoritative in conflicting states
+    - transition order and eligibility are derived only from canonical governed events
+    - missing, duplicated, out-of-order or conflicting events fail reconstruction closed
+    - identical event streams produce byte-identical queue projections
+  actual_engine_queue_or_scheduler: prohibited
+telemetry_and_budget_contract:
+  mandatory_node_fields:
+    - actor_kind_and_identity
+    - workflow_profile_node_and_contract_versions
+    - governed_start_and_end_observations
+    - queue_wait_and_execution_latency
+    - deterministic_compute
+    - model_token_and_cost_observations_when_applicable
+    - tool_calls_and_capability_grants
+    - attempts_retries_and_circuit_state
+    - cache_behavior
+    - sandbox_policy_and_receipt_refs
+    - input_output_artifact_and_validation_refs
+    - human_interventions
+    - final_status_and_failure_context
+  budget_fields: [expected_tokens, hard_token_limit, expected_latency, hard_latency_limit, expected_cost, hard_cost_limit, deterministic_compute_limit]
+  rules:
+    - NOT_APPLICABLE usage fields remain explicit and justified
+    - missing mandatory telemetry blocks local completion evidence
+    - hard budget overflow blocks, follows an already-approved degradation policy or opens an authorized human gate
+    - no provider cost, token, latency or sandbox observation may be invented
+    - quality and hard gates cannot be replaced by cost ranking
+  empirical_budget_thresholds: EVIDENCE_PENDING_NOT_ESTABLISHED
+local_public_seam_contract:
+  inputs:
+    - immutable workflow_profile_and_route
+    - typed commands_and_signals
+    - canonical workflow_node_checkpoint_and_budget_events
+    - injected_fault_fixture_identity
+  outputs:
+    - queue_projection
+    - node_and_route_observations
+    - contained_failure_or_completion_state
+    - repair_escalation_resume_or_rollback_eligibility
+    - local_public_seam_receipt
+  assertions:
+    - routing, contracts, validation, feedback, resume, human gates, authorization, observability and artifact identity remain externally observable at the local module seam
+    - tests consume the public contract and never private implementation state
+    - a focused module pass cannot substitute for a failed public-seam integration result
+  Temporal_or_external_product_seam_conformance: EXTERNAL_VALIDATION_PENDING
+injected_fault_and_recovery_matrix:
+  local_fixture_classes:
+    - agent_error
+    - malformed_contract
+    - deterministic_code_failure
+    - timeout
+    - lost_or_out_of_order_event
+    - sandbox_termination
+    - stale_checkpoint
+    - provider_unavailable
+    - partial_parallel_failure
+  fixture_rule: each class is a deterministic typed injected observation and does not launch an agent, provider, engine, sandbox, process, container or external product
+  required_outcomes:
+    - expected contained terminal_or_waiting state
+    - responsible repair_or_escalation route
+    - unaffected branches and protected state preserved
+    - resume eligibility or safe rollback is explicit
+    - immutable failure and recovery receipt
+  actual_Temporal_provider_sandbox_or_product_fault: prohibited
+authority_invalidation_rollback_and_history:
+  reject:
+    - hidden_budget_overflow
+    - missing_mandatory_telemetry
+    - conflicting_authoritative_queue_states
+    - private_internal_state_as_public_seam_evidence
+    - untested_or_unreceipted_recovery_claim
+    - fabricated_provider_cost_latency_token_or_outage_observation
+    - unauthorized queue, telemetry, recovery, invalidation or rollback mutation
+    - external engine, provider, model, network, credential, sandbox or product execution request
+  invalidation:
+    - changed event, workflow, profile, route, checkpoint, budget, authority or upstream artifact invalidates only affected projections, tests and descendants
+  rollback:
+    - restore prior active local projection and checkpoint reference without rewriting immutable history
+  partial_state_on_failure: prohibited
+  historical_reproduction: required
+lineage_determinism_and_observability:
+  canonical_inputs:
+    - Workflow_IR_profile_node_route_and_contract_hashes
+    - ST-09.05_race_route_evaluator_and_human_gate_receipts
+    - checkpoint_resume_sandbox_and_parallel_plan_receipts
+    - event_stream_budget_fault_fixture_and_public_seam_versions
+    - authority_provenance_and_invalidation_refs
+  identity_rule: queue, observation, public-seam, fault, recovery, invalidation and rollback identities derive only from canonical governed content
+  repeat_command: identical payload returns the original projection, outcome and receipt without duplicate state
+  conflicting_command: reject atomically with zero projection, recovery state, receipt, event or command record
+  required_observation_fields: [run_id, story_id, artifact_identity, authority_identity, version, provenance, outcome, failure_context]
+external_and_evidence_gates_remaining:
+  direct_dependency:
+    status: DEPENDENCY_PENDING
+    detail: ST-09.05 OD-AM-001 ImplementationCompletionReceipt is not issued
+  manual_shadow_evidence:
+    status: EVIDENCE_PENDING
+    detail: actual expert queues, routes, costs, latencies, interventions, failures, recovery and outcome parity evidence remains absent
+  XDEP-001:
+    status: AUTHORITY_REMAINS_EXTERNAL
+    detail: Program Control records remain read-only
+  XDEP-005:
+    status: FUTURE_CONSUMER_NOT_IMPLEMENTATION_EVIDENCE
+    detail: Operator Manual documentation cannot substitute for queue, telemetry, recovery or public-seam evidence
+  ADR-006-Temporal:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: local public-seam fixtures do not prove Temporal scheduling, signals, worker loss, duplicate completion, restart, replay, resume, migration or rollback
+  ADR-012-isolation-platform:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: injected sandbox termination does not prove OS, worktree, process, container or provider isolation and cleanup
+  provider_boundary:
+    status: PROVIDER_EXECUTION_OUTAGE_COST_AND_TELEMETRY_EVIDENCE_PENDING
+    detail: provider-unavailable is an injected fixture; no credential, API call, model execution, actual cost, latency, tokens, outage or recovery evidence is produced
+  product_boundary:
+    status: EXTERNAL_PRODUCT_RUNTIME_PUBLIC_SEAM_AND_ACCEPTANCE_REMAIN_EXTERNAL
+    detail: no VAE, Delegation, Interview Expression, ReelCast or downstream product behavior or compatibility is implemented or validated
+  production_promotion:
+    status: PRODUCTION_EVIDENCE_THRESHOLDS_AND_AUTHORITY_PENDING
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/workflow/observability_recovery.py
+  tests:
+    - tests/stories/st_09_06/test_queue_projection_and_telemetry.py
+    - tests/stories/st_09_06/test_budget_and_public_seam_reconstruction.py
+    - tests/stories/st_09_06/test_fault_injection_and_recovery.py
+    - tests/stories/st_09_06/test_authority_invalidation_rollback_and_boundaries.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-09.06/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-09.06/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-09.06/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-09.06/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-09.05 implementation or completion evidence
+  - external engine, queue, scheduler, agent, evaluator, model, provider, credential, network, process, container, worktree, sandbox, transport or external-product behavior
+  - behavior owned by excluded ST-09.07, ST-09.08 or any later Story
+  - production execution, promotion, readiness or certification
+prohibited_claims:
+  - actual_manual_shadow_parity
+  - durable_Temporal_queue_replay_resume_fault_or_rollback_conformance
+  - actual_provider_outage_cost_latency_token_or_recovery_evidence
+  - actual_sandbox_process_container_or_worktree_fault_and_cleanup_conformance
+  - end_to_end_external_product_public_seam_compatibility
+  - production_workflow_profile_fault_coverage
+  - production_budget_or_performance_thresholds_calibrated
+  - production_observability_or_Control_Tower_operational
+  - production_workflow_ready
+  - production_ready
+  - certified
+acceptance_after_dependency_pass:
+  - local queue projections expose one authoritative state, transition reason and eligibility explanation per node
+  - mandatory node, route, cost, latency, quality, intervention and artifact observations reconstruct the local event stream
+  - hard budget overflow cannot continue silently and no provider observation is fabricated
+  - public-seam tests cover routing, contracts, validation, feedback, resume, human gates, authority, observability and identity without private-state coupling
+  - every injected fault reaches its governed contained state and repair, escalation, resume or rollback route with no partial state
+  - identical governed inputs produce byte-identical projections, observations, outcomes and receipts
+  - local structural and injected-fixture evidence cannot close manual-shadow, Temporal, provider, isolation-platform, external-product or production gates
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  OD_AM_001_lane_D_frontier: TERMINAL_AFTER_LOCAL_INTEGRATOR_PASS
+  may_unlock_within_OD_AM_001: none
+  excluded_successor: ST-09.07
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

@@ -1,0 +1,47 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-03.04
+active_mode: DETERMINISTIC_ARTIFACT_SET
+verdict: PASS
+required_events:
+  ST-03.04:ArtifactSetCompiled: PASS
+  ST-03.04:ArtifactManifestCommitted: PASS
+  ST-03.04:CrossArtifactConsistencyValidated: PASS
+  ST-03.04:OutcomeVerified: PASS
+  ST-03.04:CompilationReplayReturned: PASS
+  ST-03.04:ArtifactDriftDetected: PASS
+  ST-03.04:ArtifactSetInvalidated: PASS
+  ST-03.04:OutcomeRejected: PASS
+required_fields:
+  run_story_artifact_set_manifest_authority_identity: PASS
+  IR_id_hash_schema_revision: PASS
+  compiler_id_version_config_hash_generation_timestamp: PASS
+  target_profile_source_lock_refs: PASS
+  artifact_count_and_total_bytes: PASS
+  dependency_selectors: PASS
+  reproducibility_drift_quarantine_nondeterminism_dispositions: PASS
+  correlation_causation_command_stream_outcome_receipt: PASS
+  typed_failure_context: PASS
+payload_safety:
+  artifact_payloads_logged: false
+  source_content_logged: false
+  personal_data_logged: false
+  secrets_or_tokens_logged: false
+  external_telemetry_used: false
+  production_claim_logged: false
+deterministic_evidence:
+  artifact_set_id: artifact-set_dff446489010347f7c6b9c60ed21564d6f64fc337504191c53494abc9959745a
+  manifest_hash: sha256:dff446489010347f7c6b9c60ed21564d6f64fc337504191c53494abc9959745a
+  receipt_hash: sha256:a38c7f1e13a4b1ddc61c47008721c194978afaea27be3abf09417009cf6a734e
+  artifact_count: 21
+  total_bytes: 146177
+  exact_double_render: PASS
+drift_evidence:
+  clean_validation: PASS
+  manual_mutation_detected: PASS
+  mismatch_quarantined: true
+  HarnessIR_mutated: false
+invalidation_evidence:
+  boundary_reopen_invalidates_HarnessIR: PASS
+  boundary_reopen_invalidates_artifact_set: PASS
+  active_consumption_blocked: true
+  immutable_history_preserved: true

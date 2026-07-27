@@ -1,0 +1,36 @@
+schema_version: cmf-builder-story-completion-receipt-template/v1
+story_id: ST-04.01
+primary_epic: EP-04
+active_mode: SYNTHETIC_CAPABILITY_OWNERSHIP
+receipt_type: StoryCompletionReceipt
+issuance_state: PENDING_STORY_COMPLETION
+owned_obligations_required:
+  D012: PASS_REQUIRED
+  FR-060: PASS_REQUIRED
+  FR-061: PASS_REQUIRED
+  FR-062: PASS_REQUIRED
+  FR-063: PASS_REQUIRED
+acceptance_criteria_required: [AC-01, AC-02, AC-03, AC-04, AC-05, AC-06, AC-07, AC-08, AC-09, AC-10, AC-11, AC-12]
+required_evidence:
+  - authorization_and_capsule_identity
+  - exact_parent_and_BD_010_limited_disposition
+  - capability_inventory_and_ownership_graph
+  - reliability_cost_authority_and_hybrid_validation
+  - files_changed_with_hashes
+  - tests_observability_and_rollback
+  - limitations_blockers_and_boundary_validation
+required_validations:
+  predecessor_regression: PASS_186_OF_186
+  story_tests: PASS_ALL_TWICE
+  full_regression: PASS_ALL_NO_SKIPS
+  capability_coverage: PASS_3_OF_3
+  file_scope: PASS_EXACT_ALLOWLIST
+  external_dependencies_added: []
+  schema_changes: []
+  later_story_behavior: false
+  production_claim: false
+downstream_effect:
+  ST_04_02: ELIGIBLE_FOR_SEPARATE_READINESS_REEVALUATION_ONLY
+  implementation_authorized: false
+completion_verdict_allowed: [PASS, FAIL]
+canonicalization: sha256_of_canonical_JSON_with_receipt_hash_field_omitted

@@ -1,0 +1,11 @@
+id: pipeline_recipe.artifact_ref.compile
+version: '1.0.0'
+status: active
+owner_agent: studio_pipeline_recipe_agent
+skill_type: deterministic_plus_pydantic
+purpose: Compile reusable studio pipeline recipes over existing orchestration spine.
+hard_gates:
+  - Do not create a parallel orchestration engine.
+  - Do not call providers.
+  - Do not call renderers.
+  - Active runs must bind to existing orchestration_run_id.

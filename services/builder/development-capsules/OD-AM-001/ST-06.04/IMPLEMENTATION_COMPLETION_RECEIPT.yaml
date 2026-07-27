@@ -1,0 +1,79 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-06.04:ImplementationCompletionReceipt:v1
+amendment_id: OD-AM-001
+story_id: ST-06.04
+development_mode: OFFLINE_DECLARATIVE_CATEGORY_OPERATING_RULES
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  Deterministic Builder-owned category operating rules covering declarative runtime
+  plan requirements, validation, evaluation contracts, diagnostics, category-local
+  repair, selective rerun, immutable migration, compatibility, invalidation,
+  rollback, and contract-only external handoff boundaries for all five categories,
+  plus an explicit generic NOT_APPLICABLE branch.
+primary_obligations_implemented:
+  FR-148: PASS_OFFLINE_CATEGORY_RUNTIME_VALIDATION_EVALUATION_AND_REPAIR_RULES
+  FR-149: PASS_OFFLINE_CATEGORY_COMPATIBILITY_MIGRATION_INVALIDATION_AND_ROLLBACK
+  FR-150: PASS_OFFLINE_EXPLICIT_CATEGORY_OWNERSHIP_AND_EXTERNAL_BOUNDARY
+  NFR-MAINT-003: PASS_OFFLINE_CATEGORY_ISOLATION_AND_INDEPENDENT_EVOLUTION
+dependency_receipts:
+  OD_AM_001:
+    sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+    verdict: PASS
+  ST_06_03:
+    path: development-capsules/OD-AM-001/ST-06.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+    sha256: 89d2f10aca87399e25f0f2115562bd4ac2c1bc2bb1f0c4621540a25e0c15569b
+    verdict: IMPLEMENTED_DEVELOPMENT_PASS
+source_files:
+  - {path: src/cmf_builder/domain/category_runtime_rules.py, sha256: cef3bf6673bde2ec501c01099f0efee12b7ad47cb8379c68a58b074a13c35512}
+  - {path: src/cmf_builder/application/category_policy_commands.py, sha256: d47184e6b0b8b1cce2206e73129171f0bec3bdba7bf33322eea0979f7257ccb7}
+test_files:
+  - {path: tests/stories/st_06_04/__init__.py, sha256: 8bea34d6edb0252f400e1318269e979844009f07194bae758d113004a65e68da}
+  - {path: tests/stories/st_06_04/conftest.py, sha256: 1da98788b374b8f49cd6b0b5105ee7070938b306076d6c7f2037dd39c9a60ef3}
+  - {path: tests/stories/st_06_04/test_category_operating_rules.py, sha256: 878064bc9d4881ebfd273123f6505cd08c381fc5e09acd7660e02a2f10300317}
+  - {path: tests/stories/st_06_04/test_repair_migration_and_lifecycle.py, sha256: bfb6c3236e37234853af22efaa15fd0e4a35fe3d698ff745c25953ad3417797c}
+  - {path: tests/stories/st_06_04/test_failure_authority_and_commands.py, sha256: 6500b8640aa93efccf6dc6988de8a4d9c362cb3fa1e15bdbb84196213016d709}
+  - {path: tests/stories/st_06_04/test_architecture_boundary.py, sha256: 54e0d326007b9b80a8929e8873baae0f452b23f14074031be084b53f9908e5ea}
+tests:
+  story_focused: PASS_29_OF_29
+  predecessor_and_story: PASS_56_OF_56
+  Python_source_compilation: PASS_2_OF_2
+  mandatory_skips: 0
+  full_repository_regression: PASS_1074_OF_1074
+deterministic_identity_evidence:
+  identical_inputs_byte_identical: PASS
+  changed_governed_inputs_new_ruleset_identity: PASS_BY_HASH_CONSTRUCTION
+  syntax_and_sequence_hash_validation: PASS
+authority_and_boundary_evidence:
+  authority_action: COMPILE_CATEGORY_POLICY
+  explicit_evaluator_repair_migration_and_compatibility_owners: PASS
+  cross_category_repair_rejected: PASS
+  atomic_ownership_transfer_rejected: PASS
+  certification_inheritance_rejected: PASS
+  external_runtime_execution: PROHIBITED_AND_TESTED
+  external_handoff_mode: BUILDER_CONTRACT_ONLY
+  shared_core_request: CR-ST0604-001_ACCEPTED_AND_APPLIED
+rollback_evidence:
+  injected_atomic_failure: PASS_ZERO_PARTIAL_RULESETS_RECEIPTS_OR_COMMANDS
+  predecessor_mutation: false
+  historical_ruleset_preservation: DECLARED_AND_TESTED
+observability_evidence:
+  success_event: ST-06.04:CategoryPolicyCompiled
+  replay_event: ST-06.04:CategoryPolicyReplayReturned
+  failure_event: ST-06.04:CategoryPolicyRejected
+  required_owner_and_provenance_fields: PASS
+evidence_gate_status:
+  implementation_gate: IMPLEMENTED_DEVELOPMENT_PASS
+  external_validation: PENDING
+  production_certification: NOT_CLAIMED
+external_gates_remaining_open: [BD-004-broader, BD-007, BD-008, BD-010-broader, BD-014, HD-006, HD-007]
+production_ready: false
+certified: false
+hashes:
+  delta_capsule: sha256:725ea47160b5010aa710dc79dabde97595fcbf76e6af525f677fff2b2d698d7f
+  test_results: sha256:4c3c34228bd37b64470178607706e1e6df77a70d42e2a3a798ef0ad49810c539
+  file_change_manifest: sha256:db9d2e9e3d03e1eb3bb9dddb3b5561e3be3af4b290e0d02ad8768bf9c97308fc
+story_completion_receipt_equivalence: false
+evidence_closure_receipt_equivalence: false
+existing_story_artifacts_modified: false
+outside_lane_changes: []
+final_verdict: PASS

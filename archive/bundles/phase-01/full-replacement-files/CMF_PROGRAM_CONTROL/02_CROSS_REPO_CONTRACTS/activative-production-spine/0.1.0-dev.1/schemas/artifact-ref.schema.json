@@ -1,0 +1,42 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:artifact-ref",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Reference to a real artifact. Synthetic or unresolved locations require separate evidence and may not masquerade as this type.",
+  "properties": {
+    "artifact_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "artifact_kind": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "bytes": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "media_type": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "uri": {
+      "pattern": "^(file|https|s3|gs)://.+$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "artifact_id",
+    "artifact_kind",
+    "uri",
+    "sha256",
+    "bytes",
+    "media_type"
+  ],
+  "title": "ArtifactRef",
+  "type": "object"
+}

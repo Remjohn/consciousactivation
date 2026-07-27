@@ -1,0 +1,31 @@
+schema_version: cmf-builder-rc1-distribution-manifest/v1
+distribution:
+  name: atomic-harness-builder
+  version: 0.1.0rc1
+  python_requires: ">=3.12"
+  build_backend: setuptools.build_meta
+  build_backend_version: 80.9.0
+artifacts:
+  wheel:
+    path: dist/atomic_harness_builder-0.1.0rc1-py3-none-any.whl
+    sha256: 97659a061f0bf2cb06914dc944a7ade4d4156385ac01ab182b7fd079f4d9651d
+    size_bytes: 573562
+    member_count: 152
+  source_distribution:
+    path: dist/atomic_harness_builder-0.1.0rc1.tar.gz
+    sha256: 206c7db2c9edb61d0ae495e84e52f3af1b595279cc8f7cb8881c57ca1e079863
+    size_bytes: 464187
+    member_count: 172
+metadata:
+  console_entry_point: "cmf-builder = cmf_builder.cli.bootstrap:local_main"
+  runtime_requires_dist: []
+  optional_requires_dist:
+    - 'pytest==8.3.4; extra == "test"'
+content_inspection:
+  wheel_contains_required_package_data: PASS
+  wheel_excludes_tests: PASS
+  wheel_excludes_development_capsules: PASS
+  wheel_excludes_databases_caches_bytecode: PASS
+  sdist_contains_pyproject: PASS
+  sdist_contains_runtime_asset: PASS
+

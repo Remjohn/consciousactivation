@@ -1,0 +1,136 @@
+{
+  "$defs": {
+    "BBoxIntent": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "title": "Component Id",
+          "type": "string"
+        },
+        "first_seen_priority": {
+          "minimum": 0,
+          "title": "First Seen Priority",
+          "type": "integer"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "spatial_requirement": {
+          "title": "Spatial Requirement",
+          "type": "string"
+        },
+        "why": {
+          "title": "Why",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_id",
+        "role",
+        "first_seen_priority",
+        "spatial_requirement",
+        "why"
+      ],
+      "title": "BBoxIntent",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "bbox_intents": {
+      "items": {
+        "$ref": "#/$defs/BBoxIntent"
+      },
+      "title": "Bbox Intents",
+      "type": "array"
+    },
+    "evaluation_contract_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "feature_contract_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Feature Contract Refs",
+      "type": "array"
+    },
+    "format_constraints": {
+      "additionalProperties": true,
+      "title": "Format Constraints",
+      "type": "object"
+    },
+    "pack_id": {
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "semantic_candidate_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "text_policy": {
+      "enum": [
+        "none",
+        "minimal",
+        "format_defined"
+      ],
+      "title": "Text Policy",
+      "type": "string"
+    },
+    "tv_route_request": {
+      "additionalProperties": true,
+      "title": "Tv Route Request",
+      "type": "object"
+    },
+    "visual_narrative_program_ref": {
+      "$ref": "#/$defs/ImmutableRef"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Wrong Reading Locks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "pack_id",
+    "visual_narrative_program_ref",
+    "semantic_candidate_ref",
+    "feature_contract_refs",
+    "tv_route_request",
+    "bbox_intents",
+    "format_constraints",
+    "text_policy",
+    "wrong_reading_locks",
+    "evaluation_contract_ref"
+  ],
+  "title": "CompositionAssetPack",
+  "type": "object"
+}

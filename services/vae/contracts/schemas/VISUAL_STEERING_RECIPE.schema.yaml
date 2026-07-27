@@ -1,0 +1,70 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Steering Recipe
+description: ''
+type: object
+additionalProperties: false
+required:
+- recipe_id
+- version
+- lifecycle_status
+- applicability
+- intervention
+- preserve
+- evidence
+properties:
+  recipe_id: &id001
+    type: string
+  version: *id001
+  lifecycle_status: *id001
+  applicability:
+    type: object
+    required:
+    - asset_families
+    - failure_patterns
+    - syntax_roles
+    properties:
+      asset_families:
+        type: array
+        items: *id001
+      failure_patterns:
+        type: array
+        items: *id001
+      syntax_roles:
+        type: array
+        items: *id001
+      compatible_workflows:
+        type: array
+        items: *id001
+  intervention:
+    type: object
+  preserve:
+    type: array
+    items: *id001
+  do_not_apply_when:
+    type: array
+    items: *id001
+  evidence:
+    type: object
+    required:
+    - observed_runs
+    - baseline_success_rate
+    - steered_success_rate
+    properties:
+      observed_runs:
+        type: integer
+        minimum: 1
+      baseline_success_rate: &id002
+        type: number
+        minimum: 0
+        maximum: 1
+      steered_success_rate: *id002
+      regression_cases:
+        type: integer
+        minimum: 0
+      average_additional_cost_usd:
+        type: number
+        minimum: 0
+  source_record_refs:
+    type: array
+    items: *id001
+  benchmark_ref: *id001

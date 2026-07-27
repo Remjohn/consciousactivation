@@ -1,0 +1,20 @@
+id: avatar_asset.paper_body_layer_set.compile
+version: "1.0.0"
+status: active
+owner_agent: avatar_asset_production_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Compile avatar asset, rig, export, and QA manifests without executing external tools."
+inputs:
+  - AvatarCharacterSpec
+  - AvatarPSDLayerRequirement
+outputs:
+  - StretchyStudioImportManifest
+  - AvatarRigExportManifest
+  - AvatarCharacterQAReport
+hard_gates:
+  - "Do not call Stretchy Studio."
+  - "Do not call Spine or DragonBones."
+  - "Do not call Remotion."
+  - "Do not render."
+  - "No lip sync, phonemes, visemes, jaw driver, or mouth flap."
+  - "PSD paths must be safe."

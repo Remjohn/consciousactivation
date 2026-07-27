@@ -1,0 +1,58 @@
+# Object Model
+
+## Source objects
+
+```text
+LayerAwareExtractionContext
+InterviewBriefBinding
+QuestionProductionContract
+ExpectedIngredientGraph
+ExtractionSourcePacket
+VerbatimSpan
+TranscriptBeatMap
+ExpressionMomentCandidate
+```
+
+## Compiler objects
+
+```text
+NarrativeCluster
+ClusterMeaningGraph
+MeaningPlaneCandidate
+ExperiencePlaneCandidate
+ArchetypeFitMatrix
+ArchetypeMeaningProgram
+PrimitiveCandidateSet
+PrimitiveCoalitionCandidate
+DeliveryRecipeProgram
+FormatFitMatrix
+FormatExpressionProgram
+```
+
+## Engine packets
+
+```text
+SuperVisualExtractionPacket
+CarouselExtractionPacket
+VideoExtractionPacket
+Format01StoryExtractionPacket
+Format02ExplainerExtractionPacket
+Format03ReactionExtractionPacket
+Format04ConsciousReactionExtractionPacket
+MemeVisualExtractionPacket
+PollVisualExtractionPacket
+ReactionSeedPacket
+AssetPackageCandidateSet
+```
+
+## Receipts
+
+```text
+ExpectedActualIngredientDiff
+QuestionCoverageReceipt
+BriefAlignmentReport
+SourceFidelityReceipt
+ExtractionQualityReceipt
+ExtractionCommanderVerdict
+InterviewerLearningReceipt
+```

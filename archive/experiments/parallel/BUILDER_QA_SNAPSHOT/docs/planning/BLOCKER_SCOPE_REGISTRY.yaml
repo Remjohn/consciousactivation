@@ -1,0 +1,177 @@
+schema_version: cmf-builder-blocker-scope-registry/v1
+generated_on: "2026-07-15"
+authority:
+  builder_prd: "1.2"
+  activative_intelligence_constitution: "1.1"
+  human_decisions: docs/constitutional-alignment/HUMAN_DECISIONS_REQUIRED.yaml
+  blocking_decisions: docs/tech-specs/BLOCKING_DECISIONS.yaml
+  canonical_xri_registry: ../CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+  story_inventory: docs/planning/STORY_INVENTORY.yaml
+scope_vocabulary:
+  - GLOBAL_CONSTITUTIONAL
+  - GLOBAL_RELEASE1
+  - CATEGORY_CONDITIONAL
+  - PROFILE_CONDITIONAL
+  - STORY_LOCAL
+  - EXTERNAL_INTEGRATION
+  - PRODUCTION_CERTIFICATION_ONLY
+global_findings:
+  open_global_constitutional_blockers: []
+  global_release1_authorization_controls: [EG-EPIC-HASH, EG-DEVELOPMENT-CAPSULE]
+  format02_first_story_semantic_blockers: []
+  format02_first_story: ST-01.01
+  full_release1_readiness: FAIL
+  full_product_readiness: FAIL
+conditional_policy:
+  builder_capability_required: true
+  conversational_execution_requires_ratified_policy: true
+  non_conversational_profiles_collect_human_reaction_data: false
+  non_conversational_behavior: reject_human_reaction_inputs_as_out_of_scope
+  structural_conversational_fixture_policy: synthetic_non_personal_no_runtime_or_certification
+  missing_policy_behavior: fail_closed
+decisions:
+  - id: HD-006
+    status: OPEN_BLOCKING_PRODUCTION_USE
+    scope: CATEGORY_CONDITIONAL
+    activation: executable Human Reaction collection, retention, redaction, access, withdrawal, or Identity DNA amendment-proposal storage
+    categories: [conversational_activation_expression]
+    profiles: [public_comment, reply_dm, reelcast_expression, interview_expression]
+    format02_required: false
+    owner: product_lead_evidence_steward_privacy_authority
+    confirmed_gate_reference_story_ids: [ST-01.01, ST-01.02, ST-01.03, ST-01.04, ST-02.01, ST-02.02, ST-02.03, ST-02.04, ST-02.05, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-06.05, ST-08.01, ST-08.02, ST-08.03, ST-08.04, ST-08.05, ST-08.06, ST-08.07, ST-11.01, ST-11.02, ST-11.03, ST-12.01, ST-12.02, ST-12.03, ST-12.04]
+    corrected_direct_effect: only conversational execution branches; ST-06.05 and ST-08.07 remain directly blocked
+    closure_evidence: approved versioned Human Reaction policy covering consent, purpose, retention, redaction, access, withdrawal, provenance, and pre-approval proposal storage
+  - id: HD-007
+    status: OPEN_BLOCKING_CONVERSATIONAL_CERTIFICATION
+    scope: PRODUCTION_CERTIFICATION_ONLY
+    activation: protected conversational evaluation and certification
+    categories: [conversational_activation_expression]
+    profiles: [public_comment, reply_dm, reelcast_expression, interview_expression]
+    format02_required: false
+    owner: evaluation_governance_and_category_steward
+    confirmed_gate_reference_story_ids: [ST-05.01, ST-05.02, ST-05.03, ST-05.04, ST-05.05, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-06.05, ST-08.01, ST-08.02, ST-08.03, ST-08.04, ST-08.05, ST-08.06, ST-08.07, ST-11.01, ST-11.02, ST-11.03, ST-12.01, ST-12.02, ST-12.03, ST-12.04]
+    corrected_direct_effect: conversational certification only; no Format 02 implementation block
+    closure_evidence: ratified protected conversational cases, custody model, non-compensable dimensions, thresholds, and repeated-run policy
+  - id: BD-004
+    status: BLOCKING_EXTERNAL_INPUT
+    scope: PROFILE_CONDITIONAL
+    activation: binding or evaluating a real profile corpus
+    independent_subscopes:
+      format02_minimal_coach_theatre: open_required_for_ST-01.02
+      public_comment: open_not_in_format02_cut
+      reply_dm: open_not_in_format02_cut
+      reelcast_expression: open_not_in_format02_cut
+      interview_expression: open_not_in_format02_cut
+    format02_required: true
+    owner: product_lead_and_evidence_steward
+    direct_story_ids: [ST-01.02, ST-01.03, ST-01.04, ST-02.01, ST-02.02, ST-02.03, ST-02.04, ST-02.05, ST-03.01, ST-05.01, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-06.05, ST-08.01, ST-08.02, ST-08.03, ST-08.04, ST-08.06, ST-12.03, ST-12.04]
+    earliest_format02_story_released_when_closed: ST-01.02
+    closure_evidence: hash-locked Format 02 corpus with authority, license, privacy, benchmark eligibility, and approved source profile
+  - id: BD-007
+    status: BLOCKING_EMPIRICAL
+    scope: PROFILE_CONDITIONAL
+    activation: provider-backed category-native syntax parsing
+    format02_required: true
+    owner: architecture_and_benchmark_team
+    direct_story_ids: [ST-02.01, ST-02.02, ST-02.03, ST-02.04, ST-02.05, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-07.03, ST-08.02, ST-12.04]
+    earliest_format02_story_released_when_closed: ST-02.01
+    closure_evidence: accepted comparison of at least two adapter-compatible providers and deterministic baselines for Format 02 visual syntax
+  - id: BD-008
+    status: BLOCKING_EMPIRICAL
+    scope: PRODUCTION_CERTIFICATION_ONLY
+    activation: maturity promotion, protected threshold decisions, and production certification
+    format02_required: false_for_component_implementation_true_for_certification
+    owner: evaluation_governance
+    direct_story_ids: [ST-02.03, ST-02.04, ST-03.01, ST-05.01, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-06.05, ST-07.03, ST-08.01, ST-08.02, ST-08.03, ST-08.04, ST-08.05, ST-08.06, ST-08.07, ST-11.01, ST-11.02, ST-11.03, ST-12.03, ST-12.04]
+    earliest_format02_story_released_when_closed: ST-08.02
+    closure_evidence: ratified protected-label custody, calibrated Format 02 dimensions and thresholds, repeated fresh-context results, and hard-gate policy
+  - id: BD-010
+    status: BLOCKING_EXTERNAL_INPUT
+    scope: STORY_LOCAL
+    activation: capability registry, skill-gap, and capsule outcomes
+    format02_required: true_when_ST-04.01_frontier_is_reached
+    owner: skill_architecture
+    direct_story_ids: [ST-04.01, ST-04.05, ST-05.01, ST-05.02, ST-05.03, ST-05.04, ST-05.05, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-06.05, ST-12.04]
+    earliest_format02_story_released_when_closed: ST-04.01
+    closure_evidence: approved empty-registry policy or evaluated seed-skill package manifest with capability-gap rules
+  - id: BD-014
+    status: BLOCKING_EXTERNAL_INPUT
+    scope: EXTERNAL_INTEGRATION
+    activation: VAE or Delegation target compilation and cross-product compatibility proof
+    format02_required: false_for_ST-01.01_true_for_three_target_handoff
+    owner: cross_product_architecture
+    confirmed_gate_reference_story_ids: [ST-01.02, ST-03.03, ST-04.04, ST-06.01, ST-06.02, ST-06.03, ST-06.04, ST-07.01, ST-07.02, ST-07.03, ST-07.04, ST-08.06, ST-11.01, ST-12.04]
+    corrected_direct_effect: ST-07.01_through_ST-07.04; other references activate only on an external-target branch
+    earliest_format02_story_released_when_closed: ST-07.01
+    closure_evidence: versioned read-only authoritative VAE and Delegation interface snapshots plus passing Builder-owned contract fixtures
+active_xri_dependencies:
+  - {id: XRI-013, status: open, scope: PRODUCTION_CERTIFICATION_ONLY, format02_first_story_block: false, earliest_story: ST-12.03}
+  - {id: XRI-014, status: open, scope: EXTERNAL_INTEGRATION, format02_first_story_block: false, earliest_story: ST-10.01}
+  - {id: XRI-015, status: open, scope: PRODUCTION_CERTIFICATION_ONLY, format02_first_story_block: false, earliest_story: ST-12.03}
+  - {id: XRI-016, status: open, scope: EXTERNAL_INTEGRATION, format02_first_story_block: false, earliest_story: ST-07.03}
+  - {id: XRI-017, status: open, scope: EXTERNAL_INTEGRATION, format02_first_story_block: false, earliest_story: ST-12.03}
+  - {id: XRI-019, status: in_remediation, scope: EXTERNAL_INTEGRATION, format02_first_story_block: false, earliest_story: ST-07.03}
+  - {id: XRI-020, status: in_remediation, scope: EXTERNAL_INTEGRATION, format02_first_story_block: false, earliest_story: ST-07.04}
+  - {id: XRI-021, status: in_remediation, scope: PRODUCTION_CERTIFICATION_ONLY, format02_first_story_block: false, earliest_story: ST-12.03}
+evidence_gates:
+  - id: EG-EPIC-HASH
+    scope: GLOBAL_RELEASE1
+    state: OPEN
+    story_readiness_effect: none
+    authorization_effect: blocks bounded Development Capsule authorization until reconciled or explicitly dispositioned
+    owner: planning_governance
+    closure_evidence: receipt-compatible hash or signed discrepancy disposition preserving confirmed Epic authority
+  - id: EG-DEVELOPMENT-CAPSULE
+    scope: GLOBAL_RELEASE1
+    state: MISSING
+    story_readiness_effect: none
+    authorization_effect: blocks actual implementation start
+    owner: product_authority_and_implementation_governance
+    closure_evidence: bounded signed capsule for ST-01.01 with contracts, tests, rollback, authority, budget, and stop boundary
+  - id: EG-STORY-COMPLETION-RECEIPTS
+    scope: STORY_LOCAL
+    state: 0_of_69_issued
+    story_readiness_effect: does_not_block_first_story_start
+    authorization_effect: each missing receipt blocks its dependent Stories and promotion
+    owner: story_implementation_owner_and_receipt_authority
+    closure_evidence: passing acceptance, tests, observability, gate dispositions, and hashes for the completed Story
+  - id: EG-FORMAT02-CERTIFICATION
+    scope: PRODUCTION_CERTIFICATION_ONLY
+    state: contract_compatible_not_benchmarked_not_certified
+    story_readiness_effect: does_not_block_ST-01.01
+    owner: product_lead_and_evaluation_governance
+    closure_evidence: BD-004, BD-007, BD-008 evidence and signed Format 02 proof
+  - id: EG-RC4-TRUST
+    scope: PRODUCTION_CERTIFICATION_ONLY
+    state: local_unsigned_release_candidate
+    story_readiness_effect: does_not_block_Builder_local_contract_work
+    owner: CMF_PROGRAM_CONTROL_and_03_DELEGATION_PROTOCOL
+    closure_evidence: approved trust roots, signing lifecycle, signed publication, and production eligibility
+  - id: EG-CRC-401
+    scope: EXTERNAL_INTEGRATION
+    state: CONCERNS
+    story_readiness_effect: none_for_ST-01.01
+    owner: 02_VISUAL_ASSET_EDITOR
+  - id: EG-CRC-402
+    scope: PRODUCTION_CERTIFICATION_ONLY
+    state: CONCERNS
+    story_readiness_effect: none_for_ST-01.01
+    owner: 01_ATOMIC_HARNESS_BUILDER_and_02_VISUAL_ASSET_EDITOR
+  - id: EG-CRC-403
+    scope: PRODUCTION_CERTIFICATION_ONLY
+    state: CONCERNS
+    story_readiness_effect: none_for_ST-01.01
+    owner: cross_product_owners
+  - id: EG-IMPLEMENTATION-EVIDENCE
+    scope: STORY_LOCAL
+    state: not_yet_generated
+    story_readiness_effect: not_a_pre_start_blocker
+    owner: each_story_implementation_owner
+    closure_evidence: implementation-produced test, observability, scaffold, and receipt evidence
+validation:
+  obligations_unchanged: 410
+  epics_unchanged: 12
+  stories_unchanged: 69
+  dependency_edges_unchanged: 103
+  rc4_active: true
+  production_implementation_started: false

@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dep_vid_029_editor_api_contract",
+  "title": "CMF Editor API Contract",
+  "description": "Defines the FastAPI backend HTTP endpoints consumed by the CMF Editor frontend (FR-VID-10). This schema documents the API surface — it is not a runtime validation schema but a design contract.",
+  "type": "object",
+  "required": ["base_url", "version", "endpoints", "authentication", "error_format"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "description": "Base URL of the FastAPI backend.",
+      "default": "http://localhost:8000"
+    },
+    "version": {
+      "type": "string",
+      "description": "API version prefix.",
+      "default": "v1"
+    },
+    "endpoints": {
+      "type": "object",
+      "required": [
+        "manifest_get",
+        "manifest_save",
+        "manifest_patch",
+        "regenerate_start",
+        "regenerate_poll",
+        "render_start",
+        "render_poll",
+        "asset_upload",
+        "asset_search",
+        "copilot_chat",
+        "ffmpeg_trim",
+        "ffmpeg_concat",
+        "ffmpeg_extract_audio",
+        "health"
+      ],
+      "properties": {
+        "manifest_get": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/editor/{videoId}/manifest" },
+            "description": { "const": "Fetch the current Remotion Manifest (DEP-VID-002) for the video." },
+            "response_schema": { "const": "DEP-VID-002" }
+          }
+        },
+        "manifest_save": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "PUT" },
+            "path": { "const": "/api/editor/{videoId}/manifest" },
+            "description": { "const": "Save the full manifest JSON to backend storage (S3 + local cache)." },
+            "request_body_schema": { "const": "DEP-VID-002" },
+            "response_schema": { "const": "DEP-VID-002" }
+          }
+        },
+        "manifest_patch": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "PATCH" },
+            "path": { "const": "/api/editor/{videoId}/manifest" },
+            "description": { "const": "Apply a JSON Patch (RFC 6902) to the manifest. Validates patch, applies, saves, returns updated manifest." },
+            "request_body_schema": { "const": "RFC 6902 JSON Patch array" },
+            "response_schema": { "const": "DEP-VID-002" }
+          }
+        },
+        "regenerate_start": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/{videoId}/regenerate" },
+            "description": { "const": "Trigger beat-level regeneration. Routes through Pipeline Commander (FR-VID-09) to FR-VID-05." },
+            "request_body": {
+              "type": "object",
+              "required": ["beat_index", "mode"],
+              "properties": {
+                "beat_index": { "type": "integer", "minimum": 0 },
+                "mode": { "type": "string", "enum": ["T2I_ONLY", "I2V_ONLY", "BOTH"] },
+                "revision_note": { "type": "string", "maxLength": 500 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "job_id": { "type": "string" }
+              }
+            }
+          }
+        },
+        "regenerate_poll": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/editor/{videoId}/regenerate/{jobId}" },
+            "description": { "const": "Poll regeneration job status." },
+            "response": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string", "enum": ["PENDING", "RUNNING", "COMPLETE", "FAILED"] },
+                "result_manifest": { "description": "Updated manifest if status=COMPLETE. Null otherwise." }
+              }
+            }
+          }
+        },
+        "render_start": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/{videoId}/render" },
+            "description": { "const": "Trigger a render job through FR-VID-08 render orchestrator." },
+            "request_body": {
+              "type": "object",
+              "required": ["quality_tier"],
+              "properties": {
+                "quality_tier": { "type": "string", "enum": ["preview", "review", "final"] },
+                "platform_preset": { "type": "string", "enum": ["tiktok_9x16", "instagram_reels_9x16", "instagram_feed_4x5", "youtube_shorts_9x16", "youtube_long_16x9", "custom"] },
+                "include_captions": { "type": "boolean", "default": true },
+                "export_srt": { "type": "boolean", "default": false },
+                "custom_width": { "type": "integer" },
+                "custom_height": { "type": "integer" },
+                "custom_fps": { "type": "integer" },
+                "custom_bitrate_kbps": { "type": "integer" }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "job_id": { "type": "string" }
+              }
+            }
+          }
+        },
+        "render_poll": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/editor/{videoId}/render/{jobId}" },
+            "description": { "const": "Poll render job status and progress." },
+            "response": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string", "enum": ["QUEUED", "RENDERING", "ENCODING", "COMPLETE", "FAILED"] },
+                "progress_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+                "output_url": { "type": "string" },
+                "file_size_mb": { "type": "number" }
+              }
+            }
+          }
+        },
+        "asset_upload": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/{videoId}/assets/upload" },
+            "description": { "const": "Upload an asset file (video or image) to S3 storage." },
+            "request_body": { "const": "multipart/form-data (file field)" },
+            "response": {
+              "type": "object",
+              "properties": {
+                "asset_url": { "type": "string" },
+                "content_type": { "type": "string" },
+                "file_size_mb": { "type": "number" }
+              }
+            }
+          }
+        },
+        "asset_search": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/editor/{videoId}/assets/search" },
+            "description": { "const": "Search stock libraries (Pexels, Pixabay) and local E-Roll library for assets." },
+            "query_params": {
+              "type": "object",
+              "properties": {
+                "q": { "type": "string", "description": "Search query" },
+                "source": { "type": "string", "enum": ["pexels", "pixabay", "local", "all"] },
+                "type": { "type": "string", "enum": ["video", "image", "all"] },
+                "page": { "type": "integer", "minimum": 1 },
+                "per_page": { "type": "integer", "minimum": 1, "maximum": 50 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": { "type": "string" },
+                      "thumbnail": { "type": "string" },
+                      "source": { "type": "string" },
+                      "license": { "type": "string" },
+                      "width": { "type": "integer" },
+                      "height": { "type": "integer" },
+                      "duration_sec": { "type": "number" }
+                    }
+                  }
+                },
+                "total_results": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "copilot_chat": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/copilot" },
+            "description": { "const": "Send natural language editing command with current manifest to LLM. Returns a JSON Patch." },
+            "request_body": {
+              "type": "object",
+              "required": ["message", "manifest"],
+              "properties": {
+                "message": { "type": "string", "maxLength": 1000 },
+                "manifest": { "description": "Current DEP-VID-002 manifest JSON" },
+                "conversation_history": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "role": { "type": "string", "enum": ["user", "assistant"] },
+                      "content": { "type": "string" }
+                    }
+                  },
+                  "maxItems": 10
+                }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "patch": { "type": "array", "description": "RFC 6902 JSON Patch operations" },
+                "summary": { "type": "string", "description": "Human-readable summary of the edit" }
+              }
+            }
+          }
+        },
+        "ffmpeg_trim": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/ffmpeg/trim" },
+            "description": { "const": "Trim a media clip to specified start/end times." },
+            "request_body": {
+              "type": "object",
+              "required": ["input_url", "start_sec", "end_sec"],
+              "properties": {
+                "input_url": { "type": "string" },
+                "start_sec": { "type": "number", "minimum": 0 },
+                "end_sec": { "type": "number", "minimum": 0 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "output_url": { "type": "string" }
+              }
+            }
+          }
+        },
+        "ffmpeg_concat": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/ffmpeg/concat" },
+            "description": { "const": "Concatenate multiple media clips into one." },
+            "request_body": {
+              "type": "object",
+              "required": ["input_urls"],
+              "properties": {
+                "input_urls": { "type": "array", "items": { "type": "string" }, "minItems": 2 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "output_url": { "type": "string" }
+              }
+            }
+          }
+        },
+        "ffmpeg_extract_audio": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "POST" },
+            "path": { "const": "/api/editor/ffmpeg/extract-audio" },
+            "description": { "const": "Extract audio waveform data for timeline visualization." },
+            "request_body": {
+              "type": "object",
+              "required": ["input_url"],
+              "properties": {
+                "input_url": { "type": "string" },
+                "samples_per_second": { "type": "integer", "default": 100 }
+              }
+            },
+            "response": {
+              "type": "object",
+              "properties": {
+                "waveform_data": { "type": "array", "items": { "type": "number" } },
+                "duration_sec": { "type": "number" },
+                "sample_rate": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "health": {
+          "type": "object",
+          "properties": {
+            "method": { "const": "GET" },
+            "path": { "const": "/api/editor/health" },
+            "description": { "const": "Health check endpoint. Returns service status and downstream dependency availability." },
+            "response": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string", "enum": ["healthy", "degraded", "unhealthy"] },
+                "comfyui_available": { "type": "boolean" },
+                "remotion_ssr_available": { "type": "boolean" },
+                "ffmpeg_available": { "type": "boolean" },
+                "s3_available": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "authentication": {
+      "type": "string",
+      "description": "Authentication method. Bearer token in Authorization header.",
+      "default": "Bearer token (Authorization header)"
+    },
+    "error_format": {
+      "type": "object",
+      "description": "Standard error response format for all endpoints.",
+      "required": ["error", "code"],
+      "properties": {
+        "error": { "type": "string", "description": "Human-readable error message." },
+        "code": { "type": "string", "description": "Machine-readable error code (e.g., MANIFEST_NOT_FOUND, INVALID_PATCH, RENDER_FAILED)." },
+        "details": { "type": "object", "description": "Optional additional error context." }
+      }
+    }
+  },
+  "additionalProperties": false
+}

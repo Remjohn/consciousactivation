@@ -1,0 +1,40 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: CHALLENGE
+enabled: true
+selection_priority:
+  tier: default
+  rank: 3
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - CHALLENGE
+  stages:
+    - scene_builder
+incompatibilities:
+  - comfort_only
+warn_conditions:
+  - metric: problem_clarity_score
+    operator: lt
+    value: 0.75
+route_hints:
+  select:
+    - use_when_problem_is_best_shown_directly
+    - use_when_binary_framing_is_not_required
+selection_conditions:
+  - if:
+      metric: problem_clarity_score
+      operator: lt
+      value: 0.8
+    then:
+      variant: friction_montage
+      score_adjustment: -0.1
+  - if:
+      metric: problem_clarity_score
+      operator: gt
+      value: 0.85
+    then:
+      variant: cost_of_inaction
+      score_adjustment: 0.1

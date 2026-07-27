@@ -1,0 +1,79 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:harness_execution_binding_manifest",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bindings": {
+      "type": "array"
+    },
+    "blockers": {
+      "type": "array"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "certified": {
+      "type": "boolean"
+    },
+    "definition_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "definition_semantic_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "definition_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "execution_eligible": {
+      "type": "boolean"
+    },
+    "graph_receipt": {
+      "type": "object"
+    },
+    "manifest_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "manifest_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "production_authorized": {
+      "type": "boolean"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "semantic_dependency_refs": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "manifest_id",
+    "manifest_version",
+    "definition_id",
+    "definition_version",
+    "definition_semantic_sha256",
+    "projection_id",
+    "category_id",
+    "profile_id",
+    "semantic_dependency_refs",
+    "graph_receipt",
+    "bindings",
+    "blockers",
+    "execution_eligible",
+    "production_authorized",
+    "certified"
+  ],
+  "title": "harness_execution_binding_manifest",
+  "type": "object"
+}

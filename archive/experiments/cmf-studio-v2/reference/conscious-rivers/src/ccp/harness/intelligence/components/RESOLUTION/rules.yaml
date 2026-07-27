@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: RESOLUTION
+enabled: true
+selection_priority:
+  tier: default
+  rank: 6
+enforcement:
+  mode: prefer_when_fit
+  default_result: ALLOW
+applies_to:
+  containers:
+    - RESOLUTION
+  stages:
+    - scene_builder
+incompatibilities:
+  - unresolved_climax
+warn_conditions:
+  - metric: closure_signal_score
+    operator: lt
+    value: 0.75
+route_hints:
+  select:
+    - use_when_simple_landing_is_sufficient
+    - use_when_symbolic_echo_assets_are_missing

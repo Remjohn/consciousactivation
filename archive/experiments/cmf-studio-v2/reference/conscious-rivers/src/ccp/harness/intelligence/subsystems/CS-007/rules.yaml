@@ -1,0 +1,31 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-007
+enabled: true
+priority:
+  tier: encoding
+  rank: 2
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: information_delta_per_cut
+    operator: lt
+    value: 1
+route_hints:
+  remove:
+    - redundant_punch_in
+    - empty_reframe
+  preserve:
+    - semantically_new_cut

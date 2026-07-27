@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cmf-visual-asset-editor"
+version = "0.8.0.dev1"
+description = "Development-only Visual Asset Editor, Delegation, worker and provider integration core."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "ca-runtime==0.1.0.dev1",
+  "ca-delegation-rc4==0.1.0.dev1",
+]
+
+[project.scripts]
+cmf-vae = "cmf_vae.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["cmf_vae*"]
+
+[tool.setuptools.package-data]
+cmf_vae = ["py.typed", "migrations/*.sql", "schemas/*.json"]

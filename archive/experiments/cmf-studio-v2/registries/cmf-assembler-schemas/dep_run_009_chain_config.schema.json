@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-009",
+  "title": "Chain Config",
+  "description": "FR-VID-12 §4 Stage 7 — Structured ordered handoff definition. Chains execute steps sequentially with each step receiving the output of the previous step. Agents exchange structured packets, not implicit conversational state.",
+  "type": "object",
+  "required": ["chain_id", "description", "execution_shape", "ordered_steps", "packet_types"],
+  "properties": {
+    "chain_id": {
+      "type": "string",
+      "description": "Unique chain identifier (e.g. learn-100-review)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the chain's purpose."
+    },
+    "execution_shape": {
+      "type": "string",
+      "enum": ["chain"],
+      "description": "Execution shape — chain means ordered sequential handoff."
+    },
+    "ordered_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_index", "agent_id", "task"],
+        "properties": {
+          "step_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-based index in the execution sequence."
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "Reference to a DEP-RUN-002 agent contract ID for this step."
+          },
+          "task": {
+            "type": "string",
+            "description": "Description of the task this step performs."
+          },
+          "receives_from_previous": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether this step receives the output packet of the previous step."
+          }
+        }
+      },
+      "minItems": 2,
+      "description": "Ordered sequence of agent steps in this chain."
+    },
+    "stop_on_failure": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the chain aborts if any step fails."
+    },
+    "packet_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["task_packet", "summary_packet", "decision_log", "failure_report"]
+      },
+      "minItems": 1,
+      "description": "Structured packet types exchanged between steps in this chain."
+    }
+  }
+}

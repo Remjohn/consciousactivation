@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "active_checkpoint_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "artifact_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "artifact_kind": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "bytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "media_type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "uri": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "artifact_kind",
+          "bytes",
+          "media_type",
+          "sha256",
+          "uri"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "autonomy_mode": {
+      "enum": [
+        "AUTOPILOT",
+        "REVIEW_BEFORE_SHIP",
+        "CHECKPOINTED",
+        "SHADOW"
+      ],
+      "type": "string"
+    },
+    "campaign_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evaluation_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "exception_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "DRAFT",
+        "LAUNCHED",
+        "RUNNING",
+        "AWAITING_REVIEW",
+        "BLOCKED_EXCEPTION",
+        "READY_TO_SHIP",
+        "SHIPPED",
+        "CANCELLED"
+      ],
+      "type": "string"
+    },
+    "order_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "run_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "version": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "campaign_id",
+    "order_ref",
+    "lifecycle_state",
+    "autonomy_mode",
+    "active_checkpoint_id",
+    "exception_ids",
+    "run_refs",
+    "artifact_refs",
+    "evaluation_refs",
+    "version"
+  ],
+  "title": "CampaignState",
+  "type": "object"
+}

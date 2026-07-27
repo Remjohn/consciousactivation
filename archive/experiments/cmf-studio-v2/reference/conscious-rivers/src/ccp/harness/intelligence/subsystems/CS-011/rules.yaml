@@ -1,0 +1,29 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-011
+enabled: true
+priority:
+  tier: recall
+  rank: 1
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - TURNING_POINT
+    - VISION
+    - RESOLUTION
+  stages:
+    - scene_builder
+evaluation_order:
+  after:
+    - CS-008
+    - CS-024
+warn_conditions:
+  - metric: peak_end_focus_score
+    operator: lt
+    value: 0.8
+route_hints:
+  prioritize:
+    - turn_up_peak_complexity
+    - strengthen_end_state

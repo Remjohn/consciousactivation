@@ -1,0 +1,2016 @@
+{
+  "acceptance_criteria": [
+    {
+      "criterion": "A valid Brief-led command with exact AIR Brief, Planned AIP, IAC, arm receipt, source media, authority declaration, and provenance creates one immutable source-root package and one linked success receipt.",
+      "criterion_id": "AC-01",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_valid_brief_led_admission_preserves_exact_plan_refs"
+    },
+    {
+      "criterion": "A Brief-led command with any planned-object digest differing from the arm receipt fails INTARMEDPLANHASHMISMATCH and creates no package version.",
+      "criterion_id": "AC-02",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_brief_led_hash_mismatch_fails"
+    },
+    {
+      "criterion": "A valid imported command creates planninglineage.state=ABSENTNOTCREATED and does not synthesize a Brief, Planned AIP, IAC, Matrix, anchor, call, lock, route, or tag.",
+      "criterion_id": "AC-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_imported_admission_preserves_absent_planning"
+    },
+    {
+      "criterion": "An imported command with ambiguous planning history fails rather than choosing an admission mode.",
+      "criterion_id": "AC-04",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Missing, unknown, or ambiguous source kind fails with its typed code; no migration or adapter guesses it.",
+      "criterion_id": "AC-05",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Every admitted media artifact is addressed by exact digest, bytes, media type, and portable logical URI. Absolute, UNC, traversal, environment-derived, or temporary paths are rejected.",
+      "criterion_id": "AC-06",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_portable_uri_required;tests/phase4/test_ts_int_001_source_package.py::test_ffprobe_reads_real_wav_and_preserves_portable_uri"
+    },
+    {
+      "criterion": "PENDINGREQUIREDCOMPONENT, BOUND, and evidence-bearing NOTAPPLICABLE remain distinguishable through serialization, adapters, replay, and queries.",
+      "criterion_id": "AC-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_component_binding_versions_package_and_preserves_history"
+    },
+    {
+      "criterion": "A required interviewexpression component cannot be marked NOTAPPLICABLE.",
+      "criterion_id": "AC-08",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_required_interview_evidence_cannot_be_not_applicable"
+    },
+    {
+      "criterion": "A source with no qualifying human reaction or Expression Moment can be archive-accepted when reproducible, but cannot become derivative-eligible or published.",
+      "criterion_id": "AC-09",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_publish_requires_reaction_and_moment"
+    },
+    {
+      "criterion": "Publication of interviewexpression fails unless at least one non-empty Reaction Receipt ref and at least one non-empty Expression Moment ref resolve and validate.",
+      "criterion_id": "AC-10",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_publish_requires_reaction_and_moment;tests/phase4/test_ts_int_001_source_package.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Non-interview source kinds do not require interview provenance unless supplied; supplied refs are fully validated.",
+      "criterion_id": "AC-11",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Planned, observed, inferred, operator-confirmed, rejected, and superseded assertions retain distinct epistemic states, source spans, owners, actors, evidence, and lifecycle.",
+      "criterion_id": "AC-12",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Interview Expression cannot alter AIR-owned semantic content; it can only preserve exact refs and record source/reaction evidence.",
+      "criterion_id": "AC-13",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "An adapter that cannot preserve a required lineage field, owner, lock, route, authority constraint, or epistemic state fails closed instead of flattening it into generic notes.",
+      "criterion_id": "AC-14",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Operator source-authority constraints are enforced exactly; missing values never default to permission, certification, or approval.",
+      "criterion_id": "AC-15",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Binding or correcting a component creates a successor package version and leaves the prior version byte-readable.",
+      "criterion_id": "AC-16",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_component_binding_versions_package_and_preserves_history"
+    },
+    {
+      "criterion": "Correction records exact changed fields and invalidates only dependent descendants. Unaffected descendants remain usable when proven independent.",
+      "criterion_id": "AC-17",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Expected-version or digest mismatch produces an optimistic concurrency failure without partial state.",
+      "criterion_id": "AC-18",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "An identical idempotent retry returns the original package and receipt refs; a changed payload under the same key fails.",
+      "criterion_id": "AC-19",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_idempotency_and_conflict"
+    },
+    {
+      "criterion": "Fault injection at every persistence boundary proves no package without a receipt, no receipt without its package, no missing command record, no missing dependency edge, and no outbox message for a rolled-back command.",
+      "criterion_id": "AC-20",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Replay in a fresh process produces the exact package bytes and digest without current time, random state, insertion order, traversal order, environment, or machine path.",
+      "criterion_id": "AC-21",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Cancellation, supersession, invalidation, and revocation preserve historical package, event, receipt, and dependency bytes while blocking prohibited new consumption.",
+      "criterion_id": "AC-22",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Downstream acknowledgement records exact consumption but does not become source acceptance, semantic acceptance, visual production acceptance, certification, or production authorization.",
+      "criterion_id": "AC-23",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Brief-led planned wrong-reading locks and route hypotheses remain exact PLANNEDUNCONFIRMED refs until their owning authority changes state. Imported admission does not invent them.",
+      "criterion_id": "AC-24",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Migration from each supported donor shape emits a new artifact and losslessness receipt; ambiguity or information loss blocks migration.",
+      "criterion_id": "AC-25",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Package publication and query behavior are compatible with a content-addressed clean extracted layout and contain no absolute source-machine path.",
+      "criterion_id": "AC-26",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "All events, commands, receipts, package versions, component refs, and invalidations use one traceable correlation/causation chain.",
+      "criterion_id": "AC-27",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "The implementation contains no AIR semantic compiler, VAE production planner, Studio canonical workflow owner, Delegation creative authority, or generic rights/safety approval authority.",
+      "criterion_id": "AC-28",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "All 11 controlling FRs and six controlling Stories are traceable to executable tests and completion evidence.",
+      "criterion_id": "AC-29",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Product eligibility, certification, build authorization, and production authorization remain false unless later distinct governed receipts change them.",
+      "criterion_id": "AC-30",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-001",
+      "test_evidence": "tests/phase4/test_ts_int_001_source_package.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "FR-124 / ST-01.03 \u2014 exact multi-speaker alignment. Given admitted multi-speaker media and raw ASR, when alignment completes, every eligible word has one exact source interval and resolved/unknown/overlap speaker state within media bounds. Assigning an unknown word to the nearest speaker fails. Evidence: component, bounds/diarization receipt, sample review. Layer: contract/integration.",
+      "criterion_id": "AC-01",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_ts_int_002_transcript.py::test_exact_alignment_and_phrase_coverage;tests/phase4/test_ts_int_002_transcript.py::test_unknown_speaker_not_guessed;tests/phase4/test_ts_int_002_transcript.py::test_overlap_requires_explicit_state"
+    },
+    {
+      "criterion": "FR-124 / ST-01.03 \u2014 drift denial. Given a range beyond the profile\u2019s drift tolerance, when downstream extraction requests it, the range is blocked or corrected first. Allowing it because global average confidence passes fails. Evidence: range blocker and unchanged package eligibility. Layer: integration.",
+      "criterion_id": "AC-02",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "FR-124 / ST-01.03 \u2014 imported-source truth. Given an imported interview without a Brief, when alignment binds, AbsentPlanningLineage remains intact and no planned anchor/tag/Matrix ref is created. Inferring a historical plan fails. Evidence: before/after package diff. Layer: cross-spec contract.",
+      "criterion_id": "AC-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_ts_int_002_transcript.py::test_imported_admission_preserves_absent_planning"
+    },
+    {
+      "criterion": "FR-124 / ST-01.03 \u2014 timebase reproducibility. Given video/audio with different rational time bases, two fresh processes produce identical tick conversions and spans. Floating-seconds rounding drift fails. Evidence: byte/hash comparison. Layer: unit/reproducibility.",
+      "criterion_id": "AC-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "FR-128 / ST-02.01 \u2014 deterministic phrase pack. Given accepted words and one policy, phrase IDs/order/text/intervals/backrefs/hash are byte-identical across input map/traversal order changes. Nondeterministic boundary order fails. Evidence: phrase-pack hashes. Layer: unit/reproducibility.",
+      "criterion_id": "AC-05",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_ts_int_002_transcript.py::test_deterministic_phrase_pack"
+    },
+    {
+      "criterion": "FR-128 / ST-02.01 \u2014 complete word coverage. Every eligible word appears exactly once and in order; blocked words remain explicitly excluded with limitations. Dropped/duplicated words fail. Evidence: coverage proof. Layer: contract.",
+      "criterion_id": "AC-06",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_ts_int_002_transcript.py::test_exact_alignment_and_phrase_coverage"
+    },
+    {
+      "criterion": "FR-128 / ST-02.01 \u2014 hesitation preservation. Given a hesitation used by later reaction/expression analysis, packing retains its word/event refs and readable marker. Normalizing it away fails. Evidence: raw-to-phrase diff and transformation inventory. Layer: adversarial integration.",
+      "criterion_id": "AC-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_ts_int_002_transcript.py::test_exact_alignment_and_phrase_coverage"
+    },
+    {
+      "criterion": "FR-128 / ST-02.01 \u2014 epistemic tag separation. Given a planned tag and unrelated observed answer, phrases retain distinct tag states; default routing exposes observed/confirmed only unless an operator resolution authorizes otherwise. Promoting planned to observed fails. Evidence: tag refs/query result. Layer: contract/integration.",
+      "criterion_id": "AC-08",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Reaction Receipt boundary. Given TS-INT-006 cites a hesitation or state-change span, the cited phrase resolves to exact raw words, speaker, event, and time. This spec does not assert reaction meaning. A phrase pack emitting its own Reaction Receipt fails architecture. Evidence: dependency contract test. Layer: architecture/integration.",
+      "criterion_id": "AC-09",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Selective correction. Given one speaker assignment is corrected, only intersecting phrases and semantic descendants become stale; unrelated phrases and historical receipts remain valid/replayable. Global package deletion fails. Evidence: invalidation graph/replay. Layer: integration.",
+      "criterion_id": "AC-10",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Atomicity/idempotency/concurrency. Same command/key returns original receipt; same key/different input fails; stale expected package commits nothing; injected mid-commit failure leaves no orphan component/receipt/package binding. Evidence: fault log. Layer: repository integration.",
+      "criterion_id": "AC-11",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_ts_int_002_transcript.py::test_deterministic_phrase_pack"
+    },
+    {
+      "criterion": "Portability and claim ceiling. Canonical artifacts contain no absolute machine path/environment/current-time/random fields, and even complete synthetic tests leave production eligibility/certification false. A local PASS represented as real-world accuracy or build approval fails. Evidence: artifact scan/completion receipt. Layer: clean-environment/governance.",
+      "criterion_id": "AC-12",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-002",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Complete source shot map: - Governing requirement: FR-129; ST-02.02 primary journey. - Given an exact technically admitted edited interview stream with a pinned timebase, source hash, profiles, and authority, - When visual structure analysis completes, - Then every presentation frame belongs to exactly one ordered shot, accepted transitions have exact ranges, and downstream edit planning can resolve both sides of every boundary. - Failure example: a dissolve range is omitted and two frames are in no shot. - Evidence/test layer: shot-map partition property tests, integration receipt, and source-time validation report.",
+      "criterion_id": "AC-01",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_ts_int_003_visual.py::test_shot_map_partitions_and_keyframes_are_deterministic;tests/phase4/test_ts_int_003_visual.py::test_gap_or_overlap_rejected"
+    },
+    {
+      "criterion": "Visual change cannot become semantic importance: - Governing requirement: FR-129; ST-02.02 adversarial and CBAR criteria. - Given a confirmed hard cut with no approved quote, reaction, or meaningful expression evidence, - When the index is validated and queried, - Then the cut is available as technical evidence but creates no Expression Moment, observed Activative tag, semantic ranking, or route. - Failure example: a detector score is copied into momentimportance=high. - Evidence/test layer: unit denial test and architecture authority-boundary test.",
+      "criterion_id": "AC-02",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_ts_int_003_visual.py::test_visual_change_never_creates_semantic_moment"
+    },
+    {
+      "criterion": "Exact frame lineage: - Governing requirement: FR-129; ST-02.02 evidence/replay criterion. - Given a selected keyframe, - When a consumer resolves it, - Then the source-package/media hash, stream, presentation ordinal/timestamp, timebase, decoded-pixel digest, artifact digest, and selection reason all verify. - Failure example: the thumbnail exists but points to the adjacent frame after variable-frame-rate conversion. - Evidence/test layer: contract test, frame-hash fixture, and clean-room materialization proof.",
+      "criterion_id": "AC-03",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Variable frame rate and presentation order: - Governing requirement: FR-129; ST-02.02 evidence/replay criterion. - Given a video whose presentation timing cannot be represented by one constant frame rate, - When the frame index is built, - Then rational presentation coordinates address every frame without relying on nominal FPS. - Failure example: round(seconds fps) returns a different frame than the recorded PTS. - Evidence/test layer: VFR contract fixture and frame-coordinate property tests.",
+      "criterion_id": "AC-04",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Boundary uncertainty remains visible: - Governing requirement: FR-129; ST-02.02 primary journey. - Given conflicting or borderline transition observations, - When validation cannot resolve them under the pinned profile, - Then the analysis enters REVIEWREQUIRED with uncertainty and evidence; it does not select the highest score silently. - Failure example: overlapping dissolve and hard-cut proposals are auto-accepted with no decision record. - Evidence/test layer: boundary-conflict unit test and review workflow integration test.",
+      "criterion_id": "AC-05",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Representative keyframe coverage: - Governing requirement: FR-129; ST-02.02 primary journey. - Given a validated nonempty shot map, - When keyframe selection succeeds, - Then every shot has at least one current SHOTREPRESENTATIVE linked to an exact source frame. - Failure example: a short shot is omitted because a sampler interval skipped it. - Evidence/test layer: keyframe coverage property test and completion report.",
+      "criterion_id": "AC-06",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_ts_int_003_visual.py::test_shot_map_partitions_and_keyframes_are_deterministic"
+    },
+    {
+      "criterion": "Expression-signal candidate stays nonsemantic: - Governing requirement: FR-129; ST-02.02 CBAR criterion. - Given a frame selected for a declared visible expression signal, - When it is emitted, - Then it is labeled EXPRESSIONSIGNALCANDIDATE, NONSEMANTICPROPOSAL=true, with observable evidence, method, and uncertainty, and it cannot satisfy Reaction Receipt or Expression Moment provenance alone. - Failure example: a facial geometry delta is called \u201caudience resistance\u201d without reaction/context evidence. - Evidence/test layer: semantic-boundary contract test and downstream denial fixture.",
+      "criterion_id": "AC-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_ts_int_003_visual.py::test_visual_change_never_creates_semantic_moment"
+    },
+    {
+      "criterion": "Geometry applicability is explicit: - Governing requirement: FR-129; ST-02.02 invalid-input criterion. - Given a shot with no detectable face or subject under the exact profile, - When visual references compile, - Then geometry is evidence-bearing NOTAPPLICABLE with inspected range and reason while the visual reference remains valid where otherwise eligible. - Failure example: facebox=null leaves consumers unable to distinguish not-run from not-found. - Evidence/test layer: applicability union test and schema/contract test.",
+      "criterion_id": "AC-08",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Source-authority restrictions are enforced: - Governing requirement: FR-129; source-first product boundary. - Given a source declaration prohibiting model training or restricting identity-frame export, - When a profile or consumer requests the prohibited use, - Then the request fails with INTVISSOURCEAUTHORITYSCOPEDENIED and no prohibited artifact/outbox record is produced. - Failure example: keyframe thumbnails are sent to a learning store because a profile defaulted training eligibility to allowed. - Evidence/test layer: authority-policy integration and negative data-egress test.",
+      "criterion_id": "AC-09",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Deterministic fresh-context reproduction: - Governing requirement: FR-129; ST-02.02 evidence/replay criterion. - Given identical exact source bytes, profiles, implementation bindings, commands, and decisions in two fresh processes with different environment, timezone, temp root, and traversal order, - When both analyses complete, - Then canonical frame index, shot map, keyframe set, visual reference index, and aggregate digests match exactly. - Failure example: keyframe ordering changes with directory enumeration. - Evidence/test layer: clean-process determinism harness and hash matrix.",
+      "criterion_id": "AC-10",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_ts_int_003_visual.py::test_shot_map_partitions_and_keyframes_are_deterministic"
+    },
+    {
+      "criterion": "Idempotency and optimistic concurrency: - Governing requirement: FR-129; ST-02.02 selective recovery. - Given an accepted command, - When the identical command retries under the same idempotency key, - Then the original refs/receipt return; a different payload under that key or stale expected version fails without mutation. - Failure example: two corrections both overwrite version 3 and issue conflicting version 4 receipts. - Evidence/test layer: repository concurrency integration test.",
+      "criterion_id": "AC-11",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Atomic commit and rollback: - Governing requirement: FR-129; ST-02.02 evidence/replay criterion. - Given fault injection at any canonical persistence boundary, - When commit fails, - Then there is no accepted index without its components/receipt, no success receipt without artifacts, no missing command/dependency, and no published outbox for rolled-back state. - Failure example: a KEYFRAMESET binding receipt exists while the image artifact write failed. - Evidence/test layer: exhaustive atomic fault-injection matrix.",
+      "criterion_id": "AC-12",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Selective boundary correction: - Governing requirement: FR-129; ST-02.02 selective recovery. - Given a correction to one boundary between shots 4 and 5 and unrelated accepted shots, - When the successor index is committed, - Then adjacent shot/keyframe and dependent consumer refs are invalidated while unrelated shot/keyframe refs remain valid with proof. - Failure example: the whole source campaign is invalidated although no other consumer used the corrected range. - Evidence/test layer: dependency-graph selective-invalidation integration test.",
+      "criterion_id": "AC-13",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Cancellation race and late result: - Governing requirement: FR-129; ST-02.02 selective recovery. - Given cancellation races a worker result, - When cancellation commits first, - Then the late result is quarantined/noncanonical and cannot bind to the source package. - Failure example: a callback publishes keyframes after the cancellation receipt. - Evidence/test layer: deterministic race fixture and outbox assertion.",
+      "criterion_id": "AC-14",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Lossless-or-blocked migration: - Governing requirement: FR-129; ST-02.02 evidence/replay criterion. - Given a legacy thumbnail with only a float timestamp and local path, - When migration cannot prove an exact frame/source digest, - Then it fails INTVISMIGRATIONAMBIGUOUS, preserves the legacy artifact, and invents no coordinate. - Failure example: migration rounds 12.4 seconds to frame 372 and claims exact lineage. - Evidence/test layer: migration negative fixture and immutable donor hash check.",
+      "criterion_id": "AC-15",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Portable clean-room consumption: - Governing requirement: FR-129; ST-02.02 downstream journey. - Given an exported validated index and content-addressed artifacts, - When loaded under a different root in a clean environment, - Then every ref resolves without source-machine paths and all hashes verify. - Failure example: C:\\Users\\...\\frame.png appears in a canonical record. - Evidence/test layer: clean-room export/import test and absolute-path scan.",
+      "criterion_id": "AC-16",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Package component binding: - Governing requirement: FR-129; ST-02.02 downstream journey; draft TS-INT-001 interface. - Given validated SHOTMAP, KEYFRAMESET, and VISUALREFERENCESET component refs and the exact current package version, - When binding succeeds, - Then TS-INT-001 returns one immutable successor package version and linked receipt without altering prior versions. - Failure example: only the keyframe slot is updated before a transaction failure, leaving a partially bound package. - Evidence/test layer: package-binding contract and atomic integration tests.",
+      "criterion_id": "AC-17",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "No claim inflation: - Governing requirement: candidate-authority and Story claim ceiling. - Given passing schema, test, or benchmark evidence, - When status is reported, - Then the maximum writer state remains WRITTENPENDINGAUDIT, authority remains CANDIDATENOTCURRENT, and implementation/build/certification/production remain false. - Failure example: detector benchmark success is reported as production certification or Expression Moment approval. - Evidence/test layer: receipt/status-policy validation.",
+      "criterion_id": "AC-18",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-003",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Exact draft and source inputs: Governs: all FRs and Stories. Given the three upstream specs and required unique/authority sources, when writing/implementation admission runs, then exact paths, bytes, hashes, states, source dispositions, and DRAFTDEPENDENCYNOTACCEPTED labels match. A drifted TS-INT-002 hash or missing required source blocks. Evidence: source-lock and draft-dependency receipts. Layer: contract/clean-room.",
+      "criterion_id": "AC-01",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "No ownership collapse: Governs: AIR-FR-066, AIR-ST-11.03. Given an approved Moment handoff, when IE publishes it, then IE owns source evidence and AIR owns Observed AIP semantic compilation. An IE handoff containing compiled roles/Edge Product/Primitive coalition or an AIR acknowledgement rewriting the Moment fails. Evidence: ownership conformance receipt. Layer: architecture/contract.",
+      "criterion_id": "AC-02",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Planned tag remains planned: Governs: FR-127, ST-02.01. Given a planned authorityconflict tag and an unrelated observed answer, when eligibility resolves, then the planned tag stays PLANNED and cannot drive an observed route without a separate observed/confirmed successor. Copying the planned value into observed state fails. Evidence: tag provenance graph and exclusion receipt. Layer: unit/integration.",
+      "criterion_id": "AC-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_imported_cannot_fabricate_planned_tag"
+    },
+    {
+      "criterion": "Inferred tag cannot self-confirm: Governs: FR-127, ST-02.01. Given a model-inferred tag with high score but no source span or operator decision, when confirmation is requested, then confirmation is denied and inference remains explicit. Score-only promotion fails. Evidence: typed denial and immutable original assertion. Layer: unit/adversarial.",
+      "criterion_id": "AC-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Rejected and superseded tag history: Governs: FR-127, FR-131. Given a rejected tag later replaced by a supported assertion, when supersession occurs, then both exact records remain, original provenance is retained, current queries return only eligible successor state, and negative-evidence queries can retrieve the rejected record. In-place status mutation fails. Evidence: lifecycle/replay receipt. Layer: repository/integration.",
+      "criterion_id": "AC-05",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Anchor Hit concepts do not conflate: Governs: FR-130, AIR-FR-061, ST-02.03. Given a Reaction Receipt outcome ANCHORHIT, when an Anchor Hit candidate is assembled, then the receipt is supporting evidence and a separate TimestampedAnchorHitCandidate/decision is required. Auto-creating an approved Moment from the outcome fails. Evidence: relation record and denial fixture. Layer: contract/integration.",
+      "criterion_id": "AC-06",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Exact phrase and speaker evidence: Governs: AIR-FR-061, FR-130, AIR-ST-11.01. Given a candidate quote, when validation runs, then ordered phrase/raw-word/speaker refs reconstruct exact text and rational source time. Guessed speaker, float-only timestamp, or normalized-away hesitation fails. Evidence: reconstruction proof hash. Layer: integration.",
+      "criterion_id": "AC-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_observed_tag_and_anchor_hit_preserve_exact_source_evidence"
+    },
+    {
+      "criterion": "Visual salience remains nonsemantic: Governs: AIR-FR-061, FR-130. Given a striking keyframe marked EXPRESSIONSIGNALCANDIDATE, when no corroborating transcript/audio/receipt evidence supports a Moment, then the candidate stays nonsemantic or is rejected. Promoting detector salience as meaning fails. Evidence: visual-reference relation and Analyst receipt. Layer: architecture/adversarial.",
+      "criterion_id": "AC-08",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_visual_change_never_creates_semantic_moment"
+    },
+    {
+      "criterion": "Reaction Receipt maximum claim is inherited: Governs: AIR-FR-061 through AIR-FR-063, FR-130. Given a receipt with NEEDSMOREEVIDENCE or NOEXPRESSIONMOMENTPROMOTION, when Moment evaluation runs, then the candidate cannot exceed that constraint without an exact successor receipt. Ignoring the maximum claim fails. Evidence: receipt dependency and blocker. Layer: integration.",
+      "criterion_id": "AC-09",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Premise and reaction tail survive extraction: Governs: AIR-FR-062, AIR-ST-11.01, PRM-VOC-009. Given a catchy phrase whose qualifier and reaction tail change its meaning, when boundary validation runs, then the boundary widens to preserve the smallest complete source context or blocks approval. Shortest-quote extraction fails. Evidence: before/after boundary proof and source reconstruction. Layer: integration/reference slice.",
+      "criterion_id": "AC-10",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Source-backed felt truth is not manufactured: Governs: AIR-FR-063, AIR-ST-11.02, PRM-VSG-021. Given a real hesitation/micro-expression and a cleaner substitute frame, when evidence review runs, then the exact source friction remains visible with uncertainty; no staged or generated evidence replaces it. Manufactured messiness fails. Evidence: exact visual/audio refs and evaluation. Layer: adversarial/integration.",
+      "criterion_id": "AC-11",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Tension/release remains source-true: Governs: AIR-FR-063, AIR-ST-11.03, PRM-PRS-002. Given a source with tension but no actual landing, when Moment quality is evaluated, then the missing release remains a limitation/borderline reason. Inventing a payoff or cutting before the unresolved tension is disclosed fails. Evidence: source spans, alternative interpretation, and verdict. Layer: evaluator/reference slice.",
+      "criterion_id": "AC-12",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Complete routeability evaluation: Governs: AIR-FR-063, AIR-ST-11.02. Given declared route profiles, when the evaluator runs, then every applicable route has exact eligibility, constraints, evidence, wrong-reading risks, and no certification inference. A bare score or omitted unsupported route fails. Evidence: routeability receipt. Layer: contract/evaluator.",
+      "criterion_id": "AC-13",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Hunter cannot approve: Governs: FR-130, ST-02.03, all AIR Stories. Given a Hunter-proposed candidate, when the same workflow identity attempts evaluation or approval, then independence/authority checks reject it. A Hunter-set APPROVED field fails schema validation. Evidence: role-separation denial. Layer: unit/security/architecture.",
+      "criterion_id": "AC-14",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_moment_requires_operator_approval"
+    },
+    {
+      "criterion": "Governed approval produces immutable Moment: Governs: FR-130, AIR-FR-064. Given an APPROVABLE independently evaluated candidate and authorized approver, when approval commits, then candidate, evaluation, Analyst decision, approved Moment, approval receipt, dependencies, HumanResolution ref, event, idempotency, and outbox appear atomically. Any missing pair fails and leaves nothing current. Evidence: atomic commit receipt. Layer: repository/integration.",
+      "criterion_id": "AC-15",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_moment_requires_operator_approval"
+    },
+    {
+      "criterion": "Borderline and rejected evidence remains excluded and learnable: Governs: FR-131, ST-02.03. Given rejected/borderline candidates, when production-ready and negative-evidence retrieval run, then production query excludes them while authorized negative-evidence query returns exact reasons, source scope, failure layer, and future admissibility. Deletion or accidental routing fails. Evidence: dual-query conformance receipt. Layer: repository/integration.",
+      "criterion_id": "AC-16",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_rejected_moment_is_preserved"
+    },
+    {
+      "criterion": "Boundary correction does not inherit approval: Governs: AIR-FR-062, AIR-FR-064, FR-130. Given an approved Moment whose boundary is adjusted, split, or merged, when the command succeeds, then successor candidates re-run evidence/evaluation/approval and the prior Moment becomes historical/superseded only through an authorized replacement. Copying approval fails. Evidence: successor graph and re-evaluation receipts. Layer: integration.",
+      "criterion_id": "AC-17",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Evidence-bearing NOTAPPLICABLE: Governs: AIR-FR-061 through AIR-FR-063, FR-127. Given imported source with no planned IAC or source with no relevant visual evidence, when compilation runs, then N/A carries reason, profile, method/actor, inspected evidence, and eligibility effect. Null or empty default fails. Evidence: positive/negative schema fixtures. Layer: unit/contract.",
+      "criterion_id": "AC-18",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Idempotency and stale concurrency: Governs: AIR-FR-064, FR-131. Given an identical approval command/key, when retried, then the original receipt returns without duplicate state. Same key/different bytes or stale expected case/moment hash commits nothing. Evidence: idempotency/concurrency test. Layer: repository.",
+      "criterion_id": "AC-19",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Selective invalidation and historical replay: Governs: AIR-FR-064, FR-131, every Story recovery clause. Given one phrase, visual ref, Reaction Receipt, or tag is superseded, when dependency analysis runs, then only citing descendants become stale, unrelated accepted work remains current with proof, and old exact path replays byte-identically. Global invalidation or historical rewrite fails. Evidence: invalidation graph and replay digest. Layer: integration/replay.",
+      "criterion_id": "AC-20",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_ts_int_004_expression.py::test_rejected_moment_is_preserved"
+    },
+    {
+      "criterion": "AIR handoff preserves source authority: Governs: AIR-FR-066, AIR-ST-11.03. Given approved moments and eligible receipt/tag evidence, when IE emits the handoff, then exact source/package/moment versions/hashes, scope, limitations, risks, maximum claim, and ownership flags survive. A derivative producer cannot reinterpret or mutate the guest\u2019s meaning. Evidence: producer/consumer conformance receipt. Layer: contract/integration.",
+      "criterion_id": "AC-21",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Source package binding and AIR acknowledgement remain distinct: Governs: AIR-FR-066, FR-130. Given an approved Moment, when package binding succeeds but AIR acknowledgement is pending, then the Moment remains approved/source-bound and handoff status remains pending. Binding is not semantic acceptance or production authorization. Evidence: separate receipts/state projection. Layer: integration.",
+      "criterion_id": "AC-22",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Migration never invents provenance: Governs: FR-127, FR-130, FR-131. Given a Studio v1 candidate with UUID, float score, and missing reaction tail/provenance, when migration runs, then a new artifact records exact predecessor, unavailable fields, and blocked/limited state; it is not promoted to observed/approved. Guessed classification fails. Evidence: migration assessment/receipt. Layer: migration.",
+      "criterion_id": "AC-23",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Claim ceiling and portability: Governs: all FRs/Stories. Given a clean machine/process, when canonical compilation/replay runs with exact inputs, then bytes/hashes match without absolute paths, clock, random, environment, filesystem order, or hidden local state. Receipts remain WRITTENPENDINGAUDIT, CANDIDATENOTCURRENT, build false. A production/certification claim fails. Evidence: clean-room reproducibility and claim scan. Layer: clean-room/architecture.",
+      "criterion_id": "AC-24",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-004",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Exact writer and upstream lock: The implementation evidence cites the exact TS-INT-004 version/hash admitted by this specification. A changed draft triggers the six declared revision-impact sections and cannot be silently substituted.",
+      "criterion_id": "AC-01",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Exact quote evidence: Given a proposed quote without exact words, speaker, rational source time, transcript revision, approved Expression Moment, or approval evidence, compilation returns PACKAGEQUOTEEXACTSOURCEREQUIRED, stores no eligible ingredient, and records which fields are missing.",
+      "criterion_id": "AC-02",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_ts_int_005_inventory.py::test_inventory_only_consumes_approved_moments"
+    },
+    {
+      "criterion": "Qualification and context preservation: Given a quote whose meaning changes when a neighboring qualification is omitted, the evidence validator requires the context/qualification span or excludes the quote. The package cannot present the truncated text as source truth.",
+      "criterion_id": "AC-03",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Audio and voice-reference limits: Given audio with missing track/channel, source artifact hash, interval, speaker identity, or permitted-use restriction, the audio/voice ingredient is blocked. A voice reference never implies synthesis, cloning, training, or production permission.",
+      "criterion_id": "AC-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Keyframe and visual lineage: Given a keyframe, the package preserves source artifact/version/hash, shot/index version, frame index or rational time, crop/transform, technical limitations, and source-faithful/derived status. A machine path or untraced derivative is rejected.",
+      "criterion_id": "AC-05",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_ts_int_005_inventory.py::test_inventory_only_consumes_approved_moments"
+    },
+    {
+      "criterion": "Approved Moment is mandatory: Only current approved Expression Moment versions are selectable for new current packages. Proposed, borderline, rejected, superseded, revoked, or invalidated Moments remain historical evidence and cannot silently enter the eligible inventory.",
+      "criterion_id": "AC-06",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_ts_int_005_inventory.py::test_inventory_only_consumes_approved_moments"
+    },
+    {
+      "criterion": "Tag and Reaction ownership: The package references exact tag and Reaction Receipt objects without changing their provenance, outcome, maximum claim, cause, or reaction tail. Parsing those refs without enforcing their states is rejected.",
+      "criterion_id": "AC-07",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Candidate archetype remains non-authoritative: Given a repository-local route suggestion with no AIR object ref, the package records NONAUTHORITATIVECANDIDATE and REQUESTOWNERCOMPILATION or NOACTION. Neither inventory nor package approval converts it to AUTHORITATIVEREFERENCE.",
+      "criterion_id": "AC-08",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Exact AIR reference remains AIR-owned: Given a valid AIR-owned semantic object ref, the package may preserve it by exact version/hash and owner. Interview Expression cannot amend it, and a changed AIR ref produces a new package version or owner-decision state.",
+      "criterion_id": "AC-09",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_ts_int_005_inventory.py::test_observed_pack_keeps_interview_and_air_ownership_separate"
+    },
+    {
+      "criterion": "Source gap, not fabrication: Given a package request for an ingredient unsupported by the source, compilation records PackageGap(SOURCEEVIDENCEMISSING) and an incomplete aggregate state. It does not generate, duplicate, rewrite, or infer an ingredient to meet requested cardinality.",
+      "criterion_id": "AC-10",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Historical fixed counts are not current law: Absent a current governed package request/profile declaring cardinality, no historical Guest Asset Pack count influences completeness. When cardinality is governed, it is evaluated as a request rule and any shortfall is a gap.",
+      "criterion_id": "AC-11",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Evidence-bearing NOTAPPLICABLE: An N/A decision includes exact profile/rule, evidence, deciding actor/program, receipt, and reopen condition. Missing evidence, unsupported input, or evaluator failure cannot become N/A.",
+      "criterion_id": "AC-12",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Restriction monotonicity: Every package slot contains the union of inherited source restrictions and any stricter package restrictions. A command or adapter that removes or weakens one fails PACKAGERESTRICTIONUNRESOLVED or the corresponding authority failure.",
+      "criterion_id": "AC-13",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Wrong-reading risks cross the boundary: Source-derived wrong-reading risks and continuity constraints survive into every selecting package slot and handoff. Builder remains responsible for authoritative downstream wrong-reading locks and cannot claim IE package evidence is already a Visual Asset Demand.",
+      "criterion_id": "AC-14",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Independent approval: A proposer or model cannot approve its own inventory/package when segregation policy requires independence. Approval records attributable actor, scope, authority, evidence, exact bytes/hash, and decision rationale.",
+      "criterion_id": "AC-15",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Inventory and package approval remain distinct: Approving an inventory does not approve any package. Approving a package does not acknowledge consumer use, grant AIR adoption, authorize Builder/Harness execution, accept VAE production, or certify a format.",
+      "criterion_id": "AC-16",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Immutable version and stale concurrency: After approval, a content change creates a new version/hash. Two commands with the same expected version cannot both commit; the loser receives PACKAGEEXPECTEDVERSIONCONFLICT with no partial artifacts.",
+      "criterion_id": "AC-17",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Idempotent replay: Repeating the same command with identical idempotency scope and canonical request bytes returns the original artifact and receipts without duplicate events or versions. Reusing the key with changed bytes fails explicitly.",
+      "criterion_id": "AC-18",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Atomic commit and rollback: Injected failures at each persistence step prove that artifact, command, decision/approval receipt, event, dependencies, idempotency result, and outbox either all commit or all roll back. No state-only or receipt-only success is observable.",
+      "criterion_id": "AC-19",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Portable handoff: The handoff manifest contains no absolute path, host, home directory, temp directory, environment value, or traversal-order artifact. Extraction on a clean layout validates all distributed bytes and exact hashes.",
+      "criterion_id": "AC-20",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Consumer acknowledgement is separate: A consumer accepts or rejects one exact package version/hash with a reason. The acknowledgement does not mutate the package and does not duplicate source or visual-production evaluation.",
+      "criterion_id": "AC-21",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Selective invalidation: Correcting one source span invalidates only ingredients and packages whose dependency edges consume that span or required context. Unaffected siblings remain active with recorded evidence. All historical versions remain reproducible.",
+      "criterion_id": "AC-22",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Revocation and post-completion invalidation: Revoked source authority blocks new consumption and invalidates affected current descendants while retaining audit evidence. Previously handed-off assets/results remain historically reconstructable but cannot be presented as currently authorized.",
+      "criterion_id": "AC-23",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Migration never guesses: Legacy objects missing source kind, exact source time, speaker, approval, restrictions, or version/hash are blocked or marked historical-reference-only. Migration creates a new immutable artifact/receipt and never edits predecessor bytes.",
+      "criterion_id": "AC-24",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Semantic compatibility, not parse-only: A consumer that parses the document but ignores evidence closure, authority state, restriction inheritance, invalidation, or source-kind semantics is rejected as incompatible.",
+      "criterion_id": "AC-25",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Owner boundaries hold end to end: AIR compiles semantic meaning; Builder declares dependencies and target authority; Pipeline executes; VAE realizes; Studio projects/corrects; Delegation transports. No package command invokes or internalizes another product's owned decision.",
+      "criterion_id": "AC-26",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_ts_int_005_inventory.py::test_observed_pack_keeps_interview_and_air_ownership_separate"
+    },
+    {
+      "criterion": "Historical reproduction: Replaying a historical package with exact frozen inputs reproduces canonical bytes/hash, decisions, receipts, manifest, and handoff identity even after successors or invalidations exist. Missing exact bytes yields an explicit failure, not current-version substitution.",
+      "criterion_id": "AC-27",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Claim ceiling remains false for build and production: All completion evidence reports WRITTENPENDINGAUDIT, CANDIDATENOTCURRENT, buildauthority: false, and the pre-ratification ceiling. No test pass or package approval changes product implementation/production authorization.",
+      "criterion_id": "AC-28",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-005",
+      "test_evidence": "tests/phase4/test_ts_int_005_inventory.py::test_observed_pack_keeps_interview_and_air_ownership_separate;tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "Multimodal reaction stream: - Governing: AIR-FR-055, AIR-ST-10.01. - Given an exact delivered call and source segment with transcript, timing, audio, and visual evidence available, - When the operator closes the reaction window, - Then lexical, vocal, temporal, visual/somatic, interactional, and reaction-tail observations are source-aligned with explicit coverage and epistemic state. - Failure example: only transcript words are stored even though audio/visual evidence was available and material. - Evidence/test: multimodal alignment integration fixture and coverage report.",
+      "criterion_id": "AC-01",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Observation is not interpretation: - Governing: AIR-FR-055, AIR-ST-10.01 CBAR. - Given a directly observed pause and a model hypothesis about its meaning, - When both are recorded, - Then they are separate linked artifacts with distinct owners/epistemic states. - Failure example: \u201cdefensive hesitation\u201d is stored as the directly observed value. - Evidence/test: epistemic-state unit and adversarial contract tests.",
+      "criterion_id": "AC-02",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Complete governed outcome vocabulary: - Governing: AIR-FR-056, AIR-ST-10.01. - Given evidence fixtures for each governed human outcome, - When classification runs, - Then all eleven exact outcomes are representable and unknown values fail. - Failure example: operational observationfailure is accepted as a human reaction outcome. - Evidence/test: exhaustive outcome enum and negative fixture matrix.",
+      "criterion_id": "AC-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_ts_int_006_reaction.py::test_exact_outcome_vocabulary_and_independent_evaluator"
+    },
+    {
+      "criterion": "Non-reaction is evidence: - Governing: AIR-FR-057, AIR-ST-10.02. - Given a complete governed window with sufficient coverage and no meaningful intended transition, - When outcome classification and independent evaluation complete, - Then ACTIVATIONNULL or evidence-supported PARTIALHIT may be validated without manufacturing an Anchor Hit. - Failure example: fluent answer text automatically becomes ANCHORHIT despite flat/defensive multimodal evidence. - Evidence/test: null/partial positive fixture and downstream denial proof.",
+      "criterion_id": "AC-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Missing evidence is not non-reaction: - Governing: AIR-FR-057, AIR-ST-10.02 adversarial case. - Given corrupted audio and no reaction-tail capture, - When a classifier proposes ACTIVATIONNULL, - Then deterministic validation rejects it as INTREACTIONNONREACTIONCONFUSEDWITHCAPTUREGAP. - Failure example: missing audio is labeled silence. - Evidence/test: capture-gap unit and integration tests.",
+      "criterion_id": "AC-05",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_ts_int_006_reaction.py::test_capture_gap_is_not_activation_null"
+    },
+    {
+      "criterion": "Receipt binds actual call and evidence: - Governing: AIR-FR-058, AIR-ST-10.02. - Given a validated live case, - When a receipt candidate compiles, - Then it binds the exact delivered call, pressure decision, source spans, observation stream, outcome, counteractivation, uncertainty, delta, source authority, and evaluator lifecycle. - Failure example: an AIR proposal ref is used although the human delivered different wording. - Evidence/test: TS-INT-007 mapping and receipt completeness contract tests.",
+      "criterion_id": "AC-06",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Imported trigger does not fabricate live history: - Governing: AIR-FR-058; imported-source constitutional boundary. - Given an imported interview with exact prompt/response spans but no live-call record, - When a reaction case opens, - Then it uses HISTORICALSOURCETRIGGER, records live fields as evidence-bearing not applicable, and lowers claim where planning context is unavailable. - Failure example: migration invents callid=main-question and a pressure dose. - Evidence/test: imported historical-trigger integration and migration fixtures.",
+      "criterion_id": "AC-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_ts_int_006_reaction.py::test_exact_outcome_vocabulary_and_independent_evaluator"
+    },
+    {
+      "criterion": "Planned\u2013observed owner separation: - Governing: AIR-FR-059, AIR-ST-10.03. - Given exact AIR planned state/role/edge/route refs and IE observations, - When the delta compiles, - Then it preserves both owners, records evidence relation/mismatch, and changes neither input. - Failure example: IE copies a planned role into observedrole without source evidence. - Evidence/test: delta ownership unit and AIR read-only boundary tests.",
+      "criterion_id": "AC-08",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Mismatch remains visible: - Governing: AIR-FR-059, AIR-ST-10.03. - Given a planned anchor/route not supported by sufficient observed evidence and an unexpected edge, - When the delta compiles, - Then both the unsupported plan and unexpected evidence are retained with exact refs and epistemic state. - Failure example: the planned object is rewritten to match the observed result. - Evidence/test: planned\u2013observed divergence fixture and replay proof.",
+      "criterion_id": "AC-09",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Independent evaluator: - Governing: AIR-FR-060, AIR-ST-10.03. - Given a receipt candidate, - When evaluator identity equals the call proposer or receipt compiler, - Then final validation fails INTREACTIONEVALUATORNOTINDEPENDENT. - Failure example: the same model proposes the call, classifies ANCHORHIT, and approves its receipt. - Evidence/test: evaluator-independence unit and architecture tests.",
+      "criterion_id": "AC-10",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_ts_int_006_reaction.py::test_exact_outcome_vocabulary_and_independent_evaluator"
+    },
+    {
+      "criterion": "Alternatives and maximum claim: - Governing: AIR-FR-060, AIR-ST-10.03. - Given evidence compatible with STATETRANSITION and UNEXPECTEDEDGE, - When independent evaluation runs, - Then it records alternative interpretations, uncertainty, and the maximum supported claim rather than hiding disagreement. - Failure example: highest score alone produces validated ANCHORHIT. - Evidence/test: evaluator disagreement fixture and receipt assertions.",
+      "criterion_id": "AC-11",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_ts_int_006_reaction.py::test_exact_outcome_vocabulary_and_independent_evaluator"
+    },
+    {
+      "criterion": "Strong affect is not intended activation: - Governing: AIR-FR-056, AIR-FR-060, CBAR/Primitive constraints. - Given intense visual/vocal affect that conflicts with the planned outcome and may reflect defensive closure, - When classification/evaluation run, - Then outcome fit and counteractivation are evaluated independently; intensity cannot prove activation. - Failure example: raised voice becomes ANCHORHIT without context. - Evidence/test: adversarial multimodal fixture.",
+      "criterion_id": "AC-12",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Reaction-tail preservation: - Governing: AIR-FR-055, AIR-ST-10.01. - Given a delayed self-correction after the apparent answer, - When the governed reaction tail includes it, - Then the exact source span participates in outcome/evaluation and remains traceable. - Failure example: capture stops at the last transcript word and misses the correction. - Evidence/test: reaction-tail range fixture and source-time hash matrix.",
+      "criterion_id": "AC-13",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Primitive evidence without hard-coded meaning: - Governing: all six FRs and three Story CBAR mandates. - Given exact Primitive refs and applicability, - When validation/evaluation runs, - Then it resolves exact bytes, tests activation/misuse/suppression, and preserves AIR coalition ownership. - Failure example: a fuzzy \u201cfelt truth\u201d prompt replaces PRM-VSG-021 or turns a staged imperfection into observed evidence. - Evidence/test: Primitive registry hash and misuse fixtures.",
+      "criterion_id": "AC-14",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Idempotency and optimistic concurrency: - Governing: all six FRs; Story recovery. - Given a committed command, - When identical bytes retry under the same key, - Then the original result returns; different bytes or stale case/watermark fail without mutation. - Failure example: two classifiers overwrite the current outcome and each emits a success receipt. - Evidence/test: repository concurrency/idempotency integration test.",
+      "criterion_id": "AC-15",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Atomic commit and rollback: - Governing: AIR-FR-058, AIR-FR-060; receipt trust. - Given fault injection at every persistence boundary, - When commit fails, - Then no state exists without command/receipt/evidence, no receipt without artifacts/evaluation, and no rolled-back outbox is published. - Failure example: validated receipt stored while evaluator receipt write failed. - Evidence/test: exhaustive atomic fault-injection matrix.",
+      "criterion_id": "AC-16",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Selective correction and invalidation: - Governing: all Stories\u2019 recovery criteria. - Given one corrected vocal observation in one reaction case, - When the successor commits, - Then only its outcome/delta/receipt/evaluation and exact downstream consumers become stale; unrelated cases remain current. - Failure example: every session receipt is invalidated. - Evidence/test: dependency-graph selective-invalidation test.",
+      "criterion_id": "AC-17",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Historical reproduction: - Governing: all Stories\u2019 evidence/replay criteria. - Given a superseded or rejected receipt, - When exact historical replay runs in a fresh process, - Then canonical bytes/digests and lifecycle reconstruct without using current/latest dependencies. - Failure example: replay substitutes the current planned AIR object. - Evidence/test: clean-process replay/hash matrix.",
+      "criterion_id": "AC-18",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Portable evidence: - Governing: source fidelity and contract compatibility. - Given a clean extracted layout on another machine root, - When the case and evidence package load, - Then every portable ref resolves by governed locator/hash and no machine path/environment value appears in canonical bytes. - Failure example: a local recording path is the only evidence identity. - Evidence/test: clean-room export/import and absolute-path scan.",
+      "criterion_id": "AC-19",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "AIR consumes but cannot manufacture: - Governing: product sovereignty for all six FRs. - Given AIR requests an eligible receipt, - When the gateway serves it, - Then AIR receives an exact read-only view with owner, lifecycle, source, epistemic, evaluation, and claim fields; AIR cannot write or normalize a local evidence fork. - Failure example: AIR creates an \u201cobserved receipt\u201d from planned expectations because IE evidence is incomplete. - Evidence/test: architecture import boundary and consumer conformance tests.",
+      "criterion_id": "AC-20",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Receipt does not auto-approve an Expression Moment: - Governing: Stories\u2019 terminal condition and product boundary. - Given a validated Reaction Receipt, - When Expression Moment resolution begins, - Then the receipt is required evidence but no moment is approved until its separate source-span/context/authority/evaluation gates pass. - Failure example: ANCHORHIT receipt automatically publishes a quote card. - Evidence/test: downstream denial fixture.",
+      "criterion_id": "AC-21",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_ts_int_006_reaction.py::test_exact_outcome_vocabulary_and_independent_evaluator"
+    },
+    {
+      "criterion": "Claim ceiling remains truthful: - Governing: recovery authority and packet claim ceiling. - Given passing local structural tests or a candidate evaluation, - When status is reported, - Then this spec remains WRITTENPENDINGAUDIT, candidate authority remains non-current, and build/certification/production remain false. - Failure example: candidate receipt validation is reported as evaluator or production certification. - Evidence/test: receipt/status-policy validation.",
+      "criterion_id": "AC-22",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "spec_id": "TS-INT-006",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "after every meaningful accepted event, current expression state, target distance, anchor status, observed signals, actual pressure history, relationship condition, and lawful next actions are represented in one immutable projection with evidence/epistemic state",
+      "criterion_id": "REQ-AIR-FR-049",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_air_proposal_is_not_delivery;tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards;tests/phase4/test_ts_int_007_live_state.py::test_replay_hash_chain"
+    },
+    {
+      "criterion": "a genuine interviewer reaction is stored only with attributable human attestation and can influence the next-call context only when the human marks it operative",
+      "criterion_id": "REQ-AIR-FR-050",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_spontaneous_call_and_human_reaction"
+    },
+    {
+      "criterion": "entry requires an armed IAC; each delivered call and meaningful state transition is recorded; reset/land/stop are truthful; no reaction is fabricated",
+      "criterion_id": "REQ-AIR-ST-09.01",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_air_proposal_is_not_delivery;tests/phase4/test_ts_int_007_live_state.py::test_spontaneous_call_and_human_reaction;tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards;tests/phase4/test_ts_int_007_live_state.py::test_replay_hash_chain"
+    },
+    {
+      "criterion": "Given an AIR proposal without a delivery command, no delivered-call event, pressure history entry, reaction, or state transition is created.",
+      "criterion_id": "9.2-01",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_air_proposal_is_not_delivery"
+    },
+    {
+      "criterion": "Given model-inferred interviewer curiosity, RecordInterviewerReaction is rejected unless the human separately attests it; the model observation remains labeled MODELINFERRED.",
+      "criterion_id": "9.2-02",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_spontaneous_call_and_human_reaction"
+    },
+    {
+      "criterion": "Given spontaneous human wording, the record uses SPONTANEOUSHUMAN and does not create an AIR call-option link.",
+      "criterion_id": "9.2-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_spontaneous_call_and_human_reaction"
+    },
+    {
+      "criterion": "Given adapted AIR wording, both the AIR source option and exact delivered language remain recoverable; neither is mutated.",
+      "criterion_id": "9.2-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Given a counteractivation hypothesis, it remains AIR-owned/hypothesized and cannot populate guest truth or Reaction Receipt outcome.",
+      "criterion_id": "9.2-05",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Given a human pressure decision lower than recommendation, the lower actual value is accepted when within constraints.",
+      "criterion_id": "9.2-06",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Given any recommendation to deepen, the human can reset, land, stop, or cancel when allowed by the governing IAC; AIR cannot override.",
+      "criterion_id": "9.2-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards"
+    },
+    {
+      "criterion": "Given a live observation, its epistemic state and evidence owner survive serialization, adapter passage, replay, and projection.",
+      "criterion_id": "9.2-08",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Start fails unless the exact IAC/binding/source refs resolve, hashes match, binding is armed/current, actor scope matches, and lawful terminal routes exist.",
+      "criterion_id": "9.3-01",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_start_is_idempotent_and_requires_terminal_routes"
+    },
+    {
+      "criterion": "Initial state does not assert unobserved reaction, call, anchor hit, or landing.",
+      "criterion_id": "9.3-02",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_start_is_idempotent_and_requires_terminal_routes"
+    },
+    {
+      "criterion": "Every accepted meaningful event increments the sequence with an unbroken previous-event hash.",
+      "criterion_id": "9.3-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_replay_hash_chain"
+    },
+    {
+      "criterion": "Every state change has a snapshot and transition receipt in the same atomic commit.",
+      "criterion_id": "9.3-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "NOEFFECT produces a receipt without an artificial state transition.",
+      "criterion_id": "9.3-05",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Paused sessions reject delivery/advance but allow evidence completion and stop/cancel.",
+      "criterion_id": "9.3-06",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards"
+    },
+    {
+      "criterion": "Reset preserves historical calls, pressure, reactions, and observations.",
+      "criterion_id": "9.3-07",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards"
+    },
+    {
+      "criterion": "Land records landing evidence and unresolved assertions without declaring a successful outcome.",
+      "criterion_id": "9.3-08",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards"
+    },
+    {
+      "criterion": "Terminal states reject new delivery/state-advance commands.",
+      "criterion_id": "9.3-09",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_pause_reset_land_and_terminal_guards"
+    },
+    {
+      "criterion": "Post-terminal evidence appends without reopening or changing historical event bytes.",
+      "criterion_id": "9.3-10",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "AIR-008 and AIR-009 inputs are verified by exact version/hash and authority owner.",
+      "criterion_id": "9.4-01",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "An AIR proposal whose snapshot ref or observation watermark differs from current state is denied STALEAIRPOLICY.",
+      "criterion_id": "9.4-02",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_air_proposal_is_not_delivery"
+    },
+    {
+      "criterion": "A proposal requiring an unsupported semantic feature is rejected even if its JSON parses.",
+      "criterion_id": "9.4-03",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "A proposal that exceeds pressure ceiling, weakens locks, lacks landing/stop options, or asserts actual human reaction is rejected.",
+      "criterion_id": "9.4-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Acknowledgement means available for consideration, never delivered or accepted as truth.",
+      "criterion_id": "9.4-05",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_air_proposal_is_not_delivery"
+    },
+    {
+      "criterion": "A live-state advance stales prior proposals unless their governed validity rule explicitly remains true; no silent retargeting occurs.",
+      "criterion_id": "9.4-06",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "A hash change to either draft dependency blocks downstream promotion until the recorded sections are reviewed and receipts refreshed.",
+      "criterion_id": "9.4-07",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Identical normalized commands and dependencies in two fresh processes produce byte-identical events, snapshots, and receipts.",
+      "criterion_id": "9.5-01",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Changing wall clock, timezone, locale, environment, process ID, random seed, dictionary insertion order, or filesystem creation/traversal order does not change canonical bytes/hashes.",
+      "criterion_id": "9.5-02",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Repository artifacts contain no absolute drive path, username, temporary directory, host name, or process-local locator.",
+      "criterion_id": "9.5-03",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Canonical lists and sorted sets serialize consistently; semantically ordered lists retain declared order.",
+      "criterion_id": "9.5-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Replay from genesis produces the same projection hash as replay from a valid checkpoint.",
+      "criterion_id": "9.5-05",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_replay_hash_chain"
+    },
+    {
+      "criterion": "Replay at an earlier sequence remains reproducible after later invalidation, with the selected historical/effective view labeled.",
+      "criterion_id": "9.5-06",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Unknown schema/event versions stop projection rather than being ignored.",
+      "criterion_id": "9.5-07",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Fault injection at every repository write boundary leaves either the complete outcome or no visible outcome.",
+      "criterion_id": "9.6-01",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "There is no stored state without receipt, receipt without command, event without command, or transition without snapshot/transition receipt.",
+      "criterion_id": "9.6-02",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "An exact retry returns the original receipt and artifact hashes without a new event.",
+      "criterion_id": "9.6-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_start_is_idempotent_and_requires_terminal_routes"
+    },
+    {
+      "criterion": "Same idempotency key plus different command fingerprint returns IDEMPOTENCYKEYREUSED.",
+      "criterion_id": "9.6-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Two commands against one expected head cannot both commit.",
+      "criterion_id": "9.6-05",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "The losing command receives STALEPROJECTION; the system does not auto-rebase it.",
+      "criterion_id": "9.6-06",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Response loss after commit followed by retry returns the committed outcome.",
+      "criterion_id": "9.6-07",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "In-memory and durable repositories pass one shared conformance suite.",
+      "criterion_id": "9.6-08",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Invalidation records reason, authority, scope, effective point, and descendants; historical bytes remain readable to authorized auditors.",
+      "criterion_id": "9.7-01",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Invalidating a selected AIR proposal propagates to its acknowledgement and dependent projections without invalidating unrelated spontaneous-human events.",
+      "criterion_id": "9.7-02",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Revoked IAC/binding blocks current operation but does not erase history.",
+      "criterion_id": "9.7-03",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Migration never guesses source kind, IAC, live state, reaction, call origin, pressure, anchor, or landing.",
+      "criterion_id": "9.7-04",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Incomplete legacy records become typed unresolved imports and cannot drive a current session.",
+      "criterion_id": "9.7-05",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Cache loss recovers through deterministic replay; a hash mismatch quarantines rather than repairs.",
+      "criterion_id": "9.7-06",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Unavailable historical inputs return HISTORICALINPUTUNAVAILABLE with exact missing refs.",
+      "criterion_id": "9.7-07",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "A corrected reaction/transcription supersedes rather than overwrites the original.",
+      "criterion_id": "9.7-08",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Cross-organization or cross-brand access is rejected before content disclosure.",
+      "criterion_id": "9.8-01",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Actor grants are checked for the exact command; generic operator access does not authorize interviewer reaction or delivery.",
+      "criterion_id": "9.8-02",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Raw sensitive content is absent from default logs and metrics.",
+      "criterion_id": "9.8-03",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Technical security rules do not create generic creative-safety/content-rights approval authority.",
+      "criterion_id": "9.8-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Guest/source authority, interviewer authority, AIR policy ownership, Interview Expression evidence ownership, and product sovereignty remain distinct in every artifact and adapter.",
+      "criterion_id": "9.8-05",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Retention/redaction actions remain receipt-bearing and do not create substitute meaning.",
+      "criterion_id": "9.8-06",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "A field declared required cannot be satisfied by empty string/list/null when its semantics apply.",
+      "criterion_id": "9.9-01",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "NOTAPPLICABLE is accepted only for enum-governed cases identified in the contract.",
+      "criterion_id": "9.9-02",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "UNKNOWN and NOTAPPLICABLE are not interchangeable.",
+      "criterion_id": "9.9-03",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Nonverbal delivered action may use exactdeliveredexpression: NOTAPPLICABLE only with governed action kind and evidence.",
+      "criterion_id": "9.9-04",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Spontaneous human delivery requires AIR refs NOTAPPLICABLE; it cannot omit origin.",
+      "criterion_id": "9.9-05",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_ts_int_007_live_state.py::test_spontaneous_call_and_human_reaction"
+    },
+    {
+      "criterion": "Initial unobserved anchor/reaction/landing values are represented explicitly and cannot appear as positive evidence.",
+      "criterion_id": "9.9-06",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "The completed writing artifact states WRITTENPENDINGAUDIT, CANDIDATENOTCURRENT, specification work authorized, build false, and the pre-ratification ceiling.",
+      "criterion_id": "9.10-01",
+      "evidence_status": "IMPLEMENTATION_PRESENT_NO_DIRECT_AC_TEST",
+      "gap_or_next_action": "Core implementation exists; a criterion-specific test and receipt are still required.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "No writer-issued audit, acceptance receipt, capsule, code, schema, release, certification, or production claim exists.",
+      "criterion_id": "9.10-02",
+      "evidence_status": "DEFERRED_NOT_IMPLEMENTED",
+      "gap_or_next_action": "Requires later external integration, migration/fault-injection, operational security, or full lifecycle work.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    },
+    {
+      "criterion": "Future technical acceptance before ratification can be only TECHNICALLYACCEPTEDPENDINGRATIFICATION.",
+      "criterion_id": "9.10-03",
+      "evidence_status": "DIRECT_ACCEPTANCE_TEST_EVIDENCE",
+      "gap_or_next_action": "",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": "tests/phase4/test_reference_flow.py::test_deterministic_reference_flow"
+    },
+    {
+      "criterion": "A separately attributable ratification and later build authorization are required before implementation.",
+      "criterion_id": "9.10-04",
+      "evidence_status": "NOT_PROVEN_IN_PHASE_04",
+      "gap_or_next_action": "No direct Phase 4 evidence was identified for this criterion.",
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "spec_id": "TS-INT-007",
+      "test_evidence": ""
+    }
+  ],
+  "gaps": [
+    {
+      "affected_specs": "TS-INT-001",
+      "finding": "Full fault-injection, migration, downstream acknowledgement, revocation and cancellation semantics are not complete.",
+      "gap_id": "P4-GAP-001",
+      "next_action": "Implement targeted repository fault injection, legacy-shape migration fixtures, consumption acknowledgement and revocation tests.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "TS-INT-002",
+      "finding": "External ASR/diarization, rational timebase normalization, drift correction and selective transcript correction are not implemented.",
+      "gap_id": "P4-GAP-002",
+      "next_action": "Add provider-neutral transcript adapters, integer tick conversion, drift receipts and local invalidation.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "TS-INT-003",
+      "finding": "Automated shot/transition detection, VFR presentation-order evidence, uncertainty profiles and geometry applicability remain outside the deterministic input-driven core.",
+      "gap_id": "P4-GAP-003",
+      "next_action": "Add OmniShotCut-compatible adapter, presentation-frame index, uncertainty records and geometry profile support.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "TS-INT-004",
+      "finding": "Complete routeability/quality evaluation, boundary correction and AIR acknowledgement workflows are not implemented.",
+      "gap_id": "P4-GAP-004",
+      "next_action": "Add evaluator contracts, boundary-expansion candidates, selective invalidation and AIR handoff acknowledgement.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "TS-INT-005",
+      "finding": "Full inventory-entry approval lifecycle, restriction inheritance, consumer acknowledgement, revocation and migration are not implemented.",
+      "gap_id": "P4-GAP-005",
+      "next_action": "Add entry-level lifecycle, monotonic restrictions, consumer-scoped acknowledgement and migration tests.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "TS-INT-006",
+      "finding": "Real multimodal capture, full outcome corpus, source-tail correction, selective invalidation and historical migration are not implemented.",
+      "gap_id": "P4-GAP-006",
+      "next_action": "Add live/imported capture adapters, evaluator corpus, correction/supersession and replay fixtures.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "TS-INT-007",
+      "finding": "The live-session engine is deterministic foundation only; real IAC resolution, AIR proposal verification, observation-driven state advancement, tenant security, redaction and durable/in-memory conformance are incomplete.",
+      "gap_id": "P4-GAP-007",
+      "next_action": "Build the live Interview execution vertical with exact AIR/IAC adapters, observation commands, security and repository conformance.",
+      "severity": "CRITICAL",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "ALL",
+      "finding": "Per-spec direct acceptance evidence is incomplete even where core implementation exists.",
+      "gap_id": "P4-GAP-008",
+      "next_action": "Complete criterion-specific tests and issue later per-spec acceptance receipts before claiming full Spec completion.",
+      "severity": "HIGH",
+      "status": "OPEN"
+    },
+    {
+      "affected_specs": "ALL",
+      "finding": "Real human interview evidence, external model/provider execution and production deployment are absent.",
+      "gap_id": "P4-GAP-009",
+      "next_action": "Close only with separately authorized real-source, provider and production evidence.",
+      "severity": "EXTERNAL",
+      "status": "DEFERRED"
+    },
+    {
+      "affected_specs": "ALL",
+      "finding": "Candidate authority remains non-current and no production/certification authority is granted.",
+      "gap_id": "P4-GAP-010",
+      "next_action": "Preserve claim ceiling until separate attributable authority receipts exist.",
+      "severity": "GOVERNANCE",
+      "status": "DEFERRED"
+    }
+  ],
+  "specs": [
+    {
+      "acceptance_criteria_total": 30,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 7,
+      "direct_acceptance_test_count": 12,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 9,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/source_package.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "implementation_status": "IMPLEMENTED_BOUNDED_CORE_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 2,
+      "spec_id": "TS-INT-001",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-001.md",
+      "spec_sha256": "ca13c9fdcc3b840533de2a955a5388497a434a0b7f94950978012536fd4301e8",
+      "test_count": 8,
+      "test_path": "tests/phase4/test_ts_int_001_source_package.py",
+      "title": "Canonical Interview Source Package and Dual Admission"
+    },
+    {
+      "acceptance_criteria_total": 12,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 0,
+      "direct_acceptance_test_count": 7,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 5,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/transcript.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "implementation_status": "IMPLEMENTED_BOUNDED_CORE_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 0,
+      "spec_id": "TS-INT-002",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-002.md",
+      "spec_sha256": "1aff9aca4776d0dbb8254882814b6277303258924990a0f75640798768f4123d",
+      "test_count": 4,
+      "test_path": "tests/phase4/test_ts_int_002_transcript.py",
+      "title": "Word/Speaker Alignment and Packed Phrase Transcript"
+    },
+    {
+      "acceptance_criteria_total": 18,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 5,
+      "direct_acceptance_test_count": 7,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 6,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/visual.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/media.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "implementation_status": "IMPLEMENTED_BOUNDED_CORE_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 0,
+      "spec_id": "TS-INT-003",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-003.md",
+      "spec_sha256": "d6075ebbc317a2e9f363bebfedda78dcf7d8d31dc1377dbc15b212f7800bd1d6",
+      "test_count": 3,
+      "test_path": "tests/phase4/test_ts_int_003_visual.py",
+      "title": "Shot Boundary, Transition, Keyframe, and Visual Reference Index"
+    },
+    {
+      "acceptance_criteria_total": 24,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 3,
+      "direct_acceptance_test_count": 8,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 13,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/expression.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "implementation_status": "IMPLEMENTED_BOUNDED_CORE_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 0,
+      "spec_id": "TS-INT-004",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-004.md",
+      "spec_sha256": "e6147fc8ca8f8d6d3a0ff8954336fe9b844c8e18e45c41b330c558f7d87a0d5a",
+      "test_count": 4,
+      "test_path": "tests/phase4/test_ts_int_004_expression.py",
+      "title": "Tag Provenance, Anchor Hit, and Expression Moment Governance"
+    },
+    {
+      "acceptance_criteria_total": 28,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 4,
+      "direct_acceptance_test_count": 7,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 17,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/inventory.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "implementation_status": "IMPLEMENTED_BOUNDED_CORE_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 0,
+      "spec_id": "TS-INT-005",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-005.md",
+      "spec_sha256": "ffdac05544b34230765c0e3f0eca32f77a471886fdb1871ecec4ba7b536f6416",
+      "test_count": 2,
+      "test_path": "tests/phase4/test_ts_int_005_inventory.py",
+      "title": "Expression Ingredient Inventory and Asset Package Spec"
+    },
+    {
+      "acceptance_criteria_total": 22,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 2,
+      "direct_acceptance_test_count": 7,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 13,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/reaction.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/domain.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py",
+      "implementation_status": "IMPLEMENTED_BOUNDED_CORE_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 0,
+      "spec_id": "TS-INT-006",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-006.md",
+      "spec_sha256": "3fb216913d8e0c52e3a51db65b6a3c848240cc3d040f9806fd8d3c85a443f58d",
+      "test_count": 3,
+      "test_path": "tests/phase4/test_ts_int_006_reaction.py",
+      "title": "Reaction Observation and Reaction Receipt Evidence"
+    },
+    {
+      "acceptance_criteria_total": 67,
+      "claim_ceiling": "PHASE_04_INTERVIEW_EXPRESSION_DEVELOPMENT_EVIDENCE",
+      "deferred_not_implemented_count": 7,
+      "direct_acceptance_test_count": 20,
+      "full_spec_completed": false,
+      "implementation_no_direct_test_count": 25,
+      "implementation_paths": "06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/live_state.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/repository.py;06_INTERVIEW_EXPRESSION/src/conscious_activations_interview_expression/adapters.py",
+      "implementation_status": "IMPLEMENTED_DETERMINISTIC_FOUNDATION_ACCEPTANCE_PARTIAL",
+      "not_proven_count": 15,
+      "spec_id": "TS-INT-007",
+      "spec_path": "06_INTERVIEW_EXPRESSION/docs/tech-specs/TS-INT-007.md",
+      "spec_sha256": "98978c560ba216707fcc7d26305de1f2c42e9391f09db20aa4fc97a69fe08dbc",
+      "test_count": 5,
+      "test_path": "tests/phase4/test_ts_int_007_live_state.py",
+      "title": "Live Activative State and Interview Execution"
+    }
+  ]
+}

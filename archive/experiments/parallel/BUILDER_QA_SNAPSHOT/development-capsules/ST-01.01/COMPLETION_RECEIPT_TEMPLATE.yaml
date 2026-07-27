@@ -1,0 +1,55 @@
+schema_version: cmf-builder-story-completion-receipt-template/v1
+template_id: ST-01.01:StoryCompletionReceipt
+template_status: UNISSUED_BY_DESIGN
+issuance_rule: issue_only_after_all_required_evidence_validates_and_no_capsule_scope_violation_exists
+receipt_identity_rule: sha256_of_canonical_receipt_payload_excluding_receipt_sha256
+required_identity_fields:
+  story_id: {type: string, required_value: ST-01.01}
+  primary_epic: {type: string, required_value: EP-01}
+  implementation_commit_or_workspace_identity: {type: sha256_or_vcs_commit, evidence_source: implementation_context}
+  capsule_manifest_sha256: {type: sha256, evidence_source: CAPSULE_MANIFEST.json}
+  implementation_authorization_sha256: {type: sha256, evidence_source: IMPLEMENTATION_AUTHORIZATION.yaml}
+  authority_identity: {type: string, evidence_source: explicit_human_authorization_record}
+  authorization_phrase_digest: {type: sha256, evidence_source: normalized_exact_authorization_phrase}
+required_outcome_fields:
+  outcome: {allowed_values: [PASS, FAIL]}
+  completed_primary_outcome: {required_value: the run has stable identity, explicit authority, replay-safe state, and target-specific required work}
+  full_release1_readiness: {required_value: FAIL}
+  full_product_readiness: {required_value: FAIL}
+required_evidence:
+  owned_obligation_results:
+    required_ids: [ADR-001, AG-001, AG-002, D001, D006, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, NFR-REL-002, NFR-SEC-003]
+    allowed_result: PASS
+  acceptance_criteria_results:
+    required_ids: [AC-01, AC-02, AC-03, AC-04, AC-05, AC-06, AC-07, AC-08, AC-09]
+    allowed_result: PASS
+  test_results:
+    path: development-capsules/ST-01.01/completion/TEST_RESULTS.json
+    required_test_ids: [ST-01.01-acceptance, ST-01.01-failure, ST-01.01-authority, ST-01.01-receipt]
+    deterministic_rerun_required: true
+  observability_evidence:
+    path: development-capsules/ST-01.01/completion/OBSERVABILITY_EVIDENCE.json
+    required_events: [ST-01.01:OutcomeVerified, ST-01.01:OutcomeRejected]
+  changed_file_manifest:
+    path: development-capsules/ST-01.01/completion/FILE_CHANGE_MANIFEST.json
+    all_paths_must_match_allowed_scope: true
+  rollback_evidence:
+    path: development-capsules/ST-01.01/completion/ROLLBACK_EVIDENCE.md
+    result_required: PASS
+  dependency_receipt:
+    path: development-capsules/ST-01.01/DEPENDENCY_RECEIPT.yaml
+    required_verdict: PASS_FOR_BOUNDED_CAPSULE
+  gate_dispositions:
+    EG-EPIC-HASH: CLOSED_BY_GOVERNED_DISPOSITION
+    EG-DEVELOPMENT-CAPSULE: PASS
+    explicit_human_implementation_authority: GRANTED_FOR_ST-01.01_ONLY
+required_hashes:
+  - every implementation source file
+  - every Story test file
+  - every completion evidence file other than the receipt being issued
+  - capsule manifest
+  - implementation authorization
+failure_rule: any missing, failing, mismatched, out-of-scope, unauthoritative, or non-deterministic evidence forces outcome FAIL and prohibits a completion claim
+downstream_effect:
+  on_pass: ST-01.01 receipt may satisfy only dependencies that explicitly name ST-01.01
+  does_not_authorize: [ST-01.02, full_release1, full_product, production_deployment, VAE, Delegation]

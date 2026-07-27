@@ -1,0 +1,51 @@
+schema_version: cmf-builder-synthetic-demonstration-integration-verdict/v1
+audited_on: "2026-07-16"
+repository: atomic_harness_builder
+scope: canonical_builder_final_synthetic_demonstration_integration_gate
+verdict: PASS
+reason: authorized_bounded_correction_closed_all_reproduced_P0_and_P1_trust_findings
+dimension_counts: {PASS: 10, CONCERN: 1, FAIL: 0}
+story_completion_receipts:
+  ST-07.02: {verdict: PASS, sha256: ee13f9b6601ab1b166f16d2d30fb043f1441745d9e8146248d2d6d7d08caa681}
+  ST-07.04: {verdict: PASS, sha256: e944032fe369e11c274e2d868bec6168d18124587cc09c9a328e58e33463fe2a}
+  ST-11.01: {verdict: PASS, sha256: 5863ef2fa3a5eca00d76234fea4c1067d132743a3ffc3b51e4acb9f0dd4480d3}
+correction:
+  capsule: development-capsules/BQA-P0-P1-TRUST-CORRECTION
+  manifest_sha256: 89f5a8f6b9193d70f612fdfc3f928991c4f0233dc539a225d9fdca8e728755d7
+  bundle_digest: 84238a1a38a9ff23fd1b0b2669a86191268e5b6b7a5697b668f61c87d7f8620f
+  immutable_inputs: PASS_18_OF_18
+  receipt_path: development-capsules/BQA-P0-P1-TRUST-CORRECTION/completion/STORY_SUPPLEMENTAL_CORRECTION_RECEIPTS.yaml
+  receipt_sha256: 0580bb67c9a4f462300b4734023008ab9c90fbcfae6590bcbf2a0e1c1f3cb24a
+validation:
+  correction_specific_process_1: PASS_125_OF_125
+  correction_specific_process_2: PASS_125_OF_125
+  affected_predecessor_suites: PASS_128_OF_128
+  repository_regression_fresh_process_1: PASS_600_OF_600_54_27_seconds
+  repository_regression_fresh_process_2: PASS_600_OF_600_49_95_seconds
+  mandatory_skips: 0
+  repository_python_compilation: PASS_178_OF_178
+  source_python_compilation: PASS_45_OF_45
+  capsule_and_receipt_hashes: PASS
+  constitutional_precedence_and_authority: PASS
+  replay_idempotency_invalidation_rollback: PASS
+  portable_artifacts_absolute_paths_or_secrets: PASS_NONE_FOUND
+qa_findings:
+  closed_blocking: [BQA-P0-001, BQA-P1-002, BQA-P1-003, BQA-P1-004, BQA-P1-005, BQA-P1-006]
+  open_blocking: []
+  deferred_nonblocking: [BQA-P2-007, BQA-P2-008, BQA-P2-009, BQA-P3-010]
+scope_boundary:
+  original_receipts_modified: false
+  authority_text_modified: false
+  schema_or_shared_contract_modified: false
+  external_repository_modified: false
+  new_product_scope_implemented: false
+  production_eligible: false
+  certified: false
+  certification_state: synthetic_not_certifiable
+  external_target_compatibility: NOT_EVALUATED_EXTERNAL_TARGET_BRANCH
+campaign:
+  constitutional_incompatibility_stop: CLEARED_BY_PASS_CORRECTION_RECEIPT
+  standing_full_builder_authority: ACTIVE
+  next_selected_story: ST-01.03
+production_ready: false
+full_product_ready: false

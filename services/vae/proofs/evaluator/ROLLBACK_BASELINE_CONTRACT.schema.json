@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf://vae/readiness/evaluator-rollback-baseline/1.0",
+  "title": "Evaluator Rollback Baseline Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["classification", "baseline_id", "status", "profile_ref", "evaluator_pin_ref", "program_pin_ref", "calibration_corpus_digest", "protected_set_digest", "rollback_triggers", "restore_evidence", "rehearsal_receipt_ref"],
+  "properties": {
+    "classification": {"const": "non_production_readiness_proof"},
+    "baseline_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["unbound", "pinned", "revoked"]},
+    "profile_ref": {"type": "string", "minLength": 1},
+    "evaluator_pin_ref": {"type": ["string", "null"]},
+    "program_pin_ref": {"type": ["string", "null"]},
+    "calibration_corpus_digest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "protected_set_digest": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "rollback_triggers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "restore_evidence": {"type": "array", "items": {"type": "string"}},
+    "rehearsal_receipt_ref": {"type": ["string", "null"]}
+  }
+}

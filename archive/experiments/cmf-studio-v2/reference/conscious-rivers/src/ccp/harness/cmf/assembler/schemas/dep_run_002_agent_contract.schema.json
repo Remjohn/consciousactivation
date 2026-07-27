@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-002",
+  "title": "Agent Contract",
+  "description": "FR-VID-12 §4 Stage 5 — Machine-readable typed agent declaration. Each contract declares the agent's objective, data dependencies, allowed tools, delegation policy, stop condition, failure routing, and memory writes.",
+  "type": "object",
+  "required": ["agent_id", "agent_type", "objective", "reads", "writes", "tool_policy_id", "delegation_policy", "stop_condition", "failure_routing", "memory_writes"],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "pattern": "^CMF-[A-Z]+-[A-Z]+$",
+      "description": "Unique agent identifier (e.g. CMF-EDITOR-AGENT)."
+    },
+    "agent_type": {
+      "type": "string",
+      "description": "Agent type key matching allowed_agent_types in DEP-RUN-001 profiles."
+    },
+    "objective": {
+      "type": "string",
+      "description": "Human-readable description of the agent's purpose and scope."
+    },
+    "reads": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "DEP schema IDs or runtime artifacts this agent reads as input."
+    },
+    "writes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "DEP schema IDs or memory domains this agent may write to. Format: DEP-ID or DEP-RUN-006:object_type."
+    },
+    "tool_policy_id": {
+      "type": "string",
+      "description": "Reference to DEP-RUN-004 tool policy governing this agent's allowed tools."
+    },
+    "delegation_policy": {
+      "type": "object",
+      "required": ["allowed_subagents", "team_ids", "chain_ids"],
+      "properties": {
+        "allowed_subagents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Agent types this agent may delegate work to."
+        },
+        "team_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "DEP-RUN-008 team config IDs this agent may dispatch."
+        },
+        "chain_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "DEP-RUN-009 chain config IDs this agent may invoke."
+        }
+      }
+    },
+    "stop_condition": {
+      "type": "string",
+      "description": "Declarative condition under which the agent considers its work complete."
+    },
+    "failure_routing": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Map of failure type to routing target (e.g. invalid_patch → route_to_commander)."
+    },
+    "memory_writes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Canonical memory object types this agent writes on command-end."
+    }
+  }
+}

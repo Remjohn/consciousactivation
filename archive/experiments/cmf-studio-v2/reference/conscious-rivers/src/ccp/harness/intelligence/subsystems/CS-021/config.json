@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-021",
+  "name": "Pan Speed Limiter",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Camera Motion",
+    "Judder and mobile comfort research"
+  ],
+  "inputs": [
+    "pan_duration_seconds",
+    "frame_width",
+    "frame_rate",
+    "movement_amplitude"
+  ],
+  "outputs": [
+    "safe_motion_verdict",
+    "alternative_suggestion",
+    "violations"
+  ],
+  "thresholds": {
+    "minimum_full_width_pan_seconds": 7.0,
+    "prefer_cut_when_under_threshold": true
+  },
+  "default_action_on_fail": "REVISE"
+}

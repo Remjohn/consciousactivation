@@ -1,0 +1,35 @@
+schema_version: cmf-builder-offline-implementation-completion-receipt/v1
+amendment_id: OD-AM-004
+story_id: ST-10.05
+receipt_type: ImplementationCompletionReceipt
+verdict: IMPLEMENTED_DEVELOPMENT_PASS
+issued_on: "2026-07-17"
+outcome: governed_skill_recipe_runtime_capsule_trace_projection_implemented
+implemented_files:
+  - src/cmf_builder/application/skill_runtime_inspection.py
+test_files:
+  - tests/stories/st_10_05/test_skill_runtime_inspection.py
+evidence:
+  delta_capsule: development-capsules/OD-AM-004/ST-10.05/DELTA_CAPSULE.yaml
+  file_change_manifest: development-capsules/OD-AM-004/ST-10.05/FILE_CHANGE_MANIFEST.yaml
+  test_results: development-capsules/OD-AM-004/ST-10.05/TEST_RESULTS.json
+validation:
+  focused_tests: PASS_4_OF_4
+  od_am_004_tests: PASS_15_OF_15
+  st_10_checkpoint_tests: PASS_37_OF_37
+  full_regression: PASS_1868_OF_1868_TWICE_NO_MANDATORY_SKIPS
+  python_compilation: PASS
+  architecture_boundaries: PASS_75_OF_75
+  source_tree_sha256: 376c3d88fe4b8822345780668e5fcf400084293c952bafacd3906897f6f551fb
+scope_boundaries:
+  implementation_gate_only: true
+  story_completion_receipt: false
+  evidence_closure_changed: false
+  production_ready: false
+  certified: false
+  provider_validation: pending
+excluded_scope:
+  - provider_execution
+  - production_or_certification_claims
+  - mutation_of_runtime_lifecycle_state
+  - ST-10.06_or_later

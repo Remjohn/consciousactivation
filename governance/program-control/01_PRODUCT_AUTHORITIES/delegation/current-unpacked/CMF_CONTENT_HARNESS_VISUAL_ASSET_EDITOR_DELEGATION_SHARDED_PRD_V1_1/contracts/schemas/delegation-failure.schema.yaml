@@ -1,0 +1,46 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Delegation Failure
+type: object
+additionalProperties: false
+required:
+- failure_id
+- classification
+- authority
+- retry
+- invalidation
+- next_actions
+properties:
+  failure_id:
+    type: string
+    minLength: 1
+    pattern: ^FAIL-
+  classification:
+    type: object
+    required:
+    - family
+    - code
+    - severity
+    - terminal
+  authority:
+    type: object
+    required:
+    - detected_by
+    - responsible_system
+    - decision_owner
+  retry:
+    type: object
+    required:
+    - permitted
+    - retry_class
+    - consumes_quality_round
+  invalidation:
+    type: object
+  next_actions:
+    type: array
+    items:
+      type: string
+      minLength: 1
+  diagnostics_ref:
+    type:
+    - string
+    - 'null'

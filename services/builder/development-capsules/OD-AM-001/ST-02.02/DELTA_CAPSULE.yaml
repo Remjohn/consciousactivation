@@ -1,0 +1,60 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-02.02:SUBSTRATE_GRAPHS
+amendment: {id: OD-AM-001, receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml, receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44}
+story:
+  id: ST-02.02
+  title: Build Spatial, Temporal, and Reading-Order Graphs
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  primary_obligations: [FR-024, FR-025, FR-026, FR-027]
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-02.01
+  receipt_path: development-capsules/OD-AM-001/ST-02.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 7945916c62c480a1a9f9b8205cde987e7a91939922d28176e4f89d00f5c831a2
+  status: IMPLEMENTED_DEVELOPMENT_PASS
+authority_sources:
+  story_inventory: {path: docs/planning/STORY_INVENTORY.yaml, sha256: ee2f53a443b36977bd3ec352c45dbf485cef5c005fdc07d1fc6fafbff37c24fe}
+  obligation_coverage: {path: docs/planning/STORY_REQUIREMENT_COVERAGE.csv, sha256: a7311578fdd5a70cf479de5156f842cfac94498f51f1bcbb280833dd5dc1f215}
+  tech_spec: {path: docs/tech-specs/specs/TS-03-VISUAL-SYNTAX-FIRST.md, sha256: d2287b754e24cf7dc9350cf378f825d9a501b16d33b6fafd600f48033a218c27}
+  path_ownership: {path: docs/implementation/offline-development/PATH_OWNERSHIP_LOCKS.yaml, sha256: e61be446e7faaa604e392083e53559a8e0206148a71dc15693bc0b08be56aab0}
+implementation_scope:
+  - compile deterministic spatial, temporal, reading-order and structurally conversational graphs from ST-02.01 observations
+  - preserve source observation identity, provenance, knowledge status, applicability and uncertainty on nodes and edges
+  - classify composition variables without semantic inference
+  - canonicalize inverse and symmetric relations
+  - reject cycles, dangling or untraceable edges, unsupported substrate relations and geometry or timing contradictions
+blocker_scope:
+  BD-004: {offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, evidence_gate: EVIDENCE_PENDING}
+  BD-007: {offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, empirical_gate: EVIDENCE_PENDING}
+  HD-006: {offline_non_personal_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, human_policy: HUMAN_POLICY_PENDING}
+allowed_files:
+  - src/cmf_builder/visual/graph_contracts.py
+  - src/cmf_builder/visual/relationship_graphs.py
+  - tests/stories/st_02_02/test_st_02_02_graphs.py
+  - tests/stories/st_02_02/test_st_02_02_failures.py
+  - tests/stories/st_02_02/test_st_02_02_determinism.py
+  - development-capsules/OD-AM-001/ST-02.02/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-02.02/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-02.02/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-02.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - existing shared or visual source files
+  - package exports and __init__.py files
+  - architecture tests, source-boundary registry, queues or status files
+  - provider, network, external-product or production behavior
+  - semantic inference from syntax observations
+  - StoryCompletionReceipt or EvidenceClosureReceipt
+acceptance:
+  - identical governed observations and relation evidence produce byte-identical graphs and receipts
+  - each applicable substrate emits only its governed graph kinds
+  - nodes and edges preserve typed evidence, provenance and uncertainty
+  - composition variables remain structural and source-traceable
+  - cycles, unsupported relations, dangling targets, missing time states and contradictory relations fail closed
+  - structurally conversational graphs are not flattened into visual timelines
+  - production readiness, certification and empirical superiority remain false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: PENDING_INTEGRATOR_FULL_REGRESSION
+  may_unlock: ST-02.03_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false

@@ -1,0 +1,53 @@
+schema_version: cmf-builder-bd008-disposition/v1
+disposition_id: bd008-category-evidence-disposition-2026-07-16
+blocker_id: BD-008
+authority_basis:
+  - docs/planning/BLOCKER_SCOPE_REGISTRY.yaml
+  - docs/planning/BUILDER_CORE_BLOCKER_REASSESSMENT.yaml
+  - docs/tech-specs/BLOCKING_DECISIONS.yaml
+  - prd/12-assumptions-open-questions.md#OQ-005
+  - prd/12-assumptions-open-questions.md#OQ-006
+  - sources/CCP_ACTIVATIVE_INTELLIGENCE_VISUAL_NARRATIVE_CONSTITUTION_V1_1.md
+scope_dispositions:
+  ST-06.01_STRUCTURAL_UNCERTIFIED_CATEGORY_BINDING:
+    disposition: SCOPED_NOT_APPLICABLE_TO_STRUCTURAL_UNCERTIFIED_BRANCH
+    rationale: >-
+      The authoritative blocker scope activates for protected-label custody,
+      maturity promotion, calibrated thresholds and production certification.
+      ST-06.01 binds one canonical category identity and preserves constitutional
+      semantics while production_ready and certified remain false.
+    does_not_authorize:
+      - real_profile_quality_claim
+      - benchmark_claim
+      - conversational_certification
+      - production_threshold
+      - production_authorization
+  REAL_PROFILE_DEVELOPMENT_EVIDENCE:
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: >-
+      No repository candidate has a complete immutable non-synthetic profile,
+      original source bytes, explicit usage authority and field-level lineage.
+      Constitutional examples, public development fixtures and placeholder PZ
+      fixtures cannot be relabeled as real evidence.
+  PROTECTED_BENCHMARK_LABEL_GOVERNANCE:
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: Evaluation governance has not ratified label custody or change control.
+  PRODUCTION_THRESHOLD_CALIBRATION:
+    disposition: REMAINS_BLOCKED_EXTERNAL_EVIDENCE
+    rationale: Repeated fresh-context real-profile trials and calibrated thresholds do not exist.
+  CONVERSATIONAL_PRODUCTION_CERTIFICATION:
+    disposition: REMAINS_BLOCKED_OPERATOR_INPUT
+    rationale: HD-007 remains independently open for conversational evaluation governance.
+st_06_01_effect:
+  bd008_applicable_cut_member: false
+  may_be_removed_from_structural_uncertified_cut: true
+  condition: >-
+    ST-06.01 must remain structural, non-production and uncertified and must make no
+    real-profile, protected-benchmark, maturity or certification claim.
+real_profile_evidence_effect:
+  eligible_profile_count: 0
+  evaluation_executed: false
+  operator_request: docs/implementation/category-evidence/BD008_REQUIRED_OPERATOR_INPUT.yaml
+global_bd008_status: OPEN
+production_ready: false
+certified: false

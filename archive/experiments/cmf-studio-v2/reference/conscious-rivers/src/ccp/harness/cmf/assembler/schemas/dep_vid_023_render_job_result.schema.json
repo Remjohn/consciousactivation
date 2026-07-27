@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-023",
+  "title": "Render Job Result",
+  "description": "FR-VID-08 §5 — Output metadata from a completed Remotion render job. Contains file path, quality metrics, render statistics, and status.",
+  "type": "object",
+  "required": ["render_id", "pipeline_id", "video_id", "project_id", "quality_tier", "composition_id", "output", "render_stats", "status", "manifest_id", "render_timestamp"],
+  "properties": {
+    "render_id": {
+      "type": "string",
+      "pattern": "^RENDER-\\d{8}-\\d{3}$"
+    },
+    "pipeline_id": { "type": "string" },
+    "video_id": { "type": "string" },
+    "project_id": { "type": "string" },
+    "quality_tier": {
+      "type": "string",
+      "enum": ["preview", "review", "final"]
+    },
+    "composition_id": {
+      "type": "string",
+      "pattern": "^cmf-[a-z-]+$"
+    },
+    "output": {
+      "type": "object",
+      "required": ["file_path", "file_size_bytes", "duration_sec", "resolution", "fps", "codec", "bitrate_kbps"],
+      "properties": {
+        "file_path": { "type": "string" },
+        "file_size_bytes": { "type": "integer", "minimum": 0 },
+        "duration_sec": { "type": "number", "minimum": 0 },
+        "resolution": {
+          "type": "string",
+          "pattern": "^\\d+x\\d+$"
+        },
+        "fps": { "type": "integer", "enum": [24, 30, 60] },
+        "codec": {
+          "type": "string",
+          "enum": ["h264", "h265"]
+        },
+        "bitrate_kbps": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "render_stats": {
+      "type": "object",
+      "required": ["render_time_sec", "frames_rendered", "frames_per_second"],
+      "properties": {
+        "render_time_sec": { "type": "number", "minimum": 0 },
+        "frames_rendered": { "type": "integer", "minimum": 0 },
+        "frames_per_second": { "type": "number", "minimum": 0 }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["COMPLETED", "FAILED", "CANCELLED"]
+    },
+    "error": { "type": ["string", "null"] },
+    "manifest_id": { "type": "string" },
+    "render_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

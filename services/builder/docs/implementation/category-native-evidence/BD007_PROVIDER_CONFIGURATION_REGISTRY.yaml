@@ -1,0 +1,85 @@
+schema_version: cmf-builder-bd007-provider-configuration-registry/v1
+registry_id: BD007-ST0603-DEVELOPMENT-PROVIDER-CONFIGURATIONS-v1
+authority: AUTHORIZE_BD-004_CORPUS_ADMISSION_BD-007_GOVERNED_PROVIDER_EVIDENCE_AND_ST-06-03_ST-06-04_IMPLEMENTATION_CAMPAIGN
+generated_on: "2026-07-17"
+scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_EVIDENCE
+eligible_semantic_configuration_count: 0
+mechanics_only_configuration_count: 1
+configurations:
+  - configuration_id: BD007-LOCAL-NONSEMANTIC-FIXTURE-v1
+    configuration_hash: e21dcdcaf83352abe833e5cf21a46dfce1479f81b20b28765b48e07cff568619
+    provider_identity: repository_local_test_fixture
+    provider_version: 1.0.0
+    runtime_identity: CPython
+    runtime_version: "Python 3.12.0"
+    executable_identity:
+      name: python.exe
+      hash_rule: runtime_resolved_exact_executable_SHA256
+      observed_hash: 42ac541168e97dedb9aabd8be335539fc41c682e414b9e8d137b164fb68683b0
+    package_identity:
+      path: tests/category_native_evidence/provider_runner/provider_fixture.py
+      version: 1.0.0
+      sha256: 0312b12ad331c9100a220ee5f65970079d1345ec56895f024ff2a68e6031cbe9
+    model_identity: NON_SEMANTIC_ECHO_FIXTURE
+    invocation_method: SUBPROCESS_STDIN_STDOUT
+    deterministic_controls:
+      seed_support: SUPPORTED
+      seed: 7
+      temperature: "0"
+      repeat_count: 3
+    timeout_seconds: 2
+    working_directory_boundary: CALLER_PINNED_BOUNDARY
+    allowed_tools: []
+    prohibited_tools: [network, shell]
+    network_policy: DENY
+    credential_environment_names: []
+    retry_policy:
+      maximum_attempts: 1
+      retryable_exit_codes: []
+      retry_timeouts: false
+    output_format: JSON
+    semantic_provider: false
+    eligibility: TEST_MECHANICS_ONLY_NOT_BD007_EVIDENCE
+    limitation: Echoes deterministic JSON and cannot evaluate category-native meaning.
+  - candidate_id: OPENAI_PYTHON_CLIENT_SURFACE
+    provider_identity: OpenAI
+    client_version: 1.59.7
+    executable_name: openai.exe
+    executable_sha256: 302ca7147122a64e05b7dd5a349d9eac97a60cb0fa34c3f947ff47d60eff7b3d
+    model_identity: NOT_GOVERNED_OR_PINNED
+    credential_environment_names: [OPENAI_API_KEY]
+    credential_present: false
+    spend_authority_present: false
+    admitted_case_authority_present: false
+    immutable_configuration_hash: NOT_AVAILABLE_INCOMPLETE_CONFIGURATION
+    eligibility: BLOCKED_OPERATOR_AUTHORITY
+  - candidate_id: LITELLM_ROUTER_SURFACE
+    provider_identity: provider_neutral_router_only
+    client_version: 1.58.0
+    model_identity: NO_BACKEND_CONFIGURED
+    credential_environment_names: [LITELLM_MASTER_KEY]
+    credential_present: false
+    spend_authority_present: false
+    admitted_case_authority_present: false
+    immutable_configuration_hash: NOT_AVAILABLE_INCOMPLETE_CONFIGURATION
+    eligibility: BLOCKED_EXTERNAL_PROVIDER
+credential_presence_observation:
+  values_read_or_recorded: false
+  OPENAI_API_KEY: false
+  ANTHROPIC_API_KEY: false
+  GOOGLE_API_KEY: false
+  GEMINI_API_KEY: false
+  AZURE_OPENAI_API_KEY: false
+  COHERE_API_KEY: false
+  MISTRAL_API_KEY: false
+  LITELLM_MASTER_KEY: false
+drift_rules:
+  - exact_configuration_hash_required
+  - exact_executable_and_package_hash_required
+  - exact_runtime_version_required
+  - exact_model_identity_required
+  - exact_deterministic_controls_required
+  - exact_tool_and_network_policy_required
+  - exact_authority_binding_required_for_credentialed_or_billable_calls
+production_ready: false
+certified: false

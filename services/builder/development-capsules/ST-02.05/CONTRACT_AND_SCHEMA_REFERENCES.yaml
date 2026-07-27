@@ -1,0 +1,53 @@
+schema_version: cmf-builder-contract-schema-reference-set/v1
+story_id: ST-02.05
+active_mode: DECLARED_BOUNDARY
+builder_owned_contracts_to_implement:
+  - contract_id: DeclaredAtomicBoundary
+    purpose: immutable_versioned_boundary_candidate_from_locked_synthetic_input
+  - contract_id: AtomicityDecision
+    purpose: typed_APPROVE_REVISE_REJECT_human_decision
+  - contract_id: AtomicityRatification
+    purpose: selected_and_rejected_alternatives_evidence_rationale_risks_human_and_time
+  - contract_id: DraftHarnessField
+    purpose: value_plus_authority_status_plus_knowledge_status_plus_provenance
+  - contract_id: DraftHarnessModel
+    purpose: transparent_provisional_model_bound_to_frozen_boundary_and_source_lock
+  - contract_id: BoundaryInvalidation
+    purpose: formal_reopen_and_affected_artifact_chain
+  - contract_id: AtomicityDecisionReceipt
+    purpose: deterministic_success_or_rejection_evidence
+  - contract_id: AtomicityReadinessEvaluation
+    purpose: explicit_HG_003_PASS_or_FAIL
+contract_rules:
+  source_lock_required: true
+  declared_boundary_input_hash_required: true
+  human_decision_required_for_freeze: true
+  every_constitutional_field_has_authority_and_knowledge_status: true
+  unratified_required_field_rejected_downstream: true
+  same_version_boundary_rewrite: prohibited
+  reopen_requires_invalidation: true
+schemas:
+  local_schema_change_required: false
+  database_schema_change_required: false
+  external_schema_change_required: false
+  read_only_negative_boundaries:
+    - path: docs/contracts/schemas/shared-activative-core.schema.json
+      rule: no_Activative_lineage_is_created_or_flattened_by_this_Story
+    - path: docs/contracts/schemas/conversational-expression.schema.json
+      rule: conversational_expression_is_not_active_or_implemented
+external_contracts:
+  Delegation_1_1_0_rc_4:
+    direct_dependency: false
+    runtime_dependency: false
+    local_schema_fork: prohibited
+  Visual_Asset_Editor:
+    dependency: false
+    behavior_owned_locally: false
+  Format02:
+    dependency: false
+    certification_inherited: false
+migration_and_compatibility:
+  persistence: additive_development_test_in_memory_state_only
+  migration_required: false
+  existing_Format02_behavior_must_remain_unchanged: true
+  existing_source_lock_contract_must_remain_backward_compatible: true

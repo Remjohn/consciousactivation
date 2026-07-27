@@ -1,0 +1,46 @@
+{
+  "schema_version": "cmf-builder-source-profile/v1",
+  "profile_id": "synthetic_task_definition_source_v1",
+  "version": "1.0.0",
+  "status": "ACTIVE_BUILDER_CORE_PROOF_ONLY",
+  "target_profile_ref": "synthetic_text_normalization_v1@1.0.0",
+  "category_binding": "none",
+  "production_eligible": false,
+  "certified": false,
+  "target_candidate": {
+    "uri": "repo://development-capsules/ST-01.01-SYNTHETIC-PROOF/SYNTHETIC_TARGET_PROFILE_FIXTURE.yaml",
+    "source_kind": "file",
+    "sha256": "82f86a94e1183ee3d475277734b03eb5f2ab3d2bb7afe0520b8828105917337b",
+    "role": "governed_task_definition",
+    "precedence": 1
+  },
+  "required_roles": ["governed_task_definition"],
+  "recommended_roles": [],
+  "optional_roles": [],
+  "prohibited_roles": ["format02_corpus", "human_reaction_material", "production_asset", "external_runtime_output"],
+  "allowed_source_kinds": ["file", "directory", "zip"],
+  "allowed_media_types": ["application/yaml", "application/json", "text/plain", "application/zip"],
+  "prohibited_extensions": [".exe", ".dll", ".com", ".bat", ".cmd", ".ps1", ".sh"],
+  "authority_policy": {
+    "owner": "Atomic_Harness_Builder_repository",
+    "authority_kind": "repository_owned_test_fixture",
+    "usage_authority": "Builder_Core_validation_only",
+    "license": "repository_internal_governed_fixture",
+    "privacy_class": "non_personal_synthetic",
+    "consent_policy_required": false
+  },
+  "safety_limits": {
+    "max_directory_depth": 8,
+    "max_file_count": 256,
+    "max_total_uncompressed_bytes": 10485760,
+    "max_single_file_bytes": 1048576,
+    "max_zip_decompression_ratio": 100,
+    "max_nested_archive_depth": 0,
+    "reject_symlinks": true,
+    "reject_casefold_collisions": true,
+    "reject_absolute_or_parent_paths": true,
+    "extract_archives": false,
+    "network_access": false
+  },
+  "amendment_rule": "any_content_or_profile_change_requires_a_new_immutable_version"
+}

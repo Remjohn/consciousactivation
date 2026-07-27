@@ -1,0 +1,26 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-01.03
+verdict: PASS
+sample:
+  run_id: run_019ba503-1000-7438-a28c-57e18240dd4f
+  source_lock_ref: source-lock_ea63e2bdfa902fd9034d62fa1a5b2d4bc6d598d9474d06809c4cd8a86e21ba60
+  index_id: evidence-index_8313ac3271f3cca92c998d9e523d5b443dcfac95347e75b174aad87c58e5e281
+  index_hash: sha256:8313ac3271f3cca92c998d9e523d5b443dcfac95347e75b174aad87c58e5e281
+  receipt_id: evidence-index-receipt_dc7a84f655289b74a6ddd54224153a4c95bdefa9a80ee4c09b4ec049537c4585
+  receipt_hash: sha256:dc7a84f655289b74a6ddd54224153a4c95bdefa9a80ee4c09b4ec049537c4585
+  specimen_count: 1
+committed_observation_intents:
+  - ST-01.03:EvidenceIndexStarted
+  - ST-01.03:SpecimenInventoryCompleted
+  - ST-01.03:EvidenceIndexCommitted
+  - ST-01.03:OutcomeVerified
+failure_and_lifecycle_observations:
+  - ST-01.03:OutcomeRejected
+  - ST-01.03:EvidenceIndexReplayReturned
+  - ST-01.03:EvidenceIndexInvalidated
+required_fields: [run_id, story_id, artifact_identity, authority_identity, version, provenance, outcome, failure_context]
+durable_outbox:
+  committed_with_authoritative_state: true
+  delivery_failure_retains_pending_intent: true
+  replay_drains_without_duplicate_acknowledgement: true
+  false_uncommitted_result_after_commit: false

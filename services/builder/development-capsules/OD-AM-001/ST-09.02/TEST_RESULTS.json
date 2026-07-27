@@ -1,0 +1,75 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-09.02",
+  "status": "PASS",
+  "development_mode": "OD_AM_001_OFFLINE_DEVELOPMENT",
+  "focused_story_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_02 -q",
+    "passed": 33,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "combined_workflow_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_01 tests/stories/st_09_02 -q",
+    "passed": 82,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "affected_st08_predecessor_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_08_01 tests/stories/st_08_02 tests/stories/st_08_03 tests/stories/st_08_04 tests/stories/st_08_05 tests/stories/st_08_06 tests/stories/st_08_07 --import-mode=importlib -q",
+    "passed": 444,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "architecture_boundary_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/source_boundary_registry.py tests/stories/st_01_01/test_architecture_boundary.py tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py tests/stories/st_01_02/test_architecture_boundary.py tests/stories/st_02_05/test_architecture_boundary.py tests/stories/st_03_03/test_architecture_boundary.py -q",
+    "passed": 12,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "full_repository_regression": {
+    "status": "PASS",
+    "aggregate_passed": 1765,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "shards": [
+      {
+        "name": "base_without_duplicate_import_story_dirs",
+        "passed": 1361
+      },
+      {
+        "name": "st_02_03",
+        "passed": 40
+      },
+      {
+        "name": "st_07_01_and_st_07_03",
+        "passed": 53
+      },
+      {
+        "name": "st_08_04_through_st_08_07_importlib",
+        "passed": 278
+      },
+      {
+        "name": "st_09_02",
+        "passed": 33
+      }
+    ]
+  },
+  "python_source_compilation": {
+    "command": "python -m compileall -q src",
+    "status": "PASS"
+  },
+  "portable_path_and_secret_scan": {
+    "command": "rg -n \"D:\\\\|C:\\\\|api[_-]?key|token|secret|password|BEGIN (RSA|OPENSSH|PRIVATE)\" ST-09.02 scope",
+    "status": "PASS_NO_MATCHES"
+  },
+  "external_or_agent_runtime_calls": 0,
+  "real_manual_shadow_evidence_created": 0,
+  "production_or_certification_claims": 0,
+  "verdict": "PASS"
+}

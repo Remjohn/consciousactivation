@@ -1,0 +1,21 @@
+schema_version: cmf-builder-capsule-contract-references/v1
+story_id: ST-04.03
+consumed_contracts:
+  - id: ResponsibilityModuleGraph
+    contract: cmf-builder-responsibility-module-graph/v1@1.0.0
+    authority: ST-04.02
+    mutation: prohibited
+  - id: ResponsibilityModuleReceipt
+    contract: cmf-builder-responsibility-module-receipt/v1
+    authority: ST-04.02
+    mutation: prohibited
+produced_typed_contracts: [PhaseNode, PhaseExecutionPlan, PhaseGraph, PhaseGraphReceipt, PhaseGraphInvalidation, CompilePhaseGraphCommand]
+governed_input:
+  path: development-capsules/ST-04.03/PHASE_GRAPH_INPUT.json
+  schema: cmf-builder-synthetic-phase-graph-input/v1
+schema_file_change: prohibited
+database_schema_change: prohibited
+external_contract_ownership: unchanged
+Delegation_pin_required: false
+VAE_contract_required: false
+compatibility_rule: changed_phase_topology_or_gate_requires_new_immutable_graph_version

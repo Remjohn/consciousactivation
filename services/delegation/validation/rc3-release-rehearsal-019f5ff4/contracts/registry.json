@@ -1,0 +1,575 @@
+{
+  "messages": [
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:6cf735c7c388ec352d100702bdee5e709f19ae049406453cd35b7e5fcb1f36f1",
+      "example_path": "contracts/examples/delegation-envelope.example.json",
+      "idempotency": "CONDITIONAL",
+      "lifecycle_effects": [],
+      "message_type": "delegation-envelope",
+      "message_version": "1.0",
+      "schema_hash": "sha256:37656f270074b2ff8c5131c05e66d09b2aa5d7ddb990fe4f8fbdf41c59a9a91d",
+      "schema_id": "https://contracts.cmf.dev/delegation/delegation-envelope/1.0/schema.json",
+      "schema_path": "contracts/schemas/delegation-envelope.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:930e93d11bb511790135f669df082b1c003d4205ffa114a92cb5b74f3ff973ad",
+      "example_path": "contracts/examples/visual-asset-demand.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "demand_recorded"
+      ],
+      "message_type": "visual-asset-demand",
+      "message_version": "1.1",
+      "schema_hash": "sha256:d23cdfd520538adc0d7769e7fefa9a9cf8af63880446efd8a8c95d5dbfb67c5e",
+      "schema_id": "https://contracts.cmf.dev/delegation/visual-asset-demand/1.1/schema.json",
+      "schema_path": "contracts/schemas/visual-asset-demand.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:2359678c0b42d57ea26f28532d28cb54760a213ae49bb0376f892164dc1eae45",
+      "example_path": "contracts/examples/visual-asset-submission.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "submission_received"
+      ],
+      "message_type": "visual-asset-submission",
+      "message_version": "1.0",
+      "schema_hash": "sha256:a89d19b80987b4b4611841ad7230320d881b117ff985650767a79e5c1dfdf4fc",
+      "schema_id": "https://contracts.cmf.dev/delegation/visual-asset-submission/1.0/schema.json",
+      "schema_path": "contracts/schemas/visual-asset-submission.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "DELEGATION_PROTOCOL"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:fa42b5dec4df2ab18999f5be11280b652fdb365476d3ff039e5b1e0f539a33fa",
+      "example_path": "contracts/examples/submission-validation-receipt.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "submission_validation_accepted",
+        "submission_validation_rejected"
+      ],
+      "message_type": "submission-validation-receipt",
+      "message_version": "1.0",
+      "schema_hash": "sha256:15a8df51cf3a4c63f646279a5d6032886a15bbe90b73afd8ea70fcf5fc8e2878",
+      "schema_id": "https://contracts.cmf.dev/delegation/submission-validation-receipt/1.0/schema.json",
+      "schema_path": "contracts/schemas/submission-validation-receipt.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:f1335c7372c207faeb66e57840f158e5a46ea832399272e08f930429a4d7a6e9",
+      "example_path": "contracts/examples/admission-receipt.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "admission_accepted",
+        "admission_rejected"
+      ],
+      "message_type": "admission-receipt",
+      "message_version": "1.0",
+      "schema_hash": "sha256:44d8c3ada71b5bf663e5b194f5a47242573a2929bc879362465fba7a37dd0e0e",
+      "schema_id": "https://contracts.cmf.dev/delegation/admission-receipt/1.0/schema.json",
+      "schema_path": "contracts/schemas/admission-receipt.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:2750e8b8c61c996729a6c2a6b441ef3c4e3b2271db9ca57f69834e790593149a",
+      "example_path": "contracts/examples/visual-asset-event.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "execution_started",
+        "execution_blocked",
+        "execution_resumed",
+        "execution_failed"
+      ],
+      "message_type": "visual-asset-event",
+      "message_version": "1.0",
+      "schema_hash": "sha256:0d1c3b4aacb60fbca3493a2fd923412360d1a624591fb61063269b5279d167cf",
+      "schema_id": "https://contracts.cmf.dev/delegation/visual-asset-event/1.0/schema.json",
+      "schema_path": "contracts/schemas/visual-asset-event.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:fe59c706349ad17a830842e8c3d13e307103013c716fcb03951194acf2510b35",
+      "example_path": "contracts/examples/delegation-set.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "delegation_set_recorded"
+      ],
+      "message_type": "delegation-set",
+      "message_version": "1.0",
+      "schema_hash": "sha256:1fc32f44432814a9d936bd359d4d605ba7d28dec501b2457c0d3cb82dd848e8d",
+      "schema_id": "https://contracts.cmf.dev/delegation/delegation-set/1.0/schema.json",
+      "schema_path": "contracts/schemas/delegation-set.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:748347ddcece39dbadbc9a76ff43406119efae4898bdaee51de15a88113e107b",
+      "example_path": "contracts/examples/budget-authorization.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "budget_authorized"
+      ],
+      "message_type": "budget-authorization",
+      "message_version": "1.0",
+      "schema_hash": "sha256:049712eca99ea52114eb19ea66b4f7cceec16ec430d02f12dd180d93f2b5bfe7",
+      "schema_id": "https://contracts.cmf.dev/delegation/budget-authorization/1.0/schema.json",
+      "schema_path": "contracts/schemas/budget-authorization.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:1ab1a0bd492a94867de1f31b9fa0616ca5a6ca8496fbf3e32b02d6a61b129703",
+      "example_path": "contracts/examples/budget-escalation-request.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "budget_escalation_requested"
+      ],
+      "message_type": "budget-escalation-request",
+      "message_version": "1.0",
+      "schema_hash": "sha256:f71acf71ba78ac8a28313db5ad192a1a00b038e15b3b989c241da2b73db005d0",
+      "schema_id": "https://contracts.cmf.dev/delegation/budget-escalation-request/1.0/schema.json",
+      "schema_path": "contracts/schemas/budget-escalation-request.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:b0ac7cbec176460008b7fff4146399904a87d9b531f4fad6da600cb24eb17162",
+      "example_path": "contracts/examples/budget-escalation-response.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "budget_escalation_approved",
+        "budget_escalation_denied"
+      ],
+      "message_type": "budget-escalation-response",
+      "message_version": "1.0",
+      "schema_hash": "sha256:2aab1043a2997d289264e3a7846c5fb32a77a9434fc1090a86350516755bfdf2",
+      "schema_id": "https://contracts.cmf.dev/delegation/budget-escalation-response/1.0/schema.json",
+      "schema_path": "contracts/schemas/budget-escalation-response.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:77a446439f7818cc044c98cfdc0307e3d079de9cf330a0e6f3433806125780f8",
+      "example_path": "contracts/examples/cancellation-request.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "cancellation_requested"
+      ],
+      "message_type": "cancellation-request",
+      "message_version": "1.0",
+      "schema_hash": "sha256:134b56f7c326f525383f1a562985aed6d3880ef79a42bb19ee187a0a21c6153d",
+      "schema_id": "https://contracts.cmf.dev/delegation/cancellation-request/1.0/schema.json",
+      "schema_path": "contracts/schemas/cancellation-request.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:1b9c68472424aa2afb809cf857cc31eeeec48cd7e3f562544468ff3b2b6487f0",
+      "example_path": "contracts/examples/cancellation-receipt.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "cancellation_accepted",
+        "cancellation_rejected",
+        "cancellation_completed"
+      ],
+      "message_type": "cancellation-receipt",
+      "message_version": "1.0",
+      "schema_hash": "sha256:eac1ce1283784dbf8638df473183c8a8c5b761a663dc2d26a658523f1ea00cf0",
+      "schema_id": "https://contracts.cmf.dev/delegation/cancellation-receipt/1.0/schema.json",
+      "schema_path": "contracts/schemas/cancellation-receipt.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:eb52aaa7a8a58b75173f94d788a3a29ed4d7bd143f5ca991d03d21dc88b5ba43",
+      "example_path": "contracts/examples/constraint-conflict.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "constraint_conflict_reported"
+      ],
+      "message_type": "constraint-conflict",
+      "message_version": "1.0",
+      "schema_hash": "sha256:6c287ff2ed33ad949b00f7ef36f3ad466354c538a2e47c031cfdc0d928fce263",
+      "schema_id": "https://contracts.cmf.dev/delegation/constraint-conflict/1.0/schema.json",
+      "schema_path": "contracts/schemas/constraint-conflict.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:f4984d73420fa7d381bdad02c7cb991c3bbc167fef1ed04f4f7e6d21ad62dd2b",
+      "example_path": "contracts/examples/amendment-proposal.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "amendment_proposed"
+      ],
+      "message_type": "amendment-proposal",
+      "message_version": "1.0",
+      "schema_hash": "sha256:852ec68b4bf5226739a98b2ffddb323d3e29436ae4a1a7cdf32d1fc83a190876",
+      "schema_id": "https://contracts.cmf.dev/delegation/amendment-proposal/1.0/schema.json",
+      "schema_path": "contracts/schemas/amendment-proposal.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:847e285f457f07da11439ab37d918781772fb574fba0a9ebac447b8de35f62a5",
+      "example_path": "contracts/examples/amendment-response.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "amendment_accepted",
+        "amendment_rejected"
+      ],
+      "message_type": "amendment-response",
+      "message_version": "1.0",
+      "schema_hash": "sha256:28753e797afc69718cddd1d2b53631c3246a0a44c56cafb43292b9a26b0847ad",
+      "schema_id": "https://contracts.cmf.dev/delegation/amendment-response/1.0/schema.json",
+      "schema_path": "contracts/schemas/amendment-response.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:26559e1adfd8551a4858240443165ee082856b10462c4abb0767e9b38fec184b",
+      "example_path": "contracts/examples/demand-supersession.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "demand_superseded"
+      ],
+      "message_type": "demand-supersession",
+      "message_version": "1.0",
+      "schema_hash": "sha256:1e96149ba570d5d6036bd7c30769fccd2ba1ab3daf9a1223cfdad3825612d475",
+      "schema_id": "https://contracts.cmf.dev/delegation/demand-supersession/1.0/schema.json",
+      "schema_path": "contracts/schemas/demand-supersession.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:3bd1ae4f9db4fd93a4ea05b436e4ccca3932f4840ff3dc1eea7acd0cb80dab7a",
+      "example_path": "contracts/examples/selective-invalidation-receipt.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "selective_invalidation_recorded"
+      ],
+      "message_type": "selective-invalidation-receipt",
+      "message_version": "1.0",
+      "schema_hash": "sha256:490a7f638761ae1201471773425965a70e1222473396c2267bee1ffc7ed873f0",
+      "schema_id": "https://contracts.cmf.dev/delegation/selective-invalidation-receipt/1.0/schema.json",
+      "schema_path": "contracts/schemas/selective-invalidation-receipt.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "CONTENT_HARNESS",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:952b3f90ffe63f06a4418527ea72295aa567a0659fcb25546582c646ea1f00b0",
+      "example_path": "contracts/examples/asset-result-contract.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "result_declared"
+      ],
+      "message_type": "asset-result-contract",
+      "message_version": "1.0",
+      "schema_hash": "sha256:ab7dc74b92c77e5ccb487f034fea96941f1c7f41fb659e6ee6e99b96bc3fb877",
+      "schema_id": "https://contracts.cmf.dev/delegation/asset-result-contract/1.0/schema.json",
+      "schema_path": "contracts/schemas/asset-result-contract.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:ecc196c25a9ae448de30e3d425bffaf06b7b6be25ec0cefb851db0840f0c2d4c",
+      "example_path": "contracts/examples/result-acknowledgement.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "result_accepted",
+        "result_rejected",
+        "result_accepted_with_concerns"
+      ],
+      "message_type": "result-acknowledgement",
+      "message_version": "1.0",
+      "schema_hash": "sha256:f1d59cac8c3fc4f4ab3f584460978652f364c84ec8a9c36d422ff1d9161bb88d",
+      "schema_id": "https://contracts.cmf.dev/delegation/result-acknowledgement/1.0/schema.json",
+      "schema_path": "contracts/schemas/result-acknowledgement.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:57af772cdaa1ed5175f48ed3b272b7ee5bf1a840c40414d2ea81cb875cb487ef",
+      "example_path": "contracts/examples/invalidation-notice.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "result_invalidated"
+      ],
+      "message_type": "invalidation-notice",
+      "message_version": "1.0",
+      "schema_hash": "sha256:4b8a9c22b66ca53e0d937975fb1de941fe42e2c46b84e4cc0c942031a0ede0df",
+      "schema_id": "https://contracts.cmf.dev/delegation/invalidation-notice/1.0/schema.json",
+      "schema_path": "contracts/schemas/invalidation-notice.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:58f553bb5884f0c078ebf39fa73d7c90abb413575240f412ea62a4f4821f3809",
+      "example_path": "contracts/examples/revocation-notice.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "result_revoked"
+      ],
+      "message_type": "revocation-notice",
+      "message_version": "1.0",
+      "schema_hash": "sha256:433e8eb5aba93753df09bb59f564f185b81d1b9a9dd7c9ce2aab7cb0816b45a8",
+      "schema_id": "https://contracts.cmf.dev/delegation/revocation-notice/1.0/schema.json",
+      "schema_path": "contracts/schemas/revocation-notice.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "VISUAL_ASSET_EDITOR"
+      ],
+      "consumers": [
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:0ac0cd855ea6e13002a445e1f974747a5849d5a08f315b6f771fbb35203118f8",
+      "example_path": "contracts/examples/replacement-notice.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "result_replaced"
+      ],
+      "message_type": "replacement-notice",
+      "message_version": "1.0",
+      "schema_hash": "sha256:c7b2a9671aaf3bb0d973379fe6a8a50eed4dc53410ce2998e7bc550f25ee0829",
+      "schema_id": "https://contracts.cmf.dev/delegation/replacement-notice/1.0/schema.json",
+      "schema_path": "contracts/schemas/replacement-notice.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:735e1bd565b794837943b3903f6889cce1de17b7a9e52fd510f65301166b604c",
+      "example_path": "contracts/examples/delegation-failure.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "delegation_failed"
+      ],
+      "message_type": "delegation-failure",
+      "message_version": "1.0",
+      "schema_hash": "sha256:3ecbc1169b9bf94e548eff9b1baef106f4a7d8eb0f6bc9a60bb633ed2f80047e",
+      "schema_id": "https://contracts.cmf.dev/delegation/delegation-failure/1.0/schema.json",
+      "schema_path": "contracts/schemas/delegation-failure.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "DELEGATION_PROTOCOL"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:592121b348e6a836c8a90f9a1fa567bfa32f7ae7cdd7541dc2b7459fe521ad56",
+      "example_path": "contracts/examples/delegation-audit-receipt.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "audit_receipt_recorded"
+      ],
+      "message_type": "delegation-audit-receipt",
+      "message_version": "1.0",
+      "schema_hash": "sha256:cfa722c66fac6a551cf68d54a46af7f90cae7238de7bf0511b85feb65ac9df03",
+      "schema_id": "https://contracts.cmf.dev/delegation/delegation-audit-receipt/1.0/schema.json",
+      "schema_path": "contracts/schemas/delegation-audit-receipt.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:34e7db07491cc2eb3d78f6e9028615ef945832c26a7a72fcbc0b512d818f4cfc",
+      "example_path": "contracts/examples/compatibility-manifest.example.json",
+      "idempotency": "PROHIBITED",
+      "lifecycle_effects": [
+        "compatibility_manifest_published"
+      ],
+      "message_type": "compatibility-manifest",
+      "message_version": "1.0",
+      "schema_hash": "sha256:09e924beb124edba6dbe31ef4e54221f8bcd279ebd180b169b698e6fef29e0a8",
+      "schema_id": "https://contracts.cmf.dev/delegation/compatibility-manifest/1.0/schema.json",
+      "schema_path": "contracts/schemas/compatibility-manifest.schema.json"
+    },
+    {
+      "allowed_producers": [
+        "DELEGATION_PROTOCOL"
+      ],
+      "consumers": [
+        "CONTENT_HARNESS",
+        "DELEGATION_PROTOCOL",
+        "VISUAL_ASSET_EDITOR",
+        "CONTROL_TOWER"
+      ],
+      "example_hash": "sha256:2a3041a29c3b9a1d8d0bb2bff580c011ea66a0d8ccf4694787c46a4f9ac12660",
+      "example_path": "contracts/examples/contract-migration.example.json",
+      "idempotency": "REQUIRED",
+      "lifecycle_effects": [
+        "contract_migration_recorded"
+      ],
+      "message_type": "contract-migration",
+      "message_version": "1.0",
+      "schema_hash": "sha256:cb8744158646846dc7bc5a1dd08e623a9f652d0fc8da84492ab1aa0d65eb5df0",
+      "schema_id": "https://contracts.cmf.dev/delegation/contract-migration/1.0/schema.json",
+      "schema_path": "contracts/schemas/contract-migration.schema.json"
+    }
+  ],
+  "package": "cmf-delegation-contracts",
+  "package_version": "1.1.0-rc.3",
+  "protocol_version": "1.0",
+  "status": "RELEASE_CANDIDATE"
+}

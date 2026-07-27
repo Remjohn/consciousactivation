@@ -1,0 +1,18 @@
+id: composition.template.select
+version: "1.0.0"
+status: active
+owner_agent: composition_intelligence_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Compile and gate composition decisions before editing/rendering."
+inputs:
+  - CompositionIntelligenceContext
+  - FormatIntelligenceProgram
+outputs:
+  - CompositionSceneProgram
+  - CompositionDecisionReceipt
+hard_gates:
+  - "Composition must be locked before editing."
+  - "Do not call providers."
+  - "Do not render."
+  - "Preserve source_span_refs."
+  - "Enforce cognitive load budget."

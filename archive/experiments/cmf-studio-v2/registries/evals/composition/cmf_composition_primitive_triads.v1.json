@@ -1,0 +1,582 @@
+{
+  "schema_version": "cmf.composition_primitive_triads.v1",
+  "registry_id": "CMF-COMP-PRIMITIVE-TRIADS-001",
+  "name": "CMF Composition Primitive Triads",
+  "purpose": "Machine-loadable route rules that block any visual composition, prompt, JSON template, preview, renderer template, or approval asset from advancing unless it passes at least three primitive validations.",
+  "status": "active",
+  "minimum_validated_primitives": 3,
+  "required_roles": [
+    "meaning_transform",
+    "delivery_shape",
+    "format_material"
+  ],
+  "applies_to": [
+    "VisualFeelContract",
+    "SceneSpec",
+    "CompositionPlan",
+    "CompositionJob",
+    "IdeogramCompositionJSON",
+    "PreviewKeyframe",
+    "MotionTemplate",
+    "RendererTemplate",
+    "ApprovalPreview"
+  ],
+  "source_doctrine_refs": [
+    "THE CMF STUDIO/product-brief-CMF_STUDIO-2026-06-19.md",
+    "THE CMF STUDIO/Matrix of Edging.md",
+    "THE CMF STUDIO/CCP V9 — Interview-First Expression Engine.md",
+    "THE CMF STUDIO/CCP V9.1 — Expression Capture & Archetype Routing Update.md",
+    "THE CMF STUDIO/CCP_CMF_Brand_Genesis_and_Micro_Semiotic_Pipeline_V3.md",
+    "THE CMF STUDIO/CCP_Creative_Pipeline_Architecture_V2.md",
+    "THE CMF STUDIO/docs/tech-specs/TS-CMF-077-doctrine-driven-test-harness-and-primitive-eval-coverage.md",
+    "THE CMF STUDIO/docs/tech-specs/TS-CMF-078-four-video-format-runtime-and-doctrine-crosswalk.md",
+    "THE CMF STUDIO/docs/tech-specs/TS-CMF-079-route-specific-visual-feel-and-primitive-composition-gates.md"
+  ],
+  "global_validation_dimensions": [
+    "primitive_declared_with_exact_id",
+    "primitive_role_is_explicit",
+    "evidence_ref_is_present",
+    "route_fit_is_explained",
+    "composition_element_activates_primitive",
+    "primitive_score_meets_threshold",
+    "primitive_coalition_avoids_style_flattening"
+  ],
+  "hard_failure_codes": [
+    "COMPOSITION_PRIMITIVE_MINIMUM_NOT_MET",
+    "COMPOSITION_PRIMITIVE_ROLE_COVERAGE_MISSING",
+    "COMPOSITION_PRIMITIVE_EVIDENCE_MISSING",
+    "COMPOSITION_PRIMITIVE_SCORE_BELOW_THRESHOLD",
+    "COMPOSITION_PRIMITIVE_ID_NOT_REGISTERED",
+    "COMPOSITION_ROUTE_FEEL_COLLAPSED",
+    "COMPOSITION_GENERIC_PREMIUM_SOCIAL_SLOP",
+    "COMPOSITION_DOCTRINE_CONFLICT"
+  ],
+  "primitive_reference_policy": {
+    "registered_primitive_required": true,
+    "accepted_registry_roots": [
+      "THE CMF STUDIO/registries/primitives/meaning_plane",
+      "THE CMF STUDIO/registries/primitives/experience_plane"
+    ],
+    "accepted_supporting_refs": [
+      "MATRIX.IRONY_INVERSION",
+      "MATRIX.WHAT_IS_WHAT_COULD_BE",
+      "MATRIX.ANALOGY_BRIDGE",
+      "MATRIX.STAKES_AS_PERSONAL_WHY"
+    ],
+    "supporting_refs_count_toward_minimum": false,
+    "note": "Matrix refs may explain pressure selection, but the minimum three validation count must be satisfied by registered primitive IDs."
+  },
+  "role_definitions": {
+    "meaning_transform": "The primitive that explains what meaning operation the composition performs: inversion, analogy, backstory, recognition, contrast, proof, or stakes.",
+    "delivery_shape": "The primitive that explains how the audience is guided through the meaning: tension, explanation, story beat, social proof, audience matching, rule of three, or sensory anchoring.",
+    "format_material": "The primitive that explains why the composition should look and move this way: paper layer materiality, cinematic light, eye path, frame behavior, playback context, controlled density, or human proof surface."
+  },
+  "route_triads": {
+    "SV-CSC": {
+      "route_name": "Cinematic Story Commentary",
+      "route_purpose": "Make the audience feel the story through memory, transformation, identity, witness, and high-stakes human experience.",
+      "required_distinct_feel": "Documentary, intimate, emotionally paced, human-scale, atmospheric, specific to the remembered scene. It must not look like a generic viral debate card or a PaperCut explainer.",
+      "minimum_validated_primitives": 3,
+      "required_roles": [
+        "meaning_transform",
+        "delivery_shape",
+        "format_material"
+      ],
+      "allowed_primitives": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-ACT-005",
+          "canonical_name": "Backstory Architecture",
+          "registry_ref": "registries/primitives/meaning_plane/performance_delivery/PRM-ACT-005.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "source_clip_or_transcript_span_identifies_backstory",
+            "scene_spec_identifies_before_after_identity_shift",
+            "composition_names_what_memory_object_or_place_carries_the_turn"
+          ]
+        },
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-009",
+          "canonical_name": "The McKee Inciting Incident Engine",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-009.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "story_beat_identifies_disruption",
+            "composition_shows_the_moment_before_or_after_the_disruption"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-002",
+          "canonical_name": "Tension-and-Release Narrative Engine",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-002.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "edit_plan_identifies_tension_hold",
+            "caption_or_cut_identifies_release_or_reframe"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-VOC-009",
+          "canonical_name": "Sensory Scene Anchoring",
+          "registry_ref": "registries/primitives/meaning_plane/voice_audio_intimacy/PRM-VOC-009.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "composition_includes_specific_sensory_cue",
+            "sensory_cue_is_supported_by_interview_or_research_evidence"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-VOC-007",
+          "canonical_name": "The Theatre of the Mind",
+          "registry_ref": "registries/primitives/meaning_plane/voice_audio_intimacy/PRM-VOC-007.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "audio_visual_plan_creates_scene_presence",
+            "viewer_can_infer_place_mood_and_emotional_pressure"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-021",
+          "canonical_name": "Punctum, Air, and Felt Truth",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-021.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "composition_has_one_arresting_human_or_object_detail",
+            "detail_feels_specific_not_stock"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-016",
+          "canonical_name": "Light and Color as Emotional Architecture",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-016.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "lighting_palette_matches_emotional_arc",
+            "palette_does_not_flatten_into_generic_dark_premium_style"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-024",
+          "canonical_name": "Space as Psychological Relationship",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-024.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "subject_scale_and_empty_space_express_relationship_or_isolation",
+            "composition_uses_space_to_hold_emotional_subtext"
+          ]
+        }
+      ]
+    },
+    "SV-EDU": {
+      "route_name": "Educational / PaperCut Explainer",
+      "route_purpose": "Make the audience understand the idea, myth, framework, timeline, or conceptual contrast through tactile visual teaching.",
+      "required_distinct_feel": "Editorial 2.5D PaperCut, handmade, warm, layered, textured, charming, instructive, and physically inspectable. It must not become flat SaaS vector art, glossy 3D, or generic influencer realism.",
+      "minimum_validated_primitives": 3,
+      "required_roles": [
+        "meaning_transform",
+        "delivery_shape",
+        "format_material"
+      ],
+      "allowed_primitives": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-HUM-025",
+          "canonical_name": "Analogy Bridge",
+          "registry_ref": "registries/primitives/meaning_plane/humor_distortion/PRM-HUM-025.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "concept_is_translated_into_a_concrete_parallel_domain",
+            "one_half_of_the_mapping_remains_discoverable_not_overexplained"
+          ]
+        },
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-015.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "current_belief_and_better_frame_are_both_present",
+            "visual_contrast_is_readable_without_extra_instructions"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-007",
+          "canonical_name": "Teaching as Compassion",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-007.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "explanation_reduces_shame_or_confusion",
+            "the_visual_invites_understanding_instead_of_scolding"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-032",
+          "canonical_name": "The Explanation Engine",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-032.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "step_sequence_or_causal_relation_is_explicit",
+            "complexity_is_reduced_without_being_made_false"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-025",
+          "canonical_name": "The Rule of Three Message Architecture",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-025.yaml",
+          "minimum_score": 0.82,
+          "evidence_requirements": [
+            "composition_groups_teaching_into_three_or_fewer_major_units",
+            "no_extra_micro_labels_compete_with_the_main_learning_path"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-020",
+          "canonical_name": "Perspective and Layering as Meaning",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-020.yaml",
+          "minimum_score": 0.88,
+          "evidence_requirements": [
+            "paper_layers_have_visible_depth_shadow_and_material_separation",
+            "layer_order_reveals_the_conceptual_hierarchy"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-008",
+          "canonical_name": "Character Coherence Beats Beauty",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-008.yaml",
+          "minimum_score": 0.88,
+          "evidence_requirements": [
+            "avatar_or_cutout_pose_matches_the_teaching_emotion",
+            "character_continuity_is_preserved_over_generic_beauty"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-003",
+          "canonical_name": "Intent Governs Style",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-003.yaml",
+          "minimum_score": 0.88,
+          "evidence_requirements": [
+            "papercut_style_choice_is_explained_by_the_teaching_intent",
+            "visual_style_does_not_copy_the_reaction_or_challenger_route"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-001",
+          "canonical_name": "Composition as Eye-Path Engineering",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-001.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "viewer_scan_path_is_declared",
+            "headline_note_object_and_avatar_create_a_clear_eye_path"
+          ]
+        }
+      ],
+      "route_specific_hard_failures": [
+        "PAPERCUT_STYLE_DRIFT_TO_GLOSSY_3D",
+        "PAPERCUT_STYLE_DRIFT_TO_SAAS_VECTOR",
+        "PAPERCUT_MATERIALITY_MISSING",
+        "PAPERCUT_AVATAR_POSE_NOT_LINKED_TO_TEACHING_BEAT"
+      ]
+    },
+    "SV-FRB": {
+      "route_name": "Challenger / Frame Breaker",
+      "route_purpose": "Make the audience confront a contradiction, false frame, myth, or unspoken industry tension without attacking the person.",
+      "required_distinct_feel": "Editorial, sharp, tense, proof-oriented, debate-ready, high-contrast, and participatory. It may use polls, ranking, this-vs-that, receipts, or social proof cards, but must not collapse into generic rage bait.",
+      "minimum_validated_primitives": 3,
+      "required_roles": [
+        "meaning_transform",
+        "delivery_shape",
+        "format_material"
+      ],
+      "allowed_primitives": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-HUM-021",
+          "canonical_name": "Irony Inversion",
+          "registry_ref": "registries/primitives/meaning_plane/humor_distortion/PRM-HUM-021.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "false_frame_is_reversed_or_exposed",
+            "the_inversion_targets_the_assumption_not_the_guest"
+          ]
+        },
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PRS-015",
+          "canonical_name": "The What Is / What Could Be Contrast Engine",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-015.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "before_after_frame_or_competing_worldviews_are_visible",
+            "contrast_is_not_only_cosmetic_color_coding"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-REF-009",
+          "canonical_name": "Constructive Tension Control",
+          "registry_ref": "registries/primitives/meaning_plane/referral_trust_transfer/PRM-REF-009.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "tension_is_held_long_enough_to_make_the_issue_felt",
+            "composition_does_not_prematurely_soothe_or_overexplain"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PSY-008",
+          "canonical_name": "Attack Problem Not Person",
+          "registry_ref": "registries/primitives/meaning_plane/psychological_diagnostics/PRM-PSY-008.yaml",
+          "minimum_score": 0.88,
+          "evidence_requirements": [
+            "critique_is_focused_on_frame_claim_or_system",
+            "guest_or_audience_identity_is_not_shamed"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-PRS-002",
+          "canonical_name": "Tension-and-Release Narrative Engine",
+          "registry_ref": "registries/primitives/meaning_plane/persuasion/PRM-PRS-002.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "setup_conflict_and_release_are_identified",
+            "edit_plan_names_where_reaction_or_reveal_occurs"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-001",
+          "canonical_name": "Composition as Eye-Path Engineering",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-001.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "viewer_path_prioritizes_claim_then_proof_then_reaction",
+            "poll_or_vs_surface_does_not_steal_attention_from_the_thesis"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-012",
+          "canonical_name": "Frame as Active Meaning Device",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-012.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "split_frame_or_overlay_itself_carries_the_argument",
+            "frame_choice_is_not_only_decoration"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-035",
+          "canonical_name": "Playback Context Is Part of the Composition",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-035.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "mobile_vertical_viewing_context_is_accounted_for",
+            "social_controls_captions_and_safe_zones_do_not_break_readability"
+          ]
+        }
+      ],
+      "route_specific_hard_failures": [
+        "FRAME_BREAKER_BECAME_GENERIC_RAGE_BAIT",
+        "FRAME_BREAKER_ATTACKS_PERSON_NOT_PROBLEM",
+        "FRAME_BREAKER_HAS_NO_PROOF_SURFACE",
+        "FRAME_BREAKER_POLL_DOES_NOT_MAP_TO_GUEST_REACTION"
+      ]
+    },
+    "SV-RRC": {
+      "route_name": "Reaction / Recognition Clip",
+      "route_purpose": "Make the audience trust the human moment by showing recognition, surprise, emotional landing, or social proof inside the interview/reaction context.",
+      "required_distinct_feel": "Human-proof, live, observational, relational, and responsive. It should feel like a captured moment landing between people, not a manufactured debate template unless routed to Conscious Reactions Editing.",
+      "minimum_validated_primitives": 3,
+      "required_roles": [
+        "meaning_transform",
+        "delivery_shape",
+        "format_material"
+      ],
+      "allowed_primitives": [
+        {
+          "role": "meaning_transform",
+          "primitive_id": "PRM-PSY-001",
+          "canonical_name": "Matching Principle",
+          "registry_ref": "registries/primitives/meaning_plane/psychological_diagnostics/PRM-PSY-001.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "reaction_matches_practical_emotional_or_identity_layer",
+            "composition_does_not_answer_an_emotional_moment_with_a_practical_overlay"
+          ]
+        },
+        {
+          "role": "meaning_transform",
+          "primitive_id": "EXP-TRS-003",
+          "canonical_name": "Reflective Social Proof (The Status Share)",
+          "registry_ref": "registries/primitives/experience_plane/trust_branding/EXP-TRS-003.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "clip_shows_recognition_or_status_transfer",
+            "social_proof_is_tied_to_actual_guest_expression_or_audience_context"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-REF-009",
+          "canonical_name": "Constructive Tension Control",
+          "registry_ref": "registries/primitives/meaning_plane/referral_trust_transfer/PRM-REF-009.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "pause_silence_or_reaction_hold_is_preserved",
+            "edit_does_not_overcut_the_human_landing"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-VOC-008",
+          "canonical_name": "Voice as Identity Signature",
+          "registry_ref": "registries/primitives/meaning_plane/voice_audio_intimacy/PRM-VOC-008.yaml",
+          "minimum_score": 0.82,
+          "evidence_requirements": [
+            "guest_voice_or_interviewer_voice_identity_is_preserved",
+            "subtitle_and_audio_treatment_do_not_sanitize_personality"
+          ]
+        },
+        {
+          "role": "delivery_shape",
+          "primitive_id": "PRM-BUS-014",
+          "canonical_name": "Affordance as Invitation",
+          "registry_ref": "registries/primitives/meaning_plane/design_business/PRM-BUS-014.yaml",
+          "minimum_score": 0.82,
+          "evidence_requirements": [
+            "audience_response_path_is_visually_obvious",
+            "poll_comment_save_or_react_invitation_matches_clip_emotion"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-015",
+          "canonical_name": "Composition as Attention Routing",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-015.yaml",
+          "minimum_score": 0.86,
+          "evidence_requirements": [
+            "frame_routes_eye_between_reaction_surface_and_human_face",
+            "upper_and_lower_halves_do_not_compete"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-024",
+          "canonical_name": "Space as Psychological Relationship",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-024.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "guest_interviewer_distance_or_split_frame_expresses_relationship",
+            "background_removed_subjects_feel_integrated_into_scene"
+          ]
+        },
+        {
+          "role": "format_material",
+          "primitive_id": "PRM-VSG-035",
+          "canonical_name": "Playback Context Is Part of the Composition",
+          "registry_ref": "registries/primitives/meaning_plane/visual_sonic_guidance/PRM-VSG-035.yaml",
+          "minimum_score": 0.84,
+          "evidence_requirements": [
+            "vertical_video_safe_zones_are_respected",
+            "captions_reaction_ui_and_human_subjects_remain_readable_on_mobile"
+          ]
+        }
+      ],
+      "route_specific_hard_failures": [
+        "REACTION_CLIP_OVERPRODUCED_THE_HUMAN_MOMENT",
+        "REACTION_SURFACE_DOES_NOT_MATCH_GUEST_SPEECH",
+        "REACTION_FRAME_LOST_INTERVIEW_RELATIONSHIP",
+        "REACTION_TEMPLATE_DOES_NOT_ROUTE_EYE_BETWEEN_UI_AND_FACE"
+      ]
+    }
+  },
+  "receipt_contract": {
+    "receipt_type": "CompositionPreflightReceipt",
+    "required_fields": [
+      "composition_id",
+      "route_id",
+      "visual_feel_contract_id",
+      "minimum_validated_primitives",
+      "primitive_validation_count",
+      "primitive_results",
+      "role_coverage",
+      "hard_failure_codes",
+      "decision"
+    ],
+    "primitive_result_fields": [
+      "primitive_id",
+      "primitive_name",
+      "role",
+      "score",
+      "threshold",
+      "evidence_ref",
+      "composition_element_ref",
+      "decision"
+    ],
+    "approval_policy": {
+      "pass_requires": [
+        "primitive_validation_count >= 3",
+        "role_coverage.meaning_transform == true",
+        "role_coverage.delivery_shape == true",
+        "role_coverage.format_material == true",
+        "all_required_primitive_scores_meet_threshold",
+        "no_hard_failure_codes"
+      ],
+      "block_decisions": [
+        "BLOCKED_FOR_PRIMITIVE_MINIMUM",
+        "BLOCKED_FOR_ROLE_COVERAGE",
+        "BLOCKED_FOR_EVIDENCE",
+        "BLOCKED_FOR_ROUTE_FEEL_COLLAPSE"
+      ]
+    }
+  },
+  "negative_fixtures": [
+    {
+      "fixture_id": "NEG-COMP-001",
+      "description": "Composition declares only two primitives even if both score above threshold.",
+      "expected_failure_code": "COMPOSITION_PRIMITIVE_MINIMUM_NOT_MET"
+    },
+    {
+      "fixture_id": "NEG-COMP-002",
+      "description": "Composition declares three primitives but all are delivery_shape primitives.",
+      "expected_failure_code": "COMPOSITION_PRIMITIVE_ROLE_COVERAGE_MISSING"
+    },
+    {
+      "fixture_id": "NEG-COMP-003",
+      "description": "Composition declares primitive names without exact registry IDs.",
+      "expected_failure_code": "COMPOSITION_PRIMITIVE_ID_NOT_REGISTERED"
+    },
+    {
+      "fixture_id": "NEG-COMP-004",
+      "description": "PaperCut route uses photoreal debate-card styling with no paper layer materiality.",
+      "expected_failure_code": "COMPOSITION_ROUTE_FEEL_COLLAPSED"
+    },
+    {
+      "fixture_id": "NEG-COMP-005",
+      "description": "Reaction route uses poll UI that does not match guest speech or interviewer response.",
+      "expected_failure_code": "REACTION_SURFACE_DOES_NOT_MATCH_GUEST_SPEECH"
+    },
+    {
+      "fixture_id": "NEG-COMP-006",
+      "description": "Challenger route attacks guest identity instead of the false frame, claim, or system.",
+      "expected_failure_code": "FRAME_BREAKER_ATTACKS_PERSON_NOT_PROBLEM"
+    }
+  ]
+}

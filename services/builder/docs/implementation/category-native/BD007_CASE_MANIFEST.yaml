@@ -1,0 +1,105 @@
+schema_version: cmf-builder-bd007-case-manifest/v1
+generated_on: "2026-07-16"
+manifest_id: BD007-ST0603-DEVELOPMENT-CASES-v1
+blocker_id: BD-007
+scope: ST-06.03_DEVELOPMENT_ONLY_CATEGORY_NATIVE_COMPARISON
+manifest_classification: PASS_WITH_RECORDED_LIMITATIONS
+corpus_admission:
+  archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  admission_status: BLOCKED_OPERATOR_AUTHORITY
+  admitted_member_count: 0
+  admitted_member_manifest: null
+  archive_members_used_as_cases: 0
+case_summary:
+  executable_case_count: 0
+  completed_case_count: 0
+  template_count: 8
+  synthetic_cases_relabelled_as_real: 0
+  reason_no_execution: No archive member has a governed usage/adoption authority receipt, so no member may be materialized or sent to a provider.
+case_template_rules:
+  source_member_ref: must_reference_one_admitted_BD004_member_and_hash
+  usage_authority_ref: required
+  provenance_ref: required
+  category_and_profile_identity: required
+  category_native_arm: required
+  flattened_generic_negative_control: required
+  activative_lineage: required_where_applicable
+  wrong_reading_negative: required
+  protected_expected_evidence: isolated_from_generator
+  status_until_admission: BLOCKED_OPERATOR_AUTHORITY
+templates:
+  - case_id: BD007-CASE-SHORT-FORM-SEQUENCE
+    category: short_form_edited_video
+    profile: admitted_BD004_short_form_profile_required
+    evidence_role: temporal_spatial_reading_order_and_sequence_coherence
+    category_native_expectation: shot_cut_persistence_transition_pacing_and_sonic_relations_remain_distinct
+    flattened_control: generic_timeline_or_document_projection
+    critical_dimensions: [visual_hierarchy, spatial_ordering, temporal_ordering, reading_order, sequence_coherence, category_native_adaptation, wrong_reading_resistance, semantic_lineage]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-FORMAT02-CHARACTER-CONTINUITY
+    category: 2d_character_animation
+    profile: format02_minimal_coach_theatre
+    evidence_role: character_state_gaze_gesture_scene_continuity_and_temporal_performance
+    category_native_expectation: character_performance_grammar_remains_distinct_from_edited_video_grammar
+    flattened_control: generic_edited_video_timeline_projection
+    critical_dimensions: [visual_hierarchy, spatial_ordering, temporal_ordering, reading_order, sequence_coherence, category_native_adaptation, wrong_reading_resistance, semantic_lineage]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-CAROUSEL-SWIPE-SEQUENCE
+    category: carousels
+    profile: admitted_BD004_carousel_profile_required
+    evidence_role: slide_role_spatial_hierarchy_reading_order_and_swipe_sequence
+    category_native_expectation: slide_and_swipe_roles_are_preserved_without_false_frame_time_motion
+    flattened_control: generic_document_or_video_timeline_projection
+    critical_dimensions: [visual_hierarchy, spatial_ordering, reading_order, sequence_coherence, category_native_adaptation, wrong_reading_resistance, semantic_lineage]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-SUPERVISUAL-ONE-FRAME
+    category: supervisuals
+    profile: admitted_BD004_supervisual_profile_required
+    evidence_role: one_frame_attention_hierarchy_density_legibility_and_reading_order
+    category_native_expectation: immediate_recognition_and_one_frame_hierarchy_remain_explicit
+    flattened_control: generic_document_with_artificial_temporal_sequence
+    critical_dimensions: [visual_hierarchy, spatial_ordering, reading_order, category_native_adaptation, wrong_reading_resistance, semantic_lineage]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-CONVERSATIONAL-TURN-STRUCTURE
+    category: conversational_activation_expression
+    profile: separately_admitted_conversational_profile_required
+    evidence_role: turn_reaction_followup_expression_elevation_and_close_structure
+    category_native_expectation: conversational_turns_remain_structural_and_never_become_a_visual_timeline_or_scripted_human_landing
+    flattened_control: generic_document_or_timeline_projection
+    critical_dimensions: [temporal_ordering, sequence_coherence, identity_and_audience_context_preservation, edge_pressure_preservation, activative_call_integrity, desired_human_role, desired_reaction, micro_commitment, wrong_reading_resistance, category_native_adaptation, semantic_lineage, non_invention_of_human_truth]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-WRONG-READING-NEGATIVE
+    category: per_admitted_source_case
+    profile: per_admitted_source_case
+    evidence_role: dominant_wrong_reading_lock_preservation_and_rejection
+    category_native_expectation: every applicable lock_remains_nonempty_exact_and_nonweakened
+    flattened_control: generic_projection_designed_to_expose_lock_loss_without_mutating_source
+    critical_dimensions: [wrong_reading_resistance, category_native_adaptation, semantic_lineage]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-HUMAN-TRUTH-CONTRADICTION
+    category: conversational_activation_expression_or_other_human_source_profile
+    profile: separately_admitted_human_source_profile_required
+    evidence_role: reject_invented_human_truth_false_Reaction_Receipt_and_false_Expression_Moment
+    category_native_expectation: human_owned_truth_reaction_and_expression_remain_external_and_attributable
+    flattened_control: generic_projection_that_exposes_invention_risk_without_supplying_fabricated_labels
+    critical_dimensions: [identity_and_audience_context_preservation, desired_human_role, desired_reaction, semantic_lineage, non_invention_of_human_truth]
+    status: BLOCKED_OPERATOR_AUTHORITY
+  - case_id: BD007-CASE-CROSS-CATEGORY-ALIAS
+    category: per_admitted_source_case
+    profile: per_admitted_source_case
+    evidence_role: unsupported_cross_category_syntax_rejection
+    category_native_expectation: source_category_grammar_cannot_be_cosmetically_aliased_to_another_category
+    flattened_control: deliberately_category_agnostic_projection
+    critical_dimensions: [category_native_adaptation, wrong_reading_resistance, semantic_lineage]
+    status: BLOCKED_OPERATOR_AUTHORITY
+validation:
+  all_templates_have_paired_control: PASS
+  all_templates_require_admitted_source_hash: PASS
+  all_templates_require_authority_and_provenance: PASS
+  wrong_reading_negative_present: PASS
+  contradiction_case_present: PASS
+  conversational_non_invention_case_present: PASS
+  unadmitted_members_used: false
+  executable_case_set: BLOCKED_OPERATOR_AUTHORITY
+production_ready: false
+certified: false

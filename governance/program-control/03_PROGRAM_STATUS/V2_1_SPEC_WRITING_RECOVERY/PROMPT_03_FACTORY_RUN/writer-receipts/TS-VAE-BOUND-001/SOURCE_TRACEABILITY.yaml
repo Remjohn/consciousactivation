@@ -1,0 +1,44 @@
+schema_version: conscious-activations-source-traceability/v3.3
+receipt_id: CA-P03-SOURCE-TRACE-TS-VAE-BOUND-001
+spec_id: TS-VAE-BOUND-001
+result: PASS
+authority_state: CANDIDATE_NOT_CURRENT
+requirements:
+  FR-087:
+    story: ST-08.02
+    spec_sections: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+    sources:
+      - 02_VISUAL_ASSET_EDITOR/prd/05-features/F08-visual-capability-registry.md
+      - 02_VISUAL_ASSET_EDITOR/prd/05-features/F09-visual-production-plan-ir.md
+      - CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED/CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED/prd/features/F15-visual-asset-editor-delegation-and-gnm-boundary-integration.md
+    invariant: VAE owns provider capability registration, provider-neutral planning, route binding and production realization; Pipeline cannot implement or select VAE providers.
+  FR-088:
+    story: ST-08.02
+    spec_sections: [2, 3, 5, 6, 8, 9, 10]
+    sources:
+      - 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-DEL-001.md
+      - 02_VISUAL_ASSET_EDITOR/prd/05-features/F09-visual-production-plan-ir.md
+      - 02_VISUAL_ASSET_EDITOR/prd/05-features/F14-visual-evaluation-profiles.md
+    invariant: External demand/result authority and semantic lineage remain immutable while VAE emits typed production, evaluation and delivery evidence.
+  FR-089:
+    story: ST-08.02
+    spec_sections: [2, 3, 5, 6, 7, 8, 9, 10]
+    sources:
+      - CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED/CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED/prd/features/F15-visual-asset-editor-delegation-and-gnm-boundary-integration.md
+      - 02_VISUAL_ASSET_EDITOR/governance/VISUAL_EVALUATION_PROFILE_REGISTRY.yaml
+      - CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED/CONSCIOUS_ACTIVATIONS_AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED/sources/CMF_STUDIO_PREDECESSOR_MIGRATION_AUDIT_V1.md
+    invariant: Provider-specific SAM3, matting, layered, ComfyUI and geometry routes remain VAE-owned, typed, evidenced, independently evaluated and non-semantic.
+story_traceability:
+  ST-08.02:
+    spec_sections: [2, 3, 5, 6, 7, 8, 9, 10]
+    acceptance_evidence: [provider_registry_receipts, route_binding_receipts, deterministic_validation_receipts, independent_evaluation_receipts, adoption_reaudit_receipt]
+semantic_objects:
+  VisualAssetDemand: {owner: Content_Harness_or_Pipeline, consumed_by: VAE, preserved_in: [3, 5, 6, 8, 9]}
+  VisualProductionPlan: {owner: VAE, preserved_in: [5, 6, 7, 9, 10]}
+  FeatureContract: {owner: AIR_or_upstream_semantic_authority, consumed_by: VAE, preserved_in: [3, 5, 6, 8, 9]}
+  CompositionIntent: {owner: upstream_semantic_authority, consumed_by: VAE, preserved_in: [3, 5, 6, 8, 9]}
+  AssetResult: {owner: VAE_production_and_external_contract_projection, preserved_in: [5, 6, 8, 9, 10]}
+claim_sources:
+  optional_or_deferred_source_claims: [SRC-EXT-026, SRC-AM-002]
+  unavailable_source_reconstruction: false
+  source_gap_notice_required_for_this_spec: false

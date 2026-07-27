@@ -1,0 +1,43 @@
+cases:
+- case_id: RES-01
+  fault: Duplicate submission after client timeout
+  expected: return_existing_receipt_no_duplicate_execution
+- case_id: RES-02
+  fault: Signed message replay in invalid lifecycle state
+  expected: reject_replay_no_state_change
+- case_id: RES-03
+  fault: Out-of-order progress event before acceptance
+  expected: buffer_or_reject_no_illegal_transition
+- case_id: RES-04
+  fault: Boundary-service restart
+  expected: rebuild_projection_and_idempotency
+- case_id: RES-05
+  fault: Event bus temporary outage
+  expected: deliver_after_recovery_preserve_order
+- case_id: RES-06
+  fault: Audit store unavailable during state-changing message
+  expected: fail_safe_no_acceptance
+- case_id: RES-07
+  fault: Delayed result acknowledgement
+  expected: retain_RESULT_READY_and_alert
+- case_id: RES-08
+  fault: VAE restart during IN_PROGRESS
+  expected: resume_same_execution_no_duplicate
+- case_id: RES-09
+  fault: Cancellation and RESULT_READY race
+  expected: apply_precedence_and_receipt
+- case_id: RES-10
+  fault: Supersession while GPU node completes
+  expected: block_old_promotion_preserve_output
+- case_id: RES-CONSTITUTION-001
+  fault: Idempotent retry and hostile replay target Activative lineage bytes
+  input_fixture: packages/fixtures/compatibility/constitutional/aip-lineage.source.json
+  expected_verdict: retry_reuses_original_and_mutation_replay_is_rejected
+  failure_code: PROTOCOL_REPLAY_DETECTED
+  state_effect: NONE_FOR_REPLAY
+  required_preservation:
+  - activative_intelligence_pack_ref.version
+  - activative_intelligence_pack_ref.payload_hash
+  - reaction_receipt_refs
+  - expression_moment_refs
+  audit_evidence: original_receipt_reused_and_mutation_rejection_receipted

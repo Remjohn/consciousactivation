@@ -1,0 +1,28 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Cancellation Receipt
+type: object
+additionalProperties: false
+required:
+- cancellation_ref
+- final_state
+- stopped_execution
+- retained
+- compute
+- downstream_consumption_authorized
+properties:
+  cancellation_ref:
+    type: string
+    minLength: 1
+  final_state:
+    type: string
+    minLength: 1
+    enum:
+    - cancelled
+  stopped_execution:
+    type: object
+  retained:
+    type: object
+  compute:
+    type: object
+  downstream_consumption_authorized:
+    type: boolean

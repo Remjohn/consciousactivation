@@ -1,0 +1,96 @@
+{
+  "registry_id": "registry.skills.shared.visual_preproduction.v1",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "visual_preproduction.context.hydrate",
+      "file": "registries/canonical/skills/shared/visual_preproduction/01_visual_preproduction.context.hydrate.skill.yaml",
+      "skill_type": "deterministic_plus_pydantic",
+      "dspy_program": null
+    },
+    {
+      "id": "visual_schema.research.compile",
+      "file": "registries/canonical/skills/shared/visual_preproduction/02_visual_schema.research.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "VisualSchemaResearchCompilerProgram"
+    },
+    {
+      "id": "visual_schema.source_evidence.map",
+      "file": "registries/canonical/skills/shared/visual_preproduction/03_visual_schema.source_evidence.map.skill.yaml",
+      "skill_type": "deterministic_evidence_mapping_plus_dspy_rationale",
+      "dspy_program": "VisualSchemaEvidenceMapperProgram"
+    },
+    {
+      "id": "visual_schema.familiarity_elements.score",
+      "file": "registries/canonical/skills/shared/visual_preproduction/04_visual_schema.familiarity_elements.score.skill.yaml",
+      "skill_type": "dspy_plus_registry_validation",
+      "dspy_program": "VisualFamiliarityScoringProgram"
+    },
+    {
+      "id": "visual_schema.subjective_distortion.map",
+      "file": "registries/canonical/skills/shared/visual_preproduction/05_visual_schema.subjective_distortion.map.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "SubjectiveDistortionMapperProgram"
+    },
+    {
+      "id": "storyboard.ingredients.compile",
+      "file": "registries/canonical/skills/shared/visual_preproduction/06_storyboard.ingredients.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "StoryboardIngredientCompilerProgram"
+    },
+    {
+      "id": "storyboard.asset_requirements.emit",
+      "file": "registries/canonical/skills/shared/visual_preproduction/07_storyboard.asset_requirements.emit.skill.yaml",
+      "skill_type": "deterministic_contract_compiler",
+      "dspy_program": null
+    },
+    {
+      "id": "storyboard.beat_visual_plan.compile",
+      "file": "registries/canonical/skills/shared/visual_preproduction/08_storyboard.beat_visual_plan.compile.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "VisualBeatPlanCompilerProgram"
+    },
+    {
+      "id": "storyboard.primal.analyze",
+      "file": "registries/canonical/skills/shared/visual_preproduction/09_storyboard.primal.analyze.skill.yaml",
+      "skill_type": "dspy_plus_pydantic",
+      "dspy_program": "PRIMALAnalysisProgram"
+    },
+    {
+      "id": "storyboard.vae.decode",
+      "file": "registries/canonical/skills/shared/visual_preproduction/10_storyboard.vae.decode.skill.yaml",
+      "skill_type": "dspy_adversarial_plus_deterministic_blockers",
+      "dspy_program": "VAEDecoderProgram"
+    },
+    {
+      "id": "storyboard.constraint_gate_c.run",
+      "file": "registries/canonical/skills/shared/visual_preproduction/11_storyboard.constraint_gate_c.run.skill.yaml",
+      "skill_type": "deterministic_gate_plus_dspy_repairs",
+      "dspy_program": "ConstraintGateCRepairProgram"
+    },
+    {
+      "id": "visual_analyst.validate",
+      "file": "registries/canonical/skills/shared/visual_preproduction/12_visual_analyst.validate.skill.yaml",
+      "skill_type": "hybrid_evaluator",
+      "dspy_program": "VisualAnalystProgram"
+    },
+    {
+      "id": "storyboard_commander.authorize",
+      "file": "registries/canonical/skills/shared/visual_preproduction/13_storyboard_commander.authorize.skill.yaml",
+      "skill_type": "deterministic_authorization_plus_reasoning_summary",
+      "dspy_program": "StoryboardCommanderProgram"
+    },
+    {
+      "id": "visual_preproduction.packet.freeze",
+      "file": "registries/canonical/skills/shared/visual_preproduction/14_visual_preproduction.packet.freeze.skill.yaml",
+      "skill_type": "deterministic_state_transition",
+      "dspy_program": null
+    },
+    {
+      "id": "visual_preproduction.revision.apply",
+      "file": "registries/canonical/skills/shared/visual_preproduction/15_visual_preproduction.revision.apply.skill.yaml",
+      "skill_type": "dspy_command_parser_plus_deterministic_patch",
+      "dspy_program": "VisualPreproductionRevisionProgram"
+    }
+  ]
+}

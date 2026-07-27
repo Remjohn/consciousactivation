@@ -1,0 +1,23 @@
+schema_version: ca-contract-compatibility-manifest/v1
+package: activative-production-spine
+version: 0.1.0-dev.1
+status: development_snapshot_unsigned_nonproduction
+schema_policy:
+  unknown_governed_fields: reject
+  additional_properties_default: false
+  semantic_versioning: required
+  canonical_serialization: utf8_sorted_keys_no_whitespace_no_floats
+bindings:
+  python:
+    path: generated/python/ca_contracts_generated.py
+    runtime_binding: packages/ca_contracts
+  typescript:
+    path: generated/typescript/contracts.ts
+    studio_binding: 07_CONSCIOUS_ACTIVATIONS_STUDIO/src/generated/contracts.ts
+consumers:
+  - activative-intelligence-runtime
+  - atomic-harness-pipeline
+  - interview-expression
+  - conscious-activations-studio
+production_authorized: false
+certified: false

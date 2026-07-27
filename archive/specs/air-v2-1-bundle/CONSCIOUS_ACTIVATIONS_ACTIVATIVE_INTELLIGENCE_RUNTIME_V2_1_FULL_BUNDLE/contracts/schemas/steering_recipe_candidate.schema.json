@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "ApplicabilityEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "audience_segments": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Audience Segments",
+          "type": "array"
+        },
+        "coach_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Coach Ids",
+          "type": "array"
+        },
+        "exclusions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusions",
+          "type": "array"
+        },
+        "formats": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Formats",
+          "type": "array"
+        },
+        "platforms": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Platforms",
+          "type": "array"
+        },
+        "pressure_domains": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Pressure Domains",
+          "type": "array"
+        },
+        "relationship_stages": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Relationship Stages",
+          "type": "array"
+        }
+      },
+      "title": "ApplicabilityEnvelope",
+      "type": "object"
+    },
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "applicability": {
+      "$ref": "#/$defs/ApplicabilityEnvelope"
+    },
+    "counterexample_refs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "title": "Counterexample Refs",
+      "type": "array"
+    },
+    "evidence_count": {
+      "minimum": 1,
+      "title": "Evidence Count",
+      "type": "integer"
+    },
+    "guidance": {
+      "title": "Guidance",
+      "type": "string"
+    },
+    "implicated_layer": {
+      "title": "Implicated Layer",
+      "type": "string"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "captured",
+        "candidate",
+        "locally_useful",
+        "repeated_evidence",
+        "promoted",
+        "deprecated",
+        "superseded"
+      ],
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "promotion_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImmutableRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "recipe_id": {
+      "title": "Recipe Id",
+      "type": "string"
+    },
+    "source_episode_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Source Episode Refs",
+      "type": "array"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "recipe_id",
+    "title",
+    "implicated_layer",
+    "guidance",
+    "source_episode_refs",
+    "applicability",
+    "lifecycle_state",
+    "evidence_count"
+  ],
+  "title": "SteeringRecipeCandidate",
+  "type": "object"
+}

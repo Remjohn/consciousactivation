@@ -1,0 +1,45 @@
+# Object Model
+
+## Common objects
+
+```text
+FormatIntelligenceContext
+GenericExtractionPacketRef
+FormatActivationDecision
+FormatSubFormatRoute
+FormatIngredientRequirement
+FormatIngredientChecklist
+FormatCompositionGrammar
+FormatLayerStackSpec
+FormatMotionDoctrine
+FormatSoundDoctrine
+FormatMemeticCuePolicy
+FormatStyleRoutePolicy
+FormatFirstFramePolicy
+FormatSubtitlePolicy
+FormatBrollPolicy
+FormatProofPolicy
+FormatMemoryObjectPolicy
+FormatAvatarPerformancePolicy
+FormatReactionSurfacePolicy
+FormatAntiSlopRule
+FormatEvalGateSet
+FormatRenderRequirement
+FormatCommanderVerdict
+FormatRepairCommand
+EngineAdapterPayload
+```
+
+## Specialized programs
+
+```text
+Format01CinematicStoryProgram
+Format02AvatarPaperCutExplainerProgram
+Format03LivingCommentaryReactionProgram
+Format04ConsciousReactionEditingProgram
+SuperVisualFormatProgram
+CarouselFormatProgram
+MemeVisualFormatProgram
+PollVisualFormatProgram
+ReactionSeedFormatProgram
+```

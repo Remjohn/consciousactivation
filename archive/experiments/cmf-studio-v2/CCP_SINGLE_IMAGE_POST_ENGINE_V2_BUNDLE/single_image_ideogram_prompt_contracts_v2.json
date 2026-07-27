@@ -1,0 +1,121 @@
+{
+  "schema_id": "provider_contract.ideogram4.single_image.v2",
+  "global_rules": {
+    "final_typography_in_ideogram": false,
+    "generate_textless_or_placeholder_composition": true,
+    "must_reserve_declared_text_zones": true,
+    "candidate_count_default": 4,
+    "reference_composition_allowed": true,
+    "negative_rules": [
+      "no_logos_unless_licensed",
+      "no_unrequested_text",
+      "no_extra_people",
+      "no_fused_hands",
+      "no_watermarks",
+      "no_border_unless_requested"
+    ]
+  },
+  "family_contracts": {
+    "conceptual_metaphor": {
+      "use_when": [
+        "unique_metaphor_scene",
+        "emotional_scene",
+        "problem_amplification",
+        "branching_scenarios"
+      ],
+      "prompt_fields": [
+        "main_metaphor",
+        "subject_state",
+        "camera_or_view",
+        "environment",
+        "visual_flow",
+        "reserved_text_zones",
+        "micro_semiotic_anchors",
+        "style_constitution",
+        "negative_space"
+      ],
+      "output_mode": "single_composition_plate_or_separate_scene_assets",
+      "prompt_template": "Create a {aspect_ratio} editorial composition illustrating {main_metaphor}. Subject state: {subject_state}. Visual flow: {visual_flow}. Reserve clean negative space at {reserved_text_zones}. Include only these subtle audience-native cues: {micro_semiotic_anchors}. Follow this visual constitution: {style_constitution}. No final words, labels, logos, or watermarks."
+    },
+    "cartoon_moral": {
+      "use_when": [
+        "single_moral_scene",
+        "object_metaphor",
+        "character_thesis"
+      ],
+      "prompt_fields": [
+        "moral_mechanism",
+        "character_action",
+        "hero_object",
+        "scene_setting",
+        "reserved_text_zones",
+        "brand_character_style",
+        "msa"
+      ],
+      "output_mode": "textless_illustration_plate",
+      "prompt_template": "Create a clean editorial cartoon scene that visually communicates {moral_mechanism}. Character action: {character_action}. Hero object: {hero_object}. Reserve the top zone for deterministic headline rendering. Use {brand_character_style}. Add one subtle recognition cue: {msa}. No written text."
+    },
+    "cartoon_framework": {
+      "use_when": [
+        "diptych",
+        "triptych",
+        "quad",
+        "progression_path"
+      ],
+      "prompt_fields": [
+        "panel_count",
+        "panel_scenes",
+        "character_consistency",
+        "camera_consistency",
+        "background_consistency"
+      ],
+      "output_mode": "generate_each_panel_separately",
+      "prompt_template": "Generate panel {panel_index} of {panel_count} for a coherent editorial cartoon framework. Scene: {panel_scene}. Keep the same character design, lens, palette, and line style as reference. No text, labels, panel borders, or numbering."
+    },
+    "comparison_poll": {
+      "use_when": [
+        "conceptual_contrast",
+        "would_you_rather",
+        "two_scenarios"
+      ],
+      "prompt_fields": [
+        "option_a_scene",
+        "option_b_scene",
+        "shared_style",
+        "matched_camera",
+        "matched_subject_scale"
+      ],
+      "output_mode": "generate_option_assets_separately",
+      "prompt_template": "Generate a matched comparison asset for option {option_label}: {option_scene}. Match the companion option in camera, scale, lighting, style, and visual complexity. Do not add text, borders, badges, or labels."
+    },
+    "assertion_commentary": {
+      "use_when": [
+        "blunt_imperative_with_custom_hero",
+        "difficult_conversation_illustration"
+      ],
+      "prompt_fields": [
+        "hero_scene",
+        "subject_pose",
+        "reserved_text_zone",
+        "style_constitution"
+      ],
+      "output_mode": "hero_asset_only",
+      "prompt_template": "Create a single clean hero visual for the claim theme {hero_scene}. Subject pose: {subject_pose}. Leave the declared headline zone empty. Follow {style_constitution}. No text."
+    },
+    "documentary_social_card": {
+      "use_when": [],
+      "output_mode": "do_not_use_ideogram",
+      "reason": "Use sourced screenshots, verified photos, and deterministic shells."
+    },
+    "sports_collage": {
+      "use_when": [],
+      "output_mode": "do_not_use_ideogram",
+      "reason": "Use verified source photography and deterministic stat composition."
+    },
+    "promo_live": {
+      "use_when": [],
+      "output_mode": "do_not_use_ideogram",
+      "reason": "Use approved portrait assets and deterministic metadata."
+    }
+  }
+}

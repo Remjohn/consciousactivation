@@ -1,0 +1,61 @@
+schema_version: cmf-builder-story-completion-receipt-template/v1
+receipt_contract:
+  story_id: {const: ST-01.02}
+  primary_epic: {const: EP-01}
+  active_mode: {const: SYNTHETIC_DEFINITION}
+  implemented_outcome:
+    required: true
+    constraint: must_match_STORY_CONTRACT_primary_outcome_without_scope_expansion
+  owned_obligations:
+    required_exact_ids: [ADR-007, D005, FR-009, FR-010, FR-011, FR-012, FR-013, NFR-PORT-001, NFR-SEC-001, NFR-SEC-002]
+    all_must_pass: true
+    ownership_change_allowed: false
+  acceptance_criteria:
+    required_exact_ids: [AC-01, AC-02, AC-03, AC-04, AC-05, AC-06, AC-07, AC-08, AC-09, AC-10]
+    all_must_pass: true
+  source_profile:
+    required_id: synthetic_task_definition_source_v1
+    required_version: 1.0.0
+    required_hash_source: development-capsules/ST-01.02/SYNTHETIC_SOURCE_PROFILE.json
+  dependencies:
+    original_receipt_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+    supplemental_receipt_sha256: 58ae069c277e4256633db258a639e4901b44cdeb3d5e36b06464aa80d2700418
+  files_changed:
+    required: true
+    exact_subset_of: development-capsules/ST-01.02/ALLOWED_FILE_SCOPE.yaml
+    previous_and_current_hashes_required: true
+  tests:
+    ST_01_02_all_pass_twice: true
+    original_ST_01_01: PASS_20_OF_20
+    supplemental_branch: PASS_18_OF_18
+    skipped_mandatory_tests_allowed: false
+  schema_and_contract_validation:
+    source_profile: PASS
+    capsule_manifest: PASS
+    local_schema_change: false
+    external_dependency_added: false
+  observability_evidence:
+    path: development-capsules/ST-01.02/completion/OBSERVABILITY_EVIDENCE.yaml
+    required: true
+  rollback_evidence:
+    path: development-capsules/ST-01.02/completion/ROLLBACK_EVIDENCE.md
+    required: true
+    atomic_failure_demo_required: true
+  unresolved_limitations:
+    required_exact_scope:
+      - non_production_non_certified
+      - development_test_persistence_only
+      - no_Harness_compilation_or_execution
+      - no_external_runtime_or_conversational_behavior
+  hashes_required_for:
+    - every_changed_file
+    - every_completion_evidence_file_except_receipt
+    - capsule_manifest
+    - implementation_authorization
+    - source_profile
+    - both_dependency_receipts
+  completion_verdict: {permitted_values: [PASS, FAIL]}
+failure_rule: any_missing_failing_mismatched_out_of_scope_or_nondeterministic_evidence_forces_FAIL
+downstream_effect:
+  PASS: ST-02.05_DECLARED_BOUNDARY_mode_becomes_eligible_for_separate_readiness_evaluation
+  does_not_authorize: [ST-02.05, full_release1, full_product, production, VAE, Delegation]

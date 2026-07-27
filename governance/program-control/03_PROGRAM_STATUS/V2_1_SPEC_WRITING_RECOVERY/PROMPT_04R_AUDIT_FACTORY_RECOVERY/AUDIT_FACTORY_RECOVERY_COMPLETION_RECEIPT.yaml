@@ -1,0 +1,44 @@
+schema_version: conscious-activations-audit-factory-recovery-completion-receipt/v1
+receipt_id: CA-P04R-RECOVERY-COMPLETION-RECEIPT-2026-07-23
+issued_on: '2026-07-23'
+result: AUDIT_FACTORY_PAUSED_CAPACITY
+factory_state: AUDIT_FACTORY_PAUSED_CAPACITY
+
+durability_verification:
+  prompt03_and_blocked_p04_commit_sha: da3f55a
+  prompt04r_specs_and_infrastructure_commit_sha: 6b10036
+  inputs_durable: true
+
+blocked_p04_package:
+  path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04_AUDIT_FACTORY
+  status: PRESERVED_UNCHANGED_HISTORICAL_EVIDENCE
+
+queue_reconstruction:
+  total_specs: 60
+  audited_specs: 0
+  pending_capacity_specs: 60
+  controller_recovered_specs: 21
+
+capacity_exhaustion:
+  event: CHILD_AGENT_RESOURCE_EXHAUSTED
+  code: RESOURCE_EXHAUSTED_429
+  affected_batch: Batch 1 (TS-AHP-001, TS-AIR-001, TS-REL-001)
+  resumption_spec_id: TS-AHP-001
+
+safety_enforcement:
+  controller_self_audit_occurred: false
+  spec_bytes_modified: false
+  development_capsules_issued: false
+  prompt05_started: false
+  prompt06_started: false
+  fabricated_findings_created: false
+
+artifacts_created:
+  - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/RECOVERY_AUDIT_STATUS_MATRIX.csv
+  - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/RECOVERY_AUDIT_FINDINGS_REGISTRY.yaml
+  - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/AUDIT_BATCH_INDEX.yaml
+  - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/CONTROLLER_RECOVERED_SPEC_REGISTRY.yaml
+  - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/AUDIT_FACTORY_RECOVERY_REPORT.md
+  - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/AUDIT_FACTORY_RECOVERY_COMPLETION_RECEIPT.yaml
+
+next_permitted_action: RESUME_PROMPT_04R_WHEN_CAPACITY_IS_AVAILABLE

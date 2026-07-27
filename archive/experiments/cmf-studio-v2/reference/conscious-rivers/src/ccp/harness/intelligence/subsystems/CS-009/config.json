@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-009",
+  "name": "Emotional Contamination",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Kuleshov Effect",
+    "Affective priming"
+  ],
+  "inputs": [
+    "preceding_emotional_vector",
+    "b_roll_neutrality_score",
+    "contradiction_score",
+    "sequence_length_shots",
+    "emotional_intensity"
+  ],
+  "outputs": [
+    "contamination_suitability_score",
+    "verdict",
+    "b_roll_recommendation"
+  ],
+  "thresholds": {
+    "contamination_window_shots": {
+      "min": 3,
+      "max": 5
+    },
+    "max_contradiction_score": 0.3,
+    "prefer_neutral_b_roll": true
+  },
+  "default_action_on_fail": "REVISE"
+}

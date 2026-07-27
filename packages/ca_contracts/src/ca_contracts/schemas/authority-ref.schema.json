@@ -1,0 +1,35 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:authority-ref",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact authority identity and state.",
+  "properties": {
+    "authority_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "authority_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "authority_state": {
+      "enum": [
+        "current",
+        "candidate_not_current"
+      ],
+      "type": "string"
+    },
+    "authority_version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "authority_id",
+    "authority_version",
+    "authority_sha256",
+    "authority_state"
+  ],
+  "title": "AuthorityRef",
+  "type": "object"
+}

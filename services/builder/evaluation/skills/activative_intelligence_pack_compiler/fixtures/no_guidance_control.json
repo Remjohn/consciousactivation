@@ -1,0 +1,24 @@
+{
+  "extends": "BASE_CASE.json",
+  "case_id": "AIP-EVAL-014",
+  "case_class": "no_guidance_control",
+  "description": "Realistic control omits Activative guidance and falls back to generic engagement language.",
+  "candidate": {
+    "edge_pressure": "confidence is important",
+    "activative_call": {
+      "text": "What are your thoughts?",
+      "assigned_role": "",
+      "asks_micro_commitment": false,
+      "claimed_human_reaction": false
+    }
+  },
+  "independent_labels": {
+    "edge_preservation": "fail",
+    "specificity": "fail",
+    "non_generic_pressure": "fail",
+    "correct_human_role": "fail",
+    "desired_reaction": "fail",
+    "micro_commitment_integrity": "fail"
+  },
+  "expected": {"status": "insufficient_evidence", "hard_gate_failures": ["FALSE_ACTIVATIVE_CALL", "GENERIC_MOTIVATIONAL_LANGUAGE"]}
+}

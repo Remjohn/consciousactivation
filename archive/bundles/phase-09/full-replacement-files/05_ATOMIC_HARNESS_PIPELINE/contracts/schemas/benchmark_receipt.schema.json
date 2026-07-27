@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "iterations": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "maximum_micros": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "median_micros": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "minimum_micros": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "result_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "samples_micros": {
+      "items": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "array"
+    },
+    "sla_claimed": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "benchmark_id",
+    "name",
+    "iterations",
+    "samples_micros",
+    "minimum_micros",
+    "median_micros",
+    "maximum_micros",
+    "result_sha256",
+    "sla_claimed"
+  ],
+  "title": "BenchmarkReceipt",
+  "type": "object"
+}

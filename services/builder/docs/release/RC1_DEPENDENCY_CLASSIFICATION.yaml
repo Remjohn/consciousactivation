@@ -1,0 +1,39 @@
+schema_version: cmf-builder-rc1-dependency-classification/v1
+runtime_dependencies: []
+build_dependencies:
+  - name: setuptools
+    pinned_version: 80.9.0
+    purpose: PEP 517 build backend via setuptools.build_meta
+    source_evidence: pyproject.toml build-system.requires
+    mandatory_for_core_runtime: false
+test_dependencies:
+  - name: pytest
+    pinned_version: 8.3.4
+    purpose: governed repository regression and packaging tests
+    source_evidence: pyproject.toml optional-dependencies.test
+  - name: pytest-asyncio
+    pinned_version: 1.2.0
+    purpose: existing governed test environment support
+    source_evidence: requirements-dev.lock
+  - name: iniconfig
+    pinned_version: 2.1.0
+    purpose: pytest transitive dependency
+    source_evidence: requirements-dev.lock
+  - name: packaging
+    pinned_version: 24.2
+    purpose: pytest transitive dependency and metadata inspection support
+    source_evidence: requirements-dev.lock
+  - name: pluggy
+    pinned_version: 1.5.0
+    purpose: pytest transitive dependency
+    source_evidence: requirements-dev.lock
+development_dependencies: []
+optional_provider_dependencies:
+  openai: NOT_REQUIRED_FOR_CORE_CLEAN_INSTALL
+  qwen: NOT_REQUIRED_FOR_CORE_CLEAN_INSTALL
+  vllm: NOT_REQUIRED_FOR_CORE_CLEAN_INSTALL
+optional_cloud_dependencies:
+  aws_sdk: NOT_REQUIRED_FOR_CORE_CLEAN_INSTALL
+  google_cloud_sdk: NOT_REQUIRED_FOR_CORE_CLEAN_INSTALL
+core_builder_requires_external_provider_or_cloud_dependency: false
+

@@ -1,0 +1,48 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-07.02
+story_title: Compile a Target-Specific Atomic Content Harness
+primary_epic: EP-07
+active_mode: GENERIC_ATOMIC_CONTENT_HARNESS
+amendment_id: BF-AM-007
+readiness_status: READY
+primary_outcome: >-
+  Compile the exact active governed synthetic Builder Core lineage into one
+  immutable, deterministic, validated AtomicHarnessDefinition for the
+  atomic_content_harness target while preserving Activative authority and
+  explicitly marking the result synthetic_not_certifiable.
+owned_obligations: [FR-171, FR-174, FR-175, FR-176]
+direct_dependencies:
+  - ST-03.05:StoryCompletionReceipt
+  - ST-04.05:StoryCompletionReceipt
+  - ST-05.02:StoryCompletionReceipt
+applicable_blockers: []
+category_binding:
+  value: none
+  semantics: category_neutral_test_fixture_not_a_sixth_category
+  category_adapter_ref: NOT_APPLICABLE_SYNTHETIC_PROOF
+target:
+  target_kind: atomic_content_harness
+  profile_id: synthetic_text_normalization_v1
+  classification: [synthetic, repository_owned, nonproduction, noncertified, Builder_Core_validation_only]
+implementation_owner: category_and_target_compiler_owner
+component_boundary:
+  owns:
+    - typed_AtomicHarnessDefinition_contract
+    - deterministic_definition_compilation_from_exact_active_governed_inputs
+    - immutable_definition_identity_hash_storage_receipt_and_run_binding
+    - target_specific_source_IR_and_pre_ratified_Genesis_references
+    - explicit_synthetic_not_certifiable_marker
+    - replay_idempotency_invalidation_observability_and_atomic_rollback
+  excludes:
+    - Harness_execution
+    - DevelopmentCapsule_generation_owned_by_ST_11_01
+    - post_compilation_validation_owned_by_ST_07_04
+    - category_adapter_or_category_native_compilation
+    - external_product_handoff_or_runtime
+failure_behavior: >-
+  Fail closed before commit on missing, altered, stale, superseded, invalidated,
+  unauthorized, incompatible, non-synthetic, category-bound, externally owned,
+  or semantically flattened input; partial definitions and receipts are forbidden.
+completion_gate: ST-07.02:StoryCompletionReceipt
+implementation_authorized: false
+

@@ -1,0 +1,30 @@
+{
+  "validated_at": "2026-07-15",
+  "candidate_source": "D:\\Work\\CONSCIOUS_ACTIVATIONS\\03_DELEGATION_PROTOCOL\\validation\\rc4-release-rehearsal-019f5ff4",
+  "validation_environment": "temporary clean release-only copy",
+  "source_repository_available_to_tests": false,
+  "status": "PASS",
+  "validator_tests": 83,
+  "protocol_tests": 35,
+  "transient_files_after_validation": [],
+  "gates": [
+    {
+      "command": "C:\\Python312\\python.exe -B validators/run_release_validation.py",
+      "exit_code": 0,
+      "stdout_tail": "{\n  \"status\": \"PASS\",\n  \"layout\": \"RELEASE\",\n  \"checks\": {\n    \"examples\": 27,\n    \"closed_schemas\": \"PASS\",\n    \"release_identity\": {\n      \"package_version\": \"1.1.0-rc.4\",\n      \"protocol_version\": \"1.0\",\n      \"visual_asset_demand_version\": \"1.1\",\n      \"compatibility_profile_version\": \"1.0\",\n      \"utf8_files_scanned\": 164,\n      \"structured_files_scanned\": 118,\n      \"stale_active_declarations\": 0\n    },\n    \"generated_types\": \"PASS\",\n    \"fixture_json\": 47,\n    \"migration_declarations\": 4,\n    \"compatibility_and_migrations\": \"PASS\",\n    \"portable_derivative_lock_validation\": \"PASS\",\n    \"release_manifest_files\": 162,\n    \"release_receipt_files\": 163,\n    \"transient_files\": 0\n  }\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "command": "C:\\Python312\\python.exe -B -m unittest discover -s validators/tests -q",
+      "exit_code": 0,
+      "stdout_tail": "",
+      "stderr_tail": "----------------------------------------------------------------------\nRan 83 tests in 3.809s\n\nOK\n"
+    },
+    {
+      "command": "C:\\Python312\\python.exe -B -m pytest protocol/tests -q -p no:cacheprovider",
+      "exit_code": 0,
+      "stdout_tail": "...................................                                      [100%]\n35 passed in 3.49s\n",
+      "stderr_tail": "C:\\Python312\\Lib\\site-packages\\pytest_asyncio\\plugin.py:247: PytestDeprecationWarning: The configuration option \"asyncio_default_fixture_loop_scope\" is unset.\nThe event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: \"function\", \"class\", \"module\", \"package\", \"session\"\n\n  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))\n"
+    }
+  ]
+}

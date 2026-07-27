@@ -1,0 +1,1808 @@
+{
+  "$defs": {
+    "ActingState": {
+      "additionalProperties": false,
+      "properties": {
+        "state_id": {
+          "title": "State Id",
+          "type": "string"
+        },
+        "communicative_intent": {
+          "title": "Communicative Intent",
+          "type": "string"
+        },
+        "emotion": {
+          "$ref": "#/$defs/EmotionSpec"
+        },
+        "base_clip": {
+          "title": "Base Clip",
+          "type": "string"
+        },
+        "gesture_clip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gesture Clip"
+        },
+        "face_pose": {
+          "title": "Face Pose",
+          "type": "string"
+        },
+        "gaze_policy": {
+          "title": "Gaze Policy",
+          "type": "string"
+        },
+        "hand_pose_L": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hand Pose L"
+        },
+        "hand_pose_R": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hand Pose R"
+        },
+        "energy": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Energy",
+          "type": "number"
+        },
+        "minimum_hold_ticks": {
+          "minimum": 0,
+          "title": "Minimum Hold Ticks",
+          "type": "integer"
+        },
+        "transition_in_ticks": {
+          "minimum": 0,
+          "title": "Transition In Ticks",
+          "type": "integer"
+        },
+        "transition_out_ticks": {
+          "minimum": 0,
+          "title": "Transition Out Ticks",
+          "type": "integer"
+        },
+        "primitive_affinities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Primitive Affinities",
+          "type": "array"
+        },
+        "forbidden_contexts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Contexts",
+          "type": "array"
+        }
+      },
+      "required": [
+        "state_id",
+        "communicative_intent",
+        "emotion",
+        "base_clip",
+        "face_pose",
+        "gaze_policy",
+        "energy",
+        "minimum_hold_ticks",
+        "transition_in_ticks",
+        "transition_out_ticks"
+      ],
+      "title": "ActingState",
+      "type": "object"
+    },
+    "AssetBundle": {
+      "additionalProperties": false,
+      "properties": {
+        "psd": {
+          "$ref": "#/$defs/AssetRef"
+        },
+        "spine_skeleton": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssetRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "atlas": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssetRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "textures": {
+          "items": {
+            "$ref": "#/$defs/AssetRef"
+          },
+          "title": "Textures",
+          "type": "array"
+        },
+        "audio_master": {
+          "$ref": "#/$defs/AssetRef"
+        }
+      },
+      "required": [
+        "psd",
+        "textures",
+        "audio_master"
+      ],
+      "title": "AssetBundle",
+      "type": "object"
+    },
+    "AssetRef": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "title": "Uri",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "mime_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mime Type"
+        },
+        "size_bytes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size Bytes"
+        }
+      },
+      "required": [
+        "uri",
+        "sha256"
+      ],
+      "title": "AssetRef",
+      "type": "object"
+    },
+    "AttachmentPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "bone_id": {
+          "title": "Bone Id",
+          "type": "string"
+        },
+        "local_position": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Local Position",
+          "type": "array"
+        },
+        "local_rotation": {
+          "default": 0.0,
+          "title": "Local Rotation",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "bone_id",
+        "local_position"
+      ],
+      "title": "AttachmentPoint",
+      "type": "object"
+    },
+    "BoneNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bone_id": {
+          "title": "Bone Id",
+          "type": "string"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Id"
+        },
+        "x": {
+          "default": 0.0,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "default": 0.0,
+          "title": "Y",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        },
+        "scale_x": {
+          "default": 1.0,
+          "title": "Scale X",
+          "type": "number"
+        },
+        "scale_y": {
+          "default": 1.0,
+          "title": "Scale Y",
+          "type": "number"
+        },
+        "shear_x_deg": {
+          "default": 0.0,
+          "title": "Shear X Deg",
+          "type": "number"
+        },
+        "shear_y_deg": {
+          "default": 0.0,
+          "title": "Shear Y Deg",
+          "type": "number"
+        },
+        "rotation_min_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rotation Min Deg"
+        },
+        "rotation_max_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rotation Max Deg"
+        },
+        "bend_direction": {
+          "anyOf": [
+            {
+              "enum": [
+                "positive",
+                "negative",
+                "either"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bend Direction"
+        }
+      },
+      "required": [
+        "bone_id"
+      ],
+      "title": "BoneNode",
+      "type": "object"
+    },
+    "CameraCue": {
+      "additionalProperties": false,
+      "properties": {
+        "start_tick": {
+          "minimum": 0,
+          "title": "Start Tick",
+          "type": "integer"
+        },
+        "end_tick": {
+          "exclusiveMinimum": 0,
+          "title": "End Tick",
+          "type": "integer"
+        },
+        "motion": {
+          "title": "Motion",
+          "type": "string"
+        },
+        "scale_from": {
+          "default": 1.0,
+          "title": "Scale From",
+          "type": "number"
+        },
+        "scale_to": {
+          "default": 1.0,
+          "title": "Scale To",
+          "type": "number"
+        },
+        "x_from": {
+          "default": 0.0,
+          "title": "X From",
+          "type": "number"
+        },
+        "x_to": {
+          "default": 0.0,
+          "title": "X To",
+          "type": "number"
+        },
+        "y_from": {
+          "default": 0.0,
+          "title": "Y From",
+          "type": "number"
+        },
+        "y_to": {
+          "default": 0.0,
+          "title": "Y To",
+          "type": "number"
+        },
+        "easing": {
+          "default": "linear",
+          "title": "Easing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_tick",
+        "end_tick",
+        "motion"
+      ],
+      "title": "CameraCue",
+      "type": "object"
+    },
+    "CharacterPosition": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "scale": {
+          "exclusiveMinimum": 0,
+          "title": "Scale",
+          "type": "number"
+        },
+        "rotation_deg": {
+          "default": 0.0,
+          "title": "Rotation Deg",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "scale"
+      ],
+      "title": "CharacterPosition",
+      "type": "object"
+    },
+    "CharacterRefs": {
+      "additionalProperties": false,
+      "properties": {
+        "identity_pack_id": {
+          "title": "Identity Pack Id",
+          "type": "string"
+        },
+        "character_art_version_id": {
+          "title": "Character Art Version Id",
+          "type": "string"
+        },
+        "layered_asset_version_id": {
+          "title": "Layered Asset Version Id",
+          "type": "string"
+        },
+        "rig_version_id": {
+          "title": "Rig Version Id",
+          "type": "string"
+        },
+        "performance_library_version_id": {
+          "title": "Performance Library Version Id",
+          "type": "string"
+        },
+        "acting_library_version_id": {
+          "title": "Acting Library Version Id",
+          "type": "string"
+        },
+        "costume_skin": {
+          "title": "Costume Skin",
+          "type": "string"
+        },
+        "micro_semiotic_anchor_skins": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Micro Semiotic Anchor Skins",
+          "type": "array"
+        }
+      },
+      "required": [
+        "identity_pack_id",
+        "character_art_version_id",
+        "layered_asset_version_id",
+        "rig_version_id",
+        "performance_library_version_id",
+        "acting_library_version_id",
+        "costume_skin"
+      ],
+      "title": "CharacterRefs",
+      "type": "object"
+    },
+    "ConstraintSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "constraint_id": {
+          "title": "Constraint Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "one_bone_ik",
+            "two_bone_ik",
+            "transform",
+            "path",
+            "gaze"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "bones": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Bones",
+          "type": "array"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "mix": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Mix",
+          "type": "number"
+        },
+        "softness": {
+          "default": 0.0,
+          "title": "Softness",
+          "type": "number"
+        },
+        "bend_direction": {
+          "anyOf": [
+            {
+              "enum": [
+                "positive",
+                "negative"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bend Direction"
+        }
+      },
+      "required": [
+        "constraint_id",
+        "type",
+        "bones",
+        "target"
+      ],
+      "title": "ConstraintSpec",
+      "type": "object"
+    },
+    "ContextRefs": {
+      "additionalProperties": false,
+      "properties": {
+        "brand_id": {
+          "title": "Brand Id",
+          "type": "string"
+        },
+        "brand_context_version_id": {
+          "title": "Brand Context Version Id",
+          "type": "string"
+        },
+        "interview_brief_id": {
+          "title": "Interview Brief Id",
+          "type": "string"
+        },
+        "interview_asset_contract_id": {
+          "title": "Interview Asset Contract Id",
+          "type": "string"
+        },
+        "complete_expression_session_id": {
+          "title": "Complete Expression Session Id",
+          "type": "string"
+        },
+        "transcript_beat_map_id": {
+          "title": "Transcript Beat Map Id",
+          "type": "string"
+        },
+        "expression_moment_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expression Moment Ids",
+          "type": "array"
+        },
+        "voice_dna_version_id": {
+          "title": "Voice Dna Version Id",
+          "type": "string"
+        },
+        "visual_dna_version_id": {
+          "title": "Visual Dna Version Id",
+          "type": "string"
+        },
+        "primitive_eval_bundle_id": {
+          "title": "Primitive Eval Bundle Id",
+          "type": "string"
+        },
+        "doctrine_bundle_id": {
+          "title": "Doctrine Bundle Id",
+          "type": "string"
+        },
+        "asset_package_spec_id": {
+          "title": "Asset Package Spec Id",
+          "type": "string"
+        },
+        "scene_template_id": {
+          "title": "Scene Template Id",
+          "type": "string"
+        },
+        "format_target": {
+          "title": "Format Target",
+          "type": "string"
+        }
+      },
+      "required": [
+        "brand_id",
+        "brand_context_version_id",
+        "interview_brief_id",
+        "interview_asset_contract_id",
+        "complete_expression_session_id",
+        "transcript_beat_map_id",
+        "expression_moment_ids",
+        "voice_dna_version_id",
+        "visual_dna_version_id",
+        "primitive_eval_bundle_id",
+        "doctrine_bundle_id",
+        "asset_package_spec_id",
+        "scene_template_id",
+        "format_target"
+      ],
+      "title": "ContextRefs",
+      "type": "object"
+    },
+    "CoordinateSystem": {
+      "additionalProperties": false,
+      "properties": {
+        "origin": {
+          "default": "character_root",
+          "title": "Origin",
+          "type": "string"
+        },
+        "x_axis": {
+          "default": "right",
+          "enum": [
+            "right",
+            "left"
+          ],
+          "title": "X Axis",
+          "type": "string"
+        },
+        "y_axis": {
+          "default": "up",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "title": "Y Axis",
+          "type": "string"
+        },
+        "units": {
+          "default": "pixels_at_design_resolution",
+          "title": "Units",
+          "type": "string"
+        }
+      },
+      "title": "CoordinateSystem",
+      "type": "object"
+    },
+    "CueAction": {
+      "enum": [
+        "play_clip",
+        "apply_acting_state",
+        "set_gaze",
+        "set_shape_key",
+        "attach_prop",
+        "detach_prop",
+        "set_attachment",
+        "set_draw_order",
+        "set_parameter"
+      ],
+      "title": "CueAction",
+      "type": "string"
+    },
+    "EmotionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "title": "Primary",
+          "type": "string"
+        },
+        "secondary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Secondary"
+        },
+        "intensity": {
+          "default": 0.5,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Intensity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "primary"
+      ],
+      "title": "EmotionSpec",
+      "type": "object"
+    },
+    "EvalGateResult": {
+      "additionalProperties": false,
+      "properties": {
+        "gate_id": {
+          "title": "Gate Id",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Score",
+          "type": "number"
+        },
+        "threshold": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Threshold",
+          "type": "number"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "gate_id",
+        "score",
+        "threshold",
+        "passed"
+      ],
+      "title": "EvalGateResult",
+      "type": "object"
+    },
+    "EvaluationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "required_gates": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Gates",
+          "type": "array"
+        },
+        "thresholds": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Thresholds",
+          "type": "object"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/$defs/EvalGateResult"
+          },
+          "title": "Results",
+          "type": "array"
+        }
+      },
+      "required": [
+        "required_gates",
+        "thresholds"
+      ],
+      "title": "EvaluationSpec",
+      "type": "object"
+    },
+    "FFmpegFinishing": {
+      "additionalProperties": false,
+      "properties": {
+        "video_codec": {
+          "default": "h264",
+          "title": "Video Codec",
+          "type": "string"
+        },
+        "pixel_format": {
+          "default": "yuv420p",
+          "title": "Pixel Format",
+          "type": "string"
+        },
+        "audio_codec": {
+          "default": "aac",
+          "title": "Audio Codec",
+          "type": "string"
+        },
+        "audio_bitrate": {
+          "default": "192k",
+          "title": "Audio Bitrate",
+          "type": "string"
+        },
+        "voice_loudness_target_lufs": {
+          "default": -16.0,
+          "title": "Voice Loudness Target Lufs",
+          "type": "number"
+        },
+        "true_peak_target_db": {
+          "default": -1.5,
+          "title": "True Peak Target Db",
+          "type": "number"
+        },
+        "music_ducking_profile": {
+          "title": "Music Ducking Profile",
+          "type": "string"
+        },
+        "output_variants": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Output Variants",
+          "type": "array"
+        }
+      },
+      "required": [
+        "music_ducking_profile",
+        "output_variants"
+      ],
+      "title": "FFmpegFinishing",
+      "type": "object"
+    },
+    "LayerNode": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "semantic_type": {
+          "title": "Semantic Type",
+          "type": "string"
+        },
+        "side": {
+          "anyOf": [
+            {
+              "enum": [
+                "left",
+                "right",
+                "center"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Side"
+        },
+        "source_name": {
+          "title": "Source Name",
+          "type": "string"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Id"
+        },
+        "draw_order": {
+          "title": "Draw Order",
+          "type": "integer"
+        },
+        "canvas_rect": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "title": "Canvas Rect",
+          "type": "array"
+        },
+        "pivot_hint": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pivot Hint"
+        },
+        "texture_ref": {
+          "$ref": "#/$defs/AssetRef"
+        },
+        "mask_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mask Ids",
+          "type": "array"
+        },
+        "material_id": {
+          "title": "Material Id",
+          "type": "string"
+        },
+        "visible": {
+          "default": true,
+          "title": "Visible",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "layer_id",
+        "semantic_type",
+        "source_name",
+        "draw_order",
+        "canvas_rect",
+        "texture_ref",
+        "material_id"
+      ],
+      "title": "LayerNode",
+      "type": "object"
+    },
+    "MotionCanvasChoreography": {
+      "additionalProperties": false,
+      "properties": {
+        "template_id": {
+          "title": "Template Id",
+          "type": "string"
+        },
+        "character_position": {
+          "$ref": "#/$defs/CharacterPosition"
+        },
+        "camera_cues": {
+          "items": {
+            "$ref": "#/$defs/CameraCue"
+          },
+          "title": "Camera Cues",
+          "type": "array"
+        },
+        "scene_object_cues": {
+          "items": {
+            "$ref": "#/$defs/SceneObjectCue"
+          },
+          "title": "Scene Object Cues",
+          "type": "array"
+        },
+        "seed": {
+          "title": "Seed",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template_id",
+        "character_position",
+        "seed"
+      ],
+      "title": "MotionCanvasChoreography",
+      "type": "object"
+    },
+    "OperatorApproval": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "not_reviewed",
+            "revision_requested",
+            "approved",
+            "rejected"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "approved_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approved By"
+        },
+        "approved_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approved At"
+        },
+        "approval_surface": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approval Surface"
+        },
+        "revision_history_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Revision History Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "OperatorApproval",
+      "type": "object"
+    },
+    "PerformanceCue": {
+      "additionalProperties": false,
+      "properties": {
+        "cue_id": {
+          "title": "Cue Id",
+          "type": "string"
+        },
+        "start_tick": {
+          "minimum": 0,
+          "title": "Start Tick",
+          "type": "integer"
+        },
+        "end_tick": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Tick"
+        },
+        "action": {
+          "$ref": "#/$defs/CueAction"
+        },
+        "clip_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clip Id"
+        },
+        "state_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "State Id"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Id"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "loop": {
+          "default": false,
+          "title": "Loop",
+          "type": "boolean"
+        },
+        "mix_in_ticks": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Mix In Ticks",
+          "type": "integer"
+        },
+        "mix_out_ticks": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Mix Out Ticks",
+          "type": "integer"
+        },
+        "semantic_target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Target"
+        }
+      },
+      "required": [
+        "cue_id",
+        "start_tick",
+        "action"
+      ],
+      "title": "PerformanceCue",
+      "type": "object"
+    },
+    "PerformanceLibrary": {
+      "additionalProperties": false,
+      "properties": {
+        "library_id": {
+          "title": "Library Id",
+          "type": "string"
+        },
+        "acting_states": {
+          "items": {
+            "$ref": "#/$defs/ActingState"
+          },
+          "title": "Acting States",
+          "type": "array"
+        },
+        "transition_rules": {
+          "items": {
+            "$ref": "#/$defs/TransitionRule"
+          },
+          "title": "Transition Rules",
+          "type": "array"
+        },
+        "viseme_map_id": {
+          "title": "Viseme Map Id",
+          "type": "string"
+        },
+        "facial_pose_map_id": {
+          "title": "Facial Pose Map Id",
+          "type": "string"
+        },
+        "gaze_map_id": {
+          "title": "Gaze Map Id",
+          "type": "string"
+        },
+        "hand_pose_map_id": {
+          "title": "Hand Pose Map Id",
+          "type": "string"
+        },
+        "prop_action_map_id": {
+          "title": "Prop Action Map Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "library_id",
+        "acting_states",
+        "transition_rules",
+        "viseme_map_id",
+        "facial_pose_map_id",
+        "gaze_map_id",
+        "hand_pose_map_id",
+        "prop_action_map_id"
+      ],
+      "title": "PerformanceLibrary",
+      "type": "object"
+    },
+    "PerformanceTrack": {
+      "additionalProperties": false,
+      "properties": {
+        "track_id": {
+          "title": "Track Id",
+          "type": "string"
+        },
+        "priority": {
+          "title": "Priority",
+          "type": "integer"
+        },
+        "property_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Property Scope",
+          "type": "array"
+        },
+        "cues": {
+          "items": {
+            "$ref": "#/$defs/PerformanceCue"
+          },
+          "title": "Cues",
+          "type": "array"
+        },
+        "cue_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SidecarRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "track_id",
+        "priority",
+        "property_scope"
+      ],
+      "title": "PerformanceTrack",
+      "type": "object"
+    },
+    "ProgramStatus": {
+      "enum": [
+        "draft",
+        "compiled",
+        "blocking_preview_ready",
+        "revision_requested",
+        "final_preview_ready",
+        "approved_for_render",
+        "rendering",
+        "rendered",
+        "approved_for_publish",
+        "rejected"
+      ],
+      "title": "ProgramStatus",
+      "type": "string"
+    },
+    "RemotionComposition": {
+      "additionalProperties": false,
+      "properties": {
+        "composition_id": {
+          "title": "Composition Id",
+          "type": "string"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        },
+        "fps": {
+          "exclusiveMinimum": 0,
+          "title": "Fps",
+          "type": "integer"
+        },
+        "duration_in_frames": {
+          "exclusiveMinimum": 0,
+          "title": "Duration In Frames",
+          "type": "integer"
+        },
+        "character_render_mode": {
+          "enum": [
+            "embedded_spine_runtime",
+            "precomposed_rgba_plate",
+            "native_runtime"
+          ],
+          "title": "Character Render Mode",
+          "type": "string"
+        },
+        "subtitle_profile_id": {
+          "title": "Subtitle Profile Id",
+          "type": "string"
+        },
+        "background_scene_id": {
+          "title": "Background Scene Id",
+          "type": "string"
+        },
+        "safe_zone_profile_id": {
+          "title": "Safe Zone Profile Id",
+          "type": "string"
+        },
+        "audio_master_ref": {
+          "title": "Audio Master Ref",
+          "type": "string"
+        },
+        "seed": {
+          "title": "Seed",
+          "type": "string"
+        }
+      },
+      "required": [
+        "composition_id",
+        "width",
+        "height",
+        "fps",
+        "duration_in_frames",
+        "character_render_mode",
+        "subtitle_profile_id",
+        "background_scene_id",
+        "safe_zone_profile_id",
+        "audio_master_ref",
+        "seed"
+      ],
+      "title": "RemotionComposition",
+      "type": "object"
+    },
+    "RenderReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "program_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Program Sha256"
+        },
+        "python_harness_image_digest": {
+          "title": "Python Harness Image Digest",
+          "type": "string"
+        },
+        "motion_canvas_image_digest": {
+          "title": "Motion Canvas Image Digest",
+          "type": "string"
+        },
+        "remotion_image_digest": {
+          "title": "Remotion Image Digest",
+          "type": "string"
+        },
+        "ffmpeg_version": {
+          "title": "Ffmpeg Version",
+          "type": "string"
+        },
+        "character_runtime_version": {
+          "title": "Character Runtime Version",
+          "type": "string"
+        },
+        "font_hashes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Font Hashes",
+          "type": "array"
+        },
+        "provider_output_hashes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Provider Output Hashes",
+          "type": "array"
+        },
+        "rendered_file_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rendered File Sha256"
+        }
+      },
+      "required": [
+        "python_harness_image_digest",
+        "motion_canvas_image_digest",
+        "remotion_image_digest",
+        "ffmpeg_version",
+        "character_runtime_version"
+      ],
+      "title": "RenderReceipt",
+      "type": "object"
+    },
+    "RigManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "rig_id": {
+          "title": "Rig Id",
+          "type": "string"
+        },
+        "coordinate_system": {
+          "$ref": "#/$defs/CoordinateSystem"
+        },
+        "setup_pose_id": {
+          "title": "Setup Pose Id",
+          "type": "string"
+        },
+        "layers": {
+          "items": {
+            "$ref": "#/$defs/LayerNode"
+          },
+          "title": "Layers",
+          "type": "array"
+        },
+        "bones": {
+          "items": {
+            "$ref": "#/$defs/BoneNode"
+          },
+          "title": "Bones",
+          "type": "array"
+        },
+        "mesh_bundle_ref": {
+          "$ref": "#/$defs/SidecarRef"
+        },
+        "shape_key_bundle_ref": {
+          "$ref": "#/$defs/SidecarRef"
+        },
+        "masks_ref": {
+          "$ref": "#/$defs/SidecarRef"
+        },
+        "constraints": {
+          "items": {
+            "$ref": "#/$defs/ConstraintSpec"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "attachment_points": {
+          "items": {
+            "$ref": "#/$defs/AttachmentPoint"
+          },
+          "title": "Attachment Points",
+          "type": "array"
+        },
+        "material_profile_id": {
+          "title": "Material Profile Id",
+          "type": "string"
+        },
+        "runtime_export_refs": {
+          "items": {
+            "$ref": "#/$defs/AssetRef"
+          },
+          "title": "Runtime Export Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rig_id",
+        "setup_pose_id",
+        "layers",
+        "bones",
+        "mesh_bundle_ref",
+        "shape_key_bundle_ref",
+        "masks_ref",
+        "material_profile_id"
+      ],
+      "title": "RigManifest",
+      "type": "object"
+    },
+    "SceneObjectCue": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "title": "Object Id",
+          "type": "string"
+        },
+        "start_tick": {
+          "minimum": 0,
+          "title": "Start Tick",
+          "type": "integer"
+        },
+        "end_tick": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Tick"
+        },
+        "motion_path_id": {
+          "title": "Motion Path Id",
+          "type": "string"
+        },
+        "target_attachment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Attachment"
+        }
+      },
+      "required": [
+        "object_id",
+        "start_tick",
+        "motion_path_id"
+      ],
+      "title": "SceneObjectCue",
+      "type": "object"
+    },
+    "SidecarRef": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "title": "Uri",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        }
+      },
+      "required": [
+        "uri",
+        "sha256"
+      ],
+      "title": "SidecarRef",
+      "type": "object"
+    },
+    "Timebase": {
+      "additionalProperties": false,
+      "properties": {
+        "ticks_per_second": {
+          "default": 48000,
+          "exclusiveMinimum": 0,
+          "title": "Ticks Per Second",
+          "type": "integer"
+        },
+        "audio_sample_rate": {
+          "default": 48000,
+          "exclusiveMinimum": 0,
+          "title": "Audio Sample Rate",
+          "type": "integer"
+        },
+        "fps_numerator": {
+          "default": 30,
+          "exclusiveMinimum": 0,
+          "title": "Fps Numerator",
+          "type": "integer"
+        },
+        "fps_denominator": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Fps Denominator",
+          "type": "integer"
+        },
+        "duration_ticks": {
+          "exclusiveMinimum": 0,
+          "title": "Duration Ticks",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "duration_ticks"
+      ],
+      "title": "Timebase",
+      "type": "object"
+    },
+    "TranscriptAlignment": {
+      "additionalProperties": false,
+      "properties": {
+        "word_alignment_ref": {
+          "$ref": "#/$defs/SidecarRef"
+        },
+        "phoneme_alignment_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SidecarRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "viseme_cues_ref": {
+          "$ref": "#/$defs/SidecarRef"
+        },
+        "alignment_confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Alignment Confidence",
+          "type": "number"
+        },
+        "manual_repairs": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Manual Repairs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "word_alignment_ref",
+        "viseme_cues_ref",
+        "alignment_confidence"
+      ],
+      "title": "TranscriptAlignment",
+      "type": "object"
+    },
+    "TransitionRule": {
+      "additionalProperties": false,
+      "properties": {
+        "from_state": {
+          "title": "From State",
+          "type": "string"
+        },
+        "to_state": {
+          "title": "To State",
+          "type": "string"
+        },
+        "allowed": {
+          "title": "Allowed",
+          "type": "boolean"
+        },
+        "min_mix_ticks": {
+          "minimum": 0,
+          "title": "Min Mix Ticks",
+          "type": "integer"
+        },
+        "max_mix_ticks": {
+          "minimum": 0,
+          "title": "Max Mix Ticks",
+          "type": "integer"
+        },
+        "bridge_clip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bridge Clip"
+        }
+      },
+      "required": [
+        "from_state",
+        "to_state",
+        "allowed",
+        "min_mix_ticks",
+        "max_mix_ticks"
+      ],
+      "title": "TransitionRule",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "program_id": {
+      "title": "Program Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ProgramStatus"
+    },
+    "timebase": {
+      "$ref": "#/$defs/Timebase"
+    },
+    "context_refs": {
+      "$ref": "#/$defs/ContextRefs"
+    },
+    "character": {
+      "$ref": "#/$defs/CharacterRefs"
+    },
+    "asset_bundle": {
+      "$ref": "#/$defs/AssetBundle"
+    },
+    "rig_manifest": {
+      "$ref": "#/$defs/RigManifest"
+    },
+    "performance_library": {
+      "$ref": "#/$defs/PerformanceLibrary"
+    },
+    "transcript_alignment": {
+      "$ref": "#/$defs/TranscriptAlignment"
+    },
+    "performance_tracks": {
+      "items": {
+        "$ref": "#/$defs/PerformanceTrack"
+      },
+      "title": "Performance Tracks",
+      "type": "array"
+    },
+    "motion_canvas_choreography": {
+      "$ref": "#/$defs/MotionCanvasChoreography"
+    },
+    "remotion_composition": {
+      "$ref": "#/$defs/RemotionComposition"
+    },
+    "ffmpeg_finishing": {
+      "$ref": "#/$defs/FFmpegFinishing"
+    },
+    "evaluation": {
+      "$ref": "#/$defs/EvaluationSpec"
+    },
+    "operator_approval": {
+      "$ref": "#/$defs/OperatorApproval"
+    },
+    "receipt": {
+      "$ref": "#/$defs/RenderReceipt"
+    }
+  },
+  "required": [
+    "program_id",
+    "status",
+    "timebase",
+    "context_refs",
+    "character",
+    "asset_bundle",
+    "rig_manifest",
+    "performance_library",
+    "transcript_alignment",
+    "performance_tracks",
+    "motion_canvas_choreography",
+    "remotion_composition",
+    "ffmpeg_finishing",
+    "evaluation",
+    "operator_approval",
+    "receipt"
+  ],
+  "title": "TwoDCharacterProgram",
+  "type": "object"
+}

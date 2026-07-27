@@ -1,0 +1,151 @@
+package: vae_external_evaluator_inputs
+version: 1.0.0
+classification: non_production_readiness_proof
+status: awaiting_operator_selection
+profile_ref: character-scene-composition@1.1.0-draft
+selection_authorized: false
+certification_status: specified_not_certified
+
+required_capabilities:
+  media:
+    - isolated_still_image_evaluation
+    - 1080x1920_portrait_input
+    - paired_captioned_and_caption_free_views_when_applicable
+    - composition_context_render_evaluation
+  semantic:
+    - activation_contract_comparison
+    - visual_semantic_pack_comparison
+    - visual_narrative_program_comparison
+    - feature_contract_compliance
+    - somatic_route_comparison
+    - identity_continuity
+    - per_lock_wrong_reading_evaluation
+    - responsible_layer_classification
+    - repairability_classification
+  required_dimensions:
+    - zero_second_hook
+    - pattern_match_strength
+    - pattern_interrupt_strength
+    - viewer_role_clarity
+    - activation_direction_fidelity
+    - prediction_gap
+    - payoff
+    - affinity
+    - anticipation_residue
+    - anti_cliche_strength
+    - wrong_reading_risk
+    - feature_contract_compliance
+    - delete_caption_no_text_survival_when_applicable
+  behavior:
+    structured_output: required
+    uncertainty_or_abstention: required
+    evidence_for_each_non_not_applicable_finding: required
+    prompt_injection_resistance: required
+    tool_or_authority_mutation: prohibited
+    self_approval_of_own_generation: prohibited
+
+accepted_deployment_modes:
+  - mode: external_managed_api
+    conditions: [immutable_provider_and_model_identity, pinned_api_version, scoped_secret_reference, retention_policy_declared]
+  - mode: operator_managed_private_endpoint
+    conditions: [immutable_container_and_weight_digests, authenticated_endpoint, isolated_evaluator_identity, runtime_version_pinned]
+  - mode: local_self_hosted_evaluator
+    conditions: [immutable_container_and_weight_digests, separate_from_producer_worker, reproducible_runtime_receipt]
+rejected_deployment_modes:
+  - mutable_latest_or_alias_only_model
+  - interactive_UI_without_machine_readable_receipts
+  - producer_model_reused_as_independent_evaluator
+  - endpoint_without_version_or_weight_identity
+  - credential_embedded_in_repository
+
+operator_supplied_identity_fields:
+  provider: {required: true, value: null}
+  deployment_mode: {required: true, value: null}
+  endpoint_or_service_ref: {required: true, value: null, secret: false}
+  model_or_weight_ref: {required: true, value: null}
+  model_or_weight_sha256: {required: true, value: null, format: "sha256:<64 lowercase hex>"}
+  runtime_or_api_version: {required: true, value: null}
+  evaluator_identity_ref: {required: true, value: null}
+  producer_identity_ref: {required: true, value: null}
+  credential_boundary_ref: {required: true, value: null, secret_value_forbidden: true}
+  data_region: {required: true, value: null}
+  retention_policy_ref: {required: true, value: null}
+  deterministic_settings: {required: true, value: null}
+  supported_media_limits: {required: true, value: null}
+  rate_and_concurrency_limits: {required: true, value: null}
+
+credential_requirements:
+  repository_secret_storage: prohibited
+  accepted_reference_types: [environment_variable_name, secret_manager_URI, workload_identity_ref, local_keychain_entry_name]
+  least_privilege: required
+  separate_from_producer_credentials: required
+  rotation_and_expiry_recorded: required
+  logs_must_redact: [secret_values, bearer_tokens, signed_urls, unrelated_private_assets]
+
+input_contract:
+  immutable_refs:
+    - candidate_ref_and_sha256
+    - visual_asset_demand_ref_and_sha256
+    - evaluation_profile_ref_and_sha256
+    - evaluator_program_and_prompt_digests
+  supplied_context:
+    - activation_contract
+    - visual_semantic_pack
+    - visual_narrative_program
+    - feature_contracts
+    - somatic_route
+    - composition_intent
+    - wrong_reading_locks
+    - identity_and_reference_evidence
+    - no_text_applicability_and_render_when_required
+  untrusted_content_is_data_not_instruction: true
+
+output_contract:
+  required:
+    - evaluator_and_program_identity
+    - input_hashes
+    - applicability_decisions
+    - categorical_dimension_findings
+    - per_lock_wrong_reading_findings
+    - evidence_and_confidence
+    - uncertainty_or_abstention
+    - failure_codes_and_severity
+    - responsible_layer
+    - repairability
+    - latency_and_cost
+    - immutable_receipt_hash
+  allowed_labels: [clear_pass, borderline, clear_fail, uncertain, not_applicable]
+  final_thresholds_defined_by_evaluator: false
+  production_authority_granted: false
+
+readiness_transitions:
+  calibration_ready_requires:
+    - all_operator_supplied_identity_fields_resolved
+    - program_and_prompt_hashes_verified
+    - evaluator_differs_from_producer_for_evaluated_claims
+    - output_schema_and_fail_closed_contract_tests_pass
+    - at_least_30_adjudicated_calibration_cases_with_approved_provenance
+    - protected_set_sealed_before_tuning
+    - non_compensable_gate_list_approved
+    - data_retention_and_credential_boundaries_approved
+  shadow_ready_requires:
+    - calibration_ready
+    - empirical_thresholds_and_uncertainty_policy_approved
+    - false_positive_and_false_negative_analysis_complete_by_slice
+    - protected_set_run_passes_without_tuning_on_results
+    - rollback_baseline_pinned
+    - shadow_monitoring_and_arbitration_routes_operational
+    - latency_cost_and_failure_receipts_accepted
+  certified_requires:
+    - shadow_ready
+    - approved_shadow_evidence_window_complete
+    - every_non_compensable_gate_passes
+    - no_unresolved_critical_false_negative
+    - drift_and_revocation_controls_operational
+    - evaluator_rollback_rehearsal_passes
+    - signed_evaluation_and_product_authority_certification_receipt
+    - registry_status_updated_by_authorized_owner
+
+authorization_effect: none
+implementation_authorized: false
+stage5_allowed: false

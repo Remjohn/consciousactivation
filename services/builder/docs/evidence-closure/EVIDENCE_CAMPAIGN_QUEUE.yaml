@@ -1,0 +1,30 @@
+schema_version: cmf-builder-evidence-campaign-queue/v1
+campaign_id: EC-AM-001
+ranking_basis: [prerequisites_available, evidence_value, cost, external_dependency, risk, claim_impact]
+queue:
+  - rank: 1
+    campaign: RC1_RELEASE_PACKAGING_METADATA_AND_CLEAN_INSTALL
+    blocker: RC1-P1-PACKAGING-METADATA-MISSING
+    reason: Highest local value; no external provider or human participant dependency.
+    authority_required: bounded_release_packaging_correction
+  - rank: 2
+    campaign: BD007_CLOUD_EMPIRICAL_CATEGORY_NATIVE_EVIDENCE
+    blocker: BD-007
+    reason: Unlocks category-native empirical validation and ST-06.03 evidence closure.
+    authority_required: cloud_account_budget_model_download_and_provider_execution
+  - rank: 3
+    campaign: BD008_PROTECTED_FORMAT02_EVIDENCE
+    blocker: BD-008
+    reason: Required for protected Format 02 claims.
+    authority_required: protected_evidence_and_external_review_authority
+  - rank: 4
+    campaign: EXTERNAL_VAE_DELEGATION_VALIDATION
+    blocker: EXTERNAL_PRODUCT_VALIDATION
+    reason: Required before external integration compatibility claims.
+    authority_required: external_product_validation_authority
+  - rank: 5
+    campaign: HUMAN_EVIDENCE_PILOT
+    blocker: REAL_HUMAN_EVIDENCE
+    reason: Required for human-reaction and expression claims.
+    authority_required: human_participant_pilot_authority
+

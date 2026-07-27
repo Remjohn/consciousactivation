@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-015",
+  "title": "Regeneration Request",
+  "description": "FR-VID-05 §3 — Operator request for surgical beat regeneration. Sent by FR-VID-09 review UI to the regeneration handler.",
+  "type": "object",
+  "required": ["beat_index", "mode", "revision_note"],
+  "properties": {
+    "beat_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Index of the beat to regenerate."
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["T2I_ONLY", "I2V_ONLY", "BOTH"],
+      "description": "Regeneration mode: T2I_ONLY (new keyframe, cascade I2V), I2V_ONLY (same keyframe, new motion), BOTH (full)."
+    },
+    "revision_note": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Operator's revision note describing what to change."
+    },
+    "operator_id": {
+      "type": "string",
+      "description": "Optional operator identifier for audit trail."
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of request."
+    }
+  }
+}

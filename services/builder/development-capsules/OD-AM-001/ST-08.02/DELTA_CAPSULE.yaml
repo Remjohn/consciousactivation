@@ -1,0 +1,211 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.02:DEVELOPMENT_MATURITY_RECEIPTS
+preparation_status: VALIDATED_IMPLEMENTED_DEVELOPMENT_PASS
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.02
+  title: Promote Maturity Only Through Protected Receipts
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: only the exact evaluated version can advance toward release
+  primary_obligations:
+    - ADR-010
+    - D022
+    - D023
+    - FR-107
+    - FR-108
+    - FR-109
+    - FR-110
+    - NFR-EVAL-001
+    - NFR-TRACE-003
+  primary_obligation_count: 9
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-08.01
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-08.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-08.01/DELTA_CAPSULE.yaml
+    sha256: 07812f6cd6b01025812364f2f2a2381f39d7498897a29580ff474294b1d6a866
+    validation: PASS_IMPLEMENTED_REFERENCE
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.02
+  - docs/architecture/adr/ADR-010-BENCHMARK-GOVERNANCE-AND-MATURITY.md
+  - docs/tech-specs/specs/TS-10-EVALUATION-REPAIR-AND-READINESS.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+two_gate_boundary:
+  implementation_gate:
+    maximum_status: development_validated
+    meaning: deterministic protected-evidence and maturity-receipt mechanism implemented for bounded development fixtures
+    closes_evidence_gate: false
+  evidence_gate:
+    status: EVIDENCE_PENDING
+    requires_real_protected_evidence: true
+    may_be_closed_by_synthetic_fixture: false
+    production_or_certification_authority: false
+implementation_scope_after_dependency_pass:
+  - immutable ProtectedEvidenceReceipt, EvaluationIdentity, PortfolioManifest and DevelopmentMaturityReceipt contracts
+  - deterministic promotion decision bound to exact evaluated subject, source IR, skill, adaptation, recipe, capsule, compiler, model policy, dataset, rubric, scoring and evaluator versions
+  - layered public, development and protected-case metadata with protected labels represented only through separately authorized custody references
+  - staged portfolio declarations for primary reference, contrasting transfer harnesses, VAE target and Delegation target with unevaluated branches explicit
+  - stable case identities, expected-behavior authority references, scoring-rule references and source provenance
+  - deterministic invalidation when any bound subject, dependency, corpus, rubric, threshold, evaluator or receipt identity changes
+  - non-destructive deprecation and supersession preserving historical reproducibility
+  - typed promotion rejection and rollback receipts with complete authority and failure context
+development_maturity_policy:
+  recognized_full_story_states:
+    - draft
+    - evaluation_pending
+    - experimental
+    - tested
+    - stable
+    - deprecated
+    - superseded
+  OD_AM_001_permitted_progression:
+    - draft
+    - evaluation_pending
+    - experimental
+    - tested
+    - development_validated
+    - deprecated
+    - superseded
+  maximum_emittable_status: development_validated
+  prohibited_emittable_statuses:
+    - stable
+    - shadow_ready
+    - production_ready
+    - certified
+  rule: >-
+    A bounded repository-owned fixture may demonstrate the promotion mechanism up to
+    development_validated only. It does not become protected benchmark evidence and
+    cannot establish release, production, transfer or certification eligibility.
+protected_evidence_rules:
+  protected_labels_in_generator_or_prompt_context: prohibited
+  protected_label_bytes_in_portable_receipts: prohibited
+  synthetic_protected_case_contract_fixture_is_real_protected_evidence: false
+  custody_reference_required: true
+  custody_authority_hash_required: true
+  case_assignment_receipt_required: true
+  evaluator_isolation_receipt_required: true
+  fresh_context_receipt_required: true
+  repetition_statistics_receipt_required: true
+  hard_gate_receipt_required: true
+  artifact_identity_receipt_required: true
+  leakage_attempt:
+    action: reject_revoke_and_invalidate
+    partial_promotion_state_allowed: false
+promotion_requirements:
+  - exact evaluated artifact identity and all dependency hashes match the candidate
+  - target-specific evaluation and regression policy is version-pinned
+  - primary reference and applicable transfer branches have explicit evaluated or NOT_EVALUATED status
+  - every corpus case has identity, evidence role, expected-behavior authority, scoring rule, provenance and custody class
+  - public, development and protected cases remain distinct
+  - all required fresh-context and control receipts are complete
+  - all applicable hard gates pass without compensation by aggregate score
+  - only evaluation-governance authority may approve a promotion decision
+  - changed dependencies stale the receipt and require a new immutable evaluation version
+negative_and_rejection_cases:
+  - benchmark or protected-label leakage
+  - generator access to protected expected behavior
+  - artifact, dependency, corpus, rubric, evaluator, threshold or receipt hash mismatch
+  - missing source, usage, label-custody or promotion authority
+  - unprotected case represented as protected release evidence
+  - missing real specimen, expert golden, known failure, adversarial near-miss, incomplete or contradictory evidence, controlled mutation, transfer case or protected release-case declaration
+  - incomplete repetitions, statistical uncertainty or missing no-guidance controls
+  - hard-gate failure hidden by an aggregate score
+  - certification inherited from Format 02, another category, another artifact version or a local fixture
+  - stable, shadow-ready, production-ready or certified request in OD-AM-001 mode
+  - unauthorized mutation, promotion, deprecation, supersession or rollback
+  - repeat command with conflicting payload
+blocker_and_evidence_gates_remaining:
+  BD-004:
+    status: EVIDENCE_PENDING
+    boundary: benchmark corpus authority is not created by this implementation
+  BD-007:
+    status: EVIDENCE_PENDING
+    boundary: provider or empirical category-native evidence is not created by this implementation
+  BD-008:
+    status: EVIDENCE_PENDING
+    boundary: protected-label custody, calibrated thresholds and production maturity remain open
+  HD-006:
+    status: HUMAN_POLICY_PENDING
+    boundary: real Human Reaction data and Identity DNA amendment-proposal storage remain prohibited
+  HD-007:
+    status: HUMAN_POLICY_PENDING
+    boundary: conversational protected cases, thresholds and certification remain open
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+future_evaluation_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/maturity_promotion.py
+  tests:
+    - tests/stories/st_08_02/test_development_maturity_promotion.py
+    - tests/stories/st_08_02/test_negative_boundaries.py
+    - tests/stories/st_08_02/test_authority_and_determinism.py
+    - tests/stories/st_08_02/test_rollback_and_invalidation.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.02/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.02/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.02/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  mechanical_integrator_files:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_evaluation_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs or historical receipts
+  - real protected labels, credentials, human data, external provider calls or external product behavior
+  - production persistence, production promotion, certification or publication
+prohibited_claims:
+  - real_protected_benchmark_passed
+  - empirical_superiority
+  - transfer_generality_proven
+  - stable
+  - shadow_ready
+  - production_ready
+  - certified
+  - external_target_compatible
+acceptance_after_dependency_pass:
+  - only the exact hash-bound evaluated version can receive a deterministic development maturity receipt
+  - all exact identity dimensions required by FR-108 and NFR-TRACE-003 are present and independently validated
+  - layered corpus and staged portfolio branches remain explicit without converting synthetic fixtures into real evidence
+  - protected-label isolation, custody references and evaluator separation fail closed on leakage or missing authority
+  - identical governed inputs produce byte-identical promotion, rejection, invalidation and rollback receipts
+  - changed inputs create new immutable identities and invalidate only affected descendants
+  - unauthorized or conflicting commands leave zero partial promotion state
+  - maximum emitted maturity is development_validated and production and certification remain false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  may_unlock: ST-08.03_OD_AM_001_OFFLINE_DEVELOPMENT
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+  maximum_maturity: development_validated
+  production_ready: false
+  certified: false
+implementation_validation:
+  source:
+    path: src/cmf_builder/evaluation/maturity_promotion.py
+    sha256: 95407ae3e94b1cf00566717a11118f178eb3ecf4ebb242003332b05909d434f9
+  tests:
+    focused: PASS_28_OF_28
+    affected_ST_08_01_and_ST_08_02: PASS_71_OF_71
+    architecture_boundary: PASS_12_OF_12
+    complete_repository_regression: PASS_1310_OF_1310_NO_MANDATORY_SKIPS
+    Python_source_compilation: PASS
+    mandatory_skips: 0
+  source_boundary_registry_sha256: ba705bd5ff8a3b3cc43f83d39fcb02de4f84b26f70148248dc9a6b8fffcbe68a

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-023",
+  "name": "Rhythm Generator",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Film Editing",
+    "1/f temporal pattern research"
+  ],
+  "inputs": [
+    "runtime_seconds",
+    "target_asl_seconds",
+    "bpm_range",
+    "scene_sequence",
+    "pacing_constraints"
+  ],
+  "outputs": [
+    "shot_duration_vector",
+    "tempo_clusters",
+    "verdict"
+  ],
+  "thresholds": {
+    "target_asl_seconds": {
+      "min": 0.8,
+      "max": 2.4
+    },
+    "use_one_over_f_distribution": true,
+    "require_reset_spaces": true
+  },
+  "default_action_on_fail": "REVISE"
+}

@@ -1,0 +1,24 @@
+schema_version: cmf-builder-capsule-dependency-receipt/v1
+story_id: ST-04.05
+direct_dependency:
+  story_id: ST-04.04
+  receipt_path: development-capsules/ST-04.04/completion/STORY_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 110d26709b63185f6ec57b5c1a1ab9bce3ecd52b151a8925dbcedbb37852aeea
+  canonical_payload_sha256: 9bddc1bcdcd5df402dbababe6a0379856da01beab397ddd49b4ca9c3f5d16c7b
+  completion_verdict: PASS
+  repository_regression: PASS_328_OF_328
+builder_first_conditional_gate:
+  amendment_id: BF-AM-006
+  mode: SYNTHETIC_CORE
+  BD_010: CLOSED_BY_GOVERNED_EMPTY_SKILL_REGISTRY_FOR_THIS_MODE_ONLY
+empty_skill_registry:
+  policy: governance/EMPTY_SKILL_REGISTRY_POLICY.yaml
+  validation_receipt: governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.yaml
+  effect: immutable_context_input_only_no_skill_implementation
+cross_repository_authority:
+  dependency_id: XDEP-001
+  effect: GOVERNING_READ_ONLY_AUTHORITY_INPUT
+  runtime_blocker: false
+applicable_blockers: []
+excluded_later_dependencies: [Format02, VAE_runtime, Delegation_runtime, GPU, evaluator_certification, conversational_policy, skill_registry_implementation, Workflow_IR, Control_Tower, production_certification]
+verdict: PASS_READY_FOR_BOUNDED_CAPSULE_AUTHORIZATION_GATE

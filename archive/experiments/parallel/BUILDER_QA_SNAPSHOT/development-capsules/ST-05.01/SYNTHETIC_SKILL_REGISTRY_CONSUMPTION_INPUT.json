@@ -1,0 +1,43 @@
+{
+  "schema_version": "cmf-builder-synthetic-skill-registry-consumption-input/v1",
+  "scope": "ST-05.01_SYNTHETIC_EMPTY_SKILL_REGISTRY_CONSUMPTION_ONLY",
+  "source_contract": "cmf-builder-minimum-complete-context-graph/v1@1.0.0",
+  "registry": {
+    "registry_ref": "builder-core-synthetic-empty-skill-registry@1.0.0",
+    "fixture_path": "governance/fixtures/synthetic-core/empty-skill-registry.yaml",
+    "fixture_sha256": "a4a9e5afaf91f60b22529ec01f1bc8e22a0d895444ad9a9e9a96e7a3e7b28114",
+    "policy_path": "governance/EMPTY_SKILL_REGISTRY_POLICY.yaml",
+    "policy_sha256": "260df1cb40655fe4f42d264bb73f3e6bda012b9fe6bd015a1b6ae153615f985c",
+    "schema_path": "governance/schemas/empty-skill-registry.schema.json",
+    "schema_sha256": "e76be265d96df3c902a26989fa2c08309f6964bf96e4ac17ce850684de44f1c7",
+    "validation_receipt_path": "governance/EMPTY_SKILL_REGISTRY_VALIDATION_RECEIPT.json",
+    "validation_receipt_sha256": "79164fa7418d3750ffefee116264b1ca44533c8073afb5485b84089ebd945ee1"
+  },
+  "expected_capabilities": [
+    {"capability_id": "deterministic_contract_validation", "owner_kind": "builder_code", "skill_required": false, "determinism": "deterministic"},
+    {"capability_id": "governed_run_lifecycle", "owner_kind": "builder_code", "skill_required": false, "determinism": "deterministic"},
+    {"capability_id": "governed_task_acceptance", "owner_kind": "builder_code", "skill_required": false, "determinism": "deterministic"},
+    {"capability_id": "immutable_receipt_emission", "owner_kind": "builder_code", "skill_required": false, "determinism": "deterministic"},
+    {"capability_id": "synthetic_target_profile_binding", "owner_kind": "builder_code", "skill_required": false, "determinism": "deterministic"}
+  ],
+  "classification_contract": {
+    "authority_lanes": ["agent_draft_only", "builder_code_validation", "human_approval", "independent_evaluator_evidence"],
+    "maturity_states": ["DRAFT", "PROTOTYPE", "EVALUATED", "STABLE", "DEPRECATED", "REVOKED"],
+    "plasticity_states": ["LOCKED", "CONTROLLED", "EXPERIMENTAL"],
+    "canonical_skills": [],
+    "harness_local_adaptations": [],
+    "experimental_capabilities": []
+  },
+  "allowed_operations": ["consume_exact_registry", "validate_empty_registry", "classify_code_owned_capabilities", "emit_immutable_consumption_receipt"],
+  "prohibited_operations": ["register_skill", "promote_skill", "deprecate_skill", "revoke_skill", "discover_skill", "execute_skill", "compile_recipe", "compile_jit_capsule"],
+  "declarations": {
+    "external_skills_required": false,
+    "dynamic_skill_discovery_allowed": false,
+    "undeclared_skill_use": "FAIL_CLOSED",
+    "later_external_skill_effect": "NEW_IMMUTABLE_HARNESS_VERSION_REQUIRED",
+    "production_inference": "PROHIBITED"
+  },
+  "real_profile_registry_subscope": "DEFERRED_BLOCKED_BY_EXISTING_GATES",
+  "production_eligible": false,
+  "certified": false
+}

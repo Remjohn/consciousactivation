@@ -1,0 +1,41 @@
+mapping_type: vae_outbound_result_mapping
+mapping_id: vae-production-result-to-asset-result-contract-1.0@1.0.0
+target_contract: asset-result-contract@1.0
+target_release: delegation-contracts@1.1.0-rc.4
+canonical_source: shared_release_only
+
+required_result_mappings:
+  result_identity: [result_id, version, declared_at]
+  execution_identity: [execution, demand]
+  artifact_identity: [artifact_ref, artifact_media_type, artifact_width_px, artifact_height_px]
+  realization_status: [completion_status, unresolved_roles, attempts_consumed]
+  receipts: [provenance_refs, evaluation_findings, cost_consumed]
+
+feature_contract_realization:
+  authoritative_contract_owner: CONTENT_HARNESS
+  authoritative_reference_source: accepted_visual_asset_demand.feature_contracts[].contract_ref
+  VAE_owned_outputs:
+    - feasibility_finding
+    - production_realization
+    - realization_receipt
+  receipt_encoding:
+    provenance_refs: typed_versioned_realization_receipt_resource
+    evaluation_findings: feature_contract_compliance_evidence
+    demand: exact_authoritative_demand_identity
+  invariant: realization_receipt_preserves_exact_feature_contract_reference
+  mutation_of_authoritative_contract: rejected
+  infeasibility_route: constraint-conflict_plus_optional_amendment-proposal
+
+wrong_reading_lock_evidence:
+  source: accepted_parent_demand_or_new_authorized_upstream_demand_version
+  derivative_relationship: derivative-lock-inheritance@1.0
+  derivative_mapping: contracts/integration/DERIVATIVE_LOCK_INHERITANCE_MAPPING.yaml
+  derivative_rule: preserve_parent_lock_identity_meaning_scope_and_strength_and_allow_only_stricter_additions
+  evidence_route: provenance_refs_and_evaluation_findings_plus_RC4_validator_outcome
+
+authority_constraints:
+  result_may_report_production_acceptance: true
+  result_may_grant_downstream_consumption: false
+  result_may_mutate_demand: false
+  result_may_mutate_feature_contract: false
+  result_may_invent_lineage: false

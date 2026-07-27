@@ -1,0 +1,51 @@
+schema_version: cmf-builder-od-am-001-file-change-manifest/v1
+amendment_id: OD-AM-001
+story_id: ST-08.02
+status: IMPLEMENTED_DEVELOPMENT_PASS
+files_created:
+  - path: src/cmf_builder/evaluation/maturity_promotion.py
+    role: deterministic development-only protected evidence and maturity receipt contracts
+    sha256: 95407ae3e94b1cf00566717a11118f178eb3ecf4ebb242003332b05909d434f9
+  - path: tests/stories/st_08_02/test_development_maturity_promotion.py
+    role: exact evaluated-version and portfolio/layered-case promotion tests
+    sha256: 83a93524a5e169fcb9a96c7bd4c1bdab7051f930b13b4b16f10b5271a5594382
+  - path: tests/stories/st_08_02/test_negative_boundaries.py
+    role: protected-label, hard-gate, status and mutation rejection tests
+    sha256: 1d00f89dcd5e8c396321f2ef63006890af68def0f76bf4008d74cf3f0267007e
+  - path: tests/stories/st_08_02/test_authority_and_determinism.py
+    role: exact authority, deterministic identity and repeat-command tests
+    sha256: 7c9ea3dce580c8a0d53032d7f4d8b8b71893a417d09ed88ca96f05833ac968d6
+  - path: tests/stories/st_08_02/test_rollback_and_invalidation.py
+    role: invalidation, deprecation, supersession and rollback tests
+    sha256: 4e4a3f0f85ea5de4e5165b7b95765e8294846c4984732923c19419b28b4eac69
+files_modified:
+  - development-capsules/OD-AM-001/ST-08.02/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-08.02/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-08.02/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-08.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+production_files_changed:
+  - src/cmf_builder/evaluation/maturity_promotion.py
+test_files_changed:
+  - tests/stories/st_08_02/test_development_maturity_promotion.py
+  - tests/stories/st_08_02/test_negative_boundaries.py
+  - tests/stories/st_08_02/test_authority_and_determinism.py
+  - tests/stories/st_08_02/test_rollback_and_invalidation.py
+shared_files_changed:
+  - path: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+    sha256: ba705bd5ff8a3b3cc43f83d39fcb02de4f84b26f70148248dc9a6b8fffcbe68a
+    role: mechanical exact-source registration for authorized ST-08.02 source file
+paths_outside_capsule_changed: []
+prohibited_files_changed: []
+external_dependencies_added: []
+validation:
+  capsule_files_only: false
+  production_or_test_code_changed: true
+  path_ownership_conformant: true
+  focused_tests: PASS_28_OF_28
+  affected_tests: PASS_71_OF_71
+  architecture_tests: PASS_12_OF_12
+  full_repository_regression: PASS_1310_OF_1310_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  real_protected_evidence_created: false
+  production_or_certification_status_created: false

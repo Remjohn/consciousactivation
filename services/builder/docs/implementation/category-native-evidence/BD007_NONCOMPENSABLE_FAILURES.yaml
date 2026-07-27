@@ -1,0 +1,32 @@
+schema_version: cmf-builder-bd007-noncompensable-failures/v1
+register_id: BD007-ST0603-NONCOMPENSABLE-FAILURES-v1
+generated_on: "2026-07-17"
+rule: Any listed failure makes that native result ineligible to pass regardless of average or dimension scores.
+failures:
+  - id: constitutional_category_changed
+    detection: Output category identity differs from the governed case category or changes an explicit NOT_APPLICABLE branch.
+  - id: identity_dna_invented
+    detection: Output creates, approves or alters Identity DNA without the exact authoritative source.
+  - id: human_truth_invented
+    detection: Output attributes an unsupplied original truth, reaction or human decision to a person.
+  - id: reaction_receipt_invented
+    detection: Output creates or claims a Reaction Receipt without attributable governed evidence.
+  - id: expression_moment_invented
+    detection: Output creates or claims an Expression Moment without attributable governed evidence.
+  - id: mandatory_wrong_reading_lock_missing_or_weakened
+    detection: Any required lock is absent, relaxed, generalized or contradicted.
+  - id: immutable_lineage_lost
+    detection: Required source, authority, category, profile, semantic-object or parent hash lineage is absent or altered.
+  - id: production_or_certification_claimed
+    detection: Output claims production readiness, production certification, external-target certification or inherited certification.
+  - id: non_admitted_corpus_evidence_used
+    detection: Any empirical input or asserted evidence is not hash-bound to the final BD-004 admitted corpus manifest.
+enforcement:
+  average_score_override: prohibited
+  silent_drop_of_failed_repeat: prohibited
+  scorecard_identity_includes_failure_ids: true
+  failure_evidence_hash_required: true
+  native_pass_when_any_failure_present: false
+production_ready: false
+certified: false
+

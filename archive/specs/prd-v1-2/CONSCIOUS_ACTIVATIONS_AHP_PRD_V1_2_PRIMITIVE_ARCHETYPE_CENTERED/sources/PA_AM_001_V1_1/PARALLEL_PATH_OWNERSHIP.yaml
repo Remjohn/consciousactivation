@@ -1,0 +1,78 @@
+schema_version: pa-am-001-path-ownership/v1.1
+campaign_id: PA-AM-001
+version: '1.1'
+canonical_integrator_only:
+- CMF_PROGRAM_CONTROL/**
+- '**/PROGRAM_STATUS_EXPORT.yaml'
+- '**/CURRENT_PROJECT_STATUS.md'
+- '**/docs/contracts/releases/**'
+- '**/SOURCE_BOUNDARY_REGISTRY.yaml'
+- root product indexes
+- shared package exports
+- shared dependency and lock files
+- cross-product release manifests
+lanes:
+  LANE_A_PIPELINE:
+    includes:
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/domain/**
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/application/**
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/**
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/adapters/cmf_studio/**
+    - 04_ATOMIC_HARNESS_PIPELINE/tests/pipeline/**
+    excludes: []
+  LANE_B_TEMPORAL:
+    includes:
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_video_editing_runtime/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_remotion_adapter/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_hyperframes_adapter/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_ffmpeg_adapter/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_render_qa/**
+    - 04_ATOMIC_HARNESS_PIPELINE/tests/temporal/**
+    excludes: []
+  LANE_C_STATIC:
+    includes:
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_composition_runtime/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_static_skia_runtime/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_pretext_adapter/**
+    - 04_ATOMIC_HARNESS_PIPELINE/packages/cmf_annotation_runtime/**
+    - 04_ATOMIC_HARNESS_PIPELINE/tests/static/**
+    excludes: []
+  LANE_D_VAE_CORE:
+    includes:
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/**
+    - 02_VISUAL_ASSET_EDITOR/tests/stage5/**
+    - 02_VISUAL_ASSET_EDITOR/docs/implementation/stage5/**
+    excludes:
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/domain/avatar/**
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/application/avatar_expression/**
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/adapters/gnm/**
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/adapters/comfyui/gnm/**
+    - 02_VISUAL_ASSET_EDITOR/comfyui/workflows/gnm_*
+    - 02_VISUAL_ASSET_EDITOR/tests/stage5/gnm/**
+  LANE_E_EXISTING_INTERVIEW_EXPRESSION:
+    includes:
+    - existing live Interview Expression product paths assigned by integrator
+    excludes:
+    - '**/gnm/**'
+    - '**/comfyui/workflows/gnm_*'
+    - creation of any new Interview product root
+  LANE_F_VAE_GNM_MAIN_AVATAR:
+    includes:
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/domain/avatar/**
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/application/avatar_expression/**
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/adapters/gnm/**
+    - 02_VISUAL_ASSET_EDITOR/src/cmf_vae/adapters/comfyui/gnm/**
+    - 02_VISUAL_ASSET_EDITOR/comfyui/workflows/gnm_avatar_expression_reference_v1.json
+    - 02_VISUAL_ASSET_EDITOR/comfyui/workflows/gnm_avatar_expression_edit_v1.json
+    - 02_VISUAL_ASSET_EDITOR/tests/stage5/gnm/**
+    excludes:
+    - 04_ATOMIC_HARNESS_PIPELINE/**
+    - existing Interview Expression product/**
+  LANE_G_RETRIEVAL_MODEL_PROGRAMS:
+    includes:
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/retrieval/**
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/model_programs/**
+    - 04_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/context/**
+    - 04_ATOMIC_HARNESS_PIPELINE/tests/retrieval/**
+    - 04_ATOMIC_HARNESS_PIPELINE/tests/model_programs/**
+    excludes: []

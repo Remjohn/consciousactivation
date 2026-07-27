@@ -1,0 +1,68 @@
+{
+  "fixture_type": "vae_delegation_rc3_boundary_cases",
+  "fixture_version": "1.0.0",
+  "source_release": "delegation-contracts@1.1.0-rc.3",
+  "release_change_classification": "release_identity_correction_only",
+  "semantic_payload_preserved_from": "delegation-contracts@1.1.0-rc.2",
+  "wrong_reading_lock_inheritance": [
+    {
+      "id": "H003-PASS-INHERIT-EXACT",
+      "parent_demand": {"request_id": "demand-100", "version": 2},
+      "parent_locks": ["Do not read the expression as contempt.", "Do not imply that effort is worthless."],
+      "derivative_kind": "deterministic_delivery_variant",
+      "derivative_locks": ["Do not read the expression as contempt.", "Do not imply that effort is worthless."],
+      "expected": "PASS"
+    },
+    {
+      "id": "H003-PASS-STRICTER",
+      "parent_demand": {"request_id": "demand-100", "version": 2},
+      "parent_locks": ["Do not read the expression as contempt."],
+      "derivative_kind": "non_semantic_derivative",
+      "derivative_locks": ["Do not read the expression as contempt.", "Do not introduce mocking typography."],
+      "expected": "PASS"
+    },
+    {
+      "id": "H003-FAIL-REMOVAL",
+      "parent_demand": {"request_id": "demand-100", "version": 2},
+      "parent_locks": ["Do not read the expression as contempt.", "Do not imply that effort is worthless."],
+      "derivative_kind": "deterministic_delivery_variant",
+      "derivative_locks": ["Do not read the expression as contempt."],
+      "expected": "REJECT"
+    },
+    {
+      "id": "H003-PASS-AUTHORIZED-RELAXATION",
+      "parent_demand": {"request_id": "demand-100", "version": 2},
+      "derivative_demand": {"request_id": "demand-100", "version": 3, "upstream_authorized": true},
+      "parent_locks": ["Do not read the expression as contempt.", "Do not imply that effort is worthless."],
+      "derivative_kind": "semantic_revision",
+      "derivative_locks": ["Do not read the expression as contempt."],
+      "expected": "PASS_NEW_UPSTREAM_VERSION"
+    }
+  ],
+  "feature_contract_boundary": {
+    "authoritative_owner": "CONTENT_HARNESS",
+    "realization_owner": "VISUAL_ASSET_EDITOR",
+    "authoritative_contract_ref": {
+      "resource_id": "feature-gaze-format02-004",
+      "version": "1.0",
+      "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "canonical_ref": "cmf-contract://resources/feature-gaze-format02-004/1.0"
+    },
+    "VAE_realization": {
+      "feasibility": "FEASIBLE",
+      "authoritative_contract_ref": {
+        "resource_id": "feature-gaze-format02-004",
+        "version": "1.0",
+        "payload_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "canonical_ref": "cmf-contract://resources/feature-gaze-format02-004/1.0"
+      },
+      "realization_receipt_ref": {
+        "resource_id": "realization-gaze-format02-004",
+        "version": "1.0",
+        "payload_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "canonical_ref": "cmf-contract://resources/realization-gaze-format02-004/1.0"
+      }
+    },
+    "forbidden_mutation": {"field": "required_for_meaning", "from": true, "to": false}
+  }
+}

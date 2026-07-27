@@ -1,0 +1,27 @@
+schema_version: ai-v2-reaction-outcomes/v1
+version: 2.0.0
+outcomes:
+- id: anchor_hit
+  next: continue_or_land
+- id: partial_anchor_hit
+  next: depth_followup
+- id: unexpected_edge
+  next: observe_and_branch
+- id: state_transition
+  next: update_live_state
+- id: complete_landing
+  next: land_or_new_contract
+- id: flat_answer
+  next: new_anchor_or_reset
+- id: topic_escape
+  next: clarify_or_stop
+- id: defensive_reaction
+  next: lower_dose_or_reset
+- id: counteractivation
+  next: recover_or_stop
+- id: activation_null
+  next: reassess_edge_timing_or_question
+- id: observation_failure
+  next: do_not_infer
+- id: operator_interruption
+  next: store_and_resume_or_stop

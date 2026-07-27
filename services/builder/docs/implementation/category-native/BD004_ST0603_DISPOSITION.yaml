@@ -1,0 +1,68 @@
+schema_version: cmf-builder-bd004-st0603-disposition/v1
+disposition_id: BD004-ST0603-2026-07-16
+recorded_on: "2026-07-16"
+blocker: BD-004
+story: ST-06.03
+allowed_classifications:
+  - PASS_DEVELOPMENT_EVIDENCE
+  - PASS_WITH_RECORDED_LIMITATIONS
+  - NOT_APPLICABLE_TO_THIS_BRANCH
+  - BLOCKED_OPERATOR_AUTHORITY
+  - BLOCKED_EXTERNAL_PROVIDER
+  - FAIL_CONTRADICTORY_EVIDENCE
+findings:
+  archive_identity: PASS_DEVELOPMENT_EVIDENCE
+  archive_security: PASS_WITH_RECORDED_LIMITATIONS
+  syntax_and_sequencing_content_sufficiency_if_admitted: PASS_WITH_RECORDED_LIMITATIONS
+  legal_and_usage_authority: BLOCKED_OPERATOR_AUTHORITY
+  current_admission_as_development_only_non_certifying_reference_corpus: BLOCKED_OPERATOR_AUTHORITY
+archive:
+  sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  complete_member_inventory_sha256: 333834dc95e7e214ff2363ed11b50db83a7c6c02bff3460bfb57d97105419ece
+  evidence_content:
+    - exact Format 02 doctrine, scene-syntax skill and ingredient registry
+    - 73 files under the Format 02 content path, including two MP4 references, 68 JPG frames and one PNG reference
+    - category-native material for Formats 01 through 08, carousels and supervisuals
+    - sequencing and expression acquisition material
+  limitations:
+    - archive mixes historical versions and generated ephemera
+    - repeated media cannot be counted as independent evidence
+    - no archive-wide source profile or admitted-member selection exists
+    - item-level creator, license, privacy and usage provenance is incomplete
+    - no legal or organizational Builder usage grant exists
+exact_st0603_effect:
+  disposition: BLOCKED_OPERATOR_AUTHORITY
+  applicable_blocker_cut:
+    - BD-004
+  may_prepare_capsule_and_tests: true
+  may_implement_production_code: false
+  may_supply_BD007_cases: false
+  reason: BD-007 may use only evidence admitted by this lane; the archive is technically qualified but not usage-authorized or admitted.
+conditional_closure_path:
+  after_truthful_operator_decision:
+    prospective_classification: PASS_WITH_RECORDED_LIMITATIONS
+    corpus_role: development_only_non_certifying_reference_corpus
+    story_scope: ST-06.03_only
+    required_integrator_checks:
+      - decision identity and signature or approval receipt hash
+      - exact archive and inventory hashes
+      - explicit admitted-member selection
+      - limitations propagated into every case and result
+      - BD-007 uses only admitted member identities
+  broader_scopes_remaining_open:
+    - Format_02_reference_profile_adoption
+    - production_benchmarking
+    - provider_selection
+    - protected_evaluation
+    - production_certification
+non_claims:
+  corpus_adopted: false
+  provider_results_present: false
+  production_ready: false
+  certified: false
+evidence_files:
+  inventory: {path: docs/implementation/category-native/BD004_ARCHIVE_INVENTORY.yaml, sha256: e279ed8e549d205e2a00b4cfd3285bae284c24c1450eec8b49ecd2e60995d263}
+  security_report: {path: docs/implementation/category-native/BD004_ARCHIVE_SECURITY_REPORT.md, sha256: c93ffff1e83b07ffc860e89b07436b0c658e0366cbf4e9d10d7f08e6c42b1dc5}
+  provenance_graph: {path: docs/implementation/category-native/BD004_PROVENANCE_GRAPH.yaml, sha256: 4a97c6ab6f131a4ef93b966dc97b9d28ff42f9ffcbe3fca9c1b9e953bd6eb5e2}
+  operator_decision: {path: docs/implementation/category-native/BD004_OPERATOR_AUTHORITY_DECISION.yaml, sha256: 108e446ad9e46c840dbc8bceb04d040acd9879551a55765d7414561b22253c6d}
+verdict: BLOCKED_OPERATOR_AUTHORITY

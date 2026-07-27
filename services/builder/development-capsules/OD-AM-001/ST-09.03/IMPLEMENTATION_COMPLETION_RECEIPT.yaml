@@ -1,0 +1,84 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-09.03:NODE_VALIDATION_AND_FAILURE_CONTAINMENT:3461548774a5
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-09.03
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  The Builder validates quarantined node outputs before downstream advancement,
+  issues immutable release or blocker receipts, routes minimal failure feedback
+  only to the responsible owner, requires reproduced localized root-cause
+  evidence before repair eligibility, and validates bounded retry, timeout and
+  circuit-breaker policy without invoking an external scheduler or evaluator.
+primary_obligations_implemented:
+  - AG-020
+  - FR-190
+  - FR-191
+  - FR-192
+  - FR-193
+  - HG-012
+  - HG-013
+  - NFR-REL-004
+  - NFR-WORKFLOW-004
+dependency_receipts:
+  satisfied:
+    - ST-09.02:ImplementationCompletionReceipt:de5a0ac2a93d4a0076c4fffa714364a731fa4ddae21fb489f2cae7e6c851c662
+  pending: []
+source_files:
+  - path: src/cmf_builder/workflow/node_validation.py
+    sha256: 3461548774a5f931a57bfa21a0dc005415ac5f515ab4b3139d4cde3402d48f47
+test_files:
+  - path: tests/stories/st_09_03/test_node_output_validation_and_quarantine.py
+    sha256: 9125e6355c41e995392d49baef092d516453ea91ef935a912a692e86933cc867
+  - path: tests/stories/st_09_03/test_failure_feedback_and_root_cause.py
+    sha256: b57c73920313a5fdf6dcf9a8d3238ddd80816f0ced8abfe73cbf946a556ced7e
+  - path: tests/stories/st_09_03/test_bounded_control_flow_and_authority.py
+    sha256: a18dd96e2b64f1cb7e9f3d83881f5270cbefd6c6e9df342fc68b437bad760c59
+  - path: tests/stories/st_09_03/test_determinism_invalidation_and_rollback.py
+    sha256: 28e3e1970ac901e9c0d3356546330a47698a1b53b072150a8d84a3cbb991d53c
+tests:
+  focused: PASS_16_OF_16
+  workflow_batch: PASS_98_OF_98
+  architecture_boundary: PASS_12_OF_12
+  latest_applicable_complete_repository_regression: PASS_1765_OF_1765_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS
+  mandatory_skips: 0
+authority_and_boundary_evidence:
+  output_quarantine_until_validation: PASS
+  downstream_advancement_requires_release_receipt: PASS
+  invalid_output_blocker_receipt: PASS
+  minimal_failure_feedback_owner_routing: PASS
+  root_cause_required_before_repair_eligibility: PASS
+  bounded_retry_timeout_circuit_breaker_policy: PASS
+  deterministic_repeat_idempotency: PASS
+  invalidation_and_rollback_preserve_history: PASS
+  external_runtime_or_scheduler_executed: false
+  external_evaluator_executed: false
+  production_ready: false
+  certified: false
+rollback_evidence: PASS_NON_DESTRUCTIVE_INVALIDATION_AND_ROLLBACK_RECEIPTS_PRESERVE_HISTORY
+observability_evidence: PASS_TYPED_RECEIPTS_AND_DETERMINISTIC_IDENTITIES
+evidence_gate_status: MANUAL_SHADOW_TEMPORAL_AND_EXTERNAL_VALIDATION_PENDING
+external_gates_remaining_open:
+  - manual_shadow_expert_behavior_evidence
+  - XDEP-001
+  - XDEP-005
+  - ADR-006-Temporal-public-seam-conformance
+  - external_semantic_evaluator_and_production_fault_evidence
+  - production_promotion_authority_and_evidence
+deterministic_identity_evidence:
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_file_count: 121
+  production_source_tree_sha256: e8cc905f8b79ce26bf707da4eed6aa852a9d9e9d455b9ed738fb401e89ff85c9
+equivalent_to_StoryCompletionReceipt: false
+hashes:
+  delta_capsule_sha256: 9a83b9e977323798dc98f968c277295fcbe781fe171d9624eca38c7ec59b6e75
+  test_results_sha256: 7a0feda3f2c5de385aabce106328416cec6a7e99a436c78f4cc55c3217c2cb6d
+  file_change_manifest_sha256: 93ff99015af0d357446bc6da5966b4e9acaa2cc400c5df903a6770b204ee3c69
+  source_boundary_registry_sha256: 097dae3874c31ccf3de25af3f144ad368080157e7b9235097021dc906ec3b6f9
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-09.04_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true
+production_ready: false
+certified: false

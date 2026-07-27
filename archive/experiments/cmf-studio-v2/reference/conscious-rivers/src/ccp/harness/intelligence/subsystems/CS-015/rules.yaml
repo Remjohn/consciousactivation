@@ -1,0 +1,31 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-015
+enabled: true
+priority:
+  tier: quality
+  rank: 5
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+    - manifest_assembly
+warn_conditions:
+  - metric: shot_length_ms
+    operator: lt
+    value: 750
+route_hints:
+  corrective_moves:
+    - extend_hold
+    - reduce_semantic_load
+    - serialize_information

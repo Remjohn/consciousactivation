@@ -1,0 +1,225 @@
+program: visual_asset_editor_constitutional_alignment
+authority_previous: VAE_V1
+authority_current: VAE_V1_1_plus_constitution_1_1_0
+stage5_allowed: false
+
+batches:
+  A:
+    name: authority_requirement_impact_and_verdict
+    status: complete
+    verdict: FAIL
+    completed_at: "2026-07-14"
+    scope:
+      - compare_V1_to_V1_1
+      - map_constitutional_and_PRD_deltas
+      - inventory_affected_existing_artifacts
+      - separate_pre_RC1_from_post_RC1_work
+      - record_human_decisions
+      - publish_program_status
+    modified_scope:
+      - docs/constitutional-alignment/
+      - PROGRAM_STATUS_EXPORT.yaml
+    stop_after_batch: true
+
+  B:
+    name: pre_RC1_authority_vae_owned_contracts_and_wire_agnostic_specs
+    status: proposed_not_authorized
+    can_begin_before_delegation_rc1: true
+    requires_explicit_authorization: true
+    unblocked_scope:
+      - patch_stable_FR_wording_and_constitutional_precedence
+      - preserve_repository_specific_source_rebases_and_stage_evidence
+      - patch_specs_to_preserve_new_layers_and_forbid_inference
+      - patch_VAE_owned_plan_memory_repair_contracts_with_opaque_authoritative_refs
+      - add_constitutional_readiness_blockers_and_negative_test_design
+    decision_blocked_scope:
+      H-005:
+        - create_versioned_visual_evaluation_profile_registry
+        - finalize_evaluation_schema_dimensions_and_thresholds
+        - finalize_benchmark_profile_applicability
+    prohibited_scope:
+      - patch_public_Visual_Asset_Demand_schema
+      - copy_or_fork_Delegation_types
+      - generate_public_bindings
+      - implementation_code
+      - Stage_5
+    exit:
+      - bounded_diff_only
+      - all_unaffected_stage_1_to_4_evidence_preserved
+      - no_shared_schema_fork
+      - validation_report_for_pre_RC1_lanes
+
+  C:
+    name: delegation_RC1_pin_shared_boundary_and_conformance
+    status: blocked
+    can_begin_before_delegation_rc1: false
+    requires:
+      - H-001
+      - H-002
+      - H-003
+      - H-004
+      - published_signed_Delegation_1_1_0_rc_1
+    scope:
+      - pin_exact_package_coordinate_digest_and_generated_bindings
+      - quarantine_or_supersede_local_shared_schema_snapshots
+      - map_canonical_demand_losslessly_to_immutable_VAE_facts
+      - update_demand_template_and_Format02_producer_reference_fixtures
+      - verify_expression_moment_and_reaction_receipt_applicability
+      - verify_inherited_wrong_reading_lock_reference
+      - verify_feature_contract_reference_union
+      - fix_amendment_response_consumer_path
+      - complete_asset_result_migration
+      - rerun_message_schema_authority_and_adapter_conformance
+    prohibited_scope:
+      - local_Delegation_schema_fork
+      - silent_defaulting_of_missing_semantics
+      - implementation_without_stage5_authorization
+    exit:
+      - signed_pin_recorded
+      - all_required_adapter_paths_lossless
+      - no_incompatible_required_message
+      - constitutional_boundary_fixtures_pass
+
+  D:
+    name: epics_release_planning_and_readiness_reconciliation
+    status: blocked_pending_B_and_C
+    requires:
+      - B_complete
+      - C_complete
+      - H-005
+    scope:
+      - patch_epic_and_story_acceptance_without_changing_primary_ownership
+      - patch_dependency_graph_and_release_work_packages
+      - materialize_constitutional_benchmark_and_negative_fixture_families
+      - refresh_cross_repo_and_stage4_blocker_registers
+      - rerun_PRD_schema_coverage_and_package_validation
+      - issue_fresh_implementation_readiness_receipt
+    preservation_rules:
+      - retain_historical_Stage2_and_Stage3_verdicts_as_evidence
+      - retain_all_existing_open_blockers_until_closure_evidence_exists
+      - readiness_remains_FAIL_unless_every_applicable_gate_passes
+    exit:
+      - all_five_amendment_acceptance_tests_pass
+      - complete_traceability_to_specs_contracts_fixtures_epics_and_gates
+      - explicit_PASS_or_FAIL_readiness_receipt
+
+  E:
+    name: implementation_and_executable_product_tests
+    status: not_authorized
+    can_begin_before_delegation_rc1: false
+    requires:
+      - D_readiness_PASS
+      - explicit_Stage5_authorization
+    scope:
+      - implementation_only_after_authorization
+      - executable_schema_adapter_evaluator_and_end_to_end_tests
+    stop_rule: >-
+      Batch A does not authorize Batch E or any implementation activity.
+
+approved_execution_2026_07_14:
+  note: >-
+    The approved execution request used Batch C for internal specifications, Batch B
+    for contract integration, and Batch D for readiness. This execution record
+    preserves the original Batch A proposal labels above and records the actual gated
+    sequence without rewriting historical planning evidence.
+  sequence:
+    internal_technical_specifications:
+      user_batch_label: C
+      status: complete
+      scope: vae_owned_only
+      shared_contract_changes: none
+    delegation_1_1_0_rc1_gate:
+      status: FAIL
+      reason: release_slot_contains_only_PENDING_ALIGNMENT_md
+    contract_integration:
+      user_batch_label: B
+      status: not_executed_blocked
+      exact_pin_recorded: false
+      adapters_or_mappings_changed: false
+      shared_contract_fork_created: false
+    evaluation_updates:
+      status: complete_specified_not_certified
+      H_005_status: partially_resolved_thresholds_and_certification_open
+    readiness_re_evaluation:
+      user_batch_label: D
+      status: complete
+      verdict: FAIL
+  implementation_authorized: false
+  stage5_allowed: false
+  automatic_continuation: prohibited
+
+batch_B_resume_2026_07_14:
+  trigger: delegation_1_1_0_rc1_candidate_now_present
+  candidate_identity:
+    package_version: 1.1.0-rc.1
+    release_digest: "sha256:8bf07bd5b51b11d77b6852678967e439f019219d247b4c999877379196fd4e56"
+    release_receipt_hash: "sha256:39250ccc3f148f885b24e0f459ed8139f5695878c151ec6b3371d1c3a477cdbe"
+    source_manifest_hash: "sha256:a323851203841a09ae29fc89f2fe4b6f74206d2cc4964866a3826fe36fec7217"
+    trust_status: local_unsigned_release_candidate
+  gate_result: FAIL
+  blockers:
+    - source_manifest_validation_requires_11_omitted_pytest_cache_files
+    - validator_suite_50_of_51
+    - H_002_typed_source_kind_absent
+    - interview_expression_conditional_provenance_unenforceable
+  parse_without_enforcement_disposition: rejected
+  pin_status: observed_not_adopted
+  contract_integration_status: not_executed
+  batch_D_rerun_status: not_run
+  preserved:
+    - Batch_C_specification_amendments
+    - evaluation_profile_work
+    - epics_stories_ADRs_release_plan
+    - historical_audit_contract_and_readiness_evidence
+  implementation_authorized: false
+  stage5_allowed: false
+  next_action: delegation_owner_reissues_self_validating_semantically_enforceable_candidate
+
+batch_B_rc2_adoption_2026_07_14:
+  trigger: delegation_1_1_0_rc_2_candidate_supplied_for_clean_consumer_validation
+  candidate_identity:
+    package_version: 1.1.0-rc.2
+    release_digest: "sha256:d4958cd3d02f0acef9d66bf245078ea70dab36b727d0c1541031fdceb63f6e41"
+    release_receipt_hash: "sha256:ff97185ec1dfd1c2eaf936beec318e28b583fd2e3da809df9b860f504c7b6cff"
+    release_manifest_hash: "sha256:6e765eeef4ebed71d6e725cf11f49815f9cc0cafbe42ef157c8f189d8c7d582c"
+    source_manifest_hash: "sha256:8a572d086397b4c781eac76fd7d81e4fdd128480de2a283d515634fde230a982"
+    compatibility_profile: cmf-delegation-compatibility@1.1.0-rc.2
+    trust_status: local_unsigned_release_candidate
+  gate_result: PASS
+  clean_consumer_validation:
+    release_validator: PASS
+    validator_tests: PASS_61_of_61
+    protocol_tests: PASS_33_of_33
+    VAE_integration_tests: PASS_12_of_12
+    receipt_file_hashes: PASS_145_of_145
+    source_discriminator_and_interview_conditionals: PASS
+    parse_without_enforcement: rejected
+    migration_guessing: rejected
+  pin_status: adopted_for_bounded_local_integration
+  contract_integration_status: complete
+  H_002: resolved_and_integrated
+  H_003: resolved_and_integrated
+  H_004: resolved_and_integrated
+  H_005: specified_not_certified
+  shared_contract_fork_created: false
+  runtime_implementation_created: false
+  rejected_rc1_report_preserved: true
+  batch_D_rerun_status: complete_FAIL
+  implementation_authorized: false
+  stage5_allowed: false
+
+batch_D_rc2_rerun_2026_07_14:
+  status: complete
+  verdict: FAIL
+  contract_compatibility: PASS_bounded_local_unsigned_candidate
+  specification_coverage: PASS
+  format02_representative_fixture_validation: PASS_schema_level
+  evaluator_certification: FAIL_specified_not_certified
+  local_cloud_compute_proof: FAIL
+  recovery_and_rollback_proof: FAIL
+  source_availability: FAIL_SRC_001_and_SRC_009
+  implementation_authorization_gates: FAIL
+  closure_plan: docs/constitutional-alignment/READINESS_CLOSURE_PLAN.md
+  implementation_authorized: false
+  stage5_allowed: false
+  stop_after_batch_D: true

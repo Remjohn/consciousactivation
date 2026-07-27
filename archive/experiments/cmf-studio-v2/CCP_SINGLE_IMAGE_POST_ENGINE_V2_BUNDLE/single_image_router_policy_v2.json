@@ -1,0 +1,44 @@
+{
+  "schema_id": "router.single_image_composition.v2",
+  "version": "2.0.0",
+  "hard_constraints": [
+    "composition_supports_target_aspect_ratio",
+    "text_fits_budget",
+    "required_assets_available_or_generatable",
+    "source_fidelity_requirements_satisfied",
+    "brand_visual_constitution_allows_family",
+    "content_shape_supported"
+  ],
+  "scoring_weights": {
+    "archetype_fit": 0.24,
+    "asset_derivative_fit": 0.18,
+    "content_shape_fit": 0.14,
+    "visual_dna_fit": 0.12,
+    "asset_availability": 0.08,
+    "platform_fit": 0.06,
+    "micro_semiotic_anchor_fit": 0.05,
+    "primitive_fit": 0.07,
+    "novelty_without_brand_drift": 0.03,
+    "historical_performance": 0.03
+  },
+  "penalties": {
+    "recent_family_repetition": -0.08,
+    "text_overflow_risk": -0.15,
+    "generative_cost_unjustified": -0.05,
+    "source_fidelity_risk": -0.25,
+    "identity_risk": -0.2,
+    "msa_distraction_risk": -0.08
+  },
+  "selection_policy": {
+    "return_candidates": 3,
+    "minimum_candidate_score": 0.72,
+    "require_family_diversity": true,
+    "operator_can_override": true,
+    "record_override_reason": true
+  },
+  "fallbacks": [
+    "deterministic_minimal_quote",
+    "deterministic_social_card",
+    "operator_review_required"
+  ]
+}

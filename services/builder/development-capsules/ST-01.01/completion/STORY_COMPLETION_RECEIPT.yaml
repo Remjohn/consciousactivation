@@ -1,0 +1,72 @@
+schema_version: cmf-builder-story-completion-receipt-mirror/v1
+receipt_type: StoryCompletionReceipt
+story_id: ST-01.01
+primary_epic: EP-01
+issued_on: "2026-07-15"
+implemented_outcome: the run has stable identity, explicit authority, replay-safe state, and target-specific required work
+canonical_receipt:
+  path: development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+  file_sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+  payload_sha256: d82529f484971ef80bbd94ea29f685c9adfe3e50969aaf78367472695ea8add9
+authorization:
+  authority_identity: current_thread_human_authority
+  effect: GRANTED_FOR_ST-01.01_ONLY
+  capsule_manifest_sha256: 779c9b6610b07451c37b6ffa773eaeff4ed046058b1d9ebfbe295bbdfd5bc6d9
+  preimplementation_authorization_receipt_sha256: cb6016e2b547eaa7879dbb4e73e1026f30057cc3a5063dbe6e530859a440acb5
+requirements_satisfied:
+  ids: [ADR-001, AG-001, AG-002, D001, D006, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, NFR-REL-002, NFR-SEC-003]
+  result: PASS_15_OF_15
+acceptance_criteria:
+  ids: [AC-01, AC-02, AC-03, AC-04, AC-05, AC-06, AC-07, AC-08, AC-09]
+  result: PASS_9_OF_9
+files_changed:
+  created: 30
+  modified_preexisting: 0
+  deleted: 0
+  prohibited_files_modified: 0
+  manifest:
+    path: development-capsules/ST-01.01/FILE_CHANGE_MANIFEST.yaml
+    sha256: 5ef0480e11e26363f918049bad584b69e43428b620e6086e435faea7460990d2
+tests_executed:
+  story_suite: PASS_20_OF_20
+  regression_run_1: PASS_20_OF_20
+  regression_run_2: PASS_20_OF_20
+  final_receipt_validation: PASS_20_OF_20
+  deterministic_fresh_context: PASS
+  event_replay: PASS
+  results_path: development-capsules/ST-01.01/completion/TEST_RESULTS.json
+test_results: PASS
+schema_and_contract_validation:
+  result: PASS
+  governed_hashes: PASS_4_OF_4
+  schema_parse: PASS
+  format02_state: contract_compatible
+  format02_production_certified: false
+  delegation_direct_dependency: false
+observability_evidence:
+  result: PASS
+  path: development-capsules/ST-01.01/completion/OBSERVABILITY_EVIDENCE.json
+  success_and_failure_examples_present: true
+  rejection_mutated_authoritative_state: false
+rollback_evidence:
+  result: PASS_NON_DESTRUCTIVE
+  path: development-capsules/ST-01.01/completion/ROLLBACK_EVIDENCE.md
+  data_migration_required: false
+  external_compensation_required: false
+unresolved_limitations:
+  - in-memory persistence adapter only
+  - application command seam only; API, CLI and Control Tower excluded
+  - Format 02 unbenchmarked and uncertified
+  - conversational, VAE and Delegation behavior excluded
+  - ST-01.02 separately gated by BD-004
+newly_discovered_blockers: []
+hashes:
+  source_bundle_sha256: dc2a922a20a654fc5f6e00cd26a76fb0315007bc3eda9f178e0490f21c485356
+  test_bundle_sha256: 32384b321989b1733398c403c40792e9ad8a5a1827319187ad5ce18a8812b947
+  implementation_workspace_identity_sha256: 77f95351b298f48d2c5e84e0d9b369eee71dc34d649872e710e3c7e1249e36c4
+completion_verdict: PASS
+readiness_effect:
+  ST-01.01: COMPLETE
+  ST-01.02: REEVALUATION_REQUIRED
+  full_release1_readiness: FAIL
+  full_product_readiness: FAIL

@@ -1,0 +1,71 @@
+schema_version: cmf-builder-epic-validation-hash-disposition/v1
+issued_on: "2026-07-15"
+verdict: RECONCILED_NON_SEMANTIC
+authority:
+  confirmed_by: human
+  confirmation_receipt: docs/planning/EPIC_INVENTORY_CONFIRMATION_RECEIPT.yaml
+  confirmed_scope:
+    epic_count: 12
+    primary_obligation_assignments: 410
+  authoritative_content_artifacts:
+    - path: docs/planning/EPIC_INVENTORY.yaml
+      sha256: c6f800e6708576f19934d52eae21e8e3915c05cec9bd550060132f430fbd3a6d
+    - path: docs/planning/EPIC_REQUIREMENT_COVERAGE.csv
+      sha256: dd72de0876f93fe071a08e009e153a3b0f38c558b3b51f4ad058cbde13eb975a
+    - path: docs/planning/EPIC_DESIGN_PROPOSAL.md
+      sha256: e0e174fb45d767d038b68913214c4fd78d719c5bb225dc0c7498cbe48d6c558d
+validation_report:
+  path: docs/planning/EPIC_DESIGN_VALIDATION_REPORT.json
+  role: derived_phase_sensitive_diagnostic
+  confirmation_time_expected_sha256: f6306221a8d891fb497638b8156b6469cf275da7854017c29eab72043b62f989
+  current_observed_sha256: dac666f0ee991926f9407d3289ae99d746dd965d78a7240a4af6b52a84f7728b
+  expected_hash_sources:
+    - docs/planning/EPIC_DESIGN_FILE_MANIFEST.yaml
+    - docs/planning/EPIC_INVENTORY_CONFIRMATION_RECEIPT.yaml
+  observed_hash_source:
+    - docs/planning/STORY_INVENTORY_CONFIRMATION_RECEIPT.yaml
+cause:
+  classification: post_confirmation_phase_sensitive_regeneration
+  formatting_or_regeneration: true
+  timestamp_or_metadata_change: false
+  intentionally_amended_derived_file: true
+  accidental_content_drift: false
+  incorrect_recorded_hash: false
+  unknown: false
+semantic_delta:
+  changed_fields:
+    - path: status
+      confirmation_time_value: PASS
+      current_value: FAIL
+      meaning: validator_run_phase_only
+    - path: errors
+      confirmation_time_value: []
+      current_value:
+        - program status does not report Step 2 complete pending human confirmation
+        - program status improperly authorizes vertical Story authoring
+      meaning: validator_run_phase_only
+  unchanged_confirmed_semantics:
+    obligations: 410
+    primary_assignments: 410
+    epic_count: 12
+    dependency_edges: 46
+    category_count: 5
+    conversational_profile_count: 4
+    compilation_target_count: 3
+supersession:
+  current_hash_may_supersede_for_current_phase_diagnostic: true
+  historical_confirmation_hash_remains_valid: true
+  confirmed_epic_inventory_amended: false
+  human_reconfirmation_required: false
+invalidation_conditions:
+  - any authoritative Epic content artifact hash changes
+  - Epic count changes from 12
+  - primary assignment count changes from 410
+  - any obligation becomes missing or multiply assigned
+  - dependency, category, profile, target, blocker, or cross-repository semantics change
+gate_effect:
+  gate_id: EG-EPIC-HASH
+  prior_state: OPEN
+  resulting_state: CLOSED_BY_GOVERNED_DISPOSITION
+  bounded_story: ST-01.01
+

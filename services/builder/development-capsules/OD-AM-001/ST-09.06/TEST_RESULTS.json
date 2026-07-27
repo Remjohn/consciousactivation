@@ -1,0 +1,66 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "amendment_id": "OD-AM-001",
+  "story_id": "ST-09.06",
+  "status": "PASS",
+  "development_mode": "OD_AM_001_OFFLINE_DEVELOPMENT",
+  "focused_story_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_06 -q",
+    "passed": 11,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "workflow_batch_tests": {
+    "command": "$env:PYTHONPATH='src'; python -m pytest tests/stories/st_09_01 tests/stories/st_09_02 tests/stories/st_09_03 tests/stories/st_09_04 tests/stories/st_09_05 tests/stories/st_09_06 --import-mode=importlib -q",
+    "passed": 134,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "architecture_boundary_tests": {
+    "passed": 12,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "verdict": "PASS"
+  },
+  "python_source_compilation": {
+    "command": "python -m compileall -q src",
+    "status": "PASS"
+  },
+  "full_repository_regression_fresh_process_1": {
+    "status": "PASS",
+    "aggregate_passed": 1806,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "shards": [
+      {"name": "base_without_duplicate_import_story_dirs", "passed": 1312},
+      {"name": "st_02_03", "passed": 40},
+      {"name": "st_07_01_and_st_07_03", "passed": 53},
+      {"name": "st_08_04_through_st_09_06_importlib", "passed": 412}
+    ]
+  },
+  "full_repository_regression_fresh_process_2": {
+    "status": "PASS",
+    "aggregate_passed": 1806,
+    "failed": 0,
+    "mandatory_skips": 0,
+    "shards": [
+      {"name": "base_without_duplicate_import_story_dirs", "passed": 1312},
+      {"name": "st_02_03", "passed": 40},
+      {"name": "st_07_01_and_st_07_03", "passed": 53},
+      {"name": "st_08_04_through_st_09_06_importlib", "passed": 412}
+    ]
+  },
+  "portable_path_and_secret_scan": {
+    "status": "PASS_NO_SECRET_VALUES_NO_ABSOLUTE_PATHS",
+    "expected_boundary_terms_seen": [
+      "secret_reference_names",
+      "SECRET_VALUE_PROHIBITED",
+      "PRIVATE_STATE_AS_PUBLIC_SEAM_EVIDENCE"
+    ]
+  },
+  "external_engine_provider_model_network_sandbox_or_product_execution": 0,
+  "production_or_certification_claims": 0,
+  "verdict": "PASS"
+}

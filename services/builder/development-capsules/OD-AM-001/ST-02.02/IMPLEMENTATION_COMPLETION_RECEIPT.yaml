@@ -1,0 +1,58 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_type: ImplementationCompletionReceipt
+receipt_id: OD-AM-001:ST-02.02:SUBSTRATE_GRAPHS
+story_id: ST-02.02
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+recorded_on_utc: "2026-07-17"
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+completion_verdict: PASS
+authority:
+  amendment_receipt: {path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml, sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44}
+  delta_capsule: {path: development-capsules/OD-AM-001/ST-02.02/DELTA_CAPSULE.yaml, sha256: 2d0bf8bec2b0a8b21eacdc77b12df7c0411f7653cc2daf72bbf226af7368d2e6}
+dependency:
+  story_id: ST-02.01
+  receipt: {path: development-capsules/OD-AM-001/ST-02.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml, sha256: 7945916c62c480a1a9f9b8205cde987e7a91939922d28176e4f89d00f5c831a2}
+  status: IMPLEMENTED_DEVELOPMENT_PASS
+implemented_outcome: >-
+  Compile ST-02.01 typed syntax observations into immutable substrate-specific
+  spatial, temporal, reading-order and structurally conversational graphs while
+  preserving evidence lineage and rejecting unsupported or untraceable topology.
+owned_obligations:
+  - {id: FR-024, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-025, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-026, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+  - {id: FR-027, status: PARTIALLY_IMPLEMENTED_PENDING_EVIDENCE_CLOSURE}
+verification:
+  story_tests: {result: PASS, passed: 25, failed: 0, skipped: 0, mandatory_skips: 0}
+  predecessor_focused_regression: {result: PASS, passed: 59, failed: 0, skipped: 0, mandatory_skips: 0}
+  python_syntax_parse: {result: PASS, passed: 5, failed: 0}
+  graph_integrity: PASS_FOCUSED
+  determinism_and_portability: PASS_FOCUSED
+  evidence_and_uncertainty_preservation: PASS_FOCUSED
+  file_scope: PASS_LANE_SCOPE
+  integrator_full_regression: PASS_1074_OF_1074
+  source_boundary_registration: PASS_GOVERNED_REGISTRY
+evidence:
+  test_results: {path: development-capsules/OD-AM-001/ST-02.02/TEST_RESULTS.json, sha256: 99af7e6ef4b5fe89e05e25b3261c74f09da1b4866706e1027b2b113bf58a0863}
+  file_change_manifest: {path: development-capsules/OD-AM-001/ST-02.02/FILE_CHANGE_MANIFEST.yaml, sha256: 4047ac55a212f7f8b944470b3da3d2e04e37a593226dca461c2899f5c6b3a14b}
+blocker_scope_preserved:
+  BD-004: EVIDENCE_PENDING_OUTSIDE_OFFLINE_BRANCH
+  BD-007: EVIDENCE_PENDING_OUTSIDE_OFFLINE_BRANCH
+  HD-006: HUMAN_POLICY_PENDING_OUTSIDE_NON_PERSONAL_OFFLINE_BRANCH
+claims:
+  story_completion_receipt_issued: false
+  evidence_closure_receipt_issued: false
+  production_ready: false
+  certified: false
+  empirical_superiority_claimed: false
+integrator_gate:
+  exact_source_registrations:
+    - src/cmf_builder/visual/graph_contracts.py
+    - src/cmf_builder/visual/relationship_graphs.py
+  completed_actions:
+    - registered both new source paths without weakening source-boundary assertions
+    - passed the canonical full repository regression at 1074/1074
+    - validated all receipt and evidence hashes
+  transitioned_to: IMPLEMENTED_DEVELOPMENT_PASS
+  may_unlock: ST-02.03_OD_AM_001_OFFLINE_DEVELOPMENT
+  current_unlock_state: ALLOWED_BY_IMPLEMENTATION_GATE_ONLY

@@ -1,0 +1,30 @@
+# SuperVisual Runtime Test Plan
+
+## Persistence tests
+
+```text
+test_create_project_persists_brand_context_version
+test_brand_context_version_is_immutable
+test_create_variant_persists_lineage
+test_project_snapshot_can_be_saved_and_loaded
+test_event_log_is_append_only
+test_build_run_allows_step_runs
+test_step_completion_updates_variant_status
+test_approved_variant_cannot_mutate
+test_16_9_delivery_frame_profile_rejected
+test_idempotent_command_does_not_duplicate_events
+```
+
+## API tests
+
+```text
+test_create_project_endpoint
+test_list_projects_endpoint
+test_get_project_detail_endpoint
+test_create_variant_endpoint
+test_start_build_run_endpoint
+test_run_step_endpoint_creates_event
+test_lock_composition_endpoint_requires_valid_state
+test_approve_endpoint_requires_eval_pass
+test_export_endpoint_requires_approval
+```

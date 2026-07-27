@@ -1,0 +1,28 @@
+schema_version: cmf-builder-shared-core-change-request/v1
+request_id: CR-ST0701-002
+story_id: ST-07.01
+calling_lane: CATEGORY_AND_TARGET_LANE
+target_file: docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+exact_symbols:
+  - src/cmf_builder/domain/compilation_targets.py
+  - src/cmf_builder/application/target_registration_commands.py
+required_additive_change: >-
+  Register the two capsule-authorized ST-07.01 source modules in the centralized
+  exact-source boundary registry consumed by every governed predecessor test.
+preconditions:
+  - both paths are explicitly allowed by the validated ST-07.01 delta capsule
+  - no external-product runtime or shared-schema implementation is present
+postconditions:
+  - every centralized exact-source architecture test recognizes both Builder-owned modules
+  - all unregistered or externally owned source paths still fail closed
+invariants:
+  - no assertion, prohibition, ownership boundary or test strength is weakened
+  - production readiness, external compatibility and certification remain false
+focused_tests:
+  - tests/stories/st_01_01/test_architecture_boundary.py
+  - tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+  - tests/stories/st_01_02/test_architecture_boundary.py
+  - tests/stories/st_02_05/test_architecture_boundary.py
+  - tests/stories/st_03_03/test_architecture_boundary.py
+result: PASS_12_OF_12
+status: ACCEPTED_AND_APPLIED_BY_CANONICAL_INTEGRATOR

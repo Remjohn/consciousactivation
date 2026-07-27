@@ -1,0 +1,67 @@
+schema_version: cmf-builder-implementation-completion-receipt/v1
+receipt_id: OD-AM-001:ST-08.06:DEVELOPMENT_READINESS:0e7acbed71f6
+receipt_type: ImplementationCompletionReceipt
+amendment_id: OD-AM-001
+story_id: ST-08.06
+development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+implementation_status: IMPLEMENTED_DEVELOPMENT_PASS
+maturity: development_validated
+implemented_outcome: >-
+  The Builder deterministically evaluates fourteen independent readiness dimensions
+  and both non-waivable hard gates, then issues immutable bounded-development or
+  blocking authorization receipts whose evidence, authority, scope, limitations,
+  unresolved gates and lifecycle remain explicit without promoting runtime,
+  deployment, provider, human-reaction, production or certification status.
+primary_obligations_implemented: [AG-015, AG-022, D027, D033, FR-133, FR-134, FR-135, FR-136, HG-009, HG-010]
+dependency_receipts:
+  satisfied: [ST-08.05:ImplementationCompletionReceipt:71d764be9fc498680e6fd6022484fd380ae5cf8aa0dfcc35c5de54430cea9e3a]
+  pending: []
+source_files:
+  - {path: src/cmf_builder/evaluation/development_readiness.py, sha256: 0e7acbed71f679c084f9cc9794e8a9ec57f6b24a555c5d0f089b08405ec93b0c}
+test_files:
+  - {path: tests/stories/st_08_06/test_evidence_backed_readiness.py, sha256: 403a093e0dacb6cf0d88eb8b83a1e13f455a46161e63b0f1092e5d8395f45148}
+  - {path: tests/stories/st_08_06/test_development_authorization_receipts.py, sha256: 6087a920fdd2f14a7b40ab551e227c0f571997bacee4600d3a273c9aa7cac6f6}
+  - {path: tests/stories/st_08_06/test_false_readiness_and_authority_boundaries.py, sha256: 9d508f24d8f7ef7d0058d150fe9a8e2221c76b541f7d1d0a6c3108ac3e1537e0}
+  - {path: tests/stories/st_08_06/test_invalidation_determinism_and_history.py, sha256: 7ca2ed92e9a86e11eac562c9e934a60c35a82ff9ed5417ef97aa5c228921d945}
+tests:
+  focused: PASS_77_OF_77
+  architecture_boundary: PASS_12_OF_12
+  latest_applicable_complete_repository_regression: PASS_1557_OF_1557_NO_MANDATORY_SKIPS
+  Python_source_compilation: PASS_116_SOURCE_FILES
+  mandatory_skips: 0
+independent_status_axes:
+  implementation: IMPLEMENTED_DEVELOPMENT_PASS
+  evidence_closure: pending
+  runtime_authorization: not_authorized
+  deployment_authorization: not_authorized
+  provider_validation: pending
+  human_reaction_validation: pending
+  production_ready: false
+  certified: false
+authority_and_boundary_evidence:
+  exact_fourteen_dimension_coverage: PASS
+  non_waivable_HG_009_and_HG_010: PASS
+  OD_AM_001_scope_and_signatory_binding: PASS
+  document_presence_as_readiness_rejected: PASS
+  unsupported_maturity_promotion_rejected: PASS
+  provider_and_human_evidence_inference_rejected: PASS
+  nested_tamper_detection: PASS
+  deterministic_issue_invalidate_and_revoke: PASS
+  historical_receipt_preservation: PASS
+  external_runtime_executed: false
+  production_or_certification_authority: false
+rollback_evidence: PASS_HISTORY_PRESERVED_ACTIVE_AUTHORIZATION_INVALIDATED_ZERO_PARTIAL_STATE
+observability_evidence: PASS_TYPED_REJECTION_AND_TRANSITION_RECEIPTS
+equivalent_to_StoryCompletionReceipt: false
+production_ready: false
+certified: false
+hashes:
+  delta_capsule_sha256: e68f4709b4704b5616041d7a174ad31170eb2b05396cfaa250a13a1c2056c36f
+  test_results_sha256: 3dcc5d5cd152396957ea3adaa0ae7ce3c4f7fe5aec16607c442949e79f3fdd66
+  file_change_manifest_sha256: 4fa3b42f02251d8a077f481a1f48a84108def2442db853432cde754813bd0520
+  source_boundary_registry_sha256: a50337c086898fca21d7ff33c9258a68f33f853127d795bfb3b106d883e66fa9
+  production_source_tree_algorithm: canonical_path_sha256_array_v1
+  production_source_tree_sha256: a7acce4f6f505a8da5c45bf5b1faa27c7c936bebc4ed72b2b883cf4461bb350a
+unlock_effect:
+  may_unlock_after_integrator_pass: ST-08.07_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY
+  unlock_now: true

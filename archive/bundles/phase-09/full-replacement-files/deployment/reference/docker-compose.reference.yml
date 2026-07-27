@@ -1,0 +1,12 @@
+services:
+  final-reference-pilot:
+    image: python:3.12-slim
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONWARNINGS: "error::ResourceWarning"
+      CA_DATA_ROOT: /workspace/.conscious-activations/reference-data
+    command: ["python", "scripts/phase9/run_phase9_reference_pilot.py", "--output-dir", "/workspace/.conscious-activations/phase9-reference"]
+    profiles: ["reference"]

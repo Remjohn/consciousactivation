@@ -1,0 +1,71 @@
+{
+  "schema_version": "cmf-builder-story-test-results/v1",
+  "story_id": "ST-04.05",
+  "active_mode": "MINIMUM_COMPLETE_CONTEXT",
+  "executed_on": "2026-07-15",
+  "environment": {
+    "python": "3.12",
+    "pythonpath": "src",
+    "network_used": false,
+    "external_dependency_added": false
+  },
+  "preimplementation": {
+    "capsule_manifest_sha256": "2e490a81d068c8bca09c66b6faf5388a99ad4080e37391cd7b3bad93cf12f948",
+    "capsule_bundle_digest": "d7b1f47334f5110822faa0f82ef6e9664a23592e57595b91c71a0f5e89369af1",
+    "immutable_inputs": {"passed": 18, "total": 18},
+    "predecessor_receipts": {"passed": 11, "total": 11},
+    "regression": {"passed": 328, "total": 328, "skipped": 0, "duration_seconds": 25.46}
+  },
+  "story_runs": [
+    {
+      "command": "PYTHONPATH=src python -m pytest tests/stories/st_04_05 -q",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 4.30,
+      "verdict": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=src python -m pytest tests/stories/st_04_05 -q",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 4.32,
+      "verdict": "PASS"
+    }
+  ],
+  "full_regression": {
+    "command": "PYTHONPATH=src python -m pytest -q",
+    "passed": 356,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 29.62,
+    "verdict": "PASS"
+  },
+  "validated_behaviors": {
+    "minimum_context_compilation": "PASS",
+    "reference_registry_and_hashes": "PASS",
+    "loading_and_influence_boundaries": "PASS",
+    "typed_progressive_disclosure_pointer": "PASS",
+    "explicit_spr_not_applicable": "PASS",
+    "context_completeness_and_minimality": "PASS",
+    "required_overflow_without_truncation": "PASS",
+    "deterministic_fresh_context_reproduction": "PASS",
+    "authority_and_lineage": "PASS",
+    "replay_resume_idempotency": "PASS",
+    "upstream_invalidation_and_historical_reproduction": "PASS",
+    "atomic_failure_zero_partial_state": "PASS",
+    "architecture_boundaries": "PASS",
+    "exact_file_scope": "PASS"
+  },
+  "schema_and_contract_validation": {
+    "schema_files_changed": [],
+    "typed_contract_import_and_runtime_validation": "PASS",
+    "governed_input_sha256": "bf44fa7595ab064ac47654addf73a6a930687ce1f04e6ef05fa0c2c14c6d30ab",
+    "external_contract_or_schema_fork": false
+  },
+  "warnings": [
+    "Pre-existing pytest-asyncio default fixture loop scope deprecation warning; no mandatory skip or failure."
+  ],
+  "verdict": "PASS"
+}

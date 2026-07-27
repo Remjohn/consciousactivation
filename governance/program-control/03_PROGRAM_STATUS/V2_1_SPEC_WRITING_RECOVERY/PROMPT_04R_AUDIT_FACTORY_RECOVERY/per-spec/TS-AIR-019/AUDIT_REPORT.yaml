@@ -1,0 +1,73 @@
+schema_version: ca-audit-report/v1
+receipt_id: CA-P04R-AUDIT-TS-AIR-019-REPORT-2026-07-23
+auditor: INDEPENDENT_AUDITOR_CONTROLLER
+spec_id: TS-AIR-019
+spec_title: Failure Attribution, Selective Repair, and JIT Role Capsules
+product: Activative Intelligence Runtime
+batch: 10
+issued_on: "2026-07-23"
+
+independence_declaration:
+  auditor_is_spec_writer: false
+  auditor_is_controller: false
+  conflicts_of_interest: NONE
+
+spec_identity:
+  hash_on_record: "515e42a7e015c212f9f972b4e78e1e7aa0558816448f10ff18db9b9a7f7ecd5e"
+  quality_state_claimed: WRITTEN_PENDING_AUDIT
+  authority_state_claimed: CANDIDATE_NOT_CURRENT
+  build_authority_claimed: false
+  build_state_claimed: NOT_BUILD_READY
+  ceiling_claimed: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+  writing_wave: 12
+
+outcome: AUDIT_PASS
+quality_state_after_audit: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+audit_pass_is_accepted_for_build: false
+audit_pass_is_production_eligible: false
+
+lens_results:
+  lens_1_fr_story_outcome_coverage: PASS
+  lens_2_authority_ownership_sovereignty: PASS
+  lens_3_contract_lifecycle_completeness: PASS
+  lens_4_activative_primitive_archetype_source_fidelity: PASS
+  lens_5_brownfield_cross_spec_consistency: PASS
+  lens_6_build_readiness_testability: PASS
+
+blocking_findings: 0
+warnings: 0
+notes: 1
+
+findings:
+  - id: NOTE-AIR-019-001
+    lens: 6
+    severity: NOTE
+    title: "SemanticRepairProgram stopping_law — no threshold invented, profile-governed"
+    description: >
+      Section 6.5 specifies that stopping_law must contain "an exact attempt/resource envelope ref,
+      terminal success conditions, terminal failure conditions, and no-progress rule" and explicitly
+      states: "The envelope is supplied by authority/configuration; this spec invents no number."
+      This is a correct and appropriately bounded design decision — stopping law is profile-governed
+      at implementation time, not fabricated by the spec. Recorded as a note for downstream implementors
+      who must bind the stopping law reference to a separately governed configuration authority.
+    action: None required at this stage.
+
+upstream_draft_dependency_status:
+  - spec_id: TS-AIR-001
+    edge_id: SDE-050
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "622b32dc08259bc8148c60f5865359c6a76de37037103789ff1fda0f842c6cbc"
+    dependency_class: AUTHORITY_DEPENDENCY
+    revision_impact: "Governing decisions; architecture/workflows; models/contracts/APIs; failure/migration/rollback/recovery/observability; acceptance; testing/evidence"
+  - spec_id: TS-AIR-005
+    edge_id: SDE-051
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "5dcf631efc4f68f40edd0991ca3ae4be9073da68aa441c52d37e874e70a43e49"
+    dependency_class: WRITE_INTERFACE_DEPENDENCY
+    revision_impact: "Governing decisions; architecture/workflows; models/contracts/APIs; failure/migration/rollback/recovery/observability; acceptance; testing/evidence"
+  - spec_id: TS-AIR-017
+    edge_id: SDE-052
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "0e87466a326eac865a66609d2609a1fc8006f5b32a5a847bd01e36e488363a81"
+    dependency_class: WRITE_INTERFACE_DEPENDENCY
+    revision_impact: "Governing decisions; architecture/workflows; models/contracts/APIs; failure/migration/rollback/recovery/observability; acceptance; testing/evidence"

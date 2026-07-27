@@ -1,0 +1,191 @@
+{
+  "assertions": {
+    "audit": {
+      "accepted_and_rejected_actions_receipted": true,
+      "committed_sequence_is_ordering_authority": true,
+      "expected_sequence": [
+        {
+          "audit_sequence": 1,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-10-msg-001",
+          "message_type": "visual-asset-submission",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        },
+        {
+          "audit_sequence": 1,
+          "disposition": "IDEMPOTENT_REPLAY",
+          "message_id": "scn-10-msg-001",
+          "message_type": "visual-asset-submission",
+          "receipt_mode": "REUSED",
+          "state_change_expected": false
+        },
+        {
+          "audit_sequence": 2,
+          "disposition": "REJECTED_OUT_OF_ORDER",
+          "message_id": "scn-10-msg-003",
+          "message_type": "visual-asset-event",
+          "receipt_mode": "REJECTION",
+          "state_change_expected": false
+        },
+        {
+          "audit_sequence": 3,
+          "disposition": "ACCEPTED",
+          "message_id": "scn-10-msg-004",
+          "message_type": "delegation-audit-receipt",
+          "receipt_mode": "ORIGINAL",
+          "state_change_expected": true
+        }
+      ],
+      "receipt_chain_required": true
+    },
+    "authority": [
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "visual-asset-submission",
+        "principal_type": "CONTENT_HARNESS"
+      },
+      {
+        "expected_disposition": "IDEMPOTENT_REPLAY",
+        "message_type": "visual-asset-submission",
+        "principal_type": "CONTENT_HARNESS"
+      },
+      {
+        "expected_disposition": "REJECTED_OUT_OF_ORDER",
+        "message_type": "visual-asset-event",
+        "principal_type": "VISUAL_ASSET_EDITOR"
+      },
+      {
+        "expected_disposition": "ACCEPTED",
+        "message_type": "delegation-audit-receipt",
+        "principal_type": "DELEGATION_PROTOCOL"
+      }
+    ],
+    "constitutional": [
+      "aip_version_and_hash_survive_retry_and_replay",
+      "reaction_and_expression_lineage_survive_retry_and_replay"
+    ],
+    "effect_counts": {
+      "duplicate_receipts_reused": 1,
+      "hostile_replay_effects": 0,
+      "submission_effects": 1
+    },
+    "identity": [
+      "exact_demand_identity_is_preserved",
+      "correlation_and_causation_are_deterministic",
+      "pinned_profile_does_not_silently_upgrade"
+    ],
+    "negative_variants": [
+      "nonce_reuse_changed_bytes",
+      "message_id_collision",
+      "expired_signature"
+    ],
+    "outbox": {
+      "accepted_effects_publish_after_atomic_commit": true,
+      "delivery_redrive_must_not_duplicate_domain_effect": true,
+      "expected_deliveries": [
+        {
+          "audit_sequence": 1,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-10-msg-001"
+        },
+        {
+          "audit_sequence": 2,
+          "delivery_kind": "REJECTION_RECEIPT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-10-msg-003"
+        },
+        {
+          "audit_sequence": 3,
+          "delivery_kind": "ACCEPTED_FACT",
+          "duplicate_domain_effect_allowed": false,
+          "message_id": "scn-10-msg-004"
+        }
+      ]
+    },
+    "prohibited_effects": [
+      "duplicate_execution",
+      "replay_acceptance",
+      "progress_before_admission"
+    ],
+    "projection": [
+      {
+        "correlation_id": "scn-10-member-corr-001",
+        "expected_state": "SUBMITTED",
+        "protocol_version": "1.0",
+        "source_audit_sequence": 3
+      },
+      {
+        "assertion": "denied_or_stale_effects_are_visible_without_becoming_authority"
+      }
+    ],
+    "race_variants": [
+      "duplicate_concurrent_submission",
+      "progress_before_admission"
+    ]
+  },
+  "expected_initial_state": "DRAFT",
+  "expected_terminal_state": "SUBMITTED",
+  "fixture_profile": "FORMAT02_REFERENCE",
+  "lifecycle_sequence": [
+    {
+      "from_state": "DRAFT",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "sequence": 1,
+      "to_state": "SUBMITTED",
+      "trigger": "submission_validation_accepted"
+    }
+  ],
+  "member_correlations": [
+    "scn-10-member-corr-001"
+  ],
+  "message_sequence": [
+    {
+      "causation_id": null,
+      "correlation_id": "scn-10-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:2359678c0b42d57ea26f28532d28cb54760a213ae49bb0376f892164dc1eae45",
+      "fixture_ref": "packages/contracts/examples/visual-asset-submission.example.json",
+      "message_id": "scn-10-msg-001",
+      "message_type": "visual-asset-submission",
+      "principal_type": "CONTENT_HARNESS",
+      "sequence": 1
+    },
+    {
+      "causation_id": null,
+      "correlation_id": "scn-10-member-corr-001",
+      "expected_disposition": "IDEMPOTENT_REPLAY",
+      "fixture_hash": "sha256:2359678c0b42d57ea26f28532d28cb54760a213ae49bb0376f892164dc1eae45",
+      "fixture_ref": "packages/contracts/examples/visual-asset-submission.example.json",
+      "message_id": "scn-10-msg-001",
+      "message_type": "visual-asset-submission",
+      "principal_type": "CONTENT_HARNESS",
+      "sequence": 2
+    },
+    {
+      "causation_id": "scn-10-msg-001",
+      "correlation_id": "scn-10-member-corr-001",
+      "expected_disposition": "REJECTED_OUT_OF_ORDER",
+      "fixture_hash": "sha256:2750e8b8c61c996729a6c2a6b441ef3c4e3b2271db9ca57f69834e790593149a",
+      "fixture_ref": "packages/contracts/examples/visual-asset-event.example.json",
+      "message_id": "scn-10-msg-003",
+      "message_type": "visual-asset-event",
+      "principal_type": "VISUAL_ASSET_EDITOR",
+      "sequence": 3
+    },
+    {
+      "causation_id": "scn-10-msg-003",
+      "correlation_id": "scn-10-member-corr-001",
+      "expected_disposition": "ACCEPTED",
+      "fixture_hash": "sha256:592121b348e6a836c8a90f9a1fa567bfa32f7ae7cdd7541dc2b7459fe521ad56",
+      "fixture_ref": "packages/contracts/examples/delegation-audit-receipt.example.json",
+      "message_id": "scn-10-msg-004",
+      "message_type": "delegation-audit-receipt",
+      "principal_type": "DELEGATION_PROTOCOL",
+      "sequence": 4
+    }
+  ],
+  "scenario_id": "SCN-10",
+  "title": "Replay and out-of-order resilience"
+}

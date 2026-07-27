@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cmf://builder/skills/activative-intelligence-pack-compiler/output/1.0.0",
+  "title": "ActivativeIntelligencePack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pack_id",
+    "pack_version",
+    "skill_ref",
+    "authority_refs",
+    "source_refs",
+    "identity_dna_ref",
+    "audience_context_premise_ref",
+    "live_premise_evidence_refs",
+    "resonance_map_ref",
+    "matrix_of_edging_ref",
+    "activation_field",
+    "field_lineage",
+    "downstream_applicability",
+    "human_truth_external",
+    "human_reaction_external",
+    "maturity",
+    "production_eligible",
+    "certified",
+    "pack_hash"
+  ],
+  "$defs": {
+    "immutableRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*@[A-Za-z0-9][A-Za-z0-9._-]*#sha256:[a-f0-9]{64}$"
+    },
+    "nonEmptyStringList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "applicabilityDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {
+        "status": {"enum": ["APPLICABLE", "NOT_APPLICABLE"]},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "properties": {
+    "pack_id": {"type": "string", "minLength": 1},
+    "pack_version": {"const": "1.0.0"},
+    "skill_ref": {"const": "activative_intelligence_pack_compiler@1.0.0"},
+    "authority_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/immutableRef"}},
+    "source_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/immutableRef"}},
+    "identity_dna_ref": {"$ref": "#/$defs/immutableRef"},
+    "audience_context_premise_ref": {"$ref": "#/$defs/immutableRef"},
+    "live_premise_evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/immutableRef"}},
+    "resonance_map_ref": {"$ref": "#/$defs/immutableRef"},
+    "matrix_of_edging_ref": {"$ref": "#/$defs/immutableRef"},
+    "activation_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_pressure", "format_goal", "desired_roles", "activative_call_constraints", "desired_reaction", "micro_commitment", "wrong_reading_locks"],
+      "properties": {
+        "edge_pressure": {"type": "string", "minLength": 1},
+        "format_goal": {"type": "string", "minLength": 1},
+        "desired_roles": {"$ref": "#/$defs/nonEmptyStringList"},
+        "activative_call_constraints": {"$ref": "#/$defs/nonEmptyStringList"},
+        "desired_reaction": {"type": "string", "minLength": 1},
+        "micro_commitment": {"type": "string", "minLength": 1},
+        "wrong_reading_locks": {"$ref": "#/$defs/nonEmptyStringList"}
+      }
+    },
+    "field_lineage": {
+      "type": "object",
+      "minProperties": 7,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {"$ref": "#/$defs/immutableRef"}
+      }
+    },
+    "downstream_applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conversational", "visual"],
+      "properties": {
+        "conversational": {"$ref": "#/$defs/applicabilityDecision"},
+        "visual": {"$ref": "#/$defs/applicabilityDecision"}
+      }
+    },
+    "human_truth_external": {"const": true},
+    "human_reaction_external": {"const": true},
+    "maturity": {"enum": ["development_uncertified", "development_validated"]},
+    "production_eligible": {"const": false},
+    "certified": {"const": false},
+    "pack_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+  }
+}

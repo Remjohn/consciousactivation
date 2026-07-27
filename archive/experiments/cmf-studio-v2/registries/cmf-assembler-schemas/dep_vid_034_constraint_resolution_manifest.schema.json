@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-034 - Constraint Resolution Manifest",
+  "description": "Auditable runtime output produced by Layered Questions evaluation and CBAR gate execution before a scene or manifest mutation is committed.",
+  "type": "object",
+  "required": [
+    "constraint_manifest_id",
+    "project_id",
+    "compile_target",
+    "target_type",
+    "target_ref",
+    "decision",
+    "layered_questions",
+    "cbar_results",
+    "cascade_lock",
+    "proof_receipt",
+    "output_files",
+    "evidence_refs",
+    "timestamp"
+  ],
+  "properties": {
+    "constraint_manifest_id": { "type": "string" },
+    "project_id": { "type": "string" },
+    "compile_target": {
+      "type": "string",
+      "enum": ["SCENE_BUILDER", "EDITOR_REGENERATION"]
+    },
+    "target_type": {
+      "type": "string",
+      "enum": ["SCENE_CANDIDATE", "MANIFEST_PATCH", "REGENERATION_REQUEST"]
+    },
+    "target_ref": {
+      "type": "object",
+      "description": "Reference to the scene, beat, manifest version, or request being evaluated."
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["PASS", "REVISE", "ESCALATE", "BLOCK"]
+    },
+    "layered_questions": {
+      "type": "object",
+      "required": ["asset_id", "score", "dominant_mode", "law_results"],
+      "properties": {
+        "asset_id": { "type": "string" },
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "dominant_mode": {
+          "type": "string",
+          "enum": ["TENSION", "VULNERABILITY", "RECOGNITION"]
+        },
+        "law_results": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["law_id", "passed", "diagnostics"],
+            "properties": {
+              "law_id": { "type": "string" },
+              "passed": { "type": "boolean" },
+              "diagnostics": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cbar_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["gate_id", "passed", "questions"],
+        "properties": {
+          "gate_id": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "question_id",
+                "passed",
+                "diagnostic",
+                "proof_status",
+                "winning_constraint",
+                "precedence_rule_id",
+                "precedence_reasoning",
+                "chosen_action",
+                "downstream_impact"
+              ],
+              "properties": {
+                "question_id": { "type": "string" },
+                "passed": { "type": "boolean" },
+                "diagnostic": { "type": "string" },
+                "proof_status": {
+                  "type": "string",
+                  "enum": ["PRESENT", "MISSING", "PARTIAL"]
+                },
+                "winning_constraint": { "type": "string" },
+                "precedence_rule_id": { "type": "string" },
+                "precedence_reasoning": { "type": "string" },
+                "chosen_action": { "type": "string" },
+                "downstream_impact": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cascade_lock": {
+      "type": "object",
+      "required": ["passed", "consistency_verdict", "constraint_manifest_ready"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "consistency_verdict": { "type": "string" },
+        "contradiction_list": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "secondary_resolution_required": { "type": "boolean" },
+        "constraint_manifest_ready": { "type": "boolean" }
+      }
+    },
+    "proof_receipt": {
+      "type": "object",
+      "required": ["stage_name", "agent_name", "receipt_id", "previous_receipt_hash"],
+      "properties": {
+        "stage_name": { "type": "string" },
+        "agent_name": { "type": "string" },
+        "receipt_id": { "type": "string" },
+        "previous_receipt_hash": { "type": "string" }
+      }
+    },
+    "output_files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["kind", "path"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["constraint_manifest", "receipt", "diff_report", "repair_plan"]
+          },
+          "path": { "type": "string" }
+        }
+      }
+    },
+    "required_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "UTC ISO-8601 timestamp."
+    }
+  }
+}

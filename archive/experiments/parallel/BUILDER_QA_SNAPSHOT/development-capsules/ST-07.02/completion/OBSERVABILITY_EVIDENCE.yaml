@@ -1,0 +1,85 @@
+schema_version: cmf-builder-story-observability-evidence/v1
+story_id: ST-07.02
+active_mode: GENERIC_ATOMIC_CONTENT_HARNESS
+emitter: deterministic_in_memory_development_test_observer
+events:
+  synthetic_atomic_harness_definition_started:
+    exercised: PASS
+    purpose: records_attributable_bounded_compile_start
+  synthetic_atomic_harness_definition_validated:
+    exercised: PASS
+    purpose: records_complete_lineage_authority_scope_and_contract_validation
+  synthetic_atomic_harness_definition_committed:
+    exercised: PASS
+    purpose: records_atomic_definition_receipt_and_run_reference_commit
+  synthetic_atomic_harness_definition_replayed:
+    exercised: PASS
+    purpose: records_payload_safe_return_of_the_original_receipt
+  synthetic_atomic_harness_definition_rejected:
+    exercised: PASS
+    purpose: records_typed_fail_closed_rejection_without_partial_state
+  synthetic_atomic_harness_definition_invalidated:
+    exercised: PASS
+    purpose: records_descendant_invalidation_and_historical_reproduction
+required_fields:
+  - run_id
+  - story_id
+  - command_id
+  - definition_id
+  - definition_hash
+  - receipt_id
+  - receipt_hash
+  - required_section_count
+  - capability_count
+  - module_count
+  - phase_count
+  - context_manifest_count
+  - Source_Lock_identity
+  - atomic_boundary_identity
+  - Draft_Harness_Model_identity
+  - Harness_IR_identity
+  - deterministic_artifact_set_identity
+  - constitutional_report_identity
+  - capability_graph_identity
+  - responsibility_module_graph_identity
+  - Phase_Graph_identity
+  - accepted_internal_handoff_identity
+  - Minimum_Complete_Context_identity
+  - skill_snapshot_identity
+  - skill_necessity_decision_identity
+  - external_skill_count
+  - external_runtime_count
+  - synthetic_not_certifiable_state
+  - authority_identity
+  - provenance
+  - outcome
+  - failure_context
+  - replay_or_invalidation_state
+determinism:
+  stable_event_vocabulary: PASS
+  canonical_payloads: PASS
+  identical_inputs_identical_definition_and_receipt: PASS
+  fresh_context_reproduction: PASS
+  local_absolute_paths_in_definition_or_receipt: false
+payload_safety:
+  secrets_emitted: false
+  protected_examples_emitted: false
+  external_runtime_data_emitted: false
+atomicity:
+  partial_definitions: 0
+  partial_receipts: 0
+  partial_events: 0
+  partial_command_records: 0
+  clean_retry: PASS
+milestone_evidence:
+  initial_atomic_harness_definition_milestone: PASS
+  harness: synthetic_text_normalization_v1
+  production_ready: false
+  certified: false
+evidence_tests:
+  - tests/stories/st_07_02/test_acceptance.py
+  - tests/stories/st_07_02/test_definition_integrity.py
+  - tests/stories/st_07_02/test_failure.py
+  - tests/stories/st_07_02/test_replay_invalidation_and_receipt.py
+  - tests/stories/st_07_02/test_architecture_boundary.py
+verdict: PASS

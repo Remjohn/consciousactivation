@@ -1,0 +1,66 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "activation_job": {
+      "title": "Activation Job",
+      "type": "string"
+    },
+    "contract_id": {
+      "title": "Contract Id",
+      "type": "string"
+    },
+    "execution": {
+      "title": "Execution",
+      "type": "string"
+    },
+    "feature_type": {
+      "enum": [
+        "gaze",
+        "hands",
+        "posture",
+        "witness",
+        "object_punctum",
+        "distance",
+        "crop",
+        "light",
+        "negative_space",
+        "contact"
+      ],
+      "title": "Feature Type",
+      "type": "string"
+    },
+    "must_not": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Must Not",
+      "type": "array"
+    },
+    "subject": {
+      "title": "Subject",
+      "type": "string"
+    },
+    "wrong_reading_blocked": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Wrong Reading Blocked"
+    }
+  },
+  "required": [
+    "contract_id",
+    "feature_type",
+    "subject",
+    "execution",
+    "activation_job"
+  ],
+  "title": "FeatureContract",
+  "type": "object"
+}

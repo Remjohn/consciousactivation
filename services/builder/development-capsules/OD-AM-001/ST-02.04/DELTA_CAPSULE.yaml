@@ -1,0 +1,83 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-02.04:ATOMIC_BOUNDARY_COMPARISON
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-02.04
+  title: Compare Candidate Atomic Product Boundaries
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  primary_outcome: human authority can inspect the typed consequences and risks of merge, split, variant, and family alternatives before making any atomicity decision
+  primary_obligations: [D008, FR-032, FR-033, FR-034, FR-035]
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_NOT_FULLY_SATISFIED_UNTIL_EVIDENCE_CLOSURE
+dependency:
+  story_id: ST-02.03
+  receipt_path: development-capsules/OD-AM-001/ST-02.03/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  receipt_sha256: 7ee1529a4bd98603c3bf1ea2b16e36a94d2d30749e457dfd56482f1e80674e64
+  status: IMPLEMENTED_DEVELOPMENT_PASS
+authority_sources:
+  story_inventory: {path: docs/planning/STORY_INVENTORY.yaml, sha256: ee2f53a443b36977bd3ec352c45dbf485cef5c005fdc07d1fc6fafbff37c24fe}
+  obligation_coverage: {path: docs/planning/STORY_REQUIREMENT_COVERAGE.csv, sha256: a7311578fdd5a70cf479de5156f842cfac94498f51f1bcbb280833dd5dc1f215}
+  obligation_inventory: {path: docs/planning/PLANNING_REQUIREMENTS_INVENTORY.csv, sha256: d3db32a78f4acce25e5448ff7c6ecb765ba814c0bdbf1bb44d6b49de00c55923}
+  ts_03: {path: docs/tech-specs/specs/TS-03-VISUAL-SYNTAX-FIRST.md, sha256: d2287b754e24cf7dc9350cf378f825d9a501b16d33b6fafd600f48033a218c27}
+  ts_04: {path: docs/tech-specs/specs/TS-04-ATOMICITY-AND-DRAFT-HARNESS-MODEL.md, sha256: 7062674691058ecfa7e85483814ff43fcc7fdd202642c91d546e44c95921ca5a}
+  ts_11: {path: docs/tech-specs/specs/TS-11-CATEGORY-CONSTITUTIONS-AND-TARGET-COMPILERS.md, sha256: f6a269e974ef44dc169790b82effa6b1c00b880e5915fd52df2172eee4d64de3}
+  adr_005: {path: docs/architecture/adr/ADR-005-HUMAN-AGENT-CODE-AUTHORITY.md, sha256: 783835d294590b52737f841adf59f588bce41bbae4fd3d2e0b7ddcc425aaf92e}
+  adr_008: {path: docs/architecture/adr/ADR-008-VISUAL-INFERENCE-AND-KNOWLEDGE-STATUS.md, sha256: da01278f2a8a615782d82df8cac7c3633481f359f684cb33c84b3fb0079c1bd3}
+  adr_014: {path: docs/architecture/adr/ADR-014-FORMAT-02-RELEASE-1-REFERENCE.md, sha256: 7cd428006efe31f69852fd550b67b0625688e0c265d7ad5b272385bcf178dfc4}
+implementation_scope:
+  - consume an exact hash-valid provisional grammar and induction receipt from ST-02.03
+  - compare exactly four visible alternatives: merge, split, variant, and family
+  - cover production promise, visual instrument, composition grammar, state machine, semantic workcell, input contract, asset program, runtime ownership, evaluation failures, and repair behavior
+  - assign each alternative exactly one typed atomicity status without ratifying it
+  - expose shared and materially different dimensions, configuration sufficiency, affected specimens, evidence gaps, and merge or split consequences
+  - distinguish over-merging from over-splitting across implementation, creative, evaluation, migration, and maintenance risk
+  - preserve grammar motifs, hypotheses, source graphs, provenance, uncertainty, and provisional knowledge status without inventing meaning
+  - compile deterministic immutable comparison packets and exactly bound receipts with atomic commit, replay, history, and rollback behavior
+failure_behavior:
+  - reject missing or hidden alternatives, missing comparison dimensions, duplicate candidates, and untyped status
+  - reject unknown, cross-wired, stale, mutated, or untraceable grammar evidence
+  - reject recommendations that lack evidence, conceal gaps, or present hypotheses as certainty
+  - reject uncalibrated protected-boundary certainty and all ratification, production, certification, or Genesis-authorization claims
+  - reject unauthorized commit, same-identity different-payload replay, stale expectation, and partial atomic commit
+blocker_scope:
+  BD-004: {offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, evidence_gate: EVIDENCE_PENDING}
+  BD-007: {offline_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, empirical_gate: EVIDENCE_PENDING}
+  BD-008: {offline_provisional_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, real_profile_gate: EVIDENCE_PENDING}
+  HD-006: {offline_non_personal_mode: NOT_APPLICABLE_TO_BOUNDED_DEVELOPMENT_BRANCH, human_policy: HUMAN_POLICY_PENDING}
+allowed_files:
+  - src/cmf_builder/visual/atomicity_contracts.py
+  - src/cmf_builder/visual/boundary_comparison.py
+  - tests/stories/st_02_04/fixtures.py
+  - tests/stories/st_02_04/test_st_02_04_comparison.py
+  - tests/stories/st_02_04/test_st_02_04_failures.py
+  - tests/stories/st_02_04/test_st_02_04_determinism.py
+  - tests/stories/st_02_04/test_st_02_04_authority_rollback.py
+  - development-capsules/OD-AM-001/ST-02.04/DELTA_CAPSULE.yaml
+  - development-capsules/OD-AM-001/ST-02.04/TEST_RESULTS.json
+  - development-capsules/OD-AM-001/ST-02.04/FILE_CHANGE_MANIFEST.yaml
+  - development-capsules/OD-AM-001/ST-02.04/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - existing source, predecessor artifacts, shared core, package exports, ports, repositories, or __init__.py files
+  - architecture tests, source-boundary registry, queues, blocker registers, or status files
+  - human ratification, atomic-boundary freeze, Draft Harness Model compilation, Genesis authorization, or descendant invalidation
+  - semantic invention, hidden alternatives, generic notes flattening, protected-label access, or unsupported certainty
+  - provider, network, database, external-product, runtime, production, certification, or publication behavior
+acceptance:
+  - all four alternatives and all ten comparison dimensions are explicit and immutable
+  - every alternative has exactly one allowed typed atomicity status and an explicit recommendation disposition
+  - every non-missing claim is linked to the exact grammar motif or provisional hypothesis and source graph evidence that supports it
+  - merge and split alternatives identify affected specimens, shared or differing dimensions, configuration sufficiency, consequences, and breaking dimensions
+  - wrong-boundary risks cover all five required consequence domains and distinguish over-merge from over-split
+  - missing or provisional evidence remains visible and cannot authorize ratification, Genesis, production, or certification
+  - identical governed inputs produce byte-identical packets and receipts; changed evidence creates a new immutable identity
+  - only declared authority commits; atomic failure leaves no state; replay and rollback preserve history
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: PENDING_INTEGRATOR_FULL_REGRESSION
+  may_unlock: ST-02.05_OD_AM_001_DISCOVERED_BOUNDARY_MODE_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  closes_external_evidence_gate: false
+production_ready: false
+certified: false

@@ -1,0 +1,49 @@
+{
+  "schema_version": "cmf-builder-od-am-001-test-results/v1",
+  "story_id": "ST-06.04",
+  "development_mode": "OFFLINE_DECLARATIVE_CATEGORY_OPERATING_RULES",
+  "runs": [
+    {
+      "name": "story_focused",
+      "command": "PYTHONPATH=src python -m pytest tests/stories/st_06_04 -q",
+      "passed": 29,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 0.60,
+      "verdict": "PASS"
+    },
+    {
+      "name": "direct_predecessor_and_story",
+      "command": "PYTHONPATH=src python -m pytest tests/stories/st_06_03 tests/stories/st_06_04 -q",
+      "passed": 56,
+      "failed": 0,
+      "mandatory_skips": 0,
+      "duration_seconds": 0.58,
+      "verdict": "PASS"
+    },
+    {
+      "name": "source_compilation",
+      "command": "python -m py_compile src/cmf_builder/domain/category_runtime_rules.py src/cmf_builder/application/category_policy_commands.py",
+      "files": 2,
+      "failed": 0,
+      "verdict": "PASS"
+    }
+  ],
+  "validated_behaviors": [
+    "five_category_runtime_plan_requirement_sets",
+    "validation_and_evaluation_contracts",
+    "explicit_evaluator_repair_migration_and_compatibility_ownership",
+    "diagnostic_routing_and_stop_conditions",
+    "category_local_repair_and_selective_rerun",
+    "same_category_immutable_profile_migration",
+    "certification_non_inheritance",
+    "invalidation_and_non_destructive_rollback",
+    "contract_only_external_handoff_boundary",
+    "generic_not_applicable_branch",
+    "authority_replay_determinism_and_atomic_failure"
+  ],
+  "full_repository_regression": {"verdict": "PASS", "passed": 1074, "failed": 0, "skipped": 0, "mandatory_skips": 0, "duration_seconds": 139.38, "source_boundary_registry_sha256": "d4e4523145e53f4ddc6cc3a8948b37b7ff1e15b613b064aff80d99081f78a6dd"},
+  "production_ready": false,
+  "certified": false,
+  "verdict": "PASS"
+}

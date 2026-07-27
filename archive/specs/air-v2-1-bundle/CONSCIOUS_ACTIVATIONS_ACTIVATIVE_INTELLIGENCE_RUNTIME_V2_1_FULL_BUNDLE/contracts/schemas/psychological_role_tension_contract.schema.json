@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "ImmutableRef": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "title": "Object Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "title": "ImmutableRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "activation_domain": {
+      "enum": [
+        "source",
+        "relationship",
+        "audience",
+        "campaign",
+        "derivative"
+      ],
+      "title": "Activation Domain",
+      "type": "string"
+    },
+    "contract_id": {
+      "title": "Contract Id",
+      "type": "string"
+    },
+    "counteractivation_roles": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Counteractivation Roles",
+      "type": "array"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/ImmutableRef"
+      },
+      "minItems": 1,
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "participation_threshold": {
+      "minLength": 1,
+      "title": "Participation Threshold",
+      "type": "string"
+    },
+    "psychological_role": {
+      "minLength": 1,
+      "title": "Psychological Role",
+      "type": "string"
+    },
+    "recognition_path": {
+      "minLength": 1,
+      "title": "Recognition Path",
+      "type": "string"
+    },
+    "stance": {
+      "minLength": 1,
+      "title": "Stance",
+      "type": "string"
+    },
+    "tension": {
+      "minLength": 1,
+      "title": "Tension",
+      "type": "string"
+    },
+    "transfer_invariants": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Transfer Invariants",
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_id",
+    "activation_domain",
+    "psychological_role",
+    "tension",
+    "recognition_path",
+    "stance",
+    "participation_threshold",
+    "transfer_invariants",
+    "evidence_refs"
+  ],
+  "title": "PsychologicalRoleTensionContract",
+  "type": "object"
+}

@@ -1,0 +1,92 @@
+schema_version: cmf-builder-supplemental-file-change-manifest/v1
+branch_id: ST-01.01-SYNTHETIC-PROOF
+generated_on: "2026-07-15"
+result: PASS
+change_summary:
+  preexisting_source_files_modified: 2
+  source_files_created: 0
+  test_files_created: 6
+  completion_evidence_files_created: 5
+  total_files_changed: 13
+  files_deleted: 0
+  prohibited_files_modified: 0
+  external_dependencies_added: 0
+modified_source_files:
+  - path: src/cmf_builder/domain/target_profile.py
+    previous_sha256: 42e33794c3a609033f84c4bce52befaaa858da9a8c84ff7d8e8c18c0dcebef71
+    current_sha256: effbaded373187c1204bbf738343f710f2794f8fb0f3f05254d337df276c87bd
+  - path: src/cmf_builder/adapters/__init__.py
+    previous_sha256: b30366ab2b23aa65742b9e6cd65ea44e02642ad46b51e926a5c4f1668f2d967e
+    current_sha256: 2e8c4d8e5d5418791fd121ceda240a72dd3d9f00fd3b78fafb20a2235a1fa875
+optional_source_file_not_created:
+  path: src/cmf_builder/adapters/synthetic_proof_target_profile_repository.py
+  reason: >-
+    The accepted original architecture test requires the exact twelve-file
+    source set. The adapter is implemented in the explicitly modifiable
+    adapters package file without changing that governed source set.
+created_test_files:
+  - path: tests/stories/st_01_01_synthetic_proof/__init__.py
+    sha256: 3300381e2109a496a5b45b8766bc925a83cb392e8533d2ef5fb510cd4a5a6515
+  - path: tests/stories/st_01_01_synthetic_proof/test_acceptance.py
+    sha256: c6d12f7da0d11057f8a96f08bf710cc5723d1c7d04342dea8d58eb7785006aaf
+  - path: tests/stories/st_01_01_synthetic_proof/test_authority.py
+    sha256: 8af9a4c0b230ebb742d1cf6cf5d7969e988491ba086c23f1e175924722f7d52d
+  - path: tests/stories/st_01_01_synthetic_proof/test_empty_skill_registry.py
+    sha256: 0ad1d75dea9238f489f691eb623ce07cff443a4765a6dd5d9d74c645b7530b9f
+  - path: tests/stories/st_01_01_synthetic_proof/test_failure_boundaries.py
+    sha256: e6d72db99598b5d8d0570e947c540aed78d4a4f2d4321830dd775daf87f3fc86
+  - path: tests/stories/st_01_01_synthetic_proof/test_replay_and_observability.py
+    sha256: cb3fc29ab5882ae17262cf6492fa53fe3eaf88dc3889fb864604b896837117c9
+completion_evidence_files:
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/IMPLEMENTATION_REPORT.md
+    sha256: 93136462dd11155a0b722e33c5d1a045917e4fa143d1c5a0878977efb31ec112
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/TEST_RESULTS.json
+    sha256: 6be22163f260ea66358106bcd534091a1447b9904d9035c922f6e80cdce55cfd
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/OBSERVABILITY_EVIDENCE.yaml
+    sha256: 164c52f42fd9cc13082b32f373b296c2d3231f9cb66ef4907a64cbf171ad8903
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/FILE_CHANGE_MANIFEST.yaml
+    hash_rule: self_excluded_and_hashed_by_completion_receipt
+  - path: development-capsules/ST-01.01-SYNTHETIC-PROOF/completion/STORY_COMPLETION_RECEIPT.yaml
+    hash_rule: receipt_file_hash_reported_after_issue_payload_identity_self_excluded
+hash_bundles:
+  source_bundle_sha256: 70ea7c85c5551656df1d9e3797ace15c8c86536f08cafdf0229a28a90c43839c
+  test_bundle_sha256: 477af18a8c626afea856b7dbced90f859f18c21d10972a291c24edd0cb527024
+  implementation_bundle_sha256: 308157bcd5ced03ccdcca8daa1bb1b4f901c0ac4fbb1a65c398d4827383d85cd
+protected_artifacts:
+  capsule_manifest:
+    path: development-capsules/ST-01.01-SYNTHETIC-PROOF/CAPSULE_MANIFEST.json
+    sha256: 4917fbce9295255f8a71f61eb9031679cd2d9dd1729cf15a771f3da24be6174f
+    validation: PASS_20_OF_20
+  capsule_bundle_digest: 2e15bb0d795813e927bc60190a79978c675e0abae3037b7529f914d4e6f70ff3
+  original_ST_01_01_completion_receipt:
+    path: development-capsules/ST-01.01/STORY_COMPLETION_RECEIPT.yaml
+    sha256: ec3e425cb562c16a6b31e427046962687b2dbfb781856b677593520635cffd7b
+    unchanged: true
+  historical_ST_01_01_evidence_hashes:
+    checked: 6
+    changed: []
+    result: PASS
+scope_validation:
+  source_paths_in_allowlist: PASS_2_OF_2
+  test_paths_in_allowlist: PASS_6_OF_6
+  completion_paths_in_allowlist: PASS_5_OF_5
+  actual_paths_outside_allowlist: []
+  VAE_paths_modified: []
+  Delegation_paths_modified: []
+  Program_Control_paths_modified: []
+  Format02_reference_paths_modified: []
+  planning_or_governance_paths_modified: []
+  result: PASS
+rollback_evidence:
+  result: PASS_NON_DESTRUCTIVE
+  data_migration_required: false
+  persistent_state_created: false
+  external_compensation_required: false
+  temporary_test_data_cleaned: true
+  original_source_file_count: 12
+  current_source_file_count: 12
+  original_Format02_profile_hash: sha256:3ad28b4f622e975ff7943f89a533544469b3e81f7348fa67fa368e833e9fbfed
+  current_Format02_profile_hash: sha256:3ad28b4f622e975ff7943f89a533544469b3e81f7348fa67fa368e833e9fbfed
+  original_ST_01_01_tests: PASS_20_OF_20
+self_hash_included: false
+completion_receipt_hash_included: false

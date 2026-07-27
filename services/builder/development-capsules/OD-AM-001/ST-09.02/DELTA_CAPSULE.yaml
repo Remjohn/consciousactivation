@@ -1,0 +1,260 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-09.02:MANUAL_SHADOW_BEFORE_AUTOMATION
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-09.02
+  title: Route Through a Manual Shadow Before Automation
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: automation begins from observed expert behavior and evaluated phase-local capsules
+  primary_obligations:
+    - FR-186
+    - FR-187
+    - FR-188
+    - FR-189
+    - NFR-PORT-002
+  primary_obligation_count: 5
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_MANUAL_SHADOW_EVIDENCE_PENDING
+dependency:
+  story_id: ST-09.01
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-09.01/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_receipt_sha256: e9aa03001b4815526f03fa2a269b074201b5ac97e514c99817370753ffc7bb1f
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-09.01/DELTA_CAPSULE.yaml
+    sha256: 984e1529d40a97ce0923c3171d6ba3b238f88ea023112f8892514ff7fb9c7c7e
+    validation: PASS_IMPLEMENTED_REFERENCE
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-09.02
+  - docs/tech-specs/specs/TS-14-BUILDER-WORKFLOW-RUNTIME.md
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - WorkflowIR
+    - WorkflowNodeContract
+    - CheckpointReceipt
+    - PromotionReceipt
+  schema_refs: []
+  ownership_rule: planned workflow contracts remain Builder-owned and provider-neutral without external engine or agent-harness coupling
+two_gate_boundary:
+  implementation_gate:
+    scope: deterministic local routing, manual-shadow capture and parity-validation mechanism over repository-owned development fixtures
+    closes_evidence_gate: false
+  evidence_gate:
+    status: MANUAL_SHADOW_AND_EXTERNAL_VALIDATION_PENDING
+    required_real_evidence: observed end-to-end expert behavior for the selected reference path
+    may_be_closed_by_synthetic_fixture: false
+    production_automation_authority: false
+implementation_scope_after_dependency_pass:
+  - select one eligible versioned Workflow Profile before execution from request type, target, run state, risk, incident class and registry policy
+  - capture immutable ordered shadow observations for human actions, bounded agent judgments, deterministic operations, handoffs, conditions, failures, cost and artifacts
+  - map each observed shadow step to one exact Workflow IR node or an explicit governed exclusion reason
+  - compare a hash-pinned development shadow trace to the selected Workflow IR and emit a deterministic parity or gap receipt
+  - enforce code-owned deterministic operations outside all agent capsules and free-form outputs
+  - validate every agent-owned node against an evaluated versioned phase-local capsule, input contract, model policy and tool permission declaration without executing the agent
+  - preserve provider-neutral ports, exact lineage, replay, invalidation and rollback
+workflow_router_contract:
+  required_inputs:
+    - request_type
+    - compilation_target
+    - run_state
+    - risk_class
+    - incident_class
+    - workflow_profile_registry_version_and_hash
+  required_result:
+    - selected_profile_id_and_version
+    - deterministic_rule_or_bounded_classifier_identity
+    - confidence_or_exact_rule_result
+    - eligible_alternatives
+    - selection_reason
+    - authority_and_policy_refs
+  rules:
+    - route before any shadow or automated execution begins
+    - unmatched profile fails closed
+    - ambiguous high-risk route blocks for human selection
+    - ineligible, stale, superseded or uncertified-for-request profile cannot be silently selected
+manual_shadow_trace_contract:
+  required_step_kinds:
+    - human_action
+    - agent_judgment
+    - deterministic_operation
+    - handoff
+    - condition
+    - failure
+    - cost_observation
+    - artifact_observation
+  required_step_fields:
+    - shadow_step_id
+    - sequence_index
+    - actor_kind_and_identity
+    - action_or_decision
+    - input_and_output_refs
+    - authority_boundary
+    - observed_condition
+    - failure_context
+    - cost_record_or_NOT_APPLICABLE_basis
+    - artifact_refs
+    - mapped_Workflow_IR_node_or_exclusion_reason
+    - provenance
+  rules:
+    - order and identity are immutable
+    - no observed step is silently omitted
+    - excluded steps require a versioned rationale and authority
+    - shadow observations do not mutate source artifacts or Workflow IR
+    - incomplete traces cannot pass parity
+development_fixture_boundary:
+  permitted_fixture:
+    classification: repository_owned_synthetic_manual_shadow
+    purpose: structural capture, mapping, parity and failure-path validation only
+    actual_expert_behavior: false
+    real_manual_shadow_evidence: false
+  prohibited_claims:
+    - real_expert_shadow_completed
+    - manual_shadow_parity_proven_for_release
+    - production_automation_ready
+code_agent_separation:
+  code_owned_node_kinds:
+    - deterministic_transform
+    - validator
+    - linter
+    - schema_check
+    - graph_check
+    - parser
+    - state_mutation
+  rules:
+    - agent output cannot assert a code-owned check passed without an exact code-result receipt
+    - code failure is returned as a typed contract and never hidden in free-form agent output
+    - deterministic work delegated to an agent fails closed
+    - local structural tests may use deterministic fixtures but no agent runtime
+phase_local_agent_capsule_validation:
+  required_refs:
+    - node_identity_and_version
+    - evaluated_model_program_or_agent_adapter
+    - approved_JIT_Execution_Capsule_identity_and_hash
+    - input_and_output_contract_versions
+    - model_policy
+    - tool_permissions
+    - skill_recipe_adapter_input_and_output_identities
+    - evaluation_and_maturity_receipts
+  rules:
+    - unpinned, unevaluated, stale, invalidated or scope-mismatched capsule fails closed
+    - unrestricted session history and future-stage instructions are prohibited
+    - tool permissions default deny and no external tool is invoked here
+    - validation creates no agent, model or provider execution
+shadow_parity_and_gap_receipt:
+  required_fields:
+    - selected_profile_and_Workflow_IR_hashes
+    - shadow_trace_identity_and_hash
+    - exact_step_to_node_mapping
+    - excluded_step_rationales
+    - missing_unobserved_or_unmapped_steps
+    - actor_and_authority_conformance
+    - code_agent_separation_results
+    - phase_local_capsule_validation_results
+    - cost_failure_handoff_and_artifact_coverage
+    - limitations_and_open_evidence_gates
+  permitted_decisions:
+    - PASS_SYNTHETIC_STRUCTURAL_PARITY_ONLY
+    - FAIL_INCOMPLETE_SHADOW
+    - FAIL_ACTOR_OR_CAPSULE_BOUNDARY
+    - BLOCKED_AMBIGUOUS_ROUTE
+    - BLOCKED_REAL_MANUAL_SHADOW_EVIDENCE
+  production_promotion_decision: prohibited
+lineage_invalidation_and_determinism:
+  pinned_inputs:
+    - request_classification_and_router_policy
+    - Workflow_Profile_registry_and_Workflow_IR
+    - shadow_trace_and_step_artifacts
+    - actor_assignment_and_authority_refs
+    - deterministic_code_result_refs
+    - JIT_capsule_contract_model_policy_tool_and_maturity_refs
+    - parity_policy_and_adapter_versions
+  invalidate_when_any_pinned_input_changes: true
+  historical_trace_and_receipt_reproduction: required
+  canonical_identity_rule: routing, trace, mapping, parity, gap and invalidation receipts derive only from canonical governed content
+  repeat_command: identical payload returns original result without duplicate state
+  conflicting_command: reject atomically with zero trace, receipt, event or command record
+failure_and_authority_boundary:
+  reject:
+    - unmatched_or_high_risk_ambiguous_profile
+    - missing_or_incomplete_manual_shadow_trace
+    - synthetic_trace_represented_as_real_expert_evidence
+    - deterministic_work_delegated_to_agent
+    - agent_claim_of_unrecorded_code_check
+    - agent_node_outside_evaluated_phase_local_capsule
+    - unauthorized route, trace, mapping, parity or invalidation mutation
+    - production workflow, agent, provider or external-product execution request
+  partial_state_on_failure: prohibited
+  workflow_or_agent_execution: prohibited
+  external_runtime_or_transport: prohibited
+external_and_evidence_gates_remaining:
+  direct_dependency:
+    status: DEPENDENCY_PENDING
+    detail: ST-09.01 OD-AM-001 ImplementationCompletionReceipt is not issued
+  manual_shadow_evidence:
+    status: EVIDENCE_PENDING
+    detail: actual selected-path expert behavior has not been observed and admitted by this capsule
+  XDEP-001:
+    status: AUTHORITY_REMAINS_EXTERNAL
+    detail: Program Control records remain read-only
+  XDEP-005:
+    status: FUTURE_CONSUMER_NOT_IMPLEMENTATION_EVIDENCE
+    detail: Operator Manual documentation cannot substitute for Builder behavior or manual-shadow evidence
+  ADR-006-Temporal:
+    status: EXTERNAL_VALIDATION_PENDING
+    detail: inherited local adapter behavior does not prove Temporal public-seam conformance
+  production_automation:
+    status: PRODUCTION_EVIDENCE_AND_AUTHORITY_PENDING
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/workflow/manual_shadow_routing.py
+  tests:
+    - tests/stories/st_09_02/test_router_and_shadow_trace.py
+    - tests/stories/st_09_02/test_actor_separation_and_capsule_binding.py
+    - tests/stories/st_09_02/test_failure_authority_boundaries.py
+    - tests/stories/st_09_02/test_determinism_invalidation_and_rollback.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-09.02/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-09.02/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-09.02/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-09.02/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-09.01 implementation or completion evidence
+  - external workflow engine, agent, model, provider, credential, network, transport or external-product behavior
+  - behavior owned by ST-09.03 through ST-09.06
+  - production automation, promotion, deployment, readiness or certification
+acceptance_after_dependency_pass:
+  - routing selects one exact eligible Workflow Profile before execution or blocks an ambiguous high-risk request
+  - every required shadow step kind and field remains ordered, immutable and mapped or explicitly excluded
+  - code-owned deterministic work remains outside agent capsules and requires exact code-result receipts
+  - every agent-owned node validates an evaluated phase-local capsule and least-privilege contract without executing an agent
+  - identical governed inputs produce byte-identical routing, shadow, mapping, gap and parity receipts
+  - changed inputs invalidate affected active receipts while preserving historical reproduction
+  - synthetic fixture evidence remains explicitly non-real and cannot close the manual-shadow or external validation gates
+  - production automation, readiness and certification remain false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-09.03_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  real_manual_shadow_evidence_created: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

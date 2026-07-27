@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-005",
+  "title": "Intelligence Packet",
+  "description": "FR-VID-12 §4 Stage 3 — Deterministic runtime bundle for one composition or review task. Assembled from intelligence/ assets in a fixed loading order and persisted for reuse across composition, regeneration, and review flows.",
+  "type": "object",
+  "required": ["packet_id", "project_id", "command_target", "loading_order", "source_paths", "valid_for", "persisted_path"],
+  "properties": {
+    "packet_id": {
+      "type": "string",
+      "description": "Unique identifier for this intelligence packet instance."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Project this packet was built for."
+    },
+    "command_target": {
+      "type": "string",
+      "description": "The command or scene/beat target that triggered packet assembly."
+    },
+    "loading_order": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "project_negative_space",
+          "project_dna",
+          "container_contract",
+          "component_spec",
+          "subsystem_runtime_asset",
+          "library_runtime_frameworks",
+          "layered_questions_runtime",
+          "cbar_gate_pack",
+          "rubrics_and_routing_rules"
+        ]
+      },
+      "minItems": 1,
+      "description": "Deterministic sequence in which intelligence dependencies are loaded."
+    },
+    "source_paths": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Map of loading_order key to resolved filesystem path for each intelligence asset."
+    },
+    "valid_for": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["assembler_composition", "regeneration_planning", "editor_regeneration", "review_flows"]
+      },
+      "minItems": 1,
+      "description": "Flow types this packet is valid for."
+    },
+    "persisted_path": {
+      "type": "string",
+      "description": "Filesystem path where this packet is persisted (e.g. .cmf/runtime/intelligence_packet_SC03.json)."
+    },
+    "assembled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this packet was assembled."
+    }
+  }
+}

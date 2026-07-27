@@ -1,0 +1,83 @@
+schema_version: cmf-builder-category-native-campaign-receipt/v1
+campaign: BD-004_BD-007_EVIDENCE_QUALIFICATION_AND_CATEGORY_NATIVE_COMPILATION
+authority: AUTHORIZE BD-004/BD-007 EVIDENCE QUALIFICATION AND CATEGORY-NATIVE COMPILATION CAMPAIGN
+completed_at: "2026-07-16T23:38:08.9110911+02:00"
+verdict: PASS_EVIDENCE_QUALIFICATION_STOPPED_AT_VALID_BLOCKER
+baseline:
+  canonical_receipts: PASS_28_OF_28
+  predecessor_manifests: PASS_ST_06_01_AND_ST_06_02
+  archive_identity: PASS
+  full_regression: PASS_909_OF_909
+  source_tree_sha256: 504155c80e7794dcbeed93ae0efbd557758a556580832a8776999c3a138428e6
+  receipt_index_sha256: d8e75ea8519225e7f849ddd656ca7042a2b6165fc8c9aff6a1ae9ee54a7dae31
+BD004:
+  disposition: BLOCKED_OPERATOR_AUTHORITY
+  archive_sha256: 403bd07f8ca3feae94a991b16a08270fb799ffea87a05ab108163b4e1dee37b0
+  archive_members: 1434
+  archive_security: PASS_WITH_RECORDED_LIMITATIONS
+  corpus_admitted: false
+  inventory_sha256: e279ed8e549d205e2a00b4cfd3285bae284c24c1450eec8b49ecd2e60995d263
+  member_inventory_digest: 333834dc95e7e214ff2363ed11b50db83a7c6c02bff3460bfb57d97105419ece
+  authority_receipt_sha256: 692d9c76cdac59135a3a8a838110a0260f4974ade90e0abe3d0853f1c93730c9
+  disposition_sha256: 6bfc9ccb434be0549517358ebd95b55cb33d1e6111f3efd790bf642341f34692
+BD007:
+  disposition: BLOCKED_EXTERNAL_PROVIDER
+  available_but_ineligible_surfaces: 3
+  eligible_provider_configurations: 0
+  governed_provider_adapters: 0
+  provider_calls: 0
+  admitted_cases: 0
+  paired_outputs: 0
+  dimension_scores: 0
+  development_threshold_established: false
+  disposition_sha256: 4587dfb755bc4caab4a2ba15838b38d53ec053e1799c2978ec1d8abb096d6eb9
+stories:
+  ST-06.03:
+    verdict: BLOCKED_EVIDENCE
+    minimum_cut: [BD-004, BD-007]
+    capsule_state: PASS_CONDITIONAL_BLOCKED_EVIDENCE
+    capsule_manifest_sha256: 0a231d36e38dd505aaf960e98c6aecae27aab727b4646495321d74f4041eeed5
+    capsule_bundle_digest: e6b0e363328f7fb459ed81de2855c94d671f70ae907a3174e1bf38d2ba354bac
+    implementation_started: false
+    active_tests_created: false
+    completion_receipt_issued: false
+  ST-06.04:
+    verdict: BLOCKED_PRIOR_STORY
+    blocker: PRIOR:ST-06.03
+    implementation_started: false
+  ST-06.05:
+    verdict: NOT_IMPLEMENTED
+    activity: READ_ONLY_HUMAN_DECISION_AUDIT_ONLY
+validation:
+  evidence_yaml_json_parse: PASS
+  cross_lane_archive_identity: PASS
+  evidence_cross_hashes: PASS
+  contradictory_dispositions: NONE
+  fabricated_evidence: false
+  fresh_process_regression_1: PASS_909_OF_909_NO_MANDATORY_SKIPS_187_07_SECONDS
+  fresh_process_regression_2: PASS_909_OF_909_NO_MANDATORY_SKIPS_202_76_SECONDS
+  python_compilation: PASS_87_SOURCE_FILES
+  canonical_receipts: PASS_28_OF_28
+  capsule_manifests: PASS_29_OF_29_INCLUDING_BLOCKED_ST_06_03
+  portable_path_scan: PASS
+  secret_scan: PASS
+  path_conflicts: 0
+  unauthorized_writes: 0
+outputs:
+  campaign_report:
+    path: docs/implementation/category-native/CAMPAIGN_COMPLETION_REPORT.md
+    sha256: 5b244d06019f3aac9834c876d3f1c3a35a0ab58f7e6423de020cfbed3295b8e4
+  ST0603_gate:
+    path: docs/implementation/category-native/ST0603_BLOCKER_CLOSURE_GATE.yaml
+    sha256: 842678bcc71992ff6e143dee1ad5c0348f9d73c6655be8b4f155c6f94004cadc
+  ST0604_gate:
+    path: docs/implementation/category-native/ST0604_BLOCKER_CLOSURE_GATE.yaml
+    sha256: 4d4fc2cd31422d2608f6894530cd21303f8271b546f96cb3acf420dcd7bf34b1
+  ST0605_audit:
+    path: docs/implementation/category-native/ST0605_FUTURE_HUMAN_DECISION_AUDIT.md
+    sha256: b307a39ad9cbaa2664041ff645c0cdaf5b83785cbbd334a39d8a39a4b27e1d20
+confirmed_stories_complete: 27
+confirmed_stories_remaining: 42
+next_ready_story: null
+production_ready: false
+certified: false

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-017",
+  "name": "Temperature Arc",
+  "version": "1.0",
+  "priority_tier": "encoding",
+  "research_basis": [
+    "Color Psychology",
+    "Affective lighting research"
+  ],
+  "inputs": [
+    "scene_order",
+    "kelvin_targets",
+    "prior_scene_temperatures",
+    "arc_role",
+    "brand_constraints"
+  ],
+  "outputs": [
+    "scene_temperature_trajectory",
+    "verdict",
+    "violations"
+  ],
+  "thresholds": {
+    "minimum_adjacent_delta_kelvin": 600,
+    "vulnerability_kelvin_band": {
+      "min": 3200,
+      "max": 4200
+    },
+    "challenge_kelvin_band": {
+      "min": 5000,
+      "max": 6000
+    }
+  },
+  "default_action_on_fail": "REVISE"
+}

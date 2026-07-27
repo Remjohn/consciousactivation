@@ -1,0 +1,49 @@
+id: asset.retrieve
+version: "1.0.0"
+status: active
+name: "Asset Retrieve"
+owner_agent: asset_intelligence_agent
+sub_agents:
+  - rights_provenance_agent
+  - asset_classifier_agent
+  - asset_eval_agent
+  - asset_retrieval_agent
+skill_type: deterministic_filter_plus_semantic_rerank
+dspy_program: AssetRetrievalRerankProgram
+purpose: "Return scored candidate assets matching a VisualIngredientRequirement or production request."
+inputs:
+  - brand_id
+  - brand_context_version_id
+  - asset_context
+outputs:
+  - typed_contract
+  - audit_receipt
+required_contracts:
+  - AssetRecord
+  - AssetVersion
+  - RightsProvenanceProfile
+  - AssetClassification
+  - AssetSemanticProfile
+  - CreativeIngredient
+  - AssetEvaluationReceipt
+  - AssetUsageReceipt
+required_registries:
+  - registry.asset_intelligence.asset_kinds.v1
+  - registry.asset_intelligence.asset_roles.v1
+  - registry.asset_intelligence.use_modes.v1
+  - registry.asset_intelligence.rights_tiers.v1
+hard_gates:
+  - "Pydantic validation is required."
+  - "Unknown-rights assets cannot be direct_use."
+  - "Blocked assets cannot be retrieved or provider-input."
+  - "State-changing actions require an audit receipt."
+forbidden_shortcuts:
+  - "Do not treat reference-only assets as direct-use."
+  - "Do not allow an LLM to decide legal rights clearance alone."
+  - "Do not bypass brand_id or brand_context_version_id."
+runtime_accuracy:
+  pydantic_validation: required
+  dspy_reasoning: allowed_when_dspy_program_is_not_null
+  deterministic_guards: required
+  idempotency_key: required_for_state_change_or_provider_job
+  audit_receipt: required

@@ -1,0 +1,45 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-033
+enabled: true
+priority:
+  tier: quality
+  rank: 13
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - HOOK
+    - SETUP
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+warn_conditions:
+  - metric: prediction_error_score
+    operator: lt
+    value: 0.35
+  - metric: legibility_loss
+    operator: gt
+    value: 0.25
+block_conditions:
+  - metric: container_budget_exceeded
+    operator: eq
+    value: true
+    when:
+      metric: legibility_loss
+      operator: gt
+      value: 0.25
+route_hints:
+  amplify:
+    - escalate_schema_break
+    - delay_explanatory_relief
+    - switch_to_contrastive_vehicle
+  soften:
+    - restore_legibility
+    - narrow_surprise_window
+    - resolve_prediction_error_faster

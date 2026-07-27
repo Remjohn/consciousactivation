@@ -1,0 +1,178 @@
+experience_primitive_id: "EXP-FRC-005"
+canonical_name: "Ritualized Agency"
+aliases:
+  - "The Commitment Swipe"
+  - "Physical Anchoring"
+  - "Tactile Ownership"
+
+experience_family: "friction_ability"
+mechanic_role: "trigger"
+moment_role: "session_initiation"
+implementation_role: "frontend_polishing"
+
+source_audits:
+  - audit_file: "AUDIT_Beyond_Belief_Nir_Eyal.md"
+    primitive_name_in_audit: "Ritualized Agency"
+    mcda_score: 170
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Beyond_Belief_Nir_Eyal.md"
+
+book_reference:
+  title: "Beyond Belief"
+  author: "Nir Eyal"
+  chapters:
+    - "Chapter 2: The Power of Anticipation"
+    - "Chapter 4: Rituals"
+  key_pages: "80-95"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Beyond Belief.md"
+
+summary: >
+  Ritualized Agency takes a counter-intuitive approach to friction: instead of
+  making every single action a mindless tap, it transforms the *most important*
+  commitments (like locking in a final audio submission) into deliberate, physical
+  'Rituals'. This slight increase in physical friction generates psychological
+  agency and ownership, transitioning the user from a passive scroller to an active
+  creator.
+
+core_move: >
+  Transform mundane functional taps (e.g., 'Submit') into deliberate, physical
+  'Commitment Swipes' or 'Hold-to-Lock' gestures that generate agency rather
+  than passivity.
+
+why_it_works: >
+  Nir Eyal points out that rituals create anticipation and belief. If submitting a
+  high-stakes debate take is just a mindless 10-millisecond screen tap, it feels
+  cheap and disposable. The user doesn't feel committed. By adding a tiny,
+  deliberate piece of physical friction (a smooth, haptic 'Swipe to Submit' bar),
+  we force the user's brain to consciously register: 'I have made a decision. I own
+  this.' This generates agency, which dramatically lowers the *psychological* friction
+  (anxiety/doubt) of participating in the community.
+
+examples:
+  - context: "BOOK: Beyond Belief - The Coffee Ritual"
+    application: >
+      People report that coffee tastes better when they grind the beans and pour
+      it themselves compared to pushing a button on an automatic machine. The
+      physical ritual of preparation generates a placebo of higher quality and ownership.
+    effect: >
+      The slight friction creates a perception of premium value.
+
+  - context: "CCP: The 'Hold to Record' Lock"
+    application: >
+      To record a short take, the user doesn't just tap. They press and hold.
+      They physically feel the action. To lock it, they must deliberately swipe up.
+    effect: >
+      The tactile feedback creates a ritual of 'taking the floor', generating confidence.
+
+  - context: "CCP: The Commitment Swipe for Law28"
+    application: >
+      When opting into the grueling 28-Day Challenge, there is no 'I Agree' checkbox.
+      There is a full-width slider that says: 'Swipe right to commit to 28 days
+      of zero excuses.'
+    effect: >
+      Transforms a passive Terms of Service click into an active, identity-shifting vow.
+
+  - context: "CCP: The Final Jury Vote"
+    application: >
+      When crowning the winner of a 'Debate Showdown', the Jury doesn't tap a tiny radio
+      button. They drag the crown icon onto the avatar of the winner.
+    effect: >
+      Makes the act of voting feel weighty, physical, and socially meaningful.
+
+  - context: "CCP: Erasing a Failed Take"
+    application: >
+      During a Redemption Round, to delete their bad audio, they must physically 'scrub'
+      it off the screen (swiping it away violently).
+    effect: >
+      A physical ritual of catharsis that clears the psychological slate for the next take.
+
+anti_examples:
+  - description: >
+      A user finishes a highly emotional, 3-minute thesis defense. The system just
+      auto-submits it the millisecond they stop talking, without giving them a chance
+      to review or explicitly 'send' it.
+    why_it_fails: >
+      The user experiences a massive spike in anxiety ('Wait, was that good? Did it
+      send?'). The lack of a submission ritual steals their agency, making them feel
+      out of control of their own image, increasing future friction.
+
+experience_stage_fit:
+  entry: 0.6
+  activation: 0.9
+  recording: 0.9
+  scoring: 0.4
+  social_spread: 0.6
+  recovery: 0.8
+  retention: 0.7
+  conversion: 0.9
+
+surface_fit:
+  telegram_message: 0.4
+  mini_app: 1.0
+  score_card: 0.8
+  share_asset: 0.2
+  voice_prompt: 0.4
+  push_nudge: 0.2
+
+user_state_effects:
+  confidence: 0.9
+  urgency: 0.2
+  clarity: 0.8
+  safety: 0.8
+  status: 0.7
+  belonging: 0.6
+  curiosity: 0.4
+  replay_desire: 0.7
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.8
+  cbcs_accountability: 1.0
+  challenge_progression: 1.0
+  silent_referral: 0.6
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.9
+  onboarding_activation: 0.9
+  social_economy: 0.7
+  content_extraction: 0.8
+
+activation_conditions:
+  - "User is performing a high-stakes action (submitting audio, voting on a winner, buying a subscription)"
+  - "User needs to feel a sense of ownership over a decision"
+
+suppression_conditions:
+  - "User is performing a completely trivial, repetitive action (e.g., dismissing a tooltip). Do not add rituals to trash tasks."
+
+misuse_modes:
+  - "Friction for Friction's Sake — making a user solve a puzzle or swipe 4 times just to navigate the menu, mistaking annoyance for 'ritual'."
+  - "Inconsistent Patterns — using a swipe for 'Submit' on one screen, but a tap for 'Submit' on the next, confusing the muscle memory."
+
+synergizes_with:
+  - "EXP-TRG-008" # Motivation Leverage (The ritual is what locks in the motivation)
+  - "EXP-PRG-005" # The Placebo Onboarding (Both rely on anticipation engineering)
+
+conflicts_with:
+  - "EXP-FRC-001" # Evolved UI (Rituals intentionally ADD a micro-dose of physical friction, breaking the 'absolute minimum' rule for specific high-value moments).
+
+implementation_targets:
+  frontend_components:
+    - "CommitmentSlider — a custom UI component requiring a deliberate left-to-right drag with haptic feedback to execute an action"
+    - "HoldToLockMic — standard Telegram audio UX that requires physical sustained touch"
+  backend_rules:
+    - "None — this is purely a frontend tactile intervention."
+  telemetry_events:
+    - "commitment_swipe_completed"
+    - "aborted_swipes"
+  experiments:
+    - "A/B test: Tap to submit vs Swipe to submit on final checkout conversion rate"
+
+experience_metrics:
+  entry_rate: 0.8
+  react_rate: 0.9
+  completion_rate: 0.9
+  share_rate: 0.6
+  comeback_rate: 0.8
+  day7_retention: 0.8
+  upgrade_signal: 0.9
+
+crosswalk_id: "XW-FRC-RITUAL"
+crosswalk_note: >
+  This differentiates CCP from TikTok. We are not mindless; we are deliberate.

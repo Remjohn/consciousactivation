@@ -1,0 +1,44 @@
+schema: ../../schemas/subsystem-rules.schema.json
+schema_id: cmf.subsystem.rules/v1
+subsystem_id: CS-024
+enabled: true
+priority:
+  tier: encoding
+  rank: 2
+enforcement:
+  mode: revise_on_fail
+  default_result: REVISE
+applies_to:
+  containers:
+    - CHALLENGE
+    - TURNING_POINT
+    - RESOLUTION
+    - VISION
+  stages:
+    - scene_builder
+    - editor_regeneration
+coordinates_with:
+  - CS-008
+  - CS-023
+  - CS-027
+block_conditions:
+  - metric: scene_cls
+    operator: gte
+    value: 3
+    when:
+      metric: median_shot_duration_seconds
+      operator: lt
+      value: 3.0
+warn_conditions:
+  - metric: scene_cls
+    operator: lte
+    value: 2
+    when:
+      metric: median_shot_duration_seconds
+      operator: gt
+      value: 3.0
+route_hints:
+  high_arousal_strategy:
+    - extend_hold
+    - reduce_cut_count
+    - simplify_visual_load

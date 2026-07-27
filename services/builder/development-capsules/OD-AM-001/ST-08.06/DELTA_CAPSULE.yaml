@@ -1,0 +1,254 @@
+schema_version: cmf-builder-od-am-001-delta-capsule/v1
+capsule_id: OD-AM-001:ST-08.06:EVIDENCE_BACKED_DEVELOPMENT_AUTHORIZATION
+preparation_status: VALIDATED_ACTIVE_IMPLEMENTATION
+amendment:
+  id: OD-AM-001
+  receipt_path: docs/implementation/offline-development/OD_AM_001_RECEIPT.yaml
+  receipt_sha256: cb6b1e6b15a6d2bde05ebf5858524c9670306ee382fa4fdc97a44590846bbf44
+story:
+  id: ST-08.06
+  title: Issue Evidence-Backed Readiness and Authorization Receipts
+  development_mode: OD_AM_001_OFFLINE_DEVELOPMENT
+  unchanged_primary_outcome: implementation teams know exactly what is authorized and why
+  primary_obligations:
+    - AG-015
+    - AG-022
+    - D027
+    - D033
+    - FR-133
+    - FR-134
+    - FR-135
+    - FR-136
+    - HG-009
+    - HG-010
+  primary_obligation_count: 10
+  obligation_status_after_implementation: PARTIALLY_IMPLEMENTED_DEVELOPMENT_AUTHORIZATION_ONLY
+dependency:
+  story_id: ST-08.05
+  required_receipt_type: ImplementationCompletionReceipt
+  required_receipt_path: development-capsules/OD-AM-001/ST-08.05/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  required_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_status: IMPLEMENTED_DEVELOPMENT_PASS
+  current_receipt_sha256: 71d764be9fc498680e6fd6022484fd380ae5cf8aa0dfcc35c5de54430cea9e3a
+  preparation_capsule:
+    path: development-capsules/OD-AM-001/ST-08.05/DELTA_CAPSULE.yaml
+    sha256: edb160eb3fd2f5c1243a72bb75ec39dccbf149ec6090e5e4cb22677aa9862930
+    validation: PASS_IMPLEMENTED_REFERENCE
+dependency_gate:
+  satisfied: 1
+  required: 1
+  verdict: PASS
+  missing: []
+authority_sources:
+  - Activative Intelligence Constitution V1.1
+  - Builder PRD V1.2
+  - docs/planning/STORY_INVENTORY.yaml#ST-08.06
+  - docs/tech-specs/specs/TS-13-IMPLEMENTATION-AUTHORIZATION-AND-DEVELOPMENT-CAPSULE.md
+  - governance/READINESS_HARD_GATES.yaml
+  - governance/ARCHITECTURAL_PROHIBITIONS.json
+  - docs/implementation/offline-development/OD_AM_001.yaml
+contract_references:
+  planned_handles:
+    - EvaluationCase
+    - ConstitutionalEvaluationReceipt
+    - ConstitutionalReadinessReceipt
+    - RepairReceipt
+  schemas:
+    - docs/contracts/schemas/constitutional-evaluation.schema.json
+    - docs/contracts/schemas/conversational-expression.schema.json
+  ownership_rule: existing contracts and schemas are referenced without local fork or authority expansion
+two_gate_boundary:
+  implementation_gate:
+    receipt_type: ImplementationCompletionReceipt
+    maximum_scope: OD_AM_001_OFFLINE_DEVELOPMENT
+    may_authorize: bounded Builder-owned development or explicitly governed prototype work only
+  evidence_gate:
+    status: EVIDENCE_AND_HUMAN_POLICY_GATES_REMAIN_OPEN
+    receipt_type: EvidenceClosureReceipt
+    may_be_closed_by_this_implementation: false
+  prohibited_equivalence:
+    - development_authorization_is_not_production_authorization
+    - implementation_completion_is_not_full_Story_completion
+    - document_or_schema_presence_is_not_readiness
+    - prototype_success_is_not_certification
+implementation_scope_after_dependency_pass:
+  - deterministic evidence-backed development readiness evaluation over exact immutable Builder artifacts and receipts
+  - typed bounded-development, prototype-only and blocking authorization outcomes
+  - immutable readiness and authorization receipts exposing passed, failed, unresolved and not-applicable gates
+  - exact scope, limitations, restrictions, authority, signatories, evidence return and invalidation conditions
+  - payload-safe idempotent issuance, revocation, invalidation and historical reproduction
+readiness_dimensions:
+  required:
+    - evidence_saturation
+    - atomicity
+    - constitutional_authority
+    - Harness_IR_consistency
+    - phases
+    - contexts
+    - contracts
+    - modules
+    - skill_maturity
+    - benchmark_results
+    - repair_coverage
+    - observability
+    - budgets
+    - target_specific_requirements
+  rules:
+    - every dimension has an exact evidence identity, status, limitation and failure context
+    - document, file, schema or test presence alone cannot pass a dimension
+    - NOT_APPLICABLE requires an authoritative target-profile basis
+    - unresolved or missing evidence remains visibly blocking
+    - one failed mandatory hard gate forces a blocking outcome
+hard_gate_rules:
+  HG-009:
+    name: false_readiness_pass
+    failure_result: BLOCKED_FALSE_READINESS
+  HG-010:
+    name: binding_anti_goal_violation
+    failure_result: BLOCKED_ARCHITECTURE
+  non_waivable_by_agent: true
+  no_aggregate_or_document_count_compensation: true
+development_authorization_outcomes:
+  permitted:
+    - AUTHORIZED_FOR_OD_AM_001_DEVELOPMENT_IMPLEMENTATION
+    - AUTHORIZED_FOR_PROTOTYPE_ONLY
+    - NEEDS_RATIFICATION
+    - BLOCKED_EVIDENCE
+    - BLOCKED_SKILL_MATURITY
+    - BLOCKED_BENCHMARK
+    - BLOCKED_ARCHITECTURE
+    - BLOCKED_AUTHORITY
+    - BLOCKED_HARD_GATE
+  reserved_full_story_statuses_not_emittable:
+    - AUTHORIZED_FOR_IMPLEMENTATION
+    - PRODUCTION_READY
+    - CERTIFIED
+  rule: the outcome names its exact target profile, bounded scope, restrictions and unresolved gates
+prototype_only_receipt_requirements:
+  required_fields:
+    - empirical_question
+    - allowed_implementation_scope
+    - permitted_artifacts
+    - provisional_decisions
+    - required_evidence_return
+    - disposal_or_migration_policy
+    - budget_and_stop_conditions
+    - promotion_conditions
+    - expiry_or_completion_condition
+    - prohibited_claims
+  production_migration_requires_new_authority: true
+exact_evidence_identity:
+  required_refs:
+    - Harness_IR_identity_version_and_hash
+    - source_lock_identity_version_and_hash
+    - category_constitution_and_profile_versions
+    - phases_contexts_contracts_and_modules
+    - skill_registry_package_maturity_and_necessity_receipts
+    - benchmark_corpus_rubric_evaluator_and_threshold_policy_receipts
+    - ST-08.03_scorecard_mutation_stability_and_hard_gate_receipts
+    - ST-08.04_diagnosis_and_repair_graph_receipts
+    - ST-08.05_repair_regression_invalidation_and_rollback_receipts
+    - waiver_ids_authority_scope_and_expiry
+    - compiler_and_Builder_versions
+    - observability_budget_and_target_requirement_receipts
+    - status_scope_restrictions_and_signatories
+  missing_or_hash_mismatched_ref: block issuance
+limitations_and_authority:
+  required_receipt_fields:
+    - evidence_limitations
+    - unresolved_blockers
+    - assumptions_and_NOT_APPLICABLE_bases
+    - allowed_and_prohibited_scope
+    - external_product_boundaries
+    - human_gates_preserved
+    - issuing_authority_identity_and_scope
+    - required_signatory_refs
+    - expiry_revocation_and_invalidation_conditions
+  human_gate_removal_without_governed_evidence: prohibited
+  external_authority_inference: prohibited
+invalidation_and_deterministic_issuance:
+  invalidate_when_any_changes:
+    - source_lock_or_Harness_IR
+    - category_or_profile
+    - phase_context_contract_or_module
+    - skill_or_maturity_evidence
+    - benchmark_rubric_evaluator_or_threshold_policy
+    - repair_or_regression_evidence
+    - waiver_authority_signatory_scope_or_expiry
+    - compiler_Builder_or_target_version
+    - hard_gate_status
+  invalidation_effect:
+    - prior receipt remains immutable historical evidence
+    - authorization becomes inactive for new work
+    - exact affected scope and rollback guidance are emitted
+    - re-evaluation requires a new immutable receipt
+  canonical_identity_rule: readiness and authorization receipts derive only from canonical governed content
+  repeat_command: identical payload returns original receipt without duplicate issuance
+  conflicting_command: reject atomically with zero receipt, event or command record
+  nondeterministic_identity_inputs_prohibited:
+    - wall_clock_time_unless_governed_input
+    - random_identifier
+    - absolute_machine_path
+    - environment_specific_value
+failure_and_authority_boundary:
+  reject:
+    - readiness_from_document_or_schema_completeness
+    - missing_threshold_represented_as_pass
+    - unresolved_blocker_hidden_or_waived_without_authority
+    - false_readiness_or_binding_anti_goal_failure
+    - authorization_without_exact_evidence_identity
+    - authorization_without qualified signatory authority
+    - removal_of_human_gate_for_automation_convenience
+    - production, release or certification authorization request
+  partial_state_on_failure: prohibited
+  external_runtime_transport_or_product_behavior: prohibited
+blocker_and_evidence_gates_remaining:
+  BD-004: EVIDENCE_PENDING
+  BD-008: EVIDENCE_PENDING
+  HD-006: HUMAN_POLICY_PENDING_REAL_HUMAN_REACTION_DATA_PROHIBITED
+  HD-007: HUMAN_POLICY_PENDING_CONVERSATIONAL_THRESHOLDS_AND_CERTIFICATION
+  cross_repository_dependencies:
+    ids: [XDEP-001, XDEP-002, XDEP-003, XDEP-004, XDEP-006]
+    status: AUTHORITY_OR_EXTERNAL_VALIDATION_REMAINS_EXTERNAL
+future_path_allowlist:
+  production_source:
+    - src/cmf_builder/evaluation/development_readiness.py
+  tests:
+    - tests/stories/st_08_06/test_evidence_backed_readiness.py
+    - tests/stories/st_08_06/test_development_authorization_receipts.py
+    - tests/stories/st_08_06/test_false_readiness_and_authority_boundaries.py
+    - tests/stories/st_08_06/test_invalidation_determinism_and_history.py
+  capsule_evidence:
+    - development-capsules/OD-AM-001/ST-08.06/DELTA_CAPSULE.yaml
+    - development-capsules/OD-AM-001/ST-08.06/TEST_RESULTS.json
+    - development-capsules/OD-AM-001/ST-08.06/FILE_CHANGE_MANIFEST.yaml
+    - development-capsules/OD-AM-001/ST-08.06/IMPLEMENTATION_COMPLETION_RECEIPT.yaml
+  mechanical_integrator_files:
+    - docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+prohibited_changes:
+  - every path not explicitly listed in future_path_allowlist
+  - shared run aggregates, ports, authority services, atomicity commands and repository adapters
+  - package exports and all __init__.py files
+  - exact-source architecture tests
+  - confirmed Stories, Epics, obligations, specifications, ADRs, schemas or historical receipts
+  - ST-08.05 implementation or completion evidence
+  - external runtime, transport, provider, model, credential, network or external-product behavior
+  - production authorization, release authorization, certification, publication or status-file mutation
+acceptance_after_dependency_pass:
+  - every readiness dimension and hard gate exposes exact evidence, status, limitation and failure context
+  - authorization cannot arise from document completeness, missing thresholds, unresolved blockers or anti-goal violations
+  - prototype-only receipts contain every required scope, evidence-return, disposal, budget and promotion condition
+  - exact Harness IR, source, category, profile, skill, benchmark, repair, compiler, status, scope and signatory identities are hash-bound
+  - any governed dependency change invalidates the active receipt while preserving historical bytes
+  - identical inputs produce byte-identical readiness and authorization receipts
+  - conflicting, unauthorized or production-authorizing requests fail atomically with zero partial state
+  - production readiness and certification remain false
+completion_semantics:
+  receipt_type: ImplementationCompletionReceipt
+  initial_status: NOT_ISSUED_DEPENDENCY_PENDING
+  may_unlock: ST-08.07_OD_AM_001_OFFLINE_DEVELOPMENT_ONLY_AFTER_INTEGRATOR_PASS
+  equivalent_to_StoryCompletionReceipt: false
+  production_authorization_issued: false
+  closes_external_evidence_gate: false
+  production_ready: false
+  certified: false

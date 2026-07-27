@@ -1,0 +1,33 @@
+schema_version: cmf-builder-story-contract/v1
+story_id: ST-01.03
+primary_epic: EP-01
+title: Index Every Evidence Specimen with Provenance
+active_mode: CATEGORY_NEUTRAL_EVIDENCE_INDEX
+classification: BUILDER_CORE
+status: READY_AUTHORIZED_BY_STANDING_CAMPAIGN
+primary_outcome: >-
+  Later Builder decisions can query a complete immutable inventory of every specimen
+  in the active Source Lock while distinguishing observation, governed status,
+  knowledge status and provenance.
+owned_obligations: [FR-014, FR-015, NFR-SCALE-001, NFR-TRACE-004]
+direct_dependencies: [ST-01.02:StoryCompletionReceipt]
+applicable_blockers: []
+inactive_conditional_blockers:
+  BD-004: activates_only_for_a_real_reference_profile_corpus
+  HD-006: activates_only_for_Human_Reaction_material
+  XDEP-001: constitutional_authority_is_referenced_not_modified
+  XDEP-004: conversational_sources_are_not_active
+  XDEP-006: external_product_execution_is_not_active
+implementation_owner: evidence_workspace_owner
+component_boundary:
+  owns:
+    - deterministic_specimen_inventory_from_the_active_SourceLock
+    - immutable_evidence_index_and_receipt_identity
+    - query_by_specimen_source_role_status_and_knowledge_status
+    - typed_rejection_atomic_commit_replay_and_invalidation
+  excludes:
+    - evidence_saturation_or_gap_resolution
+    - semantic_or_visual_inference
+    - external_product_or_runtime_behavior
+completion_gate: ST-01.03:StoryCompletionReceipt
+implementation_authorized: true

@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-003",
+  "name": "Gaze Direction Transfer",
+  "version": "1.0",
+  "priority_tier": "quality",
+  "research_basis": [
+    "Attention Capture",
+    "Social cueing research"
+  ],
+  "inputs": [
+    "eye_line_vector",
+    "overlay_coordinates",
+    "scene_intent",
+    "text_density",
+    "graphic_entry_timing"
+  ],
+  "outputs": [
+    "gaze_routing_instruction",
+    "transfer_confidence",
+    "verdict"
+  ],
+  "thresholds": {
+    "max_gaze_overlay_mismatch_degrees": 25,
+    "max_dense_overlay_blocks_with_direct_gaze": 1,
+    "direct_gaze_for_bonding": true,
+    "averted_gaze_for_instruction": true
+  },
+  "default_action_on_fail": "REVISE"
+}

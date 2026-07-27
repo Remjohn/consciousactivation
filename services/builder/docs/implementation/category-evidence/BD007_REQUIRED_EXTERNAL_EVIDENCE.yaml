@@ -1,0 +1,79 @@
+schema_version: cmf-builder-bd007-required-external-evidence/v1
+generated_on: "2026-07-16"
+blocker_id: BD-007
+status: REMAINS_BLOCKED_EXTERNAL_EVIDENCE
+not_required_for: ST-06.01_STRUCTURAL_UNCERTIFIED_CATEGORY_BINDING
+required_for:
+  - Format02_provider_comparison
+  - empirical_category_native_visual_parse_claim
+  - production_provider_selection
+  - visual_parse_production_threshold
+missing_inputs:
+  - id: BD007-IN-001
+    artifact: protected_Format02_case_manifest
+    accepted_forms: [yaml, json]
+    requirements:
+      - immutable_case_ids_and_SHA256_hashes
+      - governed_source_and_usage_authority
+      - no_guidance_controls
+      - real_protected_cases_not_synthetic_relabels
+  - id: BD007-IN-002
+    artifact: deterministic_normalization_and_geometry_baseline
+    accepted_forms: [Builder_owned_module_plus_test_receipt]
+    requirements:
+      - implementation_hash
+      - coordinate_and_geometry_contract
+      - deterministic_reproduction_receipt
+  - id: BD007-IN-003
+    artifact: provider_adapter_A
+    accepted_forms: [provider_neutral_adapter_module_plus_policy_manifest]
+    requirements:
+      - provider_and_model_identity
+      - immutable_version
+      - authorized_data_usage_and_privacy_policy
+      - typed_output_contract
+  - id: BD007-IN-004
+    artifact: provider_adapter_B
+    accepted_forms: [provider_neutral_adapter_module_plus_policy_manifest]
+    requirements:
+      - distinct_adapter_implementation_from_BD007-IN-003
+      - provider_and_model_identity
+      - immutable_version
+      - authorized_data_usage_and_privacy_policy
+      - typed_output_contract
+  - id: BD007-IN-005
+    artifact: protected_labels_and_independent_evaluator_policy
+    accepted_forms: [yaml, json, signed_receipt]
+    requirements:
+      - label_custodian
+      - access_policy
+      - evaluator_isolation
+      - rubric_identity_and_hash
+      - adjudication_and_disagreement_policy
+  - id: BD007-IN-006
+    artifact: repeated_provider_comparison_receipts
+    accepted_forms: [json, yaml]
+    requirements:
+      - exact_inputs_and_adapter_hashes
+      - deterministic_baseline_result
+      - at_least_two_adapter_results
+      - independent_scorecards
+      - confidence_cost_latency_and_failure_observations
+      - fresh_context_repeat_identity
+execution_contract:
+  commands:
+    - NormalizeSpecimen
+    - ParseVisualSyntax
+    - ParseTemporalSyntax
+    - InduceVisualGrammar
+    - EvaluateProviderComparison
+  exact_argument_and_output_contract: docs/implementation/category-evidence/BD007_COMPARISON_METHOD.yaml
+  executable_now: false
+  why_not: required_runner_adapters_corpus_and_protected_evaluation_assets_do_not_exist_as_governed_repository_evidence
+closure_rule: >-
+  Do not close the broader BD-007 provider-comparison scope until all missing inputs
+  are immutable, authority-valid, hash-verified and produce a complete comparison
+  receipt. Structural category registration is not a substitute.
+production_ready: false
+certified: false
+

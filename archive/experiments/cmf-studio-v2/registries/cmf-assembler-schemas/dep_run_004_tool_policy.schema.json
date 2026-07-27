@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-RUN-004",
+  "title": "Tool Policy",
+  "description": "FR-VID-12 §4 Stage 5 — Agent/profile-specific allowed tool categories and write scopes. Enforced by DamageControl.before_tool_call() as a hard gate before execution.",
+  "type": "object",
+  "required": ["policy_id", "description", "allowed_tool_categories", "allowed_write_scopes"],
+  "properties": {
+    "policy_id": {
+      "type": "string",
+      "description": "Unique policy identifier referenced by DEP-RUN-001 profiles and DEP-RUN-002 agent contracts."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this policy permits."
+    },
+    "applies_to_agent_types": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent types this policy applies to. If omitted, applies to all agents under the referencing profile."
+    },
+    "applies_to_profile_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["research", "composition", "validation", "production", "learning"]
+      },
+      "description": "Profile IDs this policy applies to."
+    },
+    "allowed_tool_categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["evidence", "composition", "validation", "production", "review", "learning"]
+      },
+      "minItems": 1,
+      "description": "Tool policy_tags (from DEP-RUN-003) that agents under this policy may invoke."
+    },
+    "denied_tool_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Explicit tool_id deny list. Overrides category-level allow."
+    },
+    "allowed_write_scopes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for filesystem paths agents may write to under this policy."
+    },
+    "allowed_memory_domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["working", "project", "composition", "production", "review", "learning"]
+      },
+      "description": "Memory domains agents may write to under this policy."
+    }
+  }
+}

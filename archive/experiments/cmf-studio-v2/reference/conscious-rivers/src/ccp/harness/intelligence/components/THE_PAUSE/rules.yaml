@@ -1,0 +1,26 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: THE_PAUSE
+enabled: true
+selection_priority:
+  tier: critical
+  rank: 16
+enforcement:
+  mode: require_when_signaled
+  default_result: REVIEW
+applies_to:
+  containers:
+    - RESOLUTION
+  stages:
+    - scene_builder
+    - editor_regeneration
+incompatibilities:
+  - dense_overlay
+warn_conditions:
+  - metric: cls_observed
+    operator: gt
+    value: 1.5
+route_hints:
+  select:
+    - use_after_cls4_peak
+    - preserve_silence_window

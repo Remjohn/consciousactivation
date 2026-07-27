@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/component-spec.schema.json",
+  "schema_id": "cmf.component.spec/v1",
+  "component_id": "THE_PAUSE",
+  "scene_number": 16,
+  "name": "The Pause",
+  "version": "1.0",
+  "function": "Silence container that lets residual arousal attach to stillness after the peak.",
+  "compatible_containers": [
+    "RESOLUTION"
+  ],
+  "cls_footprint": {
+    "typical": 1.0,
+    "max": 1.5
+  },
+  "required_asset_types": [
+    "A_ROLL",
+    "MEDITATIVE_B_ROLL"
+  ],
+  "template_variants": [
+    "lingering_look",
+    "meditative_broll",
+    "silent_hold"
+  ],
+  "effect_dependencies": [
+    "still_hold",
+    "silence_drop"
+  ],
+  "selection_signals": [
+    "golden_zone",
+    "excitation_transfer",
+    "low_cls_reset"
+  ],
+  "audio_profile": {
+    "score_role": "suspend",
+    "energy_band": "minimal",
+    "mode": "near_silent",
+    "prosodic_hint": "breath_and_room_tone",
+    "prosodic_contour_target": {
+      "pitch_shape": "level",
+      "stress_placement": "distributed",
+      "rate_wpm": { "min": 80, "max": 110 },
+      "emotional_register": "calm"
+    }
+  },
+  "fallback_behavior": "Use the lowest-CLS resolution beat available and strip motion and music."
+}

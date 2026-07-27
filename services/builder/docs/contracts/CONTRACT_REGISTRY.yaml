@@ -1,0 +1,117 @@
+schema_version: cmf-builder-contract-registry/v1
+status: DESIGN_CONTRACTS_ONLY_NOT_PRODUCTION_IMPLEMENTATION
+constitutional_authority: governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml
+default_failure: block_and_emit_typed_contract_violation
+contracts:
+  - contract_id: SharedActivativeCore
+    implementation_owner: builder_semantic_contracts
+    component_boundary: compile rich upstream semantic references into category-independent governed IR
+    schema: docs/contracts/schemas/shared-activative-core.schema.json#/$defs/SharedActivativeCore
+    failure_behavior: block on absent rich reference, unfrozen version, or wrong-reading locks
+    test_seam: rich-to-sparse lineage round trip
+    acceptance_criteria: all required rich references and hashes survive compilation
+    compatibility_effect: additive required V1.2 fields; V1.1 inputs require explicit upgrade
+  - contract_id: ActivativeIntelligencePack
+    implementation_owner: activation_compiler_source_product
+    component_boundary: Builder validates and references but does not author source truth
+    schema: docs/contracts/schemas/shared-activative-core.schema.json#/$defs/ActivativeIntelligencePack
+    failure_behavior: quarantine pack when authority, provenance, or version is missing
+    test_seam: immutable pack identity and provenance fixture
+    acceptance_criteria: pack carries source, identity, context, edge, reaction, visual, registry, and evaluation references
+    compatibility_effect: sparse tokens remain accepted only with frozen rich-object references
+  - contract_id: ConversationalActivationExpression
+    implementation_owner: builder_category_compiler
+    component_boundary: compile and validate profiles; external content harness executes them
+    schema: docs/contracts/schemas/conversational-expression.schema.json
+    failure_behavior: block scripted landing, missing consent policy, or missing lineage
+    test_seam: profile contract fixtures for public comment, reply DM, ReelCast, and interview
+    acceptance_criteria: all four profiles validate as structurally supported and UNCERTIFIED
+    compatibility_effect: additive fifth-category envelope
+  - contract_id: ActivativeCall
+    implementation_owner: builder_conversational_contracts
+    component_boundary: compile identity-pressure call intent; downstream harness performs the call
+    schema: docs/contracts/schemas/conversational-expression.schema.json#/$defs/ActivativeCall
+    failure_behavior: reject call without intended reaction, smallest commitment, or wrong-reading locks
+    test_seam: call-to-reaction lineage fixture
+    acceptance_criteria: call cites exact Activative Intelligence Pack and surface
+    compatibility_effect: new V1.2 contract
+  - contract_id: ReactionReceipt
+    implementation_owner: originating_content_harness
+    component_boundary: source product captures truth; Builder validates, references, and routes recompilation
+    schema: docs/contracts/schemas/conversational-expression.schema.json#/$defs/ReactionReceipt
+    failure_behavior: quarantine absent consent, provenance, transcript span, or withdrawal state
+    test_seam: consent and withdrawal fixture
+    acceptance_criteria: receipt links call, reaction evidence, time/source span, authority, and recompile disposition
+    compatibility_effect: new V1.2 contract; production use blocked on HD-006 policy values
+  - contract_id: ExpressionMoment
+    implementation_owner: originating_content_harness
+    component_boundary: source-backed segment is captured externally; Builder compiles routeable references
+    schema: docs/contracts/schemas/conversational-expression.schema.json#/$defs/ExpressionMoment
+    failure_behavior: reject untraceable, withdrawn, or non-routeable segment
+    test_seam: transcript-span and withdrawal propagation fixture
+    acceptance_criteria: every moment traces to a Reaction Receipt and exact evidence span
+    compatibility_effect: new V1.2 contract
+  - contract_id: IdentityDNAAmendmentProposal
+    implementation_owner: builder_semantic_contracts
+    component_boundary: Builder proposes; human identity authority alone approves merge
+    schema: docs/contracts/schemas/conversational-expression.schema.json#/$defs/IdentityDNAAmendmentProposal
+    failure_behavior: reject automatic merge or proposal without source receipts
+    test_seam: human approval authority negative test
+    acceptance_criteria: proposal remains pending until signed human disposition
+    compatibility_effect: additive proposal only; no automatic mutation of Identity DNA
+  - contract_id: VisualSemanticAndNarrativeHandoff
+    implementation_owner: builder_visual_contracts
+    component_boundary: compile activation-first visual meaning through narrative and feature contracts
+    schema: docs/contracts/schemas/visual-semantic-handoff.schema.json
+    failure_behavior: block missing semantic lineage or reordered chain
+    test_seam: end-to-end immutable handoff fixture
+    acceptance_criteria: semantic pack, narrative program, feature contracts, composition pack, syntax handoff, and T/V route all validate
+    compatibility_effect: enriches existing downstream handoff without implementing editor runtime
+  - contract_id: TVRouteRequest
+    implementation_owner: builder_visual_contracts
+    component_boundary: request typed somatic route; downstream visual system resolves execution
+    schema: docs/contracts/schemas/visual-semantic-handoff.schema.json#/$defs/TVRouteRequest
+    failure_behavior: block composition handoff without beat-to-route lineage
+    test_seam: T/V route coverage fixture
+    acceptance_criteria: every routed beat cites semantic and narrative source refs
+    compatibility_effect: additive V1.2 field required for aligned visual handoffs
+  - contract_id: DelegationHandoff
+    implementation_owner: builder_target_compiler
+    component_boundary: emit contract only; Delegation Protocol and Visual Asset Editor execute externally
+    schema: docs/contracts/schemas/visual-semantic-handoff.schema.json#/$defs/DelegationHandoff
+    failure_behavior: reject mutable meaning, absent version pins, or execution capability inside Builder
+    test_seam: external-runtime boundary contract test
+    acceptance_criteria: handoff is schema-valid, content-addressed, non-mutating, and executable only downstream
+    compatibility_effect: enriched contract snapshot; no external runtime implementation
+  - contract_id: ConstitutionalEvaluationReceipt
+    implementation_owner: builder_evaluation_orchestrator
+    component_boundary: aggregate layer-owned results; protected case governance remains human-controlled
+    schema: docs/contracts/schemas/constitutional-evaluation.schema.json#/$defs/ConstitutionalEvaluationReceipt
+    failure_behavior: any non-compensable failure blocks promotion
+    test_seam: hard-gate non-compensation fixture
+    acceptance_criteria: activation, reaction, expression, visual, lineage, wrong-reading, and boundary dimensions are explicit
+    compatibility_effect: extends BD-008; thresholds and protected conversational cases remain pending HD-007
+  - contract_id: ConstitutionalReadinessReceipt
+    implementation_owner: builder_readiness_service
+    component_boundary: derives readiness from exact evidence and hard gates; never from document completeness
+    schema: docs/contracts/schemas/constitutional-evaluation.schema.json#/$defs/ConstitutionalReadinessReceipt
+    failure_behavior: emit FAIL when HG-015 or any required evidence is absent
+    test_seam: false-PASS rejection fixture
+    acceptance_criteria: receipt pins all contract, schema, evaluator, corpus, and gate versions
+    compatibility_effect: adds HG-015 evidence and keeps existing gates
+  - contract_id: ControlTowerConstitutionalProjection
+    implementation_owner: builder_control_tower_projection
+    component_boundary: read-only event-derived projection; never authoritative state
+    schema: docs/contracts/schemas/constitutional-evaluation.schema.json#/$defs/ControlTowerConstitutionalProjection
+    failure_behavior: mark stale or unavailable; never synthesize missing authority
+    test_seam: event-replay projection fixture
+    acceptance_criteria: shows category/profile, semantic lineage, receipts, wrong-reading locks, gates, and external handoffs
+    compatibility_effect: additive projection fields; approved routes and authority remain unchanged
+  - contract_id: AssetDemandSemanticLineage
+    implementation_owner: builder_asset_demand_compiler
+    component_boundary: compile demand from visual semantics and narrative; editor owns asset production
+    schema: docs/contracts/schemas/visual-semantic-handoff.schema.json#/$defs/AssetDemand
+    failure_behavior: reject demand without source semantic and narrative refs
+    test_seam: demand-to-composition lineage fixture
+    acceptance_criteria: no demand can invent meaning or execute editor behavior
+    compatibility_effect: extends ADR-018 contract shape without changing its accepted boundary

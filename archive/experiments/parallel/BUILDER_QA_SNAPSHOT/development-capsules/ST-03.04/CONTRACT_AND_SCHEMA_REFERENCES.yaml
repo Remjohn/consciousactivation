@@ -1,0 +1,50 @@
+schema_version: cmf-builder-capsule-contract-references/v1
+story_id: ST-03.04
+input_contracts:
+  - {id: HarnessIR, version: cmf-builder-harness-ir/v1@1.0.0, owner: Builder, source: src/cmf_builder/domain/harness_ir.py, mutation: prohibited}
+  - {id: ST-03.03:StoryCompletionReceipt, sha256: 332675cc8878c9f168942a8ed6b33d04e27341953f591a172a22e6a5fd4df418, canonical_payload_sha256: 49f1c7a43ab1d211534efb663fa45e3fae1e562d6ee18294ca77dcefaa1d4e03}
+new_typed_contracts:
+  - GeneratedArtifact
+  - ArtifactDependencySelector
+  - ReproducibleBuildConfig
+  - ArtifactManifest
+  - ArtifactSetCompilationReceipt
+  - ArtifactDriftReport
+  - ArtifactSetInvalidation
+artifact_inventory:
+  human_markdown:
+    - human/product.md
+    - human/syntax.md
+    - human/activative-program.md
+    - human/runtime-architecture.md
+    - human/skill-system.md
+    - human/evaluation.md
+    - human/repair.md
+    - human/handoff.md
+  openspec_governed_JSON_views:
+    - openspec/change.json
+    - openspec/harness-ir-view.schema.json
+    - openspec/implementation-governance.json
+  machine_JSON_views:
+    - machine/registry-view.json
+    - machine/contract-view.json
+    - machine/graph-view.json
+    - machine/skill-manifest-view.json
+    - machine/evaluation-manifest-view.json
+    - machine/repair-policy-view.json
+    - machine/dashboard-config-view.json
+    - machine/fixture-view.json
+    - machine/traceability-map.json
+    - machine/implementation-ticket-view.json
+manifest_contract:
+  schema_id: cmf-builder-artifact-manifest/v1
+  schema_version: 1.0.0
+  required_identity: [manifest_id, ir_id, ir_hash, compiler_id, compiler_version, config_hash, target_profile_ref, source_lock_ref, generation_timestamp, artifacts, manifest_hash]
+  artifact_required_identity: [path, media_type, authority_class, source_ir_hash, source_node_paths, compiler_id, compiler_version, config_hash, generation_timestamp, content_hash]
+  authority_class: GENERATED_AUTHORITATIVE_VIEW_SUBORDINATE_TO_HARNESS_IR
+  nondeterminism_exceptions: []
+schema_files_modified: []
+external_contracts_required: []
+Delegation_pin_required: false
+VAE_contract_required: false
+OpenSpec_runtime_or_dependency_required: false

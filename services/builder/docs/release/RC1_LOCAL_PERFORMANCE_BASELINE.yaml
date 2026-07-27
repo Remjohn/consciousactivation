@@ -1,0 +1,28 @@
+schema_version: cmf-builder-rc1-local-performance-baseline/v1
+verdict: PASS_LOCAL_SYNTHETIC_NOT_PRODUCTION_BASELINE
+environment:
+  python_version: "3.12.0"
+  execution_mode: PYTHONPATH_SRC_SOURCE_TREE
+fixtures:
+  generic_manifest: tests/fixtures/productization/manifests/generic_text_summary.json
+  activative_manifest: tests/fixtures/productization/manifests/activative_expression.json
+measurements_ms:
+  cold_source_service_startup: 822.809
+  generic_ingest: 359.559
+  generic_harness_build: 324.631
+  generic_inspect: 7.05
+  generic_receipt_export: 8.205
+  activative_ingest: 311.55
+  activative_harness_build: 354.588
+  activative_inspect: 9.04
+  activative_receipt_export: 9.556
+outputs:
+  generic_export_bytes: 4853
+  activative_export_bytes: 8398
+budget_status:
+  local_timeout_seconds_per_command: 180
+  cancellation_behavior: COVERED_BY_EXISTING_WORKFLOW_REGRESSION
+  partial_result_behavior: FAIL_CLOSED_BY_COMMAND_RECEIPTS
+limitations:
+  - Measurements are local synthetic source-tree checks, not production performance evidence.
+

@@ -1,0 +1,25 @@
+schema: ../../schemas/component-rules.schema.json
+schema_id: cmf.component.rules/v1
+component_id: THE_COMMUNITY
+enabled: true
+selection_priority:
+  tier: premium
+  rank: 15
+enforcement:
+  mode: allow_with_checks
+  default_result: ALLOW
+applies_to:
+  containers:
+    - VISION
+  stages:
+    - scene_builder
+incompatibilities:
+  - generic_stock_belonging
+warn_conditions:
+  - metric: tribe_specificity_score
+    operator: lt
+    value: 0.75
+route_hints:
+  select:
+    - use_when_social_identity_is_the_conversion lever
+    - use_when_belonging_visuals_are_specific

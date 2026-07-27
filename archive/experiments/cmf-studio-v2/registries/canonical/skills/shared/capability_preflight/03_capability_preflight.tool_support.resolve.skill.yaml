@@ -1,0 +1,20 @@
+id: capability_preflight.tool_support.resolve
+version: "1.0.0"
+status: active
+owner_agent: capability_preflight_agent
+skill_type: deterministic_plus_pydantic
+purpose: "Check provider/runtime/tool availability before real execution."
+inputs:
+  - PipelineId
+  - Provider configuration status
+  - Runtime configuration status
+outputs:
+  - CapabilityPreflightReport
+  - ProviderMenuSummary
+  - RuntimeAvailabilityReport
+hard_gates:
+  - "Do not call providers."
+  - "Do not call runtimes."
+  - "Do not infer configured secrets."
+  - "Batch is blocked until sample approval when sample_required=True."
+  - "Missing required capabilities block the pipeline."

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schemas/subsystem-config.schema.json",
+  "schema_id": "cmf.subsystem.config/v1",
+  "subsystem_id": "CS-001",
+  "name": "First Frame Imprint",
+  "version": "1.0",
+  "priority_tier": "survival",
+  "research_basis": [
+    "Attention Capture",
+    "LC4MP"
+  ],
+  "inputs": [
+    "first_frame_image",
+    "focal_element_count",
+    "initial_cls",
+    "dominant_element_vertical_position_pct",
+    "competing_text_block_count",
+    "ui_overlap"
+  ],
+  "outputs": [
+    "verdict",
+    "focal_confidence_score",
+    "violations"
+  ],
+  "thresholds": {
+    "imprint_window_ms": 400,
+    "required_focal_element_count": 1,
+    "max_initial_cls": 2,
+    "preferred_vertical_band_pct": {
+      "min": 15,
+      "max": 40
+    },
+    "max_competing_text_blocks": 0,
+    "allow_ui_overlap": false
+  },
+  "default_action_on_fail": "BLOCK"
+}
