@@ -1,5 +1,5 @@
 from __future__ import annotations
-from fastapi import Request
+from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from ca_contracts import utc_now_rfc3339
@@ -27,6 +27,18 @@ def not_found_handler(request: Request, exc: Exception) -> JSONResponse:
             service=service,
             timestamp=utc_now_rfc3339(),
         ).model_dump(),
+    )
+
+
+def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    # 404s are routed to not_found_handler via status-code registration and
+    # always emit the global NOT_FOUND envelope. Everything else falls through
+    # to FastAPI's default behaviour, which wraps `detail` in {"detail": ...}
+    # -- whether the route supplied a string or a structured dict. This
+    # matches the API-007 / FastAPI convention used across the rest of the API.
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
     )
 
 

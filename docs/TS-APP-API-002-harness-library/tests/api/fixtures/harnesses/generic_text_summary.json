@@ -1,0 +1,32 @@
+{
+  "manifest_id": "operator-manifest-generic-summary",
+  "manifest_version": "1.0.0",
+  "task_id": "generic_text_summary_v1",
+  "mode": "generic",
+  "task": {
+    "goal": "Summarize governed plain text without changing its stated meaning.",
+    "success_condition": "Return one concise summary that preserves every declared constraint.",
+    "atomic_boundary": "One UTF-8 source document becomes one UTF-8 summary document.",
+    "input_contract": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1}
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["summary"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1}
+      }
+    },
+    "required_context": ["source_text", "declared_constraints"],
+    "capability_requirements": ["governed_text_read", "deterministic_contract_validation"],
+    "acceptance_tests": ["summary_is_non_empty", "declared_constraints_are_preserved"],
+    "authority_ref": "builder-prd@1.2#sha256:11445848904b61a72fbe500f6a184084e153419a2844243c0bca5f31ef87506c",
+    "provenance_refs": [
+      "operator-source@1.0.0#sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    ]
+  }
+}
