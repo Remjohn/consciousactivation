@@ -173,6 +173,87 @@ export interface HarnessLibrarySearch {
   readonly sourceCategory?: string;
 }
 
+// ---------------------------------------------------------------------------
+// Campaign API types — mirrors TS-APP-API-004 §6 field-for-field.
+// These are API-specific response/request shapes not present in domain.ts.
+// ---------------------------------------------------------------------------
+
+import type {
+  CampaignOrder,
+  CampaignState,
+  CampaignLifecycleState,
+  AutonomyMode,
+  OutputTarget,
+} from "@ca/studio/domain";
+
+export interface CampaignSummary {
+  readonly campaign_id: string;
+  readonly order_id: string;
+  readonly workspace_id: string;
+  readonly project_id: string;
+  readonly category_id: string;
+  readonly lifecycle_state: CampaignLifecycleState;
+  readonly autonomy_mode: AutonomyMode;
+  readonly output_target_count: number;
+  readonly budget_units: number;
+  readonly version: number;
+}
+
+export interface CampaignDetailResponse {
+  readonly order: CampaignOrder;
+  readonly state: CampaignState;
+  readonly source_derivative_eligible: boolean;
+  readonly source_lifecycle_state: string;
+  readonly pipeline_ingestion_status: "NOT_YET_TRIGGERED";
+  readonly idempotent_replay: boolean;
+}
+
+export interface CampaignCreateRequest {
+  readonly idempotency_key: string;
+  readonly workspace_id: string;
+  readonly project_id: string;
+  readonly source_package_id: string;
+  readonly harness_definition_id: string;
+  readonly category_id: string;
+  readonly format_profile_id: string;
+  readonly objective: string;
+  readonly initial_seed: string;
+  readonly taste_direction: string[];
+  readonly output_targets: OutputTarget[];
+  readonly budget_units: number;
+  readonly deadline_utc: string | null;
+  readonly autonomy_mode: AutonomyMode;
+  readonly operator_id: string;
+}
+
+// ---------------------------------------------------------------------------
+// Interview API types — mirrors TS-APP-API-003 §6 exactly.
+// ---------------------------------------------------------------------------
+
+export interface ImportInterviewResponse {
+  readonly package_id: string;
+  readonly revision: number;
+  readonly lifecycle_state: string;
+  readonly admission_mode: "IMPORTED" | "BRIEF_LED";
+  readonly derivative_eligible: boolean;
+  readonly planning_lineage: Record<string, unknown>;
+  readonly word_count: number;
+  readonly phrase_count: number;
+  readonly shot_count: number;
+  readonly keyframe_count: number;
+  readonly idempotent_replay: boolean;
+}
+
+export interface InterviewStatusResponse {
+  readonly package_id: string;
+  readonly revision: number;
+  readonly lifecycle_state: string;
+  readonly admission_mode: "IMPORTED" | "BRIEF_LED";
+  readonly derivative_eligible: boolean;
+  readonly word_count?: number;
+  readonly phrase_count?: number;
+}
+
 // Re-export of the Studio domain types this scaffold exists to make available.
 // No modification. See TS-APP-UI-001 §3 ("consumed by source import").
 export type {

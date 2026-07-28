@@ -85,6 +85,16 @@ async def lifespan(app: FastAPI):
     app.state.builder_repository = builder_repository
     logger.info("builder service initialised: %s", db_path / "builder.db")
 
+    # Studio bridge (TS-APP-API-006). A per-call Node subprocess bridge to the
+    # built services/studio/dist/rpc.js entrypoint. The bridge object is cheap
+    # to construct (no process is spawned until `call()` is invoked); it is held
+    # on app.state purely so the dependency can return a shared instance.
+    from api.services.studio_bridge import StudioBridge
+    app.state.studio_bridge = StudioBridge(rpc_entrypoint=config.ca_studio_rpc_entrypoint)
+    logger.info(
+        "studio bridge initialised: %s", config.ca_studio_rpc_entrypoint
+    )
+
     yield  # server runs here
 
     # --- shutdown ---
@@ -119,3 +129,7 @@ app.include_router(__import__("api.routers.air", fromlist=["router"]).router, pr
 from api.routers import harnesses; app.include_router(harnesses.router, prefix="/api/harnesses", tags=["harnesses"])
 from api.routers import interviews; app.include_router(interviews.router, prefix="/api/interviews", tags=["interviews"])  # noqa: E702
 from api.routers import campaigns; app.include_router(campaigns.router, prefix="/api/campaigns", tags=["campaigns"])
+from api.websockets import pipeline_status; app.include_router(pipeline_status.router, prefix="/api", tags=["pipeline-status"])  # noqa: E702
+# Wave 3 (TS-APP-API-006): Revision and ship routers
+from api.routers import revisions; app.include_router(revisions.router, prefix="/api", tags=["revisions"])  # noqa: E702
+from api.routers import ship; app.include_router(ship.router, prefix="/api", tags=["ship"])  # noqa: E702

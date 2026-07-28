@@ -9,7 +9,9 @@ class AppConfig:
     ca_data_root: Path
     ca_media_root: Path
     ca_delegation_root: Path
+    ca_studio_rpc_entrypoint: Path
     gateway_version: str = "0.1.0"
+    ws_poll_interval_ms: int = 750
 
 
 def load_config() -> AppConfig:
@@ -34,4 +36,17 @@ def load_config() -> AppConfig:
                 ),
             )
         ),
+        ca_studio_rpc_entrypoint=Path(
+            os.environ.get(
+                "CA_STUDIO_RPC_ENTRYPOINT",
+                str(
+                    Path(__file__).parent.parent
+                    / "services"
+                    / "studio"
+                    / "dist"
+                    / "rpc.js"
+                ),
+            )
+        ),
+        ws_poll_interval_ms=int(os.environ.get("WS_POLL_INTERVAL_MS", "750")),
     )

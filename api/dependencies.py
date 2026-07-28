@@ -1,5 +1,5 @@
 from __future__ import annotations
-from fastapi import Request
+from fastapi import Request, WebSocket
 from cmf_pipeline.application import PipelineApplication
 from cmf_activative_intelligence.application import AirApplication
 from cmf_vae.application import VAEApplication
@@ -13,6 +13,10 @@ from api.services.campaign_repository import CampaignRepository
 
 def get_pipeline(request: Request) -> PipelineApplication:
     return request.app.state.pipeline
+
+
+def get_pipeline_ws(websocket: WebSocket) -> PipelineApplication:
+    return websocket.app.state.pipeline
 
 
 def get_air(request: Request) -> AirApplication:
@@ -42,3 +46,19 @@ def get_builder_repository(request: Request) -> SQLiteProductizationRepository:
 
 def get_campaign_repository(request: Request) -> CampaignRepository:
     return request.app.state.campaign_repository
+
+
+def get_studio_bridge(request: Request) -> "StudioBridge":
+    """Return the shared StudioBridge bound at app startup (TS-APP-API-006).
+
+    The import is local-only to avoid importing the studio_bridge module at
+    module load — its only annotation use is the forward-quoted return type,
+    keeping `api.dependencies` importable in environments where Node is not
+    on PATH (e.g. unit-test shells that never call the bridge).
+    """
+    return request.app.state.studio_bridge
+
+
+# Forward reference for the get_studio_bridge return type only; imported here
+# (not at the top) so the dependency file stays importable without Node.
+from api.services.studio_bridge import StudioBridge  # noqa: E402
