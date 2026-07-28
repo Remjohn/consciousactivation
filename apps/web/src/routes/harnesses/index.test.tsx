@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { waitFor } from "@testing-library/react";
+import { waitFor, within } from "@testing-library/react";
 import { renderWithRouter } from "../../test/renderWithRouter";
+import { createUrlRouter } from "../../test/mockFetch";
 
 function makeHarness(overrides: Record<string, unknown>) {
   return {
@@ -37,6 +38,18 @@ const INELIGIBLE_HARNESS = makeHarness({
 });
 const NEUTRAL_HARNESS = makeHarness({ task_id: "generic_text_summary_v1" });
 
+// renderWithRouter mounts the full AppShell, whose TopBar calls useHealth() → an extra
+// fetch to /api/health on every render. Registering a health handler on the URL router
+// (returning a valid HealthResponse) means that fetch resolves cleanly instead of
+// stealing a mockResolvedValueOnce entry that a route test expected for its own fetch.
+const HEALTH_OK = {
+  status: "ok",
+  timestamp: "2026-07-01T00:00:00Z",
+  gateway_version: "0.1.0",
+  ca_data_root: "/state",
+  services: {},
+};
+
 describe("harnesses/index route", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
@@ -47,11 +60,12 @@ describe("harnesses/index route", () => {
   });
 
   it("empty library shows the empty state, not the error state", async () => {
-    // renderWithRouter mounts the full AppShell, whose TopBar calls useHealth() → an
-    // extra fetch. Return a fresh Response per fetch() call so a shared Response body
-    // is never read twice ("Body has already been read").
-    (fetch as ReturnType<typeof vi.fn>).mockImplementation(() =>
-      Promise.resolve(new Response(JSON.stringify([]), { status: 200 })),
+    vi.stubGlobal(
+      "fetch",
+      createUrlRouter({
+        "/api/health": { status: 200, body: HEALTH_OK },
+        "/api/harnesses": { status: 200, body: [] },
+      }),
     );
     const { findByText, queryByText } = renderWithRouter("/harnesses");
     expect(await findByText(/no harnesses in this workspace/i)).toBeInTheDocument();
@@ -59,11 +73,16 @@ describe("harnesses/index route", () => {
   });
 
   it("AC-001: renders a HarnessCard for every item the response returned", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => [ELIGIBLE_HARNESS, INELIGIBLE_HARNESS, NEUTRAL_HARNESS],
-    });
+    vi.stubGlobal(
+      "fetch",
+      createUrlRouter({
+        "/api/health": { status: 200, body: HEALTH_OK },
+        "/api/harnesses": {
+          status: 200,
+          body: [ELIGIBLE_HARNESS, INELIGIBLE_HARNESS, NEUTRAL_HARNESS],
+        },
+      }),
+    );
     const { findByText } = renderWithRouter("/harnesses");
     expect(await findByText("carousel_builder_v1")).toBeInTheDocument();
     expect(await findByText("supervisual_builder_v1")).toBeInTheDocument();
@@ -71,15 +90,20 @@ describe("harnesses/index route", () => {
   });
 
   it("AC-003: a 5xx LIBRARY_UNREADABLE response renders wording distinct from empty and unreachable", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: async () => ({
-        error_code: "LIBRARY_UNREADABLE",
-        message: "Harness library directory is unreadable: permission denied",
-        timestamp: "2026-07-01T00:00:00Z",
+    vi.stubGlobal(
+      "fetch",
+      createUrlRouter({
+        "/api/health": { status: 200, body: HEALTH_OK },
+        "/api/harnesses": {
+          status: 500,
+          body: {
+            error_code: "LIBRARY_UNREADABLE",
+            message: "Harness library directory is unreadable: permission denied",
+            timestamp: "2026-07-01T00:00:00Z",
+          },
+        },
       }),
-    });
+    );
     const { findByText, queryByText } = renderWithRouter("/harnesses");
     expect(await findByText(/could not be read/i)).toBeInTheDocument();
     expect(queryByText(/no harnesses in this workspace/i)).not.toBeInTheDocument();
@@ -87,7 +111,10 @@ describe("harnesses/index route", () => {
   });
 
   it("AC-003: an unreachable gateway renders wording distinct from empty and 5xx", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockRejectedValue(new TypeError("Failed to fetch"));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new TypeError("Failed to fetch")),
+    );
     const { findByText, queryByText } = renderWithRouter("/harnesses");
     expect(await findByText(/gateway unreachable/i)).toBeInTheDocument();
     expect(queryByText(/no harnesses in this workspace/i)).not.toBeInTheDocument();
@@ -95,11 +122,16 @@ describe("harnesses/index route", () => {
   });
 
   it("AC-004: direct navigation to a filtered URL reproduces the filtered view", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => [ELIGIBLE_HARNESS, INELIGIBLE_HARNESS, NEUTRAL_HARNESS],
-    });
+    vi.stubGlobal(
+      "fetch",
+      createUrlRouter({
+        "/api/health": { status: 200, body: HEALTH_OK },
+        "/api/harnesses": {
+          status: 200,
+          body: [ELIGIBLE_HARNESS, INELIGIBLE_HARNESS, NEUTRAL_HARNESS],
+        },
+      }),
+    );
     const { findByText, queryByText } = renderWithRouter("/harnesses?category=carousels");
     expect(await findByText("carousel_builder_v1")).toBeInTheDocument();
     await waitFor(() => expect(queryByText("supervisual_builder_v1")).not.toBeInTheDocument());
@@ -107,25 +139,28 @@ describe("harnesses/index route", () => {
   });
 
   it("AC-009: every card shows the correct client-computed EligibilityBadge with zero eligibility network calls", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => [ELIGIBLE_HARNESS, INELIGIBLE_HARNESS, NEUTRAL_HARNESS],
+    const fetchRouter = createUrlRouter({
+      "/api/health": { status: 200, body: HEALTH_OK },
+      "/api/harnesses": {
+        status: 200,
+        body: [ELIGIBLE_HARNESS, INELIGIBLE_HARNESS, NEUTRAL_HARNESS],
+      },
     });
-    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("fetch", fetchRouter);
 
-    const { findByText, findAllByText } = renderWithRouter("/harnesses?sourceCategory=carousels");
-    await findByText("carousel_builder_v1");
+    const { findByTestId } = renderWithRouter("/harnesses?sourceCategory=carousels");
+    // Use data-testid on each harness card + eligibility badge to avoid collisions with
+    // CategoryBadge (which also says "Category-neutral" for generic-mode harnesses) and
+    // HarnessFilterBar <option> elements.
+    const eligibleCard = await findByTestId("harness-card-def-carousel_builder_v1");
+    const ineligibleCard = await findByTestId("harness-card-def-supervisual_builder_v1");
+    const neutralCard = await findByTestId("harness-card-def-generic_text_summary_v1");
 
-    // Queries are scoped to <span> (Badge shells) so they don't also match the
-    // HarnessFilterBar's <option> labels ("Eligible/Not eligible/Category-neutral"
-    // appear only on Badges, but "Category-neutral" also appears as an <option>;
-    // scoping to the Card grid makes each assertion exact).
-    expect(await findAllByText("Eligible", { selector: "span" })).toHaveLength(1);
-    expect(await findAllByText("Not eligible", { selector: "span" })).toHaveLength(1);
-    expect(await findAllByText("Category-neutral", { selector: "span" })).toHaveLength(1);
+    expect(within(eligibleCard).getByTestId("eligibility-badge-ELIGIBLE")).toBeInTheDocument();
+    expect(within(ineligibleCard).getByTestId("eligibility-badge-INELIGIBLE")).toBeInTheDocument();
+    expect(within(neutralCard).getByTestId("eligibility-badge-NOT_APPLICABLE")).toBeInTheDocument();
 
-    const eligibilityCalls = fetchMock.mock.calls.filter((call) =>
+    const eligibilityCalls = fetchRouter.mock.calls.filter((call) =>
       String(call[0]).includes("/eligibility"),
     );
     expect(eligibilityCalls).toHaveLength(0);

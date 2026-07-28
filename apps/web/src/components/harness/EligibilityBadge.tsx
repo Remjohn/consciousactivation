@@ -14,5 +14,9 @@ const LABEL: Record<EligibilityStatus, string> = {
 };
 
 export function EligibilityBadge({ status }: { readonly status: EligibilityStatus }) {
-  return <Badge tone={TONE[status]}>{LABEL[status]}</Badge>;
+  return (
+    <Badge tone={TONE[status]} data-testid={`eligibility-badge-${status}`}>
+      {LABEL[status]}
+    </Badge>
+  );
 }

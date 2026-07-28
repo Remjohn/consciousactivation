@@ -49,7 +49,7 @@ function HarnessDetailPage() {
       </section>
 
       <ContractPanel input={data.input_contract} output={data.output_contract} />
-      <GovernancePanel binding={data.category_binding} />
+      {data.category_binding && <GovernancePanel binding={data.category_binding} />}
     </div>
   );
 }

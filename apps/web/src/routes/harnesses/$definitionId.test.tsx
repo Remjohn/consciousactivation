@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { waitFor } from "@testing-library/react";
 import { renderWithRouter } from "../../test/renderWithRouter";
+import { createUrlRouter } from "../../test/mockFetch";
 
 const GENERIC_DETAIL = {
   definition_id: "def-1",
@@ -66,6 +67,22 @@ const ACTIVATIVE_DETAIL = {
   },
 };
 
+const HEALTH_OK = {
+  status: "ok",
+  timestamp: "2026-07-01T00:00:00Z",
+  gateway_version: "0.1.0",
+  ca_data_root: "/state",
+  services: {},
+};
+
+const ELIGIBLE_RESPONSE = {
+  definition_id: "def-carousel",
+  harness_category: "carousels",
+  source_category: "carousels",
+  status: "ELIGIBLE",
+  reason: null,
+};
+
 describe("harnesses/$definitionId route", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
@@ -76,113 +93,106 @@ describe("harnesses/$definitionId route", () => {
   });
 
   it("AC-007: renders the full HarnessDetail contract", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => GENERIC_DETAIL,
-    });
+    vi.stubGlobal(
+      "fetch",
+      createUrlRouter({
+        "/api/health": { status: 200, body: HEALTH_OK },
+        "/api/harnesses/def-1": { status: 200, body: GENERIC_DETAIL },
+      }),
+    );
     const { findByText, getByText } = renderWithRouter("/harnesses/def-1");
 
-    // Header fields
     expect(await findByText("generic_text_summary_v1")).toBeInTheDocument();
     expect(getByText("Generic")).toBeInTheDocument();
     expect(getByText("Category-neutral")).toBeInTheDocument();
     expect(getByText(/Production-ready: No/)).toBeInTheDocument();
     expect(getByText(/Certified: No/)).toBeInTheDocument();
 
-    // What this Harness does section
     expect(getByText("What this Harness does")).toBeInTheDocument();
     expect(getByText("Summarize a body of text into a concise abstract.")).toBeInTheDocument();
     expect(getByText(/Success condition:.*under 280 characters/)).toBeInTheDocument();
     expect(getByText(/Atomic boundary:.*Single-pass/)).toBeInTheDocument();
 
-    // Contracts (ContractPanel renders two <pre> blocks)
     expect(getByText("Contracts")).toBeInTheDocument();
     expect(getByText("Input contract")).toBeInTheDocument();
     expect(getByText("Output contract")).toBeInTheDocument();
 
-    // Governance panel
     expect(getByText("Governance record")).toBeInTheDocument();
     expect(getByText(/category-neutral.*generic mode/i)).toBeInTheDocument();
   });
 
   it("AC-008: unknown definitionId shows a 404 panel, not a crash", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
-      ok: false,
-      status: 404,
-      json: async () => ({
-        error_code: "NOT_FOUND",
-        message: "No Harness with id 'nope' exists.",
-        timestamp: "2026-07-01T00:00:00Z",
+    vi.stubGlobal(
+      "fetch",
+      createUrlRouter({
+        "/api/health": { status: 200, body: HEALTH_OK },
+        "/api/harnesses/nope": {
+          status: 404,
+          body: {
+            error_code: "NOT_FOUND",
+            message: "No Harness with id 'nope' exists.",
+            timestamp: "2026-07-01T00:00:00Z",
+          },
+        },
       }),
-    });
+    );
     const { findByText, queryByText } = renderWithRouter("/harnesses/nope");
 
     expect(await findByText("Harness not found")).toBeInTheDocument();
-    expect(await findByText(/back to library/i)).toBeInTheDocument();
+    expect(await findByText(/Back to library/i)).toBeInTheDocument();
     expect(queryByText("What this Harness does")).not.toBeInTheDocument();
   });
 
   it("AC-010 (a): fires eligibility call when sourceCategory is present on an activative harness", async () => {
-    const fetchMock = vi.fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ACTIVATIVE_DETAIL,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          definition_id: "def-carousel",
-          harness_category: "carousels",
-          source_category: "carousels",
-          status: "ELIGIBLE",
-          reason: null,
-        }),
-      });
-    vi.stubGlobal("fetch", fetchMock);
+    const fetchRouter = createUrlRouter({
+      "/api/health": { status: 200, body: HEALTH_OK },
+      "/api/harnesses/def-carousel": { status: 200, body: ACTIVATIVE_DETAIL },
+      "/api/harnesses/def-carousel/eligibility": { status: 200, body: ELIGIBLE_RESPONSE },
+    });
+    vi.stubGlobal("fetch", fetchRouter);
 
     const { findByText } = renderWithRouter("/harnesses/def-carousel?sourceCategory=carousels");
     expect(await findByText("Eligible")).toBeInTheDocument();
 
-    const eligibilityCalls = fetchMock.mock.calls.filter((call) =>
+    const eligibilityCalls = fetchRouter.mock.calls.filter((call) =>
       String(call[0]).includes("/eligibility"),
     );
     expect(eligibilityCalls).toHaveLength(1);
   });
 
   it("AC-010 (b): does not fire eligibility call when sourceCategory is present on a generic harness", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => GENERIC_DETAIL,
+    const fetchRouter = createUrlRouter({
+      "/api/health": { status: 200, body: HEALTH_OK },
+      "/api/harnesses/def-1": { status: 200, body: GENERIC_DETAIL },
     });
-    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("fetch", fetchRouter);
 
-    const { findByText } = renderWithRouter("/harnesses/def-1?sourceCategory=carousels");
-    expect(await findByText("Category-neutral")).toBeInTheDocument();
+    const { findByTestId } = renderWithRouter("/harnesses/def-1?sourceCategory=carousels");
+    // Generic-mode detail: NOT_APPLICABLE rendered client-side, no eligibility fetch.
+    // Use data-testid to distinguish from CategoryBadge which also says "Category-neutral".
+    expect(await findByTestId("eligibility-badge-NOT_APPLICABLE")).toBeInTheDocument();
 
-    const eligibilityCalls = fetchMock.mock.calls.filter((call) =>
+    const eligibilityCalls = fetchRouter.mock.calls.filter((call) =>
       String(call[0]).includes("/eligibility"),
     );
     expect(eligibilityCalls).toHaveLength(0);
   });
 
   it("AC-010 (c): no eligibility UI and no eligibility call when no sourceCategory is present", async () => {
-    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => GENERIC_DETAIL,
+    const fetchRouter = createUrlRouter({
+      "/api/health": { status: 200, body: HEALTH_OK },
+      "/api/harnesses/def-1": { status: 200, body: GENERIC_DETAIL },
     });
-    const { findByText, queryByText } = renderWithRouter("/harnesses/def-1");
+    vi.stubGlobal("fetch", fetchRouter);
+
+    const { findByText, queryByTestId } = renderWithRouter("/harnesses/def-1");
 
     expect(await findByText("generic_text_summary_v1")).toBeInTheDocument();
-    expect(queryByText("Eligible")).not.toBeInTheDocument();
-    expect(queryByText("Not eligible")).not.toBeInTheDocument();
-    expect(queryByText("Category-neutral")).not.toBeInTheDocument();
+    expect(queryByTestId("eligibility-badge-ELIGIBLE")).not.toBeInTheDocument();
+    expect(queryByTestId("eligibility-badge-INELIGIBLE")).not.toBeInTheDocument();
+    expect(queryByTestId("eligibility-badge-NOT_APPLICABLE")).not.toBeInTheDocument();
 
-    const eligibilityCalls = (fetch as ReturnType<typeof vi.fn>).mock.calls.filter((call) =>
+    const eligibilityCalls = fetchRouter.mock.calls.filter((call) =>
       String(call[0]).includes("/eligibility"),
     );
     expect(eligibilityCalls).toHaveLength(0);

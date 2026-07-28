@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { fireEvent, waitFor } from "@testing-library/react";
 import { renderWithRouter } from "../../test/renderWithRouter";
+import { createUrlRouter } from "../../test/mockFetch";
 
 function makeHarness(overrides: Record<string, unknown>) {
   return {
@@ -39,16 +40,27 @@ const MANIFEST_ONLY_MATCH = makeHarness({
   manifest_id: "special_needle_manifest",
 });
 
+const HEALTH_OK = {
+  status: "ok",
+  timestamp: "2026-07-01T00:00:00Z",
+  gateway_version: "0.1.0",
+  ca_data_root: "/state",
+  services: {},
+};
+
+function harnessFetch() {
+  return createUrlRouter({
+    "/api/health": { status: 200, body: HEALTH_OK },
+    "/api/harnesses": {
+      status: 200,
+      body: [CAROUSEL, GENERIC_SUMMARY, MANIFEST_ONLY_MATCH],
+    },
+  });
+}
+
 describe("HarnessFilterBar (rendered via /harnesses)", () => {
   beforeEach(() => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        json: async () => [CAROUSEL, GENERIC_SUMMARY, MANIFEST_ONLY_MATCH],
-      }),
-    );
+    vi.stubGlobal("fetch", harnessFetch());
   });
 
   afterEach(() => {
