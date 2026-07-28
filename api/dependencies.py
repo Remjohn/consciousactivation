@@ -7,6 +7,9 @@ from conscious_activations_interview_expression.application import InterviewExpr
 from cmf_builder.application.productization_service import BuilderProductizationService
 from cmf_builder.adapters.sqlite_productization_repository import SQLiteProductizationRepository
 
+# Forward reference for type annotation only; import is deferred to lifespan()
+from api.services.campaign_repository import CampaignRepository
+
 
 def get_pipeline(request: Request) -> PipelineApplication:
     return request.app.state.pipeline
@@ -35,3 +38,7 @@ def get_builder_repository(request: Request) -> SQLiteProductizationRepository:
     BuilderProductizationService's private attributes. See api/routers/health.py.
     """
     return request.app.state.builder_repository
+
+
+def get_campaign_repository(request: Request) -> CampaignRepository:
+    return request.app.state.campaign_repository

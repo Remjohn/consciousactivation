@@ -46,13 +46,9 @@ describe("harnesses/index route", () => {
     vi.unstubAllGlobals();
   });
 
+  // Verbatim from TS-APP-UI-004 §10.
   it("empty library shows the empty state, not the error state", async () => {
-    // renderWithRouter mounts the full AppShell, whose TopBar calls useHealth() → an
-    // extra fetch. Return a fresh Response per fetch() call so a shared Response body
-    // is never read twice ("Body has already been read").
-    (fetch as ReturnType<typeof vi.fn>).mockImplementation(() =>
-      Promise.resolve(new Response(JSON.stringify([]), { status: 200 })),
-    );
+    (fetch as ReturnType<typeof vi.fn>).mockResolvedValue(new Response(JSON.stringify([]), { status: 200 }));
     const { findByText, queryByText } = renderWithRouter("/harnesses");
     expect(await findByText(/no harnesses in this workspace/i)).toBeInTheDocument();
     expect(queryByText(/could not be read/i)).not.toBeInTheDocument();
@@ -117,13 +113,9 @@ describe("harnesses/index route", () => {
     const { findByText, findAllByText } = renderWithRouter("/harnesses?sourceCategory=carousels");
     await findByText("carousel_builder_v1");
 
-    // Queries are scoped to <span> (Badge shells) so they don't also match the
-    // HarnessFilterBar's <option> labels ("Eligible/Not eligible/Category-neutral"
-    // appear only on Badges, but "Category-neutral" also appears as an <option>;
-    // scoping to the Card grid makes each assertion exact).
-    expect(await findAllByText("Eligible", { selector: "span" })).toHaveLength(1);
-    expect(await findAllByText("Not eligible", { selector: "span" })).toHaveLength(1);
-    expect(await findAllByText("Category-neutral", { selector: "span" })).toHaveLength(1);
+    expect(await findAllByText("Eligible")).toHaveLength(1);
+    expect(await findAllByText("Not eligible")).toHaveLength(1);
+    expect(await findAllByText("Category-neutral")).toHaveLength(1);
 
     const eligibilityCalls = fetchMock.mock.calls.filter((call) =>
       String(call[0]).includes("/eligibility"),

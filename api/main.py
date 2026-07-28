@@ -52,6 +52,14 @@ async def lifespan(app: FastAPI):
     app.state.interview = interview
     logger.info("interview service initialised: %s", db_path / "interview.db")
 
+    # Campaigns
+    from api.services.campaign_repository import CampaignRepository
+    campaign_db_path = db_path / "campaigns" / "campaigns.sqlite3"
+    campaign_repository = CampaignRepository(campaign_db_path)
+    campaign_repository.initialize()
+    app.state.campaign_repository = campaign_repository
+    logger.info("campaigns service initialised: %s", campaign_db_path)
+
     # Builder
     # TS-APP-API-001's Stage 3 sample code calls BuilderProductizationService()
     # with no arguments. The real class (services/builder/src/cmf_builder/
@@ -110,6 +118,4 @@ app.include_router(__import__("api.routers.air", fromlist=["router"]).router, pr
 # Wave 2 routers registered here as each spec is implemented:
 from api.routers import harnesses; app.include_router(harnesses.router, prefix="/api/harnesses", tags=["harnesses"])
 from api.routers import interviews; app.include_router(interviews.router, prefix="/api/interviews", tags=["interviews"])  # noqa: E702
-# app.include_router(campaigns.router, prefix="/api/campaigns", tags=["campaigns"])
-# app.include_router(revisions.router, prefix="/api/revisions", tags=["revisions"])
-# app.include_router(ship.router, prefix="/api/ship", tags=["ship"])
+from api.routers import campaigns; app.include_router(campaigns.router, prefix="/api/campaigns", tags=["campaigns"])
