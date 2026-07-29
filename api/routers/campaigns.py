@@ -489,7 +489,7 @@ def get_control_tower(
     try:
         result = bridge.call("build-control-tower-projection", tower_input)
     except StudioBridgeError as exc:
-        raise _error(422, exc.code, exc.message) from exc
+        raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
         logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
@@ -505,6 +505,12 @@ def get_timeline(
 ):
     """Return the timeline projection for a campaign."""
     from api.schemas.supervision import TimelineProjectionModel
+
+    # Verify the campaign exists; 404 otherwise.
+    try:
+        load_campaign(pipeline, campaign_id)
+    except StudioCampaignNotFound as exc:
+        raise _error(404, "CAMPAIGN_NOT_FOUND", str(exc)) from exc
 
     return TimelineProjectionModel(
         projection_id="timeline:" + campaign_id + ":placeholder",

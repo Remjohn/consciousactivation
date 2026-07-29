@@ -90,7 +90,7 @@ def compile_revision(
     try:
         result = bridge.call("compile-natural-language-revision", request_payload)
     except StudioBridgeError as exc:
-        raise _error(422, exc.code, exc.message) from exc
+        raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
         logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
@@ -116,7 +116,7 @@ def compile_direct_manipulation(
     try:
         result = bridge.call("compile-direct-manipulation", request_payload)
     except StudioBridgeError as exc:
-        raise _error(422, exc.code, exc.message) from exc
+        raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
         logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc

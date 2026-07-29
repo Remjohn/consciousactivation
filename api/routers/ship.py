@@ -52,7 +52,7 @@ def request_ship(
     try:
         result = bridge.call("evaluate-ship-request", request_payload)
     except StudioBridgeError as exc:
-        raise _error(422, exc.code, exc.message) from exc
+        raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
         logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
@@ -97,7 +97,7 @@ def get_audit_export(
     try:
         result = bridge.call("build-audit-export-manifest", manifest_input)
     except StudioBridgeError as exc:
-        raise _error(422, exc.code, exc.message) from exc
+        raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
         logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
