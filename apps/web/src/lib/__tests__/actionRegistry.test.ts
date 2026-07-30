@@ -19,7 +19,7 @@ describe("actionRegistry", () => {
     knownActions.forEach((action) => {
       expect(ACTION_REGISTRY[action]).toBeDefined();
       expect(ACTION_REGISTRY[action].label).toBeTruthy();
-      expect(ACTION_REGISTRY[action].icon).toBeTruthy();
+      expect(ACTION_REGISTRY[action].glyph).toBeTruthy();
     });
   });
 
@@ -62,8 +62,8 @@ describe("unknownActionEntry", () => {
     consoleSpy.mockRestore();
   });
 
-  it("should use HelpCircle icon for unknown actions", () => {
+  it("should use a fallback glyph for unknown actions", () => {
     const entry = unknownActionEntry("FUTURE_ACTION");
-    expect(entry.icon).toBeDefined();
+    expect(entry.glyph).toBeDefined();
   });
 });

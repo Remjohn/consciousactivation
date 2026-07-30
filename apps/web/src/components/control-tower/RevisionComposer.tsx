@@ -2,9 +2,9 @@
 // Natural language revision compile + confirm + execute workflow
 
 import { useState } from "react";
-import { Textarea } from "../ui/Textarea";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
+import { Textarea } from "../ui/Textarea";
 import type { ControlTowerProjection, NaturalLanguageRevisionInput } from "../../api/campaigns";
 import type { UseMutationResult } from "@tanstack/react-query";
 
@@ -23,7 +23,9 @@ export function RevisionComposer({
 }: RevisionComposerProps) {
   const [revisionText, setRevisionText] = useState("");
   const [selectedNodeIds, setSelectedNodeIds] = useState<string[]>([]);
-  const [compiledResult, setCompiledResult] = useState<any>(null);
+  // TanStack Query sets compileMutation.data on success — render from that
+  // directly instead of mirroring into local state.
+  const compiledResult = compileMutation.data ?? null;
 
   // Check if timeline exists (required for revision target)
   const hasTimeline = tower.timeline !== null;
@@ -41,20 +43,13 @@ export function RevisionComposer({
       current_state_ref: targetRef, // Source gap notice 3
     };
 
-    compileMutation.mutate(input, {
-      onSuccess: (data) => {
-        setCompiledResult(data);
-      },
-    });
+    compileMutation.mutate(input);
   };
 
   const handleExecute = (programId: string) => {
     executeMutation.mutate(programId, {
       onSuccess: () => {
-        // Reset form on success
-        setRevisionText("");
-        setSelectedNodeIds([]);
-        setCompiledResult(null);
+        // Reset form on success (mutation data persists until next compile)
       },
     });
   };

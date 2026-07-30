@@ -41,7 +41,7 @@ export function ActionRail({ tower, actionContext }: ActionRailProps) {
               }`}
               title={entry.implemented ? undefined : "Coming soon"}
             >
-              <entry.icon className="h-4 w-4" />
+              <span aria-hidden className="font-mono text-xs uppercase opacity-80">{entry.glyph}</span>
               {entry.label}
             </button>
           );

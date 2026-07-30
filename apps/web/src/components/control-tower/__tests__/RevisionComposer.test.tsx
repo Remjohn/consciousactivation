@@ -84,7 +84,7 @@ describe("RevisionComposer", () => {
     ).toBeInTheDocument();
   });
 
-  it("should enable Preview button when timeline exists", () => {
+  it("should enable Preview button when timeline exists and text is entered", () => {
     const tower = createMockTower(true);
 
     render(
@@ -95,6 +95,10 @@ describe("RevisionComposer", () => {
         executeMutation={executeMutationMock}
       />
     );
+
+    // Type some revision text — button is disabled without it
+    const textarea = screen.getByPlaceholderText(/trim the intro/);
+    fireEvent.change(textarea, { target: { value: "make the intro shorter" } });
 
     const previewButton = screen.getByText("Preview");
     expect(previewButton).not.toBeDisabled();

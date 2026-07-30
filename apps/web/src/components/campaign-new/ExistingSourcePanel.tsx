@@ -53,7 +53,7 @@ export function ExistingSourcePanel({ onReady }: ExistingSourcePanelProps) {
 
       {error && (
         <div className="mt-3 rounded border border-state-blocked/50 bg-state-blocked/10 p-3 text-sm text-state-blocked" data-testid="source-error">
-          {error.error_code}: {error.message}
+          {error.errorCode}: {error.message}
         </div>
       )}
 

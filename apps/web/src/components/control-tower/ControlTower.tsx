@@ -108,7 +108,7 @@ export function ControlTower({ tower }: ControlTowerProps) {
                 className="flex items-center justify-between rounded-lg bg-ca-surface-raised p-3"
               >
                 <div className="flex items-center gap-3">
-                  <Badge variant="outline">{artifact.media_type}</Badge>
+                  <Badge tone="muted">{artifact.media_type}</Badge>
                   <span className="text-sm text-ca-text-primary">
                     {(artifact.bytes / 1024 / 1024).toFixed(2)} MB
                   </span>

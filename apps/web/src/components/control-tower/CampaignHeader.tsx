@@ -26,7 +26,7 @@ export function CampaignHeader({ tower, campaignId }: CampaignHeaderProps) {
             campaign:{campaignId.slice(0, 8)}
           </span>
           <LifecycleBadge state={lifecycleState} />
-          <Badge variant="outline">{autonomyMode}</Badge>
+          <Badge tone="muted">{autonomyMode}</Badge>
         </div>
         <div className="text-sm text-ca-text-secondary">
           {surfaceTitle}

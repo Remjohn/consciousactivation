@@ -36,7 +36,7 @@ export function ExceptionQueue({ campaignId, packages, resolveMutation }: Except
     <div className="control-tower-card">
       <div className="control-tower-card-header">
         <span>Exceptions</span>
-        <Badge variant="danger">{packages.length}</Badge>
+        <Badge tone="danger">{packages.length}</Badge>
       </div>
 
       <div className="space-y-4">
@@ -51,7 +51,7 @@ export function ExceptionQueue({ campaignId, packages, resolveMutation }: Except
                   <span className="text-sm font-medium text-ca-text-primary">
                     {pkg.summary}
                   </span>
-                  <Badge variant="outline">{pkg.responsible_product}</Badge>
+                  <Badge tone="muted">{pkg.responsible_product}</Badge>
                 </div>
 
                 {/* Evidence refs */}

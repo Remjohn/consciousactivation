@@ -2,7 +2,6 @@
 // Main Control Tower page with tabs and full layout
 
 import { useState } from "react";
-import { useParams } from "@tanstack/react-router";
 import { CampaignHeader } from "../components/control-tower/CampaignHeader";
 import { RunProgressGauge } from "../components/control-tower/RunProgressGauge";
 import { ActionRail } from "../components/control-tower/ActionRail";
@@ -28,8 +27,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "revise", label: "Revise" },
 ];
 
-export function CampaignDetail() {
-  const { campaignId } = useParams({ from: "/campaigns/$campaignId" });
+export function CampaignDetail({ campaignId }: { campaignId: string }) {
   const queryClient = useQueryClient();
 
   // Tab state
