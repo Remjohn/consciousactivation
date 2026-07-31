@@ -254,6 +254,115 @@ export interface InterviewStatusResponse {
   readonly phrase_count?: number;
 }
 
+// ---------------------------------------------------------------------------
+// Interview Composer API types — mirrors TS-APP-COMPOSER-001 §6.2 exactly.
+// ---------------------------------------------------------------------------
+
+export interface RefModel {
+  readonly object_id: string;
+  readonly version: string;
+  readonly sha256: string;
+}
+
+export interface UploadedDocumentSummary {
+  readonly asset_id: string;
+  readonly sha256: string;
+  readonly bytes: number;
+  readonly media_type: string;
+  readonly original_filename: string;
+}
+
+export interface GuestResearchPackageResponse {
+  readonly research_package_id: string;
+  readonly revision: number;
+  readonly guest_name: string;
+  readonly source_urls: readonly string[];
+  readonly uploaded_documents: readonly UploadedDocumentSummary[];
+  readonly idempotent_replay: boolean;
+}
+
+export interface MatrixOfEdgingSeed {
+  readonly psychological_role: string;
+  readonly tension: string;
+  readonly activation_direction_set: readonly string[];
+  readonly pressure_path: string;
+  readonly stance: string;
+  readonly counteractivation_strategy: string;
+  readonly smallest_commitment: string;
+}
+
+export interface PlannedQuestionInput {
+  readonly question_text: string;
+  readonly activation_direction: string;
+  readonly psychological_role: string;
+}
+
+export interface HypothesisPipelineStatus {
+  readonly status: "BLOCKED_PENDING_GAP_007";
+  readonly iac_ref: RefModel | null;
+  readonly planned_aip_ref: RefModel | null;
+  readonly arm_receipt_ref: RefModel | null;
+  readonly blocked_reason: string;
+}
+
+export interface PlanningLineageTemplate {
+  readonly brief_ref: RefModel;
+  readonly planned_aip_ref: RefModel | null;
+  readonly iac_ref: RefModel | null;
+  readonly arm_receipt_ref: RefModel | null;
+  readonly planned_object_digests: Record<string, string> | null;
+}
+
+export interface ComposeBriefInput {
+  readonly research_package_id: string;
+  readonly brand_context_ref?: RefModel;
+  readonly voice_dna_ref?: RefModel;
+  readonly guest_name: string;
+  readonly tension_hypothesis: string;
+  readonly matrix_of_edging_seed: MatrixOfEdgingSeed;
+  readonly planned_questions: readonly PlannedQuestionInput[];
+  readonly expression_targets: readonly string[];
+  readonly operator_id: string;
+  readonly authority_scope: string;
+  readonly assertion_id: string;
+}
+
+export interface ActivativeInterviewBriefResponse {
+  readonly brief_id: string;
+  readonly revision: number;
+  readonly research_package_ref: RefModel;
+  readonly brand_context_ref: RefModel;
+  readonly voice_dna_ref: RefModel;
+  readonly guest_name: string;
+  readonly content_origin: "operator_supplied";
+  readonly tension_hypothesis: string;
+  readonly matrix_of_edging_seed: MatrixOfEdgingSeed;
+  readonly planned_questions: readonly PlannedQuestionInput[];
+  readonly expression_targets: readonly string[];
+  readonly hypothesis_pipeline_status: HypothesisPipelineStatus;
+  readonly planning_lineage_template: PlanningLineageTemplate;
+  readonly idempotent_replay: boolean;
+}
+
+export interface ComposeSessionInput {
+  readonly brief_id: string;
+  readonly recording_date: string | null;
+  readonly operator_id: string;
+  readonly authority_scope: string;
+  readonly assertion_id: string;
+}
+
+export interface ComposerSessionResponse {
+  readonly session_id: string;
+  readonly revision: number;
+  readonly brief_ref: RefModel;
+  readonly relationship_state_ref: RefModel;
+  readonly progression_ref: RefModel;
+  readonly stage: string;
+  readonly recording_date: string | null;
+  readonly idempotent_replay: boolean;
+}
+
 // Re-export of the Studio domain types this scaffold exists to make available.
 // No modification. See TS-APP-UI-001 §3 ("consumed by source import").
 export type {

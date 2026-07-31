@@ -1,22 +1,28 @@
 ---
 document_class: SPEC_GAP_LEDGER
 product: Conscious Activations
-version: 1.1
+version: 1.2
 status: ACTIVE
 prepared: 2026-07-25
-updated: 2026-07-27
+updated: 2026-07-31
 purpose: >
   Catalog every cross-spec gap discovered while reading TS-APP-API-001 through
-  TS-APP-UI-004 against each other. This is the same gap-closure pattern the
-  project already used once, in CONSCIOUS_ACTIVATIONS_PHASE_01_03_TRACEABILITY_
-  AND_GAP_CLOSURE_BUNDLE — applied here one layer earlier, at spec-authoring
-  time instead of after implementation. Read this before implementing ANY
-  spec that appears in the "blocks" column below.
+  TS-APP-UI-004 (and, as of v1.2, TS-APP-COMPOSER-001) against each other and
+  against the real, landed implementation. This is the same gap-closure
+  pattern the project already used once, in
+  CONSCIOUS_ACTIVATIONS_PHASE_01_03_TRACEABILITY_AND_GAP_CLOSURE_BUNDLE —
+  applied here one layer earlier, at spec-authoring time instead of after
+  implementation. Read this before implementing ANY spec that appears in the
+  "blocks" column below.
 scope_note: >
-  This ledger does not rewrite any of the twelve existing specs. Each one made
-  an honest, documented claim-ceiling decision when it hit a gap. This
+  This ledger does not rewrite any of the thirteen existing specs. Each one
+  made an honest, documented claim-ceiling decision when it hit a gap. This
   document exists so those decisions are visible in one place instead of
-  buried in ten different "Source Gap Notice" sections.
+  buried in eleven different "Source Gap Notice" sections. GAP-007 (added in
+  v1.2) is the first gap discovered by tracing a spec against the real,
+  already-implemented AIR/interview code rather than against another spec's
+  text — it will not be the last time that happens, since implementation
+  moved faster than this ledger's original GAP-001-through-006 pass assumed.
 ---
 
 # Conscious Activations — Spec Gap Ledger
@@ -377,6 +383,59 @@ browser only generates a random `idempotency_key` via
 
 ---
 
+## GAP-007 — No legitimate construction path exists for `planned_aip_ref` / `iac_ref` (pre-interview "planned" hypothesis pipeline)
+
+**Severity: HIGH — blocks Entry Point A ("Engineered Interview") end-to-end**
+
+**Discovered in:** TS-APP-COMPOSER-001, Section 1, Source gap notice A, while
+tracing `conscious_activations_interview_expression.domain.
+validate_planning_lineage()`'s `BRIEF_LED` requirements against the real,
+landed AIR implementation.
+
+**What happened:** `validate_planning_lineage()` requires `planned_aip_ref`
+and `iac_ref` (among others) for any Brief-led interview admission.
+`Phase9ActivativeService.compile_interview_asset_contract()` (which produces
+`iac_ref`) takes `planned_pack_ref` as a *required* parameter.
+`HypothesisService.store_planned_pack()` (which produces `planned_aip_ref`)
+cross-validates that `portfolio_ref`, `selected_hypothesis_ref`,
+`matrix_of_edging_ref`, and `role_tension_ref` **each resolve to a real,
+already-stored AIR object** of the matching type
+(`activation_hypothesis_portfolio`, `activation_hypothesis`,
+`matrix_of_edging`, `psychological_role_tension_contract`) — not merely a
+well-shaped ref. Building those four objects honestly requires genuine
+psychological reasoning about a specific guest, derived from research
+gathered before the interview happens. AIR's schema is honestly agnostic
+about whether that reasoning is interview-derived or research-derived
+(`activation_hypothesis.source_kind` includes `research_synthesis` and
+`operator_supplied` as first-class values, with `epistemic_state: planned`
+reserved for exactly this case) — so this is a real, doctrinally-intended
+gap, not a schema restriction, and not a hack waiting to be discovered. No
+spec can honestly manufacture that reasoning by inspection alone, and no
+spec should fabricate placeholder AIR objects merely to make
+`require_air_ref`'s existence check pass.
+
+**Resolution:** a future, AIR-scoped spec defining a bounded "planned
+hypothesis pipeline" — a way for a human operator (or, later, a real
+reasoning system) to author a `matrix_of_edging` /
+`activation_hypothesis` / `activation_hypothesis_portfolio` /
+`psychological_role_tension_contract` chain from a Guest Research Package,
+using the `research_synthesis`/`operator_supplied` vocabulary AIR's schema
+already reserves for it, before an interview happens. That spec should
+consume TS-APP-COMPOSER-001's `activative_interview_brief.
+matrix_of_edging_seed` and `.planned_questions` fields as its starting
+input — they are deliberately shaped to match AIR's own field vocabulary so
+that spec does not have to re-derive it.
+
+**Status:** OPEN. TS-APP-COMPOSER-001 builds and ships everything around
+this gap that is honestly buildable today (Guest Research Package creation,
+Brand DNA cross-referencing, operator-authored Brief storage, session
+tracking) and surfaces the gap explicitly in both its API response
+(`hypothesis_pipeline_status`) and its UI (`PipelineStatusNotice`), rather
+than hiding or faking it. `AC-013` in that spec is a regression test that
+keeps this boundary enforced by a running test, not only by this document.
+
+---
+
 ## Resolution Sequence
 
 Updated 2026-07-27. TS-APP-SETUP-001 implemented (claim ceiling
@@ -438,27 +497,46 @@ foundation with no known gap lurking.
 13. Implement TS-APP-UI-003 (reconciled)             — control tower, needs everything above
 ```
 
-**No specs remain to be written.** All twelve TS-APP-* specs
-(SETUP-001, BRIDGE-001, API-001 through API-007, UI-001 through UI-004)
-exist as `WRITTEN_PENDING_AUDIT` (except UI-002 and UI-003 which are now
-`RECONCILED_PENDING_AUDIT` after the GAP-003 pass). All three closeable
-gaps (GAP-002, GAP-003, GAP-004) are now closed. Gate C (a campaign that
-actually executes) becomes reachable after steps 5, 7, and 8 — steps 3
-(BRIDGE-001) and 4 (GAP-003 reconciliation) are already done.
+**Updated 2026-07-31.** Thirteen TS-APP-* specs now exist
+(SETUP-001, BRIDGE-001, API-001 through API-007, UI-001 through UI-004,
+and TS-APP-COMPOSER-001 — the last spec named in
+`CA_APP_FR_EPIC_SPEC_PLAN.md`'s Wave structure) as `WRITTEN_PENDING_AUDIT`
+(except UI-002 and UI-003, `RECONCILED_PENDING_AUDIT`). All four closeable
+gaps found before COMPOSER-001 (GAP-002, GAP-003, GAP-004, and GAP-006)
+are closed or done-with-no-action-needed. Gate C (a campaign that actually
+executes) becomes reachable after steps 5, 7, and 8 below — steps 3
+(BRIDGE-001) and 4 (GAP-003 reconciliation) are already done. Entry Point A
+(an Engineered Interview reaching Brief-led admission) is a *separate*
+readiness question from Gate C, and remains blocked on GAP-007 regardless
+of Gate C's status — closing GAP-001 through GAP-006 does not touch it.
+
+```
+14. Implement TS-APP-COMPOSER-001                    — Guest Research
+    Package + Activative Interview Brief + session tracking, per that
+    spec's own Section 7. Needs API-001 (get_air), API-003 (the
+    /brief-led shape this spec's output is designed to eventually feed),
+    and UI-001 (apiFetch, the compose.tsx placeholder) — all already
+    written.
+15. [FUTURE, UNWRITTEN] Resolve GAP-007               — "planned
+    hypothesis pipeline" spec, scoped to services/air/. Only spec that
+    can make POST /api/interviews/brief-led reachable through a real,
+    non-fabricated caller. See the GAP-007 entry above for its required
+    shape and inputs.
+```
 
 ---
 document_end: true
 next_action: >
-  Implement TS-APP-API-001 next (FastAPI gateway, wave 1, first HTTP
-  layer). Now safe: BRIDGE-001 is in place, GAP-003 is closed, paths
-  exist (SETUP-001 done). API-001's outputs (api/dependencies.py with
-  get_air(), api/config.py with AppConfig, api/errors.py with ErrorResponse)
-  are what TS-APP-API-007 needs to close GAP-001 — the last open gap
-  between current state and a campaign that actually executes
-  (Gate C). After API-001, run API-002 and API-003 in parallel, then
-  API-007, then revisit TS-APP-API-004's Stage covering compile_batch()
-  to point it at the now-real AIR API and Bridge compiler. Note: BRIDGE-001's
+  Implement TS-APP-API-001 through TS-APP-COMPOSER-001 in the order listed
+  above (steps 5-14) if any remain unimplemented in the current tree; check
+  the real repository state before assuming any step is done, since this
+  ledger tracks specs *written*, not specs *implemented*. Once TS-APP-
+  COMPOSER-001 is implemented and audited, the only remaining named gap is
+  GAP-007: a future, AIR-scoped "planned hypothesis pipeline" spec (step 15,
+  not yet written) is the sole remaining piece of work standing between the
+  current tree and a Brief-led interview admission that a real caller can
+  complete end-to-end without any fabricated reference. Note: BRIDGE-001's
   `compile_portable_to_intake()` still raises by design on `workflow`
   (Blocker 5) until a human product decision is made — that decision is
-  independent of the API wave and can run in parallel with steps 5–8 if
-  a human wants to make the call.
+  independent of both the API wave and GAP-007, and can run in parallel
+  with any of the steps above if a human wants to make the call.

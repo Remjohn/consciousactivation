@@ -4,6 +4,7 @@ from cmf_pipeline.application import PipelineApplication
 from cmf_activative_intelligence.application import AirApplication
 from cmf_vae.application import VAEApplication
 from conscious_activations_interview_expression.application import InterviewExpressionApplication
+from conscious_activations_interview_composer.application import InterviewComposerApplication
 from cmf_builder.application.productization_service import BuilderProductizationService
 from cmf_builder.adapters.sqlite_productization_repository import SQLiteProductizationRepository
 
@@ -29,6 +30,10 @@ def get_vae(request: Request) -> VAEApplication:
 
 def get_interview(request: Request) -> InterviewExpressionApplication:
     return request.app.state.interview
+
+
+def get_composer(request: Request) -> InterviewComposerApplication:
+    return request.app.state.composer
 
 
 def get_builder(request: Request) -> BuilderProductizationService:

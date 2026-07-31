@@ -95,6 +95,13 @@ async def lifespan(app: FastAPI):
         "studio bridge initialised: %s", config.ca_studio_rpc_entrypoint
     )
 
+    # Interview Composer (TS-APP-COMPOSER-001)
+    from conscious_activations_interview_composer.application import InterviewComposerApplication
+    composer = InterviewComposerApplication(database_path=db_path / "interview_composer.db")
+    composer.initialize()
+    app.state.composer = composer
+    logger.info("interview composer service initialised: %s", db_path / "interview_composer.db")
+
     yield  # server runs here
 
     # --- shutdown ---
@@ -133,3 +140,5 @@ from api.websockets import pipeline_status; app.include_router(pipeline_status.r
 # Wave 3 (TS-APP-API-006): Revision and ship routers
 from api.routers import revisions; app.include_router(revisions.router, prefix="/api", tags=["revisions"])  # noqa: E702
 from api.routers import ship; app.include_router(ship.router, prefix="/api", tags=["ship"])  # noqa: E702
+# Wave 4 (TS-APP-COMPOSER-001): Interview Composer router
+from api.routers import interview_composer; app.include_router(interview_composer.router, prefix="/api/interviews/compose", tags=["interview-composer"])  # noqa: E702
