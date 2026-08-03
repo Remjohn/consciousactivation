@@ -1,1 +1,0 @@
-"""Vertical Story test packages."""

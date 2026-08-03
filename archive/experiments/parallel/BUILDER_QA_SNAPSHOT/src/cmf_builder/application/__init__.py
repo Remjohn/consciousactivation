@@ -1,1 +1,0 @@
-"""Builder application command boundary."""

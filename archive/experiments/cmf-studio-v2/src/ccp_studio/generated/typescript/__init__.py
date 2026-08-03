@@ -1,2 +1,0 @@
-"""TypeScript consumer contract artifacts."""
-

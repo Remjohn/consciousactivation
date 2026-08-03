@@ -1,1 +1,0 @@
-"""Builder Story tests."""

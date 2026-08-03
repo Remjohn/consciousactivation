@@ -1,6 +1,0 @@
-FROM python:3.12-slim
-WORKDIR /workspace
-COPY . /workspace
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/* \
- && python -m pip install --no-cache-dir ./packages/ca_contracts ./packages/ca_runtime ./packages/ca_delegation_rc4 ./06_INTERVIEW_EXPRESSION ./04_ACTIVATIVE_INTELLIGENCE_RUNTIME ./05_ATOMIC_HARNESS_PIPELINE ./02_VISUAL_ASSET_EDITOR ./packages/ca_release
-ENV PYTHONDONTWRITEBYTECODE=1

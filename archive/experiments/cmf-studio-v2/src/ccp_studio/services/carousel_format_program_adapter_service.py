@@ -1,1 +1,0 @@
-from ccp_studio.services.supervisual_format_program_adapter_service import CarouselFormatProgramAdapterService
