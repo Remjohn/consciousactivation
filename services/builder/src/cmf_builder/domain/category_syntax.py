@@ -31,8 +31,8 @@ CONVERSATIONAL_PROFILES = (
 CATEGORY_PROFILE_CONTRACTS: Mapping[str, tuple[str, ...]] = {
     "short_form_edited_video": EDITED_VIDEO_PROFILES,
     "2d_character_animation": ("format02_minimal_coach_theatre",),
-    "carousels": (),
-    "supervisuals": (),
+    "carousels": ("visual_syntax_composition_compiler",),
+    "supervisuals": ("visual_syntax_composition_compiler",),
     "conversational_activation_expression": CONVERSATIONAL_PROFILES,
 }
 GRAMMAR_FAMILIES: Mapping[str, str] = {
