@@ -1,0 +1,74 @@
+{
+  "manifest_id": "operator-manifest-car-jux-haircolor",
+  "manifest_version": "1.0.0",
+  "task_id": "car_jux_haircolor_v1",
+  "mode": "activative",
+  "category_id": "carousels",
+  "task": {
+    "goal": "Produce one single-frame 'envy juxtaposition' grid card -- the reusable visual unit filed under the Carousels category -- that curates 2-4 real, creator-sourced UGC photos sharing one specific, directly comparable physical trait (this reference batch centers hair color and haircut, with freckles/tattoos/piercings/couple-dynamics specimens included as the same template's other deployments) under the fixed 'i'm jealous of' / '*people with [trait]*' framing.",
+    "success_condition": "The rendered card preserves the fixed visual syntax observed across all ten specimens -- solid pastel background, bold black 'i'm jealous of' headline with small creator-handle credit, and an asymmetric overlapping collage of 2-4 real candid UGC photos paired with a solid-color caption card naming the envied trait -- and a viewer recognizes the trait within one glance without needing caption text elsewhere in the post.",
+    "atomic_boundary": "One curated set of real UGC photos sharing one envied trait becomes one single-frame juxtaposition grid card. This harness governs card composition only -- it does not cover multi-slide carousel sequencing, caption/CTA copy beyond the on-image trait label, or sourcing/licensing clearance for the underlying UGC photos.",
+    "input_contract": {
+      "type": "object",
+      "required": ["source_expression_moment", "voice_context"],
+      "properties": {
+        "source_expression_moment": {"type": "string", "minLength": 1, "description": "The specific envied trait and the 2-4 real UGC photo references curated to illustrate it (e.g. 'honey-blonde balayage -- 4 specimen photos')."},
+        "voice_context": {"type": "string", "minLength": 1, "description": "Creator handle and tonal register the card must credit and preserve (e.g. '@kupofmess, warm/aspirational envy, not sarcastic')."}
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["juxtaposition_grid_frame"],
+      "properties": {
+        "juxtaposition_grid_frame": {"type": "object", "description": "A single production-ready image frame containing the headline, creator credit, photo collage, and trait-label caption card."}
+      }
+    },
+    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
+    "capability_requirements": ["activative_contract_validation"],
+    "acceptance_tests": [
+      "envied_trait_recognizable_at_a_glance",
+      "creator_handle_credit_present",
+      "collage_photos_read_as_real_ugc_not_stock_or_ai",
+      "trait_caption_card_legible_at_mobile_scale",
+      "wrong_reading_locks_enforced"
+    ],
+    "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
+    "provenance_refs": [
+      "operator-car-jux-haircolor-source@1.0.0#sha256:e68f456b5dec8748ea6785f542a5d6117c69c35ece19cad7a5816a6b1a53ae13"
+    ]
+  },
+  "activative_input": {
+    "source_premise_ref": "car-jux-haircolor-specimen-01@1.0.0#sha256:336bc74d5c1650a19bd8f2542b1d43df836b15a67f622bd88186d0b2715930c9",
+    "identity_dna_ref": "car-jux-haircolor-specimen-02@1.0.0#sha256:5287f20d86d086d42d324893d6950113a81c4de956e832cdeafe76689e92dfbd",
+    "context_premise_ref": "car-jux-drill-me-format@1.0.0#sha256:86ac29658cd37988ba78552c2917bb6932a8d3848c8aabe3a58ccc4c4e7039f5",
+    "resonance_map_ref": "car-jux-haircolor-specimen-06@1.0.0#sha256:1741490e559ffc6db8ca49a8d3fd9c3831325d65cc259f813b7dc77d753b7d9c",
+    "matrix_of_edging_ref": "car-jux-haircolor-specimen-09@1.0.0#sha256:e8e9aa0e627bf75ccbf463694c1a9a6af3e8350b101b88a2c40c2454cfa8eebb",
+    "activative_intelligence_pack_ref": "car-jux-harness-gap-analysis-build-skill@1.0.0#sha256:661cd38483fcbfd39f70a9fbff14582a65a14ad188737268d1759b12fe2d4d49",
+    "evaluation_contract_ref": "car-jux-one-harness-build-prompt@1.0.0#sha256:90be016c6f0f466ba7187e58c38d61829d59009291874a8c2abdb8af91cca566",
+    "hidden_pressure": "Viewers scroll past dozens of generic moodboard and get-ready-with-me posts daily; this format only lands if the featured trait reads as something a real person actually has -- captured candidly, not staged or AI-perfected -- so the envy feels earned rather than manufactured.",
+    "activation_directions": ["recognize_trait", "feel_earned_envy", "attribute_to_real_person"],
+    "roles": ["curator", "photographed_subject", "viewer"],
+    "stance": "Warm, admiring, unembellished -- envy as compliment, not comparison.",
+    "stakes": ["the trait reads as unattainable or fake instead of real and covetable", "the format collapses into generic moodboard noise indistinguishable from any other pastel photo grid"],
+    "identity_urges": ["see a real, attainable version of the trait", "picture the trait on themselves"],
+    "participation_design": "The viewer scans the collage, reads the trait label, and either saves the post as a reference or follows the curator account for more of the same trait-specific curation. No purchase or product CTA is embedded in the card itself.",
+    "intended_reaction": "The viewer feels aspirational envy toward the specific trait shown and credits the real people and curator pictured, not a brand or product.",
+    "smallest_useful_commitment": "Save or screenshot the card as a reference for the trait shown.",
+    "evidence_provenance_refs": [
+      "car-jux-haircolor-specimen-03@1.0.0#sha256:2992f242442c0cd50499d46cba6a4a9ad6d154edb5bfdd1fb8139fca03652ed1",
+      "car-jux-haircolor-specimen-04@1.0.0#sha256:76a453c5687d3ada7fb5fcf5773e63f46096256ef8dd6cee2d96884392424cd7",
+      "car-jux-haircolor-specimen-05@1.0.0#sha256:d5f89e11390da3913a8d91b44b81e7db44a46b6f467e658e22e987b34dac8aef",
+      "car-jux-haircolor-specimen-07@1.0.0#sha256:d48c6a1cd2098ae53718a18b2d84aa8f86c8161a9ac3056b3bff641c86d15642",
+      "car-jux-haircolor-specimen-08@1.0.0#sha256:a0581187bd10b9e8a70c6ab4ad0dafa277662a777e9ea98459b7c253f8512f2e",
+      "car-jux-haircolor-specimen-10@1.0.0#sha256:c9720c08962310ef72e1e3832e2b809e069c90ec07401ad775585b46bccd2ba5"
+    ],
+    "wrong_reading_locks": [
+      "Do not let the collage imply the viewer is being compared unfavorably against the subjects -- the label must read as 'these people have this trait' admiration, never as 'you don't have this trait' deficiency messaging.",
+      "Do not remove or shrink the solid-color caption card naming the exact trait below legibility at mobile thumbnail scale -- without it, the post reads as an ungrouped photo dump with no envy target.",
+      "Do not replace the staggered, overlapping, unevenly-cropped photo collage with an evenly tiled or symmetric grid -- the asymmetric layout is what reads as real phone-gallery curation rather than a stock moodboard or ad layout.",
+      "Do not swap the real, candid UGC photos for stock photography or AI-generated faces or hair -- the format's activation depends on the viewer believing these are real people's real, unedited photos.",
+      "Do not insert product names, brand logos, salon tags, or 'get this look' purchase CTAs into the card -- the format's activation is aspirational recognition, not direct commerce, and adding a sales layer breaks the organic-UGC read.",
+      "Do not drop the creator-handle credit from the headline -- removing it misattributes curated third-party photos as the poster's own original content."
+    ]
+  }
+}
