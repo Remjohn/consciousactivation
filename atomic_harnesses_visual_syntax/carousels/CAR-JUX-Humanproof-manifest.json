@@ -1,0 +1,73 @@
+{
+  "manifest_id": "operator-manifest-car_jux_humanproof",
+  "manifest_version": "1.0.0",
+  "task_id": "car_jux_humanproof_v1",
+  "mode": "activative",
+  "category_id": "carousels",
+  "task": {
+    "goal": "Produce a multi-slide editorial carousel that juxtaposes lifestyle/fashion photography with short philosophical text overlays interrogating AI-driven authenticity and 'proof of human' themes.",
+    "success_condition": "Output is a coherent slide sequence (headline slide + supporting image/quote slides) that reads as editorial commentary, preserves the juxtaposition structure (image-led slide / text-led slide alternation) seen in the reference specimens, and does not resolve into literal ad copy for an identity-verification product.",
+    "atomic_boundary": "Covers slide sequencing, image/text juxtaposition, and pull-quote placement for one carousel. Does not cover caption copywriting for the post itself, distribution, or any downstream identity-verification product claims.",
+    "input_contract": {
+      "type": "object",
+      "required": ["source_expression_moment", "voice_context"],
+      "properties": {
+        "source_expression_moment": {
+          "type": "string",
+          "description": "The editorial moment or thesis driving this carousel (e.g. the specific 'proof of human' angle being explored)."
+        },
+        "voice_context": {
+          "type": "string",
+          "description": "Tone/register constraints for the text overlays (e.g. wry, declarative, non-corporate)."
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["slides"],
+      "properties": {
+        "slides": {
+          "type": "array",
+          "description": "Ordered slide sequence, each slide typed as image-led or text-overlay, matching the juxtaposition pattern of the reference specimens."
+        }
+      }
+    },
+    "required_context": ["reference_specimens:CAR-JUX-Humanproof"],
+    "capability_requirements": ["activative_contract_validation"],
+    "acceptance_tests": [
+      "Sequence alternates image-only and text-overlay slides in a pattern consistent with the reference specimens.",
+      "No slide resolves the AI/authenticity theme into a literal product pitch.",
+      "Headline and pull-quote slides remain legible against background imagery at carousel thumbnail size."
+    ],
+    "authority_ref": "car-jux-humanproof-authority@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000001",
+    "provenance_refs": [
+      "car-jux-humanproof-provenance@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000002"
+    ]
+  },
+  "activative_input": {
+    "source_premise_ref": "car-jux-humanproof-source-premise@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000003",
+    "identity_dna_ref": "car-jux-humanproof-identity-dna@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000004",
+    "context_premise_ref": "car-jux-humanproof-context-premise@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000005",
+    "resonance_map_ref": "car-jux-humanproof-resonance-map@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000006",
+    "matrix_of_edging_ref": "car-jux-humanproof-matrix-of-edging@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000007",
+    "activative_intelligence_pack_ref": "car-jux-humanproof-intelligence-pack@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000008",
+    "evaluation_contract_ref": "car-jux-humanproof-evaluation-contract@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000009",
+    "evidence_provenance_refs": [
+      "car-jux-humanproof-evidence@1.0.0#sha256:000000000000000000000000000000000000000000000000000000000000000a"
+    ],
+    "hidden_pressure": "The felt tension between wanting to look effortlessly authentic and knowing authenticity itself is now producible/fakeable.",
+    "activation_directions": ["Invite the viewer to sit with the discomfort rather than resolve it into a call-to-action."],
+    "roles": ["viewer as skeptic", "brand as observer, not seller"],
+    "stance": "Editorial/observational, not promotional.",
+    "stakes": ["Trust in what's real online", "Personal identity as something now provable rather than assumed"],
+    "identity_urges": ["Wanting to be seen as genuinely, verifiably human"],
+    "participation_design": "Passive scroll-through consumption; no explicit CTA within the carousel itself.",
+    "intended_reaction": "A beat of unease/recognition, not a purchase impulse.",
+    "smallest_useful_commitment": "Viewer pauses on the headline slide before swiping.",
+    "wrong_reading_locks": [
+      "Do not let the AI/authenticity juxtaposition read as promotion or glamorization of AI-generated deception — the format critiques the erosion of trust, it does not celebrate the tools that cause it.",
+      "Do not resolve the carousel into literal ad copy for an identity-verification or 'proof of human' product — the specimens are editorial commentary, not a product pitch, and text overlays must not imply a purchasable solution.",
+      "Do not treat the fashion/lifestyle imagery as the message — the images are deliberately ambiguous (could be real or AI-generated) in service of the text's thesis; do not caption or crop them in a way that resolves that ambiguity, which would collapse the format's central tension."
+    ]
+  }
+}
