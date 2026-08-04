@@ -1,0 +1,79 @@
+{
+  "manifest_id": "operator-manifest-car-jux-jealousy",
+  "manifest_version": "1.0.0",
+  "task_id": "car_jux_jealousy_v1",
+  "mode": "activative",
+  "category_id": "carousels",
+  "task": {
+    "goal": "Produce one slide of a 'juxtaposition reaction' comparison-meme carousel (flat two-figure stick-character format) that lands a single wanted-vs-reality contrast beat, in the reduced pink/black visual language this format is recognized by.",
+    "success_condition": "The slide reads correctly at a glance on mobile: the left figure unambiguously registers as the idealized/desired subject and the right ('me') figure unambiguously registers as the deflecting reaction; the two text labels are the sole carriers of meaning since the figures themselves are visually identical slide to slide; and if the slide is sponsored or CTA-driven, that is disclosed in-frame rather than blended in as an organic beat.",
+    "atomic_boundary": "One source comparison premise becomes one slide. This harness governs a single juxtaposition-beat slide unit, not the full multi-slide carousel arc, sequencing, or outer caption copy.",
+    "input_contract": {
+      "type": "object",
+      "required": ["source_expression_moment", "voice_context"],
+      "properties": {
+        "source_expression_moment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The comparison premise for this slide, expressed as the two opposed labels to render (e.g. 'my ex' vs 'me', 'good grades' vs 'me')."
+        },
+        "voice_context": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tone/voice reference for the label copy — dry, self-deprecating, deadpan; no exclamation-driven or hard-sell phrasing."
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["carousel_slide"],
+      "properties": {
+        "carousel_slide": {
+          "type": "object",
+          "description": "One production-ready square (1:1) slide image: two stick figures on a flat single-color ground, each with a bold label caption, composed per this format's visual syntax."
+        }
+      }
+    },
+    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
+    "capability_requirements": ["activative_contract_validation"],
+    "acceptance_tests": [
+      "label_pair_reads_as_opposed_at_a_glance",
+      "figure_poses_and_palette_remain_format_consistent",
+      "sponsored_or_cta_slides_carry_explicit_disclosure",
+      "flat_two_tone_ground_preserved_no_texture_or_photo_elements",
+      "wrong_reading_locks_enforced"
+    ],
+    "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
+    "provenance_refs": [
+      "operator-car-jux-jealousy-source@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000001"
+    ]
+  },
+  "activative_input": {
+    "source_premise_ref": "source-premise@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000001",
+    "identity_dna_ref": "identity-dna@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000002",
+    "context_premise_ref": "context-premise@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000003",
+    "resonance_map_ref": "resonance-map@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000004",
+    "matrix_of_edging_ref": "matrix-of-edging@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000005",
+    "activative_intelligence_pack_ref": "activative-intelligence-pack@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000006",
+    "hidden_pressure": "The viewer scrolls past this exact 'X vs me' template constantly; the only thing that can still land is the specific unfairness/pettiness of the comparison itself, not the illustration, which never changes.",
+    "activation_directions": ["recognize_the_unfair_comparison", "self-implicate", "laugh_at_own_pattern"],
+    "roles": ["idealized_subject", "self"],
+    "stance": "Deadpan, self-deprecating, no moralizing.",
+    "stakes": ["the joke reads as generic instead of specific", "a sponsored slide gets mistaken for an organic confession and damages trust when noticed"],
+    "identity_urges": ["see my own pattern named accurately", "feel caught-out but not mocked"],
+    "participation_design": "The viewer reads both labels, recognizes the specific comparison as their own behavior, and reacts (laugh, share, tag someone). No explicit call-to-action on non-sponsored slides.",
+    "intended_reaction": "The viewer self-identifies with the 'me' figure for this specific comparison and finds it funny rather than judgmental.",
+    "smallest_useful_commitment": "Tag or send the slide to whoever else it applies to.",
+    "evidence_provenance_refs": [
+      "car-jux-jealousy-evidence@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000007"
+    ],
+    "evaluation_contract_ref": "car-jux-jealousy-eval@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000000008",
+    "wrong_reading_locks": [
+      "Do not let the stick-figure poses or expressions carry format-specific meaning beyond generic affection-vs-rejection — the figures are visually near-identical slide to slide, so the entire comedic payload lives in the two text labels; ambiguous, unopposed, or non-parallel label pairs collapse the format.",
+      "Do not caption both figures with the same valence, or leave one uncaptioned — the left figure must always read as the wanted/idealized party and the right ('me') as the deflecting party, or the reversal reads as a random illustration instead of a self-aware joke.",
+      "Do not deploy this exact template for sponsored or CTA-driven content without an explicit, in-frame paid-partnership disclosure — the format's stripped-down 'personal confession' visual language makes it easy for a promoted slide to be misread as authentic, unsponsored commentary.",
+      "Do not introduce texture, photography, gradients, or a multi-color ground — the format's recognizability depends on a flat single-color background with black linework figures; adding texture reads as a different (photo-comparison) format entirely.",
+      "Do not hard-code romantic jealousy as the only valid label pairing — the underlying format is a general wanted-vs-reality comparison beat (exes, grades, apps, habits, etc.); over-narrowing the harness to jealousy-only content would misclassify the format's actual native range."
+    ]
+  }
+}
