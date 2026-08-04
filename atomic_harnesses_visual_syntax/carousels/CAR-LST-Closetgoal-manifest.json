@@ -1,0 +1,86 @@
+{
+  "manifest_id": "operator-manifest-car-lst-closetgoal",
+  "manifest_version": "1.0.0",
+  "task_id": "car_lst_closetgoal_v1",
+  "mode": "activative",
+  "category_id": "carousels",
+  "task": {
+    "goal": "Produce a multi-slide aspirational 'wishlist' carousel where a single recurring title lockup ('I wish my [X] looked like this') is paired across a run of grid/triptych slides, each carrying one grouped cluster of curated items or looks, building category-specific desire momentum slide over slide.",
+    "success_condition": "The title lockup renders with identical wording, weight, and placement on every grid slide; each slide's image cluster shares exactly one coherent visual category (a single garment type, one outfit-fit triptych, or one aesthetic); the source handle attribution is legible on every branded slide; and a viewer swiping at speed still reads each slide as part of the same running list rather than a series of disconnected posts.",
+    "atomic_boundary": "One curated wishlist theme becomes one multi-slide (typically 6-10 slide) grid carousel using a single repeating caption lockup over swapped item clusters. No cross-slide narrative arc, no video or motion, no single-frame quote graphic, and no unrelated bonus-content slide folded into the same list without a clear, separately-scoped category break.",
+    "input_contract": {
+      "type": "object",
+      "required": ["source_expression_moment", "voice_context"],
+      "properties": {
+        "source_expression_moment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The wishlist theme or aesthetic category the grid slides organize around (e.g. a closet capsule, a room edit, a shelf)."
+        },
+        "voice_context": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source handle/voice and caption-lockup reference used for rendering decisions."
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["carousel_slide_sequence"],
+      "properties": {
+        "carousel_slide_sequence": {
+          "type": "object",
+          "description": "An ordered set of production-ready slide frames sharing one repeating title lockup, each carrying a single item/outfit cluster and creator attribution."
+        }
+      }
+    },
+    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
+    "capability_requirements": ["activative_contract_validation"],
+    "acceptance_tests": [
+      "title_lockup_identical_across_all_grid_slides",
+      "each_slide_single_visual_category_cluster",
+      "mobile_scale_legibility_of_title_text",
+      "creator_attribution_present_on_branded_slides",
+      "no_deceptive_reward_or_glitch_claims_present",
+      "wrong_reading_locks_enforced"
+    ],
+    "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
+    "provenance_refs": [
+      "operator-car-lst-closetgoal-source@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb01"
+    ]
+  },
+  "activative_input": {
+    "source_premise_ref": "source-premise-car-lst-closetgoal@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb02",
+    "identity_dna_ref": "identity-dna@4.2.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb03",
+    "context_premise_ref": "context-premise-car-lst-closetgoal@2.0.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb04",
+    "resonance_map_ref": "resonance-map-car-lst-closetgoal@3.1.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb05",
+    "matrix_of_edging_ref": "matrix-of-edging@1.3.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb06",
+    "activative_intelligence_pack_ref": "activative-intelligence-pack@5.0.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb07",
+    "hidden_pressure": "The viewer's feed is saturated with wishlist and 'get ready with me' carousels competing for a half-second swipe decision. This one must earn the swipe-through by keeping the item cluster tightly curated to one visual category per slide, not by escalating into unrelated bonus content or reward-style claims bolted onto the list.",
+    "activation_directions": ["recognize_the_aesthetic_category", "self_place_inside_the_wish", "anticipate_the_next_slide"],
+    "roles": ["curator", "viewer"],
+    "stance": "Peer-voice, aspirational, undecorated caption over grouped product or outfit imagery.",
+    "stakes": [
+      "the list reads as a generic ad grid instead of a curated personal wishlist",
+      "the recurring caption becomes wallpaper and stops earning the next swipe",
+      "the format is used to smuggle in deceptive reward or 'glitch' claims that were never part of the wishlist premise"
+    ],
+    "identity_urges": [
+      "see my own taste reflected in someone else's curation",
+      "complete the mental collection by swiping to the next slide"
+    ],
+    "participation_design": "The viewer reads the same short caption once, carries it as the frame for every subsequent slide, and taps through the grid comparing clusters against their own closet or space; save or share is the completion action, not a link click.",
+    "intended_reaction": "The viewer saves or shares the carousel as a personal mood-board reference and follows the source handle for more curated lists, not because they were promised a discount, glitch, or survey reward.",
+    "smallest_useful_commitment": "Swipe to the next slide.",
+    "evidence_provenance_refs": [
+      "car-lst-closetgoal-evidence@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb08"
+    ],
+    "evaluation_contract_ref": "car-lst-closetgoal-eval@1.0.0#sha256:0000000000000000000000000000000000000000000000000000000000aabb09",
+    "wrong_reading_locks": [
+      "Do not carry forward the 'site glitch' / 'link in bio' reward-claim framing present in two of the ten reference specimens (05.jpg, 09.jpg) -- this format is a curated wishlist grid, not a vehicle for implying a discount glitch, survey reward, or bonus giveaway the viewer must click through for.",
+      "Do not vary the repeating title lockup's wording or drop it from any grid slide -- a wishlist carousel that loses its one consistent caption reads as an unrelated product ad, not a running list.",
+      "Do not let the item cluster on a single slide mix multiple visual categories (e.g. tops with jeans with dresses) -- each slide's grid or triptych must stay to one coherent category, or the 'list' structure collapses into a random product dump.",
+      "Do not strip or obscure the source creator's handle/attribution overlaid on the grid -- presenting sourced product or outfit photography as the operator's own original content misattributes the wishlist's actual curator."
+    ]
+  }
+}
