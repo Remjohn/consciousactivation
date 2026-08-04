@@ -1,0 +1,84 @@
+{
+  "manifest_id": "operator-manifest-vpl-wyr-quizcard",
+  "manifest_version": "1.0.0",
+  "task_id": "vpl_wyr_quizcard_v1",
+  "mode": "activative",
+  "category_id": "supervisuals",
+  "task": {
+    "goal": "Produce a single-frame multi-panel comparison SuperVisual (a 4-panel or 9-panel photo grid) with a short overlaid caption that invites the viewer to self-identify with one panel and pull a specific friend into the comments, without any slide sequencing, motion, or narrative arc.",
+    "success_condition": "All grid panels render at equal visual weight with no single panel dominating the frame, the overlay caption is legible at mobile scale in under one second, the caption preserves a direct second-person social prompt (e.g. 'ask your friends which X you are'), numeral badges are present and legible for the 9-panel variant, and the viewer's likely first reaction is to think of one specific friend rather than to scroll past.",
+    "atomic_boundary": "One curated set of 4 or 9 comparison photos becomes one single-frame grid SuperVisual with an embedded overlay caption. No multi-slide sequencing, no animation, no video, no per-panel narrative, and no ranking or ordering of panels beyond their grid position.",
+    "input_contract": {
+      "type": "object",
+      "required": ["source_expression_moment", "voice_context"],
+      "properties": {
+        "source_expression_moment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The panel set reference and overlay caption/prompt text to render (e.g. 'ask your friends which rat you are')."
+        },
+        "voice_context": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Voice and tonal context for caption phrasing and panel curation (e.g. the source account's candid, peer-to-peer meme voice)."
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["supervisual_frame"],
+      "properties": {
+        "supervisual_frame": {
+          "type": "object",
+          "description": "A single production-ready grid image frame (4-up or 9-up) with embedded overlay caption and, for the 9-up variant, numeral badges."
+        }
+      }
+    },
+    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
+    "capability_requirements": ["activative_contract_validation"],
+    "acceptance_tests": [
+      "grid_panel_count_matches_declared_variant",
+      "overlay_caption_legible_at_mobile_scale",
+      "numeral_badges_present_for_numbered_variant",
+      "second_person_social_prompt_preserved",
+      "wrong_reading_locks_enforced"
+    ],
+    "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
+    "provenance_refs": [
+      "vpl-wyr-quizcard-source-material@1.0.0#sha256:7061bfb6133c645ce29815306de562354cc18e4a468a051f5ff2db3fda8f0534"
+    ]
+  },
+  "activative_input": {
+    "source_premise_ref": "vpl-wyr-quizcard-build-directive@1.0.0#sha256:90be016c6f0f466ba7187e58c38d61829d59009291874a8c2abdb8af91cca566",
+    "identity_dna_ref": "vpl-wyr-quizcard-specimen-4up-grid-as-identity-reference@1.0.0#sha256:cde01e0386474e16f8ed497ca79ab7a2b98b403f77d1087d1370a7dd77291863",
+    "context_premise_ref": "vpl-wyr-quizcard-gap-analysis-context@1.0.0#sha256:661cd38483fcbfd39f70a9fbff14582a65a14ad188737268d1759b12fe2d4d49",
+    "resonance_map_ref": "vpl-wyr-quizcard-format-drill-resonance@1.0.0#sha256:86ac29658cd37988ba78552c2917bb6932a8d3848c8aabe3a58ccc4c4e7039f5",
+    "matrix_of_edging_ref": "vpl-wyr-quizcard-bbox-why-matrix@1.0.0#sha256:6790dc37c4e789f7dfa0cab5ed02c0b9f880e693d312054cfcea7d6dd5e615ae",
+    "activative_intelligence_pack_ref": "vpl-wyr-quizcard-reference-pack@1.0.0#sha256:7061bfb6133c645ce29815306de562354cc18e4a468a051f5ff2db3fda8f0534",
+    "hidden_pressure": "The viewer scrolls past dozens of near-identical grid-quiz posts daily; if the panels or caption read as staged rather than candidly funny, the prompt to tag a friend reads as engagement-bait instead of genuine peer humor, and the format is ignored.",
+    "activation_directions": ["self_identify_with_a_panel", "recall_a_specific_friend", "prompt_a_tag_or_comment"],
+    "roles": ["viewer", "tagged_friend"],
+    "stance": "Playful, informal, peer-to-peer — never staged, corporate, or overtly promotional.",
+    "stakes": [
+      "the grid reads as generic stock photography instead of relatable candid moments",
+      "the caption reads as brand engagement-bait instead of genuine peer humor",
+      "the numbered variant loses its comment mechanic if numerals are unreadable"
+    ],
+    "identity_urges": ["see myself or my pet in one of the panels", "tag the friend who is 'obviously' one specific panel"],
+    "participation_design": "The viewer picks the panel that matches their own vibe (or a specific friend's), then tags or comments to invite that friend to confirm or dispute the match.",
+    "intended_reaction": "The viewer immediately thinks of one specific friend and tags them, rather than double-tapping and scrolling past.",
+    "smallest_useful_commitment": "Tag one friend in the comments.",
+    "evidence_provenance_refs": [
+      "vpl-wyr-quizcard-evidence-specimen-4up-grid@1.0.0#sha256:cde01e0386474e16f8ed497ca79ab7a2b98b403f77d1087d1370a7dd77291863",
+      "vpl-wyr-quizcard-evidence-specimen-9up-numbered-grid@1.0.0#sha256:cd248c9292f3e8cc6030e2b51bae01884ffb256b2b33dd9b56035da612f81439"
+    ],
+    "evaluation_contract_ref": "vpl-wyr-quizcard-specimen-9up-numbered-grid-as-evaluation-reference@1.0.0#sha256:cd248c9292f3e8cc6030e2b51bae01884ffb256b2b33dd9b56035da612f81439",
+    "wrong_reading_locks": [
+      "Do not let one panel dominate the frame with the others as small insets — the mechanic depends on all panels reading as equally weighted candidates; unequal hierarchy destroys the 'which one are you' ambiguity the format runs on.",
+      "Do not drop or soften the caption's direct second-person address (e.g. 'ask your friends', 'tag someone') — removing the social prompt turns this into a passive photo collage and kills the comment/tag mechanic that is this format's entire business justification.",
+      "For the 9-panel numbered variant, do not omit or visually bury the numeral badges — without legible numbers, viewers cannot reference a specific panel in comments, which breaks the 'comment your number' engagement pattern.",
+      "Do not write the overlay caption as a full sentence or multi-line paragraph — it must stay skimmable in under one second, since the format is consumed mid-scroll, not read.",
+      "Do not render the caption in a low-contrast, script, or decorative font — several source panels are visually busy (patterned fabric, layered textures), so legibility depends on a bold sans-serif with an outline or shadow; without it the caption, the format's only instruction, becomes unreadable."
+    ]
+  }
+}
