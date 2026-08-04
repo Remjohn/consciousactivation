@@ -1,0 +1,68 @@
+{
+  "manifest_id": "operator-manifest-twq-std-standard",
+  "manifest_version": "1.0.0",
+  "task_id": "twq_std_standard_v1",
+  "mode": "activative",
+  "category_id": "supervisuals",
+  "task": {
+    "goal": "Produce a single-frame text-with-quote SuperVisual where typographic authority carries the entire activative payload without portrait or photographic subject dependency.",
+    "success_condition": "The quote text is legible at mobile scale, occupies the dominant spatial surface, the dark plate contrast ratio exceeds 4.5:1 against text, and the viewer reads the quote as the speaker's authentic voice — not as a generic motivational overlay.",
+    "atomic_boundary": "One source expression moment becomes one text-dominant SuperVisual frame. No multi-slide, no animation, no A-roll, no portrait subject.",
+    "input_contract": {
+      "type": "object",
+      "required": ["source_expression_moment", "voice_context"],
+      "properties": {
+        "source_expression_moment": {"type": "string", "minLength": 1, "description": "The authenticated speaker quote or expression moment to render."},
+        "voice_context": {"type": "string", "minLength": 1, "description": "Voice and typographic context reference for rendering decisions."}
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["supervisual_frame"],
+      "properties": {
+        "supervisual_frame": {"type": "object", "description": "A single production-ready image frame with embedded text composition."}
+      }
+    },
+    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
+    "capability_requirements": ["activative_contract_validation"],
+    "acceptance_tests": [
+      "text_legibility_at_mobile_scale",
+      "contrast_ratio_exceeds_4_5_to_1",
+      "speaker_voice_authenticity_preserved",
+      "no_generic_motivational_overlay_pattern",
+      "wrong_reading_locks_enforced"
+    ],
+    "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
+    "provenance_refs": [
+      "operator-twq-std-standard-source@1.0.0#sha256:aabbccdd00112233445566778899aabbccddeeff00112233445566778899aabb"
+    ]
+  },
+  "activative_input": {
+    "source_premise_ref": "source-premise@1.0.0#sha256:aabb000000000000000000000000000000000000000000000000000000000001",
+    "identity_dna_ref": "identity-dna@4.2.0#sha256:aabb000000000000000000000000000000000000000000000000000000000002",
+    "context_premise_ref": "context-premise@2.0.0#sha256:aabb000000000000000000000000000000000000000000000000000000000003",
+    "resonance_map_ref": "resonance-map@3.1.0#sha256:aabb000000000000000000000000000000000000000000000000000000000004",
+    "matrix_of_edging_ref": "matrix-of-edging@1.3.0#sha256:aabb000000000000000000000000000000000000000000000000000000000005",
+    "activative_intelligence_pack_ref": "activative-intelligence-pack@5.0.0#sha256:aabb000000000000000000000000000000000000000000000000000000000006",
+    "hidden_pressure": "The viewer scrolls past dozens of identical quote graphics daily. This one must stop the scroll through typographic weight and dark-plate contrast, not through visual decoration or stock imagery.",
+    "activation_directions": ["recognize_voice", "pause_on_meaning", "attribute_to_speaker"],
+    "roles": ["speaker", "viewer"],
+    "stance": "Direct, authoritative, undecorated.",
+    "stakes": ["speaker voice is diluted into generic motivational noise", "text becomes wallpaper instead of activating recognition"],
+    "identity_urges": ["hear the speaker's real voice", "distinguish this from every other quote card"],
+    "participation_design": "The viewer reads the quote, recognizes the speaker's authentic stance, and pauses. No call-to-action. The quote IS the activation.",
+    "intended_reaction": "The viewer attributes the insight to the speaker — not to a brand, not to a template, not to generic wisdom.",
+    "smallest_useful_commitment": "Read the quote and remember who said it.",
+    "evidence_provenance_refs": [
+      "twq-std-standard-evidence@1.0.0#sha256:aabb000000000000000000000000000000000000000000000000000000000007"
+    ],
+    "evaluation_contract_ref": "twq-std-standard-eval@1.0.0#sha256:aabb000000000000000000000000000000000000000000000000000000000008",
+    "wrong_reading_locks": [
+      "Do not render the quote over a busy or high-detail background — the text surface must be the dominant visual, not a decoration layer competing with imagery.",
+      "Do not use centered-justified multiline text at small sizes — it destroys scan-path readability on mobile.",
+      "Do not apply gradient overlays or color washes that reduce text contrast below 4.5:1.",
+      "Do not add decorative elements (icons, illustrations, borders) that compete with the typographic authority of the quote itself.",
+      "Do not strip the speaker's attribution — an unattributed quote reads as generic motivational content, destroying source sovereignty."
+    ]
+  }
+}
