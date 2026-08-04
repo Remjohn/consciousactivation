@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VisualSyntaxCompositionCompilerInput",
+  "type": "object",
+  "required": [
+    "harness_definition_id",
+    "category_id",
+    "grammar_family",
+    "wrong_reading_locks",
+    "slide_evidence",
+    "canvas_dimensions",
+    "activative_input_refs"
+  ],
+  "properties": {
+    "harness_definition_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The atomic-harness-definition ID from the compiled Builder contract."
+    },
+    "category_id": {
+      "type": "string",
+      "enum": ["carousels", "supervisuals"],
+      "description": "The governed category this harness belongs to."
+    },
+    "grammar_family": {
+      "type": "string",
+      "enum": ["CAROUSEL_SWIPE_PROGRESSION", "SUPERVISUAL_STATIC_HIERARCHY"],
+      "description": "The grammar family resolved from the category_id."
+    },
+    "wrong_reading_locks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "The harness's wrong-reading locks to translate into spatial constraints."
+    },
+    "slide_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slide_index", "slide_role", "specimen_ref"],
+        "properties": {
+          "slide_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-indexed position of this slide in the carousel sequence. Always 0 for supervisuals."
+          },
+          "slide_role": {
+            "type": "string",
+            "enum": [
+              "cover",
+              "numbered_item",
+              "comparison_beat",
+              "refrain_beat",
+              "photo_beat",
+              "grid_collage",
+              "closing_question",
+              "closing_cta",
+              "closing_comparison",
+              "testimonial",
+              "single_frame"
+            ],
+            "description": "The structural role this slide plays in the sequence."
+          },
+          "specimen_ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Provenance reference to the visual specimen this slide was analyzed from."
+          },
+          "observed_primitives": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["primitive_type", "semantic_role", "zone"],
+              "properties": {
+                "primitive_type": {
+                  "type": "string",
+                  "enum": [
+                    "text_block",
+                    "image_region",
+                    "grid_cluster",
+                    "comparison_pair",
+                    "badge",
+                    "number_label",
+                    "icon_row",
+                    "caption_plate",
+                    "callout_arrow",
+                    "flow_diagram"
+                  ]
+                },
+                "semantic_role": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "What this element means: headline, caption, creator_attribution, evidence_photo, etc."
+                },
+                "zone": {
+                  "type": "string",
+                  "enum": ["header_zone", "hero_zone", "footer_zone", "overlay_zone", "full_bleed"]
+                },
+                "observed_height_pct": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Measured height as percentage of canvas from specimen analysis."
+                },
+                "observed_width_pct": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Measured width as percentage of canvas from specimen analysis."
+                },
+                "observed_y_anchor_pct": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Measured vertical start position as percentage of canvas."
+                },
+                "observed_font_size_px": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Estimated font size in pixels from specimen. Text primitives only."
+                },
+                "overlap_observed": {
+                  "type": "boolean",
+                  "description": "Whether this element intentionally overlaps another in the specimen."
+                },
+                "cross_slide_stable": {
+                  "type": "boolean",
+                  "description": "Whether this element appears in the same position across multiple slides."
+                }
+              }
+            },
+            "description": "Primitives observed in this slide from specimen analysis."
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "Per-slide evidence from specimen analysis. One entry per slide in sequence."
+    },
+    "canvas_dimensions": {
+      "type": "object",
+      "required": ["width_px", "height_px"],
+      "properties": {
+        "width_px": { "type": "integer", "minimum": 1 },
+        "height_px": { "type": "integer", "minimum": 1 }
+      },
+      "description": "Target canvas dimensions for normalized coordinate computation."
+    },
+    "activative_input_refs": {
+      "type": "object",
+      "required": ["source_premise_ref", "identity_dna_ref", "evidence_provenance_refs"],
+      "properties": {
+        "source_premise_ref": { "type": "string", "minLength": 1 },
+        "identity_dna_ref": { "type": "string", "minLength": 1 },
+        "evidence_provenance_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        }
+      },
+      "description": "Immutable semantic lineage refs from the harness. Reference-only, never mutated."
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VisualSyntaxCompositionSpec",
+  "type": "object",
+  "required": [
+    "spec_id",
+    "spec_version",
+    "harness_definition_id",
+    "category_id",
+    "grammar_family",
+    "slide_sequence",
+    "cross_slide_anchors",
+    "wrong_reading_lock_constraints",
+    "deduplication_hash",
+    "lineage"
+  ],
+  "properties": {
+    "spec_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content-addressed identifier for this specification."
+    },
+    "spec_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "harness_definition_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category_id": {
+      "type": "string",
+      "enum": ["carousels", "supervisuals"]
+    },
+    "grammar_family": {
+      "type": "string",
+      "enum": ["CAROUSEL_SWIPE_PROGRESSION", "SUPERVISUAL_STATIC_HIERARCHY"]
+    },
+    "slide_sequence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slide_index", "slide_role", "zones"],
+        "properties": {
+          "slide_index": { "type": "integer", "minimum": 0 },
+          "slide_role": {
+            "type": "string",
+            "enum": [
+              "cover", "numbered_item", "comparison_beat", "refrain_beat",
+              "photo_beat", "grid_collage", "closing_question", "closing_cta",
+              "closing_comparison", "testimonial", "single_frame"
+            ]
+          },
+          "zones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["zone_type", "layout_mode", "height_range_pct", "required", "primitives"],
+              "properties": {
+                "zone_type": {
+                  "type": "string",
+                  "enum": ["header_zone", "hero_zone", "footer_zone", "overlay_zone", "full_bleed"]
+                },
+                "layout_mode": {
+                  "type": "string",
+                  "enum": ["vertical_stack", "horizontal_row", "overlay", "grid", "fill", "absolute"]
+                },
+                "height_range_pct": {
+                  "type": "object",
+                  "required": ["min", "max"],
+                  "properties": {
+                    "min": { "type": "number", "minimum": 0, "maximum": 100 },
+                    "max": { "type": "number", "minimum": 0, "maximum": 100 }
+                  }
+                },
+                "y_anchor_range_pct": {
+                  "type": "object",
+                  "required": ["min", "max"],
+                  "properties": {
+                    "min": { "type": "number", "minimum": 0, "maximum": 100 },
+                    "max": { "type": "number", "minimum": 0, "maximum": 100 }
+                  }
+                },
+                "required": { "type": "boolean" },
+                "max_children": { "type": "integer", "minimum": 1 },
+                "primitives": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "primitive_id",
+                      "primitive_type",
+                      "semantic_role",
+                      "syntax_role",
+                      "attribute_ranges",
+                      "anchor_mode"
+                    ],
+                    "properties": {
+                      "primitive_id": { "type": "string", "minLength": 1 },
+                      "primitive_type": {
+                        "type": "string",
+                        "enum": [
+                          "text_block", "image_region", "grid_cluster",
+                          "comparison_pair", "badge", "number_label",
+                          "icon_row", "caption_plate", "callout_arrow",
+                          "flow_diagram"
+                        ]
+                      },
+                      "semantic_role": { "type": "string", "minLength": 1 },
+                      "syntax_role": { "type": "string", "minLength": 1 },
+                      "attribute_ranges": {
+                        "type": "object",
+                        "properties": {
+                          "height_pct": {
+                            "type": "object",
+                            "properties": {
+                              "min": { "type": "number" },
+                              "max": { "type": "number" }
+                            }
+                          },
+                          "width_pct": {
+                            "type": "object",
+                            "properties": {
+                              "min": { "type": "number" },
+                              "max": { "type": "number" }
+                            }
+                          },
+                          "font_size_px": {
+                            "type": "object",
+                            "properties": {
+                              "min": { "type": "integer" },
+                              "max": { "type": "integer" }
+                            }
+                          },
+                          "font_weight": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "alignment": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": ["left", "center", "right"]
+                            }
+                          },
+                          "z_index_range": {
+                            "type": "object",
+                            "properties": {
+                              "min": { "type": "integer" },
+                              "max": { "type": "integer" }
+                            }
+                          },
+                          "padding_px": {
+                            "type": "object",
+                            "properties": {
+                              "min": { "type": "integer" },
+                              "max": { "type": "integer" }
+                            }
+                          },
+                          "overlap_allowed": { "type": "boolean" },
+                          "color_constraint": { "type": "string" }
+                        }
+                      },
+                      "anchor_mode": {
+                        "type": "string",
+                        "enum": ["static", "cross_slide_locked", "per_slide_variable"]
+                      },
+                      "why": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Justification for this primitive's placement and attribute ranges."
+                      },
+                      "protected_properties": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      }
+                    }
+                  },
+                  "minItems": 1
+                }
+              }
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "cross_slide_anchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["primitive_id", "locked_properties", "applies_to_slides"],
+        "properties": {
+          "primitive_id": { "type": "string", "minLength": 1 },
+          "locked_properties": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "applies_to_slides": {
+            "type": "string",
+            "enum": ["all", "numbered_items_only", "custom"],
+            "description": "Which slides this anchor continuity applies to."
+          },
+          "custom_slide_indices": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "If applies_to_slides is custom, list the specific indices."
+          }
+        }
+      },
+      "description": "Elements that must maintain identical position and size across slides."
+    },
+    "wrong_reading_lock_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["lock_text", "spatial_constraints"],
+        "properties": {
+          "lock_text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The original wrong-reading lock text from the harness."
+          },
+          "spatial_constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["constraint_type", "target_primitive", "rule"],
+              "properties": {
+                "constraint_type": {
+                  "type": "string",
+                  "enum": [
+                    "z_index_order",
+                    "non_overlap",
+                    "anchor_lock",
+                    "contrast_ratio",
+                    "presence_required",
+                    "absence_required",
+                    "pairing_required",
+                    "content_separation"
+                  ]
+                },
+                "target_primitive": { "type": "string" },
+                "rule": { "type": "string", "minLength": 1 }
+              }
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "deduplication_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Content hash of the zone configs + primitive selections + attribute ranges. Identical specs share this hash."
+    },
+    "lineage": {
+      "type": "object",
+      "required": ["source_premise_ref", "identity_dna_ref", "evidence_provenance_refs", "skill_ref"],
+      "properties": {
+        "source_premise_ref": { "type": "string" },
+        "identity_dna_ref": { "type": "string" },
+        "evidence_provenance_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "skill_ref": {
+          "type": "string",
+          "description": "Reference to the skill version that produced this specification."
+        }
+      },
+      "description": "Immutable lineage references. Passed through unchanged from input."
+    }
+  },
+  "additionalProperties": false
+}
