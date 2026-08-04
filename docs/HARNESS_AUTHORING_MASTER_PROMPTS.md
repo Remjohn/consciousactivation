@@ -65,6 +65,7 @@ You are compiling a raw visual harness bundle into a production-valid `operator_
 3. `wrong_reading_locks` MUST be a non-empty list — provide at least 3 format-specific negative constraints derived from the visual specimen and DRILL_ME files.
 4. No licensing or rights bots — do not invent rights analysis layers.
 5. `category_id` MUST be exactly one of: `supervisuals`, `carousels`, `short_form_edited_video`, `2d_character_animation`, or `conversational_activation_expression`.
+6. `manifest_id` & `task_id` Slugs — Set `manifest_id` to `"operator-manifest-<slug>"` and `task_id` to `"<slug>_v1"` using a clean, human-readable slug (e.g. `twq_std_standard_v1`). The final exported zip must be named `<HARNESS_NAME>.zip` (e.g. `TWQ-STD-Standard.zip`), never default `atomic-harness-definition_<hash>.zip`.
 
 ## Instructions
 Please analyze the target harness directory, execute the 5-step classification & synthesis procedure from `ONE_HARNESS_BUILD_PROMPT.md`, and produce the complete, un-truncated `manifest.json`.
