@@ -1,6 +1,6 @@
 # Harness Authoring Master Prompts & Execution Guide
 
-**Version:** 1.1.0  
+**Version:** 1.2.0  
 **Status:** RATIFIED_AUTHORING_GUIDE  
 **Target Repository:** `consciousactivation`  
 **Location of Raw Harness Bundles:** `atomic_harnesses_visual_syntax/`  
@@ -36,6 +36,38 @@ Every harness must bind to **exactly one** of the 5 canonical UI categories:
 
 ---
 
+## 2.1 Mandatory Specimen Inspection Enforcement
+
+**THIS IS A NON-NEGOTIABLE EXECUTION RULE. VIOLATION IS A CONSTITUTIONAL BREACH.**
+
+Laziness, superficial skimming, or assuming "the rest look the same" when analyzing visual specimens is **strictly prohibited**. Every harness's visual syntax, wrong-reading locks, and primitive taxonomy mapping MUST be derived from thorough individual inspection of the actual specimen images — not from guessing, summarizing titles, or extrapolating from one or two examples.
+
+### Inspection Minimums
+
+| Content Type | Minimum Inspection Requirement |
+|---|---|
+| **Carousels** | Inspect **every individual slide image** in the zip. Each slide may have a different zone layout, different primitive composition, and different wrong-reading risk. Treating slide 1 as representative of slides 2–10 is a failure. |
+| **SuperVisuals** | Inspect **every specimen image** in the zip. Each specimen variant (quote card, stat card, meme template, comparison split) may use different primitives and zones. |
+| **Video formats** | Inspect a **minimum of 20 screenshots/frames** from the reference material. If fewer than 20 exist, inspect all of them. |
+
+### What "Inspect" Means
+
+For each image/slide/frame, the agent MUST:
+1. **Open and view the actual image** — not just read filenames or metadata.
+2. **Identify every visual element** present in that specific image.
+3. **Map each element** to a canonical primitive type (`text_block`, `image_region`, `badge`, etc.).
+4. **Note the container zone** each element occupies (`header_zone`, `hero_zone`, etc.).
+5. **Record differences** between this slide and previous slides — layout changes, missing elements, new elements, different z-ordering, changed font weights.
+
+### What Counts as a Violation
+
+- Viewing only 2–3 slides of a 10-slide carousel and writing locks based on those alone.
+- Describing visual syntax without having opened the actual images.
+- Writing generic wrong-reading locks that could apply to any format rather than locks grounded in specific observed specimen details.
+- Assuming all slides in a carousel share identical layout without verifying each one.
+
+---
+
 ## 3. Master Prompt Snippet (For Claude Chat Sessions)
 
 Copy and paste the snippet below when starting a Claude chat session to author or validate a harness:
@@ -48,6 +80,16 @@ You are compiling the attached raw visual harness zip file into a production-val
 ## Input Material
 - **Uploaded Zip:** Contains `ONE_HARNESS_BUILD_PROMPT.md`, `DRILL_ME_FORMAT.md`, `DRILL_ME_BBOX_WHY.md`, `HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md`, and visual image specimens (`.png`/`.jpg`).
 
+## ⚠️ MANDATORY: Specimen Inspection Rule (Non-Negotiable)
+Before writing ANY manifest fields, you MUST individually open and inspect:
+- **Carousels:** EVERY slide image in the zip. Do not skip any.
+- **SuperVisuals:** EVERY specimen image in the zip. Do not skip any.
+- **Video formats:** At least 20 frames/screenshots. If fewer than 20 exist, inspect ALL.
+
+For each image you MUST: identify every visual element, map it to a canonical primitive (`text_block`, `image_region`, `grid_cluster`, `comparison_pair`, `badge`, `number_label`, `icon_row`, `caption_plate`, `callout_arrow`, `flow_diagram`), note its container zone (`header_zone`, `hero_zone`, `footer_zone`, `overlay_zone`, `full_bleed`), and record per-slide layout differences.
+
+Skimming, assuming, or extrapolating from a subset is a constitutional violation.
+
 ## ⚠️ Critical Validator Rules (Must Follow)
 1. `category_id`: MUST be set to exactly one of the 5 canonical categories:
    - `supervisuals` (SuperVisuals — single-frame portrait/quote graphics)
@@ -57,7 +99,7 @@ You are compiling the attached raw visual harness zip file into a production-val
    - `conversational_activation_expression` (Conversational Activation — dynamic chat)
 2. `capability_requirements`: MUST be a non-empty list — use `["activative_contract_validation"]`.
 3. `input_contract.properties`: `identity_dna` is FORBIDDEN here. It belongs exclusively in `activative_input.identity_dna_ref`. Use `source_expression_moment` and `voice_context` for runtime input properties.
-4. `wrong_reading_locks`: MUST be a non-empty list of at least 3 format-specific negative constraints derived from the visual specimens and DRILL_ME files.
+4. `wrong_reading_locks`: MUST be a non-empty list of at least 3 format-specific negative constraints derived from the visual specimens and DRILL_ME files. Each lock MUST reference specific primitive types and spatial constraints observed in the inspected specimens.
 5. `provenance_refs`: Include reference to `visual_syntax_composition_compiler@1.0.0` in addition to prompt/specimen source refs.
 6. **Primitive Taxonomy Mapping (Visual Syntax):** Classify slide visual elements into the canonical primitive taxonomy:
    - `text_block`, `image_region`, `grid_cluster`, `comparison_pair`, `badge`, `number_label`, `icon_row`, `caption_plate`, `callout_arrow`, `flow_diagram`
@@ -66,7 +108,7 @@ You are compiling the attached raw visual harness zip file into a production-val
 7. Slugs & IDs: Set `manifest_id` to `"operator-manifest-<slug>"` and `task_id` to `"<slug>_v1"` using a clean slug (e.g. `twq_img_portrait_v1`).
 
 ## Instructions
-1. Inspect all files and image specimens inside the uploaded zip.
+1. Inspect ALL files and image specimens inside the uploaded zip per the Mandatory Specimen Inspection Rule above.
 2. Execute the 5-step classification & synthesis procedure from `ONE_HARNESS_BUILD_PROMPT.md`.
 3. Output the complete, valid, un-truncated `manifest.json` ready for `cmf-builder ingest`.
 ```
