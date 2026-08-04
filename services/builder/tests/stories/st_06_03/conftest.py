@@ -15,8 +15,8 @@ from cmf_builder.domain.category_syntax import (
 DEFAULT_PROFILES = {
     "short_form_edited_video": "format01_story_video",
     "2d_character_animation": "format02_minimal_coach_theatre",
-    "carousels": None,
-    "supervisuals": None,
+    "carousels": "visual_syntax_composition_compiler",
+    "supervisuals": "visual_syntax_composition_compiler",
     "conversational_activation_expression": "public_comment",
 }
 
