@@ -40,35 +40,30 @@ Every harness must bind to **exactly one** of the 5 canonical UI categories:
 Copy and paste the snippet below when starting a Claude chat session to author or validate a harness:
 
 ```markdown
-# Harness Compilation Task — Repo-Grounded Execution
+# Harness Compilation Task — Direct Zip Upload
 
-You are compiling a raw visual harness bundle into a production-valid `operator_manifest.json` for the `cmf_builder` pipeline inside the `consciousactivation` repository.
+You are compiling the attached raw visual harness zip file into a production-valid `manifest.json` for the `cmf_builder` pipeline.
 
-## Target Harness
-- Target directory in repo: `atomic_harnesses_visual_syntax/<category>/<HARNESS_NAME>/`
+## Input Material
+- **Uploaded Zip:** Contains `ONE_HARNESS_BUILD_PROMPT.md`, `DRILL_ME_FORMAT.md`, `DRILL_ME_BBOX_WHY.md`, `HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md`, and visual image specimens (`.png`/`.jpg`).
 
-## Source Files inside the Target Directory
-1. `ONE_HARNESS_BUILD_PROMPT.md` — Procedure & task guidelines.
-2. `HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md` — Gap analysis & compilation skill.
-3. `DRILL_ME_FORMAT.md` — Format purpose, boundaries, and native primitives.
-4. `DRILL_ME_BBOX_WHY.md` — Component geometry & attention path rules.
-5. Visual Specimen (`.png` if present) — Visual layout reference.
-
-## Governance & Reference Files in Codebase
-- Governance Constitution: `docs/CANONICAL_SKILL_AUTHORING_CONSTITUTION.md`
-- Reference Working Manifest: `services/builder/tests/fixtures/productization/manifests/activative_expression.json`
-- Schema Definition: `services/builder/src/cmf_builder/domain/operator_manifest.py`
-
-## ⚠️ Critical Validator Gotchas (Must Follow)
-1. `capability_requirements` MUST be a non-empty list — use `["activative_contract_validation"]`. Setting `[]` will fail ingest.
-2. `identity_dna` is FORBIDDEN in `input_contract.properties` — it belongs exclusively in `activative_input.identity_dna_ref`. Use `voice_context` or `source_expression_moment` for runtime input properties.
-3. `wrong_reading_locks` MUST be a non-empty list — provide at least 3 format-specific negative constraints derived from the visual specimen and DRILL_ME files.
-4. No licensing or rights bots — do not invent rights analysis layers.
-5. `category_id` MUST be exactly one of: `supervisuals`, `carousels`, `short_form_edited_video`, `2d_character_animation`, or `conversational_activation_expression`.
-6. `manifest_id` & `task_id` Slugs — Set `manifest_id` to `"operator-manifest-<slug>"` and `task_id` to `"<slug>_v1"` using a clean, human-readable slug (e.g. `twq_std_standard_v1`). The final exported zip must be named `<HARNESS_NAME>.zip` (e.g. `TWQ-STD-Standard.zip`), never default `atomic-harness-definition_<hash>.zip`.
+## ⚠️ Critical Validator Rules (Must Follow)
+1. `category_id`: MUST be set to exactly one of the 5 canonical categories:
+   - `supervisuals` (SuperVisuals — single-frame portrait/quote graphics)
+   - `carousels` (Carousels & Slide Documentaries — multi-slide editorial)
+   - `short_form_edited_video` (Short-Form Edited Video — Reels/TikToks)
+   - `2d_character_animation` (2D Character Animation — animated theatre)
+   - `conversational_activation_expression` (Conversational Activation — dynamic chat)
+2. `capability_requirements`: MUST be a non-empty list — use `["activative_contract_validation"]`. Setting `[]` will fail validation.
+3. `input_contract.properties`: `identity_dna` is FORBIDDEN here. It belongs exclusively in `activative_input.identity_dna_ref`. Use `source_expression_moment` and `voice_context` for runtime input properties.
+4. `wrong_reading_locks`: MUST be a non-empty list of at least 3 format-specific negative constraints derived from the visual specimens and DRILL_ME files.
+5. No licensing or rights bots: Do not invent rights analysis layers.
+6. Slugs & IDs: Set `manifest_id` to `"operator-manifest-<slug>"` and `task_id` to `"<slug>_v1"` using a clean slug (e.g. `twq_img_portrait_v1`).
 
 ## Instructions
-Please analyze the target harness directory, execute the 5-step classification & synthesis procedure from `ONE_HARNESS_BUILD_PROMPT.md`, and produce the complete, un-truncated `manifest.json`.
+1. Inspect all files and image specimens inside the uploaded zip.
+2. Execute the 5-step classification & synthesis procedure from `ONE_HARNESS_BUILD_PROMPT.md`.
+3. Output the complete, valid, un-truncated `manifest.json` ready for `cmf-builder ingest`.
 ```
 
 ---
