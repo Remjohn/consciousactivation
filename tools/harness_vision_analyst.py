@@ -4,24 +4,43 @@ Harness Vision Analyst — Stage 1 of 2-Stage Harness Compilation Pipeline.
 
 WHAT IT DOES:
   - Extracts all image specimens from a raw harness .zip file.
-  - Sends each image to a vision model via OpenRouter (e.g. google/gemini-2.5-flash).
+  - Sends each image to a vision model via OpenRouter or NVIDIA API.
   - Collapses visually duplicate slides into canonical slide roles.
   - Outputs a structured `VISUAL_SYNTAX_ANALYSIS.json` file.
 
 WHAT IT DOES NOT DO:
-  - Does not write the manifest.json (that is Stage 2 for the harness model e.g. GLM 5.2).
+  - Does not write manifest.json (that is Stage 2 for the harness model e.g. GLM 5.2).
   - Does not call cmf-builder.
   - Does not render, edit, or produce any content.
+
+SUPPORTED PROVIDERS & ENDPOINTS:
+  1. OpenRouter (Default)
+     Base URL: https://openrouter.ai/api/v1
+     API Key:  OPENROUTER_API_KEY
+     Models:   google/gemini-2.5-flash
+               qwen/qwen3.7-flash
+               nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+               google/gemma-4-26b-a4b-it:free
+               google/gemma-4-31b-it:free
+
+  2. NVIDIA API Catalog
+     Base URL: https://integrate.api.nvidia.com/v1
+     API Key:  NVIDIA_API_KEY
+     Models:   nvidia/nemotron-3-ultra-550b-a55b
+               meta/llama-3.2-90b-vision-instruct
 
 USAGE:
   python harness_vision_analyst.py <path-to-harness.zip> [options]
 
-DEPENDENCIES:
-  pip install openai
+EXAMPLES:
+  # OpenRouter default (Gemini Flash)
+  python harness_vision_analyst.py harness.zip
 
-ENVIRONMENT:
-  OPENROUTER_API_KEY=<your key>   Required.
-  VISION_MODEL=<model slug>       Optional. Default: google/gemini-2.5-flash
+  # OpenRouter with Nemotron Nano Omni
+  python harness_vision_analyst.py harness.zip --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+
+  # NVIDIA API direct
+  python harness_vision_analyst.py harness.zip --provider nvidia --model nvidia/nemotron-3-ultra-550b-a55b
 """
 
 import argparse
@@ -33,52 +52,16 @@ import sys
 import zipfile
 from pathlib import Path
 
-
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
+
 DEFAULT_VISION_MODEL = "google/gemini-2.5-flash"
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
-
-# Canonical slide roles from the Visual Syntax Composition Compiler skill.
-# Claude/GLM will choose one per deduplicated layout group.
-CANONICAL_SLIDE_ROLES = [
-    "cover",
-    "numbered_item",
-    "comparison_beat",
-    "refrain_beat",
-    "photo_beat",
-    "grid_collage",
-    "closing_question",
-    "closing_cta",
-    "closing_comparison",
-    "testimonial",
-    "single_frame",  # supervisuals only
-]
-
-CANONICAL_PRIMITIVE_TYPES = [
-    "text_block",
-    "image_region",
-    "grid_cluster",
-    "comparison_pair",
-    "badge",
-    "number_label",
-    "icon_row",
-    "caption_plate",
-    "callout_arrow",
-    "flow_diagram",
-]
-
-CANONICAL_ZONES = [
-    "header_zone",
-    "hero_zone",
-    "footer_zone",
-    "overlay_zone",
-    "full_bleed",
-]
 
 # ---------------------------------------------------------------------------
 # Vision Model Prompt
@@ -130,11 +113,31 @@ contribute the same slide role but are NOT counted as unique visual syntax patte
 # ---------------------------------------------------------------------------
 
 
-def get_api_key() -> str:
-    key = os.environ.get("OPENROUTER_API_KEY", "").strip()
-    if not key:
-        sys.exit("ERROR: OPENROUTER_API_KEY environment variable is not set.")
-    return key
+def resolve_api_credentials(provider: str | None, base_url_arg: str | None, api_key_arg: str | None, model: str) -> tuple[str, str]:
+    """Determine the base_url and api_key to use."""
+    api_key = api_key_arg or ""
+    base_url = base_url_arg or ""
+
+    if not provider:
+        if base_url_arg and "nvidia.com" in base_url_arg:
+            provider = "nvidia"
+        elif "integrate.api.nvidia.com" in base_url:
+            provider = "nvidia"
+        else:
+            provider = "openrouter"
+
+    if provider == "nvidia":
+        base_url = base_url or NVIDIA_BASE_URL
+        api_key = api_key or os.environ.get("NVIDIA_API_KEY", "").strip() or os.environ.get("OPENROUTER_API_KEY", "").strip()
+        if not api_key:
+            sys.exit("ERROR: Neither NVIDIA_API_KEY nor OPENROUTER_API_KEY environment variable is set.")
+    else:
+        base_url = base_url or OPENROUTER_BASE_URL
+        api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "").strip()
+        if not api_key:
+            sys.exit("ERROR: OPENROUTER_API_KEY environment variable is not set.")
+
+    return base_url, api_key
 
 
 def extract_images(zip_path: Path) -> list[tuple[str, bytes]]:
@@ -148,7 +151,7 @@ def extract_images(zip_path: Path) -> list[tuple[str, bytes]]:
         if not names:
             sys.exit(
                 f"ERROR: No image files found in {zip_path.name}.\n"
-                "This zip contains no visual specimens. Remove it from the harness library."
+                "This zip contains 0 visual specimens. Per system rule, harnesses with 0 images cannot be processed."
             )
         for name in names:
             images.append((name, zf.read(name)))
@@ -195,7 +198,6 @@ def analyse_slide(client, model: str, slide_index: int, filename: str, image_byt
     )
 
     raw = response.choices[0].message.content.strip()
-    # Strip accidental markdown code fences if present
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):
@@ -217,17 +219,14 @@ def analyse_slide(client, model: str, slide_index: int, filename: str, image_byt
             "is_duplicate_of": None,
             "candidate_slide_role": "UNKNOWN",
         }
-    result["slide_index"] = slide_index  # enforce correct index
+    result["slide_index"] = slide_index
     result["source_filename"] = filename
     return result
 
 
 def build_deduplication_summary(slide_analyses: list[dict]) -> dict:
-    """
-    Collapse duplicate slides into unique layout groups.
-    Returns a summary of unique visual syntax patterns.
-    """
-    unique_layouts = {}  # fingerprint -> first slide_index
+    """Collapse duplicate slides into unique layout groups."""
+    unique_layouts = {}
     unique_roles = []
     duplicate_count = 0
 
@@ -257,19 +256,22 @@ def build_deduplication_summary(slide_analyses: list[dict]) -> dict:
     }
 
 
-def run(zip_path: Path, model: str, output_dir: Path) -> None:
+def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | None, api_key_arg: str | None, output_dir: Path) -> None:
     try:
         from openai import OpenAI
     except ImportError:
         sys.exit("ERROR: openai package not installed. Run: pip install openai")
 
+    base_url, api_key = resolve_api_credentials(provider, base_url_arg, api_key_arg, model)
+
     client = OpenAI(
-        api_key=get_api_key(),
-        base_url=OPENROUTER_BASE_URL,
+        api_key=api_key,
+        base_url=base_url,
     )
 
     print(f"Harness Vision Analyst")
     print(f"  Input zip:    {zip_path}")
+    print(f"  Base URL:     {base_url}")
     print(f"  Vision model: {model}")
     print(f"  Output dir:   {output_dir}")
     print()
@@ -308,6 +310,7 @@ def run(zip_path: Path, model: str, output_dir: Path) -> None:
         "source_zip": zip_path.name,
         "source_zip_sha256": zip_sha256,
         "vision_model_used": model,
+        "base_url": base_url,
         "deduplication_summary": dedup,
         "all_slide_analyses": slide_analyses,
         "stage_2_instructions": (
@@ -325,41 +328,42 @@ def run(zip_path: Path, model: str, output_dir: Path) -> None:
     print(f"Saved: {out_file}")
 
 
-# ---------------------------------------------------------------------------
-# CLI Entry Point
-# ---------------------------------------------------------------------------
-
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Stage 1 Vision Analyst — analyses harness specimens via OpenRouter vision model.",
+        description="Stage 1 Vision Analyst — analyses harness specimens via OpenRouter or NVIDIA vision models.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+  # OpenRouter default (Gemini Flash)
   python harness_vision_analyst.py atomic_harnesses_visual_syntax/carousels/CAR-JUX-Jealousy-1-1-10.zip
-  python harness_vision_analyst.py atomic_harnesses_visual_syntax/supervisuals/TWQ-IMG-Portrait.zip --model anthropic/claude-3.5-sonnet
-  python harness_vision_analyst.py myharness.zip --output-dir ./analysis_output/
 
-Environment variables:
-  OPENROUTER_API_KEY   Required. Your OpenRouter API key.
-  VISION_MODEL         Optional override for the vision model slug.
+  # OpenRouter with Nemotron Nano Omni
+  python harness_vision_analyst.py harness.zip --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+
+  # NVIDIA API direct
+  python harness_vision_analyst.py harness.zip --provider nvidia --model nvidia/nemotron-3-ultra-550b-a55b
 """,
     )
-    parser.add_argument(
-        "zip_path",
-        type=Path,
-        help="Path to the raw harness .zip file.",
-    )
+    parser.add_argument("zip_path", type=Path, help="Path to the raw harness .zip file.")
     parser.add_argument(
         "--model",
         type=str,
         default=os.environ.get("VISION_MODEL", DEFAULT_VISION_MODEL),
-        help=f"OpenRouter vision model slug (default: {DEFAULT_VISION_MODEL}).",
+        help=f"Vision model slug (default: {DEFAULT_VISION_MODEL}).",
     )
+    parser.add_argument(
+        "--provider",
+        type=str,
+        choices=["openrouter", "nvidia"],
+        help="Provider preset: 'openrouter' (https://openrouter.ai/api/v1) or 'nvidia' (https://integrate.api.nvidia.com/v1).",
+    )
+    parser.add_argument("--base-url", type=str, help="Custom OpenAI-compatible base URL.")
+    parser.add_argument("--api-key", type=str, help="API key (overrides OPENROUTER_API_KEY / NVIDIA_API_KEY).")
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path("tools/vision_analysis_output"),
-        help="Directory to write the VISUAL_SYNTAX_ANALYSIS.json output (default: tools/vision_analysis_output/).",
+        help="Directory to write the VISUAL_SYNTAX_ANALYSIS.json output.",
     )
 
     args = parser.parse_args()
@@ -369,7 +373,7 @@ Environment variables:
     if not zipfile.is_zipfile(args.zip_path):
         sys.exit(f"ERROR: Not a valid zip file: {args.zip_path}")
 
-    run(args.zip_path, args.model, args.output_dir)
+    run(args.zip_path, args.model, args.provider, args.base_url, args.api_key, args.output_dir)
 
 
 if __name__ == "__main__":
