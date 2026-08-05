@@ -3,9 +3,11 @@
 Harness Vision Analyst — Stage 1 of 2-Stage Harness Compilation Pipeline.
 
 WHAT IT DOES:
-  - Extracts all image specimens from a raw harness .zip file.
-  - Sends each image to a vision model via OpenRouter or NVIDIA API.
-  - Collapses visually duplicate slides into canonical slide roles.
+  - Extracts image specimens from a raw harness .zip file.
+  - For long video screenshot sequences (e.g. 50-100+ frames), automatically
+    samples 15-20 evenly spaced keyframes across the timeline.
+  - Sends each sampled keyframe to a vision model via OpenRouter or NVIDIA API.
+  - Collapses visually duplicate frames into canonical slide/scene roles.
   - Outputs a structured `VISUAL_SYNTAX_ANALYSIS.json` file.
 
 WHAT IT DOES NOT DO:
@@ -33,13 +35,13 @@ USAGE:
   python harness_vision_analyst.py <path-to-harness.zip> [options]
 
 EXAMPLES:
-  # OpenRouter default (Gemini Flash)
+  # OpenRouter default with max 20 keyframe samples
   python harness_vision_analyst.py harness.zip
 
-  # OpenRouter with Nemotron Nano Omni
-  python harness_vision_analyst.py harness.zip --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  # Sample max 15 keyframes from a video screenshot folder
+  python harness_vision_analyst.py video_harness.zip --max-samples 15
 
-  # NVIDIA API direct
+  # NVIDIA API direct with Nemotron Ultra
   python harness_vision_analyst.py harness.zip --provider nvidia --model nvidia/nemotron-3-ultra-550b-a55b
 """
 
@@ -60,6 +62,7 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 
 DEFAULT_VISION_MODEL = "google/gemini-2.5-flash"
+DEFAULT_MAX_SAMPLES = 20
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 
@@ -140,21 +143,32 @@ def resolve_api_credentials(provider: str | None, base_url_arg: str | None, api_
     return base_url, api_key
 
 
-def extract_images(zip_path: Path) -> list[tuple[str, bytes]]:
-    """Return list of (filename, image_bytes) sorted by filename."""
-    images = []
+def extract_images(zip_path: Path, max_samples: int = DEFAULT_MAX_SAMPLES) -> list[tuple[str, bytes]]:
+    """
+    Return list of (filename, image_bytes) sorted by filename.
+    If total images exceed max_samples, sample max_samples keyframes evenly across the sequence.
+    """
     with zipfile.ZipFile(zip_path, "r") as zf:
-        names = sorted(
+        all_names = sorted(
             n for n in zf.namelist()
             if Path(n).suffix.lower() in IMAGE_EXTENSIONS
         )
-        if not names:
+        if not all_names:
             sys.exit(
                 f"ERROR: No image files found in {zip_path.name}.\n"
                 "This zip contains 0 visual specimens. Per system rule, harnesses with 0 images cannot be processed."
             )
-        for name in names:
-            images.append((name, zf.read(name)))
+
+        total = len(all_names)
+        if total > max_samples:
+            # Sample max_samples evenly spaced frames including start and end
+            indices = [int(i * (total - 1) / (max_samples - 1)) for i in range(max_samples)]
+            sampled_names = [all_names[idx] for idx in sorted(set(indices))]
+            print(f"  Note: Sequence has {total} images. Sampling {len(sampled_names)} evenly spaced keyframes across timeline.")
+        else:
+            sampled_names = all_names
+
+        images = [(name, zf.read(name)) for name in sampled_names]
     return images
 
 
@@ -184,7 +198,7 @@ def analyse_slide(client, model: str, slide_index: int, filename: str, image_byt
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Analyse slide {slide_index} (filename: {filename}). Return ONLY the JSON object as specified.",
+                        "text": f"Analyse frame {slide_index} (filename: {filename}). Return ONLY the JSON object as specified.",
                     },
                     {
                         "type": "image_url",
@@ -206,7 +220,7 @@ def analyse_slide(client, model: str, slide_index: int, filename: str, image_byt
     try:
         result = json.loads(raw)
     except json.JSONDecodeError as e:
-        print(f"  WARNING: Could not parse JSON for slide {slide_index}. Raw response:\n{raw[:300]}")
+        print(f"  WARNING: Could not parse JSON for frame {slide_index}. Raw response:\n{raw[:300]}")
         result = {
             "slide_index": slide_index,
             "parse_error": str(e),
@@ -225,7 +239,7 @@ def analyse_slide(client, model: str, slide_index: int, filename: str, image_byt
 
 
 def build_deduplication_summary(slide_analyses: list[dict]) -> dict:
-    """Collapse duplicate slides into unique layout groups."""
+    """Collapse duplicate slides/frames into unique layout groups."""
     unique_layouts = {}
     unique_roles = []
     duplicate_count = 0
@@ -249,14 +263,14 @@ def build_deduplication_summary(slide_analyses: list[dict]) -> dict:
             })
 
     return {
-        "total_slides": len(slide_analyses),
+        "total_slides_analysed": len(slide_analyses),
         "unique_layout_count": len(unique_roles),
         "duplicate_slides_collapsed": duplicate_count,
         "unique_slide_roles": unique_roles,
     }
 
 
-def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | None, api_key_arg: str | None, output_dir: Path) -> None:
+def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | None, api_key_arg: str | None, max_samples: int, output_dir: Path) -> None:
     try:
         from openai import OpenAI
     except ImportError:
@@ -270,14 +284,15 @@ def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | No
     )
 
     print(f"Harness Vision Analyst")
-    print(f"  Input zip:    {zip_path}")
-    print(f"  Base URL:     {base_url}")
-    print(f"  Vision model: {model}")
-    print(f"  Output dir:   {output_dir}")
+    print(f"  Input zip:     {zip_path}")
+    print(f"  Base URL:      {base_url}")
+    print(f"  Vision model:  {model}")
+    print(f"  Max keyframes: {max_samples}")
+    print(f"  Output dir:    {output_dir}")
     print()
 
-    images = extract_images(zip_path)
-    print(f"Found {len(images)} image specimen(s) to analyse.")
+    images = extract_images(zip_path, max_samples=max_samples)
+    print(f"Processing {len(images)} keyframe specimen(s).")
     print()
 
     slide_analyses = []
@@ -288,7 +303,7 @@ def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | No
         role = result.get("candidate_slide_role", "?")
         fp = result.get("layout_fingerprint", "")[:60]
         if is_dup:
-            print(f"DUPLICATE of slide {is_dup} ({role}) | {fp}")
+            print(f"DUPLICATE of frame {is_dup} ({role}) | {fp}")
         else:
             print(f"UNIQUE -> {role} | {fp}")
         slide_analyses.append(result)
@@ -296,7 +311,7 @@ def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | No
     print()
     dedup = build_deduplication_summary(slide_analyses)
     print(f"Visual Syntax Deduplication Summary:")
-    print(f"  Total slides:              {dedup['total_slides']}")
+    print(f"  Total keyframes analysed:  {dedup['total_slides_analysed']}")
     print(f"  Unique layout patterns:    {dedup['unique_layout_count']}")
     print(f"  Duplicates collapsed:      {dedup['duplicate_slides_collapsed']}")
     print()
@@ -311,6 +326,7 @@ def run(zip_path: Path, model: str, provider: str | None, base_url_arg: str | No
         "source_zip_sha256": zip_sha256,
         "vision_model_used": model,
         "base_url": base_url,
+        "max_samples": max_samples,
         "deduplication_summary": dedup,
         "all_slide_analyses": slide_analyses,
         "stage_2_instructions": (
@@ -334,11 +350,11 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # OpenRouter default (Gemini Flash)
-  python harness_vision_analyst.py atomic_harnesses_visual_syntax/carousels/CAR-JUX-Jealousy-1-1-10.zip
+  # OpenRouter default (Gemini Flash, max 20 keyframes)
+  python harness_vision_analyst.py atomic_harnesses_visual_syntax/format04_conscious_reaction/format04_tier_list.zip
 
-  # OpenRouter with Nemotron Nano Omni
-  python harness_vision_analyst.py harness.zip --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  # Sample max 15 keyframes from a video screenshot folder
+  python harness_vision_analyst.py video_harness.zip --max-samples 15
 
   # NVIDIA API direct
   python harness_vision_analyst.py harness.zip --provider nvidia --model nvidia/nemotron-3-ultra-550b-a55b
@@ -357,6 +373,12 @@ Examples:
         choices=["openrouter", "nvidia"],
         help="Provider preset: 'openrouter' (https://openrouter.ai/api/v1) or 'nvidia' (https://integrate.api.nvidia.com/v1).",
     )
+    parser.add_argument(
+        "--max-samples",
+        type=int,
+        default=DEFAULT_MAX_SAMPLES,
+        help=f"Maximum keyframe screenshots to sample across timeline (default: {DEFAULT_MAX_SAMPLES}).",
+    )
     parser.add_argument("--base-url", type=str, help="Custom OpenAI-compatible base URL.")
     parser.add_argument("--api-key", type=str, help="API key (overrides OPENROUTER_API_KEY / NVIDIA_API_KEY).")
     parser.add_argument(
@@ -373,7 +395,7 @@ Examples:
     if not zipfile.is_zipfile(args.zip_path):
         sys.exit(f"ERROR: Not a valid zip file: {args.zip_path}")
 
-    run(args.zip_path, args.model, args.provider, args.base_url, args.api_key, args.output_dir)
+    run(args.zip_path, args.model, args.provider, args.base_url, args.api_key, args.max_samples, args.output_dir)
 
 
 if __name__ == "__main__":
