@@ -55,6 +55,8 @@ class ActivativeInputContract:
     wrong_reading_locks: tuple[str, ...]
     reaction_receipt_refs: tuple[str, ...] = ()
     expression_moment_refs: tuple[str, ...] = ()
+    aligned_primitive_ids: tuple[str, ...] = ()
+    wrong_reading_locks_meaning: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

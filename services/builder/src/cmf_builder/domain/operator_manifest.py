@@ -11,6 +11,8 @@ IMMUTABLE_REF_PATTERN = re.compile(
     r"#sha256:[a-f0-9]{64}$"
 )
 
+PRIMITIVE_ID_PATTERN = re.compile(r"^(PRM|EXP)-[A-Z]{3}-\d{3}$")
+
 TASK_FIELDS = frozenset(
     {
         "goal",
@@ -183,10 +185,13 @@ def require_text(value: object, field_path: str) -> str:
     return value.strip()
 
 
-def require_text_tuple(value: object, field_path: str) -> tuple[str, ...]:
-    if not isinstance(value, list) or not value:
+def require_text_tuple(
+    value: object, field_path: str, *, allow_empty: bool = False
+) -> tuple[str, ...]:
+    if not isinstance(value, list) or (not value and not allow_empty):
+        qualifier = "a JSON string list" if allow_empty else "a non-empty JSON string list"
         raise OperatorManifestInvalid(
-            "A non-empty JSON string list is required.", field_path=field_path
+            f"{qualifier} is required.", field_path=field_path
         )
     normalized = tuple(
         require_text(item, f"{field_path}[{index}]")
@@ -227,6 +232,35 @@ def require_immutable_ref(value: object, field_path: str) -> str:
             field_path=field_path,
         )
     return text
+
+
+def require_primitive_id(value: object, field_path: str) -> str:
+    text = require_text(value, field_path)
+    if PRIMITIVE_ID_PATTERN.fullmatch(text) is None:
+        raise OperatorManifestInvalid(
+            "Primitive id must match the governed PRM-/EXP- id pattern.",
+            field_path=field_path,
+        )
+    return text
+
+
+def require_primitive_id_tuple(
+    value: object, field_path: str, *, allow_empty: bool = True
+) -> tuple[str, ...]:
+    if not isinstance(value, list) or (not value and not allow_empty):
+        qualifier = "a JSON list" if allow_empty else "a non-empty JSON list"
+        raise OperatorManifestInvalid(
+            f"{qualifier} of primitive ids is required.", field_path=field_path
+        )
+    normalized = tuple(
+        require_primitive_id(item, f"{field_path}[{index}]")
+        for index, item in enumerate(value)
+    )
+    if len(set(normalized)) != len(normalized):
+        raise OperatorManifestInvalid(
+            "Duplicate primitive ids are not canonical.", field_path=field_path
+        )
+    return normalized
 
 
 def require_contract(value: object, field_path: str) -> dict[str, object]:

@@ -22,6 +22,7 @@ from cmf_builder.domain.operator_manifest import (
     require_exact_fields,
     require_immutable_ref,
     require_object,
+    require_primitive_id_tuple,
     require_ref_tuple,
     require_text,
     require_text_tuple,
@@ -55,7 +56,12 @@ ACTIVATIVE_REQUIRED_FIELDS = frozenset(
     }
 )
 ACTIVATIVE_OPTIONAL_FIELDS = frozenset(
-    {"reaction_receipt_refs", "expression_moment_refs"}
+    {
+        "reaction_receipt_refs",
+        "expression_moment_refs",
+        "aligned_primitive_ids",
+        "wrong_reading_locks_meaning",
+    }
 )
 ACTIVATIVE_FIELDS = ACTIVATIVE_REQUIRED_FIELDS | ACTIVATIVE_OPTIONAL_FIELDS
 
@@ -296,6 +302,16 @@ def _parse_activative(
         "activative_input.expression_moment_refs",
         allow_empty=True,
     )
+    aligned_primitive_ids = require_primitive_id_tuple(
+        fields.get("aligned_primitive_ids", []),
+        "activative_input.aligned_primitive_ids",
+        allow_empty=True,
+    )
+    wrong_reading_locks_meaning = require_text_tuple(
+        fields.get("wrong_reading_locks_meaning", []),
+        "activative_input.wrong_reading_locks_meaning",
+        allow_empty=True,
+    )
     contract = ActivativeInputContract(
         source_premise_ref=source_premise_ref,
         identity_dna_ref=identity_dna_ref,
@@ -317,6 +333,8 @@ def _parse_activative(
         wrong_reading_locks=wrong_reading_locks,
         reaction_receipt_refs=reaction_receipt_refs,
         expression_moment_refs=expression_moment_refs,
+        aligned_primitive_ids=aligned_primitive_ids,
+        wrong_reading_locks_meaning=wrong_reading_locks_meaning,
     )
     normalized = {
         "source_premise_ref": source_premise_ref,
@@ -339,6 +357,8 @@ def _parse_activative(
         "wrong_reading_locks": list(wrong_reading_locks),
         "reaction_receipt_refs": list(reaction_receipt_refs),
         "expression_moment_refs": list(expression_moment_refs),
+        "aligned_primitive_ids": list(aligned_primitive_ids),
+        "wrong_reading_locks_meaning": list(wrong_reading_locks_meaning),
     }
     return contract, normalize_json(normalized)
 

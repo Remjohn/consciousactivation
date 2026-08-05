@@ -227,3 +227,59 @@ def test_duplicate_governed_list_entries_fail_closed() -> None:
 
     assert raised.value.code is ProductizationErrorCode.INVALID_MANIFEST
     assert raised.value.field_path == "task.required_context"
+
+
+def test_mandate_01_optional_aligned_primitive_ids_and_meaning_locks() -> None:
+    source = _mapping("activative_expression.json")
+    source["activative_input"]["aligned_primitive_ids"] = ["PRM-HUM-009", "PRM-HUM-023"]
+    source["activative_input"]["wrong_reading_locks_meaning"] = [
+        "Do not frame hesitation as incapacity."
+    ]
+
+    result = parse_operator_manifest(_request(_encoded(source)))
+
+    assert result.activative_input is not None
+    assert result.activative_input.aligned_primitive_ids == ("PRM-HUM-009", "PRM-HUM-023")
+    assert result.activative_input.wrong_reading_locks_meaning == (
+        "Do not frame hesitation as incapacity.",
+    )
+    normalized = result.normalized["activative_input"]
+    assert normalized["aligned_primitive_ids"] == ["PRM-HUM-009", "PRM-HUM-023"]
+    assert normalized["wrong_reading_locks_meaning"] == [
+        "Do not frame hesitation as incapacity."
+    ]
+
+
+def test_mandate_01_duplicate_primitive_ids_rejected() -> None:
+    source = _mapping("activative_expression.json")
+    source["activative_input"]["aligned_primitive_ids"] = ["PRM-HUM-009", "PRM-HUM-009"]
+
+    with pytest.raises(ProductizationError) as raised:
+        parse_operator_manifest(_request(_encoded(source)))
+
+    assert raised.value.code is ProductizationErrorCode.INVALID_ACTIVATIVE_INPUT
+    assert raised.value.field_path == "activative_input.aligned_primitive_ids"
+
+
+def test_mandate_01_invalid_primitive_id_pattern_rejected() -> None:
+    source = _mapping("activative_expression.json")
+    source["activative_input"]["aligned_primitive_ids"] = ["invalid-primitive-id"]
+
+    with pytest.raises(ProductizationError) as raised:
+        parse_operator_manifest(_request(_encoded(source)))
+
+    assert raised.value.code is ProductizationErrorCode.INVALID_ACTIVATIVE_INPUT
+    assert raised.value.field_path == "activative_input.aligned_primitive_ids[0]"
+
+
+def test_mandate_01_empty_primitive_ids_and_meaning_locks_allowed() -> None:
+    source = _mapping("activative_expression.json")
+    source["activative_input"]["aligned_primitive_ids"] = []
+    source["activative_input"]["wrong_reading_locks_meaning"] = []
+
+    result = parse_operator_manifest(_request(_encoded(source)))
+
+    assert result.activative_input is not None
+    assert result.activative_input.aligned_primitive_ids == ()
+    assert result.activative_input.wrong_reading_locks_meaning == ()
+
