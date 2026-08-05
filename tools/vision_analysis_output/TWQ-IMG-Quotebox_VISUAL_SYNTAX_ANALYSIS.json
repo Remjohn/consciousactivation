@@ -1,0 +1,117 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "TWQ-IMG-Quotebox",
+  "source_zip": "TWQ-IMG-Quotebox.zip",
+  "source_zip_sha256": "02ecd66aacc791c618bf20df7f3739f38015c13aef0c14664a4e1f6da7b103c0",
+  "vision_model_used": "google/gemini-2.5-flash",
+  "base_url": "https://openrouter.ai/api/v1",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 1,
+    "unique_layout_count": 1,
+    "duplicate_slides_collapsed": 0,
+    "unique_slide_roles": [
+      {
+        "slide_role": "grid_collage",
+        "first_slide_index": 1,
+        "layout_fingerprint": "three_image_regions_with_text_blocks",
+        "container_zones": [
+          "full_bleed"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "top third, ultrasound image"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "overlay on top image, 'From God'"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "middle third, wedding couple"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "overlay on middle image, 'For God'"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "bottom third, funeral scene"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "overlay on bottom image, 'To God'"
+          }
+        ],
+        "reading_order": "top image and text, then middle image and text, then bottom image and text",
+        "anchor_elements": []
+      }
+    ]
+  },
+  "all_slide_analyses": [
+    {
+      "slide_index": 1,
+      "layout_fingerprint": "three_image_regions_with_text_blocks",
+      "container_zones": [
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "top third, ultrasound image"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "overlay on top image, 'From God'"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "middle third, wedding couple"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "overlay on middle image, 'For God'"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "bottom third, funeral scene"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "overlay on bottom image, 'To God'"
+        }
+      ],
+      "reading_order": "top image and text, then middle image and text, then bottom image and text",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "grid_collage",
+      "source_filename": "spiritual_devotion.jpg"
+    }
+  ],
+  "stage_2_instructions": "Feed this file together with the harness drill markdown files (ONE_HARNESS_BUILD_PROMPT.md, DRILL_ME_FORMAT.md, HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md) to the manifest authoring model (GLM 5.2 or equivalent non-vision model). The authoring model must produce manifest.json using ONLY deduplication_summary.unique_slide_roles as its visual syntax source — it must NOT re-derive layout from raw images."
+}

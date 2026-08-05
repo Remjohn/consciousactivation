@@ -1,0 +1,165 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "CAR-LST-Messigoat-4-5-2",
+  "source_zip": "CAR-LST-Messigoat-4-5-2.zip",
+  "source_zip_sha256": "6d689d4a5aa7d91d1ee52ace18171ed3d49c00e9174236f07c1a20ddfccf8a1f",
+  "vision_model_used": "google/gemini-2.5-flash",
+  "base_url": "https://openrouter.ai/api/v1",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 2,
+    "unique_layout_count": 2,
+    "duplicate_slides_collapsed": 0,
+    "unique_slide_roles": [
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 1,
+        "layout_fingerprint": "two_image_one_text",
+        "container_zones": [
+          "full_bleed"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "Top image shows two men, one in a tan shirt shaking hands with another man in a white and blue striped jersey with 'MESSI' on the back. The man in the tan shirt is smiling."
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "A large text block with the quote '“WE'LL NEVER SEE A PLAYER LIKE MESSI EVER AGAIN”' in a green banner."
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "Bottom image shows a man with a beard and glasses speaking into a pink microphone with a 'T' logo."
+          }
+        ],
+        "reading_order": "image_region, text_block, image_region",
+        "anchor_elements": [
+          "text_block"
+        ]
+      },
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 2,
+        "layout_fingerprint": "two_image_blocks_with_text",
+        "container_zones": [],
+        "primitives": [
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "top half of the slide, showing a man speaking"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "caption for the top image"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "bottom half of the slide, showing the same man smiling"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "caption for the bottom image"
+          }
+        ],
+        "reading_order": "top_to_bottom",
+        "anchor_elements": [
+          "image_region:top half of the slide, showing a man speaking",
+          "text_block:caption for the top image",
+          "image_region:bottom half of the slide, showing the same man smiling",
+          "text_block:caption for the bottom image"
+        ]
+      }
+    ]
+  },
+  "all_slide_analyses": [
+    {
+      "slide_index": 1,
+      "layout_fingerprint": "two_image_one_text",
+      "container_zones": [
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "Top image shows two men, one in a tan shirt shaking hands with another man in a white and blue striped jersey with 'MESSI' on the back. The man in the tan shirt is smiling."
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "A large text block with the quote '“WE'LL NEVER SEE A PLAYER LIKE MESSI EVER AGAIN”' in a green banner."
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "Bottom image shows a man with a beard and glasses speaking into a pink microphone with a 'T' logo."
+        }
+      ],
+      "reading_order": "image_region, text_block, image_region",
+      "anchor_elements": [
+        "text_block"
+      ],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "single_frame",
+      "source_filename": "01.jpg"
+    },
+    {
+      "slide_index": 2,
+      "layout_fingerprint": "two_image_blocks_with_text",
+      "container_zones": [],
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "top half of the slide, showing a man speaking"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "caption for the top image"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "bottom half of the slide, showing the same man smiling"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "caption for the bottom image"
+        }
+      ],
+      "reading_order": "top_to_bottom",
+      "anchor_elements": [
+        "image_region:top half of the slide, showing a man speaking",
+        "text_block:caption for the top image",
+        "image_region:bottom half of the slide, showing the same man smiling",
+        "text_block:caption for the bottom image"
+      ],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "single_frame",
+      "source_filename": "02.jpg"
+    }
+  ],
+  "stage_2_instructions": "Feed this file together with the harness drill markdown files (ONE_HARNESS_BUILD_PROMPT.md, DRILL_ME_FORMAT.md, HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md) to the manifest authoring model (GLM 5.2 or equivalent non-vision model). The authoring model must produce manifest.json using ONLY deduplication_summary.unique_slide_roles as its visual syntax source — it must NOT re-derive layout from raw images."
+}

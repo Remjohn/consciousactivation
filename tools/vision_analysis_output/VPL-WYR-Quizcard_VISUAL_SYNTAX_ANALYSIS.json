@@ -1,0 +1,121 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "VPL-WYR-Quizcard",
+  "source_zip": "VPL-WYR-Quizcard.zip",
+  "source_zip_sha256": "7061bfb6133c645ce29815306de562354cc18e4a468a051f5ff2db3fda8f0534",
+  "vision_model_used": "google/gemini-2.5-flash",
+  "base_url": "https://openrouter.ai/api/v1",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 2,
+    "unique_layout_count": 2,
+    "duplicate_slides_collapsed": 0,
+    "unique_slide_roles": [
+      {
+        "slide_role": "grid_collage",
+        "first_slide_index": 1,
+        "layout_fingerprint": "grid_cluster + number_labels",
+        "container_zones": [
+          "full_bleed"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "grid_cluster",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "3x3 grid of images"
+          },
+          {
+            "primitive_type": "number_label",
+            "zone": "full_bleed",
+            "dominant": false,
+            "notes": "Numbers 1-9, one in the top-left corner of each grid cell"
+          }
+        ],
+        "reading_order": "left_to_right_then_top_to_bottom_across_grid",
+        "anchor_elements": []
+      },
+      {
+        "slide_role": "grid_collage",
+        "first_slide_index": 2,
+        "layout_fingerprint": "grid_cluster + overlay_text",
+        "container_zones": [
+          "full_bleed",
+          "overlay_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "grid_cluster",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "4 images arranged in a 2x2 grid"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "overlay_zone",
+            "dominant": false,
+            "notes": "white text with black outline, centered horizontally, overlapping grid images"
+          }
+        ],
+        "reading_order": "top-left to top-right, then bottom-left to bottom-right for images, then overlay text",
+        "anchor_elements": []
+      }
+    ]
+  },
+  "all_slide_analyses": [
+    {
+      "slide_index": 1,
+      "layout_fingerprint": "grid_cluster + number_labels",
+      "container_zones": [
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "grid_cluster",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "3x3 grid of images"
+        },
+        {
+          "primitive_type": "number_label",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "Numbers 1-9, one in the top-left corner of each grid cell"
+        }
+      ],
+      "reading_order": "left_to_right_then_top_to_bottom_across_grid",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "grid_collage",
+      "source_filename": "img_SFHnGOU.jpg"
+    },
+    {
+      "slide_index": 2,
+      "layout_fingerprint": "grid_cluster + overlay_text",
+      "container_zones": [
+        "full_bleed",
+        "overlay_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "grid_cluster",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "4 images arranged in a 2x2 grid"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "overlay_zone",
+          "dominant": false,
+          "notes": "white text with black outline, centered horizontally, overlapping grid images"
+        }
+      ],
+      "reading_order": "top-left to top-right, then bottom-left to bottom-right for images, then overlay text",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "grid_collage",
+      "source_filename": "img_rKdeWNP.jpg"
+    }
+  ],
+  "stage_2_instructions": "Feed this file together with the harness drill markdown files (ONE_HARNESS_BUILD_PROMPT.md, DRILL_ME_FORMAT.md, HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md) to the manifest authoring model (GLM 5.2 or equivalent non-vision model). The authoring model must produce manifest.json using ONLY deduplication_summary.unique_slide_roles as its visual syntax source — it must NOT re-derive layout from raw images."
+}

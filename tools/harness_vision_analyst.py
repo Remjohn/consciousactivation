@@ -50,9 +50,17 @@ import base64
 import hashlib
 import json
 import os
+import re
 import sys
 import zipfile
 from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+    _REPO_ROOT = Path(__file__).resolve().parent.parent
+    load_dotenv(_REPO_ROOT / ".env", override=False)
+except ImportError:
+    pass  # python-dotenv not installed; fall back to plain os.environ
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -71,44 +79,36 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 # ---------------------------------------------------------------------------
 
 PER_SLIDE_SYSTEM_PROMPT = """\
-You are a Visual Syntax Analyst for the Conscious Activations Builder system.
-Your job is to analyse a single slide/frame image and produce a structured JSON description
-of its visual layout for harness compilation. You do NOT generate content, suggest captions,
-or interpret the topic meaning of the image.
+You are a Visual Syntax Analyst. Analyse the image at `url` and return ONE JSON object ONLY.
+No prose explanation. No thought tags. No markdown fences. No preamble or postamble.
 
-You MUST return ONLY a valid JSON object. No markdown fences. No explanation outside JSON.
+Required keys:
+  slide_index (integer),
+  layout_fingerprint (string),
+  container_zones (string[]),
+  primitives (array of { primitive_type: string, zone: string, dominant: boolean, notes: string }),
+  reading_order (string),
+  anchor_elements (string[]),
+  is_duplicate_of (integer|null),
+  candidate_slide_role (string)
 
-Required JSON structure:
-{
-  "slide_index": <integer>,
-  "layout_fingerprint": "<a brief structural description used to detect duplicates, e.g. 'header_text + full_bleed_photo + footer_badge'>",
-  "container_zones": ["<zone_name>", ...],
-  "primitives": [
-    {
-      "primitive_type": "<one of the canonical types>",
-      "zone": "<which zone it lives in>",
-      "dominant": <true if this is the visually dominant element>,
-      "notes": "<any attribute observations: font weight, overlap, anchor continuity across slides, contrast>"
-    }
-  ],
-  "reading_order": "<brief description of natural eye-path through the slide>",
-  "anchor_elements": ["<elements that appear fixed/consistent across slides, e.g. badge in footer>"],
-  "is_duplicate_of": <null or slide_index of the earlier slide this is visually identical to>,
-  "candidate_slide_role": "<one canonical slide role from the taxonomy>"
-}
-
-Canonical primitive types: text_block, image_region, grid_cluster, comparison_pair, badge,
+Canonical primitive_type: text_block, image_region, grid_cluster, comparison_pair, badge,
 number_label, icon_row, caption_plate, callout_arrow, flow_diagram.
 
-Canonical container zones: header_zone, hero_zone, footer_zone, overlay_zone, full_bleed.
+Canonical container_zones: header_zone, hero_zone, footer_zone, overlay_zone, full_bleed.
 
-Canonical slide roles: cover, numbered_item, comparison_beat, refrain_beat, photo_beat,
-grid_collage, closing_question, closing_cta, closing_comparison, testimonial, single_frame.
+Canonical candidate_slide_role: cover, numbered_item, comparison_beat, refrain_beat,
+photo_beat, grid_collage, closing_question, closing_cta, closing_comparison,
+testimonial, single_frame.
 
-Deduplication rule: if this slide's layout_fingerprint is structurally identical to a previous
-slide (same zones, same primitive types in same positions, only TEXT CONTENT is different),
-set is_duplicate_of to the slide_index of the first occurrence. Slides that are duplicates
-contribute the same slide role but are NOT counted as unique visual syntax patterns.
+Constraints (MANDATORY):
+- layout_fingerprint MUST be a short, human-readable summary of ~1 sentence
+  (max 8 words), e.g. "header_text + full_bleed_photo + footer_badge".
+- Do NOT invent delimiters or repeat tokens. Never output sequences like
+  "B1_B1_B1" or per-cell layout encodings. Describe zones/regions, not each cell.
+- primitives: list each distinct element at most once; cap at 8 entries.
+- READING ORDER and NOTES: keep each field under 25 words.
+- Output MUST be strictly valid JSON. Total output should be under 400 tokens.
 """
 
 # ---------------------------------------------------------------------------
@@ -185,45 +185,101 @@ def image_to_data_url(image_bytes: bytes, filename: str) -> str:
     return f"data:{mime};base64,{b64}"
 
 
-def analyse_slide(client, model: str, slide_index: int, filename: str, image_bytes: bytes) -> dict:
-    """Call the vision model for a single slide. Returns parsed JSON dict."""
-    data_url = image_to_data_url(image_bytes, filename)
+def _extract_text(response: object) -> str:
+    """Pull the text payload from a completions response across providers."""
+    choice = getattr(response, "choices", [None])[0]
+    if choice is None:
+        return ""
+    msg = getattr(choice, "message", None)
+    if msg is None:
+        return ""
+    # Field used by OpenAI and the NVIDIA API gateway
+    content = getattr(msg, "content", None)
+    if isinstance(content, str) and content.strip():
+        return content.strip()
+    # NVIDIA Step models return output in reasoning_content (the
+    # chain-of-thought surface) when content is null.
+    reasoning_content = getattr(msg, "reasoning_content", None)
+    if isinstance(reasoning_content, str) and reasoning_content.strip():
+        return reasoning_content.strip()
+    # Some providers return structured tool calls instead.
+    tool_calls = getattr(msg, "tool_calls", None) or []
+    for tc in tool_calls:
+        func = getattr(tc, "function", None)
+        if func is None:
+            continue
+        args = getattr(func, "arguments", "")
+        if isinstance(args, str) and args.strip():
+            return args.strip()
+    return ""
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": PER_SLIDE_SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": f"Analyse frame {slide_index} (filename: {filename}). Return ONLY the JSON object as specified.",
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": data_url},
-                    },
-                ],
-            },
-        ],
-        temperature=0.0,
-        max_tokens=1024,
-    )
 
-    raw = response.choices[0].message.content.strip()
+def _try_parse_json(raw: str) -> tuple[dict, bool]:
+    """Strip markdown fences / json prefix, then try to parse. Returns (dict, success)."""
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):
             raw = raw[4:]
-        raw = raw.strip()
+    raw = raw.strip()
     try:
-        result = json.loads(raw)
-    except json.JSONDecodeError as e:
-        print(f"  WARNING: Could not parse JSON for frame {slide_index}. Raw response:\n{raw[:300]}")
+        return json.loads(raw), True
+    except json.JSONDecodeError:
+        return {}, False
+
+
+def analyse_slide(client, model: str, slide_index: int, filename: str, image_bytes: bytes) -> dict:
+    """Call the vision model for a single slide. Returns parsed JSON dict."""
+    data_url = image_to_data_url(image_bytes, filename)
+    user_content = [
+        {
+            "type": "text",
+            "text": (
+                f"Analyse frame {slide_index} (filename: {filename}). "
+                "Output ONLY the JSON object described below. Start with { and end with }."
+            ),
+        },
+        {"type": "image_url", "image_url": {"url": data_url}},
+    ]
+
+    messages = [
+        {"role": "system", "content": PER_SLIDE_SYSTEM_PROMPT},
+        {"role": "user", "content": user_content},
+        {"role": "user", "content": "Continue. Output ONLY the raw JSON object, starting with { and ending with }."},
+    ]
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=0.0,
+        max_tokens=4096,
+    )
+
+    raw = _extract_text(response)
+    if not raw:
+        print(f" WARNING: Empty response for frame {slide_index} (provider returned no text).")
+        return {
+            "slide_index": slide_index,
+            "source_filename": filename,
+            "layout_fingerprint": "EMPTY_RESPONSE",
+            "container_zones": [],
+            "primitives": [],
+            "reading_order": "",
+            "anchor_elements": [],
+            "is_duplicate_of": None,
+            "candidate_slide_role": "UNKNOWN",
+        }
+
+    result, ok = _try_parse_json(raw)
+    if not ok:
+        # Last resort: pull the first JSON-looking {...} block from reasoning prose.
+        match = re.search(r'\{[\s\S]*\}', raw)
+        if match:
+            result, ok = _try_parse_json(match.group(0))
+    if not ok:
+        print(f" WARNING: Could not parse JSON for frame {slide_index}. Raw response:\n{raw[:300]}")
         result = {
             "slide_index": slide_index,
-            "parse_error": str(e),
+            "parse_error": "json_decode_failed",
             "raw_response": raw[:500],
             "layout_fingerprint": "PARSE_ERROR",
             "container_zones": [],
