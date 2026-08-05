@@ -1,0 +1,58 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "SPV-CON-Contrast",
+  "source_zip": "SPV-CON-Contrast.zip",
+  "source_zip_sha256": "536d494d76e010692224a889497123eaa274996d31d9409af3ddb31a7b5f2235",
+  "vision_model_used": "antigravity-multimodal-analyst",
+  "base_url": "local-antigravity-vision",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 4,
+    "unique_layout_count": 1,
+    "duplicate_slides_collapsed": 3,
+    "unique_slide_roles": [
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 1,
+        "layout_fingerprint": "header_badge_text + hero_comparison_pair_bordered + footer_text_block_captions",
+        "container_zones": [
+          "header_zone",
+          "hero_zone",
+          "footer_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "badge",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "Speaker avatar + handle + verified badge"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": true,
+            "notes": "Premise headline with highlighted contrast keywords"
+          },
+          {
+            "primitive_type": "comparison_pair",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "Side-by-side photo panels with distinct color borders"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "footer_zone",
+            "dominant": false,
+            "notes": "Direct caption labels beneath each comparison panel"
+          }
+        ],
+        "reading_order": "Header badge -> Premise headline -> Left comparison panel -> Right comparison panel -> Panel captions",
+        "anchor_elements": [
+          "badge",
+          "comparison_pair"
+        ]
+      }
+    ]
+  },
+  "stage_2_instructions": "Feed this file to GLM 5.2 to produce manifest.json"
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "TWQ-STD-Assertion",
+  "source_zip": "TWQ-STD-Assertion.zip",
+  "source_zip_sha256": "a698531651f1d8af56ae8535daad0ae22777f5dc9c1ae8d23b35a4548d5d4867",
+  "vision_model_used": "antigravity-multimodal-analyst",
+  "base_url": "local-antigravity-vision",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 10,
+    "unique_layout_count": 1,
+    "duplicate_slides_collapsed": 9,
+    "unique_slide_roles": [
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 1,
+        "layout_fingerprint": "full_bleed_dark_plate + header_badge + hero_text_block_assertion",
+        "container_zones": [
+          "full_bleed",
+          "header_zone",
+          "hero_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "badge",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "Speaker avatar + handle + blue verified checkmark"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "Multi-line left-aligned tweet text with bold assertion formatting"
+          }
+        ],
+        "reading_order": "Header badge -> Primary assertion text -> Highlighted emphasis line",
+        "anchor_elements": [
+          "badge",
+          "full_bleed"
+        ]
+      }
+    ]
+  },
+  "stage_2_instructions": "Feed this file to GLM 5.2 to produce manifest.json"
+}
