@@ -10,21 +10,43 @@
     "atomic_boundary": "One identity-contrast premise (two named paths, one shared decision point) becomes one static vertical split-portrait SuperVisual frame. No carousel slides, no animation, no video, no multi-frame narrative, no interactive poll mechanics beyond the single static image.",
     "input_contract": {
       "type": "object",
-      "required": ["source_expression_moment", "voice_context"],
+      "required": [
+        "source_expression_moment",
+        "voice_context"
+      ],
       "properties": {
-        "source_expression_moment": {"type": "string", "minLength": 1, "description": "The specific identity duality being contrasted (e.g. 'the exhausted default-mode dad vs. the energized intentional dad') that this frame stages."},
-        "voice_context": {"type": "string", "minLength": 1, "description": "Voice, tone, and brand-typography context governing the headline, sticker-label copy, and trait-row phrasing."}
+        "source_expression_moment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The specific identity duality being contrasted (e.g. 'the exhausted default-mode dad vs. the energized intentional dad') that this frame stages."
+        },
+        "voice_context": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Voice, tone, and brand-typography context governing the headline, sticker-label copy, and trait-row phrasing."
+        }
       }
     },
     "output_contract": {
       "type": "object",
-      "required": ["supervisual_frame"],
+      "required": [
+        "supervisual_frame"
+      ],
       "properties": {
-        "supervisual_frame": {"type": "object", "description": "A single production-ready vertical image frame containing dual portraits, sticker-shaped identity labels, a VS divider, a four-row trait comparison, and a brand footer mark."}
+        "supervisual_frame": {
+          "type": "object",
+          "description": "A single production-ready vertical image frame containing dual portraits, sticker-shaped identity labels, a VS divider, a four-row trait comparison, and a brand footer mark."
+        }
       }
     },
-    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "source_expression_session",
+      "identity_dna",
+      "air_tensions"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "dual_portrait_and_sticker_label_legibility_at_mobile_scale",
       "trait_row_vertical_alignment_between_columns",
@@ -35,7 +57,8 @@
     ],
     "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
     "provenance_refs": [
-      "operator-vpl-wyr-vertical-source@1.0.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000001"
+      "operator-vpl-wyr-vertical-source@1.0.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000001",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -46,11 +69,24 @@
     "matrix_of_edging_ref": "matrix-of-edging@1.3.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000006",
     "activative_intelligence_pack_ref": "activative-intelligence-pack@5.0.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000007",
     "hidden_pressure": "The viewer scrolls past dozens of 'which one are you' comparison graphics daily. Most either read as mockery (the 'before' side feels like an insult) or fantasy (the 'after' side feels unattainable). This frame has to make the viewer feel accurately named on the left without feeling attacked, and see the right column as a realistic next version of themselves rather than a stock-photo aspiration.",
-    "activation_directions": ["self_identify_the_current_column", "feel_named_not_shamed", "see_the_other_column_as_reachable"],
-    "roles": ["viewer_as_subject", "brand_as_mirror"],
-    "stance": "Playful confrontation with an open door — name the exhausted pattern accurately, then hand over an attainable alternative rather than a fantasy.",
-    "stakes": ["the busy-dad column reads as mockery, so the viewer disengages defensively instead of self-identifying", "the balanced-dad column reads as an unattainable fitness-ad fantasy, breaking the sense that the viewer could actually move columns"],
-    "identity_urges": ["see myself honestly named without feeling attacked", "believe the better version is reachable, not performative"],
+    "activation_directions": [
+      "self_identify_the_current_column",
+      "feel_named_not_shamed",
+      "see_the_other_column_as_reachable"
+    ],
+    "roles": [
+      "viewer_as_subject",
+      "brand_as_mirror"
+    ],
+    "stance": "Playful confrontation with an open door \u2014 name the exhausted pattern accurately, then hand over an attainable alternative rather than a fantasy.",
+    "stakes": [
+      "the busy-dad column reads as mockery, so the viewer disengages defensively instead of self-identifying",
+      "the balanced-dad column reads as an unattainable fitness-ad fantasy, breaking the sense that the viewer could actually move columns"
+    ],
+    "identity_urges": [
+      "see myself honestly named without feeling attacked",
+      "believe the better version is reachable, not performative"
+    ],
     "participation_design": "The viewer scans two labeled portraits divided by a VS mark, silently checks off which of the four trait rows currently describes them, and lands on wanting to move from the left column to the right.",
     "intended_reaction": "The viewer recognizes the left column as an accurate, slightly funny description of their current state, and feels a genuine pull toward the right column rather than shame or dismissal.",
     "smallest_useful_commitment": "Silently name which column currently describes you.",
@@ -59,12 +95,20 @@
     ],
     "evaluation_contract_ref": "vpl-wyr-vertical-eval@1.0.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000009",
     "wrong_reading_locks": [
-      "Do not let the left-column portrait/labels read as an attack on the viewer (e.g. exaggerated dishevelment, mocking copy) — the busy-dad rows must stay descriptive and relatable, or the viewer disengages defensively instead of self-identifying.",
-      "Do not let the right-column portrait read as a staged fitness-ad fantasy (studio lighting, magazine physique) — it must look like an attainable next version of the same man, not a different, unreachable person.",
-      "Do not swap or blend the yellow/white color coding between columns — yellow must consistently mark the struggle column and white must consistently mark the aspirational column, or the trait rows lose their meaning.",
-      "Do not shrink or omit the VS divider or the sticker-shaped identity labels ('THE BUSY DAD' / 'THE BALANCED DAD') below mobile legibility — without them the split-comparison structure collapses into two unrelated portraits.",
-      "Do not let the four trait rows misalign vertically between the two columns — each row must sit directly opposite its counterpart so the format reads as a point-by-point comparison, not two separate blurbs.",
-      "Do not remove or shrink the brand footer mark past recognizability — this is a self-identification format meant to drive attribution back to the source, and an unattributed frame breaks the participation loop."
+      "Do not let the left-column portrait/labels read as an attack on the viewer (e.g. exaggerated dishevelment, mocking copy) \u2014 the busy-dad rows must stay descriptive and relatable, or the viewer disengages defensively instead of self-identifying.",
+      "Do not let the right-column portrait read as a staged fitness-ad fantasy (studio lighting, magazine physique) \u2014 it must look like an attainable next version of the same man, not a different, unreachable person.",
+      "Do not swap or blend the yellow/white color coding between columns \u2014 yellow must consistently mark the struggle column and white must consistently mark the aspirational column, or the trait rows lose their meaning.",
+      "Do not shrink or omit the VS divider or the sticker-shaped identity labels ('THE BUSY DAD' / 'THE BALANCED DAD') below mobile legibility \u2014 without them the split-comparison structure collapses into two unrelated portraits.",
+      "Do not let the four trait rows misalign vertically between the two columns \u2014 each row must sit directly opposite its counterpart so the format reads as a point-by-point comparison, not two separate blurbs.",
+      "Do not remove or shrink the brand footer mark past recognizability \u2014 this is a self-identification format meant to drive attribution back to the source, and an unattributed frame breaks the participation loop."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-PSY-018",
+      "EXP-FBK-004"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not break vertical reading stack flow -- PRM-PSY-018 aligns with mobile scroll trajectory.",
+      "Do not crowd decision buttons -- EXP-FBK-004 enables effortless tap interaction."
     ]
   }
 }

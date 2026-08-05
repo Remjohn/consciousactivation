@@ -5,12 +5,16 @@
   "mode": "activative",
   "category_id": "carousels",
   "task": {
-    "goal": "Produce a multi-slide 'juxtaposition' editorial carousel that reframes a subject by contrasting an expected dominant narrative against an under-told creative-identity narrative, using highlighted-plate captions, annotated symbol callouts, collaged evidence panels, and a closing explanatory diagram — with no video, no animation, and no single-frame collapse.",
+    "goal": "Produce a multi-slide 'juxtaposition' editorial carousel that reframes a subject by contrasting an expected dominant narrative against an under-told creative-identity narrative, using highlighted-plate captions, annotated symbol callouts, collaged evidence panels, and a closing explanatory diagram \u2014 with no video, no animation, and no single-frame collapse.",
     "success_condition": "Every slide reads standalone at mobile scale; the highlighted-text caption plates remain the dominant visual surface over any background photography or collage; annotation arrows connecting a garment or symbol to its referent stay legible and subordinate to the caption plates; the closing flow-diagram slide reads as an explanatory model rather than a statistical claim; and the sign-off slide keeps a first-person, unpolished authorial voice instead of collapsing into brand copy.",
     "atomic_boundary": "One juxtaposition premise (dominant narrative vs. under-told narrative) becomes one ordered, static multi-slide image sequence (this specimen: 12 slides). No video, no motion or animation, no single-frame SuperVisual collapse, and no more than one juxtaposition thesis per carousel.",
     "input_contract": {
       "type": "object",
-      "required": ["source_expression_moment", "voice_context", "slide_source_sequence"],
+      "required": [
+        "source_expression_moment",
+        "voice_context",
+        "slide_source_sequence"
+      ],
       "properties": {
         "source_expression_moment": {
           "type": "string",
@@ -26,23 +30,35 @@
           "type": "array",
           "minItems": 1,
           "description": "Ordered reference photography, diagram content, and/or supporting material for each slide, in render order.",
-          "items": { "type": "object" }
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
     "output_contract": {
       "type": "object",
-      "required": ["carousel_slide_sequence"],
+      "required": [
+        "carousel_slide_sequence"
+      ],
       "properties": {
         "carousel_slide_sequence": {
           "type": "array",
           "description": "An ordered list of production-ready slide frames (image or diagram plus caption-plate composition) forming one complete carousel post.",
-          "items": { "type": "object" }
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
-    "required_context": ["reference_carousel_corpus", "identity_dna", "air_tensions"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "reference_carousel_corpus",
+      "identity_dna",
+      "air_tensions"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "caption_plate_reads_as_dominant_surface_at_mobile_scale",
       "annotation_arrows_resolve_to_a_named_referent_not_asserted_fact",
@@ -54,7 +70,8 @@
     ],
     "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
     "provenance_refs": [
-      "operator-car-jux-congofash-source@1.0.0#sha256:44ee8c0216c843d095ebe7c5c2f60c29185484b10e6be0ae4a547aef7af0849b"
+      "operator-car-jux-congofash-source@1.0.0#sha256:44ee8c0216c843d095ebe7c5c2f60c29185484b10e6be0ae4a547aef7af0849b",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -65,16 +82,26 @@
     "matrix_of_edging_ref": "car-jux-congofash-matrix-of-edging@1.3.0#sha256:44ee8c0216c843d095ebe7c5c2f60c29185484b10e6be0ae4a547aef7af0849b",
     "activative_intelligence_pack_ref": "car-jux-congofash-activative-intelligence-pack@5.0.0#sha256:44ee8c0216c843d095ebe7c5c2f60c29185484b10e6be0ae4a547aef7af0849b",
     "hidden_pressure": "The viewer already has a mental slot for 'DR Congo at the World Cup' pre-filled by decades of conflict-and-crisis coverage; this carousel has to displace that slot with a self-authored creative-identity narrative before the reader's attention lapses past slide two.",
-    "activation_directions": ["notice_the_reframe", "trace_the_symbol", "carry_the_curiosity_forward"],
-    "roles": ["narrator", "viewer"],
-    "stance": "Observational and self-aware — argues a genuine reframe while admitting its own possible cynicism ('I think it was a set up, but hey').",
+    "activation_directions": [
+      "notice_the_reframe",
+      "trace_the_symbol",
+      "carry_the_curiosity_forward"
+    ],
+    "roles": [
+      "narrator",
+      "viewer"
+    ],
+    "stance": "Observational and self-aware \u2014 argues a genuine reframe while admitting its own possible cynicism ('I think it was a set up, but hey').",
     "stakes": [
       "the reframe reads as spin instead of a genuine cultural argument",
       "the closing diagram is mistaken for a data claim instead of an explanatory model",
       "the personal authorial voice gets sanded into generic brand copy"
     ],
-    "identity_urges": ["be seen as more than a stereotype", "get credit for authorship, not just spectacle"],
-    "participation_design": "The viewer follows a five-beat arc — hook, contrast setup, symbol callout, evidence collage, explanatory model — then is released on a low-key, first-person sign-off with no hard call-to-action.",
+    "identity_urges": [
+      "be seen as more than a stereotype",
+      "get credit for authorship, not just spectacle"
+    ],
+    "participation_design": "The viewer follows a five-beat arc \u2014 hook, contrast setup, symbol callout, evidence collage, explanatory model \u2014 then is released on a low-key, first-person sign-off with no hard call-to-action.",
     "intended_reaction": "The viewer starts searching for more about the subject (the designer, the culture, the country) instead of scrolling past.",
     "smallest_useful_commitment": "Read past the cover slide instead of scrolling on.",
     "evidence_provenance_refs": [
@@ -82,12 +109,21 @@
     ],
     "evaluation_contract_ref": "car-jux-congofash-eval@1.0.0#sha256:44ee8c0216c843d095ebe7c5c2f60c29185484b10e6be0ae4a547aef7af0849b",
     "wrong_reading_locks": [
-      "Do not let the annotation-arrow callouts (garment detail to symbolic referent, e.g. leopard motif to cheetah) assert a specific cultural or historical meaning as verified fact — render them as an interpretive prompt, not a sourced claim, unless the operator supplies a citable source.",
-      "Do not let the 'fashion vs. football' juxtaposition read as diminishing the team's athletic legitimacy or as mockery — the reframe argues fashion is a parallel strategic asset, not a replacement for or admission of competitive weakness.",
-      "Do not present the stacked rhetorical-question slide ('Who designed them?', 'What's happening in DR Congo?') as verified interview quotes or sourced reporting — it is a framing device simulating audience curiosity, not attributed quotation.",
-      "Do not attribute statements, endorsement, or participation in this narrative to any real, identifiable person who appears in comparison photography (e.g. a rival team's player) beyond what is factually documented — contrast photography is contextual, not implied collaboration or quotation.",
-      "Do not render the closing flow-diagram slide ('Self, Other, Synthesis') as a statistically validated economic or cultural pipeline — it is an explanatory narrative model and must read as argument, not measured data.",
-      "Do not smooth the closing sign-off slide into polished brand voice — the casual, first-person, imperfect tone is load-bearing for the format's authorship thesis and must not be normalized away."
+      "Do not let the annotation-arrow callouts (garment detail to symbolic referent, e.g. leopard motif to cheetah) assert a specific cultural or historical meaning as verified fact \u2014 render them as an interpretive prompt, not a sourced claim, unless the operator supplies a citable source.",
+      "Do not let the 'fashion vs. football' juxtaposition read as diminishing the team's athletic legitimacy or as mockery \u2014 the reframe argues fashion is a parallel strategic asset, not a replacement for or admission of competitive weakness.",
+      "Do not present the stacked rhetorical-question slide ('Who designed them?', 'What's happening in DR Congo?') as verified interview quotes or sourced reporting \u2014 it is a framing device simulating audience curiosity, not attributed quotation.",
+      "Do not attribute statements, endorsement, or participation in this narrative to any real, identifiable person who appears in comparison photography (e.g. a rival team's player) beyond what is factually documented \u2014 contrast photography is contextual, not implied collaboration or quotation.",
+      "Do not render the closing flow-diagram slide ('Self, Other, Synthesis') as a statistically validated economic or cultural pipeline \u2014 it is an explanatory narrative model and must read as argument, not measured data.",
+      "Do not smooth the closing sign-off slide into polished brand voice \u2014 the casual, first-person, imperfect tone is load-bearing for the format's authorship thesis and must not be normalized away."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-HUM-009",
+      "PRM-PSY-018",
+      "PRM-BUS-001"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not substitute the reference specimens with generic fashion stock imagery -- doing so breaks PRM-HUM-009 recognition mechanics by destroying regional cultural specificity.",
+      "Do not frame the comparison as moral judgment -- PRM-PSY-018 requires neutral participant observation."
     ]
   }
 }

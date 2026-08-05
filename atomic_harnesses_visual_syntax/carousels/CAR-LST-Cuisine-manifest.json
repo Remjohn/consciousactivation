@@ -10,7 +10,10 @@
     "atomic_boundary": "One curated list of cuisine dishes becomes one ordered carousel slide sequence (cover/list-item slides plus a closing comparison or testimonial slide). No single dish stretched across multiple list slots, no video, no per-slide identity drift on the creator badge.",
     "input_contract": {
       "type": "object",
-      "required": ["source_expression_moment", "voice_context"],
+      "required": [
+        "source_expression_moment",
+        "voice_context"
+      ],
       "properties": {
         "source_expression_moment": {
           "type": "string",
@@ -26,7 +29,9 @@
     },
     "output_contract": {
       "type": "object",
-      "required": ["carousel_slide_sequence"],
+      "required": [
+        "carousel_slide_sequence"
+      ],
       "properties": {
         "carousel_slide_sequence": {
           "type": "object",
@@ -34,8 +39,14 @@
         }
       }
     },
-    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "source_expression_session",
+      "identity_dna",
+      "air_tensions"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "distinct_dish_per_list_slide",
       "dish_name_label_matches_visual_content",
@@ -45,7 +56,8 @@
     ],
     "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
     "provenance_refs": [
-      "operator-car-lst-cuisine-source@1.0.0#sha256:3726d4a6b81fc81f8b7ae9438a054868932d8d927b0fdda2115b68478c85a47f"
+      "operator-car-lst-cuisine-source@1.0.0#sha256:3726d4a6b81fc81f8b7ae9438a054868932d8d927b0fdda2115b68478c85a47f",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -56,14 +68,24 @@
     "matrix_of_edging_ref": "matrix-of-edging@1.3.0#sha256:400f2c84dd0a6d9d795ad4ce5cd78e66e4b81bb84a5047095d6bd8813b43e601",
     "activative_intelligence_pack_ref": "activative-intelligence-pack@5.0.0#sha256:9baf979383be17b529488dbf9d6cff45a964725901e064fe117521f4b1ae0660",
     "hidden_pressure": "Food-culture carousels compete against thousands of near-identical recipe-grid posts; the viewer keeps swiping unless each slide reads as one new, nameable dish worth knowing rather than a repeated frame of the same plate wearing a new caption.",
-    "activation_directions": ["recognize_dish", "connect_to_origin_culture", "want_to_try_or_share"],
-    "roles": ["creator", "viewer"],
+    "activation_directions": [
+      "recognize_dish",
+      "connect_to_origin_culture",
+      "want_to_try_or_share"
+    ],
+    "roles": [
+      "creator",
+      "viewer"
+    ],
     "stance": "Warm, culturally grounded, unhurried.",
     "stakes": [
       "a real regional dish gets flattened into generic 'African food' iconography",
       "the list format collapses into one dish repeated across slots instead of a genuine list"
     ],
-    "identity_urges": ["see my own cuisine represented accurately", "learn one new dish I can name and try"],
+    "identity_urges": [
+      "see my own cuisine represented accurately",
+      "learn one new dish I can name and try"
+    ],
     "participation_design": "The viewer swipes through a bounded list of dishes, each slide anchored to the creator's brand badge, arriving at a comparison slide that clarifies how to talk about the dish or the creator's business correctly.",
     "intended_reaction": "The viewer names the dish correctly, associates it with the creator's brand badge, and swipes expecting the next slide to introduce a new item rather than repeat the last one.",
     "smallest_useful_commitment": "Remember the name of one dish and the creator who introduced it.",
@@ -72,11 +94,20 @@
     ],
     "evaluation_contract_ref": "car-lst-cuisine-eval@1.0.0#sha256:0120da9dbc3a1820e89e9e4b994453710cd833e750d82a4ae5abebea8f1f8dcd",
     "wrong_reading_locks": [
-      "Do not repeat the same dish's photo set across multiple list-item slides — each list slot must show a visually and nominally distinct dish, or the carousel reads as one dish stretched across several slides instead of a genuine list.",
-      "Do not populate the 'Don't Say / Say' comparison slide with identical copy in both columns — the two sides must show genuinely different phrasing, or the slide's entire contrastive function collapses into meaningless repetition.",
-      "Do not detach the dish-name text overlay from its matching image grid — the name label must stay visually bound to the specific photo set it identifies, so the viewer never mislabels one regional dish as another.",
-      "Do not crop, obscure, or drop the creator's circular brand badge (portrait plus product) from any slide — it is the throughline identity anchor across the whole list; losing it on a single slide breaks source attribution for that item.",
-      "Do not present the tweet-style testimonial slide as an authentic, unedited platform capture — the verified badge and handle are a designed template asset, not live-platform evidence, and must not be read as an unmediated real endorsement."
+      "Do not repeat the same dish's photo set across multiple list-item slides \u2014 each list slot must show a visually and nominally distinct dish, or the carousel reads as one dish stretched across several slides instead of a genuine list.",
+      "Do not populate the 'Don't Say / Say' comparison slide with identical copy in both columns \u2014 the two sides must show genuinely different phrasing, or the slide's entire contrastive function collapses into meaningless repetition.",
+      "Do not detach the dish-name text overlay from its matching image grid \u2014 the name label must stay visually bound to the specific photo set it identifies, so the viewer never mislabels one regional dish as another.",
+      "Do not crop, obscure, or drop the creator's circular brand badge (portrait plus product) from any slide \u2014 it is the throughline identity anchor across the whole list; losing it on a single slide breaks source attribution for that item.",
+      "Do not present the tweet-style testimonial slide as an authentic, unedited platform capture \u2014 the verified badge and handle are a designed template asset, not live-platform evidence, and must not be read as an unmediated real endorsement."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-HUM-009",
+      "PRM-PSY-018",
+      "EXP-FBK-004"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not erase regional culinary heritage -- PRM-HUM-009 leverages cultural memory as an activation hook.",
+      "Do not present recipes as rigid doctrine -- EXP-FBK-004 encourages experiential exploration."
     ]
   }
 }

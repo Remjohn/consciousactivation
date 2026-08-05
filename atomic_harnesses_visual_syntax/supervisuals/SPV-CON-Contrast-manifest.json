@@ -10,12 +10,15 @@
     "atomic_boundary": "One raw visual specimen set for one dish variant (statement-contrast or would-you-rather) becomes one structural Builder contract. This harness does not itself render pixels or select final imagery.",
     "input_contract": {
       "type": "object",
-      "required": ["source_expression_moment", "voice_context"],
+      "required": [
+        "source_expression_moment",
+        "voice_context"
+      ],
       "properties": {
         "source_expression_moment": {
           "type": "string",
           "minLength": 1,
-          "description": "The single claim or binary choice this frame will express — a quote thesis for Conceptual Contrast, or two named alternatives for a Would-You-Rather stem."
+          "description": "The single claim or binary choice this frame will express \u2014 a quote thesis for Conceptual Contrast, or two named alternatives for a Would-You-Rather stem."
         },
         "voice_context": {
           "type": "string",
@@ -24,7 +27,10 @@
         },
         "dish_variant": {
           "type": "string",
-          "enum": ["conceptual_contrast", "would_you_rather"],
+          "enum": [
+            "conceptual_contrast",
+            "would_you_rather"
+          ],
           "description": "Which of the two proven dish variants this frame instantiates."
         },
         "panel_captions": {
@@ -32,20 +38,32 @@
           "minItems": 2,
           "maxItems": 2,
           "uniqueItems": true,
-          "items": { "type": "string", "minLength": 1 },
-          "description": "The two per-panel captions. Must be distinct strings — identical captions collapse the format's binary premise (see wrong_reading_locks)."
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "The two per-panel captions. Must be distinct strings \u2014 identical captions collapse the format's binary premise (see wrong_reading_locks)."
         }
       }
     },
     "output_contract": {
       "type": "object",
-      "required": ["structural_contract"],
+      "required": [
+        "structural_contract"
+      ],
       "properties": {
-        "structural_contract": { "type": "object" }
+        "structural_contract": {
+          "type": "object"
+        }
       }
     },
-    "required_context": ["frozen_activative_intelligence", "authority_evidence"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "frozen_activative_intelligence",
+      "authority_evidence"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "rich_references_are_preserved",
       "identity_dna_is_not_mutated",
@@ -55,7 +73,8 @@
     ],
     "authority_ref": "one-harness-build-prompt@1.0.0#sha256:90be016c6f0f466ba7187e58c38d61829d59009291874a8c2abdb8af91cca566",
     "provenance_refs": [
-      "harness-gap-analysis-and-build-skill@1.0.0#sha256:661cd38483fcbfd39f70a9fbff14582a65a14ad188737268d1759b12fe2d4d49"
+      "harness-gap-analysis-and-build-skill@1.0.0#sha256:661cd38483fcbfd39f70a9fbff14582a65a14ad188737268d1759b12fe2d4d49",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -77,9 +96,16 @@
       "one-harness-build-prompt@1.0.0#sha256:90be016c6f0f466ba7187e58c38d61829d59009291874a8c2abdb8af91cca566"
     ],
     "hidden_pressure": "The viewer feels pressure to publicly declare which side of the contrast they identify with, even when the offered opposition is trivial, false, or the two sides were never actually made distinct.",
-    "activation_directions": ["notice", "choose a side", "declare"],
-    "roles": ["commentator (header attribution block)", "viewer (forced chooser)"],
-    "stance": "Provocative and binary — presents two poles as though only one can be true, then invites public, low-cost commitment to one.",
+    "activation_directions": [
+      "notice",
+      "choose a side",
+      "declare"
+    ],
+    "roles": [
+      "commentator (header attribution block)",
+      "viewer (forced chooser)"
+    ],
+    "stance": "Provocative and binary \u2014 presents two poles as though only one can be true, then invites public, low-cost commitment to one.",
     "stakes": [
       "being seen holding a self-contradictory or 'both sides are the same' position",
       "misreading the two contrasted panels as depicting the same underlying condition"
@@ -92,11 +118,19 @@
     "intended_reaction": "Viewer picks a side in the comments, converting a single static frame into a debate thread.",
     "smallest_useful_commitment": "State, in one line, which of the two contrasted panels the viewer identifies with and why.",
     "wrong_reading_locks": [
-      "Do not let the two panel captions resolve to the same or a non-contrasting string — the format's entire premise is a binary choice, and identical captions on both sides (as shipped in the raw WOULD YOU RATHER specimen) erase the choice entirely.",
-      "Do not let unfilled placeholder text (e.g. 'Add a heading') reach final render — placeholder tokens are required-content slots, not decorative defaults, and shipping one is a broken-format failure, not a valid minimal state.",
-      "Do not resolve the two image panels to the same or a near-duplicate subject/image — the contrast collapses into a meaningless split-gallery if both slots depict the same person, object, or scene.",
-      "Do not let both panel borders render in the same color, or drop the color differentiation entirely in a variant that relies on it — the border color is the format's primary 'these are two distinct poles' signal, not a palette choice.",
-      "Do not let the header attribution block (avatar, name, handle) be read as authoring a personal before/after story out of the two contrasted images when the source imagery is stock or third-party — the format asserts an abstract claim or question, not a testimonial, unless the operator explicitly supplies personal-narrative source material."
+      "Do not let the two panel captions resolve to the same or a non-contrasting string \u2014 the format's entire premise is a binary choice, and identical captions on both sides (as shipped in the raw WOULD YOU RATHER specimen) erase the choice entirely.",
+      "Do not let unfilled placeholder text (e.g. 'Add a heading') reach final render \u2014 placeholder tokens are required-content slots, not decorative defaults, and shipping one is a broken-format failure, not a valid minimal state.",
+      "Do not resolve the two image panels to the same or a near-duplicate subject/image \u2014 the contrast collapses into a meaningless split-gallery if both slots depict the same person, object, or scene.",
+      "Do not let both panel borders render in the same color, or drop the color differentiation entirely in a variant that relies on it \u2014 the border color is the format's primary 'these are two distinct poles' signal, not a palette choice.",
+      "Do not let the header attribution block (avatar, name, handle) be read as authoring a personal before/after story out of the two contrasted images when the source imagery is stock or third-party \u2014 the format asserts an abstract claim or question, not a testimonial, unless the operator explicitly supplies personal-narrative source material."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-BUS-001",
+      "PRM-PSY-018"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not soften the contrast boundary -- PRM-BUS-001 enforces clear perceptual polarization.",
+      "Do not distract from core thesis with secondary elements -- PRM-PSY-018 maintains singular focus."
     ]
   }
 }

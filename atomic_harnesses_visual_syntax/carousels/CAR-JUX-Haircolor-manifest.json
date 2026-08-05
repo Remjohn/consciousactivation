@@ -10,21 +10,43 @@
     "atomic_boundary": "One curated set of real UGC photos sharing one envied trait becomes one single-frame juxtaposition grid card. This harness governs card composition only -- it does not cover multi-slide carousel sequencing, caption/CTA copy beyond the on-image trait label, or sourcing/licensing clearance for the underlying UGC photos.",
     "input_contract": {
       "type": "object",
-      "required": ["source_expression_moment", "voice_context"],
+      "required": [
+        "source_expression_moment",
+        "voice_context"
+      ],
       "properties": {
-        "source_expression_moment": {"type": "string", "minLength": 1, "description": "The specific envied trait and the 2-4 real UGC photo references curated to illustrate it (e.g. 'honey-blonde balayage -- 4 specimen photos')."},
-        "voice_context": {"type": "string", "minLength": 1, "description": "Creator handle and tonal register the card must credit and preserve (e.g. '@kupofmess, warm/aspirational envy, not sarcastic')."}
+        "source_expression_moment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The specific envied trait and the 2-4 real UGC photo references curated to illustrate it (e.g. 'honey-blonde balayage -- 4 specimen photos')."
+        },
+        "voice_context": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Creator handle and tonal register the card must credit and preserve (e.g. '@kupofmess, warm/aspirational envy, not sarcastic')."
+        }
       }
     },
     "output_contract": {
       "type": "object",
-      "required": ["juxtaposition_grid_frame"],
+      "required": [
+        "juxtaposition_grid_frame"
+      ],
       "properties": {
-        "juxtaposition_grid_frame": {"type": "object", "description": "A single production-ready image frame containing the headline, creator credit, photo collage, and trait-label caption card."}
+        "juxtaposition_grid_frame": {
+          "type": "object",
+          "description": "A single production-ready image frame containing the headline, creator credit, photo collage, and trait-label caption card."
+        }
       }
     },
-    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "source_expression_session",
+      "identity_dna",
+      "air_tensions"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "envied_trait_recognizable_at_a_glance",
       "creator_handle_credit_present",
@@ -34,7 +56,8 @@
     ],
     "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
     "provenance_refs": [
-      "operator-car-jux-haircolor-source@1.0.0#sha256:e68f456b5dec8748ea6785f542a5d6117c69c35ece19cad7a5816a6b1a53ae13"
+      "operator-car-jux-haircolor-source@1.0.0#sha256:e68f456b5dec8748ea6785f542a5d6117c69c35ece19cad7a5816a6b1a53ae13",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -46,11 +69,25 @@
     "activative_intelligence_pack_ref": "car-jux-harness-gap-analysis-build-skill@1.0.0#sha256:661cd38483fcbfd39f70a9fbff14582a65a14ad188737268d1759b12fe2d4d49",
     "evaluation_contract_ref": "car-jux-one-harness-build-prompt@1.0.0#sha256:90be016c6f0f466ba7187e58c38d61829d59009291874a8c2abdb8af91cca566",
     "hidden_pressure": "Viewers scroll past dozens of generic moodboard and get-ready-with-me posts daily; this format only lands if the featured trait reads as something a real person actually has -- captured candidly, not staged or AI-perfected -- so the envy feels earned rather than manufactured.",
-    "activation_directions": ["recognize_trait", "feel_earned_envy", "attribute_to_real_person"],
-    "roles": ["curator", "photographed_subject", "viewer"],
+    "activation_directions": [
+      "recognize_trait",
+      "feel_earned_envy",
+      "attribute_to_real_person"
+    ],
+    "roles": [
+      "curator",
+      "photographed_subject",
+      "viewer"
+    ],
     "stance": "Warm, admiring, unembellished -- envy as compliment, not comparison.",
-    "stakes": ["the trait reads as unattainable or fake instead of real and covetable", "the format collapses into generic moodboard noise indistinguishable from any other pastel photo grid"],
-    "identity_urges": ["see a real, attainable version of the trait", "picture the trait on themselves"],
+    "stakes": [
+      "the trait reads as unattainable or fake instead of real and covetable",
+      "the format collapses into generic moodboard noise indistinguishable from any other pastel photo grid"
+    ],
+    "identity_urges": [
+      "see a real, attainable version of the trait",
+      "picture the trait on themselves"
+    ],
     "participation_design": "The viewer scans the collage, reads the trait label, and either saves the post as a reference or follows the curator account for more of the same trait-specific curation. No purchase or product CTA is embedded in the card itself.",
     "intended_reaction": "The viewer feels aspirational envy toward the specific trait shown and credits the real people and curator pictured, not a brand or product.",
     "smallest_useful_commitment": "Save or screenshot the card as a reference for the trait shown.",
@@ -69,6 +106,15 @@
       "Do not swap the real, candid UGC photos for stock photography or AI-generated faces or hair -- the format's activation depends on the viewer believing these are real people's real, unedited photos.",
       "Do not insert product names, brand logos, salon tags, or 'get this look' purchase CTAs into the card -- the format's activation is aspirational recognition, not direct commerce, and adding a sales layer breaks the organic-UGC read.",
       "Do not drop the creator-handle credit from the headline -- removing it misattributes curated third-party photos as the poster's own original content."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-HUM-009",
+      "PRM-PSY-018",
+      "PRM-BUS-001"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not strip specimen-specific color nuance -- PRM-HUM-009 relies on exact lived-experience recognition.",
+      "Do not position the coach as external critic -- PRM-PSY-018 mandates empathetic insider stance."
     ]
   }
 }

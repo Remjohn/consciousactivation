@@ -10,7 +10,10 @@
     "atomic_boundary": "One source claim set (a numbered visual-tile-to-label mapping) becomes one hook-plus-grid SuperVisual frame. No multi-slide carousel, no animation, no video, no chat interface.",
     "input_contract": {
       "type": "object",
-      "required": ["source_claim_set", "visual_reference_context"],
+      "required": [
+        "source_claim_set",
+        "visual_reference_context"
+      ],
       "properties": {
         "source_claim_set": {
           "type": "array",
@@ -18,11 +21,26 @@
           "description": "The ordered set of numbered visual-tile-to-label claims the SuperVisual grid must render.",
           "items": {
             "type": "object",
-            "required": ["claim_number", "visual_subject", "label"],
+            "required": [
+              "claim_number",
+              "visual_subject",
+              "label"
+            ],
             "properties": {
-              "claim_number": {"type": "integer", "minimum": 1},
-              "visual_subject": {"type": "string", "minLength": 1, "description": "What the tile's photo shows."},
-              "label": {"type": "string", "minLength": 1, "description": "The one-line caption paired with the tile."}
+              "claim_number": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "visual_subject": {
+                "type": "string",
+                "minLength": 1,
+                "description": "What the tile's photo shows."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The one-line caption paired with the tile."
+              }
             }
           }
         },
@@ -35,7 +53,9 @@
     },
     "output_contract": {
       "type": "object",
-      "required": ["supervisual_frame"],
+      "required": [
+        "supervisual_frame"
+      ],
       "properties": {
         "supervisual_frame": {
           "type": "object",
@@ -43,8 +63,14 @@
         }
       }
     },
-    "required_context": ["source_expression_session", "identity_dna", "air_tensions"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "source_expression_session",
+      "identity_dna",
+      "air_tensions"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "hook_headline_legible_at_mobile_scale",
       "grid_tiles_remain_visually_and_photographically_distinct",
@@ -55,7 +81,8 @@
     ],
     "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
     "provenance_refs": [
-      "operator-spv-con-comparison-source@1.0.0#sha256:36d3e1c65c620d48acd5a165bdb520e6bfab200dcae2930e1838d53cf5fd17dd"
+      "operator-spv-con-comparison-source@1.0.0#sha256:36d3e1c65c620d48acd5a165bdb520e6bfab200dcae2930e1838d53cf5fd17dd",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -66,27 +93,45 @@
     "matrix_of_edging_ref": "PLACEHOLDER-matrix-of-edging-bodysigns@0.0.0-pending#sha256:0000000000000000000000000000000000000000000000000000000000000004",
     "activative_intelligence_pack_ref": "PLACEHOLDER-activative-intelligence-pack-bodysigns@0.0.0-pending#sha256:0000000000000000000000000000000000000000000000000000000000000005",
     "hidden_pressure": "The viewer has scrolled past dozens of confident 'what your body says about you' graphics that turn ordinary anatomy into a checklist of things to worry about; this one must let curiosity resolve into reassurance, not new anxiety, without turning preachy or clinical.",
-    "activation_directions": ["notice_a_familiar_detail", "compare_against_the_grid", "release_the_worry"],
-    "roles": ["curious_viewer", "narrator"],
+    "activation_directions": [
+      "notice_a_familiar_detail",
+      "compare_against_the_grid",
+      "release_the_worry"
+    ],
+    "roles": [
+      "curious_viewer",
+      "narrator"
+    ],
     "stance": "Playful and observational, de-escalating rather than alarming.",
     "stakes": [
       "an unverified visual comparison gets mistaken for a medical diagnosis",
       "ordinary anatomical variation gets reframed as a personal health problem"
     ],
-    "identity_urges": ["understand my own body a little better", "confirm I'm not the only one who looks like this"],
-    "participation_design": "The viewer scans the six tiles, locates the one closest to their own belly button, reads its one-line label, and exhales — the grid format itself, not a call-to-action, delivers the payoff.",
-    "intended_reaction": "The viewer feels mildly informed and reassured, and either moves on or independently decides to ask a doctor if something genuinely concerns them — the graphic never tells them which.",
+    "identity_urges": [
+      "understand my own body a little better",
+      "confirm I'm not the only one who looks like this"
+    ],
+    "participation_design": "The viewer scans the six tiles, locates the one closest to their own belly button, reads its one-line label, and exhales \u2014 the grid format itself, not a call-to-action, delivers the payoff.",
+    "intended_reaction": "The viewer feels mildly informed and reassured, and either moves on or independently decides to ask a doctor if something genuinely concerns them \u2014 the graphic never tells them which.",
     "smallest_useful_commitment": "Notice which numbered tile most resembles your own belly button.",
     "evidence_provenance_refs": [
       "spv-grid-bodysigns-evidence@1.0.0#sha256:6915f7db5b972538ac238d60fe6ebd73d0a9a7d59c7138214a4b3f8647a91d90"
     ],
     "evaluation_contract_ref": "PLACEHOLDER-evaluation-contract-bodysigns@0.0.0-pending#sha256:0000000000000000000000000000000000000000000000000000000000000006",
     "wrong_reading_locks": [
-      "Do not let the numbered, labeled grid format read as a validated medical diagnostic chart — it must stay legible as an illustrative comparison, not a clinical reference poster, even though the layout visually resembles one.",
-      "Do not let any single tile's caption stand alone outside the full six-tile set — cropping one tile out (e.g. for a standalone repost) turns a relative visual comparison into an isolated, unqualified diagnostic claim.",
-      "Do not raise the certainty of the tile captions above the headline's own hedge ('says less about your health than you might think') — captions must not read as more confident or alarming than the headline's reassurance framing promises.",
+      "Do not let the numbered, labeled grid format read as a validated medical diagnostic chart \u2014 it must stay legible as an illustrative comparison, not a clinical reference poster, even though the layout visually resembles one.",
+      "Do not let any single tile's caption stand alone outside the full six-tile set \u2014 cropping one tile out (e.g. for a standalone repost) turns a relative visual comparison into an isolated, unqualified diagnostic claim.",
+      "Do not raise the certainty of the tile captions above the headline's own hedge ('says less about your health than you might think') \u2014 captions must not read as more confident or alarming than the headline's reassurance framing promises.",
       "Do not apply decorative filters, gradients, or stylized color grading to the anatomical photo tiles that would obscure the specific visual detail each caption is describing.",
-      "Do not omit or soften tile 1 and tile 6 (hernia / poor healing) into vague language that erases the one real case where a viewer should see a doctor — the format must stay honest about the one or two tiles that are not purely cosmetic."
+      "Do not omit or soften tile 1 and tile 6 (hernia / poor healing) into vague language that erases the one real case where a viewer should see a doctor \u2014 the format must stay honest about the one or two tiles that are not purely cosmetic."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-BUS-001",
+      "PRM-PSY-018"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not obscure contrast through ambiguous visual framing -- PRM-BUS-001 demands razor-sharp distinction.",
+      "Do not bias the comparison with unfair caricature -- PRM-PSY-018 preserves authentic evaluation."
     ]
   }
 }

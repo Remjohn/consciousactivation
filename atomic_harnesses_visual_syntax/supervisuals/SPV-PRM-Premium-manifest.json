@@ -10,21 +10,44 @@
     "atomic_boundary": "One scheduled episode/broadcast moment becomes one portrait-anchored premium SuperVisual frame. No multi-slide carousel, no animation, no video edit, and no text-only quote-dominant layout without a portrait subject (that boundary belongs to the Standard tier, not this one).",
     "input_contract": {
       "type": "object",
-      "required": ["source_expression_moment", "voice_context"],
+      "required": [
+        "source_expression_moment",
+        "voice_context"
+      ],
       "properties": {
-        "source_expression_moment": {"type": "string", "minLength": 1, "description": "The episode's authenticated topic/headline moment to render in the lower black band (e.g. the on-flyer episode premise and guest attribution)."},
-        "voice_context": {"type": "string", "minLength": 1, "description": "Host and brand voice/typographic context (recurring host name lockup, network name, accent color system, logo mark) governing rendering decisions for this recurring show."}
+        "source_expression_moment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The episode's authenticated topic/headline moment to render in the lower black band (e.g. the on-flyer episode premise and guest attribution)."
+        },
+        "voice_context": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Host and brand voice/typographic context (recurring host name lockup, network name, accent color system, logo mark) governing rendering decisions for this recurring show."
+        }
       }
     },
     "output_contract": {
       "type": "object",
-      "required": ["supervisual_frame"],
+      "required": [
+        "supervisual_frame"
+      ],
       "properties": {
-        "supervisual_frame": {"type": "object", "description": "A single production-ready portrait-anchored announcement frame with embedded metadata stack and lower-band topic/guest text."}
+        "supervisual_frame": {
+          "type": "object",
+          "description": "A single production-ready portrait-anchored announcement frame with embedded metadata stack and lower-band topic/guest text."
+        }
       }
     },
-    "required_context": ["source_expression_session", "identity_dna", "air_tensions", "broadcast_schedule_context"],
-    "capability_requirements": ["activative_contract_validation"],
+    "required_context": [
+      "source_expression_session",
+      "identity_dna",
+      "air_tensions",
+      "broadcast_schedule_context"
+    ],
+    "capability_requirements": [
+      "activative_contract_validation"
+    ],
     "acceptance_tests": [
       "host_portrait_dominant_visual_mass",
       "metadata_stack_contrast_exceeds_4_5_to_1",
@@ -35,7 +58,8 @@
     "authority_ref": "activative-intelligence-constitution@1.1.0#sha256:21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b",
     "provenance_refs": [
       "spv-prm-premium-specimen-mama-kasaku-live-dec04@1.0.0#sha256:8fce1418060e4eafbe03cd9fad5463721859a9db4cb29ed75434e1d46817af2c",
-      "spv-prm-premium-specimen-mama-kasaku-live-dec13@1.0.0#sha256:dff312e230f5d20167222f89802f8475af14321b54b9264268d39045ddafc630"
+      "spv-prm-premium-specimen-mama-kasaku-live-dec13@1.0.0#sha256:dff312e230f5d20167222f89802f8475af14321b54b9264268d39045ddafc630",
+      "visual_syntax_composition_compiler@1.0.0#sha256:788d157313e2aed64b259b22bdbd51c0763c06953faa92a81cdf795cd604e724"
     ]
   },
   "activative_input": {
@@ -46,11 +70,26 @@
     "matrix_of_edging_ref": "matrix-of-edging@1.3.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000005",
     "activative_intelligence_pack_ref": "activative-intelligence-pack@5.0.0#sha256:ccdd000000000000000000000000000000000000000000000000000000000006",
     "hidden_pressure": "The viewer's feed is full of interchangeable 'upcoming live' announcement graphics; this one must be recognized as this specific host's appointment-to-view through her portrait and the show's consistent brand system, not read as one more generic event flyer.",
-    "activation_directions": ["recognize_host", "register_urgency", "mark_the_appointment"],
-    "roles": ["host", "guest", "viewer"],
+    "activation_directions": [
+      "recognize_host",
+      "register_urgency",
+      "mark_the_appointment"
+    ],
+    "roles": [
+      "host",
+      "guest",
+      "viewer"
+    ],
     "stance": "Warm authority - an invitation from a familiar host, not a cold event notice.",
-    "stakes": ["the host's face and the episode topic separate in the viewer's memory", "LIVE urgency reads as generic template rather than a real appointment", "a secondary product or sponsor mark upstages the host's own brand mark"],
-    "identity_urges": ["recognize the host on sight", "know exactly when and where to show up"],
+    "stakes": [
+      "the host's face and the episode topic separate in the viewer's memory",
+      "LIVE urgency reads as generic template rather than a real appointment",
+      "a secondary product or sponsor mark upstages the host's own brand mark"
+    ],
+    "identity_urges": [
+      "recognize the host on sight",
+      "know exactly when and where to show up"
+    ],
     "participation_design": "The viewer sees the host's face first, reads the live/date/time/platform stack second, and reads the topic and guest line as the reason to attend third - then marks the appointment.",
     "intended_reaction": "The viewer commits to watching live at the stated time because they recognize the host and want to hear this specific topic with this specific guest.",
     "smallest_useful_commitment": "Save the date and time or set a reminder for the live broadcast.",
@@ -64,6 +103,14 @@
       "Do not render the LIVE badge and the episode topic headline in the same visual weight - LIVE must always carry the highest urgency-coded treatment (badge, not body text), or a live appointment misreads as recorded/past content, or vice versa.",
       "Do not let a secondary brand or product placement visible inside the portrait crop (e.g. an apron logo, a sponsor mark) get duplicated, enlarged, or repositioned into the black band - sponsor content is incidental to the frame, never the activation subject.",
       "Do not replace the recurring two-tone host name lockup (accent-color first line, solid-white second line) with a single-color treatment - that lockup is the recurring identity anchor across every episode in this series, and altering it breaks episode-to-episode host recognition."
+    ],
+    "aligned_primitive_ids": [
+      "PRM-BUS-001",
+      "PRM-PSY-018"
+    ],
+    "wrong_reading_locks_meaning": [
+      "Do not confuse premium quality with decorative clutter -- PRM-BUS-001 defines luxury through restraint and clarity.",
+      "Do not compromise typographic authority -- PRM-PSY-018 commands respect through execution."
     ]
   }
 }
