@@ -9,6 +9,7 @@
   "properties": {
     "aligned_manifest": {
       "type": "object",
+      "description": "The complete operator manifest with aligned prose fields. All task.* fields, semantic lineage refs, and wrong_reading_locks (spatial) must be byte-identical to the input.",
       "required": [
         "manifest_id",
         "manifest_version",
@@ -17,10 +18,45 @@
         "category_id",
         "task",
         "activative_input"
-      ]
+      ],
+      "properties": {
+        "activative_input": {
+          "type": "object",
+          "properties": {
+            "hidden_pressure": {
+              "type": "string",
+              "description": "Rewritten to cite primitive IDs and core_move language. Zero proper nouns."
+            },
+            "stance": {
+              "type": "string",
+              "description": "Rewritten to cite primitive IDs and core_move language. Zero proper nouns."
+            },
+            "wrong_reading_locks": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "PASSTHROUGH — spatial layout locks. Must be byte-identical to input. Owned by visual_syntax_composition_compiler."
+            },
+            "wrong_reading_locks_meaning": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Meaning-plane locks authored by this skill. Each lock cites at least one PRM-/EXP- primitive ID."
+            },
+            "aligned_primitive_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(PRM|EXP)-[A-Z]{3}-\\d{3}$"
+              },
+              "uniqueItems": true,
+              "description": "Conflict-checked primitive IDs verified against PRIMITIVE_INVENTORY.csv."
+            }
+          }
+        }
+      }
     },
     "alignment_receipt": {
       "type": "object",
+      "description": "Deterministic audit receipt for the alignment run.",
       "required": [
         "receipt_id",
         "manifest_id",
@@ -28,26 +64,55 @@
         "verified_yaml_checksums",
         "dropped_conflict_pairs",
         "prose_changes_applied",
+        "structural_locks_preserved",
+        "ambiguous_locks_flagged",
         "outcome"
       ],
       "properties": {
-        "receipt_id": { "type": "string", "minLength": 1 },
-        "manifest_id": { "type": "string", "minLength": 1 },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique identifier for this alignment run."
+        },
+        "manifest_id": {
+          "type": "string",
+          "minLength": 1
+        },
         "aligned_primitive_ids": {
           "type": "array",
-          "items": { "type": "string", "pattern": "^(PRM|EXP)-[A-Z]{3}-\\d{3}$" }
+          "items": {
+            "type": "string",
+            "pattern": "^(PRM|EXP)-[A-Z]{3}-\\d{3}$"
+          },
+          "description": "Final conflict-free primitive set."
+        },
+        "candidate_selection_rationale": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["primitive_id", "core_move_match", "selection_reason"],
+            "properties": {
+              "primitive_id": { "type": "string" },
+              "core_move_match": { "type": "string", "description": "The core_move text from the registry that matched." },
+              "selection_reason": { "type": "string", "description": "Why this primitive was selected over alternatives." }
+            }
+          },
+          "description": "Why each primitive was selected, citing core_move text."
         },
         "verified_yaml_checksums": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["primitive_id", "snapshot_path", "sha256"],
+            "required": ["primitive_id", "snapshot_path", "expected_sha256", "computed_sha256", "verified"],
             "properties": {
               "primitive_id": { "type": "string" },
               "snapshot_path": { "type": "string" },
-              "sha256": { "type": "string" }
+              "expected_sha256": { "type": "string" },
+              "computed_sha256": { "type": "string" },
+              "verified": { "type": "boolean" }
             }
-          }
+          },
+          "description": "SHA256 verification audit trail for every loaded YAML snapshot."
         },
         "dropped_conflict_pairs": {
           "type": "array",
@@ -57,9 +122,10 @@
             "properties": {
               "kept_primitive_id": { "type": "string" },
               "dropped_primitive_id": { "type": "string" },
-              "conflict_reason": { "type": "string" }
+              "conflict_reason": { "type": "string", "description": "Reason from the YAML conflicts_with context." }
             }
-          }
+          },
+          "description": "Candidates dropped due to pairwise conflicts_with resolution."
         },
         "prose_changes_applied": {
           "type": "array",
@@ -67,13 +133,37 @@
             "type": "object",
             "required": ["field_name", "original_prose", "aligned_prose"],
             "properties": {
-              "field_name": { "type": "string" },
+              "field_name": {
+                "type": "string",
+                "enum": ["hidden_pressure", "stance", "wrong_reading_locks_meaning"]
+              },
               "original_prose": { "type": "string" },
               "aligned_prose": { "type": "string" }
             }
-          }
+          },
+          "description": "Exact diff of every prose change applied."
         },
-        "outcome": { "type": "string", "enum": ["PASS", "FAIL"] }
+        "structural_locks_preserved": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Spatial layout locks in wrong_reading_locks that were left untouched (passed through byte-identical)."
+        },
+        "ambiguous_locks_flagged": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["lock_text", "reason"],
+            "properties": {
+              "lock_text": { "type": "string", "description": "The ambiguous lock text." },
+              "reason": { "type": "string", "description": "Why this lock could not be confidently classified as spatial or meaning-plane." }
+            }
+          },
+          "description": "Locks that could not be confidently classified as spatial or meaning-plane. Flagged for human review rather than silently reclassified."
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "PASS_WITH_REVIEW_REQUIRED"]
+        }
       }
     }
   },
