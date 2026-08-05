@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PrimitiveAlignmentEditorOutput",
+  "type": "object",
+  "required": [
+    "aligned_manifest",
+    "alignment_receipt"
+  ],
+  "properties": {
+    "aligned_manifest": {
+      "type": "object",
+      "required": [
+        "manifest_id",
+        "manifest_version",
+        "task_id",
+        "mode",
+        "category_id",
+        "task",
+        "activative_input"
+      ]
+    },
+    "alignment_receipt": {
+      "type": "object",
+      "required": [
+        "receipt_id",
+        "manifest_id",
+        "aligned_primitive_ids",
+        "verified_yaml_checksums",
+        "dropped_conflict_pairs",
+        "prose_changes_applied",
+        "outcome"
+      ],
+      "properties": {
+        "receipt_id": { "type": "string", "minLength": 1 },
+        "manifest_id": { "type": "string", "minLength": 1 },
+        "aligned_primitive_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(PRM|EXP)-[A-Z]{3}-\\d{3}$" }
+        },
+        "verified_yaml_checksums": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["primitive_id", "snapshot_path", "sha256"],
+            "properties": {
+              "primitive_id": { "type": "string" },
+              "snapshot_path": { "type": "string" },
+              "sha256": { "type": "string" }
+            }
+          }
+        },
+        "dropped_conflict_pairs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kept_primitive_id", "dropped_primitive_id", "conflict_reason"],
+            "properties": {
+              "kept_primitive_id": { "type": "string" },
+              "dropped_primitive_id": { "type": "string" },
+              "conflict_reason": { "type": "string" }
+            }
+          }
+        },
+        "prose_changes_applied": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["field_name", "original_prose", "aligned_prose"],
+            "properties": {
+              "field_name": { "type": "string" },
+              "original_prose": { "type": "string" },
+              "aligned_prose": { "type": "string" }
+            }
+          }
+        },
+        "outcome": { "type": "string", "enum": ["PASS", "FAIL"] }
+      }
+    }
+  },
+  "additionalProperties": false
+}

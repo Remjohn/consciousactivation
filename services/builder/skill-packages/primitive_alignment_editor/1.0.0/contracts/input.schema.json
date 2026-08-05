@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PrimitiveAlignmentEditorInput",
+  "type": "object",
+  "required": [
+    "manifest_id",
+    "manifest_version",
+    "task_id",
+    "mode",
+    "category_id",
+    "task",
+    "activative_input"
+  ],
+  "properties": {
+    "manifest_id": { "type": "string", "minLength": 1 },
+    "manifest_version": { "type": "string", "const": "1.0.0" },
+    "task_id": { "type": "string", "minLength": 1 },
+    "mode": { "type": "string", "const": "activative" },
+    "category_id": { "type": "string", "minLength": 1 },
+    "task": { "type": "object" },
+    "activative_input": {
+      "type": "object",
+      "required": [
+        "source_premise_ref",
+        "identity_dna_ref",
+        "context_premise_ref",
+        "resonance_map_ref",
+        "matrix_of_edging_ref",
+        "activative_intelligence_pack_ref",
+        "hidden_pressure",
+        "activation_directions",
+        "roles",
+        "stance",
+        "stakes",
+        "identity_urges",
+        "participation_design",
+        "intended_reaction",
+        "smallest_useful_commitment",
+        "evidence_provenance_refs",
+        "evaluation_contract_ref",
+        "wrong_reading_locks"
+      ],
+      "properties": {
+        "hidden_pressure": { "type": "string" },
+        "stance": { "type": "string" },
+        "wrong_reading_locks": { "type": "array", "items": { "type": "string" } },
+        "wrong_reading_locks_meaning": { "type": "array", "items": { "type": "string" } },
+        "aligned_primitive_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(PRM|EXP)-[A-Z]{3}-\\d{3}$"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
