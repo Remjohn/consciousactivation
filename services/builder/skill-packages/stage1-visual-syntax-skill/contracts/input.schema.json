@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "input.schema.json",
+  "title": "Stage 1 Input Receipt",
+  "description": "Recorded at the LOADED checkpoint (state_machine.md). Technical identity and integrity only \u2014 see SKILL.md \u00a70 and \u00a73. This schema intentionally contains no field for licensing status, provenance completeness, or usability disposition, and none may be added.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "harness_id",
+    "source_zip_path",
+    "source_zip_sha256_recorded",
+    "source_zip_sha256_observed_now",
+    "match",
+    "vision_model_used",
+    "base_url",
+    "deviation_from_documented_pipeline",
+    "operator_selected",
+    "selected_by",
+    "selected_at"
+  ],
+  "properties": {
+    "harness_id": { "type": "string", "minLength": 1 },
+    "source_zip_path": { "type": "string", "minLength": 1 },
+    "source_zip_sha256_recorded": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "source_zip_sha256_observed_now": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "match": { "type": "boolean" },
+    "vision_model_used": { "type": "string", "minLength": 1 },
+    "base_url": { "type": "string", "minLength": 1 },
+    "deviation_from_documented_pipeline": { "type": "boolean" },
+    "operator_selected": { "const": true },
+    "selected_by": { "type": "string", "minLength": 1 },
+    "selected_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "match": { "const": false } } },
+      "then": {
+        "description": "A hash mismatch forces technical_status = BLOCKED downstream (contracts/invariants.json: SOURCE_INTEGRITY_MISMATCH). Nothing in this schema enforces that directly \u2014 it's enforced by the semantic validator consuming this receipt \u2014 but the mismatch itself must exist verbatim in the receipt, unmodified, for that check to run."
+      }
+    }
+  ]
+}

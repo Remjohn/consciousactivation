@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "observation.schema.json",
+  "title": "Stage 1 Visual Observation",
+  "description": "SKILL.md \u00a75. One entry per meaningful visual object detected on a specimen frame. This layer is evidence \u2014 it must not contain taxonomy interpretation (no slide_role, no candidate names). Interpretation lives in syntax.schema.json and references these object_ids via evidence_refs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source_frame", "objects"],
+  "properties": {
+    "source_frame": { "type": "integer", "minimum": 1 },
+    "objects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/observation_object" }
+    }
+  },
+  "$defs": {
+    "observation_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "object_id",
+        "object_type",
+        "bbox_normalized",
+        "zone_observation",
+        "text_or_visual_description",
+        "confidence",
+        "source_frame"
+      ],
+      "properties": {
+        "object_id": { "type": "string", "minLength": 1 },
+        "object_type": { "type": "string", "minLength": 1 },
+        "bbox_normalized": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y", "width", "height"],
+          "properties": {
+            "x": { "type": "number", "minimum": 0, "maximum": 1 },
+            "y": { "type": "number", "minimum": 0, "maximum": 1 },
+            "width": { "type": "number", "minimum": 0, "maximum": 1 },
+            "height": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "zone_observation": { "type": "string", "minLength": 1 },
+        "text_or_visual_description": { "type": "string", "minLength": 1 },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["related_object_id", "relation_type"],
+            "properties": {
+              "related_object_id": { "type": "string" },
+              "relation_type": { "type": "string" }
+            }
+          },
+          "default": []
+        },
+        "dominance": { "type": ["string", "number"] },
+        "repetition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repeats_across_frames": { "type": "boolean" },
+            "frame_indices": { "type": "array", "items": { "type": "integer" } }
+          }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "source_frame": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

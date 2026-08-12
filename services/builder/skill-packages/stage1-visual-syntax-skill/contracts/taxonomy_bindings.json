@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "taxonomy_bindings.json",
+  "title": "Stage 1 Taxonomy Bindings",
+  "description": "Canonical registries referenced by SKILL.md \u00a74. Sourced verbatim from the existing tools/harness_vision_analyst.py and tools/STAGE_2_MANIFEST_AUTHORING_PROMPT.md canonical vocabularies as of the v3 audit. This file is the single place these lists live \u2014 do not hardcode them elsewhere.",
+  "version": "3.0",
+
+  "primitive_registry": {
+    "description": "Canonical primitive_type values. A value from this list must never appear in a slide_role field (see Regression Case 1).",
+    "canonical": [
+      "text_block",
+      "image_region",
+      "grid_cluster",
+      "comparison_pair",
+      "badge",
+      "number_label",
+      "icon_row",
+      "caption_plate",
+      "callout_arrow",
+      "flow_diagram"
+    ]
+  },
+
+  "zone_registry": {
+    "description": "Canonical container_zones values.",
+    "canonical": [
+      "header_zone",
+      "hero_zone",
+      "footer_zone",
+      "overlay_zone",
+      "full_bleed"
+    ]
+  },
+
+  "slide_role_registry": {
+    "description": "Canonical candidate_slide_role values. A value from this list must never appear in a primitive_type field.",
+    "canonical": [
+      "cover",
+      "numbered_item",
+      "comparison_beat",
+      "refrain_beat",
+      "photo_beat",
+      "grid_collage",
+      "closing_question",
+      "closing_cta",
+      "closing_comparison",
+      "testimonial",
+      "single_frame"
+    ]
+  },
+
+  "grammar_registry": {
+    "description": "How roles and structures compose across a harness's slide sequence. Not yet populated from the legacy corpus \u2014 the coding agent must derive this from cross-specimen analysis during calibration (SKILL.md \u00a710), not invent it. Leave as an empty, explicitly-typed array until real evidence populates it.",
+    "canonical": []
+  },
+
+  "taxonomy_candidate_states": {
+    "description": "The only legal states for any taxonomy item, in any registry.",
+    "enum": ["CANONICAL", "VARIANT", "NOVEL_CANDIDATE", "UNKNOWN", "REJECTED"]
+  },
+
+  "notes": [
+    "This file intentionally contains no field related to licensing, provenance-completeness, or usability of source media \u2014 see SKILL.md \u00a70.",
+    "grammar_registry.canonical is empty by design and must be populated only from real evidence gathered during calibration, not pre-filled."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "taxonomy_candidate.schema.json",
+  "title": "Stage 1 Taxonomy Candidate",
+  "description": "SKILL.md \u00a74, \u00a710. Structured proposal for a slide_role, primitive_type, zone, or grammar pattern not present in contracts/taxonomy_bindings.json. A candidate here is a successful outcome, not an error \u2014 but it must never be silently promoted to CANONICAL within Stage 1 (Regression Case 3, invariants.json: INVALID_CANDIDATE_PROMOTION).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "proposed_name",
+    "candidate_type",
+    "status",
+    "supporting_specimen_ids",
+    "observed_evidence",
+    "nearest_existing_concepts",
+    "insufficiency_explanation",
+    "confidence"
+  ],
+  "properties": {
+    "proposed_name": { "type": "string", "minLength": 1 },
+    "candidate_type": {
+      "type": "string",
+      "enum": ["slide_role", "primitive_type", "zone", "grammar_pattern"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["NOVEL_CANDIDATE", "UNKNOWN", "REJECTED"],
+      "description": "Never CANONICAL or VARIANT here \u2014 those states only exist once a candidate has gone through the explicit, out-of-band taxonomy-registry promotion event, which Stage 1 execution does not perform."
+    },
+    "supporting_specimen_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "observed_evidence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "References into observation.schema.json object_ids."
+    },
+    "nearest_existing_concepts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "The closest CANONICAL entries in taxonomy_bindings.json, for the operator's reference when deciding whether this is genuinely novel."
+    },
+    "insufficiency_explanation": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Why the nearest existing concepts don't adequately cover this observation."
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

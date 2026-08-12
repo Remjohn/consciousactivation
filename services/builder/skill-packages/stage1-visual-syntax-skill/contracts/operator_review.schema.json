@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "operator_review.schema.json",
+  "title": "Stage 1 Operator Review",
+  "description": "SKILL.md \u00a78, \u00a79. Left blank by the agent; filled by the operator after reading the contract report. Renamed from 'independent_evaluation' \u2014 this is an operator-controlled certification boundary, not a second-model evaluation. See Regression Case 10 for the full truth table this schema's stage1_complete field must satisfy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["harness_id", "technical_status", "operator_disposition", "stage1_complete"],
+  "properties": {
+    "harness_id": { "type": "string", "minLength": 1 },
+    "technical_status": {
+      "type": "string",
+      "enum": ["PASS", "REVIEW", "BLOCKED", "FAIL"],
+      "description": "System-assessed. Set by the semantic + evidence validators, not by the operator."
+    },
+    "operator_disposition": {
+      "type": ["string", "null"],
+      "enum": ["APPROVE", "REVISE", "HOLD", null],
+      "description": "Human-recorded. Null until the operator has actually reviewed the contract report."
+    },
+    "reviewer": { "type": ["string", "null"] },
+    "reviewed_at": { "type": ["string", "null"], "format": "date-time" },
+    "notes": { "type": ["string", "null"] },
+    "stage1_complete": {
+      "type": "boolean",
+      "description": "Derived, never set directly by the agent or the operator. Must equal: (operator_disposition == 'APPROVE') AND (technical_status in ['PASS','REVIEW'])."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "technical_status": { "enum": ["BLOCKED", "FAIL"] } } },
+      "then": { "properties": { "stage1_complete": { "const": false } } }
+    },
+    {
+      "if": { "properties": { "operator_disposition": { "not": { "const": "APPROVE" } } } },
+      "then": { "properties": { "stage1_complete": { "const": false } } }
+    }
+  ]
+}

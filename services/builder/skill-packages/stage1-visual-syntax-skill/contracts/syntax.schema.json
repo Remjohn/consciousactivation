@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "syntax.schema.json",
+  "title": "Stage 1 Visual Syntax Analysis",
+  "description": "SKILL.md \u00a72, \u00a76. Interpretation layer \u2014 built from observation.schema.json objects, never invented independently of them. slide_role and primitive_type values are validated against contracts/taxonomy_bindings.json (Regression Case 1). syntax_hash, not layout_fingerprint, is the authoritative identity used for deduplication.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slide_index",
+    "slide_role",
+    "taxonomy_state",
+    "container_zones",
+    "primitives",
+    "reading_order",
+    "anchor_elements",
+    "evidence_refs",
+    "layout_fingerprint",
+    "syntax_hash"
+  ],
+  "properties": {
+    "slide_index": { "type": "integer", "minimum": 1 },
+    "slide_role": { "type": "string", "minLength": 1 },
+    "taxonomy_state": {
+      "type": "string",
+      "enum": ["CANONICAL", "VARIANT", "NOVEL_CANDIDATE", "UNKNOWN", "REJECTED"]
+    },
+    "container_zones": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "primitives": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["primitive_type", "zone", "dominant", "evidence_refs"],
+        "properties": {
+          "primitive_type": { "type": "string", "minLength": 1 },
+          "zone": { "type": "string", "minLength": 1 },
+          "dominant": { "type": "boolean" },
+          "notes": { "type": "string" },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "reading_order": { "type": "string", "maxLength": 200 },
+    "anchor_elements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "evidence_refs"],
+        "properties": {
+          "label": { "type": "string" },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "is_duplicate_of": { "type": ["integer", "null"] },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Overall evidence links for slide_role, resolving to observation.schema.json object_ids. Empty array is INSUFFICIENT_EVIDENCE (invariants.json)."
+    },
+    "layout_fingerprint": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Human-readable only. Max ~8 words per the existing prompt constraint. NOT used for deduplication identity."
+    },
+    "syntax_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of the canonicalized {slide_role, container_zones (sorted), primitives (sorted by type+zone), normalized geometry, anchor_elements (sorted by label)}. Authoritative identity for deduplication \u2014 see SKILL.md \u00a76 and Regression Case 4."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "taxonomy_state": { "const": "NOVEL_CANDIDATE" } } },
+      "then": {
+        "description": "A NOVEL_CANDIDATE slide_role must additionally satisfy taxonomy_candidate.schema.json for the same proposed name \u2014 see SKILL.md \u00a74.",
+        "required": ["slide_role", "evidence_refs"]
+      }
+    }
+  ]
+}

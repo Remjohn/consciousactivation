@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "receipt.schema.json",
+  "title": "Stage 1 Final Receipt",
+  "description": "SKILL.md \u00a712. One per harness. Produced at checkpoint 08_final_receipt (state_machine.md). This is what a downstream system checks before trusting a harness as Stage 2 input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "harness_id",
+    "input_receipt",
+    "checkpoints_completed",
+    "taxonomy_summary",
+    "validation_summary",
+    "operator_review",
+    "stage1_complete",
+    "compiler_ready"
+  ],
+  "properties": {
+    "harness_id": { "type": "string", "minLength": 1 },
+    "input_receipt": { "$ref": "input.schema.json" },
+    "checkpoints_completed": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "01_input_receipt",
+          "02_observation",
+          "03_taxonomy_resolution",
+          "04_visual_syntax",
+          "05_deduplication",
+          "06_contract_validation",
+          "07_operator_review",
+          "08_final_receipt"
+        ]
+      }
+    },
+    "taxonomy_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "canonical_count": { "type": "integer", "minimum": 0 },
+        "variant_count": { "type": "integer", "minimum": 0 },
+        "novel_candidate_count": { "type": "integer", "minimum": 0 },
+        "unknown_count": { "type": "integer", "minimum": 0 },
+        "novel_candidates": {
+          "type": "array",
+          "items": { "$ref": "taxonomy_candidate.schema.json" }
+        }
+      }
+    },
+    "validation_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structural_status", "semantic_status", "evidence_status", "findings"],
+      "properties": {
+        "structural_status": { "type": "string", "enum": ["PASS", "REVIEW", "BLOCKED", "FAIL"] },
+        "semantic_status": { "type": "string", "enum": ["PASS", "REVIEW", "BLOCKED", "FAIL"] },
+        "evidence_status": { "type": "string", "enum": ["PASS", "REVIEW", "BLOCKED", "FAIL"] },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["error_code", "severity", "detail"],
+            "properties": {
+              "error_code": { "type": "string" },
+              "severity": { "type": "string", "enum": ["INFO", "REVIEW", "BLOCKED", "FAIL"] },
+              "detail": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "fyi": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "SKILL.md \u00a70 \u2014 non-blocking notes, e.g. an unrelated governance artifact the agent noticed but did not act on.",
+      "default": []
+    },
+    "operator_review": { "$ref": "operator_review.schema.json" },
+    "stage1_complete": { "type": "boolean" },
+    "compiler_ready": { "type": "boolean" }
+  },
+  "allOf": [
+    {
+      "description": "stage1_complete and compiler_ready must always agree with operator_review.stage1_complete \u2014 no separate path to setting either.",
+      "if": { "properties": { "operator_review": { "properties": { "stage1_complete": { "const": false } } } } },
+      "then": {
+        "properties": {
+          "stage1_complete": { "const": false },
+          "compiler_ready": { "const": false }
+        }
+      }
+    }
+  ]
+}

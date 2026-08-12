@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "invariants.json",
+  "title": "Stage 1 Deterministic Invariants",
+  "description": "Machine-enforced rules for the semantic validator (SKILL.md \u00a77) and evidence sufficiency validator. Every invariant here must be checkable without visual judgment \u2014 if a rule requires looking at the image to decide, it does not belong in this file (see SKILL.md \u00a77 boundary note and \u00a712 on not hardcoding subjective thresholds).",
+  "version": "3.0",
+
+  "invariants": [
+    {
+      "id": "ROLE_PRIMITIVE_TYPE_MISMATCH",
+      "description": "A slide_role value must be a member of taxonomy_bindings.slide_role_registry.canonical, and must never be a member of taxonomy_bindings.primitive_registry.canonical.",
+      "severity": "FAIL",
+      "regression_case": 1
+    },
+    {
+      "id": "PRIMITIVE_ROLE_TYPE_MISMATCH",
+      "description": "A primitive_type value must be a member of taxonomy_bindings.primitive_registry.canonical, and must never be a member of taxonomy_bindings.slide_role_registry.canonical.",
+      "severity": "FAIL",
+      "regression_case": 1
+    },
+    {
+      "id": "ZONE_PRIMITIVE_INCOMPATIBLE",
+      "description": "A primitive's declared zone must be a member of taxonomy_bindings.zone_registry.canonical.",
+      "severity": "FAIL",
+      "regression_case": 5
+    },
+    {
+      "id": "DANGLING_EVIDENCE_REF",
+      "description": "Every evidence_refs entry must resolve to an object_id that exists in the same harness's visual_observations.json.",
+      "severity": "FAIL",
+      "regression_case": 7
+    },
+    {
+      "id": "INSUFFICIENT_EVIDENCE",
+      "description": "An inference (slide_role, novel-candidate proposal, anchor claim, comparison claim) with an empty evidence_refs array. Does not require a minimum count \u2014 only presence and resolvability, per the no-hardcoded-thresholds rule.",
+      "severity": "FAIL",
+      "regression_case": 9
+    },
+    {
+      "id": "UNSUPPORTED_ANCHOR_CLAIM",
+      "description": "A persistent-anchor claim with no evidence_refs identifying the frames/observations supporting persistence.",
+      "severity": "REVIEW_OR_FAIL",
+      "regression_case": 6
+    },
+    {
+      "id": "DUPLICATE_ID",
+      "description": "object_id values must be unique within a harness's observation set.",
+      "severity": "FAIL"
+    },
+    {
+      "id": "SYNTAX_HASH_MISMATCH",
+      "description": "The recorded syntax_hash must equal a fresh canonicalization of the same syntax fields. If they disagree, the canonicalizer or the record is broken \u2014 surface, do not silently trust either.",
+      "severity": "FAIL"
+    },
+    {
+      "id": "DEDUP_COUNT_INCONSISTENT",
+      "description": "The number of unique entries in deduplication_summary must equal the number of distinct syntax_hash values across all slide analyses in the harness \u2014 not the number of distinct layout_fingerprint strings.",
+      "severity": "FAIL",
+      "regression_case": 4
+    },
+    {
+      "id": "INVALID_CANDIDATE_PROMOTION",
+      "description": "A taxonomy item may only carry state CANONICAL if it is present in the relevant contracts/taxonomy_bindings.json canonical list. A NOVEL_CANDIDATE state must never be silently rewritten to CANONICAL within Stage 1 execution \u2014 promotion is a separate, explicit, out-of-band taxonomy-registry update event.",
+      "severity": "FAIL",
+      "regression_case": 3
+    },
+    {
+      "id": "SOURCE_INTEGRITY_MISMATCH",
+      "description": "source_zip_sha256_recorded must equal source_zip_sha256_observed_now. This is a technical-integrity check only \u2014 see SKILL.md \u00a70 and \u00a73. It carries no licensing or usability implication.",
+      "severity": "BLOCKED",
+      "regression_case": 11
+    },
+    {
+      "id": "UNDOCUMENTED_PIPELINE_DEVIATION",
+      "description": "vision_model_used/base_url differ from the documented default pipeline. Must be recorded as deviation_from_documented_pipeline: true and surfaced in the contract report.",
+      "severity": "INFO",
+      "regression_case": 12
+    }
+  ],
+
+  "lifecycle_rule": {
+    "description": "The single hard rule gating STAGE1_COMPLETE. Enforced in code \u2014 see SKILL.md \u00a78 and Regression Case 10.",
+    "rule": "STAGE1_COMPLETE == (operator_disposition == 'APPROVE') AND (technical_status IN ['PASS', 'REVIEW'])",
+    "notes": "technical_status of BLOCKED or FAIL can never reach STAGE1_COMPLETE regardless of operator_disposition. technical_status of REVIEW CAN reach STAGE1_COMPLETE on APPROVE \u2014 REVIEW is the expected shape of a well-evidenced novel candidate, not a defect (see SKILL.md \u00a78, \u00a710)."
+  }
+}
