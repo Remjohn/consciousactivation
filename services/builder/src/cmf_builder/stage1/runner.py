@@ -136,7 +136,8 @@ class Stage1Runner:
 
         vision = VisionClient(
             model_name=self.config.vision_model,
-            base_url=self.config.base_url
+            base_url=self.config.base_url,
+            harness_id=self.config.harness_id
         )
 
         all_observations = []
@@ -313,6 +314,8 @@ class Stage1Runner:
         val_data = self.state.get('06_contract_validation', {})
         val_summary = build_validation_summary(val_data.get('semantic', {}), val_data.get('evidence', {}))
         review_data = self.state.get('07_operator_review', {})
+        observations = self.state.get('02_observation', {}).get('observations', [])
+        syntax_entries = self.state.get('04_visual_syntax', {}).get('entries', [])
         
         report = assemble_contract_report(
             harness_id=self.config.harness_id,
@@ -321,6 +324,8 @@ class Stage1Runner:
             taxonomy_summary=tax_summary,
             validation_summary=val_summary,
             operator_review=review_data,
-            fyi=[]
+            fyi=[],
+            observations=observations,
+            visual_syntax=syntax_entries
         )
         return CheckpointResult(checkpoint='08_final_receipt', status='completed', data={'report': report})

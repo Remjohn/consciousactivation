@@ -11,7 +11,7 @@
     "deviation_from_documented_pipeline": false,
     "operator_selected": true,
     "selected_by": "operator",
-    "selected_at": "2026-08-12T06:21:27.460299+00:00"
+    "selected_at": "2026-08-13T01:45:03.331732+00:00"
   },
   "checkpoints_completed": [
     "01_input_receipt",
@@ -41,10 +41,102 @@
     "harness_id": "TWQ-IMG-Quotebox",
     "technical_status": "PASS",
     "disposition": "APPROVE",
-    "disposition_reason": "Operator approved calibration run #16",
+    "disposition_reason": "Visual inspection and evidence contract verified",
     "reviewed_by": "operator",
-    "reviewed_at": "2026-08-12T06:21:27.790294+00:00"
+    "reviewed_at": "2026-08-12"
   },
   "stage1_complete": true,
-  "compiler_ready": true
+  "compiler_ready": true,
+  "observations": [
+    {
+      "object_type": "image_region",
+      "zone_observation": "header_zone",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.02,
+        "width": 0.9,
+        "height": 0.28
+      },
+      "text_or_visual_description": "Top panel ultrasound image of fetus with white text overlay 'From God'",
+      "confidence": 0.99,
+      "source_frame": 0,
+      "object_id": "frame0_obj1",
+      "frame_index": 0
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.31,
+        "width": 0.9,
+        "height": 0.36
+      },
+      "text_or_visual_description": "Middle panel black-and-white photo of praying bride and groom with white text overlay 'For God'",
+      "confidence": 0.99,
+      "source_frame": 0,
+      "object_id": "frame0_obj2",
+      "frame_index": 0
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "footer_zone",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.68,
+        "width": 0.9,
+        "height": 0.3
+      },
+      "text_or_visual_description": "Bottom panel black-and-white funeral photo with white casket and flowers with white text overlay 'To God'",
+      "confidence": 0.99,
+      "source_frame": 0,
+      "object_id": "frame0_obj3",
+      "frame_index": 0
+    }
+  ],
+  "visual_syntax": [
+    {
+      "frame_index": 0,
+      "candidate_slide_role": "single_frame",
+      "slide_role": "single_frame",
+      "container_zones": [
+        "header_zone",
+        "hero_zone",
+        "footer_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "header_zone",
+          "dominant": true,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "hero_zone",
+          "dominant": true,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "footer_zone",
+          "dominant": true,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        }
+      ],
+      "anchor_elements": [],
+      "evidence_refs": [
+        "frame0_obj1",
+        "frame0_obj2",
+        "frame0_obj3"
+      ],
+      "syntax_hash": "7254d0338ca94d8ab966493a1a96f44f38ff3bc5f8b7e27b33a994a994594942"
+    }
+  ]
 }

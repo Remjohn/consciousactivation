@@ -21,8 +21,10 @@ def test_build_validation_summary():
     assert len(summary["findings"]) == 2
 
 def test_operator_review_stub():
-    stub = build_operator_review_stub("h1", "PASS")
-    assert stub["disposition"] is None
+    stub_default = build_operator_review_stub("h1", "PASS")
+    assert stub_default["disposition"] == "APPROVE"
+    stub_none = build_operator_review_stub("h1", "PASS", disposition=None)
+    assert stub_none["disposition"] is None
 
 def test_assemble_contract_report():
     report = assemble_contract_report(

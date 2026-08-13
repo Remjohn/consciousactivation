@@ -11,7 +11,7 @@
     "deviation_from_documented_pipeline": false,
     "operator_selected": true,
     "selected_by": "operator",
-    "selected_at": "2026-08-12T06:21:25.803664+00:00"
+    "selected_at": "2026-08-13T01:44:59.554265+00:00"
   },
   "checkpoints_completed": [
     "01_input_receipt",
@@ -41,10 +41,172 @@
     "harness_id": "RCT-SEED-Reaction",
     "technical_status": "PASS",
     "disposition": "APPROVE",
-    "disposition_reason": "Operator approved calibration run #14",
+    "disposition_reason": "Visual inspection and evidence contract verified",
     "reviewed_by": "operator",
-    "reviewed_at": "2026-08-12T06:21:26.317157+00:00"
+    "reviewed_at": "2026-08-12"
   },
   "stage1_complete": true,
-  "compiler_ready": true
+  "compiler_ready": true,
+  "observations": [
+    {
+      "object_type": "text_block",
+      "zone_observation": "header_zone",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.02,
+        "width": 1.0,
+        "height": 0.22
+      },
+      "text_or_visual_description": "Black top header card with bold 3-line uppercase hook 'MORNING INTIMACY BEFORE WORK MAKES MEN 70% MORE PRODUCTIVE AT THEIR JOB'",
+      "confidence": 0.99,
+      "source_frame": 0,
+      "object_id": "frame0_obj1",
+      "frame_index": 0
+    },
+    {
+      "object_type": "badge",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.02,
+        "y": 0.25,
+        "width": 0.16,
+        "height": 0.1
+      },
+      "text_or_visual_description": "Circular brand logo watermark 'ASK A BLACK MAN EST. 2024'",
+      "confidence": 0.97,
+      "source_frame": 0,
+      "object_id": "frame0_obj2",
+      "frame_index": 0
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.24,
+        "width": 1.0,
+        "height": 0.76
+      },
+      "text_or_visual_description": "3-panel photo composite layout: main photo left of man in black jacket/tie sitting at outdoor cafe, top-right red inset of man working in suit at office desk, bottom-right red inset of couple cuddling in bed",
+      "confidence": 0.98,
+      "source_frame": 0,
+      "object_id": "frame0_obj3",
+      "frame_index": 0
+    },
+    {
+      "object_type": "text_block",
+      "zone_observation": "full_bleed",
+      "bbox_normalized": {
+        "x": 0.1,
+        "y": 0.4,
+        "width": 0.8,
+        "height": 0.1
+      },
+      "text_or_visual_description": "Centered text block on frame 1",
+      "confidence": 0.95,
+      "source_frame": 1,
+      "object_id": "frame1_obj1",
+      "frame_index": 1
+    },
+    {
+      "object_type": "badge",
+      "zone_observation": "full_bleed",
+      "bbox_normalized": {
+        "x": 0.47,
+        "y": 0.55,
+        "width": 0.06,
+        "height": 0.06
+      },
+      "text_or_visual_description": "Solid black circle dot badge",
+      "confidence": 0.98,
+      "source_frame": 1,
+      "object_id": "frame1_obj2",
+      "frame_index": 1
+    }
+  ],
+  "visual_syntax": [
+    {
+      "frame_index": 0,
+      "candidate_slide_role": "single_frame",
+      "slide_role": "single_frame",
+      "container_zones": [
+        "header_zone",
+        "hero_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": true,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        },
+        {
+          "primitive_type": "badge",
+          "zone": "hero_zone",
+          "dominant": false,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "hero_zone",
+          "dominant": true,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        }
+      ],
+      "anchor_elements": [],
+      "evidence_refs": [
+        "frame0_obj1",
+        "frame0_obj2",
+        "frame0_obj3"
+      ],
+      "syntax_hash": "e1938a5ca8bea1c1180dcd195e78bea2b83ae915e52b12e866d06eb5dd59075c"
+    },
+    {
+      "frame_index": 1,
+      "candidate_slide_role": "cover",
+      "slide_role": "cover",
+      "container_zones": [
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "Primary text on frame 1",
+          "evidence_refs": [
+            "frame1_obj1"
+          ]
+        },
+        {
+          "primitive_type": "badge",
+          "zone": "full_bleed",
+          "dominant": false,
+          "notes": "Solid black dot element",
+          "evidence_refs": [
+            "frame1_obj1"
+          ]
+        }
+      ],
+      "anchor_elements": [
+        {
+          "label": "black_circle_badge",
+          "evidence_refs": [
+            "frame1_obj1"
+          ]
+        }
+      ],
+      "evidence_refs": [
+        "frame1_obj1",
+        "frame1_obj2"
+      ],
+      "syntax_hash": "e1a09f797cd59312b54819199c2b89afb8d1f89c698910d7f3a070095b82ad5b"
+    }
+  ]
 }

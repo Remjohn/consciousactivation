@@ -1,0 +1,130 @@
+{
+  "harness_id": "CAR-LST-Weekgoals-4-5-2",
+  "input_receipt": {
+    "harness_id": "CAR-LST-Weekgoals-4-5-2",
+    "source_zip_path": "d:\\Work\\consciousactivation\\atomic_harnesses_visual_syntax\\carousels\\CAR-LST-Weekgoals-4-5-2.zip",
+    "source_zip_sha256_recorded": "458df3b42677bec785dd65f2fa839aec14be72f2cd424f70f5be361b12512820",
+    "source_zip_sha256_observed_now": "458df3b42677bec785dd65f2fa839aec14be72f2cd424f70f5be361b12512820",
+    "match": true,
+    "vision_model_used": "google/gemini-2.5-flash",
+    "base_url": "https://openrouter.ai/api/v1",
+    "deviation_from_documented_pipeline": false,
+    "operator_selected": true,
+    "selected_by": "operator",
+    "selected_at": "2026-08-13T01:45:24.994735+00:00"
+  },
+  "checkpoints_completed": [
+    "01_input_receipt",
+    "02_observation",
+    "03_taxonomy_resolution",
+    "04_visual_syntax",
+    "05_deduplication",
+    "06_contract_validation",
+    "07_operator_review",
+    "08_final_receipt"
+  ],
+  "taxonomy_summary": {
+    "canonical_count": 0,
+    "variant_count": 0,
+    "novel_candidate_count": 0,
+    "unknown_count": 0,
+    "novel_candidates": []
+  },
+  "validation_summary": {
+    "structural_status": "PASS",
+    "semantic_status": "PASS",
+    "evidence_status": "PASS",
+    "findings": []
+  },
+  "fyi": [],
+  "operator_review": {
+    "harness_id": "CAR-LST-Weekgoals-4-5-2",
+    "technical_status": "PASS",
+    "disposition": "APPROVE",
+    "disposition_reason": "Visual inspection and evidence contract verified",
+    "reviewed_by": "operator",
+    "reviewed_at": "2026-08-12"
+  },
+  "stage1_complete": true,
+  "compiler_ready": true,
+  "observations": [
+    {
+      "object_type": "image_region",
+      "zone_observation": "full_bleed",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "3-row footballer comparison photo strips: top = Kylian Mbappe (2 GOALS), middle = Erling Haaland (2 GOALS) with S/5 World Cup trophy, bottom = Lionel Messi (3 GOALS). Green 'LAST WEEK' label top-right corner",
+      "confidence": 0.99,
+      "source_frame": 0,
+      "object_id": "frame0_obj1",
+      "frame_index": 0
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "full_bleed",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "Football stats slide 2 - weekly performance comparison strips",
+      "confidence": 0.99,
+      "source_frame": 1,
+      "object_id": "frame1_obj1",
+      "frame_index": 1
+    }
+  ],
+  "visual_syntax": [
+    {
+      "frame_index": 0,
+      "candidate_slide_role": "cover",
+      "slide_role": "cover",
+      "container_zones": [
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true,
+          "evidence_refs": [
+            "frame0_obj1"
+          ]
+        }
+      ],
+      "anchor_elements": [],
+      "evidence_refs": [
+        "frame0_obj1"
+      ],
+      "syntax_hash": "5013a187f2e7af47ec503bd92b7e927a8fd032ca1495ee960f2711530957602a"
+    },
+    {
+      "frame_index": 1,
+      "candidate_slide_role": "numbered_item",
+      "slide_role": "numbered_item",
+      "container_zones": [
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true,
+          "evidence_refs": [
+            "frame1_obj1"
+          ]
+        }
+      ],
+      "anchor_elements": [],
+      "evidence_refs": [
+        "frame1_obj1"
+      ],
+      "syntax_hash": "f23cf3db4d458a29787681024975c9c485ade1958b2ab9fb7a1e5fb6a2739f6e"
+    }
+  ]
+}

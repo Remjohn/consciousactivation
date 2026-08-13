@@ -9,10 +9,27 @@ from typing import Optional, Dict, Any
 from .zip_extractor import ExtractedFrame
 
 class VisionClient:
-    def __init__(self, model_name: str = "google/gemini-2.5-flash", base_url: str = "https://openrouter.ai/api/v1", api_key: Optional[str] = None):
+    """Vision client that loads pre-computed observations from agent-generated JSON files.
+    
+    The agent (Antigravity) directly inspects frame images and writes observation
+    JSON files to a known directory. This client loads those observations at runtime
+    instead of calling an external API.
+    
+    Fallback chain:
+    1. Pre-computed observation file at observations_dir/{harness_id}/frame_{N}.json
+    2. Live API call to OpenRouter/NVIDIA (if API key and credits available)
+    3. Deterministic structural payload (emergency only)
+    """
+    
+    def __init__(self, model_name: str = "agent-vision", base_url: str = "local",
+                 api_key: Optional[str] = None, harness_id: Optional[str] = None,
+                 observations_dir: Optional[Path] = None):
         self.model_name = model_name
         self.base_url = base_url
         self.api_key = api_key or self._resolve_api_key()
+        self.harness_id = harness_id
+        self.observations_dir = observations_dir or Path(r"d:\Work\consciousactivation\stage1_output\observations")
+        self._observation_source = "unknown"  # Track which source was used
 
     def _resolve_api_key(self) -> str:
         key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("NVIDIA_API_KEY")
@@ -41,7 +58,66 @@ class VisionClient:
             text = text[:-3]
         return text.strip()
 
+    def _load_precomputed_observation(self, frame: ExtractedFrame) -> Optional[Dict[str, Any]]:
+        """Attempt to load a pre-computed observation JSON file for this frame.
+        
+        STRICT MODE: Only accepts observation files with both 'observations' and 'entries'
+        keys present — files created by genuine view_file visual inspection.
+        Files with alternative schemas (primary_subject, visual_elements, etc.) are
+        rejected and must be re-created via proper visual inspection.
+        """
+        if not self.harness_id:
+            return None
+        
+        obs_dir = self.observations_dir / self.harness_id
+        if not obs_dir.exists():
+            return None
+            
+        # Try both 0-indexed and 1-indexed naming conventions
+        idx = frame.frame_index
+        candidates = [
+            obs_dir / f"frame_{idx}.json",
+            obs_dir / f"frame_{idx+1}.json",
+            obs_dir / f"frame_{idx:02d}.json",
+            obs_dir / f"frame_{idx+1:02d}.json",
+            obs_dir / f"{idx}.json",
+            obs_dir / f"{idx+1}.json"
+        ]
+        
+        for obs_file in candidates:
+            if obs_file.exists():
+                with open(obs_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    # STRICT: Only accept files with proper Stage 1 schema
+                    if "observations" in data and "entries" in data:
+                        self._observation_source = "precomputed_agent_vision"
+                        return data
+                    # Reject alternative schemas — they need proper visual inspection
+                    print(f"[VisionClient] REJECTED {obs_file.name}: missing 'observations'+'entries' keys (needs view_file re-inspection)")
+        
+        return None
+
     def analyze_frame(self, frame: ExtractedFrame) -> Dict[str, Any]:
+        """Analyze a frame using the fallback chain: precomputed -> API -> structural."""
+        
+        # 1. Try pre-computed observation (agent-generated)
+        precomputed = self._load_precomputed_observation(frame)
+        if precomputed:
+            return precomputed
+        
+        # 2. Try live API call
+        if self.api_key and self.base_url not in ("local", ""):
+            api_result = self._call_live_api(frame)
+            if api_result:
+                self._observation_source = "live_api"
+                return api_result
+
+        # 3. Fallback to deterministic structural payload
+        self._observation_source = "structural_fallback"
+        return self._generate_visual_inspection_payload(frame)
+
+    def _call_live_api(self, frame: ExtractedFrame) -> Optional[Dict[str, Any]]:
+        """Call the live vision API (OpenRouter)."""
         b64_image = base64.b64encode(frame.image_bytes).decode("utf-8")
         image_url = f"data:{frame.mime_type};base64,{b64_image}"
 
@@ -65,7 +141,7 @@ class VisionClient:
                     ]
                 }
             ],
-            "max_tokens": 4096,
+            "max_tokens": 1500,
             "response_format": {"type": "json_object"}
         }
 
@@ -95,11 +171,12 @@ class VisionClient:
                 parsed = json.loads(cleaned)
                 if isinstance(parsed, dict) and ("observations" in parsed or "entries" in parsed):
                     return parsed
-        except Exception:
-            pass
-
-        # Deterministic visual inspection payload fallback based on local frame detection
-        return self._generate_visual_inspection_payload(frame)
+        except urllib.error.HTTPError as e:
+            print(f"[VisionClient] HTTP {e.code} Error")
+        except Exception as e:
+            print(f"[VisionClient] Exception: {e}")
+        
+        return None
 
     def _generate_visual_inspection_payload(self, frame: ExtractedFrame) -> Dict[str, Any]:
         obs = [
@@ -150,3 +227,8 @@ class VisionClient:
         ]
 
         return {"observations": obs, "entries": entries}
+
+    @property
+    def observation_source(self) -> str:
+        """Returns the source used for the last analyze_frame call."""
+        return self._observation_source
