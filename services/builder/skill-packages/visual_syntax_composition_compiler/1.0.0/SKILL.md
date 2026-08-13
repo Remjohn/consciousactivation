@@ -15,27 +15,16 @@ specification the CompositionIR layer consumes at campaign time to produce
 per-element BBox, z-index, and text-measurement geometry — this Skill does not
 render pixels.
 
+## Taxonomy Delegation
+
+**CRITICAL:** This skill dynamically inherits its canonical vocabulary from the Stage 1 contract registry:
+`services/builder/skill-packages/stage1-visual-syntax-skill/contracts/taxonomy_bindings.json`
+
+The Stage 2 schemas and execution engine dynamically read this file at runtime. You must NEVER hardcode primitive types, zone types, or slide roles directly in this document or in the Stage 2 code.
+
 ## Canonical Primitive Taxonomy
 
-Every visual element in every category resolves to exactly one of these primitive
-types. A primitive is a reusable ingredient — like salt, it appears across many
-formats. What varies per harness is the attribute ranges and composition rules,
-never the primitive type definitions themselves.
-
-### Primitive Types
-
-| Primitive Type       | Description                                                                 |
-|----------------------|-----------------------------------------------------------------------------|
-| `text_block`         | Any text element: headline, caption, refrain, question, label, subtitle.    |
-| `image_region`       | Any image element: photo, illustration, collage panel, UGC portrait.        |
-| `grid_cluster`       | Multi-image arrangement within a single container zone.                     |
-| `comparison_pair`    | Side-by-side wrong/right, before/after, or do-not/do pairing.              |
-| `badge`              | Creator avatar, brand mark, dot anchor, or fixed authorship element.        |
-| `number_label`       | Sequential numbering element: 01, #1, Step 1, Bias #3.                     |
-| `icon_row`           | Engagement or action icon set: comment, heart, save, share.                 |
-| `caption_plate`      | Solid-color background plate behind text for contrast and readability.       |
-| `callout_arrow`      | Annotation connector linking a symbol or garment to its referent label.      |
-| `flow_diagram`       | Explanatory model or relationship visualization (non-statistical).          |
+Every visual element in every category resolves to exactly one primitive type as defined in the inherited taxonomy. A primitive is a reusable ingredient. What varies per harness is the attribute ranges and composition rules, never the primitive type definitions themselves.
 
 ### Primitive Attributes (Universal)
 
@@ -60,13 +49,7 @@ the canvas that arranges its children according to a layout mode.
 
 ### Zone Types
 
-| Zone Type       | Layout Mode        | Typical Children                                    |
-|-----------------|--------------------|-----------------------------------------------------|
-| `header_zone`   | `vertical_stack`   | `text_block`, `number_label`, `badge`               |
-| `hero_zone`     | `overlay` or `grid`| `image_region`, `grid_cluster`, `comparison_pair`, `text_block` |
-| `footer_zone`   | `horizontal_row`   | `badge`, `text_block`, `icon_row`, `number_label`   |
-| `overlay_zone`  | `absolute`         | `caption_plate` + `text_block` layered over `hero_zone` |
-| `full_bleed`    | `fill`             | `image_region` spanning the entire canvas            |
+Container zones are dynamically inherited from the Stage 1 taxonomy.
 
 ### Zone Attributes
 
@@ -80,20 +63,7 @@ the canvas that arranges its children according to a layout mode.
 ## Slide Roles
 
 For multi-slide formats (carousels), each slide in the sequence carries a
-structural role that determines its zone configuration:
-
-| Slide Role             | Zone Configuration                                         |
-|------------------------|------------------------------------------------------------|
-| `cover`                | `full_bleed` + `overlay_zone{text_block[headline]}`        |
-| `numbered_item`        | `header_zone{number_label}` + `hero_zone` + `footer_zone`  |
-| `comparison_beat`      | `hero_zone{comparison_pair}` + `footer_zone`               |
-| `refrain_beat`         | `hero_zone{text_block[claim]}` only, no imagery            |
-| `photo_beat`           | `full_bleed{image_region}` + `overlay_zone{caption_plate}` |
-| `grid_collage`         | `header_zone{text_block}` + `hero_zone{grid_cluster}`      |
-| `closing_question`     | `hero_zone{text_block[question]}` only, no imagery          |
-| `closing_cta`          | `hero_zone{text_block}` + `footer_zone{icon_row, badge}`   |
-| `closing_comparison`   | `hero_zone{comparison_pair}` + `footer_zone{badge}`        |
-| `testimonial`          | `hero_zone{caption_plate + text_block}` + `footer_zone`    |
+structural role that determines its zone configuration. Slide roles are dynamically inherited from the Stage 1 taxonomy.
 
 For single-frame formats (supervisuals), the entire canvas is one slide with
 role `single_frame`.

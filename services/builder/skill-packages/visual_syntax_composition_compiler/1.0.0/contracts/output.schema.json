@@ -45,11 +45,7 @@
           "slide_index": { "type": "integer", "minimum": 0 },
           "slide_role": {
             "type": "string",
-            "enum": [
-              "cover", "numbered_item", "comparison_beat", "refrain_beat",
-              "photo_beat", "grid_collage", "closing_question", "closing_cta",
-              "closing_comparison", "testimonial", "single_frame"
-            ]
+            "description": "Dynamically validated against taxonomy_bindings.json."
           },
           "zones": {
             "type": "array",
@@ -59,7 +55,7 @@
               "properties": {
                 "zone_type": {
                   "type": "string",
-                  "enum": ["header_zone", "hero_zone", "footer_zone", "overlay_zone", "full_bleed"]
+                  "description": "Dynamically validated against taxonomy_bindings.json."
                 },
                 "layout_mode": {
                   "type": "string",
@@ -99,12 +95,7 @@
                       "primitive_id": { "type": "string", "minLength": 1 },
                       "primitive_type": {
                         "type": "string",
-                        "enum": [
-                          "text_block", "image_region", "grid_cluster",
-                          "comparison_pair", "badge", "number_label",
-                          "icon_row", "caption_plate", "callout_arrow",
-                          "flow_diagram"
-                        ]
+                        "description": "Dynamically validated against taxonomy_bindings.json."
                       },
                       "semantic_role": { "type": "string", "minLength": 1 },
                       "syntax_role": { "type": "string", "minLength": 1 },

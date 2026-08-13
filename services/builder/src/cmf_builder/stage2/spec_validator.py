@@ -5,23 +5,26 @@ Validates input payloads and output VisualSyntaxCompositionSpec objects against 
 
 from typing import Dict, Any, List, Tuple, Optional
 import re
+import json
 import jsonschema
+from pathlib import Path
 
+
+def _load_taxonomy_bindings() -> Dict[str, Any]:
+    taxonomy_path = Path(__file__).resolve().parent.parent.parent.parent / "skill-packages" / "stage1-visual-syntax-skill" / "contracts" / "taxonomy_bindings.json"
+    if taxonomy_path.exists():
+        with open(taxonomy_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+_TAXONOMY = _load_taxonomy_bindings()
 
 VALID_CATEGORIES = {"carousels", "supervisuals", "short_form_edited_video"}
 VALID_GRAMMAR_FAMILIES = {"CAROUSEL_SWIPE_PROGRESSION", "SUPERVISUAL_STATIC_HIERARCHY", "SHORT_FORM_EDITED_VIDEO_TIMELINE"}
-VALID_SLIDE_ROLES = {
-    "cover", "numbered_item", "comparison_beat", "refrain_beat",
-    "photo_beat", "grid_collage", "closing_question", "closing_cta",
-    "closing_comparison", "testimonial", "single_frame"
-}
-VALID_ZONES = {"header_zone", "hero_zone", "footer_zone", "overlay_zone", "full_bleed"}
+VALID_SLIDE_ROLES = set(_TAXONOMY.get("slide_role_registry", {}).get("canonical", []))
+VALID_ZONES = set(_TAXONOMY.get("zone_registry", {}).get("canonical", []))
 VALID_LAYOUT_MODES = {"vertical_stack", "horizontal_row", "overlay", "grid", "fill", "absolute"}
-VALID_PRIMITIVE_TYPES = {
-    "text_block", "image_region", "grid_cluster", "comparison_pair",
-    "badge", "number_label", "icon_row", "caption_plate",
-    "callout_arrow", "flow_diagram"
-}
+VALID_PRIMITIVE_TYPES = set(_TAXONOMY.get("primitive_registry", {}).get("canonical", []))
 VALID_CONSTRAINT_TYPES = {
     "z_index_order", "non_overlap", "anchor_lock", "contrast_ratio",
     "presence_required", "absence_required", "pairing_required", "content_separation"

@@ -5,6 +5,7 @@ into governed VisualSyntaxCompositionCompilerInput data structures.
 """
 
 from typing import Dict, Any, List, Optional
+from .spec_validator import VALID_PRIMITIVE_TYPES, VALID_ZONES, VALID_SLIDE_ROLES
 
 
 def derive_category_and_grammar(harness_id: str) -> tuple[str, str]:
@@ -19,12 +20,7 @@ def derive_category_and_grammar(harness_id: str) -> tuple[str, str]:
 
 def normalize_primitive_type(prim_type: str) -> str:
     """Ensure primitive_type maps to canonical taxonomy."""
-    canonical_primitives = {
-        "text_block", "image_region", "grid_cluster", "comparison_pair",
-        "badge", "number_label", "icon_row", "caption_plate",
-        "callout_arrow", "flow_diagram"
-    }
-    if prim_type in canonical_primitives:
+    if prim_type in VALID_PRIMITIVE_TYPES:
         return prim_type
     
     mapping = {
@@ -46,8 +42,7 @@ def normalize_primitive_type(prim_type: str) -> str:
 
 def normalize_zone(zone: str) -> str:
     """Ensure zone maps to canonical container zones."""
-    canonical_zones = {"header_zone", "hero_zone", "footer_zone", "overlay_zone", "full_bleed"}
-    if zone in canonical_zones:
+    if zone in VALID_ZONES:
         return zone
     mapping = {
         "header": "header_zone",
@@ -64,12 +59,7 @@ def normalize_slide_role(role: str, category_id: str) -> str:
     if category_id == "supervisuals":
         return "single_frame"
     
-    canonical_roles = {
-        "cover", "numbered_item", "comparison_beat", "refrain_beat",
-        "photo_beat", "grid_collage", "closing_question", "closing_cta",
-        "closing_comparison", "testimonial", "single_frame"
-    }
-    if role in canonical_roles:
+    if role in VALID_SLIDE_ROLES:
         return role
     
     mapping = {
