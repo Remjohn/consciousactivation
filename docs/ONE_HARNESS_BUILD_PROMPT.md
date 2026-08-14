@@ -16,6 +16,8 @@ OUTPUT: one file, `manifest.json`, ready for `cmf-builder ingest`. Nothing else 
 
 2. **Look at every file in the folder.** Note what it actually is (images, slide sequence, scene template JSON, video). This is context for step 3, not something that gets zipped into the ingest input — the CLI takes one JSON manifest, not raw media.
 
+2.5 **Load Stage 1 and Stage 2 Outputs.** Load `stage1_output/{harness_id}_STAGE1_REPORT.json` and `stage1_output/specs/{harness_id}_STAGE2_SPEC.json`. Treat these reports as the primary, verified evidence base for visual syntax and `wrong_reading_locks`. Only fall back to raw-image inspection (Step 2) if those reports are thin or missing.
+
 3. **Fill the manifest below.** Two different bars apply to different fields — do not blur them:
 
    - **`task.*` and 6 of the 7 `activative_input` refs** (`source_premise_ref`, `identity_dna_ref`, `context_premise_ref`, `resonance_map_ref`, `matrix_of_edging_ref`, `activative_intelligence_pack_ref`, `evaluation_contract_ref`, `evidence_provenance_refs`) — these are **attestation, not live content**. Nothing downstream ever reads them again after Builder validates them. They still must be real, not fabricated — point at real reference material or ask what they should point to — but don't agonize over making them bespoke to a hypothetical future client. They just need to honestly represent this format.

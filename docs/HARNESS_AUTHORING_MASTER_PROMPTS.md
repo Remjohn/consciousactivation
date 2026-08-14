@@ -1,11 +1,14 @@
 # Harness Authoring Master Prompts & Execution Guide
 
-**Version:** 1.2.0  
+**Version:** 1.3.0  
 **Status:** RATIFIED_AUTHORING_GUIDE  
 **Target Repository:** `consciousactivation`  
 **Location of Raw Harness Bundles:** `atomic_harnesses_visual_syntax/`  
-**Location of Output Library:** `storage/harness-library/`  
+**Location of Compiled Evidence:** `stage1_output/` (Stage 1 reports) and `stage1_output/specs/` (Stage 2 specs)  
+**Location of Output Library:** `${CA_HARNESS_LIBRARY_ROOT:-$CA_DATA_ROOT/harness-library}` — resolved at runtime by `api/routers/harnesses.py::get_harness_library_root()`; never a fixed repo path.  
 **Governing Visual Syntax Skill:** `services/builder/skill-packages/visual_syntax_composition_compiler/1.0.0/`
+
+> **2026-08-14 correction (v1.3.0):** fixed three defects found in audit — (1) `storage/harness-library/` was never a real path, it doesn't exist and nothing reads it; the real library root is env-resolved, see above; (2) `capability_requirements` guidance below previously said "non-empty," which directly contradicted `ONE_HARNESS_BUILD_PROMPT.md` and would break every harness at campaign-creation time (known Blocker 2, see `docs/PRD/CURRENT.md` §1.10#1) — corrected to `[]`; (3) Stage 1 report path corrected — Stage 1 reports live directly in `stage1_output/`, not `stage1_output/reports/` (that subfolder holds Stage 2 reports instead).
 
 ---
 
@@ -46,8 +49,8 @@ Laziness, superficial skimming, or assuming "the rest look the same" when analyz
 
 | Content Type | Minimum Inspection Requirement |
 |---|---|
-| **Carousels** | Inspect **every individual slide image** in the zip. Each slide may have a different zone layout, different primitive composition, and different wrong-reading risk. Treating slide 1 as representative of slides 2–10 is a failure. |
-| **SuperVisuals** | Inspect **every specimen image** in the zip. Each specimen variant (quote card, stat card, meme template, comparison split) may use different primitives and zones. |
+| **Carousels** | Inspect **every individual slide image** in the harness folder. Each slide may have a different zone layout, different primitive composition, and different wrong-reading risk. Treating slide 1 as representative of slides 2–10 is a failure. |
+| **SuperVisuals** | Inspect **every specimen image** in the harness folder. Each specimen variant (quote card, stat card, meme template, comparison split) may use different primitives and zones. |
 | **Video formats** | Inspect a **minimum of 20 screenshots/frames** from the reference material. If fewer than 20 exist, inspect all of them. |
 
 ### What "Inspect" Means
@@ -73,17 +76,20 @@ For each image/slide/frame, the agent MUST:
 Copy and paste the snippet below when starting a Claude chat session to author or validate a harness:
 
 ```markdown
-# Harness Compilation Task — Direct Zip Upload
+# Harness Compilation Task
 
-You are compiling the attached raw visual harness zip file into a production-valid `manifest.json` for the `cmf_builder` pipeline.
+You are compiling a raw visual harness bundle into a production-valid `manifest.json` for the `cmf_builder` pipeline.
 
 ## Input Material
-- **Uploaded Zip:** Contains `ONE_HARNESS_BUILD_PROMPT.md`, `DRILL_ME_FORMAT.md`, `DRILL_ME_BBOX_WHY.md`, `HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md`, and visual image specimens (`.png`/`.jpg`).
+- **Harness reference material:** `atomic_harnesses_visual_syntax/<category>/<harness_id>/` — raw image specimens (`.png`/`.jpg`), plus process docs `ONE_HARNESS_BUILD_PROMPT.md`, `DRILL_ME_FORMAT.md`, `DRILL_ME_BBOX_WHY.md`, `HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md`.
+- **Compiled evidence (load this first):** `stage1_output/{harness_id}_STAGE1_REPORT.json` and `stage1_output/specs/{harness_id}_STAGE2_SPEC.json`.
 
 ## ⚠️ MANDATORY: Specimen Inspection Rule (Non-Negotiable)
-Before writing ANY manifest fields, you MUST individually open and inspect:
-- **Carousels:** EVERY slide image in the zip. Do not skip any.
-- **SuperVisuals:** EVERY specimen image in the zip. Do not skip any.
+Before writing ANY manifest fields, you MUST first load `stage1_output/{harness_id}_STAGE1_REPORT.json` and `stage1_output/specs/{harness_id}_STAGE2_SPEC.json`. Treat these as the verified, canonical evidence base for visual syntax and `wrong_reading_locks`.
+
+ONLY if those reports are thin or missing should you fall back to raw-image inspection. If you must fall back, individually open and inspect:
+- **Carousels:** EVERY slide image in the harness folder. Do not skip any.
+- **SuperVisuals:** EVERY specimen image in the harness folder. Do not skip any.
 - **Video formats:** At least 20 frames/screenshots. If fewer than 20 exist, inspect ALL.
 
 For each image you MUST: identify every visual element, map it to a canonical primitive (`text_block`, `image_region`, `grid_cluster`, `comparison_pair`, `badge`, `number_label`, `icon_row`, `caption_plate`, `callout_arrow`, `flow_diagram`), note its container zone (`header_zone`, `hero_zone`, `footer_zone`, `overlay_zone`, `full_bleed`), and record per-slide layout differences.
@@ -97,7 +103,7 @@ Skimming, assuming, or extrapolating from a subset is a constitutional violation
    - `short_form_edited_video` (Short-Form Edited Video — Reels/TikToks)
    - `2d_character_animation` (2D Character Animation — animated theatre)
    - `conversational_activation_expression` (Conversational Activation — dynamic chat)
-2. `capability_requirements`: MUST be a non-empty list — use `["activative_contract_validation"]`.
+2. `capability_requirements`: MUST be `[]` (empty). Non-empty values fail at campaign-creation time today — `capability_metadata` is hardcoded to `{}` at that call site, so it can never satisfy a non-empty requirements list (known gate, tracked in `docs/PRD/CURRENT.md` §1.10#1). Not this harness's problem to solve.
 3. `input_contract.properties`: `identity_dna` is FORBIDDEN here. It belongs exclusively in `activative_input.identity_dna_ref`. Use `source_expression_moment` and `voice_context` for runtime input properties.
 4. `wrong_reading_locks`: MUST be a non-empty list of at least 3 format-specific negative constraints derived from the visual specimens and DRILL_ME files. Each lock MUST reference specific primitive types and spatial constraints observed in the inspected specimens.
 5. `provenance_refs`: Include reference to `visual_syntax_composition_compiler@1.0.0` in addition to prompt/specimen source refs.
@@ -108,7 +114,7 @@ Skimming, assuming, or extrapolating from a subset is a constitutional violation
 7. Slugs & IDs: Set `manifest_id` to `"operator-manifest-<slug>"` and `task_id` to `"<slug>_v1"` using a clean slug (e.g. `twq_img_portrait_v1`).
 
 ## Instructions
-1. Inspect ALL files and image specimens inside the uploaded zip per the Mandatory Specimen Inspection Rule above.
+1. Load the Stage 1/Stage 2 outputs for this harness, and only fall back to inspecting the raw image specimens per the Mandatory Specimen Inspection Rule above if those outputs are thin or missing.
 2. Execute the 5-step classification & synthesis procedure from `ONE_HARNESS_BUILD_PROMPT.md`.
 3. Output the complete, valid, un-truncated `manifest.json` ready for `cmf-builder ingest`.
 ```
@@ -131,17 +137,19 @@ python -m cmf_builder.cli build --artifact-id <operator-manifest-id>
 python -m cmf_builder.cli inspect --artifact-id <definition-artifact-id>
 
 # Step 4: Export zip package to Harness Library (ALWAYS specify explicit --output path)
-python -m cmf_builder.cli export --artifact-id <definition-artifact-id> --output "../../storage/harness-library/<HARNESS_NAME>.zip"
+# Library root resolves to ${CA_HARNESS_LIBRARY_ROOT:-$CA_DATA_ROOT/harness-library} — confirm the
+# actual value in your environment before exporting; do not hardcode a repo-relative path.
+python -m cmf_builder.cli export --artifact-id <definition-artifact-id> --output "${CA_HARNESS_LIBRARY_ROOT:-$CA_DATA_ROOT/harness-library}/<HARNESS_NAME>.zip"
 ```
 
 ---
 
 ## 5. Strict Naming Conventions & Export Rules
 
-When exporting compiled harness packages to `storage/harness-library/`, enforce the 3-tier naming convention:
+When exporting compiled harness packages to `${CA_HARNESS_LIBRARY_ROOT:-$CA_DATA_ROOT/harness-library}`, enforce the 3-tier naming convention:
 
 | Identity Layer | Format / Example | Purpose |
 |---|---|---|
 | **Cryptographic ID (`definition_id`)** | `atomic-harness-definition_7f0e70c1...` | Auto-generated by Builder (sha256 digest) to guarantee no collisions in database. |
 | **Manifest Slug (`task_id`)** | `TWQ-STD-Standard` or `twq_std_standard_v1` | Human-readable slug in `manifest.json`. |
-| **Library Package File (`package_file`)** | `TWQ-STD-Standard.zip` | Explicit `--output` filename saved to `storage/harness-library/`. |
+| **Library Package File (`package_file`)** | `TWQ-STD-Standard.zip` | Explicit `--output` filename saved to `${CA_HARNESS_LIBRARY_ROOT:-$CA_DATA_ROOT/harness-library}`. |

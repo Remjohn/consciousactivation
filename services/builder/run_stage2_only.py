@@ -5,8 +5,7 @@ import json
 from pathlib import Path
 
 stage1_out = Path("d:/Work/consciousactivation/stage1_output")
-specs_out = stage1_out / "specs"
-specs_out.mkdir(parents=True, exist_ok=True)
+specs_out = stage1_out
 
 success_count = 0
 reports = list(stage1_out.glob("*_STAGE1_REPORT.json"))

@@ -188,8 +188,8 @@ def build_compiler_input(
 
             if frame_objects:
                 for p_idx, o in enumerate(frame_objects):
-                    p_type = normalize_primitive_type(o.get("object_type", "text_block"))
-                    zone = normalize_zone(o.get("zone_observation", "hero_zone"))
+                    p_type = normalize_primitive_type(o.get("object_type"))
+                    zone = normalize_zone(o.get("zone_observation"))
                     bbox = o.get("bbox_normalized", {})
 
                     height = bbox.get("height", 0.2) * 100.0 if "height" in bbox else 25.0
@@ -209,8 +209,8 @@ def build_compiler_input(
                     })
             else:
                 for p in slide_entry.get("primitives", []):
-                    p_type = normalize_primitive_type(p.get("primitive_type", "text_block"))
-                    zone = normalize_zone(p.get("zone", "hero_zone"))
+                    p_type = normalize_primitive_type(p.get("primitive_type"))
+                    zone = normalize_zone(p.get("zone"))
                     observed_prims.append({
                         "primitive_type": p_type,
                         "semantic_role": f"{p_type}_element",
@@ -223,6 +223,9 @@ def build_compiler_input(
                         "cross_slide_stable": p_type == "badge"
                     })
 
+            if not observed_prims:
+                raise SpecificationValidationError(f"Zero observed primitives found for slide {idx} in harness {harness_id}")
+
             slide_evidence.append({
                 "slide_index": idx,
                 "slide_role": role,
@@ -234,8 +237,8 @@ def build_compiler_input(
         role = "single_frame" if category_id == "supervisuals" else "cover"
         observed_prims = []
         for p_idx, o in enumerate(raw_obs):
-            p_type = normalize_primitive_type(o.get("object_type", "text_block"))
-            zone = normalize_zone(o.get("zone_observation", "hero_zone"))
+            p_type = normalize_primitive_type(o.get("object_type"))
+            zone = normalize_zone(o.get("zone_observation"))
             bbox = o.get("bbox_normalized", {})
             height = bbox.get("height", 0.2) * 100.0 if "height" in bbox else 25.0
             width = bbox.get("width", 0.8) * 100.0 if "width" in bbox else 80.0
@@ -252,23 +255,14 @@ def build_compiler_input(
                 "cross_slide_stable": p_type == "badge"
             })
             
+        if not observed_prims:
+            raise SpecificationValidationError(f"Zero observed primitives found for fallback frame in harness {harness_id}")
+            
         slide_evidence.append({
             "slide_index": 0,
             "slide_role": role,
             "specimen_ref": f"specimen:{harness_id}:frame_0",
-            "observed_primitives": observed_prims or [
-                {
-                    "primitive_type": "text_block",
-                    "semantic_role": "headline",
-                    "zone": "hero_zone",
-                    "observed_height_pct": 30.0,
-                    "observed_width_pct": 80.0,
-                    "observed_y_anchor_pct": 20.0,
-                    "observed_font_size_px": 36,
-                    "overlap_observed": False,
-                    "cross_slide_stable": False
-                }
-            ]
+            "observed_primitives": observed_prims
         })
 
     if category_id == "supervisuals" and slide_evidence:
@@ -280,24 +274,15 @@ def build_compiler_input(
                 if key not in seen:
                     seen.add(key)
                     all_prims.append(p)
+        if not all_prims:
+            raise SpecificationValidationError(f"Zero observed primitives found in supervisual flattening for harness {harness_id}")
+
         slide_evidence = [
             {
                 "slide_index": 0,
                 "slide_role": "single_frame",
                 "specimen_ref": f"specimen:{harness_id}:single_frame",
-                "observed_primitives": all_prims or [
-                    {
-                        "primitive_type": "text_block",
-                        "semantic_role": "headline",
-                        "zone": "hero_zone",
-                        "observed_height_pct": 30.0,
-                        "observed_width_pct": 80.0,
-                        "observed_y_anchor_pct": 20.0,
-                        "observed_font_size_px": 36,
-                        "overlap_observed": False,
-                        "cross_slide_stable": False
-                    }
-                ]
+                "observed_primitives": all_prims
             }
         ]
 

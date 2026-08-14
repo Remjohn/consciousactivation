@@ -22,8 +22,7 @@ temp_zip_dir = Path("d:/Work/consciousactivation/temp_zips")
 temp_zip_dir.mkdir(parents=True, exist_ok=True)
 
 stage1_out = Path("d:/Work/consciousactivation/stage1_output")
-specs_out = stage1_out / "specs"
-specs_out.mkdir(parents=True, exist_ok=True)
+specs_out = stage1_out
 
 success_s1 = 0
 success_s2 = 0
