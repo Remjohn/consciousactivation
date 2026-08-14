@@ -1,27 +1,42 @@
 {
   "observations": [
     {
-      "object_type": "text_block",
-      "zone_observation": "hero_zone",
-      "bbox_normalized": {"x": 0.10, "y": 0.30, "width": 0.60, "height": 0.35},
-      "text_or_visual_description": "Black sans-serif text: 'How many times you promised yourself to check them again but you never did?'",
-      "confidence": 0.99,
-      "source_frame": 2
-    },
-    {
       "object_type": "image_region",
-      "zone_observation": "hero_zone",
-      "bbox_normalized": {"x": 0.70, "y": 0.35, "width": 0.30, "height": 0.65},
-      "text_or_visual_description": "Silhouette of a person hunched over looking at a glowing smartphone.",
-      "confidence": 0.99,
+      "zone_observation": "full_bleed",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "Clean gradient or photo background for tip slide 2",
+      "confidence": 0.98,
       "source_frame": 2
     },
     {
       "object_type": "text_block",
-      "zone_observation": "footer_zone",
-      "bbox_normalized": {"x": 0.10, "y": 0.85, "width": 0.30, "height": 0.05},
-      "text_or_visual_description": "Small black text handle: '@ismail_elazizi'",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.04,
+        "y": 0.38,
+        "width": 0.92,
+        "height": 0.22
+      },
+      "text_or_visual_description": "List item slide 2 - tip about content saving behavior by Ismail El Azizi",
       "confidence": 0.99,
+      "source_frame": 2
+    },
+    {
+      "object_type": "badge",
+      "zone_observation": "footer_zone",
+      "bbox_normalized": {
+        "x": 0.04,
+        "y": 0.88,
+        "width": 0.4,
+        "height": 0.06
+      },
+      "text_or_visual_description": "Ismail El Azizi @ismail_elazizi",
+      "confidence": 0.96,
       "source_frame": 2
     }
   ],
@@ -30,14 +45,30 @@
       "slide_index": 2,
       "slide_role": "numbered_item",
       "taxonomy_state": "CANONICAL",
-      "container_zones": ["hero_zone", "footer_zone"],
-      "primitives": [
-        {"primitive_type": "text_block", "zone": "hero_zone", "dominant": true},
-        {"primitive_type": "image_region", "zone": "hero_zone", "dominant": false},
-        {"primitive_type": "text_block", "zone": "footer_zone", "dominant": false}
+      "container_zones": [
+        "full_bleed",
+        "hero_zone",
+        "footer_zone"
       ],
-      "reading_order": "headline text -> illustration -> handle",
-      "layout_fingerprint": "gradient_bg_left_text_right_illustration_bottom_handle"
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": true
+        },
+        {
+          "primitive_type": "badge",
+          "zone": "footer_zone",
+          "dominant": false
+        }
+      ],
+      "reading_order": "bold text overlay -> hero photo full bleed -> brand badge",
+      "layout_fingerprint": "gradient_bg_tip_slide_with_author_badge"
     }
   ]
 }

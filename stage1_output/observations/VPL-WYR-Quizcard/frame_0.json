@@ -1,7 +1,7 @@
 {
   "observations": [
     {
-      "object_type": "grid_cluster",
+      "object_type": "image_region",
       "zone_observation": "full_bleed",
       "bbox_normalized": {
         "x": 0.0,
@@ -9,15 +9,32 @@
         "width": 1.0,
         "height": 1.0
       },
-      "text_or_visual_description": "3x3 interactive quiz choice grid of 9 numbered mouse photo tiles (1: smoking rat, 2: fairy princess mouse, 3: pink mouse, 4: spaghetti mouse, 5: bow tie mouse, 6: pole dancing mouse, 7: wet bath mouse, 8: flat bed mouse, 9: pink car mouse)",
+      "text_or_visual_description": "3x3 photo grid of funny animal/mouse characters",
       "confidence": 0.99,
-      "source_frame": 0
+      "object_id": "frame0_obj1",
+      "source_frame": 0,
+      "frame_index": 0
+    },
+    {
+      "object_type": "number_label",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.02,
+        "y": 0.02,
+        "width": 0.96,
+        "height": 0.96
+      },
+      "text_or_visual_description": "Numbers 1 to 9 overlaid on grid cell top-left corners",
+      "confidence": 0.98,
+      "object_id": "frame0_obj2",
+      "source_frame": 0,
+      "frame_index": 0
     }
   ],
   "entries": [
     {
       "slide_index": 0,
-      "slide_role": "single_frame",
+      "slide_role": "cover",
       "taxonomy_state": "CANONICAL",
       "container_zones": [
         "full_bleed",
@@ -25,13 +42,18 @@
       ],
       "primitives": [
         {
-          "primitive_type": "grid_cluster",
+          "primitive_type": "image_region",
           "zone": "full_bleed",
           "dominant": true
+        },
+        {
+          "primitive_type": "number_label",
+          "zone": "hero_zone",
+          "dominant": false
         }
       ],
-      "reading_order": "3x3 grid tiles 1 through 9 left-to-right top-to-bottom",
-      "layout_fingerprint": "full_bleed_3x3_numbered_character_quiz_choice_grid"
+      "reading_order": "3x3 character grid -> 1-9 number labels",
+      "layout_fingerprint": "numbered_3x3_quiz_grid_card"
     }
   ]
 }

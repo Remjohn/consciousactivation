@@ -6,6 +6,7 @@ into governed VisualSyntaxCompositionCompilerInput data structures.
 
 from typing import Dict, Any, List, Optional
 from .spec_validator import VALID_PRIMITIVE_TYPES, VALID_ZONES, VALID_SLIDE_ROLES
+from .composition_compiler import SpecificationValidationError
 
 
 def derive_category_and_grammar(harness_id: str) -> tuple[str, str]:
@@ -27,17 +28,30 @@ def normalize_primitive_type(prim_type: str) -> str:
         "text": "text_block",
         "headline": "text_block",
         "caption": "text_block",
+        "paragraph": "text_block",
+        "title_text": "text_block",
+        "body_text": "text_block",
         "image": "image_region",
         "photo": "image_region",
+        "picture": "image_region",
         "avatar": "badge",
+        "logo": "badge",
+        "brand": "badge",
         "number": "number_label",
         "step_number": "number_label",
+        "index": "number_label",
         "plate": "caption_plate",
+        "container": "caption_plate",
         "icons": "icon_row",
         "arrow": "callout_arrow",
         "diagram": "flow_diagram"
     }
-    return mapping.get(prim_type, "text_block")
+    if prim_type in mapping:
+        return mapping[prim_type]
+    
+    raise SpecificationValidationError(
+        f"Unrecognized primitive_type: '{prim_type}'. Value is not in canonical primitive taxonomy or known aliases."
+    )
 
 
 def normalize_zone(zone: str) -> str:
@@ -46,12 +60,60 @@ def normalize_zone(zone: str) -> str:
         return zone
     mapping = {
         "header": "header_zone",
+        "top": "header_zone",
+        "top_zone": "header_zone",
+        "upper_zone": "header_zone",
+        "subheading_zone": "header_zone",
+        "logo_zone": "header_zone",
+        "upper_left": "header_zone",
+        "upper_right": "header_zone",
+        "upper_center": "header_zone",
+        "upper_photo": "hero_zone",
+        "upper_grid": "hero_zone",
+        "lower_grid": "hero_zone",
+        "upper_illustration": "hero_zone",
+        "lower_illustration": "hero_zone",
+        "upper_portrait": "hero_zone",
+        "lower_portrait": "hero_zone",
         "hero": "hero_zone",
+        "hero_zone": "hero_zone",
+        "body_zone": "hero_zone",
+        "center": "hero_zone",
+        "center_zone": "hero_zone",
+        "center_left_zone": "hero_zone",
+        "center_right_zone": "hero_zone",
+        "left_zone": "hero_zone",
+        "right_zone": "hero_zone",
+        "left_card": "hero_zone",
+        "right_card": "hero_zone",
+        "left_graphic": "hero_zone",
+        "right_graphic": "hero_zone",
+        "left_diagram": "hero_zone",
+        "right_diagram": "hero_zone",
+        "card_zone": "hero_zone",
+        "photo_zone": "hero_zone",
+        "middle_zone": "hero_zone",
+        "lower_photo": "footer_zone",
+        "quote_banner": "hero_zone",
+        "question_badge": "overlay_zone",
         "footer": "footer_zone",
+        "bottom": "footer_zone",
+        "bottom_zone": "footer_zone",
+        "lower_zone": "footer_zone",
+        "lower_center": "footer_zone",
+        "lower_left": "footer_zone",
+        "lower_right": "footer_zone",
+        "lower_left_zone": "footer_zone",
+        "lower_right_zone": "footer_zone",
         "overlay": "overlay_zone",
         "background": "full_bleed"
     }
-    return mapping.get(zone, "hero_zone")
+    if zone in mapping:
+        return mapping[zone]
+    
+    raise SpecificationValidationError(
+        f"Unrecognized zone: '{zone}'. Value is not in canonical zone taxonomy or known aliases."
+    )
 
 
 def normalize_slide_role(role: str, category_id: str) -> str:
@@ -65,15 +127,26 @@ def normalize_slide_role(role: str, category_id: str) -> str:
     mapping = {
         "title": "cover",
         "intro": "cover",
+        "header": "cover",
         "item": "numbered_item",
         "step": "numbered_item",
+        "body": "numbered_item",
+        "content": "numbered_item",
         "cta": "closing_cta",
         "conclusion": "closing_cta",
+        "closing": "closing_cta",
+        "end": "closing_cta",
         "question": "closing_question",
         "comparison": "comparison_beat",
-        "quote": "refrain_beat"
+        "quote": "refrain_beat",
+        "recap": "refrain_beat"
     }
-    return mapping.get(role, "numbered_item")
+    if role in mapping:
+        return mapping[role]
+    
+    raise SpecificationValidationError(
+        f"Unrecognized slide_role: '{role}'. Value is not in canonical slide_role taxonomy or known aliases."
+    )
 
 
 def build_compiler_input(

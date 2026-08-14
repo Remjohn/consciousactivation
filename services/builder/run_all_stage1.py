@@ -43,7 +43,7 @@ harnesses = [
 ]
 
 zip_map = {}
-for root, dirs, files in os.walk('d:/Work/consciousactivation/atomic_harnesses_visual_syntax'):
+for root, dirs, files in os.walk('d:/Work/consciousactivation/services/storage/harness-library'):
     for f in files:
         if f.endswith('.zip'):
             name = f[:-4]

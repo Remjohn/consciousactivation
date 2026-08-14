@@ -1,5 +1,5 @@
 {
-  "spec_id": "visual_syntax_spec_SPV-SYM-Symbolic_fc97d9df70331caf",
+  "spec_id": "visual_syntax_spec_SPV-SYM-Symbolic_ab3f00aa3ad08b09",
   "spec_version": "1.0.0",
   "harness_definition_id": "SPV-SYM-Symbolic",
   "category_id": "supervisuals",
@@ -24,18 +24,64 @@
           "max_children": 5,
           "primitives": [
             {
-              "primitive_id": "prim_0_header_zone_0_text_block",
+              "primitive_id": "prim_0_header_zone_default",
               "primitive_type": "text_block",
-              "semantic_role": "text_block_element",
-              "syntax_role": "header_zone:text_block",
+              "semantic_role": "zone_placeholder",
+              "syntax_role": "header_zone:placeholder",
               "attribute_ranges": {
                 "height_pct": {
                   "min": 15.0,
-                  "max": 25.0
+                  "max": 30.0
                 },
                 "width_pct": {
-                  "min": 75.0,
-                  "max": 85.0
+                  "min": 20.0,
+                  "max": 100.0
+                },
+                "z_index_range": {
+                  "min": 1,
+                  "max": 5
+                },
+                "padding_px": {
+                  "min": 8,
+                  "max": 16
+                },
+                "overlap_allowed": false
+              },
+              "anchor_mode": "static",
+              "why": "Standard container primitive for header_zone",
+              "protected_properties": [
+                "primitive_type"
+              ]
+            }
+          ]
+        },
+        {
+          "zone_type": "hero_zone",
+          "layout_mode": "overlay",
+          "height_range_pct": {
+            "min": 45.0,
+            "max": 70.0
+          },
+          "y_anchor_range_pct": {
+            "min": 0.0,
+            "max": 90.0
+          },
+          "required": true,
+          "max_children": 5,
+          "primitives": [
+            {
+              "primitive_id": "prim_0_hero_zone_0_text_block",
+              "primitive_type": "text_block",
+              "semantic_role": "text_block_element",
+              "syntax_role": "hero_zone:text_block",
+              "attribute_ranges": {
+                "height_pct": {
+                  "min": 20.0,
+                  "max": 30.0
+                },
+                "width_pct": {
+                  "min": 85.0,
+                  "max": 95.0
                 },
                 "z_index_range": {
                   "min": 2,
@@ -71,65 +117,6 @@
           ]
         },
         {
-          "zone_type": "hero_zone",
-          "layout_mode": "overlay",
-          "height_range_pct": {
-            "min": 45.0,
-            "max": 70.0
-          },
-          "y_anchor_range_pct": {
-            "min": 0.0,
-            "max": 90.0
-          },
-          "required": true,
-          "max_children": 5,
-          "primitives": [
-            {
-              "primitive_id": "prim_0_hero_zone_1_image_region",
-              "primitive_type": "image_region",
-              "semantic_role": "image_region_element",
-              "syntax_role": "hero_zone:image_region",
-              "attribute_ranges": {
-                "height_pct": {
-                  "min": 53.0,
-                  "max": 63.0
-                },
-                "width_pct": {
-                  "min": 87.0,
-                  "max": 97.0
-                },
-                "z_index_range": {
-                  "min": 3,
-                  "max": 10
-                },
-                "padding_px": {
-                  "min": 4,
-                  "max": 16
-                },
-                "overlap_allowed": false,
-                "color_constraint": "contrast_ratio_min_4.5:1",
-                "font_size_px": {
-                  "min": 12,
-                  "max": 20
-                },
-                "font_weight": [
-                  "regular",
-                  "medium"
-                ],
-                "alignment": [
-                  "left"
-                ]
-              },
-              "anchor_mode": "static",
-              "why": "Derived from specimen analysis frame 0 observation for image_region",
-              "protected_properties": [
-                "primitive_type",
-                "anchor_mode"
-              ]
-            }
-          ]
-        },
-        {
           "zone_type": "footer_zone",
           "layout_mode": "horizontal_row",
           "height_range_pct": {
@@ -155,7 +142,7 @@
                 },
                 "width_pct": {
                   "min": 10.0,
-                  "max": 17.0
+                  "max": 20.0
                 },
                 "z_index_range": {
                   "min": 3,
@@ -255,13 +242,13 @@
       ]
     }
   ],
-  "deduplication_hash": "sha256:fc97d9df70331caf81373f1cd9818b48df8b92b05f69791e9ec340e342ff3b88",
+  "deduplication_hash": "sha256:ab3f00aa3ad08b099ac5802b7ab4b2ccfd7db3bb8bbc9881276ed3fef254d4a2",
   "lineage": {
     "source_premise_ref": "source_premise:SPV-SYM-Symbolic:v1.0.0",
-    "identity_dna_ref": "identity_dna:SPV-SYM-Symbolic:bc2434af09e1fda3",
+    "identity_dna_ref": "identity_dna:SPV-SYM-Symbolic:c87c45573511be52",
     "evidence_provenance_refs": [
       "provenance:stage1_report:SPV-SYM-Symbolic",
-      "provenance:zip:bc2434af09e1fda32409536bf6adfe3d"
+      "provenance:zip:c87c45573511be5248c1c3ebb1cb9a27"
     ],
     "skill_ref": "visual_syntax_composition_compiler@1.0.0"
   }

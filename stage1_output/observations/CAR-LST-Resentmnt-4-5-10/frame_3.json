@@ -3,16 +3,26 @@
     {
       "object_type": "image_region",
       "zone_observation": "full_bleed",
-      "bbox_normalized": {"x": 0.0, "y": 0.0, "width": 1.0, "height": 1.0},
-      "text_or_visual_description": "Illustration of a folded paper envelope floating in turbulent dark blue ocean waves.",
-      "confidence": 0.99,
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "Dark illustration artwork slide 4 in narrative resentment series",
+      "confidence": 0.98,
       "source_frame": 3
     },
     {
       "object_type": "text_block",
-      "zone_observation": "footer_zone",
-      "bbox_normalized": {"x": 0.15, "y": 0.70, "width": 0.70, "height": 0.20},
-      "text_or_visual_description": "White handwritten-style text in the lower half: 'I give positive messages, but sometimes I'm the one who needs them.'",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.42,
+        "width": 0.6,
+        "height": 0.26
+      },
+      "text_or_visual_description": "Narrative quote text slide 4 on resentment and self-reflection theme",
       "confidence": 0.99,
       "source_frame": 3
     }
@@ -22,13 +32,24 @@
       "slide_index": 3,
       "slide_role": "numbered_item",
       "taxonomy_state": "CANONICAL",
-      "container_zones": ["full_bleed", "footer_zone"],
-      "primitives": [
-        {"primitive_type": "text_block", "zone": "footer_zone", "dominant": true},
-        {"primitive_type": "image_region", "zone": "full_bleed", "dominant": false}
+      "container_zones": [
+        "full_bleed",
+        "hero_zone"
       ],
-      "reading_order": "narrative text -> illustration",
-      "layout_fingerprint": "illustrated_background_bottom_centered_text"
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": true
+        }
+      ],
+      "reading_order": "full-bleed painted artwork -> overlaid handwritten quote text",
+      "layout_fingerprint": "dark_olive_surrealist_illustration_with_handwritten_introspective_quote"
     }
   ]
 }

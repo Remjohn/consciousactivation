@@ -3,16 +3,26 @@
     {
       "object_type": "image_region",
       "zone_observation": "full_bleed",
-      "bbox_normalized": {"x": 0.0, "y": 0.0, "width": 1.0, "height": 1.0},
-      "text_or_visual_description": "Illustration of a cloaked, fox-headed figure standing in front of a bookshelf.",
-      "confidence": 0.99,
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "Dark olive tone surrealist illustration of abstract fox-figure in library setting among bookshelves",
+      "confidence": 0.98,
       "source_frame": 0
     },
     {
       "object_type": "text_block",
       "zone_observation": "hero_zone",
-      "bbox_normalized": {"x": 0.05, "y": 0.35, "width": 0.50, "height": 0.30},
-      "text_or_visual_description": "White handwritten-style text over the bookshelves: 'I talk about empathy, but I have also hurt people.'",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.42,
+        "width": 0.6,
+        "height": 0.26
+      },
+      "text_or_visual_description": "I talk about empathy, but I have also hurt people.",
       "confidence": 0.99,
       "source_frame": 0
     }
@@ -22,13 +32,24 @@
       "slide_index": 0,
       "slide_role": "cover",
       "taxonomy_state": "CANONICAL",
-      "container_zones": ["full_bleed", "hero_zone"],
-      "primitives": [
-        {"primitive_type": "text_block", "zone": "hero_zone", "dominant": true},
-        {"primitive_type": "image_region", "zone": "full_bleed", "dominant": false}
+      "container_zones": [
+        "full_bleed",
+        "hero_zone"
       ],
-      "reading_order": "narrative text -> illustration",
-      "layout_fingerprint": "illustrated_background_left_aligned_text"
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": true
+        }
+      ],
+      "reading_order": "full-bleed painted artwork -> overlaid handwritten quote text",
+      "layout_fingerprint": "dark_olive_surrealist_illustration_with_handwritten_introspective_quote"
     }
   ]
 }

@@ -3,25 +3,27 @@
     {
       "object_type": "image_region",
       "zone_observation": "full_bleed",
-      "bbox_normalized": {"x": 0.0, "y": 0.0, "width": 1.0, "height": 1.0},
-      "text_or_visual_description": "Illustration of a girl looking into multiple scattered mirrors in a room with blue curtains.",
-      "confidence": 0.99,
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "Dark illustration artwork slide 3 in narrative resentment series",
+      "confidence": 0.98,
       "source_frame": 2
     },
     {
       "object_type": "text_block",
-      "zone_observation": "footer_zone",
-      "bbox_normalized": {"x": 0.20, "y": 0.75, "width": 0.60, "height": 0.20},
-      "text_or_visual_description": "White handwritten-style text in the lower half: 'I talk about healing, but sometimes I keep living in the past.'",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.42,
+        "width": 0.6,
+        "height": 0.26
+      },
+      "text_or_visual_description": "Narrative quote text slide 3 on resentment and self-reflection theme",
       "confidence": 0.99,
-      "source_frame": 2
-    },
-    {
-      "object_type": "badge",
-      "zone_observation": "footer_zone",
-      "bbox_normalized": {"x": 0.05, "y": 0.90, "width": 0.15, "height": 0.05},
-      "text_or_visual_description": "Small stylized 'fallenpoet' brand watermark at bottom left",
-      "confidence": 0.97,
       "source_frame": 2
     }
   ],
@@ -30,14 +32,24 @@
       "slide_index": 2,
       "slide_role": "numbered_item",
       "taxonomy_state": "CANONICAL",
-      "container_zones": ["full_bleed", "footer_zone"],
-      "primitives": [
-        {"primitive_type": "text_block", "zone": "footer_zone", "dominant": true},
-        {"primitive_type": "badge", "zone": "footer_zone", "dominant": false},
-        {"primitive_type": "image_region", "zone": "full_bleed", "dominant": false}
+      "container_zones": [
+        "full_bleed",
+        "hero_zone"
       ],
-      "reading_order": "narrative text -> illustration -> fallenpoet watermark",
-      "layout_fingerprint": "illustrated_background_bottom_centered_text"
+      "primitives": [
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": true
+        }
+      ],
+      "reading_order": "full-bleed painted artwork -> overlaid handwritten quote text",
+      "layout_fingerprint": "dark_olive_surrealist_illustration_with_handwritten_introspective_quote"
     }
   ]
 }

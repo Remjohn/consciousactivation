@@ -94,11 +94,13 @@ class Stage2Runner:
             return result
 
         except SpecificationValidationError as e:
-            findings = getattr(e, "findings", [{
-                "rule": "COMPILATION_VALIDATION_ERROR",
-                "severity": "ERROR",
-                "message": str(e)
-            }])
+            findings = getattr(e, "findings", None)
+            if not findings:
+                findings = [{
+                    "rule": "COMPILATION_VALIDATION_ERROR",
+                    "severity": "ERROR",
+                    "message": str(e)
+                }]
             result = Stage2RunResult(
                 harness_id=harness_id,
                 status="FAIL",

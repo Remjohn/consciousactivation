@@ -1,73 +1,79 @@
 {
   "observations": [
     {
-      "object_type": "text_block",
-      "zone_observation": "header_zone",
-      "bbox_normalized": {
-        "x": 0.28,
-        "y": 0.05,
-        "width": 0.44,
-        "height": 0.08
-      },
-      "text_or_visual_description": "Underlined white marker text header 'HOT TAKE:'",
-      "confidence": 0.99,
-      "source_frame": 0
-    },
-    {
-      "object_type": "text_block",
-      "zone_observation": "hero_zone",
-      "bbox_normalized": {
-        "x": 0.15,
-        "y": 0.15,
-        "width": 0.70,
-        "height": 0.45
-      },
-      "text_or_visual_description": "White marker font quote text 'TRUE FRIENDS ARE RARER THAN THE ACHIEVEMENTS WE SACRIFICE THEM FOR.' with handwritten signature mark",
-      "confidence": 0.99,
-      "source_frame": 0
-    },
-    {
       "object_type": "image_region",
+      "zone_observation": "full_bleed",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "text_or_visual_description": "Full-bleed background portrait photo of Alex Hormozi speaking on stage",
+      "confidence": 0.99,
+      "object_id": "frame0_obj1",
+      "source_frame": 0,
+      "frame_index": 0
+    },
+    {
+      "object_type": "badge",
       "zone_observation": "hero_zone",
       "bbox_normalized": {
-        "x": 0.10,
-        "y": 0.58,
-        "width": 0.80,
-        "height": 0.42
+        "x": 0.1,
+        "y": 0.4,
+        "width": 0.8,
+        "height": 0.12
       },
-      "text_or_visual_description": "Yellow-lit studio portrait photo of Alex Hormozi in baseball cap speaking into microphone",
+      "text_or_visual_description": "Alex Hormozi @AlexHormozi twitter profile header inside card",
       "confidence": 0.98,
-      "source_frame": 0
+      "object_id": "frame0_obj2",
+      "source_frame": 0,
+      "frame_index": 0
+    },
+    {
+      "object_type": "text_block",
+      "zone_observation": "hero_zone",
+      "bbox_normalized": {
+        "x": 0.1,
+        "y": 0.52,
+        "width": 0.8,
+        "height": 0.3
+      },
+      "text_or_visual_description": "Beginners are paralyzed to make a decision because they assume the real world works like school...",
+      "confidence": 0.99,
+      "object_id": "frame0_obj3",
+      "source_frame": 0,
+      "frame_index": 0
     }
   ],
   "entries": [
     {
       "slide_index": 0,
-      "slide_role": "single_frame",
+      "slide_role": "cover",
       "taxonomy_state": "CANONICAL",
       "container_zones": [
-        "header_zone",
+        "full_bleed",
         "hero_zone"
       ],
       "primitives": [
         {
-          "primitive_type": "text_block",
-          "zone": "header_zone",
-          "dominant": true
-        },
-        {
-          "primitive_type": "text_block",
-          "zone": "hero_zone",
-          "dominant": true
-        },
-        {
           "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true
+        },
+        {
+          "primitive_type": "badge",
+          "zone": "hero_zone",
+          "dominant": false
+        },
+        {
+          "primitive_type": "text_block",
           "zone": "hero_zone",
           "dominant": true
         }
       ],
-      "reading_order": "HOT TAKE header -> marker font quote text -> Alex Hormozi studio portrait",
-      "layout_fingerprint": "dark_portrait_quote_post_with_marker_typography_and_yellow_studio_lighting"
+      "reading_order": "background speaker portrait -> overlaid tweet profile -> tweet quote text",
+      "layout_fingerprint": "full_bleed_portrait_with_overlaid_tweet_card"
     }
   ]
 }
