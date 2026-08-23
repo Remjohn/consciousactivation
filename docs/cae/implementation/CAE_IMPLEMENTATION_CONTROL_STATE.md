@@ -1,0 +1,178 @@
+# CAE Implementation Control State
+
+**Control status:** `RECON_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Authority:** CAE Governance & Specification Bridge Bundle v3
+**Created:** 2026-08-23
+**Scope:** WP-00 — Brownfield Reality Map only. No production architecture, runtime code, schema, registry, or test was changed.
+
+## Current execution record
+
+```yaml
+current_execution_stage: OPERATOR_REVIEW
+current_work_package: WP-00 Brownfield Reality Map
+objective: >
+  Establish evidence-led current-state, contradiction, dependency, and decision
+  records before any CAE implementation work begins.
+agent_id: /root
+git_commit: f1776b7 (reconnaissance baseline)
+environment_identity:
+  workspace: D:\\Work\\consciousactivation
+  branch: main
+  python: 3.12.0
+  node: v24.11.0
+  state_environment_variables_observed: []
+  api_default_state_root_when_unconfigured: /state
+last_updated: 2026-08-23
+next_transition: RECON -> OPERATOR_REVIEW
+```
+
+## Authoritative documents loaded
+
+- `Conscious Activation Engine Brownfield/CAE_Governance_and_Specification_Bridge_Bundle_v3/CAE_Governance_and_Specification_Bridge_Bundle_v3/00_BUNDLE_MANIFEST.md` through `22_CAE_CODING_AGENT_STATE_CONTROL_NOTE.md`
+- `docs/PRD/CURRENT.md` — verified implementation audit; last substantive audit entry: 2026-08-14.
+- `Conscious Activation Engine Brownfield/cae_phase0` through `cae_phase7` — target architecture only, pending reconciliation.
+- `Conscious Activation Engine Brownfield/sda.zip` and `sfl.zip` — inherited registry seeds, pending controlled migration.
+- Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
+
+## Current codebase truth
+
+The repository is a working, multi-service development system. API startup constructs Pipeline, AIR, VAE, Interview Expression, Interview Composer, Campaign, Builder, and Studio-bridge surfaces. The active implementation uses separate SQLite databases and filesystem paths, not a shared PostgreSQL/Supabase state authority. Several services implement idempotency, events, state transitions, and receipts locally; there is no repository-wide CAE semantic-operation gateway or state-transition authority.
+
+The Phase 0–7 bundles define target architecture. They have not been reconciled into code, schemas, migrations, or tracked project authority. The SDA/SFL ZIPs are real inherited YAML assets, but have not yet been promoted through a registry migration and runtime-resolution layer.
+
+## Target architecture
+
+```text
+Verified brownfield behavior
+  + inherited canonical registries
+  + ratified CAE architecture
+  -> phase validation
+  -> object/state/registry reconciliation
+  -> FR and Tech Spec contracts
+  -> bounded implementation
+  -> receipts, fidelity evidence, anti-reward-hack and taste evaluation
+```
+
+The adopted state-control target is:
+
+```text
+PostgreSQL/Supabase = authoritative durable operational state
+Typed semantic operations = authorized normal reads/writes
+Events + receipts = immutable history and proof
+Skills/runbooks = versioned procedural doctrine
+StateM = reference for control semantics only
+```
+
+## Implemented
+
+- FastAPI gateway and mounted API/router surfaces: `api/main.py`.
+- SQLite-backed service initialization for Pipeline, AIR, VAE, Interview Expression, Interview Composer, Campaigns, and Builder: `api/main.py`.
+- Atomic command/event/receipt persistence utility with idempotency: `packages/ca_runtime/src/ca_runtime/database.py`.
+- Pipeline workflow/run state, event, checkpoint, incident, and node-state persistence: `services/pipeline/src/cmf_pipeline/migrations/0001_pipeline_core.sql` and `workflow/application/run_service.py`.
+- Local campaign transition rules: `api/domain/campaign.py`.
+- Builder, AIR, Interview, Interview Composer, Pipeline, and VAE migrations/repositories.
+- Builder-side Stage 1/2 visual-syntax outputs: 49 Stage 1 reports and 49 Stage 2 specs.
+- Existing automated test inventory: 70 Python `test_*.py` files and 4 web-test files.
+
+## Partially implemented
+
+- State/event/receipt behavior exists within several individual SQLite services, but not as one CAE-wide authoritative state and transition model.
+- Pipeline has a substantial workflow compiler and run service. API status/replay endpoints consume run state, but campaign creation does not call `WorkflowRunService.create_run()`.
+- AIR persists semantic objects, primitives, archetypes, and registry snapshots, but the full CAE World → Context → SDA → Edging chain is not demonstrated as a reconciled runtime.
+- VAE has local objects, jobs, events, outbox, and schemas; its production-state/compute claims remain development-bounded.
+- Studio `dist/rpc.js` is present on disk, but file presence alone is not E2 evidence that the bridge succeeds on the live revision path.
+
+## Absent
+
+- Active PostgreSQL, Supabase, or shared CAE state integration in executable source; the inspected services use SQLite.
+- A CAE-wide typed semantic-operation registry/gateway spanning state, evidence, SDA/SFL, primitive, coalition, and semantic-program operations.
+- A reconciled CAE object/relation/state/event matrix for Phases 0–7.
+- A controlled runtime registry resolver for the supplied SDA and SFL ZIP assets.
+- A populated runtime harness library for the 49 visual-syntax specimens; `storage/harness-library` is absent and no specimen manifest was located.
+- Reality-contact, reward-hack, and taste/anti-centroid proof packets for the proposed CAE claims.
+
+## Contradictory
+
+1. **State authority:** the v3 doctrine and Builder ADR-003 nominate PostgreSQL/Supabase for authoritative operational state; executable API/service wiring currently initializes separate SQLite files.
+2. **Phase authority:** Phases 0–7 describe target architecture; the bridge bundle prohibits treating them as implementation authority before validation, while their generated documents label themselves as draft/source-of-truth artifacts.
+3. **SFL registry integrity:** the inherited failure corpus references `SFL-FAM-005`, `006`, `007`, `009`, and `012`; the supplied family registry contains only `SFL-FAM-001` through `004`.
+4. **Studio evidence currency:** `docs/PRD/CURRENT.md` records a historic missing Studio build; `services/studio/dist/rpc.js` now exists. Its runtime behavior remains unverified in this work package.
+
+## Registry gaps
+
+- SDA: a versioned seed registry exists (13 records across ontology, grammar, and crosswalks), but it is outside an established CAE runtime registry path.
+- SFL: a versioned seed registry exists (families, functions, compression rules, crosswalks, and a failure corpus), but it has the unresolved family-reference defect above.
+- Primitive registry: AIR contains primitive and archetype persistence, but primitive/SDA/SFL cross-registry authority and query contracts are not reconciled.
+- Required next action: inventory, hash, schema-validate, reference-validate, preserve original IDs/versions/lineage, then create migration decisions. No missing registry record may be invented.
+
+## State-model gaps
+
+- No approved migration/adoption plan reconciles the SQLite service databases with PostgreSQL/Supabase authority.
+- No single current-state projection spans campaign, workflow, evidence, semantic, evaluation, and outcome state.
+- No CAE-wide transition-contract registry defines source/target state, evidence, validator, receipt, failure route, and idempotency behavior.
+- Existing local events/receipts do not yet carry the full v3 fidelity, reward-hack, taste, and anti-centroid proof fields.
+
+## Semantic-operation gaps
+
+- Existing service methods and API routes are typed locally but not exposed as one governed semantic API.
+- No reconciled operation contracts yet define CAE-wide role authorization, reads, writes, preconditions, validators, receipts, and repair routes.
+- Normal agent state interaction must not be designed until the authority/migration decision in WP-02 is made.
+
+## Harness gaps
+
+- The Builder authoring and Pipeline execution representations remain disconnected for campaign-created workflow runs.
+- The 49 Stage 1/2 visual-syntax artifacts are evidence inputs, not harness manifests or executable library entries.
+- No CAE runbook/state-binding contract has been reconciled with the existing Builder JIT capsules and Pipeline run service.
+
+## Test gaps
+
+- Existing tests were inventoried but not executed in WP-00; no test pass is claimed.
+- Tests have not been classified against the v3 categories or E0–E4 environment-fidelity scale.
+- No system-wide proxy-to-intent, reward-hack, or taste-corpus coverage map exists.
+- SFL failure assets are not yet registered as executable hard-negative/mutation suites in the live test architecture.
+
+## Operator decisions required
+
+1. **State authority decision:** approve PostgreSQL/Supabase as the target authority and authorize WP-02 to write only a reconciliation/migration Tech Spec, or explicitly ratify another authority. This is required before state-model implementation.
+2. **Bridge adoption decision:** confirm that this v3 bundle and the forthcoming `docs/cae/implementation/` records are tracked project governance artifacts rather than external working material.
+3. **Registry source decision:** confirm whether the supplied SDA/SFL ZIP bytes are the migration authority, and identify the accountable owner/source for resolving the SFL missing-family lineage.
+4. **Promotion authority:** name the operator/role who may approve `OPERATOR_REVIEW -> PROMOTE` for CAE work packages.
+
+## Blocked questions
+
+- Which existing SQLite records, if any, must be migrated, dual-read, or discarded when PostgreSQL/Supabase becomes authoritative?
+- Is Supabase the chosen PostgreSQL deployment path, and is infrastructure provisioning in scope for a later package?
+- Which initial vertical slice will supply E3/E4 evidence without overstating production readiness?
+- Which legacy semantic/primitive registry is canonical when AIR assets and inherited SDA/SFL crosswalks overlap?
+
+## Evidence collected
+
+- API bootstrap: `api/main.py`.
+- Shared SQLite command/event/receipt implementation: `packages/ca_runtime/src/ca_runtime/database.py`.
+- Service migrations under `services/{air,interview,interview-composer,pipeline,vae}/src/**/migrations/`.
+- Pipeline run service: `services/pipeline/src/cmf_pipeline/workflow/application/run_service.py`.
+- Campaign transition model: `api/domain/campaign.py` and `api/services/campaign_repository.py`.
+- Builder PostgreSQL target ADR: `services/builder/docs/architecture/adr/ADR-003-AUTHORITATIVE-STATE-AND-ARTIFACT-STORAGE.md`.
+- Current implementation audit: `docs/PRD/CURRENT.md`.
+- Inherited SDA/SFL ZIP inventory and reference checks.
+
+## Verification results
+
+```yaml
+repository_structure: VERIFIED_READ_ONLY
+api_bootstrap_and_local_persistence: VERIFIED_READ_ONLY
+postgres_or_supabase_runtime_integration: NOT_FOUND_IN_EXECUTABLE_SOURCE
+state_and_receipt_infrastructure: PARTIAL_LOCAL_IMPLEMENTATIONS_VERIFIED
+phase_0_to_7_reconciliation: NOT_STARTED
+sda_sfl_runtime_registry_migration: NOT_STARTED
+existing_test_inventory: VERIFIED_READ_ONLY
+test_execution_this_work_package: NOT_RUN
+reality_contact_claim: NOT_MADE
+```
+
+## Risks
+
+- Migrating directly to a new state store without object/transition reconciliation could duplicate or orphan existing local state.
+- Treating SQLite development evidence as production-authority parity would violate both the v3 doctrine and Builder ADR-003.
+- Treating SFL failure-corpus references as valid without resolving their missing family records would corrupt registry authority.
+- Implementing a generic CAE state engine before one bounded vertical state transition is reconciled would create premature abstraction.
