@@ -37,7 +37,7 @@ objective: >
   durable PostgreSQL command/event/receipt payloads, without importing legacy
   data or changing existing service authority.
 agent_id: /root
-git_commit: cb3fb30 (WP-02a baseline; WP-03 pending commit)
+git_commit: 13c056f (WP-03 primary implementation/proof commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
