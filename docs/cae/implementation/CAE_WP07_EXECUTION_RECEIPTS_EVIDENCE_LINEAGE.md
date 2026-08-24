@@ -1,7 +1,7 @@
 # CAE WP-07 — Execution Receipts and Evidence Lineage
 
-**Status:** `COMPLETE_PENDING_OPERATOR_REVIEW`  
-**Work package:** WP-07 — execution receipts + evidence lineage  
+**Status:** `COMPLETE_PENDING_OPERATOR_REVIEW`
+**Work package:** WP-07 — execution receipts + evidence lineage
 **Environment:** disposable Supabase/PostgreSQL staging only (`E3_PRODUCTION_SHAPED`); no legacy service cutover or record migration.
 
 ## Objective and boundary

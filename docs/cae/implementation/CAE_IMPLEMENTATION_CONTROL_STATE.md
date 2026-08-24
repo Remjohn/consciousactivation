@@ -37,7 +37,7 @@ objective: >
   queryable execution receipt context and evidence lineage without treating a
   receipt as independent evidence or creating a second operational state store.
 agent_id: /root
-git_commit: PENDING (WP-07 implementation commit)
+git_commit: 9a021b0 (WP-07 execution receipt/evidence-lineage implementation commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
