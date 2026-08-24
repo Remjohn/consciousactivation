@@ -37,7 +37,7 @@ objective: >
   inputs through immutable PostgreSQL snapshots without inventing or repairing
   unresolved source definitions.
 agent_id: /root
-git_commit: 814f32c (WP-03 control-record baseline; WP-04 pending commit)
+git_commit: f567741 (WP-04 registry migration/proof commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
