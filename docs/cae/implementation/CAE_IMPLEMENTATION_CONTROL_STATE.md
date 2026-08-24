@@ -37,7 +37,7 @@ objective: >
   first slice without inferring semantic/taste/human quality from its structural
   or evidence-lineage results.
 agent_id: /root
-git_commit: PENDING (WP-08 test-governance and proof commit)
+git_commit: c8637fe (WP-08 reality-contact and reward-hacking proof commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
