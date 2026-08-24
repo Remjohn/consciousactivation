@@ -12,6 +12,7 @@ from .semantic_operations import (
     SemanticOperationConflict,
     SemanticOperationError,
 )
+from .interview_source_bridge import InterviewExpressionSourceBridge, InterviewSourceBridgeError
 
 __all__ = [
     "IdempotencyConflict",
@@ -26,6 +27,8 @@ __all__ = [
     "OperationReceipt",
     "SemanticOperationConflict",
     "SemanticOperationError",
+    "InterviewExpressionSourceBridge",
+    "InterviewSourceBridgeError",
 ]
 
 __version__ = "0.1.0.dev1"

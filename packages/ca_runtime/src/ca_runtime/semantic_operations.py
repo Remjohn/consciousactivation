@@ -61,6 +61,7 @@ def _execution_receipt_context(
         "cae.air.propose-assessment": "CAE-EVID-001.assessment-evidence-linkage",
         "cae.air.validate-assessment": "CAE-EVID-001.assessment-validation-lineage",
         "cae.air.confirm-assessment": "CAE-EVID-001.operator-confirmation-lineage",
+        "cae.bridge.register-interview-source": "CAE-BRIDGE-001.verified-interview-source-registration",
     }
     return {
         "receipt_type": "cae_execution_receipt",
@@ -88,7 +89,11 @@ def _execution_receipt_context(
         "reward_hack_result": "UNVERIFIED",
         "taste_integrity_result": "NOT_APPLICABLE",
         "anti_centroid_result": "NOT_APPLICABLE",
-        "evidence_status": "TRACEABLE",
+        "evidence_status": (
+            "NOT_APPLICABLE"
+            if operation_id == "cae.bridge.register-interview-source"
+            else "TRACEABLE"
+        ),
         "receipt_payload_sha256": canonical_sha256(dict(receipt_payload)),
     }
 
@@ -447,6 +452,125 @@ class FirstSliceSemanticOperations:
                     event_type="SemanticAssessmentOperatorConfirmed",
                     independent_evidence_refs=evidence_refs,
                     operator_decision=operator_decision,
+                )
+
+    def register_verified_interview_source(
+        self,
+        *,
+        workspace_id: str,
+        project_id: str,
+        bridge_actor_id: str,
+        source_package_id: str,
+        upstream_source_ref: Mapping[str, Any],
+        media_asset_id: str,
+        storage_bucket: str,
+        storage_object_key: str,
+        content_sha256: str,
+        byte_size: int,
+        media_type: str,
+        idempotency_key: str,
+    ) -> OperationReceipt:
+        """Register bytes verified by the read-only Interview Expression bridge.
+
+        The bridge validates the legacy package and media bytes before it calls
+        this typed operation. This method persists only the CAE copy and its
+        immutable upstream reference; it does not mutate the legacy service.
+        """
+        operation_id = "cae.bridge.register-interview-source"
+        if set(upstream_source_ref) != {"object_id", "revision", "sha256"}:
+            raise SemanticOperationError("upstream_source_ref has invalid shape")
+        upstream_ref = {key: _required(str(upstream_source_ref[key]), f"upstream_source_ref.{key}") for key in sorted(upstream_source_ref)}
+        digest = _required(content_sha256, "content_sha256")
+        if len(digest) != 64 or any(character not in "0123456789abcdef" for character in digest):
+            raise SemanticOperationError("content_sha256 must be a lowercase SHA-256")
+        if isinstance(byte_size, bool) or int(byte_size) < 1:
+            raise SemanticOperationError("byte_size must be positive")
+        command_payload = {
+            "workspace_id": _required(workspace_id, "workspace_id"),
+            "project_id": _required(project_id, "project_id"),
+            "bridge_actor_id": _required(bridge_actor_id, "bridge_actor_id"),
+            "source_package_id": _required(source_package_id, "source_package_id"),
+            "upstream_source_ref": upstream_ref,
+            "media_asset_id": _required(media_asset_id, "media_asset_id"),
+            "storage_bucket": _required(storage_bucket, "storage_bucket"),
+            "storage_object_key": _required(storage_object_key, "storage_object_key"),
+            "content_sha256": digest,
+            "byte_size": int(byte_size),
+            "media_type": _required(media_type, "media_type"),
+        }
+        with self.connection.transaction():
+            with self.connection.cursor() as cursor:
+                replay = self._idempotent_replay(cursor, operation_id, workspace_id, idempotency_key, command_payload)
+                if replay:
+                    return replay
+                cursor.execute(
+                    "SELECT 1 FROM cae.project WHERE workspace_id = %s AND project_id = %s",
+                    (workspace_id, project_id),
+                )
+                if cursor.fetchone() is None:
+                    raise SemanticOperationError("project is not a member of the workspace")
+                self._require_actor(cursor, workspace_id, bridge_actor_id)
+                media_core = {
+                    "storage_provider": "SUPABASE_STORAGE",
+                    "storage_bucket": command_payload["storage_bucket"],
+                    "storage_object_key": command_payload["storage_object_key"],
+                    "content_sha256": digest,
+                    "byte_size": command_payload["byte_size"],
+                    "media_type": command_payload["media_type"],
+                    "upstream_source_ref": upstream_ref,
+                }
+                cursor.execute(
+                    """
+                    INSERT INTO cae.media_asset(
+                      asset_id, workspace_id, project_id, storage_provider, storage_bucket,
+                      storage_object_key, canonical_uri, content_sha256, byte_size, media_type,
+                      lifecycle_state, created_by_actor_id, verified_at
+                    ) VALUES (%s, %s, %s, 'SUPABASE_STORAGE', %s, %s, %s, %s, %s, %s, 'VERIFIED', %s, now())
+                    """,
+                    (
+                        media_asset_id, workspace_id, project_id, command_payload["storage_bucket"],
+                        command_payload["storage_object_key"],
+                        f"storage://SUPABASE_STORAGE/{command_payload['storage_bucket']}/{command_payload['storage_object_key']}",
+                        digest, command_payload["byte_size"], command_payload["media_type"], bridge_actor_id,
+                    ),
+                )
+                source_core = {
+                    "source_kind": "INTERVIEW_EXPRESSION",
+                    "media_asset_id": media_asset_id,
+                    "upstream_source_ref": upstream_ref,
+                    "media_verification": media_core,
+                }
+                cursor.execute(
+                    """
+                    INSERT INTO cae.source_package(
+                      source_package_id, workspace_id, media_asset_id, source_kind, canonical_sha256
+                    ) VALUES (%s, %s, %s, 'INTERVIEW_EXPRESSION', %s)
+                    """,
+                    (source_package_id, workspace_id, media_asset_id, canonical_sha256(source_core)),
+                )
+                cursor.execute(
+                    """
+                    INSERT INTO cae.state_aggregate(
+                      aggregate_id, workspace_id, aggregate_type, current_state, version
+                    ) VALUES (%s, %s, 'source_package', 'CREATED', 0)
+                    """,
+                    (source_package_id, workspace_id),
+                )
+                return self._transition(
+                    cursor,
+                    operation_id=operation_id,
+                    contract_id="STC-BRIDGE-000",
+                    workspace_id=workspace_id,
+                    aggregate_id=source_package_id,
+                    actor_id=bridge_actor_id,
+                    idempotency_key=idempotency_key,
+                    expected_version=0,
+                    command_payload=command_payload,
+                    event_type="InterviewExpressionSourceVerified",
+                    independent_evidence_refs=[
+                        {"upstream_source_ref": upstream_ref},
+                        {"media_asset_id": media_asset_id, "content_sha256": digest},
+                    ],
                 )
 
     def _transition(
