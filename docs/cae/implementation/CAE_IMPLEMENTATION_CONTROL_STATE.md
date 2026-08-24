@@ -37,7 +37,7 @@ objective: >
   isolated CAE staging slice, without mutating legacy SQLite state or treating
   copied source bytes as a repository-wide state-authority cutover.
 agent_id: /root
-git_commit: fd6aca7 (refined tenant-authority/canonicalization plan; evidence handoff: f8fcbe8; WP-09 implementation: 23cf8bd)
+git_commit: bab0716 (Gemini 12-phase delivery program and drafted WP-10A mandate; authority-plan refinement: fd6aca7; evidence handoff: f8fcbe8)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -70,6 +70,8 @@ next_transition: OPERATOR_REVIEW -> VERIFY (WP-10 regression/promotion/operator 
 - `docs/cae/implementation/CAE_WP09_FIRST_VERTICAL_RUNTIME_SLICE.md` and `docs/cae/evaluations/INTERVIEW_SOURCE_BRIDGE_WP09_EVALUATION_SUITE.yaml` — one read-only Interview Expression source bridge, verification provenance, staging proof, and WP-10 boundary.
 - `docs/cae/implementation/CAE_WP00_TO_WP09_REVIEW_EVIDENCE_HANDOFF.md` — independent-review evidence index, commit ledger, proof boundaries, and reproduction order for WP-00 through WP-09.
 - `docs/cae/implementation/CAE_MULTI_TENANT_AUTHORITY_AND_CANONICALIZATION_PLAN.md` — proposed canonical/operational-plane, workspace-isolation, scope/authority mapping, and gated PostgreSQL authority-migration plan.
+- `docs/cae/gemini_execution/00_GEMINI_12_PHASE_EXECUTION_PROGRAM.md` — governed 12-phase delivery program, safe parallel-work rules, authoring-control inventory, and mandate standard for Gemini.
+- `docs/cae/gemini_execution/01_WP10A_EVIDENCE_CONTAINMENT_MANDATE.md` — draft, operator-gated first Gemini mandate; it authorizes evidence acceptance only and explicitly forbids downstream implementation.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -221,6 +223,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - WP-09 read-only Interview Expression bridge, verified byte copy, typed CAE registration, capture compatibility, and cleanup proof: `CAE_WP09_FIRST_VERTICAL_RUNTIME_SLICE.md`.
 - Reviewer-facing WP-00 through WP-09 evidence/commit/checksum ledger and reproducible review order: `CAE_WP00_TO_WP09_REVIEW_EVIDENCE_HANDOFF.md`.
 - Proposed post-WP-09 containment, scope/authority mapping, canonicalization, tenant-isolation, and authority-cutover sequence: `CAE_MULTI_TENANT_AUTHORITY_AND_CANONICALIZATION_PLAN.md`.
+- Gemini delivery control: the 12-phase program and drafted WP-10A evidence-containment mandate under `docs/cae/gemini_execution/`; later phase mandates must be derived from accepted predecessor outputs rather than pre-authorizing future implementation.
 
 ## Verification results
 
