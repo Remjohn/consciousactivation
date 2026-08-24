@@ -1,0 +1,45 @@
+version: 0.1
+phase: 4
+name: Pressure Field Matrix of Edging Canonical Register
+objects:
+  - Tension
+  - TensionType
+  - Webhook
+  - PressureField
+  - PressureFieldCandidate
+  - EdgingAssessment
+  - BroadPrimarySignal
+  - ActivationSelectionPlan
+  - ActivationHypothesis
+  - ActivationEvent
+  - CandidateSurvivalAssessment
+  - AntiCentroidPatrolResult
+  - EdgeReceipt
+classes:
+  Ontology:
+    objects: [TensionType]
+  StateModel:
+    objects: [Tension, Webhook]
+  DerivedField:
+    objects: [PressureField, PressureFieldCandidate]
+  Assessment:
+    objects: [EdgingAssessment, CandidateSurvivalAssessment, AntiCentroidPatrolResult]
+  Plan:
+    objects: [ActivationSelectionPlan]
+  Hypothesis:
+    objects: [ActivationHypothesis]
+  Event:
+    objects: [ActivationEvent]
+  Receipt:
+    objects: [EdgeReceipt]
+constitutional_requirements:
+  - pressure_is_distinct_from_topic
+  - webhook_is_distinct_from_hook_copy
+  - broad_primary_signal_precedes_authenticated_guest_evidence
+  - edge_product_follows_authenticated_evidence
+  - state_is_temporal_and_history_preserving
+  - evidence_thresholds_are_explicit
+  - contradictions_are_preserved
+  - candidate_alternatives_are_retained
+  - anti_centroid_patrol_is_executable
+  - activation_event_cannot_prewrite_guest_conclusion

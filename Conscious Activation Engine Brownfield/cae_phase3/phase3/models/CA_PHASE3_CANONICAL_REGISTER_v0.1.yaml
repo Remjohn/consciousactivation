@@ -1,0 +1,41 @@
+version: 0.1
+phase: 3
+name: Relational Intelligence Canonical Register
+objects:
+  - GuestAudienceRelation
+  - GuestExperiencedTension
+  - AudienceTensionRelation
+  - SchemaCrossing
+  - CongruenceAssessment
+  - ResonanceCandidate
+  - AffinityAssessment
+  - RelationalState
+  - RelationalObservation
+  - ContextReasoningPlan
+  - PressureFieldCandidate
+  - RelationalReceipt
+classes:
+  Relation:
+    objects: [GuestAudienceRelation, GuestExperiencedTension, AudienceTensionRelation, SchemaCrossing]
+  Assessment:
+    objects: [CongruenceAssessment, AffinityAssessment]
+  Candidate:
+    objects: [ResonanceCandidate, PressureFieldCandidate]
+  State:
+    objects: [RelationalState]
+  Observation:
+    objects: [RelationalObservation]
+  Plan:
+    objects: [ContextReasoningPlan]
+  Receipt:
+    objects: [RelationalReceipt]
+constitutional_requirements:
+  - source_and_target_are_explicit
+  - relation_type_is_canonical
+  - temporal_scope_is_preserved
+  - evidence_lineage_is_required
+  - observed_vs_inferred_is_explicit
+  - aggregate_scores_require_component_scores
+  - historical_relations_do_not_automatically_become_current_state
+  - downstream_authority_is_explicit
+  - contradiction_is_preserved
