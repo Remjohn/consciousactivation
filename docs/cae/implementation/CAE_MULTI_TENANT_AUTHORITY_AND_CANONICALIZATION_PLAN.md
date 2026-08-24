@@ -58,21 +58,20 @@ The following laws govern every package in this plan:
 
 ## 3. Precise vocabulary and default boundaries
 
-These are proposed canonical roles, pending their individual Object Constitutions.
+These are proposed roles, pending CA-MAP-01 and their individual Object Constitutions. A candidate classification is not a ratified primary artifact class. CA-MAP-01 must resolve each ambiguity by selecting one class, splitting genuinely distinct objects, or recording a justified deferral.
 
-| Term | Primary class | Proposed role and boundary |
+| Term | Candidate classification | Proposed role and boundary |
 |---|---|---|
-| `OperatorOrganization` | Entity | The CAE-owned administrative organization. It owns platform governance, not a client’s operational facts. |
-| `Workspace` | Entity | The initial client/tenant isolation boundary. A workspace owns all client-scoped operational records. No client record is global by default. |
-| `WorkspaceMembership` | Relation | Binds an authenticated principal to a workspace role. It is the ordinary authorization source for client-scoped work. |
-| `OperatorAccessGrant` | Policy/Contract or Relation | Explicit, time/role/reason-bounded cross-workspace authority for internal operators. Its use is receipted. It is not a client-visible membership shortcut. |
-| `Engagement` | Entity | A bounded project/program inside one Workspace. It groups a client’s work without being the tenant boundary itself. |
-| `Guest` | Entity | A guest as known within one Workspace. It has persistent local identity and local history only. |
-| `GuestIdentityLink` | Crosswalk/Mapping Object | An exceptional, auditable link between Guest records. It must never merge or expose histories automatically. |
-| `HarnessTemplate` | Canonical Structural Grammar / Execution Packet | A globally versioned procedure shape. It contains no tenant facts. |
-| `HarnessRun` | Execution Packet | A Workspace- and Engagement-scoped execution of a template. Its inputs, state, evidence, receipts, and outputs are tenant-scoped. |
-| `MediaAsset` | Immutable Evidence plus storage reference | The authoritative metadata and verification identity for private object-store bytes; it does not place raw media blobs in ordinary relational rows. |
-| `Receipt` | Receipt/Evaluation Record | Immutable evidence of a scoped operation. It carries workspace, actor, operation, contract/version, inputs, outputs, and proof classification. |
+| `OperatorOrganization` | Candidate `Entity` | The CAE-owned administrative organization. It owns platform governance, not a client’s operational facts. |
+| `Workspace` | Candidate `Entity` | The initial client/tenant isolation boundary. A workspace owns all client-scoped operational records. No client record is global by default. |
+| `WorkspaceMembership` | Candidate `Relation` | Binds an authenticated principal to a workspace role. It is the ordinary authorization source for client-scoped work. |
+| `OperatorAccessPolicy` / `OperatorAccessGrant` | **Unresolved:** policy and granted relationship may be distinct objects | The policy defines cross-workspace authority; a specific time/role/reason-bounded grant applies it. Grant use is receipted and is not a client-visible membership shortcut. |
+| `Engagement` | Candidate `Entity` | A bounded project/program inside one Workspace. It groups a client’s work without being the tenant boundary itself. |
+| `Guest` | Candidate `Entity` | A guest as known within one Workspace. It has persistent local identity and local history only. |
+| `GuestIdentityLink` | Candidate `Crosswalk / Mapping Object` | An exceptional, auditable link between Guest records. It must never merge or expose histories automatically. |
+| `HarnessTemplate` / `HarnessRun` | **Unresolved:** canonical template and operational execution must be separate objects | The template is a globally versioned procedure shape with no tenant facts; the run is Workspace/Engagement-scoped and has inputs, state, evidence, receipts, and outputs. |
+| `MediaAsset` / immutable media evidence | **Unresolved:** asset identity record and evidence bytes may be separate objects | The asset record carries metadata, verification lifecycle, and Storage reference; immutable bytes/evidence carry origin and authenticity boundaries. Raw media is not stored in ordinary relational rows. |
+| `Receipt` | Candidate `Receipt / Evaluation Record` | Immutable evidence of a scoped operation. It carries workspace, actor, operation, contract/version, inputs, outputs, and proof classification. |
 
 ### 3.1 Scope classification is mandatory
 
@@ -95,7 +94,10 @@ Before any table, API, queue, cache, or Storage policy is designed, the current 
 |---|---|
 | Object and primary artifact class | What it is; no multi-class ambiguity is hidden in its schema. |
 | Plane and scope classification | Canonical, operational, and the exact scope class from §3.1. |
-| Authority and owner | Which system is authoritative now/at target, and who is accountable for change. |
+| Canonical definition source | The reviewed source artifact, its version/checksum, and whether it is source authority, a migration input, or merely evidence. |
+| Runtime representation | The authoritative runtime projection and retrieval surface, including whether PostgreSQL has been verified for this object/registry. |
+| Change/promotion authority | Who may change/promote it, by which review and migration/operation path. |
+| Authority and owner | Current/target authority by lifecycle phase and the accountable owner; these do not replace the three distinct authority axes above. |
 | Mutability/history | Immutable, versioned, stateful, derived, or ephemeral; and its historical record/projection rule. |
 | Parent chain | Required Workspace/Engagement/Guest containment chain, if operational. |
 | Evidence and receipt | What independently proves material changes and which receipt captures them. |
@@ -105,7 +107,22 @@ Before any table, API, queue, cache, or Storage policy is designed, the current 
 
 An object marked `PENDING` in this matrix is not promoted to DDL or runtime implementation.
 
-### 3.3 Isolation invariants
+### 3.3 Object Scope / Authority Collision Register
+
+CA-MAP-01 must also produce a versioned `CAE_OBJECT_SCOPE_COLLISION_REGISTER`. The register exists to prevent a team from settling object meaning through convenient table design. Every ambiguous first-slice object records:
+
+| Field | Required content |
+|---|---|
+| Object | Candidate object or a proposed split. |
+| Candidate plane/class/scope | Each credible interpretation, not merely the preferred one. |
+| Competing interpretation and collision | What becomes false, mutable, untraceable, over-broad, or cross-scoped under each interpretation. |
+| Evidence | Authoritative documents, executable brownfield evidence, registry lineage, or explicitly marked hypothesis. |
+| Resolution | `RATIFIED`, `SPLIT`, `DEFERRED`, or `BLOCKED`; never an implicit schema choice. |
+| Decision owner and version | The operator/authority and the decision version/date. |
+
+At minimum, CA-MAP-01 must examine `OperatorAccessPolicy`/`OperatorAccessGrant`, `HarnessTemplate`/`HarnessRun`, `MediaAsset`/immutable media evidence, `Receipt`, `GuestIdentityLink`, and any inherited object that could be global or workspace-scoped. An unresolved collision blocks the affected Object Constitution and all downstream DDL/API work.
+
+### 3.4 Isolation invariants
 
 The following must be database-enforced where feasible, then independently verified:
 
@@ -125,11 +142,26 @@ Implement the parent/child check with composite foreign keys, constrained views/
 
 ## 4. Target authority and access model
 
-### 4.1 Authoritative persistence
+### 4.1 Authority axes and authoritative persistence
+
+The term “authority” has three independent meanings and they must never be collapsed:
+
+```text
+canonical definition source
+  = reviewed source artifact, version, lineage, and semantic meaning
+
+canonical runtime representation
+  = verified PostgreSQL relational projection used by typed operations
+
+change / promotion authority
+  = governed decision and migration path that may alter either of the above
+```
+
+For inherited SDA, SFL, and Primitive materials, the supplied ZIP/YAML bytes are migration inputs with preserved lineage; they are not automatically a perpetual source of truth merely because they exist. CA-MAP-01 and registry migration records must explicitly identify the source authority for each registry/version. Once a PostgreSQL projection is approved for runtime retrieval, normal runtime consumers use the typed semantic-operation layer, not ad-hoc files or direct tables. A source/projection mismatch is a `CONTRACT_CONFLICT` or `QUARANTINED` condition, never a silent precedence decision.
 
 | Concern | Authoritative representation | Notes |
 |---|---|---|
-| Canonical ontology/taxonomy/contracts/registries | Versioned PostgreSQL tables | Immutable source lineage and version histories remain queryable. |
+| Canonical ontology/taxonomy/contracts/registries | Reviewed versioned definition source **plus** verified PostgreSQL runtime projection | Source authority, runtime authority, and promotion path are recorded per registry/object. PostgreSQL is not automatically the definition source merely because it stores the projection. |
 | Workspace/Guest/Engagement identity and relations | PostgreSQL typed tables | Relational constraints enforce containment. |
 | Dynamic state | PostgreSQL state history plus current-state projection | Current values are never created by erasing history. |
 | Events/receipts/evidence lineage | Append-only PostgreSQL records | Receipt links and hashes provide historical chain, not self-attestation. |
@@ -191,8 +223,8 @@ No package may expand its scope without a new operator decision. Every package b
 | Allowed changes | Scope & Authority Matrix, plane map, authority/collision register, and explicit `NEW`/`EXTEND`/`ADAPT`/`RETAIN`/`DEFER` decisions. |
 | Prohibited changes | SQL migrations, runtime model changes, RLS policies, identity merge, legacy data migration. |
 | Dependencies | WP-00 reality map, WP-09 evidence, Phase 0 object register/constitution, registry proof, and direct inspection of relevant legacy sources. |
-| Required artifacts | Versioned matrix described in §3.2; canonical/operational plane map; object-to-existing-source crosswalk; unresolved-authority register. |
-| Tests/evidence | Static coverage validation: no first-slice object is missing scope/authority/parent/write boundary; adversarial review of a false global classification and a false Guest scope. E1 is sufficient because this makes no runtime claim. |
+| Required artifacts | Versioned Scope & Authority Matrix (§3.2); Object Scope / Authority Collision Register (§3.3); canonical/operational plane map; object-to-existing-source crosswalk; unresolved-authority register. |
+| Tests/evidence | Static coverage validation: no first-slice object is missing scope/authority/parent/write boundary; no candidate class is passed off as ratified; every collision is resolved, deferred, or blocked. Adversarial review includes a false global classification, a false Guest scope, and an unapproved source/projection registry mismatch. E1 is sufficient because this makes no runtime claim. |
 | Operator decision | Approve the first-slice plane and scope map, including the statement that Workspace—not Guest—is the initial tenant boundary. |
 | Rollback | Matrix decisions are versioned/superseded. No runtime state exists. |
 
