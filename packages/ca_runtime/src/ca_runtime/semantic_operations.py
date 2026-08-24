@@ -41,6 +41,68 @@ def _stable_id(prefix: str, payload: Mapping[str, Any]) -> str:
     return f"{prefix}:{canonical_sha256(payload)[:32]}"
 
 
+def _execution_receipt_context(
+    *,
+    operation_id: str,
+    command_payload: Mapping[str, Any],
+    event_payload: Mapping[str, Any],
+    receipt_id: str,
+    receipt_payload: Mapping[str, Any],
+) -> Mapping[str, Any]:
+    """Build context for one immutable execution receipt.
+
+    The context reports what this transition actually exercised. It does not
+    convert a receipt into independent evidence or manufacture semantic/taste
+    proof that this bounded transition does not evaluate.
+    """
+    claim_ids = {
+        "cae.evidence.capture": "CAE-EVID-001.capture-traceability",
+        "cae.evidence.authenticate": "CAE-EVID-001.authentication-lineage",
+        "cae.air.propose-assessment": "CAE-EVID-001.assessment-evidence-linkage",
+        "cae.air.validate-assessment": "CAE-EVID-001.assessment-validation-lineage",
+        "cae.air.confirm-assessment": "CAE-EVID-001.operator-confirmation-lineage",
+    }
+    return {
+        "receipt_type": "cae_execution_receipt",
+        "receipt_id": receipt_id,
+        "claim_id": claim_ids[operation_id],
+        "component_id": "ca_runtime.first_slice_semantic_operations",
+        "input_snapshot_sha256": canonical_sha256(dict(command_payload)),
+        "output_snapshot_sha256": canonical_sha256(dict(event_payload)),
+        "registry_scope": "NOT_READ",
+        "registry_snapshot_sha256": None,
+        "environment_fidelity": "E3_PRODUCTION_SHAPED",
+        "environment_identity": {
+            "state_authority": "postgresql_supabase",
+            "runtime_component": "ca_runtime.FirstSliceSemanticOperations",
+            "deployment_boundary": "staging_only",
+        },
+        "evaluator_versions": {"semantic_operation": f"{operation_id}@1.0.0"},
+        "validator_results": {
+            "transition_contract": "PASS",
+            "independent_evidence_precondition": "PASS",
+            "operator_decision_precondition": (
+                "PASS" if receipt_payload.get("operator_decision") else "NOT_APPLICABLE"
+            ),
+        },
+        "reward_hack_result": "UNVERIFIED",
+        "taste_integrity_result": "NOT_APPLICABLE",
+        "anti_centroid_result": "NOT_APPLICABLE",
+        "evidence_status": "TRACEABLE",
+        "receipt_payload_sha256": canonical_sha256(dict(receipt_payload)),
+    }
+
+
+def _receipt_lineage_role(operation_id: str) -> str:
+    return {
+        "cae.evidence.capture": "CREATED",
+        "cae.evidence.authenticate": "AUTHENTICATES",
+        "cae.air.propose-assessment": "SUPPORTS",
+        "cae.air.validate-assessment": "VALIDATES",
+        "cae.air.confirm-assessment": "CONFIRMS",
+    }[operation_id]
+
+
 class FirstSliceSemanticOperations:
     """Executes only registered first-slice CAE semantic operations.
 
@@ -517,6 +579,64 @@ class FirstSliceSemanticOperations:
             """,
             (receipt_id, command_id, transition_id, canonical_sha256([dict(item) for item in independent_evidence_refs]), receipt_sha, canonical_json_text(receipt_payload), Jsonb(receipt_payload)),
         )
+        execution_payload = _execution_receipt_context(
+            operation_id=operation_id,
+            command_payload=command_payload,
+            event_payload=event_payload,
+            receipt_id=receipt_id,
+            receipt_payload=receipt_payload,
+        )
+        execution_payload_sha = canonical_sha256(execution_payload)
+        cursor.execute(
+            """
+            INSERT INTO cae.execution_receipt(
+              receipt_id, claim_id, component_id, input_snapshot_sha256,
+              output_snapshot_sha256, registry_scope, registry_snapshot_sha256,
+              environment_fidelity, environment_identity, evaluator_versions,
+              validator_results, reward_hack_result, taste_integrity_result,
+              anti_centroid_result, evidence_status, payload_sha256,
+              payload_canonical_json, payload
+            ) VALUES (
+              %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+              %s, %s, %s, %s
+            )
+            """,
+            (
+                receipt_id,
+                execution_payload["claim_id"],
+                execution_payload["component_id"],
+                execution_payload["input_snapshot_sha256"],
+                execution_payload["output_snapshot_sha256"],
+                execution_payload["registry_scope"],
+                execution_payload["registry_snapshot_sha256"],
+                execution_payload["environment_fidelity"],
+                Jsonb(execution_payload["environment_identity"]),
+                Jsonb(execution_payload["evaluator_versions"]),
+                Jsonb(execution_payload["validator_results"]),
+                execution_payload["reward_hack_result"],
+                execution_payload["taste_integrity_result"],
+                execution_payload["anti_centroid_result"],
+                execution_payload["evidence_status"],
+                execution_payload_sha,
+                canonical_json_text(execution_payload),
+                Jsonb(execution_payload),
+            ),
+        )
+        evidence_ids = {
+            str(reference["evidence_id"])
+            for reference in independent_evidence_refs
+            if reference.get("evidence_id")
+        }
+        if operation_id == "cae.evidence.capture":
+            evidence_ids.add(str(command_payload["evidence_id"]))
+        for evidence_id in sorted(evidence_ids):
+            cursor.execute(
+                """
+                INSERT INTO cae.receipt_evidence_link(receipt_id, evidence_id, lineage_role)
+                VALUES (%s, %s, %s)
+                """,
+                (receipt_id, evidence_id, _receipt_lineage_role(operation_id)),
+            )
         return OperationReceipt(receipt_id=receipt_id, outcome="ACCEPTED", idempotent_replay=False, payload=receipt_payload)
 
     @staticmethod

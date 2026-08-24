@@ -18,7 +18,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
 import psycopg
-from psycopg.errors import RaiseException
+from psycopg.errors import ForeignKeyViolation, RaiseException
 from psycopg.types.json import Jsonb
 
 
@@ -186,6 +186,45 @@ def main() -> int:
                     event_count = int(cursor.fetchone()[0])
                     cursor.execute("SELECT count(*) FROM cae.receipt WHERE payload ->> 'outcome' = 'ACCEPTED'")
                     receipt_count = int(cursor.fetchone()[0])
+                    cursor.execute(
+                        """
+                        SELECT
+                          count(*),
+                          count(DISTINCT execution.receipt_id),
+                          count(DISTINCT lineage.receipt_id),
+                          bool_and(execution.registry_scope = 'NOT_READ'
+                            AND execution.registry_snapshot_sha256 IS NULL),
+                          bool_and(execution.environment_fidelity = 'E3_PRODUCTION_SHAPED'
+                            AND execution.environment_identity ->> 'deployment_boundary' = 'staging_only'),
+                          bool_and(execution.reward_hack_result = 'UNVERIFIED'
+                            AND execution.taste_integrity_result = 'NOT_APPLICABLE'
+                            AND execution.anti_centroid_result = 'NOT_APPLICABLE')
+                        FROM cae.execution_receipt execution
+                        LEFT JOIN cae.receipt_evidence_link lineage ON lineage.receipt_id = execution.receipt_id
+                        WHERE execution.receipt_id IN (
+                          SELECT receipt_id FROM cae.receipt
+                          WHERE payload ->> 'command_id' IN (%s, %s, %s, %s, %s)
+                        )
+                        """,
+                        (
+                            captured.payload["command_id"], authenticated.payload["command_id"],
+                            proposed.payload["command_id"], validated.payload["command_id"],
+                            confirmed.payload["command_id"],
+                        ),
+                    )
+                    (
+                        execution_receipt_count,
+                        lineage_receipt_count,
+                        lineage_link_receipt_count,
+                        registry_not_read,
+                        staging_identity_present,
+                        no_semantic_overclaim,
+                    ) = cursor.fetchone()
+                    cursor.execute(
+                        "SELECT count(*) FROM cae.v_receipt_evidence_lineage WHERE receipt_id = %s",
+                        (confirmed.receipt_id,),
+                    )
+                    confirmation_lineage_visible = int(cursor.fetchone()[0]) == 1
                     immutable_update_rejected = expect_raises_in_savepoint(
                         connection,
                         lambda: cursor.execute("UPDATE cae.command SET payload = %s WHERE command_id = %s", (Jsonb({"tampered": True}), captured.payload["command_id"])),
@@ -207,6 +246,22 @@ def main() -> int:
                         ),
                         RaiseException,
                     )
+                    execution_receipt_update_rejected = expect_raises_in_savepoint(
+                        connection,
+                        lambda: cursor.execute(
+                            "UPDATE cae.execution_receipt SET payload = %s WHERE receipt_id = %s",
+                            (Jsonb({"tampered": True}), captured.receipt_id),
+                        ),
+                        RaiseException,
+                    )
+                    false_evidence_reference_rejected = expect_raises_in_savepoint(
+                        connection,
+                        lambda: cursor.execute(
+                            "INSERT INTO cae.receipt_evidence_link(receipt_id, evidence_id, lineage_role) VALUES (%s, %s, 'SUPPORTS')",
+                            (captured.receipt_id, f"proof:nonexistent-evidence:{proof_id}"),
+                        ),
+                        ForeignKeyViolation,
+                    )
         print(f"capture_transition={'PASS' if captured.outcome == 'ACCEPTED' else 'FAIL'}")
         print(f"idempotent_replay={'PASS' if replay.idempotent_replay else 'FAIL'}")
         print(f"self_authentication_rejected={'PASS' if self_auth_rejected else 'FAIL'}")
@@ -219,11 +274,22 @@ def main() -> int:
         print(f"receipt_count={'PASS' if receipt_count == 5 else 'FAIL'}")
         print(f"immutable_command_update_rejected={'PASS' if immutable_update_rejected else 'FAIL'}")
         print(f"hash_payload_mismatch_rejected={'PASS' if hash_mismatch_rejected else 'FAIL'}")
+        print(f"execution_receipt_count={'PASS' if execution_receipt_count == 5 else 'FAIL'}")
+        print(f"receipt_evidence_lineage_count={'PASS' if lineage_receipt_count == 5 and lineage_link_receipt_count == 5 else 'FAIL'}")
+        print(f"receipt_lineage_view={'PASS' if confirmation_lineage_visible else 'FAIL'}")
+        print(f"registry_scope_not_read={'PASS' if registry_not_read else 'FAIL'}")
+        print(f"staging_environment_identity={'PASS' if staging_identity_present else 'FAIL'}")
+        print(f"semantic_outcome_not_overclaimed={'PASS' if no_semantic_overclaim else 'FAIL'}")
+        print(f"immutable_execution_receipt_rejected={'PASS' if execution_receipt_update_rejected else 'FAIL'}")
+        print(f"false_evidence_reference_rejected={'PASS' if false_evidence_reference_rejected else 'FAIL'}")
         return 0 if all((
             captured.outcome == 'ACCEPTED', replay.idempotent_replay, self_auth_rejected,
             authenticated.outcome == 'ACCEPTED', proposed.outcome == 'ACCEPTED', stale_validation_rejected,
             validated.outcome == 'ACCEPTED', confirmed.outcome == 'ACCEPTED', event_count == 5,
             receipt_count == 5, immutable_update_rejected, hash_mismatch_rejected,
+            execution_receipt_count == 5, lineage_receipt_count == 5, lineage_link_receipt_count == 5,
+            confirmation_lineage_visible, registry_not_read, staging_identity_present,
+            no_semantic_overclaim, execution_receipt_update_rejected, false_evidence_reference_rejected,
         )) else 1
     except (HTTPError, OSError, psycopg.Error, SemanticOperationError) as error:
         print("wp03_proof=FAILED")
