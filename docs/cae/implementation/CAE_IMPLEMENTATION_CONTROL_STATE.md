@@ -37,7 +37,7 @@ objective: >
   isolated CAE staging slice, without mutating legacy SQLite state or treating
   copied source bytes as a repository-wide state-authority cutover.
 agent_id: /root
-git_commit: 23cf8bd (WP-09 first vertical runtime slice commit)
+git_commit: f8fcbe8 (WP-00 through WP-09 review-evidence handoff; WP-09 implementation: 23cf8bd)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -68,6 +68,7 @@ next_transition: OPERATOR_REVIEW -> VERIFY (WP-10 regression/promotion/operator 
 - `docs/cae/implementation/CAE_WP07_EXECUTION_RECEIPTS_EVIDENCE_LINEAGE.md` — staging schema amendment, receipt/evidence-lineage proof, non-claims, and WP-08 boundary.
 - `docs/cae/implementation/CAE_WP08_REALITY_CONTACT_AND_REWARD_HACKING.md` and `docs/cae/evaluations/EVIDENCE_TO_AIR_FIRST_SLICE_WP08_EVALUATION_SUITE.yaml` — governed E3 test claims, countertests, evidence, limitations, and WP-09 boundary.
 - `docs/cae/implementation/CAE_WP09_FIRST_VERTICAL_RUNTIME_SLICE.md` and `docs/cae/evaluations/INTERVIEW_SOURCE_BRIDGE_WP09_EVALUATION_SUITE.yaml` — one read-only Interview Expression source bridge, verification provenance, staging proof, and WP-10 boundary.
+- `docs/cae/implementation/CAE_WP00_TO_WP09_REVIEW_EVIDENCE_HANDOFF.md` — independent-review evidence index, commit ledger, proof boundaries, and reproduction order for WP-00 through WP-09.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -217,6 +218,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - WP-07 execution-receipt context, immutable receipt-to-evidence links, lineage projection, migration result, and force-rolled-back staging proof: `CAE_WP07_EXECUTION_RECEIPTS_EVIDENCE_LINEAGE.md`.
 - WP-08 governed test manifest, real private Storage readback, contrastive/reward-hack cases, and proof boundary: `CAE_WP08_REALITY_CONTACT_AND_REWARD_HACKING.md`.
 - WP-09 read-only Interview Expression bridge, verified byte copy, typed CAE registration, capture compatibility, and cleanup proof: `CAE_WP09_FIRST_VERTICAL_RUNTIME_SLICE.md`.
+- Reviewer-facing WP-00 through WP-09 evidence/commit/checksum ledger and reproducible review order: `CAE_WP00_TO_WP09_REVIEW_EVIDENCE_HANDOFF.md`.
 
 ## Verification results
 
