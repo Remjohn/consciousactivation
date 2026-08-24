@@ -37,7 +37,7 @@ objective: >
   and a bounded first-slice Tech Spec without promoting target prose to runtime
   truth or changing the user-maintained canonical PRD audit.
 agent_id: /root
-git_commit: e0552c3 (WP-04 control-record baseline; WP-05 pending commit)
+git_commit: 665df8c (WP-05 requirement reconciliation/Tech-Spec commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
