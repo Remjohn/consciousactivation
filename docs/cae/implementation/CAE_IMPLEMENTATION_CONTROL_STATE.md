@@ -1,20 +1,43 @@
 # CAE Implementation Control State
 
-**Control status:** `RECON_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Control status:** `WP02A_COMPLETE_PENDING_OPERATOR_REVIEW`
 **Authority:** CAE Governance & Specification Bridge Bundle v3
 **Created:** 2026-08-23
-**Scope:** WP-00 — Brownfield Reality Map only. No production architecture, runtime code, schema, registry, or test was changed.
+**Scope:** WP-00 through WP-02a — evidence-led reconnaissance, ontology reconciliation, reviewed PostgreSQL/Supabase state model, and a staging-only relational foundation. No legacy data, existing service authority, registry data, or production environment was changed.
+
+## Required control fields
+
+```yaml
+authoritative_documents: See "Authoritative documents loaded".
+current_codebase_truth: See "Current codebase truth".
+target_architecture: See "Target architecture".
+implemented: See "Implemented".
+partially_implemented: See "Partially implemented".
+absent: See "Absent".
+contradictory: See "Contradictory".
+registry_gaps: See "Registry gaps".
+state_model_gaps: See "State-model gaps".
+semantic_operation_gaps: See "Semantic-operation gaps".
+harness_gaps: See "Harness gaps".
+test_gaps: See "Test gaps".
+operator_decisions_required: See "Operator decisions required".
+blocked_questions: See "Blocked questions".
+evidence_collected: See "Evidence collected".
+verification_results: See "Verification results".
+risks: See "Risks".
+```
 
 ## Current execution record
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: WP-00 Brownfield Reality Map
+current_work_package: WP-02a Disposable Staging Foundation
 objective: >
-  Establish evidence-led current-state, contradiction, dependency, and decision
-  records before any CAE implementation work begins.
+  Apply and structurally prove the reviewed CAE relational foundation in a
+  staging-only Supabase environment without importing legacy data or changing
+  existing service authority.
 agent_id: /root
-git_commit: f1776b7 (reconnaissance baseline)
+git_commit: 14ac7ff (WP-00 control-record baseline; WP-01/WP-02/WP-02a records pending commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -22,8 +45,8 @@ environment_identity:
   node: v24.11.0
   state_environment_variables_observed: []
   api_default_state_root_when_unconfigured: /state
-last_updated: 2026-08-23
-next_transition: RECON -> OPERATOR_REVIEW
+last_updated: 2026-08-24
+next_transition: OPERATOR_REVIEW -> MODEL (WP-03 semantic-operation contracts only after operator approval)
 ```
 
 ## Authoritative documents loaded
@@ -32,6 +55,10 @@ next_transition: RECON -> OPERATOR_REVIEW
 - `docs/PRD/CURRENT.md` — verified implementation audit; last substantive audit entry: 2026-08-14.
 - `Conscious Activation Engine Brownfield/cae_phase0` through `cae_phase7` — target architecture only, pending reconciliation.
 - `Conscious Activation Engine Brownfield/sda.zip` and `sfl.zip` — inherited registry seeds, pending controlled migration.
+- `docs/cae/implementation/CAE_OBJECT_ONTOLOGY_RECONCILIATION.md` — WP-01 evidence-led reconciliation record.
+- `docs/cae/implementation/CAE_POSTGRES_STATE_MODEL_RECONCILIATION.md` and `sql/0001_cae_foundation_draft.sql` — WP-02 target relational model and reviewed foundation DDL draft.
+- `docs/cae/implementation/CAE_POSTGRES_MIGRATION_EXECUTION_PLAN.md` — WP-02 phased, evidence-bearing migration and cutover plan.
+- `docs/cae/implementation/CAE_WP02A_FOUNDATION_PROOF.md` — applied staging-foundation and structural-proof evidence.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -39,6 +66,8 @@ next_transition: RECON -> OPERATOR_REVIEW
 The repository is a working, multi-service development system. API startup constructs Pipeline, AIR, VAE, Interview Expression, Interview Composer, Campaign, Builder, and Studio-bridge surfaces. The active implementation uses separate SQLite databases and filesystem paths, not a shared PostgreSQL/Supabase state authority. Several services implement idempotency, events, state transitions, and receipts locally; there is no repository-wide CAE semantic-operation gateway or state-transition authority.
 
 The Phase 0–7 bundles define target architecture. They have not been reconciled into code, schemas, migrations, or tracked project authority. The SDA/SFL ZIPs are real inherited YAML assets, but have not yet been promoted through a registry migration and runtime-resolution layer.
+
+WP-01 establishes a canonical role map and collision log. It does not promote a target object to runtime truth merely because a similarly named service model exists.
 
 ## Target architecture
 
@@ -62,6 +91,8 @@ Events + receipts = immutable history and proof
 Skills/runbooks = versioned procedural doctrine
 StateM = reference for control semantics only
 ```
+
+WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S3-compatible object store. PostgreSQL holds their authoritative metadata, immutable storage identity, URL routing identity, SHA-256, lifecycle, lineage, and access policy.
 
 ## Implemented
 
@@ -111,6 +142,7 @@ StateM = reference for control semantics only
 - No single current-state projection spans campaign, workflow, evidence, semantic, evaluation, and outcome state.
 - No CAE-wide transition-contract registry defines source/target state, evidence, validator, receipt, failure route, and idempotency behavior.
 - Existing local events/receipts do not yet carry the full v3 fidelity, reward-hack, taste, and anti-centroid proof fields.
+- A reviewed shared relational model and first-slice transition contracts are applied to staging only; RLS and real object-storage operation proof remain unimplemented.
 
 ## Semantic-operation gaps
 
@@ -137,6 +169,9 @@ StateM = reference for control semantics only
 2. **Bridge adoption decision:** confirm that this v3 bundle and the forthcoming `docs/cae/implementation/` records are tracked project governance artifacts rather than external working material.
 3. **Registry source decision:** confirm whether the supplied SDA/SFL ZIP bytes are the migration authority, and identify the accountable owner/source for resolving the SFL missing-family lineage.
 4. **Promotion authority:** name the operator/role who may approve `OPERATOR_REVIEW -> PROMOTE` for CAE work packages.
+5. **Canonical ownership decision:** approve the WP-01 role boundaries and nominate the authority that resolves primitive/SDA/SFL overlap before WP-04 registry migration.
+6. **Foundation-provisioning decision:** approve WP-02a to create a disposable Supabase/PostgreSQL + private object-storage environment, apply the reviewed DDL draft, and produce structural/environment-fidelity evidence before importing data or redirecting writes.
+7. **WP-03 promotion decision:** promote WP-02a and authorize the typed semantic-operation contracts for the first evidence-to-AIR transition, without importing legacy data or redirecting existing service writes.
 
 ## Blocked questions
 
@@ -155,6 +190,10 @@ StateM = reference for control semantics only
 - Builder PostgreSQL target ADR: `services/builder/docs/architecture/adr/ADR-003-AUTHORITATIVE-STATE-AND-ARTIFACT-STORAGE.md`.
 - Current implementation audit: `docs/PRD/CURRENT.md`.
 - Inherited SDA/SFL ZIP inventory and reference checks.
+- Canonical-object/ontology role and collision comparison: `docs/cae/implementation/CAE_OBJECT_ONTOLOGY_RECONCILIATION.md`.
+- PostgreSQL/Supabase state model, first-slice transition contracts, and source disposition plan: `docs/cae/implementation/CAE_POSTGRES_STATE_MODEL_RECONCILIATION.md`.
+- Phased import, dual-read, cutover, and rollback plan: `docs/cae/implementation/CAE_POSTGRES_MIGRATION_EXECUTION_PLAN.md`.
+- WP-02a staging application, migration checksum, private-bucket, and structural-proof results: `docs/cae/implementation/CAE_WP02A_FOUNDATION_PROOF.md`.
 
 ## Verification results
 
@@ -163,7 +202,17 @@ repository_structure: VERIFIED_READ_ONLY
 api_bootstrap_and_local_persistence: VERIFIED_READ_ONLY
 postgres_or_supabase_runtime_integration: NOT_FOUND_IN_EXECUTABLE_SOURCE
 state_and_receipt_infrastructure: PARTIAL_LOCAL_IMPLEMENTATIONS_VERIFIED
-phase_0_to_7_reconciliation: NOT_STARTED
+phase_0_to_7_reconciliation: WP01_OBJECT_MODEL_RECONCILED_PENDING_OPERATOR_REVIEW
+postgres_state_model: WP02_DRAFT_COMPLETE_PENDING_OPERATOR_REVIEW
+postgres_foundation_ddl: APPLIED_TO_STAGING_ONLY
+wp02a_staging_connection: VERIFIED_VIA_SUPAVISOR_SESSION_POOLER
+wp02a_migration_checksum: b9ac25e8bd81abab2f01af828d3ab209b4d2e7308a2f698272f720e944430b91
+wp02a_private_buckets: VERIFIED
+wp02a_structural_proof: VERIFIED
+wp02a_workspace_rls_checksum: 6067550621e78a3aa4f645e84e9be34b907df4441cd0d1851a1b8c8bc28d095d
+wp02a_workspace_rls_proof: VERIFIED_ROLLBACK_ONLY
+wp02a_real_storage_proof: VERIFIED_UPLOAD_HASH_AUTHORIZED_AND_DENIED_READ_CLEANUP
+legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
 test_execution_this_work_package: NOT_RUN
