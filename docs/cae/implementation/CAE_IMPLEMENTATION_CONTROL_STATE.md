@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `WP02A_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Control status:** `WP03_COMPLETE_PENDING_OPERATOR_REVIEW`
 **Authority:** CAE Governance & Specification Bridge Bundle v3
 **Created:** 2026-08-23
-**Scope:** WP-00 through WP-02a — evidence-led reconnaissance, ontology reconciliation, reviewed PostgreSQL/Supabase state model, and a staging-only relational foundation. No legacy data, existing service authority, registry data, or production environment was changed.
+**Scope:** WP-00 through WP-03 — evidence-led reconciliation, staging-only relational foundation/security proof, and one executed first-slice semantic-operation proof. No legacy data, existing service authority, registry data, or production environment was changed.
 
 ## Required control fields
 
@@ -31,13 +31,13 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: WP-02a Disposable Staging Foundation
+current_work_package: WP-03 State Transition and Semantic Operation Layer
 objective: >
-  Apply and structurally prove the reviewed CAE relational foundation in a
-  staging-only Supabase environment without importing legacy data or changing
-  existing service authority.
+  Prove the first typed evidence-to-AIR lifecycle transition slice with
+  durable PostgreSQL command/event/receipt payloads, without importing legacy
+  data or changing existing service authority.
 agent_id: /root
-git_commit: 2a65d1f (WP-02a foundation baseline; formatting/control-record update pending commit)
+git_commit: cb3fb30 (WP-02a baseline; WP-03 pending commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -46,7 +46,7 @@ environment_identity:
   state_environment_variables_observed: []
   api_default_state_root_when_unconfigured: /state
 last_updated: 2026-08-24
-next_transition: OPERATOR_REVIEW -> MODEL (WP-03 semantic-operation contracts only after operator approval)
+next_transition: OPERATOR_REVIEW -> MODEL (WP-04 registry migration reconnaissance only after operator approval)
 ```
 
 ## Authoritative documents loaded
@@ -59,6 +59,8 @@ next_transition: OPERATOR_REVIEW -> MODEL (WP-03 semantic-operation contracts on
 - `docs/cae/implementation/CAE_POSTGRES_STATE_MODEL_RECONCILIATION.md` and `sql/0001_cae_foundation_draft.sql` — WP-02 target relational model and reviewed foundation DDL draft.
 - `docs/cae/implementation/CAE_POSTGRES_MIGRATION_EXECUTION_PLAN.md` — WP-02 phased, evidence-bearing migration and cutover plan.
 - `docs/cae/implementation/CAE_WP02A_FOUNDATION_PROOF.md` — applied staging-foundation and structural-proof evidence.
+- `docs/cae/implementation/CAE_WP03_SEMANTIC_OPERATION_DISCOVERY.md` — resolved persistent-evidence contract discovery.
+- `docs/cae/implementation/CAE_WP03_SEMANTIC_OPERATION_PROOF.md` — staging execution, adversarial checks, cleanup, and WP-03 boundary.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -142,13 +144,14 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - No single current-state projection spans campaign, workflow, evidence, semantic, evaluation, and outcome state.
 - No CAE-wide transition-contract registry defines source/target state, evidence, validator, receipt, failure route, and idempotency behavior.
 - Existing local events/receipts do not yet carry the full v3 fidelity, reward-hack, taste, and anti-centroid proof fields.
-- A reviewed shared relational model and first-slice transition contracts are applied to staging only; RLS and real object-storage operation proof remain unimplemented.
+- A reviewed shared relational model and first-slice transition contracts are applied to staging only; RLS and real object-storage proof are complete.
+- The applied generic command/event/receipt tables now persist canonical payload bytes and JSONB forms, enforce their SHA-256 integrity, and reject mutation after insertion. This is currently exercised only by the bounded WP-03 adapter.
 
 ## Semantic-operation gaps
 
 - Existing service methods and API routes are typed locally but not exposed as one governed semantic API.
-- No reconciled operation contracts yet define CAE-wide role authorization, reads, writes, preconditions, validators, receipts, and repair routes.
-- Normal agent state interaction must not be designed until the authority/migration decision in WP-02 is made.
+- Five first-slice operation contracts and a PostgreSQL adapter are registered and staging-proven, but there is no CAE-wide semantic-operation gateway or API binding.
+- Registry-dependent AIR semantic direction remains unavailable until WP-04 creates a controlled SDA/SFL/Primitive resolver.
 
 ## Harness gaps
 
@@ -171,7 +174,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 4. **Promotion authority:** name the operator/role who may approve `OPERATOR_REVIEW -> PROMOTE` for CAE work packages.
 5. **Canonical ownership decision:** approve the WP-01 role boundaries and nominate the authority that resolves primitive/SDA/SFL overlap before WP-04 registry migration.
 6. **Foundation-provisioning decision:** approve WP-02a to create a disposable Supabase/PostgreSQL + private object-storage environment, apply the reviewed DDL draft, and produce structural/environment-fidelity evidence before importing data or redirecting writes.
-7. **WP-03 promotion decision:** promote WP-02a and authorize the typed semantic-operation contracts for the first evidence-to-AIR transition, without importing legacy data or redirecting existing service writes.
+7. **WP-03 promotion decision:** promote the staging-proven first evidence-to-AIR lifecycle slice and authorize WP-04 registry reconciliation/migration, without importing legacy data or redirecting existing service writes.
 
 ## Blocked questions
 
@@ -194,6 +197,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - PostgreSQL/Supabase state model, first-slice transition contracts, and source disposition plan: `docs/cae/implementation/CAE_POSTGRES_STATE_MODEL_RECONCILIATION.md`.
 - Phased import, dual-read, cutover, and rollback plan: `docs/cae/implementation/CAE_POSTGRES_MIGRATION_EXECUTION_PLAN.md`.
 - WP-02a staging application, migration checksum, private-bucket, and structural-proof results: `docs/cae/implementation/CAE_WP02A_FOUNDATION_PROOF.md`.
+- WP-03 command/event/receipt payload amendment, operation registrations, and first-slice staging proof: `docs/cae/implementation/CAE_WP03_SEMANTIC_OPERATION_DISCOVERY.md` and `CAE_WP03_SEMANTIC_OPERATION_PROOF.md`.
 
 ## Verification results
 
@@ -212,6 +216,10 @@ wp02a_structural_proof: VERIFIED
 wp02a_workspace_rls_checksum: 6067550621e78a3aa4f645e84e9be34b907df4441cd0d1851a1b8c8bc28d095d
 wp02a_workspace_rls_proof: VERIFIED_ROLLBACK_ONLY
 wp02a_real_storage_proof: VERIFIED_UPLOAD_HASH_AUTHORIZED_AND_DENIED_READ_CLEANUP
+wp03a_immutable_payload_checksum: 3d331989fd74af1ccfec71d6087b481f4369debe5045d4e7d4dbaed1c1373124
+wp03_operation_registration_checksum: ad6ccc6f08d3e46cfdff42fc9a2be52b9998eea4c62a21fa9c044c5a4c69df8d
+wp03_first_slice_operations: VERIFIED_STAGING_FORCE_ROLLBACK
+wp03_adversarial_evidence_checks: VERIFIED_STAGING_FORCE_ROLLBACK
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
