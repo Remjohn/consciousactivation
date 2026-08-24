@@ -37,7 +37,7 @@ objective: >
   doctrine without allowing a Harness, Skill, prompt, or runbook to become a
   shadow operational state store.
 agent_id: /root
-git_commit: f884734 (WP-05 control-record baseline; WP-06 pending commit)
+git_commit: 067bb7e (WP-06 runbook/Skill integration commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
