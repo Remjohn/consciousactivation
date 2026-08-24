@@ -5,6 +5,7 @@ from .database import (
     ProductHealth,
 )
 from .paths import default_database_path
+from .registry import RegistryItem, RegistryResolutionError, RegistryResolver
 from .semantic_operations import (
     FirstSliceSemanticOperations,
     OperationReceipt,
@@ -18,6 +19,9 @@ __all__ = [
     "ProductDatabaseError",
     "ProductHealth",
     "default_database_path",
+    "RegistryItem",
+    "RegistryResolutionError",
+    "RegistryResolver",
     "FirstSliceSemanticOperations",
     "OperationReceipt",
     "SemanticOperationConflict",

@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `WP03_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Control status:** `WP04_COMPLETE_PENDING_OPERATOR_REVIEW`
 **Authority:** CAE Governance & Specification Bridge Bundle v3
 **Created:** 2026-08-23
-**Scope:** WP-00 through WP-03 — evidence-led reconciliation, staging-only relational foundation/security proof, and one executed first-slice semantic-operation proof. No legacy data, existing service authority, registry data, or production environment was changed.
+**Scope:** WP-00 through WP-04 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, and immutable SDA/SFL/Primitive registry migration. No legacy service authority or production environment was changed.
 
 ## Required control fields
 
@@ -31,13 +31,13 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: WP-03 State Transition and Semantic Operation Layer
+current_work_package: WP-04 Registry Migration
 objective: >
-  Prove the first typed evidence-to-AIR lifecycle transition slice with
-  durable PostgreSQL command/event/receipt payloads, without importing legacy
-  data or changing existing service authority.
+  Preserve, validate, and expose inherited SDA, SFL, and Primitive registry
+  inputs through immutable PostgreSQL snapshots without inventing or repairing
+  unresolved source definitions.
 agent_id: /root
-git_commit: 13c056f (WP-03 primary implementation/proof commit)
+git_commit: 814f32c (WP-03 control-record baseline; WP-04 pending commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -46,7 +46,7 @@ environment_identity:
   state_environment_variables_observed: []
   api_default_state_root_when_unconfigured: /state
 last_updated: 2026-08-24
-next_transition: OPERATOR_REVIEW -> MODEL (WP-04 registry migration reconnaissance only after operator approval)
+next_transition: OPERATOR_REVIEW -> MODEL (WP-05 PRD/FR/Tech-Spec reconciliation only after operator approval)
 ```
 
 ## Authoritative documents loaded
@@ -61,6 +61,7 @@ next_transition: OPERATOR_REVIEW -> MODEL (WP-04 registry migration reconnaissan
 - `docs/cae/implementation/CAE_WP02A_FOUNDATION_PROOF.md` — applied staging-foundation and structural-proof evidence.
 - `docs/cae/implementation/CAE_WP03_SEMANTIC_OPERATION_DISCOVERY.md` — resolved persistent-evidence contract discovery.
 - `docs/cae/implementation/CAE_WP03_SEMANTIC_OPERATION_PROOF.md` — staging execution, adversarial checks, cleanup, and WP-03 boundary.
+- `docs/cae/implementation/CAE_WP04_REGISTRY_MIGRATION_PROOF.md` — immutable source registry migration, integrity findings, and staging proof.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -133,10 +134,10 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 
 ## Registry gaps
 
-- SDA: a versioned seed registry exists (13 records across ontology, grammar, and crosswalks), but it is outside an established CAE runtime registry path.
-- SFL: a versioned seed registry exists (families, functions, compression rules, crosswalks, and a failure corpus), but it has the unresolved family-reference defect above.
-- Primitive registry: AIR contains primitive and archetype persistence, but primitive/SDA/SFL cross-registry authority and query contracts are not reconciled.
-- Required next action: inventory, hash, schema-validate, reference-validate, preserve original IDs/versions/lineage, then create migration decisions. No missing registry record may be invented.
+- SDA, SFL, and AIR Primitive inputs are imported as separate immutable registry snapshots with hashes, raw source text, paths, source identifiers, version context, relationships, RLS, and typed read-only resolution.
+- SFL failure assets that cite absent `SFL-FAM-005`, `006`, `007`, `009`, or `012` are quarantined. No missing family was invented.
+- AIR Primitive source ID `EXP-TRG-001` occurs twice; both records are preserved and quarantined, and resolution refuses the ambiguity.
+- Twenty-three SFL records inherit only their manifest version; no per-record version was synthesized. The accountable lineage owner must resolve this before any version-specific source assertion.
 
 ## State-model gaps
 
@@ -151,7 +152,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 
 - Existing service methods and API routes are typed locally but not exposed as one governed semantic API.
 - Five first-slice operation contracts and a PostgreSQL adapter are registered and staging-proven, but there is no CAE-wide semantic-operation gateway or API binding.
-- Registry-dependent AIR semantic direction remains unavailable until WP-04 creates a controlled SDA/SFL/Primitive resolver.
+- Registry-dependent AIR semantic direction remains unavailable until a later bounded integration package binds validated operations to the new resolver; WP-04 introduces no service write/read cutover.
 
 ## Harness gaps
 
@@ -174,7 +175,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 4. **Promotion authority:** name the operator/role who may approve `OPERATOR_REVIEW -> PROMOTE` for CAE work packages.
 5. **Canonical ownership decision:** approve the WP-01 role boundaries and nominate the authority that resolves primitive/SDA/SFL overlap before WP-04 registry migration.
 6. **Foundation-provisioning decision:** approve WP-02a to create a disposable Supabase/PostgreSQL + private object-storage environment, apply the reviewed DDL draft, and produce structural/environment-fidelity evidence before importing data or redirecting writes.
-7. **WP-03 promotion decision:** promote the staging-proven first evidence-to-AIR lifecycle slice and authorize WP-04 registry reconciliation/migration, without importing legacy data or redirecting existing service writes.
+7. **WP-04 promotion decision:** promote the immutable registry migration and authorize WP-05 PRD/FR/Tech-Spec reconciliation against its versioned authority, without a legacy-service cutover.
 
 ## Blocked questions
 
@@ -198,6 +199,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - Phased import, dual-read, cutover, and rollback plan: `docs/cae/implementation/CAE_POSTGRES_MIGRATION_EXECUTION_PLAN.md`.
 - WP-02a staging application, migration checksum, private-bucket, and structural-proof results: `docs/cae/implementation/CAE_WP02A_FOUNDATION_PROOF.md`.
 - WP-03 command/event/receipt payload amendment, operation registrations, and first-slice staging proof: `docs/cae/implementation/CAE_WP03_SEMANTIC_OPERATION_DISCOVERY.md` and `CAE_WP03_SEMANTIC_OPERATION_PROOF.md`.
+- WP-04 registry migration records, raw-source lineage, resolver behavior, quarantines, and migration checksums: `docs/cae/implementation/CAE_WP04_REGISTRY_MIGRATION_PROOF.md`.
 
 ## Verification results
 
@@ -220,6 +222,10 @@ wp03a_immutable_payload_checksum: 3d331989fd74af1ccfec71d6087b481f4369debe5045d4
 wp03_operation_registration_checksum: ad6ccc6f08d3e46cfdff42fc9a2be52b9998eea4c62a21fa9c044c5a4c69df8d
 wp03_first_slice_operations: VERIFIED_STAGING_FORCE_ROLLBACK
 wp03_adversarial_evidence_checks: VERIFIED_STAGING_FORCE_ROLLBACK
+wp04_registry_authority_schema_checksum: 9a7724013676b08cc4f0cb454bfb7aef0d075a90cbd58808cb59fd718a8d1793
+wp04_registry_import: VERIFIED_STAGING_WITH_QUARANTINES
+wp04_active_crosswalk_graph: VERIFIED_67_REFERENCES_6_UNRESOLVED_QUARANTINED
+wp04_registry_resolver_and_immutability: VERIFIED_STAGING_FORCE_ROLLBACK
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
