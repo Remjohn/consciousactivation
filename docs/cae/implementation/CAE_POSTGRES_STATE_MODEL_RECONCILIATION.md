@@ -1,8 +1,8 @@
 # CAE PostgreSQL/Supabase State Model Reconciliation
 
-**Work package:** WP-02 — PostgreSQL State Model Reconciliation  
-**Status:** `MODEL_DRAFT_PENDING_OPERATOR_REVIEW`  
-**Date:** 2026-08-23  
+**Work package:** WP-02 — PostgreSQL State Model Reconciliation
+**Status:** `MODEL_DRAFT_PENDING_OPERATOR_REVIEW`
+**Date:** 2026-08-23
 **Decision:** PostgreSQL/Supabase is the target authoritative durable operational-state store for CAE. This document does not claim that cutover, provisioning, or data migration has occurred.
 
 ## Objective and scope

@@ -37,7 +37,7 @@ objective: >
   staging-only Supabase environment without importing legacy data or changing
   existing service authority.
 agent_id: /root
-git_commit: 14ac7ff (WP-00 control-record baseline; WP-01/WP-02/WP-02a records pending commit)
+git_commit: 2a65d1f (WP-02a foundation baseline; formatting/control-record update pending commit)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main

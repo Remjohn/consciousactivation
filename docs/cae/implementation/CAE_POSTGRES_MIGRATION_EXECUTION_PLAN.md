@@ -1,7 +1,7 @@
 # CAE PostgreSQL/Supabase Migration Execution Plan
 
-**Work package:** WP-02 — executable migration-plan design  
-**Status:** `DRAFT_PENDING_OPERATOR_REVIEW`  
+**Work package:** WP-02 — executable migration-plan design
+**Status:** `DRAFT_PENDING_OPERATOR_REVIEW`
 **Target authority:** PostgreSQL/Supabase for CAE durable operational state; Supabase Storage or S3-compatible object storage for raw media/artifact bytes.
 
 ## What “executable” means here

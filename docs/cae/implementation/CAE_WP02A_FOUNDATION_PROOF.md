@@ -1,8 +1,8 @@
 # CAE WP-02a Foundation Proof
 
-**Work package:** WP-02a — Disposable Staging Foundation  
-**Status:** `COMPLETE_PENDING_OPERATOR_REVIEW`  
-**Environment:** Supabase staging project `evnxdssbxxrsesftdvgx`; PostgreSQL 17.6; session pooler  
+**Work package:** WP-02a — Disposable Staging Foundation
+**Status:** `COMPLETE_PENDING_OPERATOR_REVIEW`
+**Environment:** Supabase staging project `evnxdssbxxrsesftdvgx`; PostgreSQL 17.6; session pooler
 **Applied:** 2026-08-24
 
 ## Authorized scope executed

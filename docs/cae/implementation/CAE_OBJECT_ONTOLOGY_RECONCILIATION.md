@@ -1,8 +1,8 @@
 # CAE Object / Ontology Reconciliation
 
-**Work package:** WP-01 — Canonical Object / Ontology Reconciliation  
-**Status:** `MODEL_COMPLETE_PENDING_OPERATOR_REVIEW`  
-**Date:** 2026-08-23  
+**Work package:** WP-01 — Canonical Object / Ontology Reconciliation
+**Status:** `MODEL_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Date:** 2026-08-23
 **Execution boundary:** documentation and evidence reconciliation only. No runtime behavior, database schema, registry data, migration, API contract, or test was changed.
 
 ## Objective
@@ -139,4 +139,3 @@ Inspect the roles and dispositions for `Activative Context`, `Webhook`, `Primiti
 ### H. Exact decision required
 
 **Promote WP-01 and authorize WP-02 as a specification-only PostgreSQL/Supabase state-model reconciliation package, with no provisioning or data migration?**
-
