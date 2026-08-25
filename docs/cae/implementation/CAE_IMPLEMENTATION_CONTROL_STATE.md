@@ -31,16 +31,14 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-IMPL-02 One-Aggregate Authority Cutover (MC-CAE-MED-001)
+current_work_package: CA-IMPL-02P Operator-Authorized Promotion of MC-CAE-MED-001
 objective: >
-  Execute the controlled authority cutover of exactly one aggregate, MC-CAE-MED-001 (Media Asset &
-  Evidence Lineage), from DUAL_VERIFY to POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION per
-  CA-STATE-01_MEDIA_ASSET_AUTHORITY_MIGRATION_CONTRACT and DEC-CUT-MED-001: admission gating,
-  controlled transform/registration in two workspaces via the typed path, field-/scope-aware dual
-  reconciliation (not count-only), immutable replay-safe cutover receipt, fresh-read operation proof
-  with bypass denial, recovery rehearsal, 11 adversarial countertests, zero-residue cleanup.
+  Execute the operator's Section 6 answer (PROMOTE) for MC-CAE-MED-001: gate-checked transition of
+  the recorded pending state to POSTGRES_AUTHORITATIVE via an immutable replay-safe promotion
+  receipt on the typed path; scope boundary and non-claims encoded in the receipt; sources not
+  retired; zero residue after cleanup.
 agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
-git_commit: main (CA-IMPL-02 cutover verifier, unit tests, proof artifacts; transition PENDING_OPERATOR)
+git_commit: main (cutover fb498f5 + promotion receipt rcpt_cae_receipt_commit_c5af2497e8cb3e4a894bde05)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -49,7 +47,7 @@ environment_identity:
   staging_postgres_pooler: aws-1-eu-west-1.pooler.supabase.com:5432/postgres (ref: evnxdssbxxrsesftdvgx)
   staging_storage_bucket: cae-media (private)
 last_updated: 2026-08-25
-next_transition: OPERATOR_REVIEW -> Section 6 promotion decision for MC-CAE-MED-001 (operator-only; no self-promotion)
+next_transition: PHASE_BOUNDARY_REACHED - MC-CAE-MED-001 is POSTGRES_AUTHORITATIVE; next phase requires a new operator mandate
 cutover_record:
   aggregate_id: MC-CAE-MED-001
   contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
@@ -60,6 +58,10 @@ cutover_record:
   evidence_id: 38630a34-7c68-4896-8bf2-6b4a7b3e2dd8
   verifier_sha256: 9dcf0858ebad77ab593881852f838f3e74019549a58fd73cf5dd60b7f80a5cb0
   countertests: 11_PASSED_CT01_TO_CT11
+  promotion_phase: CA-IMPL-02P
+  promotion_receipt_id: rcpt_cae_receipt_commit_c5af2497e8cb3e4a894bde05
+  promotion_operator_token: OPERATOR_SECTION6_PROMOTE_APPROVED_2026-08-25
+  authority_state_effective: POSTGRES_AUTHORITATIVE
   findings:
     - F-01 single-column FK on cae.receipt_evidence_link.receipt_id (approved DDL); parity detection + repair proven instead of schema rejection
     - F-02 WP-03/CA-IMPL-01B table-name shadowing makes contract bridge op unusable on resident schema; typed verify_media_asset route used
@@ -369,6 +371,7 @@ ca_impl_02_adversarial_countertests: VERIFIED_ALL_11_DEFENDED_CT01_TO_CT11
 ca_impl_02_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS_SPOT_CHECK_404
 ca_impl_02_authority_transition_recorded: DUAL_VERIFY_TO_POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION
 ca_impl_02_pytest_suite: 28_PASSED
+ca_impl_02p_promotion_receipt: RECORDED_IMMUTABLE_REPLAY_SAFE_FRESH_READ_DIGEST_MATCH_TRIGGER_BLOCKED_UPDATE
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
