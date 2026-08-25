@@ -1,0 +1,203 @@
+suite_id: cae.one_aggregate_authority_cutover.ca_impl_02
+suite_version: 1.0.0
+subject: CA-IMPL-02 One-Aggregate Authority Cutover for MC-CAE-MED-001 (Media Asset & Evidence Lineage)
+scope: >
+  E3 operational claims for the controlled cutover of exactly one aggregate (MC-CAE-MED-001) from DUAL_VERIFY to
+  POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION on the CA-IMPL-01B staging topology, governed by
+  CA-STATE-01_MEDIA_ASSET_AUTHORITY_MIGRATION_CONTRACT and DEC-CUT-MED-001.
+  This suite evaluates admission gating, transform fidelity, field-/scope-aware reconciliation, immutable cutover
+  receipting, fresh-read operation proof, recovery rehearsal, and adversarial countertests.
+  This suite is not a semantic, taste, anti-centroid, human, or audience-outcome evaluator.
+environment:
+  required: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+  actual: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+  identity: Supabase/PostgreSQL staging session pooler (aws-1-eu-west-1.pooler.supabase.com:5432) plus private cae-media Storage
+  persistence: disposable synthetic fixtures under staging-ca-impl-02/ and ws-med-alpha-%/ws-med-beta-% slugs; force-cleaned post-run with 0 residual rows and 0 residual objects (Stage 7 asserted)
+governing_documents:
+  - id: CA-STATE-01_MEDIA_ASSET_AUTHORITY_MIGRATION_CONTRACT
+    sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
+  - id: CAE_CUTOVER_AND_RECOVERY_DECISION_LEDGER
+    sha256: 19f19b2e24d77f6a19aede0487b66f43e795ea9a6e259870967089efd549003e
+  - id: CAE_AGGREGATE_AUTHORITY_MATRIX
+    sha256: 55acddcc36788ec2621acc6a3da63c3dee047250aea6cd55d537c902078d4e63
+canonical_run:
+  date: 2026-08-25
+  verifier_sha256: 9dcf0858ebad77ab593881852f838f3e74019549a58fd73cf5dd60b7f80a5cb0
+  evidence_id: 38630a34-7c68-4896-8bf2-6b4a7b3e2dd8
+  cutover_receipt_id: rcpt_cae_receipt_commit_1610201dbaba990e71a6b1b2
+  registered_assets: [c6040b5a-69e8-470d-ac3a-03a3824b852b, 36c10692-9f94-4541-bf9f-4ed84f76a8f1]
+tests:
+  - test_id: IMPL02-STG0-001
+    claim_id: CA-IMPL-02.admission-gating
+    class: ENVIRONMENT_FIDELITY
+    subject: mandate Section 3.1 admission before any mutation
+    preconditions: [contract_checksum_match, ledger_checksum_match, matrix_checksum_match, target_topology_present, rls_enabled, baseline_counts_recorded, storage_prefix_clean]
+    fixture_source: resident staging schema and private storage prefix staging-ca-impl-02/
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: verify_ca_impl_02_staging.py::stage 0
+    assertions: [all_gates_pass_before_mutation]
+    expected_failure_mode: any gate fails -> VerificationFailure before first write
+    reward_hacking_scenario: skipping admission or recording counts after mutation
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: IMPL02-STG1-001
+    claim_id: MC-CAE-MED-001.transform-registration-fidelity
+    class: OPERATIONAL
+    subject: transform manifest validation + typed registration via fresh-read SHA-256 in two workspaces
+    preconditions: [admission_complete]
+    fixture_source: deterministic synthetic audio fixtures built by build_disposable_source_fixture
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: TenantScopedSemanticOperations.verify_media_asset (cae.media.verify@1.0.0)
+    assertions: [logical_uri_validated, hash_and_size_recomputed, lifecycle_verified_only_on_hash_match, receipts_emitted]
+    expected_failure_mode: URI/hash/size mismatch -> TransformValidationError or QUARANTINED
+    reward_hacking_scenario: registering VERIFIED from manifest claims without reading storage bytes
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+
+  - test_id: IMPL02-STG2-001
+    claim_id: MC-CAE-MED-001.honest-reconciliation-not-count-only
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: field-, scope-, and lineage-aware dual verification (HN-TS-008)
+    preconditions: [two_assets_registered]
+    fixture_source: registered assets plus swapped-scope control variant
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: verify_ca_impl_02_staging.py::reconcile_media_records + contract Section 5 parity SQL
+    assertions: [fresh_read_parity, zero_field_mismatches, scope_swap_detected_despite_equal_totals, zero_orphans_zero_broken_links]
+    expected_failure_mode: any field/scope/lineage divergence -> ReconciliationMismatch list non-empty -> FATAL
+    reward_hacking_scenario: declaring success from row-count equality alone
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: IMPL02-STG3-001
+    claim_id: MC-CAE-MED-001.immutable-replay-safe-cutover-record
+    class: OPERATIONAL
+    subject: authority transition recorded as immutable receipt; replay identical; altered payload rejected
+    preconditions: [stage2_reconciled_clean]
+    fixture_source: pending-transition command bound to aggregate/contract/environment identities
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: TenantScopedSemanticOperations.commit_receipt (cae.receipt.commit@1.0.0)
+    assertions: [receipt_committed, replay_returns_identical_receipt_no_duplicate_rows, altered_payload_rejected_idempotency_payload_mismatch]
+    expected_failure_mode: altered-payload replay -> IdempotencyPayloadMismatchError
+    reward_hacking_scenario: editing or re-issuing a modified transition record instead of appending an immutable one
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+
+  - test_id: IMPL02-STG4-001
+    claim_id: MC-CAE-MED-001.fresh-read-operation-proof-and-bypass-denial
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: normal typed read/write path works; forged scope, unscoped session, and direct INSERT bypass denied
+    preconditions: [cutover_receipt_recorded]
+    fixture_source: registered assets in scoped sessions
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: typed ops + RLS-scoped probes (SET ROLE authenticated)
+    assertions: [scoped_projection_matches_truth, evidence_captured_and_linked, event_projection_receipt_consistent, tenancy_violation_on_forged_scope, unscoped_reads_zero_rows, rls_with_check_blocks_direct_insert]
+    expected_failure_mode: TenancyViolationError / empty result set / RLS violation
+    reward_hacking_scenario: using service-role or raw SQL for the cutover writes themselves
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+
+  - test_id: IMPL02-STG5-001
+    claim_id: CA-IMPL-02.recovery-route-proven
+    class: OPERATIONAL
+    subject: compensation, forced rollback, divergence restoration, source preservation
+    preconditions: [stage4_passed]
+    fixture_source: deliberate failure injections inside transaction scopes
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: verify_ca_impl_02_staging.py::stage 5 (conn.transaction(force_rollback=True) etc.)
+    assertions: [orphan_object_compensated_deleted, zero_residue_after_forced_rollback, divergence_flagged_then_fresh_read_restored, source_checksums_unchanged]
+    expected_failure_mode: residue after rollback or source drift -> VerificationFailure
+    reward_hacking_scenario: claiming recoverability without executing the failure paths
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: IMPL02-HN-CT06
+    claim_id: MC-CAE-MED-001.lineage-mismatch-detection-and-repair
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: forged cross-workspace lineage link detected by Section 5 parity and repaired (finding F-01)
+    preconditions: [beta_receipt_exists]
+    fixture_source: raw-SQL INSERT of Alpha-scoped link to Beta receipt (forgery probe)
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: verify_ca_impl_02_staging.py::count_broken_links parity relation + repair delete
+    assertions: [broken_link_count_at_least_one_after_forgery, parity_clean_after_repair]
+    expected_failure_mode: undetected forgery -> CT-06 FATAL
+    reward_hacking_scenario: asserting schema-level rejection that the approved single-column-FK DDL does not provide (honest finding recorded instead)
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: IMPL02-HN-CT07
+    claim_id: MC-CAE-MED-001.no-fabricated-success-receipts
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: quarantine receipt honestly records FAIL; receipt UPDATE blocked by append-only trigger
+    preconditions: [ct05_quarantine_executed_with_deterministic_idempotency_key]
+    fixture_source: stale-source quarantine receipt (idemp_ct05_<workspace_hex8>)
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: validator_results probe + UPDATE attempt against trg_prevent_receipt_mutation
+    assertions: [storage_sha256_match_equals_FAIL, update_blocked_by_trigger]
+    expected_failure_mode: honest FAIL verdict absent or trigger absent -> CT-07 FATAL
+    reward_hacking_scenario: rewriting a quarantined FAIL into a fabricated PASS receipt
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+
+  - test_id: IMPL02-STG7-001
+    claim_id: CA-IMPL-02.zero-residue-cleanup
+    class: OPERATIONAL
+    subject: transient storage objects pruned and operational tables returned to baseline
+    preconditions: [all_stages_completed]
+    fixture_source: this run's own fixture inventory
+    required_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    actual_environment_fidelity: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+    execution_path: sweep_transient_cutover_state + spot-check reads expecting denial
+    assertions: [all_transient_objects_pruned_404_on_readback, zero_rows_in_touched_operational_tables]
+    expected_failure_mode: reachable object or residual row -> Stage 7 FATAL
+    reward_hacking_scenario: leaving fixtures behind while claiming hygiene
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+findings:
+  - id: F-01
+    class: SCHEMA_FIDELITY_LIMITATION
+    detail: >
+      cae.receipt_evidence_link.receipt_id is bound by single-column FK to global cae.receipt(receipt_id) per the approved
+      CA-IMPL-01A DDL, not a composite (workspace_id, receipt_id) binding; raw-SQL cross-scope links are detected by parity
+      (proven) rather than schema-rejected. Recorded for operator attention; no migration altered.
+    disposition: QUARANTINED_CLASS_FINDING_FOR_OPERATOR
+  - id: F-02
+    class: TOPOLOGY_DUALITY
+    detail: WP-03 text-keyed tables shadow CA-IMPL-01B uuid-keyed tables; contract bridge op unusable on resident schema;
+      typed verify_media_asset route used as contract-approved executable change path.
+    disposition: RECORDED_FIDELITY_NOTE
+non_claims:
+  - does not assert POSTGRES_AUTHORITATIVE status; transition recorded as PENDING_OPERATOR_PROMOTION only
+  - does not prove production-environment behavior (staging environment class only)
+  - does not retire or modify any legacy/source system
+  - never relies on count-only parity as verification
+promotion:
+  decision_owner: human_operator
+  question_status: REQUESTED_VERBATIM_NOT_ANSWERED_BY_THIS_AGENT

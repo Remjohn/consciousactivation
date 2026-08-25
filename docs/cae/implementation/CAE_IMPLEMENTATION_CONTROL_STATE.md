@@ -31,14 +31,16 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-IMPL-01A Tenant-Scoped Staging Foundation
+current_work_package: CA-IMPL-02 One-Aggregate Authority Cutover (MC-CAE-MED-001)
 objective: >
-  Implement approved staging relational containment, composite parent-chain foreign keys,
-  Row-Level Security (RLS) policies, private Storage policies, Pydantic v2 domain models,
-  thread-safe tenancy context management, and comprehensive E3 staging verifier with
-  all 11 hard-negative defenses and 100% transient cleanup.
-agent_id: Antigravity / Gemini 3.7 Flash (High)
-git_commit: main (CA-IMPL-01A staging foundation, tenancy models, DDL, verifier, and proof artifacts completed)
+  Execute the controlled authority cutover of exactly one aggregate, MC-CAE-MED-001 (Media Asset &
+  Evidence Lineage), from DUAL_VERIFY to POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION per
+  CA-STATE-01_MEDIA_ASSET_AUTHORITY_MIGRATION_CONTRACT and DEC-CUT-MED-001: admission gating,
+  controlled transform/registration in two workspaces via the typed path, field-/scope-aware dual
+  reconciliation (not count-only), immutable replay-safe cutover receipt, fresh-read operation proof
+  with bypass denial, recovery rehearsal, 11 adversarial countertests, zero-residue cleanup.
+agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
+git_commit: main (CA-IMPL-02 cutover verifier, unit tests, proof artifacts; transition PENDING_OPERATOR)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -47,7 +49,20 @@ environment_identity:
   staging_postgres_pooler: aws-1-eu-west-1.pooler.supabase.com:5432/postgres (ref: evnxdssbxxrsesftdvgx)
   staging_storage_bucket: cae-media (private)
 last_updated: 2026-08-25
-next_transition: OPERATOR_REVIEW -> CA-IMPL-01B (Typed semantic operations and narrow runtime path)
+next_transition: OPERATOR_REVIEW -> Section 6 promotion decision for MC-CAE-MED-001 (operator-only; no self-promotion)
+cutover_record:
+  aggregate_id: MC-CAE-MED-001
+  contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
+  from_authority_state: DUAL_VERIFY
+  to_authority_state_recorded: POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION
+  environment_class: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
+  cutover_receipt_id: rcpt_cae_receipt_commit_1610201dbaba990e71a6b1b2
+  evidence_id: 38630a34-7c68-4896-8bf2-6b4a7b3e2dd8
+  verifier_sha256: 9dcf0858ebad77ab593881852f838f3e74019549a58fd73cf5dd60b7f80a5cb0
+  countertests: 11_PASSED_CT01_TO_CT11
+  findings:
+    - F-01 single-column FK on cae.receipt_evidence_link.receipt_id (approved DDL); parity detection + repair proven instead of schema rejection
+    - F-02 WP-03/CA-IMPL-01B table-name shadowing makes contract bridge op unusable on resident schema; typed verify_media_asset route used
 ```
 
 ## Authoritative documents loaded
@@ -344,6 +359,16 @@ ca_impl_01a_private_storage_byte_hash: VERIFIED_PASS_READBACK_AND_UNAUTH_DENIAL
 ca_impl_01a_hard_negatives: VERIFIED_ALL_11_DEFENDED_HN_TS_001_TO_011
 ca_impl_01a_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS
 ca_impl_01a_pytest_suite: 13_PASSED
+ca_impl_02_admission_gating: VERIFIED_CONTRACT_LEDGER_MATRIX_CHECKSUMS_TOPOLOGY_RLS_BASELINE_PREFIX_CLEAN
+ca_impl_02_transform_registration: VERIFIED_TWO_WORKSPACES_TYPED_FRESH_READ_SHA256_VERIFIED
+ca_impl_02_honest_reconciliation: VERIFIED_FIELD_SCOPE_LINEAGE_AWARE_NOT_COUNT_ONLY_SWAPOVER_DETECTED
+ca_impl_02_cutover_receipt: RECORDED_IMMUTABLE_REPLAY_SAFE_ALTERED_PAYLOAD_REJECTED
+ca_impl_02_fresh_read_operation_proof: VERIFIED_READ_WRITE_PATH_BYPASS_DENIAL_FORGED_SCOPE_UNSCOPED_DIRECT_INSERT
+ca_impl_02_recovery_rehearsal: VERIFIED_COMPENSATION_FORCE_ROLLBACK_DIVERGENCE_SOURCE_PRESERVATION
+ca_impl_02_adversarial_countertests: VERIFIED_ALL_11_DEFENDED_CT01_TO_CT11
+ca_impl_02_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS_SPOT_CHECK_404
+ca_impl_02_authority_transition_recorded: DUAL_VERIFY_TO_POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION
+ca_impl_02_pytest_suite: 28_PASSED
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
@@ -357,3 +382,6 @@ reality_contact_claim: NOT_MADE
 - Treating SQLite development evidence as production-authority parity would violate both the v3 doctrine and Builder ADR-003.
 - Treating SFL failure-corpus references as valid without resolving their missing family records would corrupt registry authority.
 - Implementing a generic CAE state engine before one bounded vertical state transition is reconciled would create premature abstraction.
+- F-01: the approved CA-IMPL-01A DDL binds `cae.receipt_evidence_link.receipt_id` by single-column FK, so raw-SQL cross-scope links are not schema-rejected; integrity relies on typed-path discipline plus parity sweeps until a composite-FK migration is separately approved.
+- F-02: WP-03 text-keyed tables shadow CA-IMPL-01B uuid-keyed tables in staging; contract bridge operations must be routed through the typed runtime path until the topology duality is resolved.
+- Treating the recorded pending transition as promoted authority before the operator answers Section 6 would violate the promotion-authority separation.
