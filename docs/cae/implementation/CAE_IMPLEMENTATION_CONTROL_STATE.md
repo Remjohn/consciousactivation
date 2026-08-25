@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `WP10A_COMPLETE_PENDING_OPERATOR_REVIEW`
-**Authority:** CAE Governance & Specification Bridge Bundle v3
+**Control status:** `CA_MAP_01_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-MAP-01 Mandate
 **Created:** 2026-08-23
-**Scope:** WP-00 through WP-10A — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, and WP-10A vertical-slice evidence containment/acceptance. No legacy service authority or production environment was changed.
+**Scope:** WP-00 through CA-MAP-01 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, and CA-MAP-01 canonical/operational-plane and scope/authority mapping. No legacy service authority, production environment, SQL schema, or runtime behavior was changed.
 
 ## Required control fields
 
@@ -31,15 +31,16 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: WP-10A Vertical-Slice Evidence Containment and Acceptance
+current_work_package: CA-MAP-01 Scope, Authority, and Canonical/Operational-Plane Mapping
 objective: >
-  Evaluate whether the recorded proof from WP-00 through WP-09 is reproducible
-  at its stated fidelity, establish explicit claim/non-claim boundaries, re-verify
-  static specifications and runbook bindings, verify SQL migration checksums,
-  execute selective dynamic proof with forced transaction rollback and full Storage
-  cleanup, and present the bounded acceptance decision for operator review.
+  Create evidence-led mapping artifacts for the minimum tenant/Guest first-slice
+  object chain across three independent authority axes (definition source, runtime
+  representation, change/promotion authority), establish Workspace as the sole candidate
+  tenant boundary, isolate Guest as a workspace-local entity with no automatic cross-workspace
+  merges, record all ambiguous object classifications and splits in the Collision Register,
+  crosswalk every object to brownfield source, and run static mapping validation.
 agent_id: Antigravity / Gemini 3.7 Flash (High)
-git_commit: 7f23609 (WP-10A evidence containment and acceptance committed)
+git_commit: main (CA-MAP-01 mapping completed)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -48,7 +49,7 @@ environment_identity:
   state_environment_variables_observed: []
   api_default_state_root_when_unconfigured: /state
 last_updated: 2026-08-25
-next_transition: OPERATOR_REVIEW -> CA-MAP-01 (Scope and authority mapping only after operator approval)
+next_transition: OPERATOR_REVIEW -> CA-AUTH-01 (Authoring-control Skills and static validators only after operator approval)
 ```
 
 ## Authoritative documents loaded
@@ -73,7 +74,13 @@ next_transition: OPERATOR_REVIEW -> CA-MAP-01 (Scope and authority mapping only 
 - `docs/cae/implementation/CAE_WP00_TO_WP09_REVIEW_EVIDENCE_HANDOFF.md` — independent-review evidence index, commit ledger, proof boundaries, and reproduction order for WP-00 through WP-09.
 - `docs/cae/implementation/CAE_MULTI_TENANT_AUTHORITY_AND_CANONICALIZATION_PLAN.md` — proposed canonical/operational-plane, workspace-isolation, scope/authority mapping, and gated PostgreSQL authority-migration plan.
 - `docs/cae/gemini_execution/00_GEMINI_12_PHASE_EXECUTION_PROGRAM.md` — governed 12-phase delivery program, safe parallel-work rules, authoring-control inventory, and mandate standard for Gemini.
-- `docs/cae/gemini_execution/01_WP10A_EVIDENCE_CONTAINMENT_MANDATE.md` — draft, operator-gated first Gemini mandate; it authorizes evidence acceptance only and explicitly forbids downstream implementation.
+- `docs/cae/gemini_execution/01_WP10A_EVIDENCE_CONTAINMENT_MANDATE.md` — operator-gated first Gemini mandate.
+- `docs/cae/gemini_execution/02_CA_MAP_01_SCOPE_AUTHORITY_MAPPING_MANDATE.md` — operator mandate governing CA-MAP-01 scope, authority, and plane mapping.
+- `docs/cae/implementation/CAE_SCOPE_AND_AUTHORITY_MATRIX.md` — CA-MAP-01 18-dimension scope and authority matrix mapping 22 scoped objects.
+- `docs/cae/implementation/CAE_OBJECT_SCOPE_COLLISION_REGISTER.md` — CA-MAP-01 collision register recording 8 architectural splits and boundaries.
+- `docs/cae/implementation/CAE_CANONICAL_OPERATIONAL_PLANE_MAP.md` — CA-MAP-01 plane separation doctrine, isolation invariants, and legal parent chains.
+- `docs/cae/implementation/CAE_CA_MAP_01_SOURCE_CROSSWALK.md` — CA-MAP-01 brownfield traceability crosswalk.
+- `docs/cae/implementation/CAE_CA_MAP_01_COMPLETION_RECORD.md` — CA-MAP-01 completion record, non-claims, and operator decision request.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -280,6 +287,11 @@ wp10a_dynamic_reproduction_wp09: PASS_E2_REPOSITORY_FIXTURE_E3_STAGING_FORCE_ROL
 wp10a_sql_migration_checksums_all_9: VERIFIED_EXACT_MATCH
 wp10a_post_verification_storage_cleanup: VERIFIED_0_OBJECTS
 wp10a_post_verification_transient_db_cleanup: VERIFIED_0_ROWS
+ca_map_01_matrix_completeness: VERIFIED_22_OBJECTS_18_COLUMNS
+ca_map_01_collision_register: VERIFIED_8_COLLISIONS_SPLIT_OR_RATIFIED
+ca_map_01_plane_map_invariants: VERIFIED_WORKSPACE_TENANT_ROOT_AND_GUEST_LOCALITY
+ca_map_01_source_crosswalk: VERIFIED_BROWNFIELD_TRACEABILITY
+ca_map_01_static_verification: PASS
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
