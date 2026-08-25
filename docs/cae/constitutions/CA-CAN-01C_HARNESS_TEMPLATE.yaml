@@ -1,0 +1,272 @@
+# Object Constitution: HarnessTemplate
+# Phase 06 / CA-CAN-01C Harness, Receipt, and Relation Constitutions
+
+id: "CA-STR-001"
+canonical_name: "HarnessTemplate"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Canonical Structural Grammar"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-002"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-STR-001"
+    canonical_name: "HarnessTemplate"
+    common_aliases: ["Runbook Template", "Procedural Doctrine", "Harness Definition", "Canonical Runbook", "StateM Specification"]
+    naming_standard: "PascalCase singular compound noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Canonical Structural Grammar"
+    class_matrix_id: 8
+    class_rationale: "HarnessTemplate defines the formal structural topology, state machines, transition contracts, allowed semantic operations, evidence requirements, and recovery routes governing procedural execution across CAE, completely decoupled from tenant operational facts."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Defines reusable procedural doctrine and structural contracts on the Global Canonical Plane; contains zero tenant data, guest records, workspace IDs, or mutable execution state."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Procedural Doctrine & Structural Governance"
+    primary_purpose: "Serves as the immutable, versioned specification of an operational procedure (such as evidence-to-AIR assessment), declaring required inputs, allowable state transitions, semantic operations, guards, and anti-reward-hacking checks."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical structural grammar and procedural doctrine specification"
+    differentia: "Distinguished from HarnessRun (the operational execution instance) by being stateless, global, versioned, and immutable; distinguished from StateTransitionContract (which governs a single atomic transition) by defining an end-to-end multi-state procedural lifecycle."
+    function: "Teaches agents, compilers, and runtimes the valid execution topology, required context, authorized semantic operations, before-transfer checks, and typed recovery routes for a specific CAE capability."
+    boundary: "Must not contain tenant facts, workspace IDs, guest identities, private storage paths, runtime state, or mutable status; must not be treated as proof that a general autonomous agent orchestrator exists."
+    normative_definition: >
+      HarnessTemplate is a Global Canonical Structural Grammar that specifies the formal state graph, context requirements,
+      authorized semantic operations, transition contracts, evidence prerequisites, and recovery routes for a bounded operational
+      procedure in Conscious Activation Engine. It is immutable per published version and contains no tenant-scoped facts.
+      Operational runs reference HarnessTemplate by immutable identifier and version tag without mutating canonical doctrine.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The immutable canonical specification of a procedural state graph (e.g. `evidence_to_air_first_slice_v1.yaml`)."
+      - "The definition of valid states, allowed operations, guards, and typed recovery routes."
+      - "A versioned doctrine artifact published on the Canonical Plane."
+    what_it_is_not:
+      - "An operational execution run (that is `HarnessRun`)."
+      - "An autonomous agent orchestrator or general state engine."
+      - "A container for client, guest, workspace, or session facts."
+      - "A database migration script or SQL schema."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "HarnessRun (CA-EXE-001)"
+        distinction: "HarnessTemplate is the stateless canonical blueprint; HarnessRun is one bounded operational execution inside a specific Workspace and Engagement."
+      - neighbor: "StateTransitionContract (CA-POL-002)"
+        distinction: "HarnessTemplate defines the multi-state procedural lifecycle; StateTransitionContract governs a single atomic from_state -> to_state mutation."
+      - neighbor: "SemanticOperation (CA-PRM-001)"
+        distinction: "HarnessTemplate specifies when and how operations may be called; SemanticOperation is the executable atomic mutation interface."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Procedural Governance & Harness Architecture"
+    tier: "Global Canonical Structural Specification"
+    specialization: "Procedural Runbook Template"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "versioned"
+    epistemic_status: "established"
+    authority_status: "constitutional"
+    lifecycle_phases: ["DRAFT", "PROPOSED", "RATIFIED", "DEPRECATED", "RETIRED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "template_id"
+        type: "STRING"
+        description: "Canonical unique string identifier (e.g. 'cae.evidence_to_air_first_slice')."
+      - name: "version"
+        type: "SEMVER"
+        description: "Semantic version string (e.g. '1.0.0')."
+      - name: "content_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 hash of the canonical template definition file."
+      - name: "purpose"
+        type: "STRING"
+        description: "Normative statement of procedural purpose and execution boundary."
+      - name: "initial_state"
+        type: "STRING"
+        description: "Initial state identifier in the procedural graph (e.g. 'RECON')."
+      - name: "terminal_states"
+        type: "ARRAY[STRING]"
+        description: "Set of valid terminal state identifiers (e.g. ['COMPLETE', 'BLOCKED', 'REPAIR_REQUIRED', 'FAILED'])."
+      - name: "states"
+        type: "JSONB"
+        description: "Array of state definitions specifying state_id, context_requirements, allowed_operations, transition_contract, required_evidence, receipt_requirement, before_transfer_checks, and recovery_routes."
+      - name: "transitions"
+        type: "JSONB"
+        description: "Array of valid edges specifying source, target, guard, and required_evidence."
+      - name: "fidelity_and_reward_hack_checks"
+        type: "ARRAY[STRING]"
+        description: "Mandatory counterchecks and anti-reward-hacking constraints."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "Lifecycle governance status (DRAFT, PROPOSED, RATIFIED, DEPRECATED, RETIRED)."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last lifecycle governance status transition."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "HarnessTemplate (Self is global canonical root)"
+    child_relations:
+      - child_object: "HarnessRun"
+        cardinality: "1:N (Referenced by operational runs; template holds no reverse references)"
+      - child_object: "StateTransitionContract"
+        cardinality: "1:N (Specifies required transition contracts)"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "DRAFT"
+    terminal_states: ["RETIRED"]
+    states: ["DRAFT", "PROPOSED", "RATIFIED", "DEPRECATED", "RETIRED"]
+    transitions:
+      - from: "DRAFT"
+        to: "PROPOSED"
+        operation: "propose_template_version"
+      - from: "PROPOSED"
+        to: "RATIFIED"
+        operation: "ratify_template_version"
+      - from: "RATIFIED"
+        to: "DEPRECATED"
+        operation: "deprecate_template_version"
+      - from: "DEPRECATED"
+        to: "RETIRED"
+        operation: "retire_template_version"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "harness_template.proposed"
+      - event_name: "harness_template.ratified"
+      - event_name: "harness_template.deprecated"
+      - event_name: "harness_template.retired"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Authored in Git repository (docs/cae/runbooks/) and reviewed under CAE Phase 0 Object Constitution Protocol"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-TMP-001: HarnessTemplate MUST reside on the CANONICAL_PLANE and MUST NOT contain workspace_id, guest_id, private storage keys/URIs, or mutable runtime state."
+      - "INV-TMP-002: Published HarnessTemplate versions are strictly immutable; modifying a published version requires issuing a new semantic version tag."
+      - "INV-TMP-003: Operational HarnessRuns reference a template by template_id and version; HarnessTemplate MUST NEVER hold references to operational runs or tenant instances."
+      - "INV-TMP-004: All semantic operations and transition contracts named in states/transitions MUST reference registered canonical identifiers."
+      - "INV-TMP-005: The presence of a YAML runbook or companion Skill DOES NOT prove that a general autonomous agent orchestrator exists."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "Versioned YAML runbooks in `docs/cae/runbooks/` and companion skills in `docs/cae/skills/`; CAE Bundle v3 `17_CAE_HARNESS_RUNBOOK_INTEGRATION_PROTOCOL.md`"
+    runtime_representation: "cae.harness_template (PostgreSQL global versioned registry snapshot / table projection)"
+    promotion_authority: "CAE Architecture Governance Committee / Canonical Architecture Lead"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "propose_harness_template"
+        parameters: ["template_id", "version", "definition_yaml", "content_sha256"]
+      - name: "ratify_harness_template"
+        parameters: ["template_id", "version", "governance_receipt_id"]
+      - name: "deprecate_harness_template"
+        parameters: ["template_id", "version", "deprecation_rationale"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT insert or store tenant-scoped data, workspace IDs, or guest identities in a HarnessTemplate."
+      - "MUST NOT overwrite or mutate the definition or content_sha256 of a published/ratified version."
+      - "MUST NOT treat template publication as proof of a general agent runtime or execution orchestrator."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify template_id conforms to lowercase dot-separated namespace (e.g. 'cae.evidence_to_air_first_slice')."
+      - "Verify version conforms to Semantic Versioning 2.0.0 format."
+      - "Verify content_sha256 matches exact canonical digest of the definition source."
+    semantic_validators:
+      - "Verify procedural state graph contains valid initial_state and reachable terminal_states with zero dead-end cycles."
+      - "Verify all referenced semantic operations and transition contracts exist in the canonical registry."
+      - "Verify zero presence of tenant keys (`workspace_id`, `guest_id`, `storage://cae-media/<workspace_id>/`)."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_TEMPLATE_TENANT_BLEED"
+        http_status: 422
+        description: "Template definition contains forbidden tenant identifiers or private storage locators."
+      - code: "ERR_TEMPLATE_VERSION_IMMUTABLE"
+        http_status: 409
+        description: "Attempted to overwrite an existing published template version."
+      - code: "ERR_TEMPLATE_CONTRACT_UNRESOLVED"
+        http_status: 404
+        description: "Template references a transition contract or semantic operation not found in registry."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.harness_template"
+    rls_boundary_column: "NONE (Global canonical table; read-only to all authenticated sessions)"
+    storage_boundary: "Git repository `docs/cae/runbooks/` + PostgreSQL global registry snapshot"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Harness Runner Service (initializes HarnessRun instances)"
+      - "Pipeline Workflow Compiler & JIT Capsule Generator"
+      - "Governance & Conformance Verifiers"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the authorized procedural state machine and execution protocol for this capability?"
+      - "Which semantic operations, evidence preconditions, and recovery paths are legally permitted in each step?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-TMP-001"
+        description: "Canonical evidence-to-AIR first-slice runbook template."
+        attributes:
+          template_id: "cae.evidence_to_air_first_slice"
+          version: "1.0.0"
+          content_sha256: "3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e"
+          status: "RATIFIED"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-TMP-001"
+        description: "Embedding a tenant Workspace ID or Guest ID in a runbook template."
+        rejection_reason: "Violates INV-TMP-001, COL-MAP-002, and Canonical Plane Law §2.1; templates are global canonical doctrine and must never contain tenant facts."
+      - id: "NEG-TMP-002"
+        description: "Silently updating a published template version in-place when procedural requirements change."
+        rejection_reason: "Violates INV-TMP-002 and Versioning Law; published templates are strictly immutable; modifications require a new semver release."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01C)"
+        summary: "Initial draft constitution establishing HarnessTemplate as Global Canonical Structural Grammar."

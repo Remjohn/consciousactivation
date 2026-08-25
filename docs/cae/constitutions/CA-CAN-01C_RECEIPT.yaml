@@ -1,0 +1,284 @@
+# Object Constitution: Receipt
+# Phase 06 / CA-CAN-01C Harness, Receipt, and Relation Constitutions
+
+id: "CA-REC-001"
+canonical_name: "Receipt"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Receipt / Evaluation Record"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REC-001"
+    canonical_name: "Receipt"
+    common_aliases: ["Execution Receipt", "Operation Receipt", "Transition Receipt", "Evaluation Record", "Cryptographic Execution Proof"]
+    naming_standard: "PascalCase singular noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Receipt / Evaluation Record"
+    class_matrix_id: 16
+    class_rationale: "Receipt captures the immutable cryptographic record of an executed semantic operation or state transition, binding calling actor, contract version, input/output digests, validator outcomes, and evidence links in an append-only relational ledger."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Maintains operational execution history, cryptographic verification digests, and evaluation evidence within a tenant Workspace; strictly decoupled from global canonical doctrine."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Cryptographic Audit, Evidence Lineage & State Proof"
+    primary_purpose: "Provides an immutable, tamper-evident record of consequential state transitions, recording who executed what operation, under which contract version, with what input/output snapshots, and linking all supporting evidence spans."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational evaluation record and cryptographic execution receipt"
+    differentia: "Distinguished from Event (which simply announces an occurrence) by being an immutable cryptographic proof ledger emitted atomically with transition commit; distinguished from EvidenceItem (which holds primary source claims) by recording operational transition facts; distinguished from SemanticAssessment (which is an interpretive claim) by recording mechanical execution outcomes."
+    function: "Answers definitively: what happened, under which inputs, under which program/contract version, what decisions occurred, what validator measurements resulted, and what evidence spans justify the transition."
+    boundary: "Receipt presence alone DOES NOT prove semantic correctness, human truth, taste, anti-centroid quality, or E4 real-world outcomes; a receipt cannot self-authenticate unverified claims; cannot link to evidence in another Workspace; an event is not a receipt merely because it has a timestamp."
+    normative_definition: >
+      Receipt is a Workspace-scoped Operational Receipt / Evaluation Record that provides an immutable cryptographic audit record
+      of an executed semantic operation and committed state transition. It captures the executing actor, operation ID, contract version,
+      input snapshot SHA-256, output snapshot SHA-256, validator results, environment fidelity, and explicit evidence span links.
+      It is strictly append-only, rejected for in-place mutation, and does not serve as unverified proof of semantic truth.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable, append-only record of an executed operation and state transition."
+      - "The container for cryptographic input/output hashes, validator outcomes, and evidence links."
+      - "The auditable verification artifact emitted atomically at transaction commit."
+    what_it_is_not:
+      - "A simple event or notification (Event records occurrence; Receipt records controlled proof)."
+      - "Self-authenticating evidence of semantic quality, taste, or real-world truth."
+      - "A mutable state table that can be updated post-insertion."
+      - "A cross-workspace evidence aggregator."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Event (CA-EVT-001)"
+        distinction: "Event announces that something occurred for asynchronous consumers; Receipt is the durable, immutable audit record with cryptographic hashes and evidence links."
+      - neighbor: "StateTransition (CA-STA-002)"
+        distinction: "StateTransition records the version mutation from_state -> to_state; Receipt records the complete execution context and evidence linkage for that transition."
+      - neighbor: "EvidenceItem (CA-EVI-002)"
+        distinction: "EvidenceItem represents primary factual or perceptual claims extracted from media; Receipt records the operational act of capturing or evaluating that evidence."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "State Control, Audit & Verification"
+    tier: "Workspace-Scoped Evaluation Record"
+    specialization: "Semantic Operation Execution Receipt"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "runtime"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["COMMITTED", "VERIFIED", "ARCHIVED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "receipt_id"
+        type: "UUID"
+        description: "Primary unique identifier for the receipt."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key anchoring the receipt strictly to its parent Workspace."
+      - name: "command_id"
+        type: "UUID"
+        description: "Foreign key to the initiating command."
+      - name: "transition_id"
+        type: "UUID"
+        description: "Foreign key to the committed state transition (if state changed)."
+      - name: "operation_id"
+        type: "STRING"
+        description: "Canonical identifier of the executed semantic operation (e.g. 'cae.evidence.capture')."
+      - name: "contract_version"
+        type: "SEMVER"
+        description: "Version of the state transition contract or operation contract."
+      - name: "actor_id"
+        type: "UUID"
+        description: "Identifier of the actor or agent executing the operation."
+      - name: "input_snapshot_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 hash of the normalized input payload."
+      - name: "output_snapshot_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 hash of the resulting output payload."
+      - name: "validator_results"
+        type: "JSONB"
+        description: "Structured array of validator outcomes (name, status: PASS/FAIL/WARN, details)."
+      - name: "evidence_links"
+        type: "JSONB"
+        description: "Structured array of evidence item IDs and link roles (SUPPORTS, CONTRADICTS, CONTEXTUALIZES)."
+      - name: "fidelity_status"
+        type: "STRING"
+        description: "Environment fidelity classification (e.g. 'HIGH_FIDELITY_REALITY', 'STAGING_SIMULATION')."
+      - name: "taste_integrity_result"
+        type: "STRING"
+        description: "Anti-centroid and taste integrity classification (defaults to 'UNVERIFIED' or 'NOT_APPLICABLE' until evaluated)."
+      - name: "reward_hack_result"
+        type: "STRING"
+        description: "Reward hacking check outcome (defaults to 'PASS' or 'DETECTED')."
+      - name: "committed_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when receipt was atomically committed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace"]
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "ReceiptEvidenceLink"
+        cardinality: "0:N (Direct lineage links to EvidenceItem rows within the same Workspace)"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "COMMITTED"
+    terminal_states: ["COMMITTED", "ARCHIVED"]
+    states: ["COMMITTED", "ARCHIVED"]
+    transitions:
+      - from: "COMMITTED"
+        to: "ARCHIVED"
+        operation: "archive_receipt"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "receipt.committed"
+      - event_name: "receipt.verified"
+    subscribed_events:
+      - event_name: "workspace.purged"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Generated atomically by FirstSliceSemanticOperations / CAE Runtime State Engine upon database commit"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-REC-001: Every Receipt MUST belong to exactly one Workspace (workspace_id) and be committed atomically with its command and state transition."
+      - "INV-REC-002: A Receipt is strictly append-only and immutable; database triggers (reject_immutable_evidence_mutation) MUST reject any update or delete."
+      - "INV-REC-003: A Receipt MUST capture actor_id, operation_id, contract_version, input_snapshot_sha256, output_snapshot_sha256, and validator_results."
+      - "INV-REC-004: A Receipt MUST NOT link to evidence, guests, or media assets belonging to a different Workspace."
+      - "INV-REC-005: Receipt presence is a mechanical record of execution commit; it DOES NOT constitute independent authentication or prove semantic truth, taste quality, or E4 real-world outcomes."
+      - "INV-REC-006: An Event MUST NOT be classified as a Receipt merely because it possesses a timestamp; an event records occurrence, while a receipt records controlled cryptographic evidence of an authorized operation."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "Phase 0 Object Constitution Protocol §7.16; Bundle v3 `11_CAE_PHASE_PROMOTION_AND_PROOF_PROTOCOL.md`, `21_CAE_STATE_CONTROL_TEST_AND_PROOF_PROTOCOL.md`; Collision Register COL-MAP-004"
+    runtime_representation: "cae.receipt + cae.execution_receipt + cae.receipt_evidence_link + cae.v_receipt_evidence_lineage (PostgreSQL relational tables scoped by workspace_id)"
+    promotion_authority: "CAE Runtime State Engine / Transactional Semantic Operation Adapter at commit time"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "commit_execution_receipt"
+        parameters: ["workspace_id", "command_id", "transition_id", "operation_id", "contract_version", "actor_id", "input_snapshot_sha256", "output_snapshot_sha256", "validator_results", "evidence_links"]
+      - name: "verify_receipt_integrity"
+        parameters: ["receipt_id", "expected_input_sha256", "expected_output_sha256"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT update, mutate, or delete an existing Receipt record."
+      - "MUST NOT insert a Receipt before its corresponding command and state transition have committed."
+      - "MUST NOT link a Receipt to evidence items from a different Workspace."
+      - "MUST NOT interpret the existence of a Receipt as independent proof of semantic truth or taste quality."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify receipt_id, workspace_id, command_id, and actor_id are valid UUIDv4 strings."
+      - "Verify input_snapshot_sha256 and output_snapshot_sha256 are 64-character lowercase hexadecimal strings."
+      - "Verify contract_version is a valid semantic version string."
+    semantic_validators:
+      - "Verify workspace_id matches current tenant RLS context."
+      - "Verify all linked evidence_id entries belong strictly to the same workspace_id."
+      - "Verify immutability trigger reject_immutable_evidence_mutation is attached and active."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_RECEIPT_MUTATION_FORBIDDEN"
+        http_status: 403
+        description: "Attempted to update or delete an immutable Receipt record."
+      - code: "ERR_RECEIPT_CROSS_WORKSPACE_LINK"
+        http_status: 403
+        description: "Attempted to link a Receipt to evidence from a different Workspace."
+      - code: "ERR_RECEIPT_PRE_COMMIT_EMISSION"
+        http_status: 409
+        description: "Attempted to emit or claim a Receipt before transaction commit."
+      - code: "ERR_RECEIPT_MISSING_LINEAGE_FIELDS"
+        http_status: 422
+        description: "Receipt is missing required actor, contract_version, input/output hash, or validator outcome."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.receipt + cae.execution_receipt + cae.receipt_evidence_link"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL relational tables `cae.receipt`, `cae.execution_receipt`, `cae.receipt_evidence_link` scoped by `workspace_id`"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "CAE Runtime State Engine"
+      - "Audit & Compliance Inspectors"
+      - "Regression Verification Suites"
+      - "Evidence Lineage Views (`cae.v_receipt_evidence_lineage`)"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What exact semantic operation was executed, by whom, at what time, and under which contract version?"
+      - "What were the cryptographic hashes of the inputs and outputs, and which evidence spans justified the transition?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-REC-001"
+        description: "Execution receipt for STC-EVID-000 capture_evidence operation."
+        attributes:
+          receipt_id: "99999999-9999-9999-9999-999999999999"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          command_id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+          operation_id: "cae.evidence.capture"
+          contract_version: "1.0.0"
+          input_snapshot_sha256: "4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c"
+          output_snapshot_sha256: "5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d"
+          reward_hack_result: "PASS"
+          taste_integrity_result: "NOT_APPLICABLE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-REC-001"
+        description: "Treating a Receipt as independent proof that a generated assessment is semantically true or high taste without evaluator evidence."
+        rejection_reason: "Violates INV-REC-005, COL-MAP-004, and Gate H/I anti-self-attestation; receipts record execution facts, not epistemic truth."
+      - id: "NEG-REC-002"
+        description: "Emitting a Receipt before the underlying semantic operation and state transition commit to PostgreSQL."
+        rejection_reason: "Violates INV-REC-001 and State Control Protocol; receipts must be committed atomically with state changes."
+      - id: "NEG-REC-003"
+        description: "Calling an asynchronous notification Event a Receipt merely because it contains a timestamp."
+        rejection_reason: "Violates INV-REC-006 and Definition Grammar §7.16; events announce occurrences, receipts prove authorized execution."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01C)"
+        summary: "Initial draft constitution establishing Receipt as Workspace-scoped Operational Receipt / Evaluation Record."

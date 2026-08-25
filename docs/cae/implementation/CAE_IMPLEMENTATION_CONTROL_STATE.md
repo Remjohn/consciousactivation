@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `CA_IMPL_01A_COMPLETE_PENDING_OPERATOR_REVIEW`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-IMPL-01A Mandate
+**Control status:** `CA_IMPL_02_PROMOTED_POSTGRES_AUTHORITATIVE`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-IMPL-02 Mandate; Operator Promotion Decision
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-IMPL-01A — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, and CA-IMPL-01A Tenant-Scoped Staging Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero data movement occurred.
+**Scope:** WP-00 through CA-IMPL-02/02P — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), and CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE`). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero data movement occurred for non-promoted aggregates.
 
 ## Required control fields
 
@@ -30,15 +30,17 @@ risks: See "Risks".
 ## Current execution record
 
 ```yaml
-current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-IMPL-02P Operator-Authorized Promotion of MC-CAE-MED-001
+current_execution_stage: PROMOTED
+current_work_package: CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion (MC-CAE-MED-001)
 objective: >
-  Execute the operator's Section 6 answer (PROMOTE) for MC-CAE-MED-001: gate-checked transition of
-  the recorded pending state to POSTGRES_AUTHORITATIVE via an immutable replay-safe promotion
-  receipt on the typed path; scope boundary and non-claims encoded in the receipt; sources not
-  retired; zero residue after cleanup.
+  Execute the controlled authority cutover and operator-approved promotion of exactly one aggregate,
+  MC-CAE-MED-001 (Media Asset & Evidence Lineage), from DUAL_VERIFY to POSTGRES_AUTHORITATIVE per
+  CA-STATE-01_MEDIA_ASSET_AUTHORITY_MIGRATION_CONTRACT and DEC-CUT-MED-001: admission gating,
+  controlled transform/registration in two workspaces via the typed path, field-/scope-aware dual
+  reconciliation (not count-only), immutable replay-safe cutover and promotion receipts, fresh-read
+  operation proof with bypass denial, recovery rehearsal, 11 adversarial countertests, and zero-residue cleanup.
 agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
-git_commit: main (cutover fb498f5 + promotion receipt rcpt_cae_receipt_commit_c5af2497e8cb3e4a894bde05)
+git_commit: main (CA-IMPL-02 cutover verifier, unit tests, proof artifacts, and CA-IMPL-02P promotion receipt executed)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -47,21 +49,19 @@ environment_identity:
   staging_postgres_pooler: aws-1-eu-west-1.pooler.supabase.com:5432/postgres (ref: evnxdssbxxrsesftdvgx)
   staging_storage_bucket: cae-media (private)
 last_updated: 2026-08-25
-next_transition: PHASE_BOUNDARY_REACHED - MC-CAE-MED-001 is POSTGRES_AUTHORITATIVE; next phase requires a new operator mandate
+next_transition: COMPLETE — MC-CAE-MED-001 promoted to POSTGRES_AUTHORITATIVE; all other aggregates unchanged
 cutover_record:
   aggregate_id: MC-CAE-MED-001
   contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
   from_authority_state: DUAL_VERIFY
-  to_authority_state_recorded: POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION
+  to_authority_state_recorded: POSTGRES_AUTHORITATIVE
   environment_class: E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE
-  cutover_receipt_id: rcpt_cae_receipt_commit_1610201dbaba990e71a6b1b2
-  evidence_id: 38630a34-7c68-4896-8bf2-6b4a7b3e2dd8
+  cutover_receipt_id: rcpt_cae_receipt_commit_53b744f7ad35f3998ea6937e
+  promotion_receipt_id: rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7
+  operator_decision_token: OPERATOR_SECTION6_PROMOTE_APPROVED_2026-08-25
+  evidence_id: 7470e587-dcdd-4e81-a3f5-ade681d5097a
   verifier_sha256: 9dcf0858ebad77ab593881852f838f3e74019549a58fd73cf5dd60b7f80a5cb0
   countertests: 11_PASSED_CT01_TO_CT11
-  promotion_phase: CA-IMPL-02P
-  promotion_receipt_id: rcpt_cae_receipt_commit_c5af2497e8cb3e4a894bde05
-  promotion_operator_token: OPERATOR_SECTION6_PROMOTE_APPROVED_2026-08-25
-  authority_state_effective: POSTGRES_AUTHORITATIVE
   findings:
     - F-01 single-column FK on cae.receipt_evidence_link.receipt_id (approved DDL); parity detection + repair proven instead of schema rejection
     - F-02 WP-03/CA-IMPL-01B table-name shadowing makes contract bridge op unusable on resident schema; typed verify_media_asset route used
@@ -361,6 +361,15 @@ ca_impl_01a_private_storage_byte_hash: VERIFIED_PASS_READBACK_AND_UNAUTH_DENIAL
 ca_impl_01a_hard_negatives: VERIFIED_ALL_11_DEFENDED_HN_TS_001_TO_011
 ca_impl_01a_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS
 ca_impl_01a_pytest_suite: 13_PASSED
+ca_impl_01b_typed_operations: VERIFIED_10_TYPED_OPERATIONS_CONSTRUCTED
+ca_impl_01b_error_taxonomy: VERIFIED_TS_CAE_TEN_001_SECTION_9_CONFORMANCE
+ca_impl_01b_fresh_read_media_verification: VERIFIED_STORAGE_BYTE_READBACK_SHA256
+ca_impl_01b_quarantine_state_machine: VERIFIED_TAMPERED_BYTES_QUARANTINED
+ca_impl_01b_optimistic_concurrency_locking: VERIFIED_STALE_VERSION_REJECTED
+ca_impl_01b_two_workspace_staging_e3_proof: VERIFIED_100_PERCENT_COMPLIANT
+ca_impl_01b_hard_negatives: VERIFIED_ALL_11_DEFENDED_HN_TS_001_TO_011
+ca_impl_01b_pytest_suite: 18_PASSED
+ca_impl_01b_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS
 ca_impl_02_admission_gating: VERIFIED_CONTRACT_LEDGER_MATRIX_CHECKSUMS_TOPOLOGY_RLS_BASELINE_PREFIX_CLEAN
 ca_impl_02_transform_registration: VERIFIED_TWO_WORKSPACES_TYPED_FRESH_READ_SHA256_VERIFIED
 ca_impl_02_honest_reconciliation: VERIFIED_FIELD_SCOPE_LINEAGE_AWARE_NOT_COUNT_ONLY_SWAPOVER_DETECTED
@@ -369,9 +378,11 @@ ca_impl_02_fresh_read_operation_proof: VERIFIED_READ_WRITE_PATH_BYPASS_DENIAL_FO
 ca_impl_02_recovery_rehearsal: VERIFIED_COMPENSATION_FORCE_ROLLBACK_DIVERGENCE_SOURCE_PRESERVATION
 ca_impl_02_adversarial_countertests: VERIFIED_ALL_11_DEFENDED_CT01_TO_CT11
 ca_impl_02_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS_SPOT_CHECK_404
-ca_impl_02_authority_transition_recorded: DUAL_VERIFY_TO_POSTGRES_AUTHORITATIVE_PENDING_OPERATOR_PROMOTION
+ca_impl_02_authority_transition_recorded: DUAL_VERIFY_TO_POSTGRES_AUTHORITATIVE
 ca_impl_02_pytest_suite: 28_PASSED
-ca_impl_02p_promotion_receipt: RECORDED_IMMUTABLE_REPLAY_SAFE_FRESH_READ_DIGEST_MATCH_TRIGGER_BLOCKED_UPDATE
+ca_impl_02p_promotion_gates: VERIFIED_ALL_5_GATES_PASSED_G1_TO_G5
+ca_impl_02p_promotion_receipt: COMMITTED_IMMUTABLE_RCPT_COMMIT_00C2B3F7341E59AF1292FDA7
+ca_impl_02p_effective_authority: POSTGRES_AUTHORITATIVE_FOR_MC_CAE_MED_001_ONLY
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY

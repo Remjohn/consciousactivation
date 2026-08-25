@@ -1,0 +1,253 @@
+# Object Constitution: ImmutableMediaEvidence
+# Phase 05 / CA-CAN-01B Guest & Evidence Constitutions
+
+id: "CA-EVI-001"
+canonical_name: "ImmutableMediaEvidence"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Immutable Evidence"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-003"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-EVI-001"
+    canonical_name: "ImmutableMediaEvidence"
+    common_aliases: ["Raw Media Evidence Bytes", "Binary Evidence Payload", "Immutable Recording Bytes"]
+    naming_standard: "PascalCase singular compound evidence noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Immutable Evidence"
+    class_matrix_id: 6
+    class_rationale: "ImmutableMediaEvidence represents the immutable source binary data (audio/video bytes) captured in private object storage that serves as the factual, empirical foundation for transcription, semantic evaluation, and audit verification."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Represents tenant-isolated binary evidence payloads stored in private object storage; does not exist on the Global Canonical Plane."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Empirical Grounding & Cryptographic Proof"
+    primary_purpose: "Guarantees the immutable integrity of captured participant audio/video recording payloads in private storage, providing a content-addressed factual anchor that downstream transcripts, semantic interpretations, and receipts cannot alter."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Cryptographically immutable binary payload and evidence anchor"
+    differentia: "Distinguished from MediaAsset (the mutable relational metadata record in PostgreSQL) and EvidenceItem (the semantic claim or proposition extracted from the recording) by consisting strictly of immutable binary bytes verified via fresh SHA-256 digest."
+    function: "Serves as the tamper-evident, empirical ground truth for participant interviews, perceptual acoustic measurements, and downstream semantic analysis."
+    boundary: "Does not hold relational metadata or lifecycle flags (held in MediaAsset); does not represent human interpretations or model inferences (held in EvidenceItem); strictly immutable."
+    normative_definition: >
+      ImmutableMediaEvidence is an operational Immutable Evidence artifact representing the raw, content-addressed binary payload
+      stored in private object storage for an ingested media recording. It is bound to an acquisition event and verified via
+      fresh-read SHA-256 byte comparison. It is strictly immutable and cannot be overwritten, synthesized, or replaced by downstream
+      transcripts, feature extractions, or semantic interpretations.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The exact raw binary bytes stored in private object storage (storage://cae-media/<workspace_id>/...)."
+      - "The content-addressed ground truth identified by SHA-256 hash."
+      - "The immutable anchor for temporal and byte-range evidence spans."
+    what_it_is_not:
+      - "The PostgreSQL relational metadata row (that is MediaAsset)."
+      - "A derived transcript, summary, or acoustic pitch contour (those are Derived Artifacts)."
+      - "A semantic assessment or hypothesis (that is SemanticAssessment)."
+      - "A temporary signed download URL."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "MediaAsset (CA-ENT-002)"
+        distinction: "MediaAsset manages the relational metadata, lifecycle, and access policies in PostgreSQL; ImmutableMediaEvidence is the actual binary byte payload in private storage."
+      - neighbor: "EvidenceItem (CA-EVI-002 / Operational Entity)"
+        distinction: "EvidenceItem is a structured semantic claim; ImmutableMediaEvidence is the raw audio/video byte stream that supports the claim."
+      - neighbor: "DerivedTranscript (Derived Semantic Artifact)"
+        distinction: "DerivedTranscript is an interpretation compiled from the audio; ImmutableMediaEvidence is the immutable acoustic recording itself."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Evidence Grounding & Storage Reality"
+    tier: "Workspace-Scoped Immutable Evidence"
+    specialization: "Binary Media Evidence Payload"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "constitutional"
+    lifecycle_phases: ["CAPTURED_AND_SEALED", "PURGED_BY_COMPLIANCE"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "evidence_bytes_id"
+        type: "UUID"
+        description: "Primary unique identifier for the immutable evidence byte object."
+      - name: "media_asset_id"
+        type: "UUID"
+        description: "Foreign key to the owning MediaAsset metadata entity."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key anchoring the evidence payload strictly to its parent Workspace."
+      - name: "storage_uri"
+        type: "STRING"
+        description: "Deterministic private object storage URI (storage://cae-media/<workspace_id>/...)."
+      - name: "content_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 digest of the exact binary payload."
+      - name: "byte_count"
+        type: "INTEGER"
+        description: "Exact count of payload bytes."
+      - name: "captured_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when payload was verified and sealed in storage."
+      - name: "acquisition_source"
+        type: "STRING"
+        description: "Ingestion origin identifier (e.g. 'INTERVIEW_EXPRESSION_BRIDGE_WP09')."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["MediaAsset", "Workspace"]
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "EvidenceSpan"
+        cardinality: "0:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "CAPTURED_AND_SEALED"
+    terminal_states: ["PURGED_BY_COMPLIANCE"]
+    states: ["CAPTURED_AND_SEALED", "PURGED_BY_COMPLIANCE"]
+    transitions:
+      - from: "CAPTURED_AND_SEALED"
+        to: "PURGED_BY_COMPLIANCE"
+        operation: "purge_evidence_bytes"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "immutable_evidence.sealed"
+      - event_name: "immutable_evidence.purged"
+    subscribed_events:
+      - event_name: "workspace.purged"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Cryptographically verified upload to private object storage via typed capture bridge"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-EVI-001: ImmutableMediaEvidence payload bytes MUST NEVER be modified, mutated, or overwritten after initial verification."
+      - "INV-EVI-002: Content-addressing via SHA-256 digest is the sole authoritative verification metric; bytes MUST match content_sha256 on fresh readback."
+      - "INV-EVI-003: Immutable evidence MUST NOT be silently replaced, updated, or overridden by derived transcripts or model interpretations."
+      - "INV-EVI-004: Evidence payload storage is strictly isolated to the workspace private bucket path; cross-tenant direct reads are forbidden."
+      - "INV-EVI-005: Deletion or destruction of evidence payload requires an immutable cryptographic compliance receipt."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "Definition Grammar Bundle §06; Builder ADR-003; CA-MAP-01 Matrix; Collision Register COL-MAP-003"
+    runtime_representation: "Private Supabase/S3 Storage Object in cae-media bucket (verified by fresh-read byte hash)"
+    promotion_authority: "Cryptographic Ingestion Hash Verifier / Storage Controller via typed semantic operations"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "seal_evidence_bytes"
+        parameters: ["workspace_id", "media_asset_id", "storage_uri", "content_sha256", "byte_count"]
+      - name: "verify_evidence_integrity"
+        parameters: ["evidence_bytes_id", "readback_sha256"]
+      - name: "purge_evidence_bytes"
+        parameters: ["evidence_bytes_id", "compliance_destruction_receipt"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT modify stored bytes under an existing storage_uri or content_sha256."
+      - "MUST NOT treat database status rows as proof of storage payload existence without byte verification."
+      - "MUST NOT substitute derived text or transcripts for raw audio evidence."
+      - "MUST NOT allow unauthenticated or public access to storage payload URIs."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify content_sha256 is exactly 64 lowercase hexadecimal characters."
+      - "Verify byte_count matches exact byte length of stored payload."
+    semantic_validators:
+      - "Verify fresh readback of storage_uri reproduces content_sha256 before sealing."
+      - "Verify storage_uri is rooted within the private workspace prefix."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_EVIDENCE_CORRUPTED"
+        http_status: 500
+        description: "Fresh readback of object storage payload failed SHA-256 integrity check."
+      - code: "ERR_EVIDENCE_PAYLOAD_MISSING"
+        http_status: 404
+        description: "Referenced storage object not found in private bucket."
+      - code: "ERR_EVIDENCE_IMMUTABILITY_BREACH"
+        http_status: 409
+        description: "Attempted mutation of sealed immutable evidence payload."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "storage://cae-media/<workspace_id>/assets/<content_sha256> (Object Storage Payload)"
+    rls_boundary_column: "workspace_id (Object Storage Private Path Policy)"
+    storage_boundary: "storage://cae-media/<workspace_id>/"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Acoustic / Perceptual Feature Extractor"
+      - "Transcription Engine"
+      - "Evidence Integrity Verification Service"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What are the exact, uncorrupted binary bytes recorded for this participant session?"
+      - "Does the binary payload in private storage match the cryptographic SHA-256 seal established at capture?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-EVI-001"
+        description: "Sealed immutable WAV audio payload in private storage."
+        attributes:
+          evidence_bytes_id: "99999999-9999-9999-9999-999999999999"
+          media_asset_id: "88888888-8888-8888-8888-888888888888"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          storage_uri: "storage://cae-media/11111111-1111-1111-1111-111111111111/assets/a1b2c3d4e5f6.wav"
+          content_sha256: "a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0"
+          byte_count: 5242880
+          acquisition_source: "INTERVIEW_EXPRESSION_BRIDGE_WP09"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-EVI-001"
+        description: "Replacing raw audio bytes with an AI-generated transcript and claiming evidence verification is complete."
+        rejection_reason: "Violates Meta-Law §4, Section 5, and INV-EVI-003; derived interpretations cannot replace immutable empirical evidence."
+      - id: "NEG-EVI-002"
+        description: "Rewriting an evidence claim to match an updated hypothesis while source audio bytes remain unchanged."
+        rejection_reason: "Violates Section 5; evidence claims must strictly reflect underlying observed bytes, not retrofitted interpretations."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01B)"
+        summary: "Initial draft constitution establishing ImmutableMediaEvidence as workspace-scoped immutable evidence artifact."

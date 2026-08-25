@@ -28,6 +28,31 @@ class UnauthorizedOperatorAccessError(TenancyError):
     pass
 
 
+class CrossWorkspaceLeakError(TenancyError):
+    """Raised when an operation attempts to link or access entities across different workspaces."""
+    pass
+
+
+class UnverifiedMediaDigestError(TenancyError):
+    """Raised when media bytes do not match the claimed cryptographic SHA-256 digest."""
+    pass
+
+
+class ReceiptSelfAttestationViolationError(TenancyError):
+    """Raised when an execution receipt attempts to self-attest qualitative/taste/truth claims."""
+    pass
+
+
+class StaleVersionConflictError(TenancyError):
+    """Raised when optimistic concurrency version locking detects a concurrent mutation."""
+    pass
+
+
+class IdempotencyPayloadMismatchError(TenancyError):
+    """Raised when an idempotency key is reused with a different canonical payload."""
+    pass
+
+
 @dataclass(frozen=True, slots=True)
 class TenantContext:
     workspace_id: UUID

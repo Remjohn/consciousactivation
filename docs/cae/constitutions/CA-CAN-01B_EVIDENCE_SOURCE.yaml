@@ -1,0 +1,269 @@
+# Object Constitution: EvidenceSource
+# Phase 05 / CA-CAN-01B Guest & Evidence Constitutions
+
+id: "CA-REL-004"
+canonical_name: "EvidenceSource"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Relation"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-003"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REL-004"
+    canonical_name: "EvidenceSource"
+    common_aliases: ["SourcePackage", "Canonical Source Package", "Evidence Ingestion Envelope", "Interview Source Package"]
+    naming_standard: "PascalCase singular compound relation noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Relation"
+    class_matrix_id: 3
+    class_rationale: "EvidenceSource defines the operational relation and provenance envelope binding an external source ingestion package to a Workspace and its target MediaAsset, preserving upstream origin metadata without granting external systems write authority over CAE state."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Maintains operational provenance relations for ingested source packages within a client Workspace; does not exist on the Global Canonical Plane."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Source Adapter & Ingestion Provenance"
+    primary_purpose: "Acts as the governed provenance bridge between external source systems (such as Interview Expression or direct client ingest) and CAE, recording upstream package digests, source authority assertions, and file locators before evidence capture."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational provenance envelope and source ingestion relation"
+    differentia: "Distinguished from MediaAsset (the internal content-addressed asset entity) and InterviewSession (the conversational turn container) by bounding the external package origin, upstream source digest, and legacy authority claims into an immutable relational envelope."
+    function: "Records and verifies the upstream source package metadata, payload hash, and origin system context for ingested media before promoting to verified CAE evidence."
+    boundary: "Does not grant external systems permission authority in CAE; does not contain raw audio bytes directly (stored in object storage); cannot cross workspace boundaries."
+    normative_definition: >
+      EvidenceSource is a Workspace-scoped operational Relation that binds an external source ingestion package to a target
+      MediaAsset and parent Workspace. It captures upstream source metadata, package digests, and origin declarations, enforcing
+      hash verification prior to admission. Upstream source authority fields are preserved as evidentiary provenance and never
+      interpreted as administrative access grants within CAE.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The relational provenance record connecting external ingestion packages to CAE."
+      - "The container for upstream package hashes and legacy source authority declarations."
+      - "The required relational precursor for typed evidence capture operations."
+    what_it_is_not:
+      - "A permission or security authority grant in CAE."
+      - "The raw media payload in object storage."
+      - "A global source repository spanning client workspaces."
+      - "An interview transcript or semantic evaluation."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "MediaAsset (CA-ENT-002)"
+        distinction: "EvidenceSource is the upstream provenance envelope; MediaAsset is the internal CAE asset entity holding storage locators and verification lifecycle."
+      - neighbor: "ImmutableMediaEvidence (CA-EVI-001)"
+        distinction: "EvidenceSource contains upstream metadata and package structure; ImmutableMediaEvidence contains the raw binary recording bytes in object storage."
+      - neighbor: "InterviewSession (CA-ENT-005)"
+        distinction: "EvidenceSource is the ingestion source package; InterviewSession is the conversational turn aggregate."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Ingestion Provenance & Bridge Architecture"
+    tier: "Workspace-Scoped Ingestion Relation"
+    specialization: "Standard Evidence Source Package"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["ADMITTED", "VERIFIED", "QUARANTINED", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "source_package_id"
+        type: "UUID"
+        description: "Primary unique identifier for the evidence source package."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key anchoring the source package strictly to its parent Workspace."
+      - name: "media_asset_id"
+        type: "UUID"
+        description: "Foreign key to the associated MediaAsset."
+      - name: "source_type"
+        type: "STRING"
+        description: "Source system classification (e.g. 'INTERVIEW_EXPRESSION', 'DIRECT_CLIENT_UPLOAD')."
+      - name: "source_package_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic hash of the upstream source package manifest or payload."
+      - name: "external_reference_uri"
+        type: "STRING"
+        description: "Upstream system logical identifier or file locator."
+      - name: "admitted_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when package was admitted by bridge adapter."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "Lifecycle status (ADMITTED, VERIFIED, QUARANTINED, SUPERSEDED)."
+      - name: "upstream_payload_snapshot"
+        type: "JSONB"
+        description: "Preserved upstream metadata, participant pseudonyms, and legacy authority declarations."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last modification."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace"]
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "MediaAsset"
+        cardinality: "1:1"
+      - child_object: "EvidenceItem"
+        cardinality: "0:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "ADMITTED"
+    terminal_states: ["SUPERSEDED"]
+    states: ["ADMITTED", "VERIFIED", "QUARANTINED", "SUPERSEDED"]
+    transitions:
+      - from: "ADMITTED"
+        to: "VERIFIED"
+        operation: "verify_source_package"
+      - from: "ADMITTED"
+        to: "QUARANTINED"
+        operation: "quarantine_source_package"
+      - from: "VERIFIED"
+        to: "QUARANTINED"
+        operation: "quarantine_source_package"
+      - from: "VERIFIED"
+        to: "SUPERSEDED"
+        operation: "supersede_source_package"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "source_package.admitted"
+      - event_name: "source_package.verified"
+      - event_name: "source_package.quarantined"
+      - event_name: "source_package.superseded"
+    subscribed_events:
+      - event_name: "workspace.purged"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Ingested via InterviewExpressionSourceBridge (STC-BRIDGE-000) or client upload adapter"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-SRC-001: Every EvidenceSource MUST belong to exactly one Workspace (workspace_id) and reference a valid media_asset_id."
+      - "INV-SRC-002: Upstream legacy source metadata (e.g. source_authority) is preserved as immutable provenance evidence; it NEVER confers administrative permission authority in CAE."
+      - "INV-SRC-003: Tampering with upstream package payload or failure of source_package_sha256 comparison MUST abort registration before any state transition."
+      - "INV-SRC-004: EvidenceSource is strictly workspace-scoped; cross-tenant source ingestion is prohibited."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01 Source Crosswalk; WP-09 First Vertical Runtime Slice; Phase 0 Object Constitution Protocol"
+    runtime_representation: "cae.source_package (PostgreSQL table scoped by workspace_id)"
+    promotion_authority: "Ingestion Bridge Adapter / Workspace Ingestion Operator via typed operation STC-BRIDGE-000"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "admit_source_package"
+        parameters: ["workspace_id", "source_type", "source_package_sha256", "external_reference_uri", "upstream_payload_snapshot"]
+      - name: "verify_source_package"
+        parameters: ["source_package_id", "media_asset_id"]
+      - name: "quarantine_source_package"
+        parameters: ["source_package_id", "quarantine_reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT admit a source package whose payload digest does not match source_package_sha256."
+      - "MUST NOT interpret legacy source_authority declarations as granting system bypass rights."
+      - "MUST NOT mutate upstream_payload_snapshot after package admission."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify source_package_id, workspace_id, and media_asset_id are valid UUIDv4 strings."
+      - "Verify source_package_sha256 is a 64-character lowercase hexadecimal string."
+    semantic_validators:
+      - "Verify workspace_id matches current tenant RLS context."
+      - "Verify associated media_asset_id exists in same workspace."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_SOURCE_HASH_MISMATCH"
+        http_status: 422
+        description: "Upstream source package payload does not match recorded SHA-256 digest."
+      - code: "ERR_SOURCE_MEDIA_UNRESOLVED"
+        http_status: 404
+        description: "Admitted media asset referenced by source package is missing from storage."
+      - code: "ERR_SOURCE_CROSS_WORKSPACE"
+        http_status: 403
+        description: "Source package workspace does not match target asset workspace."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.source_package"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "storage://cae-media/<workspace_id>/sources/<source_package_id>/"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "InterviewExpressionSourceBridge"
+      - "Evidence Capture Operation (capture_evidence)"
+      - "Audit & Provenance Inspector"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What upstream system generated or provided this media and evidence package?"
+      - "What were the original source metadata, package hashes, and legacy declarations at ingestion time?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-SRC-001"
+        description: "Admitted Interview Expression source package from WP-09 bridge."
+        attributes:
+          source_package_id: "66666666-6666-6666-6666-666666666666"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          media_asset_id: "88888888-8888-8888-8888-888888888888"
+          source_type: "INTERVIEW_EXPRESSION"
+          source_package_sha256: "b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef01"
+          status: "VERIFIED"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-SRC-001"
+        description: "Using legacy source_authority field from an external package to bypass CAE workspace RLS enforcement."
+        rejection_reason: "Violates INV-SRC-002 and Meta-Law §3; external source authority is evidentiary metadata, never CAE administrative privilege."
+      - id: "NEG-SRC-002"
+        description: "Admitting a modified local media file whose byte hash differs from the canonical package declaration."
+        rejection_reason: "Violates INV-SRC-003 and WP-09 verification law; byte mismatch must immediately abort ingestion."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01B)"
+        summary: "Initial draft constitution establishing EvidenceSource as workspace-scoped provenance relation."

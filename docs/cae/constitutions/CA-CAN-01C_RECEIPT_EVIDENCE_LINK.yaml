@@ -1,0 +1,219 @@
+# Object Constitution: ReceiptEvidenceLink
+# Phase 06 / CA-CAN-01C Harness, Receipt, and Relation Constitutions
+
+id: "CA-REL-005"
+canonical_name: "ReceiptEvidenceLink"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Relation"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REL-005"
+    canonical_name: "ReceiptEvidenceLink"
+    common_aliases: ["Receipt Evidence Lineage", "Evidence Lineage Link", "Receipt Evidence Relation"]
+    naming_standard: "PascalCase singular compound relation noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Relation"
+    class_matrix_id: 3
+    class_rationale: "ReceiptEvidenceLink defines the operational many-to-many relation binding an execution Receipt to the specific EvidenceItem instances that justified or resulted from the operation, strictly within the same Workspace."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Represents operational evidence lineage relations within a client Workspace; does not exist on the Global Canonical Plane."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Evidence Lineage & Anti-Reward-Hacking Traceability"
+    primary_purpose: "Connects execution receipts to verified evidence spans, establishing cryptographic proof of reality contact and enabling downstream anti-centroid and anti-reward-hacking verification."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational evidence lineage relation"
+    differentia: "Distinguished from AssessmentEvidenceLink (which connects derived semantic assessments to evidence) by connecting operational execution receipts to evidence items, capturing the operational act's evidentiary basis."
+    function: "Establishes auditable lineage between executed operations and supporting evidence items with explicit typed lineage roles."
+    boundary: "Cannot link receipts and evidence across different Workspaces; does not replace primary evidence bytes or semantic assessment logic."
+    normative_definition: >
+      ReceiptEvidenceLink is a Workspace-scoped Operational Relation that binds an immutable execution Receipt to an EvidenceItem
+      with a declared lineage role (e.g. PRIMARY_SOURCE, SUPPORTING_ANCHOR, VERIFICATION_SAMPLE). Both the receipt and evidence item
+      must belong strictly to the same parent Workspace.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The append-only relational link connecting an execution receipt to an evidence item."
+      - "The lineage record declaring the role played by an evidence item during operation execution."
+      - "The basis for the `cae.v_receipt_evidence_lineage` audit view."
+    what_it_is_not:
+      - "A cross-workspace pointer or identity merge."
+      - "A semantic assessment or qualitative interpretation."
+      - "A mutable link that can be redirected to different evidence post-commit."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "AssessmentEvidenceLink (CA-REL-006)"
+        distinction: "ReceiptEvidenceLink binds an execution receipt to evidence; AssessmentEvidenceLink binds a derived semantic assessment revision to evidence."
+      - neighbor: "EvidenceSpan (CA-REL-003)"
+        distinction: "ReceiptEvidenceLink links a receipt to an evidence item; EvidenceSpan anchors an evidence item to specific temporal/byte offsets in media."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Evidence Lineage & Cryptographic Audit"
+    tier: "Workspace-Scoped Lineage Relation"
+    specialization: "Receipt-to-Evidence Lineage Link"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "runtime"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["COMMITTED", "VERIFIED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "link_id"
+        type: "UUID"
+        description: "Primary unique identifier for the lineage link."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key anchoring the link strictly to its parent Workspace."
+      - name: "receipt_id"
+        type: "UUID"
+        description: "Foreign key to the associated Receipt."
+      - name: "evidence_id"
+        type: "UUID"
+        description: "Foreign key to the associated EvidenceItem."
+      - name: "lineage_role"
+        type: "STRING"
+        description: "Typed lineage role (e.g. 'PRIMARY_SOURCE', 'SUPPORTING_ANCHOR', 'VERIFICATION_SAMPLE')."
+      - name: "linked_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when linkage was atomically committed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace"]
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "COMMITTED"
+    terminal_states: ["COMMITTED"]
+    states: ["COMMITTED"]
+    transitions: []
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "receipt_evidence_link.committed"
+    subscribed_events:
+      - event_name: "workspace.purged"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Committed atomically with execution receipts by FirstSliceSemanticOperations adapter"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-REL-001: Every ReceiptEvidenceLink MUST belong to exactly one Workspace (workspace_id) matching both the receipt_id and evidence_id."
+      - "INV-REL-002: Cross-workspace evidence linking is strictly prohibited; receipt_id and evidence_id MUST share the identical workspace_id."
+      - "INV-REL-003: ReceiptEvidenceLink is strictly immutable once committed."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "WP-07 Execution Receipts & Evidence Lineage; Multi-Tenant Authority and Canonicalization Plan §3"
+    runtime_representation: "cae.receipt_evidence_link (PostgreSQL table scoped by workspace_id)"
+    promotion_authority: "CAE Runtime State Engine / Transactional Operation Adapter at commit time"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "link_receipt_evidence"
+        parameters: ["workspace_id", "receipt_id", "evidence_id", "lineage_role"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT link a receipt in Workspace A to an evidence item in Workspace B."
+      - "MUST NOT mutate or delete a committed ReceiptEvidenceLink record."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify link_id, workspace_id, receipt_id, and evidence_id are valid UUIDv4 strings."
+      - "Verify lineage_role is one of declared legal roles (PRIMARY_SOURCE, SUPPORTING_ANCHOR, VERIFICATION_SAMPLE)."
+    semantic_validators:
+      - "Verify workspace_id matches receipt.workspace_id and evidence_item.workspace_id."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_LINK_CROSS_WORKSPACE"
+        http_status: 403
+        description: "Receipt and evidence item belong to different workspaces."
+      - code: "ERR_LINK_IMMUTABLE"
+        http_status: 403
+        description: "Attempted to mutate an existing lineage link."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.receipt_evidence_link"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL relational table `cae.receipt_evidence_link`"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Evidence Lineage View (`cae.v_receipt_evidence_lineage`)"
+      - "Anti-Reward-Hacking Verifier"
+      - "Compliance & Lineage Auditors"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Which exact evidence items were consumed, produced, or verified during this operation execution?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-REL-001"
+        description: "Lineage link connecting STC-EVID-000 capture receipt to captured evidence item."
+        attributes:
+          link_id: "aaaaaaaa-1111-2222-3333-444444444444"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          receipt_id: "99999999-9999-9999-9999-999999999999"
+          evidence_id: "44444444-4444-4444-4444-444444444444"
+          lineage_role: "PRIMARY_SOURCE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-REL-001"
+        description: "Linking a Receipt in Workspace 1 to an EvidenceItem in Workspace 2 to satisfy a lineage query."
+        rejection_reason: "Violates INV-REL-001, INV-REL-002, and Multi-Tenant Isolation; cross-workspace linkage is strictly forbidden."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01C)"
+        summary: "Initial draft constitution establishing ReceiptEvidenceLink as Workspace-scoped Relation."

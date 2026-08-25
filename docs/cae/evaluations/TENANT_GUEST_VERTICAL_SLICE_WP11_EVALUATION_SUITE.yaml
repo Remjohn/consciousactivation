@@ -1,0 +1,149 @@
+suite_id: cae.tenant_guest_vertical_slice.wp11
+suite_version: 1.0.0
+subject: TS-CAE-TEN-001 Tenant/Guest Vertical Slice Typed Runtime Operations & E3 Containment
+scope: >
+  E3 operational and evidence-lineage claims for the tenant-scoped typed runtime path on Supabase staging.
+  This suite evaluates multi-tenant isolation, state transitions, storage byte readback, append-only receipt
+  lineage, and adversarial hard-negative defenses.
+  This suite is not a semantic, taste, anti-centroid, human, or audience-outcome evaluator.
+environment:
+  required: E3_PRODUCTION_SHAPED
+  actual: E3_PRODUCTION_SHAPED
+  identity: Supabase/PostgreSQL staging pooler (aws-1-eu-west-1.pooler.supabase.com:5432) plus private cae-media Storage
+  persistence: disposable synthetic multi-tenant fixtures; force-cleaned post-run with 0 residual rows and 0 residual objects
+tests:
+  - test_id: WP11-ENV-001
+    claim_id: CAE-TEN-001.storage-byte-reality-contact
+    class: ENVIRONMENT_FIDELITY
+    subject: private storage object readback and media_asset state transition
+    preconditions: [private_storage_available, tenant_context_authenticated]
+    fixture_source: temporary private Supabase Storage object in cae-media bucket with fresh SHA-256 readback
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: verify_ca_impl_01b_staging.py::verify_media_asset
+    assertions: [downloaded_bytes_match_uploaded_bytes, sha256_matches_media_asset_metadata, state_transitions_to_verified]
+    expected_failure_mode: storage bytes or hash differ -> transitions to QUARANTINED
+    reward_hacking_scenario: claiming media verification from metadata presence without reading back actual storage bytes
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+
+  - test_id: WP11-HN-001
+    claim_id: CAE-TEN-001.scope-forgery-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: token claim vs request parameter derivation
+    preconditions: [token_issued_for_workspace_alpha]
+    fixture_source: request attempting to access workspace_beta using workspace_alpha token
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: extract_tenant_context_from_claims
+    assertions: [scope_mismatch_detected, tenancy_violation_raised]
+    expected_failure_mode: TenancyViolationError raised
+    reward_hacking_scenario: trust caller-supplied request body workspace_id instead of cryptographically bound token
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: WP11-HN-002
+    claim_id: CAE-TEN-001.rls-containment-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: PostgreSQL Row-Level Security session variables
+    preconditions: [unauthenticated_or_blank_tenant_session]
+    fixture_source: direct SELECT query executed with blank app.current_workspace_id
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: postgresql_rls_policies
+    assertions: [zero_rows_returned]
+    expected_failure_mode: RLS filters out all tenant data
+    reward_hacking_scenario: query tenant tables using shared service credentials without setting session context
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: WP11-HN-003
+    claim_id: CAE-TEN-001.cross-workspace-relation-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: Composite foreign key and parent containment
+    preconditions: [workspace_alpha_and_workspace_beta_exist]
+    fixture_source: attempt to link media asset in workspace_alpha to engagement in workspace_beta
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: TenantScopedSemanticOperations.verify_media_asset
+    assertions: [cross_workspace_link_rejected, foreign_key_violation_raised]
+    expected_failure_mode: CrossWorkspaceLeakError / ForeignKeyViolation
+    reward_hacking_scenario: link disparate operational records across tenant boundaries
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: WP11-HN-004
+    claim_id: CAE-TEN-001.tampered-bytes-quarantine-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: Byte-level payload tampering detection
+    preconditions: [media_asset_staged_with_falsified_hash]
+    fixture_source: storage object whose actual SHA-256 does not match claimed hash
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: TenantScopedSemanticOperations.verify_media_asset
+    assertions: [hash_mismatch_detected, state_set_to_quarantined, error_raised]
+    expected_failure_mode: UnverifiedMediaDigestError raised, asset state QUARANTINED
+    reward_hacking_scenario: accept corrupted or modified audio bytes as verified evidence
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+
+  - test_id: WP11-HN-008
+    claim_id: CAE-TEN-001.optimistic-concurrency-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: HarnessRun optimistic locking state machine
+    preconditions: [harness_run_at_version_3]
+    fixture_source: step transition command specifying stale expected_version=1
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: TenantScopedSemanticOperations.step_harness_run
+    assertions: [stale_version_rejected, state_conflict_raised]
+    expected_failure_mode: StaleVersionConflictError raised
+    reward_hacking_scenario: overwrite concurrent aggregate state transitions without version locking
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: WP11-HN-009
+    claim_id: CAE-TEN-001.idempotency-payload-mismatch-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: Idempotent operation re-execution
+    preconditions: [operation_receipt_persisted]
+    fixture_source: identical idempotency_key submitted with altered command payload
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: TenantScopedSemanticOperations._idempotent_replay_check
+    assertions: [payload_hash_mismatch_detected, conflict_raised]
+    expected_failure_mode: IdempotencyPayloadMismatchError raised
+    reward_hacking_scenario: reuse previous execution receipt to mask differing mutation payload
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
+
+  - test_id: WP11-HN-010
+    claim_id: CAE-TEN-001.immutable-receipt-defense
+    class: ADVERSARIAL_HARD_NEGATIVE
+    subject: Database trigger trg_prevent_receipt_mutation
+    preconditions: [receipt_persisted_in_cae_receipt]
+    fixture_source: raw SQL UPDATE or DELETE command targeting cae.receipt table
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: postgresql_trigger_trg_prevent_receipt_mutation
+    assertions: [mutation_blocked, trigger_exception_raised]
+    expected_failure_mode: PostgreSQL trigger raises exception
+    reward_hacking_scenario: mutate or erase audit receipt trail post-execution
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: false
