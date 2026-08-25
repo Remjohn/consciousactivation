@@ -1,0 +1,56 @@
+skill_id: "cae_requirement_traceability_author"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only static traceability and contract completeness; does not prove runtime functional correctness."
+
+test_fixtures:
+  - id: "FIX-REQ-POS-001"
+    name: "Valid Requirement Media Verification"
+    type: "positive_anchor"
+    input:
+      requirement_id: "FR-CAE-MEDIA-001"
+      title: "Media Asset Content Verification"
+      narrative_description: "System must verify content SHA-256 and byte size upon ingestion before advancing to VERIFIED."
+      source_constitution_id: "CA-ENT-002"
+      collision_review_receipt_id: "RCP-REV-8f3a9d12"
+      functional_slice: "Evidence Ingestion"
+      operations_and_transitions:
+        - operation_id: "verify_media_asset"
+          from_state: "STAGED"
+          to_state: "VERIFIED"
+          error_codes: ["ERR_SHA256_MISMATCH", "ERR_STORAGE_UNREACHABLE"]
+      verification_fidelity: "E3_STAGING_PERSISTENCE"
+      false_proof_countertests:
+        - "Countertest: Reject simulated verification without fresh HEAD/GET readback from storage."
+    expected_verdict: "RATIFIED_REQUIREMENT"
+
+  - id: "FIX-REQ-NEG-001"
+    name: "Deceptive Negative: Orphan Requirement Without Constitution"
+    type: "deceptive_negative"
+    input:
+      requirement_id: "FR-CAE-ORPHAN-001"
+      title: "Arbitrary AI Insight Generator"
+      narrative_description: "Automatically generates insights without underlying evidence model."
+      source_constitution_id: "CA-NONEXISTENT-999"
+      collision_review_receipt_id: ""
+      functional_slice: "AI Processing"
+      operations_and_transitions: []
+      verification_fidelity: "E1_STATIC"
+      false_proof_countertests: []
+    expected_verdict: "REJECTED_ORPHAN_REQUIREMENT"
+    expected_rejection_reason: "Referenced constitution CA-NONEXISTENT-999 is missing or unratified."
+
+  - id: "FIX-REQ-NEG-002"
+    name: "Deceptive Negative: Missing State Transitions"
+    type: "deceptive_negative"
+    input:
+      requirement_id: "FR-CAE-MEDIA-002"
+      title: "Media Asset State Update"
+      narrative_description: "Updates state directly without defining transition contract."
+      source_constitution_id: "CA-ENT-002"
+      collision_review_receipt_id: "RCP-REV-8f3a9d12"
+      functional_slice: "Evidence Ingestion"
+      operations_and_transitions: []
+      verification_fidelity: "E3_STAGING_PERSISTENCE"
+      false_proof_countertests: ["Countertest present"]
+    expected_verdict: "REJECTED_INCOMPLETE_TRACEABILITY"
+    expected_rejection_reason: "Stateful requirement must bind to explicit state transitions."

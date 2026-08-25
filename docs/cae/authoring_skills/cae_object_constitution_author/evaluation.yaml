@@ -1,0 +1,38 @@
+skill_id: "cae_object_constitution_author"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only constitutional structure and dimension completeness; does not prove runtime semantics or semantic truth."
+
+test_fixtures:
+  - id: "FIX-CONST-POS-001"
+    name: "Valid Entity Constitution Workspace"
+    type: "positive_anchor"
+    input:
+      canonical_id: "CA-ENT-001"
+      object_name: "Workspace"
+      validated_scope_mapping:
+        plane: "OPERATIONAL_PLANE"
+        scope_class: "WORKSPACE_SCOPED"
+        legal_parent_chain: ["Workspace"]
+      primary_artifact_class: "Entity"
+      class_grammar_file: "01_ENTITY_DEFINITION_GRAMMAR.md"
+      dimension_inputs:
+        dimensions_count: 26
+        all_dimensions_addressed: true
+    expected_verdict: "DRAFT_COMPLETE"
+
+  - id: "FIX-CONST-NEG-001"
+    name: "Deceptive Negative: Multi-Class Conflation (Entity + Event + Packet)"
+    type: "deceptive_negative"
+    input:
+      canonical_id: "CA-CONFL-001"
+      object_name: "GenericTransactionBlob"
+      validated_scope_mapping:
+        plane: "OPERATIONAL_PLANE"
+        scope_class: "WORKSPACE_SCOPED"
+        legal_parent_chain: ["Workspace"]
+      primary_artifact_class: "Entity"
+      class_grammar_file: "01_ENTITY_DEFINITION_GRAMMAR.md"
+      dimension_inputs:
+        attempted_classes: ["Entity", "Event", "Execution Packet"]
+    expected_verdict: "REJECTED_AMBIGUOUS_CLASS"
+    expected_rejection_reason: "Object cannot combine multiple primary classes; must be split."

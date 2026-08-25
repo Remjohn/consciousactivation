@@ -1,0 +1,48 @@
+type: object
+required:
+  - spec_id
+  - spec_title
+  - target_work_package
+  - spec_document_path
+  - declared_gates
+properties:
+  spec_id:
+    type: string
+    pattern: "^TS-CAE-[A-Z0-9_-]+$"
+  spec_title:
+    type: string
+  target_work_package:
+    type: string
+  spec_document_path:
+    type: string
+  declared_gates:
+    type: object
+    required:
+      - gate_a_scope
+      - gate_b_object_model
+      - gate_c_operations
+      - gate_d_schema_security
+      - gate_e_idempotency
+      - gate_f_receipts
+      - gate_g_errors
+      - gate_h_reality_contact
+      - gate_i_rollback
+    properties:
+      gate_a_scope:
+        type: object
+      gate_b_object_model:
+        type: object
+      gate_c_operations:
+        type: object
+      gate_d_schema_security:
+        type: object
+      gate_e_idempotency:
+        type: object
+      gate_f_receipts:
+        type: object
+      gate_g_errors:
+        type: object
+      gate_h_reality_contact:
+        type: object
+      gate_i_rollback:
+        type: object

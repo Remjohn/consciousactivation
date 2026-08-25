@@ -1,0 +1,48 @@
+skill_id: "cae_state_migration_contract_author"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only static contract validity and protocol adherence; does not execute database migration or data cutover."
+
+test_fixtures:
+  - id: "FIX-MIG-POS-001"
+    name: "Valid MediaAsset State Migration Contract"
+    type: "positive_anchor"
+    input:
+      contract_id: "MC-CAE-MEDIA-001"
+      aggregate_name: "MediaAsset"
+      legacy_authority_source:
+        store_type: "Local Filesystem / SQLite"
+        write_boundary: "services/interview"
+      target_postgres_schema:
+        table_name: "cae.media_asset"
+        rls_boundary_column: "workspace_id"
+      planned_stages:
+        - "LEGACY_ONLY"
+        - "DUAL_VERIFY"
+        - "POSTGRES_AUTHORITATIVE"
+        - "LEGACY_READ_ONLY"
+        - "RETIRED"
+      data_disposition_plan:
+        - entity_name: "interview_recording"
+          disposition: "MIGRATE"
+        - entity_name: "temp_audio_chunk"
+          disposition: "DISCARD_WITH_RECORD"
+      execution_action_permitted: false
+    expected_verdict: "CONTRACT_RATIFIED_SPEC_ONLY"
+
+  - id: "FIX-MIG-NEG-001"
+    name: "Deceptive Negative: Contract Attempting Runtime Backfill Execution"
+    type: "deceptive_negative"
+    input:
+      contract_id: "MC-CAE-EXEC-001"
+      aggregate_name: "Campaign"
+      legacy_authority_source:
+        store_type: "api/domain/campaign.py SQLite"
+        write_boundary: "api"
+      target_postgres_schema:
+        table_name: "cae.campaign"
+        rls_boundary_column: "workspace_id"
+      planned_stages: ["LEGACY_ONLY", "POSTGRES_AUTHORITATIVE"]
+      data_disposition_plan: []
+      execution_action_permitted: true
+    expected_verdict: "PROHIBITED_ACTION_MIGRATION_EXECUTION_FORBIDDEN"
+    expected_rejection_reason: "Authoring skill cannot authorize or execute live data movement."

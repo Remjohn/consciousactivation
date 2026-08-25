@@ -1,0 +1,40 @@
+type: object
+required:
+  - receipt_id
+  - skill_id
+  - skill_version
+  - evaluated_object
+  - execution_timestamp_utc
+  - validator_result
+  - authority_source_version
+  - unresolved_questions
+properties:
+  receipt_id:
+    type: string
+    pattern: "^RCP-MAP-[0-9a-f]{8}$"
+  skill_id:
+    type: string
+    const: "cae_scope_authority_mapper"
+  skill_version:
+    type: string
+  evaluated_object:
+    type: string
+  execution_timestamp_utc:
+    type: string
+  validator_result:
+    type: string
+    enum:
+      - "PASS"
+      - "FAIL_CONTRACT_CONFLICT"
+      - "FAIL_SPLIT_REQUIRED"
+      - "FAIL_PENDING_DECISION"
+  authority_source_version:
+    type: string
+  input_hash_sha256:
+    type: string
+  output_hash_sha256:
+    type: string
+  unresolved_questions:
+    type: array
+    items:
+      type: string

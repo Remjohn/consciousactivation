@@ -1,0 +1,43 @@
+type: object
+required:
+  - receipt_id
+  - skill_id
+  - skill_version
+  - authored_canonical_id
+  - authored_object_name
+  - primary_class_selected
+  - execution_timestamp_utc
+  - validator_result
+  - dimension_count_verified
+  - unresolved_dimensions
+properties:
+  receipt_id:
+    type: string
+    pattern: "^RCP-CONST-[0-9a-f]{8}$"
+  skill_id:
+    type: string
+    const: "cae_object_constitution_author"
+  skill_version:
+    type: string
+  authored_canonical_id:
+    type: string
+  authored_object_name:
+    type: string
+  primary_class_selected:
+    type: string
+  execution_timestamp_utc:
+    type: string
+  validator_result:
+    type: string
+    enum:
+      - "PASS_DRAFT_COMPLETE"
+      - "FAIL_AMBIGUOUS_CLASS"
+      - "FAIL_DIMENSION_DEFECT"
+  dimension_count_verified:
+    type: integer
+    minimum: 26
+    maximum: 26
+  unresolved_dimensions:
+    type: array
+    items:
+      type: string

@@ -1,0 +1,55 @@
+type: object
+required:
+  - requirement_id
+  - title
+  - narrative_description
+  - source_constitution_id
+  - collision_review_receipt_id
+  - functional_slice
+  - operations_and_transitions
+  - verification_fidelity
+properties:
+  requirement_id:
+    type: string
+    pattern: "^FR-CAE-[A-Z]+-[0-9]{3}$"
+  title:
+    type: string
+  narrative_description:
+    type: string
+  source_constitution_id:
+    type: string
+  collision_review_receipt_id:
+    type: string
+  functional_slice:
+    type: string
+  operations_and_transitions:
+    type: array
+    items:
+      type: object
+      required:
+        - operation_id
+        - from_state
+        - to_state
+        - error_codes
+      properties:
+        operation_id:
+          type: string
+        from_state:
+          type: string
+        to_state:
+          type: string
+        error_codes:
+          type: array
+          items:
+            type: string
+  verification_fidelity:
+    type: string
+    enum:
+      - "E1_STATIC"
+      - "E2_REPOSITORY_FIXTURE"
+      - "E3_STAGING_PERSISTENCE"
+      - "E4_PRODUCTION_RUNTIME"
+  false_proof_countertests:
+    type: array
+    items:
+      type: string

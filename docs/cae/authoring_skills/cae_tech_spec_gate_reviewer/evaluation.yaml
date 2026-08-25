@@ -1,0 +1,45 @@
+skill_id: "cae_tech_spec_gate_reviewer"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only static specification compliance with Gates A–I; does not execute implementation or verify live system security."
+
+test_fixtures:
+  - id: "FIX-GATE-POS-001"
+    name: "Valid First Slice Evidence Tech Spec (TS-CAE-EVID-001)"
+    type: "positive_anchor"
+    input:
+      spec_id: "TS-CAE-EVID-001"
+      spec_title: "Evidence-to-AIR First Vertical Slice Implementation Tech Spec"
+      target_work_package: "WP-05"
+      spec_document_path: "docs/cae/implementation/TS-CAE-EVID-001_EVIDENCE_TO_AIR_FIRST_SLICE.md"
+      declared_gates:
+        gate_a_scope: { status: "PASS", tenant_boundary: "Workspace" }
+        gate_b_object_model: { status: "PASS", source_constitutions: ["CA-ENT-001", "CA-ENT-002"] }
+        gate_c_operations: { status: "PASS", typed_operations_count: 3 }
+        gate_d_schema_security: { status: "PASS", rls_enforced: true, storage_buckets_private: true }
+        gate_e_idempotency: { status: "PASS", idempotency_key_enforced: true }
+        gate_f_receipts: { status: "PASS", lineage_verified: true }
+        gate_g_errors: { status: "PASS", typed_errors_count: 5 }
+        gate_h_reality_contact: { status: "PASS", countertests_defined: true }
+        gate_i_rollback: { status: "PASS", rollback_sql_provided: true }
+    expected_verdict: "GATES_CLEARED_RECOMMENDED_FOR_OPERATOR_GATE"
+
+  - id: "FIX-GATE-NEG-001"
+    name: "Deceptive Negative: Spec Omitting RLS Isolation (Gate D Failure)"
+    type: "deceptive_negative"
+    input:
+      spec_id: "TS-CAE-INSECURE-001"
+      spec_title: "Unsecured Shared Workspace Storage Spec"
+      target_work_package: "WP-XX"
+      spec_document_path: "docs/cae/implementation/TS-INSECURE.md"
+      declared_gates:
+        gate_a_scope: { status: "PASS" }
+        gate_b_object_model: { status: "PASS" }
+        gate_c_operations: { status: "PASS" }
+        gate_d_schema_security: { status: "FAIL", rls_enforced: false, storage_buckets_private: false }
+        gate_e_idempotency: { status: "PASS" }
+        gate_f_receipts: { status: "PASS" }
+        gate_g_errors: { status: "PASS" }
+        gate_h_reality_contact: { status: "PASS" }
+        gate_i_rollback: { status: "PASS" }
+    expected_verdict: "FAILED_GATE_VIOLATION"
+    expected_failed_gates: ["Gate D (Relational & Storage Security)"]

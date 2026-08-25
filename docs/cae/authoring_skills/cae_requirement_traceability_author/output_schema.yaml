@@ -1,0 +1,59 @@
+type: object
+required:
+  - requirement_id
+  - title
+  - source_constitution_id
+  - acceptance_criteria
+  - bound_transitions
+  - error_contracts
+  - verification_contract
+  - traceability_status
+properties:
+  requirement_id:
+    type: string
+  title:
+    type: string
+  source_constitution_id:
+    type: string
+  acceptance_criteria:
+    type: array
+    items:
+      type: string
+  bound_transitions:
+    type: array
+    items:
+      type: object
+      properties:
+        operation_id:
+          type: string
+        transition:
+          type: string
+        idempotency_scope:
+          type: string
+  error_contracts:
+    type: array
+    items:
+      type: string
+  verification_contract:
+    type: object
+    required:
+      - required_fidelity
+      - false_proof_countertests
+    properties:
+      required_fidelity:
+        type: string
+      required_receipts:
+        type: array
+        items:
+          type: string
+      false_proof_countertests:
+        type: array
+        items:
+          type: string
+  traceability_status:
+    type: string
+    enum:
+      - "RATIFIED_REQUIREMENT"
+      - "REJECTED_ORPHAN_REQUIREMENT"
+      - "REJECTED_INCOMPLETE_TRACEABILITY"
+      - "PENDING_CONSTITUTION"

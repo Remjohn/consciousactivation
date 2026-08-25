@@ -1,0 +1,38 @@
+type: object
+required:
+  - receipt_id
+  - skill_id
+  - skill_version
+  - authored_suite_id
+  - execution_timestamp_utc
+  - validator_result
+  - fidelity_level
+  - countertests_count
+  - non_claims_count
+properties:
+  receipt_id:
+    type: string
+    pattern: "^RCP-REAL-[0-9a-f]{8}$"
+  skill_id:
+    type: string
+    const: "cae_reality_contact_proof_author"
+  skill_version:
+    type: string
+  authored_suite_id:
+    type: string
+  execution_timestamp_utc:
+    type: string
+  validator_result:
+    type: string
+    enum:
+      - "PASS_SUITE_VALIDATED"
+      - "FAIL_FALSE_REALITY_CLAIM"
+      - "FAIL_MISSING_COUNTERTESTS"
+  fidelity_level:
+    type: string
+  countertests_count:
+    type: integer
+    minimum: 1
+  non_claims_count:
+    type: integer
+    minimum: 1
