@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `CA_CAN_01A_COMPLETE_PENDING_OPERATOR_REVIEW`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-CAN-01A Mandate
+**Control status:** `CA_IMPL_01A_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-IMPL-01A Mandate
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-CAN-01A — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, and CA-CAN-01A boundary/access/engagement object constitutions. No legacy service authority, production environment, SQL schema, or runtime behavior was changed.
+**Scope:** WP-00 through CA-IMPL-01A — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, and CA-IMPL-01A Tenant-Scoped Staging Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero data movement occurred.
 
 ## Required control fields
 
@@ -31,24 +31,23 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-CAN-01A Boundary, Access, and Engagement Object Constitutions
+current_work_package: CA-IMPL-01A Tenant-Scoped Staging Foundation
 objective: >
-  Author 6 foundational 26-dimension object constitutions (OperatorOrganization,
-  Workspace, WorkspaceMembership, Engagement, OperatorAccessPolicy, OperatorAccessGrant),
-  enforce 3 authority axes, preserve Workspace as root tenant boundary, ratify
-  the OperatorAccessPolicy/Grant split, evaluate 9 hard-negative fixtures, produce
-  independent collision review record, and run static validation.
+  Implement approved staging relational containment, composite parent-chain foreign keys,
+  Row-Level Security (RLS) policies, private Storage policies, Pydantic v2 domain models,
+  thread-safe tenancy context management, and comprehensive E3 staging verifier with
+  all 11 hard-negative defenses and 100% transient cleanup.
 agent_id: Antigravity / Gemini 3.7 Flash (High)
-git_commit: main (CA-CAN-01A constitutions completed)
+git_commit: main (CA-IMPL-01A staging foundation, tenancy models, DDL, verifier, and proof artifacts completed)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
   python: 3.12.0
   node: v24.11.0
-  state_environment_variables_observed: []
-  api_default_state_root_when_unconfigured: /state
+  staging_postgres_pooler: aws-1-eu-west-1.pooler.supabase.com:5432/postgres (ref: evnxdssbxxrsesftdvgx)
+  staging_storage_bucket: cae-media (private)
 last_updated: 2026-08-25
-next_transition: OPERATOR_REVIEW -> CA-CAN-01B (Guest, media, and evidence constitutions only after operator approval)
+next_transition: OPERATOR_REVIEW -> CA-IMPL-01B (Typed semantic operations and narrow runtime path)
 ```
 
 ## Authoritative documents loaded
@@ -305,6 +304,46 @@ ca_can_01a_constitutions_completeness: VERIFIED_6_CONSTITUTIONS_ALL_26_DIMENSION
 ca_can_01a_collision_review: APPROVED_NO_COLLISIONS
 ca_can_01a_hard_negatives: VERIFIED_9_FIXTURES_REJECTED_AS_EXPECTED
 ca_can_01a_static_verification: PASS
+ca_can_01b_constitutions_completeness: VERIFIED_5_CONSTITUTIONS_ALL_26_DIMENSIONS
+ca_can_01b_collision_review: APPROVED_NO_COLLISIONS
+ca_can_01b_hard_negatives: VERIFIED_11_FIXTURES_REJECTED_AS_EXPECTED
+ca_can_01b_static_verification: PASS
+ca_can_01c_constitutions_completeness: VERIFIED_4_CONSTITUTIONS_ALL_26_DIMENSIONS
+ca_can_01c_relation_map: VERIFIED_10_RELATIONS_GLOBAL_TO_OPERATIONAL
+ca_can_01c_contradiction_closure: VERIFIED_12_CONTRADICTIONS_CLOSED_OR_QUARANTINED
+ca_can_01c_collision_review: APPROVED_NO_COLLISIONS
+ca_can_01c_hard_negatives: VERIFIED_11_FIXTURES_REJECTED_AS_EXPECTED
+ca_can_01c_static_verification: PASS
+ca_spec_01_prd_completeness: VERIFIED_PRD_CAE_TEN_001_AUTHORED
+ca_spec_01_fr_completeness: VERIFIED_15_FRS_MANDATORY_14_FIELDS
+ca_spec_01_traceability_matrix: VERIFIED_100_PERCENT_MAPPING
+ca_spec_01_brownfield_impact_map: VERIFIED_ALL_COMPONENTS_CLASSIFIED
+ca_spec_01_deferment_register: VERIFIED_12_COLLISIONS_AND_OUT_OF_SCOPE
+ca_spec_01_hard_negatives: VERIFIED_11_FIXTURES_REJECTED_AS_EXPECTED
+ca_spec_01_static_verification: PASS
+ca_state_01_matrix_completeness: VERIFIED_22_AGGREGATES_4_AXES
+ca_state_01_contracts_completeness: VERIFIED_7_CONTRACTS_5_STAGES
+ca_state_01_crosswalk_completeness: VERIFIED_7_SECTIONS_MOVEMENT_MODES
+ca_state_01_quarantine_register: VERIFIED_6_DEFECTS_ROUTED
+ca_state_01_cutover_decision_ledger: VERIFIED_7_DECISIONS_FIRST_CUTOVER_NOMINATED
+ca_state_01_hard_negatives: VERIFIED_11_FIXTURES_DEFENDED
+ca_state_01_zero_data_movement_guarantee: CONFIRMED_ZERO_ROWS_ZERO_DDL
+ca_state_01_static_verification: PASS
+ca_ts_01_tech_spec_completeness: VERIFIED_14_SECTIONS_EVIDENCE_LOG
+ca_ts_01_gates_a_to_i: VERIFIED_ALL_9_GATES_PASSED
+ca_ts_01_operation_contracts: VERIFIED_10_OPERATIONS_SCOPED_CONTEXT
+ca_ts_01_test_and_proof_plan: VERIFIED_11_HARD_NEGATIVES_E0_TO_E4
+ca_ts_01_allowlist_completeness: VERIFIED_8_ALLOWED_FILES_STRICT_PROHIBITIONS
+ca_ts_01_risk_and_rollback: VERIFIED_6_RISKS_3_PROCEDURES
+ca_ts_01_static_verification: PASS
+ca_impl_01a_models_and_tenancy: VERIFIED_PYDANTIC_V2_AND_CONTEXTVAR
+ca_impl_01a_scaffolding_ddl: APPLIED_SUCCESSFULLY_COMPOSITE_FKS_AND_RLS
+ca_impl_01a_two_workspace_rls: VERIFIED_ISOLATION_PASS
+ca_impl_01a_operator_grant_lifecycle: VERIFIED_PASS_ACTIVE_EXPIRED_REVOKED
+ca_impl_01a_private_storage_byte_hash: VERIFIED_PASS_READBACK_AND_UNAUTH_DENIAL
+ca_impl_01a_hard_negatives: VERIFIED_ALL_11_DEFENDED_HN_TS_001_TO_011
+ca_impl_01a_transient_cleanup: VERIFIED_0_ROWS_0_OBJECTS
+ca_impl_01a_pytest_suite: 13_PASSED
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY

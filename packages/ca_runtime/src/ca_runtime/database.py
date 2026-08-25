@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from contextlib import closing, contextmanager
 from dataclasses import dataclass
 from importlib import resources
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional
+from urllib.parse import urlsplit
 
 from ca_contracts import canonical_json_text, canonical_sha256, utc_now_rfc3339, validate_payload
+import psycopg
 
 
 class ProductDatabaseError(RuntimeError):
@@ -310,3 +313,56 @@ class ProductDatabase:
             event_count=counts["events"],
             receipt_count=counts["receipts"],
         )
+
+
+STAGING_DATABASE_ENV_VAR = "CAE_SUPABASE_DATABASE_URL"
+STAGING_PROJECT_REF = "evnxdssbxxrsesftdvgx"
+
+
+def get_staging_postgres_connection(
+    url: Optional[str] = None,
+    *,
+    connect_timeout: int = 10,
+) -> psycopg.Connection:
+    """Obtain a verified connection to the approved CAE staging Supabase session pooler.
+
+    Fails if the connection URL points to an unapproved host or non-pooler endpoint.
+    """
+    target_url = url or os.environ.get(STAGING_DATABASE_ENV_VAR, "")
+    if not target_url:
+        raise ProductDatabaseError(
+            f"Staging database URL not configured; set {STAGING_DATABASE_ENV_VAR}"
+        )
+
+    parsed = urlsplit(target_url)
+    if not (
+        parsed.hostname
+        and parsed.hostname.endswith(".pooler.supabase.com")
+        and parsed.port == 5432
+        and parsed.username == f"postgres.{STAGING_PROJECT_REF}"
+    ):
+        raise ProductDatabaseError(
+            f"Connection endpoint is not the approved CAE staging session pooler: {parsed.hostname}"
+        )
+
+    return psycopg.connect(target_url, connect_timeout=connect_timeout)
+
+
+@contextmanager
+def tenant_postgres_transaction(
+    connection: psycopg.Connection,
+    context: Any,
+    *,
+    force_rollback: bool = False,
+) -> Iterator[psycopg.Cursor[object]]:
+    """Context manager executing a PostgreSQL transaction with active TenantContext RLS configuration.
+
+    Applies app.current_workspace_id and related session parameters immediately upon entry.
+    """
+    from ca_runtime.tenancy import apply_tenant_session
+
+    with connection.transaction(force_rollback=force_rollback):
+        with connection.cursor() as cursor:
+            apply_tenant_session(cursor, context)
+            yield cursor
+
