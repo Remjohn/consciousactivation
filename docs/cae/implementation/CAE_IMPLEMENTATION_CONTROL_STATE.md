@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `CA_AUTH_01_COMPLETE_PENDING_OPERATOR_REVIEW`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-AUTH-01 Mandate
+**Control status:** `CA_CAN_01A_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-CAN-01A Mandate
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-AUTH-01 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, and CA-AUTH-01 development-uncertified authoring-control skills and static validators. No legacy service authority, production environment, SQL schema, or runtime behavior was changed.
+**Scope:** WP-00 through CA-CAN-01A — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, and CA-CAN-01A boundary/access/engagement object constitutions. No legacy service authority, production environment, SQL schema, or runtime behavior was changed.
 
 ## Required control fields
 
@@ -31,16 +31,15 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-AUTH-01 Development-Uncertified CAE Authoring Controls and Static Validators
+current_work_package: CA-CAN-01A Boundary, Access, and Engagement Object Constitutions
 objective: >
-  Create bounded development-uncertified authoring-control packages under
-  docs/cae/authoring_skills/ (7 skill packages: scope/authority mapper, object
-  constitution author, constitution collision reviewer, requirement traceability
-  author, state migration contract author, tech spec gate reviewer, reality-contact
-  proof author), typed input/output/receipt schemas, references, shared deceptive
-  negative fixture corpus, and static validator script.
+  Author 6 foundational 26-dimension object constitutions (OperatorOrganization,
+  Workspace, WorkspaceMembership, Engagement, OperatorAccessPolicy, OperatorAccessGrant),
+  enforce 3 authority axes, preserve Workspace as root tenant boundary, ratify
+  the OperatorAccessPolicy/Grant split, evaluate 9 hard-negative fixtures, produce
+  independent collision review record, and run static validation.
 agent_id: Antigravity / Gemini 3.7 Flash (High)
-git_commit: main (CA-AUTH-01 authoring controls completed)
+git_commit: main (CA-CAN-01A constitutions completed)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -49,7 +48,7 @@ environment_identity:
   state_environment_variables_observed: []
   api_default_state_root_when_unconfigured: /state
 last_updated: 2026-08-25
-next_transition: OPERATOR_REVIEW -> CA-CAN-01A (Pilot object constitutions only after operator approval)
+next_transition: OPERATOR_REVIEW -> CA-CAN-01B (Guest, media, and evidence constitutions only after operator approval)
 ```
 
 ## Authoritative documents loaded
@@ -84,6 +83,9 @@ next_transition: OPERATOR_REVIEW -> CA-CAN-01A (Pilot object constitutions only 
 - `docs/cae/gemini_execution/03_CA_AUTH_01_AUTHORING_CONTROLS_MANDATE.md` — operator mandate governing CA-AUTH-01 authoring controls.
 - `docs/cae/authoring_skills/README.md` and 7 authoring skill packages under `docs/cae/authoring_skills/` (`cae_scope_authority_mapper`, `cae_object_constitution_author`, `cae_constitution_collision_reviewer`, `cae_requirement_traceability_author`, `cae_state_migration_contract_author`, `cae_tech_spec_gate_reviewer`, `cae_reality_contact_proof_author`).
 - `docs/cae/authoring_skills/fixtures/corpus.yaml` — 8-case deceptive negative fixture corpus.
+- `docs/cae/gemini_execution/04_CA_CAN_01A_BOUNDARY_ACCESS_CONSTITUTIONS_MANDATE.md` — operator mandate governing CA-CAN-01A boundary and access constitutions.
+- 6 pilot object constitutions under `docs/cae/constitutions/` (`CA-CAN-01A_OPERATOR_ORGANIZATION.yaml`, `CA-CAN-01A_WORKSPACE.yaml`, `CA-CAN-01A_WORKSPACE_MEMBERSHIP.yaml`, `CA-CAN-01A_ENGAGEMENT.yaml`, `CA-CAN-01A_OPERATOR_ACCESS_POLICY.yaml`, `CA-CAN-01A_OPERATOR_ACCESS_GRANT.yaml`).
+- `docs/cae/implementation/CAE_CA_CAN_01A_CONSTITUTION_REVIEW.md` — CA-CAN-01A independent collision review and hard-negative evaluation record.
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -299,6 +301,10 @@ ca_auth_01_packages_and_schemas: VERIFIED_7_PACKAGES_ALL_FILES_PRESENT
 ca_auth_01_manifest_maturity: VERIFIED_DEVELOPMENT_UNCERTIFIED_RUNTIME_AUTHORITY_NONE
 ca_auth_01_deceptive_fixture_corpus: VERIFIED_ALL_8_CASES_REJECTED_AS_EXPECTED
 ca_auth_01_static_verification: PASS
+ca_can_01a_constitutions_completeness: VERIFIED_6_CONSTITUTIONS_ALL_26_DIMENSIONS
+ca_can_01a_collision_review: APPROVED_NO_COLLISIONS
+ca_can_01a_hard_negatives: VERIFIED_9_FIXTURES_REJECTED_AS_EXPECTED
+ca_can_01a_static_verification: PASS
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
