@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `WP09_COMPLETE_PENDING_OPERATOR_REVIEW`
+**Control status:** `WP10A_COMPLETE_PENDING_OPERATOR_REVIEW`
 **Authority:** CAE Governance & Specification Bridge Bundle v3
 **Created:** 2026-08-23
-**Scope:** WP-00 through WP-09 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, and one repository-integrated source bridge. No legacy service authority or production environment was changed.
+**Scope:** WP-00 through WP-10A — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, and WP-10A vertical-slice evidence containment/acceptance. No legacy service authority or production environment was changed.
 
 ## Required control fields
 
@@ -31,13 +31,15 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: WP-09 First Vertical Runtime Slice
+current_work_package: WP-10A Vertical-Slice Evidence Containment and Acceptance
 objective: >
-  Verify and bridge one existing Interview Expression source package into the
-  isolated CAE staging slice, without mutating legacy SQLite state or treating
-  copied source bytes as a repository-wide state-authority cutover.
-agent_id: /root
-git_commit: b3420bf (drafted blocked CA-IMPL-02 Gemini mandate; CA-IMPL-01B mandate: 086580c; CA-IMPL-01A mandate: bf4a244)
+  Evaluate whether the recorded proof from WP-00 through WP-09 is reproducible
+  at its stated fidelity, establish explicit claim/non-claim boundaries, re-verify
+  static specifications and runbook bindings, verify SQL migration checksums,
+  execute selective dynamic proof with forced transaction rollback and full Storage
+  cleanup, and present the bounded acceptance decision for operator review.
+agent_id: Antigravity / Gemini 3.7 Flash (High)
+git_commit: 7f23609 (WP-10A evidence containment and acceptance committed)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
@@ -46,7 +48,7 @@ environment_identity:
   state_environment_variables_observed: []
   api_default_state_root_when_unconfigured: /state
 last_updated: 2026-08-25
-next_transition: OPERATOR_REVIEW -> VERIFY (WP-10 regression/promotion/operator acceptance only after operator approval)
+next_transition: OPERATOR_REVIEW -> CA-MAP-01 (Scope and authority mapping only after operator approval)
 ```
 
 ## Authoritative documents loaded
@@ -222,8 +224,9 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - WP-08 governed test manifest, real private Storage readback, contrastive/reward-hack cases, and proof boundary: `CAE_WP08_REALITY_CONTACT_AND_REWARD_HACKING.md`.
 - WP-09 read-only Interview Expression bridge, verified byte copy, typed CAE registration, capture compatibility, and cleanup proof: `CAE_WP09_FIRST_VERTICAL_RUNTIME_SLICE.md`.
 - Reviewer-facing WP-00 through WP-09 evidence/commit/checksum ledger and reproducible review order: `CAE_WP00_TO_WP09_REVIEW_EVIDENCE_HANDOFF.md`.
+- WP-10A evidence containment artifacts: `CAE_WP10A_CLAIM_BOUNDARY_MATRIX.md`, `CAE_WP10A_REGRESSION_LEDGER.md`, and `CAE_WP10A_ACCEPTANCE_REPORT.md`.
 - Proposed post-WP-09 containment, scope/authority mapping, canonicalization, tenant-isolation, and authority-cutover sequence: `CAE_MULTI_TENANT_AUTHORITY_AND_CANONICALIZATION_PLAN.md`.
-- Gemini delivery control: the 12-phase program and drafted WP-10A evidence-containment mandate under `docs/cae/gemini_execution/`; later phase mandates must be derived from accepted predecessor outputs rather than pre-authorizing future implementation.
+- Gemini delivery control: the 12-phase program and executed WP-10A evidence-containment mandate under `docs/cae/gemini_execution/`; subsequent phase mandates must be derived from accepted predecessor outputs rather than pre-authorizing future implementation.
 
 ## Verification results
 
@@ -263,10 +266,24 @@ wp08_human_semantic_taste_or_world_outcome_claim: NOT_MADE
 wp09_interview_source_bridge_registration_checksum: 26a3b4c08e90d4845612ae6263c1850ac5cfa5d23e7664547c01f1697a24e9a0
 wp09_first_vertical_runtime_slice: VERIFIED_E2_REPOSITORY_INTEGRATED_AND_E3_STAGING_FORCE_ROLLBACK
 wp09_legacy_authority_cutover: NOT_MADE
+wp10a_claim_boundary_matrix: VERIFIED_COMPLETE_WP00_TO_WP09
+wp10a_regression_ledger: VERIFIED_ALL_COMMANDS_MATCH_AND_PASS
+wp10a_acceptance_report: COMPILED_WITH_EXPLICIT_NON_CLAIMS
+wp10a_static_verification_wp05: PASS
+wp10a_static_verification_wp06: PASS
+wp10a_dynamic_reproduction_wp02a: PASS_E3_STAGING
+wp10a_dynamic_reproduction_wp03: PASS_E3_STAGING_FORCE_ROLLBACK
+wp10a_dynamic_reproduction_wp04: PASS_E3_STAGING_QUARANTINES_ACTIVE
+wp10a_dynamic_reproduction_wp07: PASS_E3_STAGING_FORCE_ROLLBACK
+wp10a_dynamic_reproduction_wp08: PASS_E3_STAGING_FORCE_ROLLBACK
+wp10a_dynamic_reproduction_wp09: PASS_E2_REPOSITORY_FIXTURE_E3_STAGING_FORCE_ROLLBACK
+wp10a_sql_migration_checksums_all_9: VERIFIED_EXACT_MATCH
+wp10a_post_verification_storage_cleanup: VERIFIED_0_OBJECTS
+wp10a_post_verification_transient_db_cleanup: VERIFIED_0_ROWS
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
-test_execution_this_work_package: NOT_RUN
+test_execution_this_work_package: REPRODUCED_NAMED_STATIC_AND_DYNAMIC_VERIFIERS_ONLY
 reality_contact_claim: NOT_MADE
 ```
 
