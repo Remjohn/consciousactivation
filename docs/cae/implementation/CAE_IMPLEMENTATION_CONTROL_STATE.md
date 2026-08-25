@@ -37,7 +37,7 @@ objective: >
   isolated CAE staging slice, without mutating legacy SQLite state or treating
   copied source bytes as a repository-wide state-authority cutover.
 agent_id: /root
-git_commit: 1d0168c (drafted blocked CA-SPEC-01 Gemini mandate; CA-CAN-01C mandate: 14e5a3f; CA-CAN-01B mandate: ed7ec12)
+git_commit: 1de9497 (drafted blocked CA-STATE-01 Gemini mandate; CA-SPEC-01 mandate: 1d0168c; CA-CAN-01C mandate: 14e5a3f)
 environment_identity:
   workspace: D:\\Work\\consciousactivation
   branch: main
