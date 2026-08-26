@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-STAGE-09 Mandate; Operator Acceptance of CA-E3-08
+**Control status:** `FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-ACCEPT-10 Mandate; Operator Acceptance of CA-STAGE-09
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-STAGE-09 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, CA-MIG-03 Forward-Only PostgreSQL Migration Design, CA-APPLY-04 Disposable PostgreSQL Migration Application Proof, CA-INT-05 F-01 Workspace/Receipt Lineage Integrity Repair, CA-TOPO-06 F-02 Table-Family Topology Reconciliation and Canonical Route Decision, CA-TOPO-07 Selected F-02 Canonical Topology Implementation and Disposable Proof, CA-E3-08 Independent Staging-Equivalent Reality-Contact Replay, and CA-STAGE-09 Controlled Shared-Staging Deployment of the Proven Foundation Repairs (named staging target `evnxdssbxxrsesftdvgx.pooler.supabase.com:6543/postgres`, pre-change snapshot `snapshot_pre_stage09_20260826T051500Z`, 8 forward migrations `MIG-0001` to `MIG-0008` applied via `GuardedMigrationRunner`, 14 countertests `STAGE09-CT-01` to `STAGE09-CT-14` passing, composite FK `fk_workspace_receipt` active, Option A canonical UUID schema active, `legacy_wp03_*` quarantined, canonical bridge route `register_verified_interview_source` bound and verified, private storage byte check passing, and complete synthetic fixture cleanup). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero client data was transformed or migrated during CA-STAGE-09.
+**Scope:** WP-00 through CA-ACCEPT-10 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, CA-MIG-03 Forward-Only PostgreSQL Migration Design, CA-APPLY-04 Disposable PostgreSQL Migration Application Proof, CA-INT-05 F-01 Workspace/Receipt Lineage Integrity Repair, CA-TOPO-06 F-02 Table-Family Topology Reconciliation and Canonical Route Decision, CA-TOPO-07 Selected F-02 Canonical Topology Implementation and Disposable Proof, CA-E3-08 Independent Staging-Equivalent Reality-Contact Replay, CA-STAGE-09 Controlled Shared-Staging Deployment of the Proven Foundation Repairs, and CA-ACCEPT-10 Independent Regression, Operator Acceptance, and Next-Aggregate Decision (review classified as `SELF_REVIEW_WITH_ADVERSARIAL_CHECKS`, claim matrix distinguishing inherited vs observed local evidence, 88/88 passing tests, 9 static validators passing, Candidate Register qualifying 3 next candidates `MC-CAE-ENG-001`, `MC-CAE-GST-001`, and `MC-CAE-EVN-001`, with zero candidate implemented). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero client data was transformed or migrated during CA-ACCEPT-10.
 
 ## Required control fields
 
@@ -31,26 +31,24 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-STAGE-09 Controlled Shared-Staging Deployment of the Proven Foundation Repairs
+current_work_package: CA-ACCEPT-10 Independent Regression, Operator Acceptance, and Next-Aggregate Decision
 objective: >
-  Deploy the approved migration chain (MIG-0001 to MIG-0008), F-01 composite FK repair,
-  and operator-selected Option A canonical route to named shared staging environment
-  evnxdssbxxrsesftdvgx.pooler.supabase.com:6543/postgres under pre-change snapshot
-  snapshot_pre_stage09_20260826T051500Z and change window CW-2026-08-26-STAGE09-01.
-  Execute 14 reality-contact countertests STAGE09-CT-01 to STAGE09-CT-14, prove RLS isolation,
-  storage byte verification, F-01 composite FK link rejection, receipt immutability,
-  and complete synthetic cleanup. Zero operational authority changed.
+  Conduct bounded shared-staging substrate acceptance review under SELF_REVIEW_WITH_ADVERSARIAL_CHECKS
+  classification. Audit complete chain CA-AUDIT-01 through CA-STAGE-09, evaluate 12 adversarial challenge
+  points, recompute draft checksums, verify F-01 composite FK and F-02 Option A canonical topology,
+  run 88 local regressions, and qualify at most 3 next-aggregate candidates (MC-CAE-ENG-001, MC-CAE-GST-001,
+  MC-CAE-EVN-001) for operator decision. Zero operational authority changed.
 agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
-git_commit: main (CA-STAGE-09 controlled shared-staging deployment, 14 countertests, cleanup)
+git_commit: main (CA-ACCEPT-10 substrate review, claim matrix, candidate register)
 environment_identity:
   workspace: D:\Work\consciousactivation
   branch: main
   python: 3.12.0
   node: v24.11.0
   operational_authority_change: ZERO_AUTHORITY_CHANGED
-  migration_package_status: FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY
+  migration_package_status: FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW
 last_updated: 2026-08-26
-next_transition: CA-ACCEPT-10 Independent Acceptance and Next Aggregate Selection — pending operator decision on CA-STAGE-09
+next_transition: CA-NEXT-01 Next Aggregate Planning — pending operator decision on CA-ACCEPT-10
 retained_staging_cutover_evidence:
   aggregate_id: MC-CAE-MED-001
   contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b

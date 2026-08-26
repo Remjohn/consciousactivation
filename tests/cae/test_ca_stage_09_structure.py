@@ -111,9 +111,13 @@ def test_completion_record_structure_and_decision_question():
 
 
 def test_control_state_status():
-    """Control state is updated to FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY."""
+    """Control state is updated to FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY or downstream."""
     content = (IMPL_DIR / "CAE_IMPLEMENTATION_CONTROL_STATE.md").read_text(encoding="utf-8")
-    assert "**Control status:** `FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY`" in content
+    valid_statuses = [
+        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
+        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
+    ]
+    assert any(st in content for st in valid_statuses)
     assert "CA-STAGE-09" in content
 
 

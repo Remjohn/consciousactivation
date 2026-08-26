@@ -192,6 +192,7 @@ def check_control_state() -> bool:
     valid_statuses = [
         "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
         "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
+        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
     ]
     if not any(st in content for st in valid_statuses):
         print("  [FAIL] Control status is not INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY or downstream")

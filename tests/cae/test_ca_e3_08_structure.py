@@ -126,6 +126,7 @@ def test_control_state_status():
     valid_statuses = [
         "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
         "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
+        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
     ]
     assert any(st in content for st in valid_statuses)
     assert "CA-E3-08" in content

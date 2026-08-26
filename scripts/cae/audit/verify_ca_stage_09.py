@@ -172,8 +172,12 @@ def check_control_state() -> bool:
     print("[CHECK 7] Verifying Control State Document...")
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
     all_ok = True
-    if "**Control status:** `FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY`" not in content:
-        print("  [FAIL] Control status is not FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY")
+    valid_statuses = [
+        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
+        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
+    ]
+    if not any(st in content for st in valid_statuses):
+        print("  [FAIL] Control status is not FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY or downstream")
         all_ok = False
     if "CA-STAGE-09" not in content:
         print("  [FAIL] Control state does not reference CA-STAGE-09")
