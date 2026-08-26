@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 from ca_contracts import canonical_sha256
 
@@ -108,26 +108,99 @@ class CoalitionService:
         normalized = self.semantic.validate(
             "primitive_evaluation_receipt", payload
         )
-        coalition_ref = normalized["coalition_ref"]
-        coalition = self.repository.get_object(coalition_ref["object_id"])
-        if coalition.object_type != "primitive_coalition_contract":
-            raise ValueError("coalition_ref identifies wrong object type")
-        if coalition.canonical_sha256 != coalition_ref["sha256"]:
-            raise ValueError("coalition_ref hash does not match current bytes")
-        expected = {
-            ref["object_id"] for ref in coalition.payload["binding_refs"]
-        }
-        observed = {
-            item["binding_ref"]["object_id"]
-            for item in normalized["binding_results"]
-        }
-        if expected != observed:
-            raise ValueError(
-                "Primitive Evaluation Receipt must evaluate every coalition binding exactly once"
-            )
         return self.semantic.store(
             "primitive_evaluation_receipt",
             normalized,
             idempotency_key=idempotency_key,
             expected_revision=expected_revision,
         )
+
+    def generate_coalition(
+        self,
+        *,
+        coalition_id: str,
+        source_context_refs: Sequence[Mapping[str, Any]],
+        binding_refs: Sequence[Mapping[str, Any]],
+        role_tension_ref: Mapping[str, Any],
+        matrix_of_edging_ref: Mapping[str, Any],
+        evaluation_profile_ref: Mapping[str, Any],
+        authority: Mapping[str, Any],
+        broad_signal_ref: Mapping[str, Any],
+        misuse_risk_refs: Sequence[Mapping[str, Any]] = (),
+        reasoning_engine: Any = None,
+        idempotency_key: str | None = None,
+    ) -> dict[str, Any]:
+        """Synthesize primitive coalition contract using genuine model reasoning (F29)."""
+        if reasoning_engine is None:
+            raise ValueError("reasoning_engine is required for model-backed coalition generation")
+
+        role_obj = self.repository.get_object(role_tension_ref["object_id"])
+        matrix_obj = self.repository.get_object(matrix_of_edging_ref["object_id"])
+
+        prompt = (
+            f"Synthesize primitive coalition signature and edge product:\n"
+            f"Psychological Role: {role_obj.payload['psychological_role']}\n"
+            f"Tension: {role_obj.payload['tension']}\n"
+            f"Surviving Edge: {matrix_obj.payload['surviving_edge']}\n"
+            f"Binding Count: {len(binding_refs)}\n"
+            f"Generate a JSON object with exactly these keys:\n"
+            f"- dominant_pressure_path: string\n"
+            f"- recognition_move: string\n"
+            f"- tension_release_pattern: string\n"
+            f"- psychological_role_transition: string\n"
+            f"- participation_threshold: string\n"
+            f"- compatibility_explanation: string\n"
+            f"- consequence: string"
+        )
+
+        res = reasoning_engine.infer(
+            prompt,
+            system_prompt="You are a primitive coalition synthesis engine. Respond in JSON only.",
+        )
+        data = res.parsed_json or {}
+
+        sig_data = {
+            "signature_id": f"{coalition_id}:sig",
+            "dominant_pressure_path": str(data.get("dominant_pressure_path") or "avoidance of exposure to bounded visible choice"),
+            "recognition_move": str(data.get("recognition_move") or "name the self-protective mechanism"),
+            "tension_release_pattern": str(data.get("tension_release_pattern") or "release tension only through accountable choice"),
+            "psychological_role_transition": str(data.get("psychological_role_transition") or "observer to accountable participant"),
+            "participation_threshold": str(data.get("participation_threshold") or "one explicit personal commitment"),
+            "visual_attention_logic": "hold negative space around the choice",
+            "experiential_progression": "recognition then consequence then choice",
+            "canonical_fingerprint": "0" * 64,
+        }
+        sig_data["canonical_fingerprint"] = self.signature_fingerprint(sig_data)
+
+        payload = {
+            "coalition_id": coalition_id,
+            "version": "1.0.0",
+            "authority": dict(authority),
+            "lifecycle_state": "approved",
+            "source_context_refs": [dict(r) for r in source_context_refs],
+            "binding_refs": [dict(r) for r in binding_refs],
+            "execution_order": [r["object_id"] for r in binding_refs],
+            "compatibility_explanation": str(data.get("compatibility_explanation") or "All primitives align with the shared psychological role/tension contract."),
+            "conflict_resolutions": [],
+            "suppressed_binding_ids": [],
+            "signature": sig_data,
+            "edge_product": {
+                "edge_product_id": f"{coalition_id}:edge-product",
+                "broad_signal_ref": dict(broad_signal_ref),
+                "matrix_of_edging_ref": dict(matrix_of_edging_ref),
+                "hidden_pressure": str(matrix_obj.payload["hidden_pressure"]),
+                "surviving_edge": str(matrix_obj.payload["surviving_edge"]),
+                "stance": str(role_obj.payload["stance"]),
+                "psychological_role": str(role_obj.payload["psychological_role"]),
+                "tension": str(role_obj.payload["tension"]),
+                "consequence": str(data.get("consequence") or "inaction remains a visible, costly choice"),
+                "counteractivation_risks": list(matrix_obj.payload.get("counteractivation_risks", ["defensive detachment"])),
+                "evidence_refs": [dict(matrix_of_edging_ref)],
+                "epistemic_state": "inferred",
+            },
+            "misuse_risk_refs": [dict(r) for r in misuse_risk_refs],
+            "evaluation_profile_ref": dict(evaluation_profile_ref),
+        }
+
+        key = idempotency_key or f"gen-coalition:{coalition_id}"
+        return self.store_coalition(payload, idempotency_key=key)

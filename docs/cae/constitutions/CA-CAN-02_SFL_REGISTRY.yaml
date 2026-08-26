@@ -1,0 +1,230 @@
+# Object Constitution: SFLRegistry
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-REG-002"
+canonical_name: "SFLRegistry"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Experience / Perceptual Function"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:45, CA-STATE-01:79, CAE-UPTL-01-CUST-001 (Operator Ratified Class 1 & 3)"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REG-002"
+    canonical_name: "SFLRegistry"
+    common_aliases: ["SFL Perceptual Registry", "Sensory Function Language Registry", "SFL Snapshot"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Experience / Perceptual Function"
+    class_matrix_id: 12
+    class_rationale: "SFLRegistry is an immutable canonical registry defining sensory and perceptual experience functions, failure modes, and perceptual transformation grammars."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Resides strictly on the Canonical Plane as global system doctrine governing sensory and perceptual experience definitions."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Perceptual Architecture & Sensory Mapping"
+    primary_purpose: "Provides the canonical vocabulary and failure modes of sensory experience functions used in AIR voice DNA and psychological tension resolution."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical perceptual function registry"
+    differentia: "Distinguished from SDARegistry (abstract dimensions) and PrimitiveRegistry (atomic operators) by modeling experiential and sensory failure transformations."
+    function: "Stores perceptual function records, failure modes, family groupings, and quarantine dispositions."
+    boundary: "Must not contain operational tenant data; must enforce Route B permanent quarantine for absent families; must inherit manifest version."
+    normative_definition: >
+      SFLRegistry is the canonical registry of Sensory Function Language assets. It defines experiential failure modes
+      and transformations, enforcing Route B permanent quarantine on defective absent family references with typed
+      runtime refusals.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable canonical registry of sensory and perceptual experience assets."
+      - "The authority defining valid SFL families and failure modes."
+      - "A repository governed by operator-ratified Route B quarantine invariants."
+    what_it_is_not:
+      - "A permissive registry that silently resolves missing family references."
+      - "An operational tenant store."
+      - "A Primitive registry."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "SDARegistry (CA-REG-001)"
+        distinction: "SDARegistry defines semantic polarities; SFLRegistry defines experiential sensory function transforms."
+      - neighbor: "PrimitiveRegistry (CA-REG-003)"
+        distinction: "SFLRegistry models perceptual experience modes; PrimitiveRegistry models atomic behavioral operators."
+      - neighbor: "SemanticAssessment (CA-DSA-001)"
+        distinction: "SFLRegistry is canonical vocabulary; SemanticAssessment is operational evaluation using that vocabulary."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Perceptual Architecture"
+    tier: "Global Canonical Registry"
+    specialization: "Sensory Function & Failure Language Registry"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "operator-ratified"
+    lifecycle_phases: ["PINNED_SNAPSHOT", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "snapshot_id"
+        type: "STRING"
+        description: "Canonical registry snapshot identifier (e.g., 'sfl-manifest-1.0')."
+      - name: "manifest_version"
+        type: "STRING"
+        description: "Manifest version inherited by all items ('1.0')."
+      - name: "archive_sha256"
+        type: "STRING"
+        description: "SHA-256 hash of the canonical `sfl.zip` archive."
+      - name: "valid_item_count"
+        type: "INTEGER"
+        description: "Count of valid resolvable records (23)."
+      - name: "quarantined_family_count"
+        type: "INTEGER"
+        description: "Count of permanently quarantined absent families (5: FAM-005, 006, 007, 009, 012)."
+      - name: "pinned_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when snapshot was sealed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Global Canonical System"
+    child_relations:
+      - child_object: "PrimitiveRegistry"
+        cardinality: "1:N (Cross-reference)"
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "SFLRegistry is an immutable canonical snapshot; updates occur exclusively through new pinned releases."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "canonical.sfl_registry.pinned"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Sensory Experience Lead & Operator Ratification via CA-UPTL-01/U1"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-SFL-001: Route B Permanent Quarantine — Absent families (SFL-FAM-005, 006, 007, 009, 012) and their dependent failure assets (SFL-FAIL-005, 006, 007, 009, 012) MUST remain permanently quarantined."
+      - "INV-SFL-002: Typed Refusal Semantics — Attempted runtime resolution of a quarantined SFL family or failure asset MUST raise RegistryItemQuarantinedError(reason='ABSENT_SFL_FAMILY', canonical_id=...)."
+      - "INV-SFL-003: Manifest-Version Inheritance — Valid SFL records inherit source_record_version='1.0' from registry_manifest.yaml."
+      - "INV-SFL-004: Anti-Heuristic Prohibition — Resolvers MUST NOT invent missing families or heuristically bind orphaned failure assets to existing families."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:45, CA-STATE-01:79, CAE-UPTL-01-CUST-001"
+    runtime_representation: "packages/ca_runtime/src/ca_runtime/registry.py & cae.registry_snapshot"
+    promotion_authority: "Sensory Experience Lead & Platform Operator"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "load_sfl_snapshot"
+        parameters: ["archive_path", "manifest_path"]
+      - name: "resolve_sfl_asset"
+        parameters: ["canonical_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT return dummy or synthetic placeholder objects when resolving quarantined SFL families."
+      - "MUST NOT modify SFL definitions in place without operator gate approval."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify archive_sha256 matches sfl.zip byte hash."
+      - "Verify quarantined families list matches [SFL-FAM-005, 006, 007, 009, 012]."
+    semantic_validators:
+      - "Verify resolve_sfl_asset raises RegistryItemQuarantinedError on defect IDs."
+      - "Verify valid items resolve cleanly with version '1.0'."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_SFL_ITEM_QUARANTINED"
+        http_status: 423
+        description: "Requested SFL asset belongs to an absent family and is permanently quarantined (Route B)."
+      - code: "ERR_SFL_ITEM_NOT_FOUND"
+        http_status: 404
+        description: "Requested SFL asset ID does not exist in registry."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.registry_snapshot & RegistryResolver in-memory cache"
+    rls_boundary_column: "NOT_APPLICABLE (Global Canonical Plane)"
+    storage_boundary: "Repository Archive (sfl.zip) & RegistryResolver"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "AIR Brand & Voice DNA Generator"
+      - "AIR Edging Service"
+      - "RegistryResolver"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the sensory failure mode and perceptual transform for this SFL ID?"
+      - "Is this SFL asset valid or permanently quarantined under Route B?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-SFL-001"
+        description: "Valid SFL perceptual function resolving with manifest version 1.0."
+        attributes:
+          snapshot_id: "sfl-manifest-1.0"
+          manifest_version: "1.0"
+          valid_item_count: 23
+          quarantined_family_count: 5
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-SFL-001"
+        description: "Near-miss: A runtime resolver catches an absent SFL family (e.g. SFL-FAM-005) and dynamically falls back to SFL-FAM-001 to prevent pipeline errors."
+        rejection_reason: "Violates INV-SFL-001 and INV-SFL-004; silent fallback is strictly prohibited; resolver must raise RegistryItemQuarantinedError."
+      - id: "NEG-SFL-002"
+        description: "Near-miss: A developer attempts to unquarantine SFL-FAIL-005 by declaring a synthetic 'Auto-Generated SFL-FAM-005' inside the resolver code."
+        rejection_reason: "Violates INV-SFL-004; inventing families heuristically violates operator-ratified Route B law."
+      - id: "NEG-SFL-003"
+        description: "Generic violation: Attempting to resolve an SFL item from an unpinned zip file."
+        rejection_reason: "Violates cryptographic snapshot integrity."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for SFLRegistry with 26 dimensions encoding ratified Route B quarantine invariants."

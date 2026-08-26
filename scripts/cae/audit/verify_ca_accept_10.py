@@ -141,8 +141,14 @@ def check_control_state() -> bool:
     print("[CHECK 6] Verifying Control State Document...")
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
     all_ok = True
-    if "**Control status:** `FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW`" not in content:
-        print("  [FAIL] Control status is not FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW")
+    valid_statuses = [
+        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
+        "CLAIMS_UNVERIFIED_BY_OPERATOR",
+        "AWAITING_OPERATOR_AUTHORIZATION_CA_UPTL_01",
+        "UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE",
+    ]
+    if not any(st in content for st in valid_statuses):
+        print("  [FAIL] Control status is not FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW or downstream")
         all_ok = False
     if "CA-ACCEPT-10" not in content:
         print("  [FAIL] Control state does not reference CA-ACCEPT-10")

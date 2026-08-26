@@ -1,0 +1,251 @@
+# Object Constitution: StateTransition
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-EVT-004"
+canonical_name: "StateTransition"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Event"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:57, CA-STATE-01:77, 15_CAE_POSTGRES_STATE_MODEL.md"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-EVT-004"
+    canonical_name: "StateTransition"
+    common_aliases: ["State Transition Event", "Lifecycle Transition Record", "Aggregate State Change"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Event"
+    class_matrix_id: 5
+    class_rationale: "StateTransition is an immutable operational event recording the atomic lifecycle state change of a StateAggregate from one state/version to another."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Records historical operational state mutations within customer workspaces."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "State Audit & Historical Ledger"
+    primary_purpose: "Maintains an immutable, append-only journal of every state change applied to any aggregate in the Conscious Activation Engine."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational state transition event"
+    differentia: "Distinguished from StateAggregate (which holds current mutable state) and StateTransitionContract (canonical rulebook) by recording a past, immutable state mutation event."
+    function: "Stores aggregate_id, from_state, to_state, from_version, to_version, command_id, actor_id, and timestamp."
+    boundary: "Must be strictly append-only; from_version and to_version MUST satisfy to_version = from_version + 1; cannot be deleted or mutated."
+    normative_definition: >
+      StateTransition is an immutable operational event documenting the progression of a StateAggregate from one state
+      and version to the next. It binds the transition to the triggering Command and executing Actor, providing a complete
+      cryptographic audit trail.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable journal entry of a completed state change."
+      - "The causal link between a Command and the resulting StateAggregate state."
+      - "An append-only historical record in `cae.state_transition`."
+    what_it_is_not:
+      - "A StateAggregate (StateAggregate is the current active state)."
+      - "A Command (Command is the intent packet requesting the change)."
+      - "A generic business event (StateTransition is specifically an aggregate lifecycle transition)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "StateAggregate (CA-STA-001)"
+        distinction: "StateAggregate stores the latest state; StateTransition stores the history of how it got there."
+      - neighbor: "Event (CA-EVT-002 / cae.event)"
+        distinction: "cae.event is a generic domain broadcast event; StateTransition is specifically the atomic state-version journal entry."
+      - neighbor: "Receipt (CA-REC-001)"
+        distinction: "Receipt proves command execution completion; StateTransition records the specific before/after state Delta."
+
+  8_taxonomic_position:
+    domain: "State Control & Audit"
+    status: "APPLICABLE"
+    tier: "State Journal Event"
+    specialization: "Aggregate Version Transition"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["COMMITTED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "transition_id"
+        type: "UUID"
+        description: "Globally unique identifier for the transition event."
+      - name: "aggregate_id"
+        type: "UUID"
+        description: "Target StateAggregate identifier."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "from_state"
+        type: "STRING"
+        description: "Originating lifecycle state."
+      - name: "to_state"
+        type: "STRING"
+        description: "Resulting lifecycle state."
+      - name: "from_version"
+        type: "INTEGER"
+        description: "Pre-transition aggregate version."
+      - name: "to_version"
+        type: "INTEGER"
+        description: "Post-transition aggregate version (strictly from_version + 1)."
+      - name: "command_id"
+        type: "UUID"
+        description: "Triggering Command identifier."
+      - name: "actor_id"
+        type: "UUID"
+        description: "Executing actor identifier."
+      - name: "contract_id"
+        type: "STRING"
+        description: "Governing StateTransitionContract identifier."
+      - name: "occurred_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when transition was committed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+      - parent_object: "StateAggregate"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "StateTransition is an immutable historical event record; it has no lifecycle state machine."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "state.transition.committed"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Transactional Operation Adapter on successful command commit"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-STR-001: to_version MUST equal from_version + 1."
+      - "INV-STR-002: The pair (aggregate_id, to_version) MUST be unique."
+      - "INV-STR-003: StateTransition is append-only; in-place update or deletion is prohibited."
+      - "INV-STR-004: from_state and to_state MUST be legal transitions under the cited contract_id."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:57, CA-STATE-01:77, 15_CAE_POSTGRES_STATE_MODEL.md"
+    runtime_representation: "cae.state_transition (PostgreSQL relational, append-only)"
+    promotion_authority: "Transactional Operation Adapter"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "record_state_transition"
+        parameters: ["aggregate_id", "from_state", "to_state", "from_version", "to_version", "command_id", "actor_id", "contract_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT update or delete committed StateTransition records."
+      - "MUST NOT insert transitions where to_version != from_version + 1."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify transition_id, aggregate_id, workspace_id, command_id, actor_id are valid UUIDv4."
+      - "Verify from_version >= 0 and to_version == from_version + 1."
+    semantic_validators:
+      - "Verify target aggregate exists in the same workspace."
+      - "Verify transition matches contract rule."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_TRANSITION_VERSION_NON_SEQUENTIAL"
+        http_status: 400
+        description: "to_version is not exactly from_version + 1."
+      - code: "ERR_TRANSITION_MUTATION_PROHIBITED"
+        http_status: 403
+        description: "Attempted mutation of append-only transition record."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.state_transition"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage (Append-only)"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Audit Log & Compliance Inspector"
+      - "Event Sourcing Replay Engine"
+      - "State Concurrency Verifier"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "When, why, and by whom was this entity transitioned from state A to state B?"
+      - "What command caused version increment N on aggregate X?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-STR-001"
+        description: "Transition event moving MediaAsset from STORED to VERIFIED at version 2."
+        attributes:
+          transition_id: "ff0e8400-e29b-41d4-a716-446655440001"
+          aggregate_id: "aa0e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          from_state: "STORED"
+          to_state: "VERIFIED"
+          from_version: 1
+          to_version: 2
+          command_id: "120e8400-e29b-41d4-a716-446655440001"
+          actor_id: "cc0e8400-e29b-41d4-a716-446655440001"
+          contract_id: "STC-MEDIA-001"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-STR-001"
+        description: "Near-miss: Attempting to record a StateTransition where from_version: 1 and to_version: 3 under the premise that an intermediate step was a no-op."
+        rejection_reason: "Violates INV-STR-001; version sequence must increment strictly by +1 with zero gaps."
+      - id: "NEG-STR-002"
+        description: "Near-miss: Inserting a transition with command_id: NULL, claiming it was an automatic system timeout."
+        rejection_reason: "Violates causality; all transitions must be attributable to a valid Command (even system cron commands)."
+      - id: "NEG-STR-003"
+        description: "Generic violation: Attempting to execute SQL UPDATE on cae.state_transition."
+        rejection_reason: "Violates INV-STR-003; transitions are immutable."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for StateTransition audit event with 26 dimensions."

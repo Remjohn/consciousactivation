@@ -81,9 +81,15 @@ def test_completion_record_structure_and_decision_question():
 
 
 def test_control_state_status():
-    """Control state is updated to FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW."""
+    """Control state is updated to FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW or downstream."""
     content = (IMPL_DIR / "CAE_IMPLEMENTATION_CONTROL_STATE.md").read_text(encoding="utf-8")
-    assert "**Control status:** `FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW`" in content
+    valid_statuses = [
+        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
+        "CLAIMS_UNVERIFIED_BY_OPERATOR",
+        "AWAITING_OPERATOR_AUTHORIZATION_CA_UPTL_01",
+        "UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE",
+    ]
+    assert any(st in content for st in valid_statuses)
     assert "CA-ACCEPT-10" in content
 
 

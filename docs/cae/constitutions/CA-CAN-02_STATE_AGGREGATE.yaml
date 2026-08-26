@@ -1,0 +1,265 @@
+# Object Constitution: StateAggregate
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-STA-001"
+canonical_name: "StateAggregate"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "State"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:55, CA-STATE-01:77, MC-CAE-REC-001, 14_CAE_STATE_AND_TRANSITION_CONTROL_PROTOCOL.md"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-STA-001"
+    canonical_name: "StateAggregate"
+    common_aliases: ["Aggregate State Root", "Versioned Aggregate", "Concurrency Control Root"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "State"
+    class_matrix_id: 9
+    class_rationale: "StateAggregate maintains the dynamic lifecycle state, sequence version, and optimistic concurrency boundary for operational domain entities."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Provides the transactional state and concurrency anchor for all stateful entities within customer workspaces."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "State Control & Optimistic Concurrency"
+    primary_purpose: "Enforces single-writer optimistic concurrency control, sequence monotonic ordering, and legal lifecycle transitions across all CAE aggregates."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational concurrency and state lifecycle aggregate"
+    differentia: "Distinguished from domain entities (e.g., Workspace, MediaAsset, InterviewSession) by serving as the generic operational state control header managing version increments and transition invariants."
+    function: "Stores current lifecycle state, monotonically increasing aggregate_version, and state payload digest."
+    boundary: "Must reject transitions when expected_version != current aggregate_version; cannot skip version numbers; must enforce RLS."
+    normative_definition: >
+      StateAggregate is the operational state and concurrency control record for any versioned domain entity in CAE.
+      It tracks current lifecycle state and enforces optimistic locking via monotonically increasing aggregate_version
+      numbers, preventing race conditions and silent state corruption.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The optimistic concurrency root for an operational entity (`aggregate_id`, `aggregate_type`, `aggregate_version`)."
+      - "The guardian of current lifecycle state transitions."
+      - "The parent anchor for StateTransition event records."
+    what_it_is_not:
+      - "A StateTransitionContract (StateTransitionContract is canonical policy; StateAggregate is operational state)."
+      - "A StateTransition (StateTransition is an immutable transition event; StateAggregate is the mutable current state root)."
+      - "A generic blob store."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "StateTransitionContract (CA-POL-002)"
+        distinction: "StateTransitionContract defines canonical rules for legal transitions; StateAggregate tracks the current live state and version."
+      - neighbor: "StateTransition (CA-EVT-004)"
+        distinction: "StateTransition is an append-only historical record of a past transition; StateAggregate is the active state container."
+      - neighbor: "Command (CA-EXE-002)"
+        distinction: "Command requests a state modification; StateAggregate applies it if version and contract preconditions pass."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "State Control & Transaction Management"
+    tier: "State Infrastructure Aggregate"
+    specialization: "Optimistic Concurrency State Root"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["INITIALIZED", "ACTIVE", "FROZEN", "TOMBSTONED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "aggregate_id"
+        type: "UUID"
+        description: "Target entity identifier serving as aggregate root."
+      - name: "aggregate_type"
+        type: "STRING"
+        description: "Type of domain entity (e.g., 'Workspace', 'MediaAsset', 'InterviewSession')."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of aggregate initialization."
+    mutable_attributes:
+      - name: "current_state"
+        type: "STRING"
+        description: "Current lifecycle state of the entity."
+      - name: "aggregate_version"
+        type: "INTEGER"
+        description: "Strictly monotonically increasing sequence version."
+      - name: "state_payload_sha256"
+        type: "STRING"
+        description: "Cryptographic digest of the current state snapshot."
+      - name: "last_transition_id"
+        type: "UUID"
+        description: "Identifier of the last applied StateTransition."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last version increment."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "StateTransition"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "INITIALIZED"
+    terminal_states: ["TOMBSTONED"]
+    states: ["INITIALIZED", "ACTIVE", "FROZEN", "TOMBSTONED"]
+    transitions:
+      - from: "INITIALIZED"
+        to: "ACTIVE"
+        operation: "activate_aggregate"
+      - from: "ACTIVE"
+        to: "FROZEN"
+        operation: "freeze_aggregate"
+      - from: "FROZEN"
+        to: "ACTIVE"
+        operation: "unfreeze_aggregate"
+      - from: "ACTIVE"
+        to: "TOMBSTONED"
+        operation: "tombstone_aggregate"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "state.aggregate.initialized"
+      - event_name: "state.aggregate.transitioned"
+      - event_name: "state.aggregate.frozen"
+      - event_name: "state.aggregate.tombstoned"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Entity creation command via Transactional Operation Adapter"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-STA-001: aggregate_version MUST increment by exactly +1 on every state transition."
+      - "INV-STA-002: Any state transition MUST supply expected_version matching current aggregate_version; mismatch MUST trigger ERR_OPTIMISTIC_LOCK_CONFLICT."
+      - "INV-STA-003: current_state MUST be a valid state declared in the corresponding StateTransitionContract."
+      - "INV-STA-004: StateAggregate cannot be updated directly; all mutations MUST occur via an atomic StateTransition."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:55, CA-STATE-01:77, MC-CAE-REC-001, 14_CAE_STATE_AND_TRANSITION_CONTROL_PROTOCOL.md"
+    runtime_representation: "cae.state_aggregate (PostgreSQL relational)"
+    promotion_authority: "Transactional Operation Adapter & State Protocol Engine"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "initialize_state_aggregate"
+        parameters: ["aggregate_id", "aggregate_type", "workspace_id", "initial_state"]
+      - name: "apply_state_transition"
+        parameters: ["aggregate_id", "expected_version", "target_state", "command_id", "transition_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT execute in-place UPDATE on current_state without incrementing aggregate_version."
+      - "MUST NOT apply transitions when aggregate is in FROZEN or TOMBSTONED state without explicit administrative unfreeze."
+      - "MUST NOT permit concurrent conflicting writes (violating expected_version)."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify aggregate_id, workspace_id are valid UUIDv4."
+      - "Verify aggregate_version is positive integer (>= 1)."
+    semantic_validators:
+      - "Verify target_state is permitted from current_state by StateTransitionContract."
+      - "Verify expected_version == aggregate_version in atomic transaction."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_OPTIMISTIC_LOCK_CONFLICT"
+        http_status: 409
+        description: "Concurrent modification detected; expected_version does not match current aggregate_version."
+      - code: "ERR_AGGREGATE_FROZEN"
+        http_status: 423
+        description: "Aggregate is frozen; modifications prohibited."
+      - code: "ERR_ILLEGAL_STATE_TRANSITION"
+        http_status: 422
+        description: "Transition is not permitted by StateTransitionContract."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.state_aggregate"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Transactional Operation Adapter"
+      - "State Machine Runtime Engine"
+      - "Pipeline & Event Sourcing Handlers"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the current version and lifecycle state of this domain entity?"
+      - "Has this entity been concurrently modified by another process?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-STA-001"
+        description: "Active MediaAsset state aggregate at version 2."
+        attributes:
+          aggregate_id: "aa0e8400-e29b-41d4-a716-446655440001"
+          aggregate_type: "MediaAsset"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          current_state: "VERIFIED"
+          aggregate_version: 2
+          last_transition_id: "ff0e8400-e29b-41d4-a716-446655440001"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-STA-001"
+        description: "Near-miss: A service passes expected_version: 1 when the database is already at aggregate_version: 2, and the adapter proceeds by silently applying an in-place UPDATE without version checking."
+        rejection_reason: "Violates INV-STA-002; version mismatch must abort transaction with ERR_OPTIMISTIC_LOCK_CONFLICT."
+      - id: "NEG-STA-002"
+        description: "Near-miss: Incrementing aggregate_version by +2 to 'reserve a slot' for an asynchronous task."
+        rejection_reason: "Violates INV-STA-001; version sequence must increment by exactly +1 per applied transition."
+      - id: "NEG-STA-003"
+        description: "Generic violation: Updating current_state directly via SQL without generating a StateTransition record."
+        rejection_reason: "Violates INV-STA-004; state changes must be accompanied by atomic transition records."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for StateAggregate optimistic concurrency root with 26 dimensions."

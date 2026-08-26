@@ -5,7 +5,15 @@ from .database import (
     ProductHealth,
 )
 from .paths import default_database_path
-from .registry import RegistryItem, RegistryResolutionError, RegistryResolver
+from .registry import (
+    RegistryItem,
+    RegistryItemAmbiguousError,
+    RegistryItemNotFoundError,
+    RegistryItemQuarantinedError,
+    RegistryItemVersionlessError,
+    RegistryResolutionError,
+    RegistryResolver,
+)
 from .semantic_operations import (
     FirstSliceSemanticOperations,
     OperationReceipt,
@@ -39,6 +47,10 @@ __all__ = [
     "default_database_path",
     "RegistryItem",
     "RegistryResolutionError",
+    "RegistryItemNotFoundError",
+    "RegistryItemQuarantinedError",
+    "RegistryItemAmbiguousError",
+    "RegistryItemVersionlessError",
     "RegistryResolver",
     "FirstSliceSemanticOperations",
     "OperationReceipt",

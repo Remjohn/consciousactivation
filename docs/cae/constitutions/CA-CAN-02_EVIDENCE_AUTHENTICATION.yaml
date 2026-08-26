@@ -1,0 +1,244 @@
+# Object Constitution: EvidenceAuthentication
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-REC-003"
+canonical_name: "EvidenceAuthentication"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Receipt / Evaluation Record"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:52, CA-STATE-01:72, MC-CAE-MED-001, TS-CAE-TEN-001:3.5"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REC-003"
+    canonical_name: "EvidenceAuthentication"
+    common_aliases: ["Evidence Attestation", "Authentication Record", "Evidence Verification Receipt"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Receipt / Evaluation Record"
+    class_matrix_id: 7
+    class_rationale: "EvidenceAuthentication records an attributable qualitative evaluation decision made by an independent evaluator on an EvidenceItem."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Stores operational evaluation decisions and epistemic attestations within a customer workspace."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Independent Verification & Anti-Reward-Hacking"
+    primary_purpose: "Guarantees that evidence claims are reviewed and attested by an independent evaluator actor, enforcing the strict anti-self-attestation doctrine."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational evaluation receipt record"
+    differentia: "Distinguished from mechanical execution receipts (`cae.receipt`, which prove an operation ran) by recording an epistemic determination of truth, quality, and grounding."
+    function: "Records evaluator identity, verdict (AUTHENTICATED, REJECTED, NEEDS_REPAIR), rationale, and timestamp."
+    boundary: "Evaluator actor MUST NOT be identical to the capturing agent; cannot be edited after creation; cannot attest unanchored evidence."
+    normative_definition: >
+      EvidenceAuthentication is an immutable operational evaluation record certifying the authenticity, grounding,
+      and epistemic validity of an EvidenceItem. It enforces independent verification by prohibiting capturing agents
+      from attesting their own extractions.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable evaluation record produced by an authorized human or secondary model evaluator."
+      - "The required gating artifact for transitioning an EvidenceItem to AUTHENTICATED."
+      - "An attributable receipt carrying evaluator identity and justification."
+    what_it_is_not:
+      - "A mechanical Receipt (`cae.receipt` records command execution, not qualitative truth)."
+      - "An EvidenceItem (EvidenceItem is the target finding under review)."
+      - "A SemanticAssessment (SemanticAssessment is an inference generated from evidence)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Receipt / ExecutionReceipt (CA-REC-001 / CA-REC-002)"
+        distinction: "Receipt proves computational execution of a command; EvidenceAuthentication records an evaluator's qualitative judgment on data validity."
+      - neighbor: "EvidenceItem (CA-EVI-002)"
+        distinction: "EvidenceItem is the factual claim; EvidenceAuthentication is the signed verdict attesting or rejecting that claim."
+      - neighbor: "SemanticAssessment (CA-DSA-001)"
+        distinction: "EvidenceAuthentication evaluates evidence truth; SemanticAssessment derives psychological insights from that evidence."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Evaluation & Quality Assurance"
+    tier: "Evidence Evaluation Record"
+    specialization: "Independent Evidentiary Attestation"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["ATTESTED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "authentication_id"
+        type: "UUID"
+        description: "Globally unique identifier for the authentication record."
+      - name: "evidence_id"
+        type: "UUID"
+        description: "Target EvidenceItem identifier."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "evaluator_actor_id"
+        type: "UUID"
+        description: "Identity of the independent human evaluator or certified secondary model."
+      - name: "verdict"
+        type: "STRING"
+        description: "Evaluation determination (AUTHENTICATED, REJECTED, NEEDS_REPAIR)."
+      - name: "rationale"
+        type: "STRING"
+        description: "Structured qualitative justification for the verdict."
+      - name: "epistemic_status"
+        type: "STRING"
+        description: "Epistemic confidence boundary (ESTABLISHED, CANDIDATE, UNVERIFIED)."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when authentication was sealed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+      - parent_object: "EvidenceItem"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "EvidenceAuthentication is an append-only evaluation receipt; once sealed, it cannot be modified or transitioned."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "evidence.authenticated"
+      - event_name: "evidence.rejected"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Designated Evaluator via authenticate_evidence command (STC-EVID-001)"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-AUT-001: evaluator_actor_id MUST NOT be identical to the capturing agent actor_id of the EvidenceItem (Anti-Self-Attestation)."
+      - "INV-AUT-002: verdict MUST be one of 'AUTHENTICATED', 'REJECTED', or 'NEEDS_REPAIR'."
+      - "INV-AUT-003: rationale MUST be non-empty and explain the basis for the verdict."
+      - "INV-AUT-004: EvidenceAuthentication is immutable once written."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:52, CA-STATE-01:72, MC-CAE-MED-001, TS-CAE-TEN-001:3.5"
+    runtime_representation: "cae.evidence_authentication (PostgreSQL relational)"
+    promotion_authority: "Designated Evaluator Actor & Governance Lead"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "record_evidence_authentication"
+        parameters: ["evidence_id", "evaluator_actor_id", "verdict", "rationale", "epistemic_status"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT permit automated capturing agents to self-issue EvidenceAuthentication records."
+      - "MUST NOT update or overwrite an existing authentication record."
+      - "MUST NOT issue authentication for an EvidenceItem lacking valid EvidenceSpans."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify authentication_id, evidence_id, workspace_id, evaluator_actor_id are valid UUIDv4."
+      - "Verify verdict is an allowed enum member."
+    semantic_validators:
+      - "Verify evaluator_actor_id differs from evidence capturer actor_id."
+      - "Verify target EvidenceItem exists in same workspace."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_AUTH_SELF_ATTESTATION_PROHIBITED"
+        http_status: 422
+        description: "Capturing agent cannot authenticate its own evidence extractions."
+      - code: "ERR_AUTH_EVIDENCE_NOT_FOUND"
+        http_status: 404
+        description: "Target evidence item does not exist."
+      - code: "ERR_AUTH_EMPTY_RATIONALE"
+        http_status: 400
+        description: "Authentication record must provide justification rationale."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.evidence_authentication"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage (Append-only)"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "AIR Activation Gate"
+      - "Quality & Compliance Audit Dashboard"
+      - "Dataset Curation Pipeline"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Who verified this evidence, and why was it deemed authentic?"
+      - "Did an independent evaluator review this claim before downstream activation?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-AUT-001"
+        description: "Independent human curator attesting verbatim quote evidence."
+        attributes:
+          authentication_id: "bb0e8400-e29b-41d4-a716-446655440001"
+          evidence_id: "770e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          evaluator_actor_id: "cc0e8400-e29b-41d4-a716-446655440001"
+          verdict: "AUTHENTICATED"
+          rationale: "Audio span matches transcript verbatim; tonal inflection confirms stated distress."
+          epistemic_status: "ESTABLISHED"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-AUT-001"
+        description: "Near-miss: The primary extraction model passes its own model_id as evaluator_actor_id to auto-certify its output as AUTHENTICATED."
+        rejection_reason: "Violates INV-AUT-001 (Anti-Self-Attestation); capturing agent cannot serve as evaluator."
+      - id: "NEG-AUT-002"
+        description: "Near-miss: An automated service issues an EvidenceAuthentication with verdict: 'AUTHENTICATED' and rationale: '' (empty string)."
+        rejection_reason: "Violates INV-AUT-003; rationale must provide concrete qualitative justification."
+      - id: "NEG-AUT-003"
+        description: "Generic violation: Updating an existing authentication record's verdict from REJECTED to AUTHENTICATED via UPDATE."
+        rejection_reason: "Violates INV-AUT-004; authentication records are immutable append-only receipts."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for EvidenceAuthentication evaluation record with 26 dimensions."

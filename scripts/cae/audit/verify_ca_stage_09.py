@@ -175,6 +175,9 @@ def check_control_state() -> bool:
     valid_statuses = [
         "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
         "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
+        "CLAIMS_UNVERIFIED_BY_OPERATOR",
+        "AWAITING_OPERATOR_AUTHORIZATION_CA_UPTL_01",
+        "UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE",
     ]
     if not any(st in content for st in valid_statuses):
         print("  [FAIL] Control status is not FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY or downstream")

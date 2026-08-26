@@ -1,0 +1,288 @@
+# Object Constitution: InterviewSession
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-ENT-005"
+canonical_name: "InterviewSession"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Entity"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "ENGAGEMENT_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:48, TS-CAE-TEN-001:3.4"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-ENT-005"
+    canonical_name: "InterviewSession"
+    common_aliases: ["Interview", "Expression Session", "Recorded Session"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Entity"
+    class_matrix_id: 1
+    class_rationale: "InterviewSession has continuous temporal identity, stateful lifecycle (PLANNED -> ACTIVE -> COMPLETED), mutable session metadata, and owns an ordered sequence of conversational turns."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Executes in real-time as an operational dialogue container within a specific customer tenant workspace and engagement."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Conversational Expression & Dialogue Ingestion"
+    primary_purpose: "Acts as the operational aggregate container for live and synthetic interviews conducted with a Guest under an Engagement."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational conversational container entity"
+    differentia: "Distinguished from Engagement (broad project scope) and Guest (participant identity) by representing a single, temporally bounded dialogue encounter."
+    function: "Coordinates live dialogue flow, orchestrates turn recording, anchors evidence extraction, and manages session state transitions."
+    boundary: "Must not cross Workspace or Engagement boundaries; cannot contain turns from multiple distinct Guests without explicit multi-party governance."
+    normative_definition: >
+      InterviewSession is the stateful operational container for a single bounded interview interaction. It binds a
+      participating Guest to an Engagement within a Workspace, tracking the temporal progression of turns and anchoring
+      all extracted perceptual and biographical evidence.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "A bounded temporal interaction session between a conductor/agent and a Guest."
+      - "The operational parent for an ordered sequence of InterviewTurn events."
+      - "An engagement-scoped entity protected by multi-tenant RLS."
+    what_it_is_not:
+      - "A Guest (Guest is the subject entity participating in the session)."
+      - "An Engagement (Engagement is the overarching campaign/project)."
+      - "A MediaAsset (MediaAsset is the raw audio/video recording artifact)."
+      - "A HarnessRun (HarnessRun executes automated analytical pipelines, not conversational dialogue)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Engagement (CA-ENT-004)"
+        distinction: "Engagement spans multiple sessions, milestones, and deliverables; InterviewSession is a single bounded dialogue event."
+      - neighbor: "Guest (CA-ENT-003)"
+        distinction: "Guest is the durable participant entity; InterviewSession is an ephemeral event container involving that Guest."
+      - neighbor: "MediaAsset (CA-ENT-002)"
+        distinction: "MediaAsset stores audio/video file metadata and byte lineage; InterviewSession models conversational semantics and turn state."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Interview Expression & Dialogue"
+    tier: "Engagement-Scoped Operational Aggregate"
+    specialization: "Standard Semi-Structured Psychological Interview"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["PLANNED", "ACTIVE", "PAUSED", "COMPLETED", "CANCELLED", "QUARANTINED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "session_id"
+        type: "UUID"
+        description: "Globally unique identifier for the interview session."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "project_id"
+        type: "UUID"
+        description: "Parent Engagement identifier."
+      - name: "guest_id"
+        type: "UUID"
+        description: "Participant Guest identifier."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Session creation timestamp."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "Current lifecycle state (PLANNED, ACTIVE, COMPLETED, etc.)."
+      - name: "conductor_id"
+        type: "UUID"
+        description: "Identifier of the human interviewer or AI conductor agent."
+      - name: "turn_count"
+        type: "INTEGER"
+        description: "Total count of recorded conversational turns."
+      - name: "started_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when dialogue commenced."
+      - name: "ended_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when dialogue terminated."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+      - parent_object: "Engagement"
+        multiplicity: "1"
+      - parent_object: "Guest"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "InterviewTurn"
+        cardinality: "1:N"
+      - child_object: "EvidenceItem"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "PLANNED"
+    terminal_states: ["COMPLETED", "CANCELLED", "QUARANTINED"]
+    states: ["PLANNED", "ACTIVE", "PAUSED", "COMPLETED", "CANCELLED", "QUARANTINED"]
+    transitions:
+      - from: "PLANNED"
+        to: "ACTIVE"
+        operation: "start_interview_session"
+      - from: "ACTIVE"
+        to: "PAUSED"
+        operation: "pause_interview_session"
+      - from: "PAUSED"
+        to: "ACTIVE"
+        operation: "resume_interview_session"
+      - from: "ACTIVE"
+        to: "COMPLETED"
+        operation: "complete_interview_session"
+      - from: "PLANNED"
+        to: "CANCELLED"
+        operation: "cancel_interview_session"
+      - from: "ACTIVE"
+        to: "QUARANTINED"
+        operation: "quarantine_interview_session"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "interview.session.created"
+      - event_name: "interview.session.started"
+      - event_name: "interview.session.completed"
+      - event_name: "interview.session.quarantined"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Interview Expression service via start_interview_session command"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-INT-001: Every InterviewSession MUST be linked to valid workspace_id, project_id, and guest_id."
+      - "INV-INT-002: An InterviewSession MUST NOT record turns before transition to ACTIVE state or after transition to COMPLETED/CANCELLED."
+      - "INV-INT-003: An InterviewSession cannot change its guest_id or workspace_id after instantiation."
+      - "INV-INT-004: All turns recorded in an InterviewSession must strictly share the session's workspace_id."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:48, TS-CAE-TEN-001:3.4; PRD-CAE-TEN-001 §3.4"
+    runtime_representation: "cae.interview_session (PostgreSQL relational)"
+    promotion_authority: "Workspace Interview Conductor & Engagement Lead"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "create_interview_session"
+        parameters: ["workspace_id", "project_id", "guest_id", "conductor_id"]
+      - name: "start_interview_session"
+        parameters: ["session_id"]
+      - name: "pause_interview_session"
+        parameters: ["session_id", "reason"]
+      - name: "resume_interview_session"
+        parameters: ["session_id"]
+      - name: "complete_interview_session"
+        parameters: ["session_id"]
+      - name: "quarantine_interview_session"
+        parameters: ["session_id", "reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT reassign an InterviewSession to a different Guest or Workspace."
+      - "MUST NOT delete an InterviewSession if active EvidenceItems reference its turns."
+      - "MUST NOT record turns while session is in PLANNED, PAUSED, or terminal states."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify session_id, workspace_id, project_id, guest_id are valid UUIDv4."
+      - "Verify status is an allowed enum member."
+    semantic_validators:
+      - "Verify referenced Guest exists and belongs to the specified workspace_id."
+      - "Verify referenced Engagement exists and belongs to the specified workspace_id."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_SESSION_NOT_FOUND"
+        http_status: 404
+        description: "Interview session does not exist."
+      - code: "ERR_SESSION_INVALID_STATE_TRANSITION"
+        http_status: 409
+        description: "Requested state transition is not permitted from current session state."
+      - code: "ERR_SESSION_GUEST_MISMATCH"
+        http_status: 422
+        description: "Guest does not belong to the target workspace."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.interview_session"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Interview Expression Engine"
+      - "Evidence Ingestion & Span Extraction Pipeline"
+      - "AIR Psychological Analysis Service"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "When, where, and with whom did this conversational dialogue occur?"
+      - "Which operational session produced the turns cited by this evidence item?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-INT-001"
+        description: "Standard active interview session between Conductor and Guest in Audrey project."
+        attributes:
+          session_id: "550e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          project_id: "22222222-2222-2222-2222-222222222222"
+          guest_id: "33333333-3333-3333-3333-333333333333"
+          status: "ACTIVE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-INT-001"
+        description: "Near-miss: An interview session that attempts to span multiple guests by storing an array of guest_ids without multi-party governance."
+        rejection_reason: "Violates INV-INT-001; InterviewSession is strictly 1:1 with Guest to guarantee individual consent and evidence containment."
+      - id: "NEG-INT-002"
+        description: "Near-miss: Attempting to record an interview turn against a session in PLANNED state before start_interview_session has executed."
+        rejection_reason: "Violates INV-INT-002; turns cannot be captured before session activation."
+      - id: "NEG-INT-003"
+        description: "Generic violation: Updating session status directly via unverified SQL update bypassing state machine."
+        rejection_reason: "Violates state transition control protocol; session state must transition via typed commands."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for InterviewSession operational aggregate with 26 dimensions."
