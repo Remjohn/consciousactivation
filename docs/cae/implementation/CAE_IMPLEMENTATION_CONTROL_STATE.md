@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-APPLY-04 Mandate; Operator Acceptance of CA-MIG-03
+**Control status:** `F01_REPAIRED_AND_E3_PROVEN_DISPOSABLE_ONLY`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-INT-05 Mandate; Operator Acceptance of CA-APPLY-04
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-APPLY-04 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, CA-MIG-03 Forward-Only PostgreSQL Migration Design, and CA-APPLY-04 Disposable PostgreSQL Migration Application and Recovery Proof (admission record, clean apply log, structural/containment results, failure/recovery rehearsal, teardown receipt, 11 adversarial countertests CT-01 to CT-11, guarded migration runner, and zero operational authority change). No legacy service authority, production environment, shared staging database, or brownfield SQLite database was changed. Zero data movement occurred during CA-APPLY-04.
+**Scope:** WP-00 through CA-INT-05 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, CA-MIG-03 Forward-Only PostgreSQL Migration Design, CA-APPLY-04 Disposable PostgreSQL Migration Application Proof, and CA-INT-05 F-01 Workspace/Receipt Evidence-Lineage Integrity Repair and Proof (admission record, MIG-0007 forward composite FK repair, structural proof, adversarial results F01-CT-01 to CT-11, recovery rehearsal, teardown receipt, and zero operational authority change). No legacy service authority, production environment, shared staging database, or brownfield SQLite database was changed. Zero data movement occurred during CA-INT-05.
 
 ## Required control fields
 
@@ -31,25 +31,25 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-APPLY-04 Disposable PostgreSQL Migration Application and Recovery Proof
+current_work_package: CA-INT-05 F-01 Workspace/Receipt Evidence-Lineage Integrity Repair and Proof
 objective: >
-  Apply exact forward-only migration drafts MIG-0001 through MIG-0006 against an isolated
-  disposable PostgreSQL environment via GuardedMigrationRunner, execute 11 adversarial
-  countertests CT01-CT11, verify RLS isolation and receipt immutability, prove failure
-  rollback honesty and idempotent re-run, verify scoped teardown, and prepare completion
-  record without touching shared staging, production, or changing operational authority.
+  Apply forward-only repair migration MIG-0007 in an isolated disposable PostgreSQL environment
+  to replace single-column receipt FK with composite (workspace_id, receipt_id) FK, execute 11
+  adversarial countertests F01-CT-01 to CT-11, prove structural rejection of cross-workspace
+  lineage links at database constraint level, verify RLS and trigger immutability, and prepare
+  completion record without touching shared staging, production, or changing operational authority.
   Zero operational authority changed.
 agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
-git_commit: main (CA-APPLY-04 guarded runner, admission record, application proof, recovery rehearsal, teardown)
+git_commit: main (CA-INT-05 F-01 composite FK repair, admission record, repair proof, adversarial results, teardown)
 environment_identity:
   workspace: D:\Work\consciousactivation
   branch: main
   python: 3.12.0
   node: v24.11.0
   operational_authority_change: ZERO_AUTHORITY_CHANGED
-  migration_package_status: APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY
+  migration_package_status: F01_REPAIRED_AND_E3_PROVEN_DISPOSABLE_ONLY
 last_updated: 2026-08-26
-next_transition: CA-INT-05 Workspace/Receipt Lineage Integrity Repair (F-01) — pending operator decision on CA-APPLY-04
+next_transition: CA-TOPO-06 Table-Family Topology Reconciliation — pending operator decision on CA-INT-05
 retained_staging_cutover_evidence:
   aggregate_id: MC-CAE-MED-001
   contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
@@ -63,8 +63,8 @@ retained_staging_cutover_evidence:
   verifier_sha256: 9dcf0858ebad77ab593881852f838f3e74019549a58fd73cf5dd60b7f80a5cb0
   countertests: 11_PASSED_CT01_TO_CT11
   findings_disposition:
-    - F-01: STILL_OPEN (Single-column FK on cae.receipt_evidence_link.receipt_id; compensated by typed operations and parity detection; owner: CA-MIG-03)
-    - F-02: STILL_OPEN (WP-03 text-keyed tables shadow CA-IMPL-01B uuid-keyed tables in staging; typed path used; owner: CA-MIG-03)
+    - F-01: REPAIRED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY (Composite FK fk_workspace_receipt enforces (workspace_id, receipt_id); staging unchanged; owner: CA-INT-05)
+    - F-02: STILL_OPEN (WP-03 text-keyed tables shadow CA-IMPL-01B uuid-keyed tables in staging; typed path used; owner: CA-TOPO-06)
     - F-03: STILL_OPEN (FastAPI campaign router bypasses typed runtime operations; brownfield SQLite isolated; owner: CA-API-01)
     - F-04: STILL_OPEN (Destructive scaffolding DDL drops schema; owner: CA-MIG-03)
     - F-05: STILL_OPEN (Quarantined SFL and Primitive registry defects; owner: Lineage Governance)
@@ -146,6 +146,12 @@ retained_staging_cutover_evidence:
 - `docs/cae/implementation/CAE_APPLY_04_FAILURE_RECOVERY_REHEARSAL.md` — Phase 16 failure and recovery rehearsal.
 - `docs/cae/implementation/CAE_APPLY_04_TEARDOWN_RECEIPT.md` — Phase 16 teardown receipt.
 - `docs/cae/implementation/CAE_APPLY_04_COMPLETION_RECORD.md` — Phase 16 completion record (Sections A–H).
+- `docs/cae/gemini_execution/17_CA_INT_05_WORKSPACE_RECEIPT_LINEAGE_INTEGRITY_MANDATE.md` — operator mandate governing CA-INT-05.
+- `docs/cae/implementation/CAE_INT_05_F01_ADMISSION_RECORD.md` — Phase 17 admission record.
+- `docs/cae/implementation/CAE_INT_05_F01_SCHEMA_REPAIR_PROOF.md` — Phase 17 schema repair proof.
+- `docs/cae/implementation/CAE_INT_05_F01_ADVERSARIAL_RESULTS.md` — Phase 17 adversarial countertest results.
+- `docs/cae/implementation/CAE_INT_05_F01_RECOVERY_AND_TEARDOWN.md` — Phase 17 recovery rehearsal and teardown receipt.
+- `docs/cae/implementation/CAE_INT_05_COMPLETION_RECORD.md` — Phase 17 completion record (Sections A–G).
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -460,12 +466,20 @@ ca_apply_04_adversarial_countertests: PASS_11_OF_11_CT01_TO_CT11
 ca_apply_04_completion_record: VERIFIED_SECTIONS_A_TO_H
 ca_apply_04_static_verification: PASS
 ca_apply_04_pytest_suite: PASS
+ca_int_05_admission_record: VERIFIED_DISPOSABLE_ONLY_NO_STAGING_PRODUCTION
+ca_int_05_f01_composite_fk_repair: VERIFIED_POSTGRES_CONSTRAINT_LEVEL
+ca_int_05_adversarial_countertests: PASS_11_OF_11_F01_CT01_TO_CT11
+ca_int_05_defense_retention: VERIFIED_TRIGGER_AND_RLS_ACTIVE
+ca_int_05_teardown_receipt: VERIFIED_PURGED_ZERO_LEAKAGE
+ca_int_05_completion_record: VERIFIED_SECTIONS_A_TO_G
+ca_int_05_static_verification: PASS
+ca_int_05_pytest_suite: PASS
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
 test_execution_this_work_package: REPRODUCED_NAMED_STATIC_AND_DYNAMIC_VERIFIERS_ONLY
 reality_contact_claim: NOT_MADE
-operational_authority_transition: ZERO_CHANGE_DURING_CA_APPLY_04
+operational_authority_transition: ZERO_CHANGE_DURING_CA_INT_05
 ```
 
 ## Risks

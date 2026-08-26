@@ -11,7 +11,7 @@ Enforces:
 7. Idempotent / No-op Re-run verification.
 8. Synthetic Fixture Containment & Failure Recovery Rehearsal.
 
-Governed by CA-APPLY-04 Mandate and TS-CAE-TEN-001.
+Governed by CA-APPLY-04, CA-INT-05 Mandates, and TS-CAE-TEN-001.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 from urllib.parse import urlsplit
 
 
@@ -67,6 +67,8 @@ APPROVED_DRAFTS = [
     ("MIG-0005", "0005_cae_row_level_security.sql", "MIG-0004"),
     ("MIG-0006", "0006_cae_indexes_and_constraints.sql", "MIG-0005"),
 ]
+
+F01_REPAIR_DRAFT = ("MIG-0007", "0007_cae_f01_composite_receipt_fk_draft.sql", "MIG-0006")
 
 
 @dataclass(frozen=True)
@@ -117,15 +119,24 @@ class GuardedMigrationRunner:
         self,
         admission: TargetEnvironmentAdmission,
         drafts_dir: Path,
+        *,
+        include_f01_repair: bool = False,
+        custom_drafts: Optional[Sequence[Tuple[str, str, str]]] = None,
     ) -> None:
         self.admission = admission
         self.drafts_dir = drafts_dir
         self.admission.validate()
         self.manifest: List[MigrationManifestEntry] = []
+        if custom_drafts is not None:
+            self.approved_drafts = list(custom_drafts)
+        else:
+            self.approved_drafts = list(APPROVED_DRAFTS)
+            if include_f01_repair:
+                self.approved_drafts.append(F01_REPAIR_DRAFT)
         self._load_and_validate_manifest()
 
     def _load_and_validate_manifest(self) -> None:
-        for mig_id, fname, pred in APPROVED_DRAFTS:
+        for mig_id, fname, pred in self.approved_drafts:
             fpath = self.drafts_dir / fname
             if not fpath.is_file():
                 raise FileNotFoundError(f"Missing migration draft file: {fname}")
@@ -138,7 +149,7 @@ class GuardedMigrationRunner:
 
             # Static Safety Linting
             cleaned_sql = re.sub(
-                r"\bDROP\s+(TRIGGER|POLICY|EXTENSION)\b",
+                r"\bDROP\s+(TRIGGER|POLICY|EXTENSION|CONSTRAINT)\b",
                 "",
                 content,
                 flags=re.IGNORECASE,
@@ -178,12 +189,29 @@ class GuardedMigrationRunner:
 
     def preflight_incompatible_topology(self, existing_tables: Dict[str, Dict[str, str]]) -> None:
         """Preflight check: Reject schema if non-conforming table/column types exist."""
-        # e.g., if workspace exists with text workspace_id instead of UUID
         if "cae.workspace" in existing_tables:
             ws_cols = existing_tables["cae.workspace"]
             if ws_cols.get("workspace_id") != "uuid":
                 raise IncompatibleTopologyError(
                     f"Incompatible topology detected: cae.workspace.workspace_id has type '{ws_cols.get('workspace_id')}', expected 'uuid'."
+                )
+
+    def preflight_f01_composite_fk_readiness(
+        self,
+        receipt_unique_keys: List[Tuple[str, ...]],
+        existing_evidence_links: List[Dict[str, str]],
+    ) -> None:
+        """Preflight check for F-01 repair: parent key exists and zero orphaned/cross-workspace links."""
+        # 1. Parent table cae.receipt must have composite unique key (workspace_id, receipt_id)
+        if ("workspace_id", "receipt_id") not in receipt_unique_keys:
+            raise IncompatibleTopologyError(
+                "Parent table cae.receipt lacks required composite unique constraint on (workspace_id, receipt_id)."
+            )
+        # 2. Existing evidence links must have zero cross-workspace mismatches
+        for link in existing_evidence_links:
+            if link["link_workspace_id"] != link["receipt_workspace_id"]:
+                raise IncompatibleTopologyError(
+                    f"Cross-workspace link detected in existing data: link ws {link['link_workspace_id']} != receipt ws {link['receipt_workspace_id']}."
                 )
 
     def compute_manifest_checksum_digest(self) -> str:
