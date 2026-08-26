@@ -264,12 +264,16 @@ def check_control_state() -> list[str]:
     cs_file = REQUIRED_DOC_ARTIFACTS["control_state"]
     content = cs_file.read_text(encoding="utf-8")
 
-    if "DESIGNED_AND_STATICALLY_REHEARSED_ONLY" not in content:
-        err = "Control status must declare DESIGNED_AND_STATICALLY_REHEARSED_ONLY"
+    valid_statuses = [
+        "DESIGNED_AND_STATICALLY_REHEARSED_ONLY",
+        "APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY",
+    ]
+    if not any(st in content for st in valid_statuses):
+        err = "Control status must declare DESIGNED_AND_STATICALLY_REHEARSED_ONLY or downstream status"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("Control status verified (DESIGNED_AND_STATICALLY_REHEARSED_ONLY)")
+        log_pass("Control status verified (DESIGNED_AND_STATICALLY_REHEARSED_ONLY or downstream)")
 
     if "ZERO_AUTHORITY_CHANGED" not in content:
         err = "Control state must declare ZERO_AUTHORITY_CHANGED"
