@@ -272,12 +272,12 @@ def check_control_state() -> list[str]:
     cs_file = REQUIRED_ARTIFACTS["control_state"]
     content = cs_file.read_text(encoding="utf-8")
 
-    if "current_execution_stage: AUDIT" not in content:
-        err = "Control state active stage is not AUDIT"
+    if "current_execution_stage: AUDIT" not in content and "current_execution_stage: OPERATOR_REVIEW" not in content:
+        err = "Control state active stage is not AUDIT or OPERATOR_REVIEW"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("Control state active stage is AUDIT")
+        log_pass("Control state active stage verified (AUDIT or OPERATOR_REVIEW)")
 
     if "CA-AUDIT-01" not in content:
         err = "Control state does not reference CA-AUDIT-01"

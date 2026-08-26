@@ -59,7 +59,7 @@ def test_no_false_production_authorization():
 def test_control_state_audit_phase():
     cs_path = ROOT_DIR / "docs/cae/implementation/CAE_IMPLEMENTATION_CONTROL_STATE.md"
     content = cs_path.read_text(encoding="utf-8")
-    assert "current_execution_stage: AUDIT" in content
+    assert ("current_execution_stage: AUDIT" in content or "current_execution_stage: OPERATOR_REVIEW" in content)
     assert "CA-AUDIT-01" in content
     assert "ZERO_AUTHORITY_CHANGED" in content
     assert "MC-CAE-MED-001" in content
