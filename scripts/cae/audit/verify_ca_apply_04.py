@@ -210,6 +210,7 @@ def verify_control_state() -> bool:
     valid_statuses = [
         "APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY",
         "F01_REPAIRED_AND_E3_PROVEN_DISPOSABLE_ONLY",
+        "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
     ]
     if not any(st in content for st in valid_statuses):
         log_fail("Control status is not APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY or downstream")
