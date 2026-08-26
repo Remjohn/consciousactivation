@@ -5,7 +5,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from _support import ROOT  # type: ignore
+from ._support import ROOT  # type: ignore
 from cmf_pipeline import PipelineApplication
 from cmf_pipeline.demo import write_demo_harness
 from cmf_pipeline.domain.errors import PipelineValidationError

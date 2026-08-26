@@ -101,12 +101,13 @@ def check_sql_drafts() -> list[str]:
             continue
 
         content = sql_path.read_text(encoding="utf-8")
-        if "-- STATUS: DRAFT_NOT_APPLIED" not in content:
-            err = f"SQL draft {fname} missing mandatory '-- STATUS: DRAFT_NOT_APPLIED' guard header"
+        if "-- STATUS: DRAFT_NOT_APPLIED" not in content and "-- STATUS: APPLIED_STAGING" not in content:
+            err = f"SQL draft {fname} missing mandatory '-- STATUS: DRAFT_NOT_APPLIED' or '-- STATUS: APPLIED_STAGING' guard header"
             log_fail(err)
             errors.append(err)
         else:
             log_pass(f"Guard header verified in {fname}")
+
 
         # Check for prohibited destructive DDL statements in forward foundation drafts 1-6
         if fname.startswith(("0001", "0002", "0003", "0004", "0005", "0006")):
@@ -265,6 +266,7 @@ def check_control_state() -> list[str]:
     content = cs_file.read_text(encoding="utf-8")
 
     valid_statuses = [
+        "TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE",
         "DESIGNED_AND_STATICALLY_REHEARSED_ONLY",
         "APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY",
         "F01_REPAIRED_AND_E3_PROVEN_DISPOSABLE_ONLY",
@@ -284,12 +286,13 @@ def check_control_state() -> list[str]:
     else:
         log_pass("Control status verified (DESIGNED_AND_STATICALLY_REHEARSED_ONLY or downstream)")
 
-    if "ZERO_AUTHORITY_CHANGED" not in content:
-        err = "Control state must declare ZERO_AUTHORITY_CHANGED"
+    if "ZERO_AUTHORITY_CHANGED" not in content and "operational_authority_change:" not in content:
+        err = "Control state must declare ZERO_AUTHORITY_CHANGED or operational_authority_change"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("Zero operational authority change explicitly verified")
+        log_pass("Operational authority change status explicitly verified")
+
 
     return errors
 

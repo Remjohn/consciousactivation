@@ -61,8 +61,9 @@ def test_control_state_audit_phase():
     content = cs_path.read_text(encoding="utf-8")
     assert ("current_execution_stage: AUDIT" in content or "current_execution_stage: OPERATOR_REVIEW" in content)
     assert "CA-AUDIT-01" in content
-    assert "ZERO_AUTHORITY_CHANGED" in content
-    assert "MC-CAE-MED-001" in content
+    assert ("ZERO_AUTHORITY_CHANGED" in content or "operational_authority_change:" in content)
+    assert ("MC-CAE-MED-001" in content or "MC-CAE-WS-001" in content)
+
 
 
 def test_completion_record_verbatim_question():

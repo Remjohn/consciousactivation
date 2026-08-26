@@ -4,7 +4,7 @@ import json
 import unittest
 from pathlib import Path
 
-from _support import ROOT  # type: ignore
+from ._support import ROOT  # type: ignore
 
 
 class BoundaryTests(unittest.TestCase):

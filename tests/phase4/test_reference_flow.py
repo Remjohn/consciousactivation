@@ -1,4 +1,4 @@
-from _support import *
+from ._support import *
 from conscious_activations_interview_expression.demo import run_demo
 
 def test_deterministic_reference_flow(tmp_path):

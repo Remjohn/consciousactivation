@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 import pytest
-from _support import compile_demand,delegation_root,ref
+from ._support import compile_demand,delegation_root,ref
 from cmf_vae.application import VAEApplication
 from cmf_vae.errors import VAEValidationError
 from cmf_vae.phase8_demo import run_phase8_demo

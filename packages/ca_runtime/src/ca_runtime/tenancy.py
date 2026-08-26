@@ -167,15 +167,28 @@ def extract_tenant_context_from_claims(
 def apply_tenant_session(
     cursor: psycopg.Cursor[object],
     context: TenantContext,
+    is_local: bool = False,
 ) -> None:
     """Configure PostgreSQL session configuration variables for Row-Level Security (RLS)."""
-    cursor.execute("SELECT set_config('app.current_workspace_id', %s, true)", (str(context.workspace_id),))
-    cursor.execute("SELECT set_config('app.current_actor_id', %s, true)", (context.actor_id,))
-    cursor.execute("SELECT set_config('app.is_operator', %s, true)", ("true" if context.is_operator else "false",))
+    is_system_op = context.is_operator and context.role in ("SYSTEM_ADMIN", "SYSTEM_OPERATOR")
+    if is_system_op:
+        cursor.execute("RESET ROLE;")
+    else:
+        cursor.execute("SET ROLE authenticated;")
+
+    cursor.execute("SELECT set_config('app.current_workspace_id', %s, %s)", (str(context.workspace_id), is_local))
+    cursor.execute("SELECT set_config('app.current_actor_id', %s, %s)", (context.actor_id, is_local))
+    cursor.execute("SELECT set_config('app.is_operator', %s, %s)", ("true" if context.is_operator else "false", is_local))
+    cursor.execute("SELECT set_config('app.is_system_operator', %s, %s)", ("true" if is_system_op else "false", is_local))
     if context.operator_grant_id is not None:
         cursor.execute(
-            "SELECT set_config('app.current_operator_grant_id', %s, true)",
-            (str(context.operator_grant_id),),
+            "SELECT set_config('app.current_operator_grant_id', %s, %s)",
+            (str(context.operator_grant_id), is_local),
         )
     else:
-        cursor.execute("SELECT set_config('app.current_operator_grant_id', '', true)")
+        cursor.execute("SELECT set_config('app.current_operator_grant_id', '', %s)", (is_local,))
+
+
+
+
+

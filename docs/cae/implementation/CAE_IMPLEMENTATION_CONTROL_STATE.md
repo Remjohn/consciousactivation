@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `CONSTITUTION_SET_COMPLETE_READY_FOR_OPERATOR_READING`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-UPTL-01 Mandate; Operator Acceptance
+**Control status:** `TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-TWC-01 Mandate; TS-CAE-TEN-001
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-ACCEPT-10 (with CA-E3-08, CA-STAGE-09, CA-ACCEPT-10 evidence records formally reclassified as `CLAIMS_UNVERIFIED_BY_OPERATOR`), and CA-UPTL-01 Upstream Intelligence Completion (U1 SFL/primitive defect dispositions with Route B permanent quarantine and runtime typed refusals; U2 genuine ModelReasoningEngine bound to ProgrammedModelRegistry with live Groq probe; U3 World -> Context -> SDA -> Edging demonstration on synthetic input with 8 immutable receipts and honest `reward_hack_result: UNVERIFIED` boundaries; U4 AIR generation services F17/F28/F29/F30 upgraded with model-backed synthesis and contrastive tests). Zero operational authority changed. Zero shared-staging or production databases written to.
+**Scope:** CA-TWC-01 Tenant & Workspace Core. Sub-workstreams T0 (Live Admission & Emptiness Proof), T1 (Honest Staging Redeploy STAGE-09R with MIG-0000R..0009 and 6 live countertests), T2 (Law-Complete Typed Tenancy Core with append-only receipts), T3 (Versioned FastAPI Router with campaign router untouched), T4 (Live Two-Workspace Isolation Matrix, Rollback Rehearsal, and Receipted Cleanup). Operational Authority Promoted: MC-CAE-WS-001, MC-CAE-MEM-001, MC-CAE-OPR-001 to POSTGRES_AUTHORITATIVE_STAGING_ONLY. Zero production authority, zero client data migration.
 
 ## Required control fields
 
@@ -31,44 +31,55 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-UPTL-01 Upstream Intelligence Completion
+current_work_package: CA-TWC-01 Tenant & Workspace Core
 objective: >
-  Complete upstream intelligence foundational requirements across four gated sub-workstreams:
-  U1: Custodian disposition packet for SFL/primitive registry defects, implementing Route B permanent quarantine with typed runtime refusals.
-  U2: Bind one real model-backed reasoning module (ModelReasoningEngine) through ProgrammedModelRegistry conventions, capturing verbatim synthetic transcript and telemetry.
-  U3: Demonstrate World -> Context -> SDA -> Edging once on synthetic input with 8 immutable receipts and honest UNVERIFIED epistemic fields.
-  U4: Replace generation stubs with genuine model reasoning behind F17/F28/F29/F30 with contrastive test suite.
+  Complete Tenant & Workspace Core vertical slice across five gated sub-workstreams:
+  T0: Probed live PostgreSQL server identity and audited all 27 slated reset tables at 0 rows.
+  T1: Authored MIG-0000R non-destructive reset, applied MIG-0001..0009 byte-exact with live checksums, verified APPLIED_STAGING and 6 live structural countertests.
+  T2: Authored typed workspace/membership/grant operations in ca_runtime.workspace_core with immutable receipts and UNVERIFIED epistemic boundaries.
+  T3: Authored and mounted FastAPI versioned router api/routers/v1_tenancy.py with campaign router untouched.
+  T4: Executed live 2-workspace isolation matrix, rollback rehearsal, transient cleanup to 0 rows, and full regression verification.
 agent_id: Antigravity CAE Governed Execution Agent
-git_commit: main (CA-UPTL-01 complete: U1-U4 artifacts, proofs, tests, and control state)
+git_commit: main (CA-TWC-01 complete: T0-T4 artifacts, proofs, tests, and control state)
 environment_identity:
   workspace: D:\Work\consciousactivation
   branch: main
   python: 3.12.0
   node: v24.11.0
-  operational_authority_change: ZERO_AUTHORITY_CHANGED
   reclassified_prior_chains:
     CA-E3-08: CLAIMS_UNVERIFIED_BY_OPERATOR
     CA-STAGE-09: CLAIMS_UNVERIFIED_BY_OPERATOR
     CA-ACCEPT-10: CLAIMS_UNVERIFIED_BY_OPERATOR
-  migration_package_status: UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE
+  operational_authority_change:
+    MC-CAE-WS-001: POSTGRES_AUTHORITATIVE_STAGING_ONLY
+    MC-CAE-MEM-001: POSTGRES_AUTHORITATIVE_STAGING_ONLY
+    MC-CAE-OPR-001: POSTGRES_AUTHORITATIVE_STAGING_ONLY
+    ALL_OTHER_AGGREGATES: SQLITE_AUTHORITATIVE_LOCAL_ONLY
+  staging_target:
+    host: aws-1-eu-west-1.pooler.supabase.com:5432
+    project_ref: evnxdssbxxrsesftdvgx
+    server_version: PostgreSQL 17.6
+  migration_package_status: TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE
+
 last_updated: 2026-08-26
-next_transition: CA-CAN-02 Constitution Set Authoring — pending operator decision on CA-UPTL-01
+next_transition: CA-NEXT Media & Evidence Ingestion Mandate — pending operator decision on CA-TWC-01
 subworkstream_status:
-  U1_registry_dispositions: COMPLETED_ROUTE_B_QUARANTINE
-  U2_model_reasoning_module: COMPLETED_LIVE_PROBE_VERIFIED
-  U3_semantic_chain_demonstration: COMPLETED_8_RECEIPTS_UNVERIFIED
-  U4_air_generation_upgrades: COMPLETED_CONTRASTIVE_TESTS_PASSING
+  T0_staging_admission: COMPLETED_LIVE_AUDIT_PROVEN
+  T1_honest_staging_redeploy: COMPLETED_STAGE_09R_APPLIED_STAGING
+  T2_typed_tenancy_core: COMPLETED_7_OPERATIONS_RECEIPTED
+  T3_versioned_api_surface: COMPLETED_V1_TENANCY_ROUTER_MOUNTED
+  T4_isolation_matrix_and_cleanup: COMPLETED_ALL_6_PROBES_PASSED
 retained_staging_cutover_evidence:
-  aggregate_id: MC-CAE-MED-001
-  contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
-  from_authority_state: DUAL_VERIFY
-  to_authority_state_recorded: CLAIMS_UNVERIFIED_BY_OPERATOR
-  environment_class: E2_DEVELOPMENT_STANDALONE
+  aggregate_ids_promoted:
+    - MC-CAE-WS-001
+    - MC-CAE-MEM-001
+    - MC-CAE-OPR-001
+  authority_state: POSTGRES_AUTHORITATIVE_STAGING_ONLY
   findings_disposition:
-    - F-01: SHARED_STAGING_REPAIRED_AND_VERIFIED (Composite FK fk_workspace_receipt enforces (workspace_id, receipt_id); owner: CA-INT-05 / CA-STAGE-09)
-    - F-02: SHARED_STAGING_REPAIRED_AND_VERIFIED (Option A canonical UUID topology & bridge route deployed; owner: CA-TOPO-07 / CA-STAGE-09)
-    - F-03: STILL_OPEN (FastAPI campaign router bypasses typed runtime operations; brownfield SQLite isolated; owner: CA-API-01)
-    - F-04: STILL_OPEN (Destructive scaffolding DDL drops schema; owner: CA-MIG-03)
+    - F-01: SHARED_STAGING_REPAIRED_AND_VERIFIED (Composite FK fk_workspace_receipt enforces (workspace_id, receipt_id); owner: CA-INT-05 / CA-TWC-01)
+    - F-02: SHARED_STAGING_REPAIRED_AND_VERIFIED (Canonical UUID topology & guest_profile view deployed; owner: CA-TOPO-07 / CA-TWC-01)
+    - F-03: STILL_OPEN (FastAPI campaign router untouched; brownfield SQLite isolated; owner: CA-API-01)
+    - F-04: RESOLVED_FOR_SHARED_STAGING (Non-destructive enumerated reset 0000R and complete RLS 0009 applied; owner: CA-TWC-01)
     - F-05: RESOLVED_FOR_RUNTIME (Quarantined SFL and Primitive registry defects handled via Route B typed runtime refusals; owner: CA-UPTL-01)
 ```
 

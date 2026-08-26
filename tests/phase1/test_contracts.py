@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _support import ROOT  # type: ignore  # noqa: F401
+from ._support import ROOT  # type: ignore  # noqa: F401
 
 from ca_contracts import (
     CanonicalizationError,

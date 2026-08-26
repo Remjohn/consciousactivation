@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from _support import composer_app, ref, valid_seed, valid_question
+from ._support import composer_app, ref, valid_seed, valid_question
 from conscious_activations_interview_composer.domain import make_guest_research_package
 
 

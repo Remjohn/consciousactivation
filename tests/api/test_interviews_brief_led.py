@@ -63,7 +63,7 @@ def test_digest_mismatch_rejected(api_app, fixtures_dir):
         lineage["planned_object_digests"]["brief"] = "f" * 64  # no longer matches brief_ref's sha256
         response = _post_brief_led(client, fixtures_dir, planning_lineage=lineage, workspace_id="ws-4", project_id="prj-4")
         assert response.status_code == 422, response.text
-        body = response.json()
+        body = response.json().get("detail", response.json())
         assert body["error_code"] == "VALIDATION_FAILED"
         assert "INT_ARMED_PLAN_HASH_MISMATCH" in body["message"]
         assert client.app.state.interview.repository.list_objects("canonical_interview_source_package") == []

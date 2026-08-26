@@ -105,7 +105,8 @@ def test_untimed_transcript_rejected(api_app, fixtures_dir):
             transcript_format="SRT",
         )
         assert response.status_code == 422, response.text
-        assert response.json()["error_code"] == "UNSUPPORTED_TRANSCRIPT_FORMAT"
+        err = response.json().get("detail", response.json())
+        assert err["error_code"] == "UNSUPPORTED_TRANSCRIPT_FORMAT"
         assert client.app.state.interview.repository.list_objects("canonical_interview_source_package") == []
 
 
@@ -117,7 +118,8 @@ def test_corrupt_media_rejected_before_admit(api_app, fixtures_dir):
             client, fixtures_dir, workspace_id="ws-8", project_id="prj-8", video_name="corrupt.mp4",
         )
         assert response.status_code == 422, response.text
-        assert response.json()["error_code"] == "MEDIA_PROBE_FAILED"
+        err = response.json().get("detail", response.json())
+        assert err["error_code"] == "MEDIA_PROBE_FAILED"
         assert client.app.state.interview.repository.list_objects("canonical_interview_source_package") == []
 
 

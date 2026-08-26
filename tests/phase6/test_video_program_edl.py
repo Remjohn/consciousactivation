@@ -1,4 +1,4 @@
-from _support import ref
+from ._support import ref
 import pytest
 from cmf_pipeline.application import PipelineApplication
 from cmf_pipeline.domain.errors import PipelineValidationError

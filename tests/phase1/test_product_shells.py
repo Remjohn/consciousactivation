@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-from _support import ROOT  # type: ignore
+from ._support import ROOT  # type: ignore
 
 PRODUCTS = (
     ("cmf_activative_intelligence", "activative-intelligence-runtime"),

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import copy
 import pytest
-from _support import compile_demand,delegation_root,ref
+from ._support import compile_demand,delegation_root,ref
 from ca_delegation_rc4 import ContractSet
 from cmf_pipeline.delegation import VisualDelegationService
 from cmf_pipeline.domain.errors import PipelineValidationError

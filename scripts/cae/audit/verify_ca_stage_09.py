@@ -173,6 +173,7 @@ def check_control_state() -> bool:
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
     all_ok = True
     valid_statuses = [
+        "TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE",
         "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
         "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
         "CLAIMS_UNVERIFIED_BY_OPERATOR",

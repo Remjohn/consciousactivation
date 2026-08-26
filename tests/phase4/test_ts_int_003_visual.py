@@ -1,4 +1,4 @@
-from _support import *
+from ._support import *
 import pytest
 from conscious_activations_interview_expression.errors import ValidationError
 

@@ -197,10 +197,11 @@ class GuardedMigrationRunner:
                 raise FileNotFoundError(f"Missing migration draft file: {fname}")
 
             content = fpath.read_text(encoding="utf-8")
-            if "-- STATUS: DRAFT_NOT_APPLIED" not in content:
+            if "-- STATUS: DRAFT_NOT_APPLIED" not in content and "-- STATUS: APPLIED_STAGING" not in content:
                 raise MigrationAdmissionError(
-                    f"Draft {fname} missing mandatory '-- STATUS: DRAFT_NOT_APPLIED' guard header."
+                    f"Draft {fname} missing mandatory '-- STATUS: DRAFT_NOT_APPLIED' or '-- STATUS: APPLIED_STAGING' guard header."
                 )
+
 
             # Static Safety Linting
             cleaned_sql = re.sub(

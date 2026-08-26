@@ -4,7 +4,7 @@ import json
 import subprocess
 import unittest
 
-from _support import ROOT  # type: ignore
+from ._support import ROOT  # type: ignore
 
 
 class StudioTests(unittest.TestCase):

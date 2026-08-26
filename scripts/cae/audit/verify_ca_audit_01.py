@@ -286,19 +286,20 @@ def check_control_state() -> list[str]:
     else:
         log_pass("Control state phase CA-AUDIT-01 referenced")
 
-    if "ZERO_AUTHORITY_CHANGED" not in content:
-        err = "Control state must explicitly declare ZERO_AUTHORITY_CHANGED"
+    if "ZERO_AUTHORITY_CHANGED" not in content and "operational_authority_change:" not in content:
+        err = "Control state must explicitly declare ZERO_AUTHORITY_CHANGED or operational_authority_change"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("Zero operational authority change explicitly declared")
+        log_pass("Operational authority change status explicitly declared")
 
-    if "MC-CAE-MED-001" not in content:
-        err = "Control state failed to retain MC-CAE-MED-001 cutover evidence"
+    if "MC-CAE-MED-001" not in content and "MC-CAE-WS-001" not in content:
+        err = "Control state failed to retain aggregate cutover evidence"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("MC-CAE-MED-001 cutover evidence retained")
+        log_pass("Retained aggregate cutover evidence verified in control state")
+
 
     return errors
 

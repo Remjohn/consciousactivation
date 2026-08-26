@@ -1,4 +1,4 @@
--- STATUS: DRAFT_NOT_APPLIED
+-- STATUS: APPLIED_STAGING
 -- DO NOT EXECUTE DIRECTLY OUTSIDE AN AUTHORIZED APPLICATION MANDATE
 -- Migration ID: MIG-0005
 -- Title: CAE Row-Level Security Enablement and Tenant Isolation Policies

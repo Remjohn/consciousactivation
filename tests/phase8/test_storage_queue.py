@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 import pytest
-from _support import delegation_root
+from ._support import delegation_root
 from ca_contracts import canonical_sha256
 from cmf_vae.repository import VAERepository
 from cmf_vae.storage import ContentAddressedStore

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from _support import composer_app
+from ._support import composer_app
 from conscious_activations_interview_composer.errors import NotFoundError, ConflictError
 
 

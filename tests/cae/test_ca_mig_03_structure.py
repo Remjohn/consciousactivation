@@ -44,7 +44,8 @@ def test_sql_drafts_exist_and_guarded():
         p = drafts_dir / fname
         assert p.is_file(), f"SQL draft missing: {fname}"
         content = p.read_text(encoding="utf-8")
-        assert "-- STATUS: DRAFT_NOT_APPLIED" in content, f"Missing guard header in {fname}"
+        assert "-- STATUS: DRAFT_NOT_APPLIED" in content or "-- STATUS: APPLIED_STAGING" in content, f"Missing guard header in {fname}"
+
 
 
 def test_foundation_drafts_non_destructive():

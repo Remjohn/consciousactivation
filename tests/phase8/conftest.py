@@ -2,7 +2,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 import pytest
-from _support import delegation_root
+from ._support import delegation_root
 
 @pytest.fixture
 def rc4_root(): return delegation_root()

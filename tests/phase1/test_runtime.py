@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _support import ROOT  # type: ignore  # noqa: F401
+from ._support import ROOT  # type: ignore  # noqa: F401
 
 from ca_runtime.cli import bootstrap_transition
 from ca_runtime.database import IdempotencyConflict, ProductDatabase

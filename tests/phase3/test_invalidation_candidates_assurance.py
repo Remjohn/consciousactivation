@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _support import ref  # type: ignore
+from ._support import ref  # type: ignore
 from cmf_pipeline import PipelineApplication
 from cmf_pipeline.domain.errors import PipelineValidationError
 

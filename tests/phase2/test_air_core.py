@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _support import AUTHORITY, ROOT, base, ref  # type: ignore
+from ._support import AUTHORITY, ROOT, base, ref  # type: ignore
 from ca_contracts import canonical_sha256
 from cmf_activative_intelligence.application import AirApplication
 from cmf_activative_intelligence.domain import (

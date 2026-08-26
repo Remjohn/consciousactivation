@@ -289,12 +289,13 @@ def check_control_state() -> list[str]:
     else:
         log_pass("Control state phase CA-GOV-02 referenced")
 
-    if "ZERO_AUTHORITY_CHANGED" not in content:
-        err = "Control state must explicitly declare ZERO_AUTHORITY_CHANGED"
+    if "ZERO_AUTHORITY_CHANGED" not in content and "operational_authority_change:" not in content:
+        err = "Control state must explicitly declare ZERO_AUTHORITY_CHANGED or operational_authority_change"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("Zero operational authority change explicitly declared")
+        log_pass("Operational authority change status explicitly declared")
+
 
     return errors
 

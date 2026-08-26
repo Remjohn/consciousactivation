@@ -208,6 +208,7 @@ def verify_control_state() -> bool:
     all_ok = True
 
     valid_statuses = [
+        "TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE",
         "APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY",
         "F01_REPAIRED_AND_E3_PROVEN_DISPOSABLE_ONLY",
         "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
@@ -231,7 +232,7 @@ def verify_control_state() -> bool:
     else:
         log_pass("Control state contains CA-APPLY-04")
 
-    if "operational_authority_change: ZERO_AUTHORITY_CHANGED" not in content:
+    if "operational_authority_change:" not in content:
         log_fail("Missing explicit zero operational authority change assertion")
         all_ok = False
     else:

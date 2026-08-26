@@ -2,7 +2,7 @@ from __future__ import annotations
 import json,sys
 from pathlib import Path
 import pytest
-from _support import compile_demand,delegation_root
+from ._support import compile_demand,delegation_root
 from ca_contracts import canonical_sha256
 from cmf_vae.application import VAEApplication
 from cmf_vae.capabilities import WorkcellCompiler,default_registry
