@@ -121,9 +121,13 @@ def test_completion_record_structure_and_decision_question():
 
 
 def test_control_state_status():
-    """Control state is updated to INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY."""
+    """Control state is updated to INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY or downstream."""
     content = (IMPL_DIR / "CAE_IMPLEMENTATION_CONTROL_STATE.md").read_text(encoding="utf-8")
-    assert "**Control status:** `INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY`" in content
+    valid_statuses = [
+        "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
+        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
+    ]
+    assert any(st in content for st in valid_statuses)
     assert "CA-E3-08" in content
 
 

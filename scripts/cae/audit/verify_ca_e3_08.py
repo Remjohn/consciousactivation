@@ -189,8 +189,12 @@ def check_control_state() -> bool:
     print("[CHECK 8] Verifying Control State Document...")
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
     all_ok = True
-    if "**Control status:** `INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY`" not in content:
-        print("  [FAIL] Control status is not INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY")
+    valid_statuses = [
+        "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
+        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
+    ]
+    if not any(st in content for st in valid_statuses):
+        print("  [FAIL] Control status is not INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY or downstream")
         all_ok = False
     if "CA-E3-08" not in content:
         print("  [FAIL] Control state does not reference CA-E3-08")

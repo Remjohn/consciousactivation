@@ -106,6 +106,56 @@ class TargetEnvironmentAdmission:
                 )
 
 
+@dataclass(frozen=True)
+class SharedStagingEnvironmentAdmission:
+    target_label: str
+    target_url: str
+    environment_class: str
+    change_window: str
+    backup_snapshot_id: str
+    recovery_owner: str
+    data_classification: str = "EMPTY_OR_SYNTHETIC_ONLY"
+
+    def validate(self) -> None:
+        valid_classes = [
+            "SHARED_STAGING_GUARDED",
+            "E3_STAGING_SUPABASE_POOLER_PRIVATE_STORAGE",
+        ]
+        if self.environment_class not in valid_classes:
+            raise MigrationAdmissionError(
+                f"Invalid staging environment class: {self.environment_class}. Must be one of {valid_classes}."
+            )
+        if self.data_classification != "EMPTY_OR_SYNTHETIC_ONLY":
+            raise MigrationAdmissionError(
+                f"Forbidden data classification: {self.data_classification}. Client/production data prohibited."
+            )
+        if not self.change_window or not self.change_window.startswith("CW-"):
+            raise MigrationAdmissionError(
+                f"Invalid or missing change window: {self.change_window}."
+            )
+        if not self.backup_snapshot_id:
+            raise MigrationAdmissionError("Missing required pre-deployment backup_snapshot_id.")
+        if not self.recovery_owner:
+            raise MigrationAdmissionError("Missing designated recovery_owner.")
+
+        parsed = urlsplit(self.target_url)
+        url_lower = self.target_url.lower()
+
+        # Reject any production signatures
+        prohibited_prod = ["prod", "production", "live", "customer", "main-db"]
+        for sig in prohibited_prod:
+            if sig in url_lower:
+                raise MigrationAdmissionError(
+                    f"Target URL contains forbidden production signature '{sig}': {parsed.hostname}"
+                )
+
+        # Ensure approved staging project identity
+        if "evnxdssbxxrsesftdvgx" not in url_lower and "127.0.0.1" not in url_lower and "localhost" not in url_lower:
+            raise MigrationAdmissionError(
+                f"Target URL does not match approved staging signature 'evnxdssbxxrsesftdvgx': {parsed.hostname}"
+            )
+
+
 @dataclass
 class MigrationManifestEntry:
     migration_id: str
@@ -119,7 +169,7 @@ class MigrationManifestEntry:
 class GuardedMigrationRunner:
     def __init__(
         self,
-        admission: TargetEnvironmentAdmission,
+        admission: TargetEnvironmentAdmission | SharedStagingEnvironmentAdmission,
         drafts_dir: Path,
         *,
         include_f01_repair: bool = False,

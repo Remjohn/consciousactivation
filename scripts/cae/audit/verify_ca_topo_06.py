@@ -207,6 +207,7 @@ def verify_control_state() -> bool:
         "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
         "F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY",
         "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
+        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
     ]
     if not any(f"**Control status:** `{st}`" in content for st in valid_statuses):
         log_fail("Control status is not F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED or downstream")
