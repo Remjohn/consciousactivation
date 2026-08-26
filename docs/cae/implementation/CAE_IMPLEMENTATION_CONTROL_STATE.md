@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `CA_GOV_02_PENDING_OPERATOR_DECISION`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-GOV-02 Mandate; Operator Acceptance of CA-AUDIT-01
+**Control status:** `DESIGNED_AND_STATICALLY_REHEARSED_ONLY`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-MIG-03 Mandate; Operator Acceptance of CA-GOV-02
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-GOV-02 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, and CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation (18-item ratification register, 3-layer stratified control architecture, 8-item unbundled operator decision packet, 13 status transitions, and zero operational authority change). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero data movement occurred during CA-GOV-02.
+**Scope:** WP-00 through CA-MIG-03 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, and CA-MIG-03 Forward-Only PostgreSQL Migration Design and Offline Safety Rehearsal (schema inventory, forward migration plan, acyclic dependency DAG, 10-point No-Go safety rehearsal, F-01/F-02 repair boundaries, non-executable SQL drafts 0001-0008, static validator, pure test suite, and zero operational authority change). No legacy service authority, production environment, or brownfield SQLite database was changed. Zero data movement or database execution occurred during CA-MIG-03.
 
 ## Required control fields
 
@@ -31,22 +31,24 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation
+current_work_package: CA-MIG-03 Forward-Only PostgreSQL Migration Design and Offline Safety Rehearsal
 objective: >
-  Reconcile formal ratification records, stratify durable control state into three decoupled
-  layers (Current State, Historical Ledger, Open Decisions), present an 8-item unbundled
-  operator decision packet, and preserve all historical cutover/promotion evidence without
-  changing operational authority. Zero operational authority changed.
+  Design a forward-only, acyclic, non-destructive PostgreSQL migration sequence (MIG-0001
+  through MIG-0006), define repair boundaries for F-01 and F-02 (MIG-0007 and MIG-0008 drafts),
+  perform static/offline safety rehearsal with a 10-point No-Go checklist, and prepare
+  completion records without applying any database migration or changing operational authority.
+  Zero operational authority changed.
 agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
-git_commit: main (CA-GOV-02 ratification register, decision packet, transition ledger, static validator)
+git_commit: main (CA-MIG-03 schema inventory, forward plan, dependency graph, safety rehearsal, repair boundary)
 environment_identity:
   workspace: D:\Work\consciousactivation
   branch: main
   python: 3.12.0
   node: v24.11.0
   operational_authority_change: ZERO_AUTHORITY_CHANGED
+  migration_package_status: DESIGNED_AND_STATICALLY_REHEARSED_ONLY
 last_updated: 2026-08-26
-next_transition: CA-MIG-03 (Forward-Only Migration Safety) — pending operator decision on CA-GOV-02 packet
+next_transition: CA-MIG-04 Disposable-Environment Migration Application Proof — pending operator decision on CA-MIG-03
 retained_staging_cutover_evidence:
   aggregate_id: MC-CAE-MED-001
   contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
@@ -119,6 +121,7 @@ retained_staging_cutover_evidence:
 - `docs/cae/gemini_execution/12_CA_IMPL_02_ONE_AGGREGATE_AUTHORITY_CUTOVER_MANDATE.md` — operator mandate governing CA-IMPL-02/02P.
 - `docs/cae/gemini_execution/13_CA_AUDIT_01_POST_EXECUTION_GOVERNANCE_RECONCILIATION_MANDATE.md` — operator mandate governing CA-AUDIT-01.
 - `docs/cae/gemini_execution/14_CA_GOV_02_RATIFICATION_AND_CONTROL_STATE_MANDATE.md` — operator mandate governing CA-GOV-02.
+- `docs/cae/gemini_execution/15_CA_MIG_03_FORWARD_ONLY_MIGRATION_SAFETY_MANDATE.md` — operator mandate governing CA-MIG-03.
 - `docs/cae/implementation/CAE_POST_EXECUTION_GOVERNANCE_AUDIT.md` — Phase 13 executive audit report.
 - `docs/cae/implementation/CAE_GOVERNANCE_STATUS_MATRIX.md` — 14-column status matrix across Phases 1–12.
 - `docs/cae/implementation/CAE_AUDIT_01_FINDINGS_AND_DECISIONS_REGISTER.md` — Findings and decisions register.
@@ -129,6 +132,12 @@ retained_staging_cutover_evidence:
 - `docs/cae/implementation/CAE_GOV_02_OPERATOR_DECISION_PACKET.md` — 8-item unbundled operator decision packet.
 - `docs/cae/implementation/CAE_GOV_02_GOVERNANCE_TRANSITION_LEDGER.md` — 13-transition ledger and 8 adversarial checks.
 - `docs/cae/implementation/CAE_GOV_02_COMPLETION_RECORD.md` — Phase 14 completion record (Sections A–H).
+- `docs/cae/implementation/CAE_MIG_03_SCHEMA_INVENTORY.md` — Phase 15 schema inventory across 10 tables and Storage.
+- `docs/cae/implementation/CAE_MIG_03_FORWARD_MIGRATION_PLAN.md` — Phase 15 forward-only migration plan.
+- `docs/cae/implementation/CAE_MIG_03_MIGRATION_DEPENDENCY_GRAPH.md` — Phase 15 acyclic object dependency DAG.
+- `docs/cae/implementation/CAE_MIG_03_SAFETY_REHEARSAL.md` — Phase 15 offline safety rehearsal and 10 No-Go checks.
+- `docs/cae/implementation/CAE_MIG_03_F01_F02_REPAIR_BOUNDARY.md` — Phase 15 repair boundary for findings F-01 and F-02.
+- `docs/cae/implementation/CAE_MIG_03_COMPLETION_RECORD.md` — Phase 15 completion record (Sections A–H).
 - Existing service migrations, repositories, API bootstrap, package documentation, Builder ADR-003, and current tests listed in the Reality Map.
 
 ## Current codebase truth
@@ -425,12 +434,21 @@ ca_gov_02_transition_ledger: VERIFIED_13_TRANSITIONS_8_ADVERSARIAL_DEFENSES
 ca_gov_02_completion_record: VERIFIED_SECTIONS_A_TO_H
 ca_gov_02_static_verification: PASS
 ca_gov_02_pytest_suite: PASS
+ca_mig_03_schema_inventory: VERIFIED_10_TABLES_STORAGE_BUCKET
+ca_mig_03_forward_migration_plan: VERIFIED_FORWARD_ONLY_NO_DML
+ca_mig_03_dependency_graph: VERIFIED_DAG_ACYCLIC_TOPOLOGICAL_SORT
+ca_mig_03_safety_rehearsal: VERIFIED_10_POINT_NO_GO_CHECKLIST
+ca_mig_03_f01_f02_repair_boundary: VERIFIED_STILL_OPEN_DESIGNED_NOT_APPLIED
+ca_mig_03_draft_sql_manifests: VERIFIED_8_DRAFTS_WITH_GUARD_HEADERS
+ca_mig_03_completion_record: VERIFIED_SECTIONS_A_TO_H
+ca_mig_03_static_verification: PASS
+ca_mig_03_pytest_suite: PASS
 legacy_data_migration: NOT_STARTED
 sda_sfl_runtime_registry_migration: NOT_STARTED
 existing_test_inventory: VERIFIED_READ_ONLY
 test_execution_this_work_package: REPRODUCED_NAMED_STATIC_AND_DYNAMIC_VERIFIERS_ONLY
 reality_contact_claim: NOT_MADE
-operational_authority_transition: ZERO_CHANGE_DURING_CA_GOV_02
+operational_authority_transition: ZERO_CHANGE_DURING_CA_MIG_03
 ```
 
 ## Risks
