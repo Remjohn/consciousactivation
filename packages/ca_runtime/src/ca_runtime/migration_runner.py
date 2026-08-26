@@ -82,9 +82,10 @@ class TargetEnvironmentAdmission:
     teardown_owner: str
 
     def validate(self) -> None:
-        if self.environment_class != "DISPOSABLE_POSTGRESQL_ONLY":
+        valid_classes = ["DISPOSABLE_POSTGRESQL_ONLY", "E3_STAGING_EQUIVALENT_DISPOSABLE"]
+        if self.environment_class not in valid_classes:
             raise MigrationAdmissionError(
-                f"Invalid environment class: {self.environment_class}. Must be DISPOSABLE_POSTGRESQL_ONLY."
+                f"Invalid environment class: {self.environment_class}. Must be one of {valid_classes}."
             )
         if not self.is_disposable_declared:
             raise MigrationAdmissionError(

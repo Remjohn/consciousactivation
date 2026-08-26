@@ -1,9 +1,9 @@
 # CAE Implementation Control State
 
-**Control status:** `F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-TOPO-07 Mandate; Operator Acceptance of CA-TOPO-06 Option A
+**Control status:** `INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-E3-08 Mandate; Operator Acceptance of CA-TOPO-07
 **Created:** 2026-08-23
-**Scope:** WP-00 through CA-TOPO-07 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, CA-MIG-03 Forward-Only PostgreSQL Migration Design, CA-APPLY-04 Disposable PostgreSQL Migration Application Proof, CA-INT-05 F-01 Workspace/Receipt Lineage Integrity Repair, CA-TOPO-06 F-02 Table-Family Topology Reconciliation and Canonical Route Decision, and CA-TOPO-07 Selected F-02 Canonical Topology Implementation and Disposable Proof (Option A canonical UUID topology, legacy table quarantine MIG-0008, CanonicalInterviewSourceAdapter, canonical register_verified_interview_source route execution, 12 adversarial countertests TOPO07-CT-01 to CT-12, scoped teardown, and zero operational authority change). No legacy service authority, production environment, shared staging database, or brownfield SQLite database was changed. Zero data movement occurred during CA-TOPO-07.
+**Scope:** WP-00 through CA-E3-08 — evidence-led reconciliation, staging-only relational foundation/security proof, first-slice semantic operations, immutable registry migration, PRD/FR/Tech-Spec reconciliation, bounded Harness/Skills/Runbook integration, immutable execution receipt/evidence lineage, E3 reality-contact/reward-hacking proof, one repository-integrated source bridge, WP-10A vertical-slice evidence containment/acceptance, CA-MAP-01 canonical/operational-plane mapping, CA-AUTH-01 development-uncertified authoring-control skills/static validators, CA-CAN-01A/B/C object constitutions, CA-SPEC-01 tenant/guest operational PRD and 15 FRs, CA-STATE-01 per-aggregate authority matrices/contracts, CA-TS-01 14-section Tech Spec (TS-CAE-TEN-001) with Gate A–I review, CA-IMPL-01A Tenant Foundation (Pydantic v2 models, thread-safe tenancy context manager, PostgreSQL DDL with composite keys and RLS, private Storage verification, 11 hard negatives, and 13 pytest unit/integration tests), CA-IMPL-01B Typed Tenant-Scoped Runtime Path and E3 Proof (strongly-typed `TenantScopedSemanticOperations`, fresh storage byte readback SHA-256 verification, state machines, optimistic concurrency locking, 18 unit/integration tests, two-workspace staging proof, full 11-case adversarial matrix, immutable receipt ledger, and complete transient cleanup), CA-IMPL-02/02P One-Aggregate Authority Cutover and Promotion Proof (admission gating, controlled transform/registration in two workspaces via typed path, scope-aware dual verification, immutable cutover receipt, fresh-read operation proof with bypass denials, recovery rehearsal, 11 adversarial countertests CT01–CT11, complete transient cleanup, 28 pytest unit tests, and operator-authorized promotion receipt `rcpt_cae_receipt_commit_00c2b3f7341e59af1292fda7` promoting `MC-CAE-MED-001` Media Asset & Evidence Lineage to `POSTGRES_AUTHORITATIVE_STAGING_ONLY`), CA-AUDIT-01 Post-Execution Governance Reconciliation, CA-GOV-02 Formal Ratification and Durable Control-State Reconciliation, CA-MIG-03 Forward-Only PostgreSQL Migration Design, CA-APPLY-04 Disposable PostgreSQL Migration Application Proof, CA-INT-05 F-01 Workspace/Receipt Lineage Integrity Repair, CA-TOPO-06 F-02 Table-Family Topology Reconciliation and Canonical Route Decision, CA-TOPO-07 Selected F-02 Canonical Topology Implementation and Disposable Proof, and CA-E3-08 Independent Staging-Equivalent Reality-Contact Replay (fresh target `disposable_e3_08_pg`, private storage bucket `cae-media-disposable-e3-08`, 14 adversarial countertests E3-CT-01 to E3-CT-14, storage tamper detection & quarantine, RLS isolation, F-01 composite FK constraint enforcement, Option A topology validation, atomic rollback, and complete scoped teardown). No legacy service authority, production environment, shared staging database, or brownfield SQLite database was changed. Zero data movement occurred during CA-E3-08.
 
 ## Required control fields
 
@@ -31,25 +31,25 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-TOPO-07 Selected F-02 Canonical Topology Implementation and Disposable Proof
+current_work_package: CA-E3-08 Independent Staging-Equivalent Reality-Contact Replay
 objective: >
-  Apply Option A canonical UUID topology (MIG-0001 to MIG-0008) in isolated disposable PostgreSQL
-  environment disposable_topo07_pg, modernize canonical bridge route register_verified_interview_source
-  via CanonicalInterviewSourceAdapter, execute 12 adversarial countertests TOPO07-CT-01 to CT-12,
-  prove F-01 composite FK lineage enforcement, RLS isolation, and receipt immutability, and prepare
-  completion record without touching shared staging, production, or changing operational authority.
+  Replay the approved migration chain (MIG-0001 to MIG-0008), F-01 composite FK repair,
+  and operator-selected Option A canonical route in fresh staging-equivalent environment
+  disposable_e3_08_pg and private storage bucket cae-media-disposable-e3-08. Execute 14
+  adversarial countertests E3-CT-01 to E3-CT-14, prove RLS isolation, storage byte verification,
+  F-01 composite FK link rejection, receipt immutability, and complete scoped teardown.
   Zero operational authority changed.
 agent_id: ox-alpha / ZCode (CAE Governed Execution Agent)
-git_commit: main (CA-TOPO-07 Option A topology implementation, adapter, 12 countertests, teardown)
+git_commit: main (CA-E3-08 independent staging-equivalent replay, 14 countertests, teardown)
 environment_identity:
   workspace: D:\Work\consciousactivation
   branch: main
   python: 3.12.0
   node: v24.11.0
   operational_authority_change: ZERO_AUTHORITY_CHANGED
-  migration_package_status: F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY
+  migration_package_status: INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY
 last_updated: 2026-08-26
-next_transition: CA-E3-08 Staging-Equivalent Replay Proof — pending operator decision on CA-TOPO-07
+next_transition: CA-STAGE-09 Shared Staging Deployment — pending operator decision on CA-E3-08
 retained_staging_cutover_evidence:
   aggregate_id: MC-CAE-MED-001
   contract_sha256: 03200cea77c9625e1cdb7e86f89703fbea4164ab943947ce65fe6a50cd9cf87b
@@ -63,8 +63,8 @@ retained_staging_cutover_evidence:
   verifier_sha256: 9dcf0858ebad77ab593881852f838f3e74019549a58fd73cf5dd60b7f80a5cb0
   countertests: 11_PASSED_CT01_TO_CT11
   findings_disposition:
-    - F-01: REPAIRED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY (Composite FK fk_workspace_receipt enforces (workspace_id, receipt_id); staging unchanged; owner: CA-INT-05)
-    - F-02: SELECTED_TOPOLOGY_IMPLEMENTED_AND_E3_PROVEN_DISPOSABLE_ONLY (Option A canonical UUID topology & bridge route proven in disposable environment; staging unchanged; owner: CA-TOPO-07)
+    - F-01: REPAIRED_AND_E3_PROVEN_STAGING_EQUIVALENT (Composite FK fk_workspace_receipt enforces (workspace_id, receipt_id); staging unchanged; owner: CA-INT-05 / CA-E3-08)
+    - F-02: RESOLVED_AND_E3_PROVEN_STAGING_EQUIVALENT (Option A canonical UUID topology & bridge route proven in staging-equivalent environment; staging unchanged; owner: CA-TOPO-07 / CA-E3-08)
     - F-03: STILL_OPEN (FastAPI campaign router bypasses typed runtime operations; brownfield SQLite isolated; owner: CA-API-01)
     - F-04: STILL_OPEN (Destructive scaffolding DDL drops schema; owner: CA-MIG-03)
     - F-05: STILL_OPEN (Quarantined SFL and Primitive registry defects; owner: Lineage Governance)

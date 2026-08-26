@@ -105,6 +105,7 @@ def test_ca_topo_06_control_state():
     valid_statuses = [
         "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
         "F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY",
+        "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
     ]
     assert any(st in content for st in valid_statuses)
     assert "CA-TOPO-06" in content
