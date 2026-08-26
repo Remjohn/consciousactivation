@@ -69,6 +69,7 @@ APPROVED_DRAFTS = [
 ]
 
 F01_REPAIR_DRAFT = ("MIG-0007", "0007_cae_f01_composite_receipt_fk_draft.sql", "MIG-0006")
+F02_TOPOLOGY_DRAFT = ("MIG-0008", "0008_cae_f02_topology_shadow_reconciliation_draft.sql", "MIG-0007")
 
 
 @dataclass(frozen=True)
@@ -121,6 +122,7 @@ class GuardedMigrationRunner:
         drafts_dir: Path,
         *,
         include_f01_repair: bool = False,
+        include_f02_topology: bool = False,
         custom_drafts: Optional[Sequence[Tuple[str, str, str]]] = None,
     ) -> None:
         self.admission = admission
@@ -131,8 +133,10 @@ class GuardedMigrationRunner:
             self.approved_drafts = list(custom_drafts)
         else:
             self.approved_drafts = list(APPROVED_DRAFTS)
-            if include_f01_repair:
+            if include_f01_repair or include_f02_topology:
                 self.approved_drafts.append(F01_REPAIR_DRAFT)
+            if include_f02_topology:
+                self.approved_drafts.append(F02_TOPOLOGY_DRAFT)
         self._load_and_validate_manifest()
 
     def _load_and_validate_manifest(self) -> None:

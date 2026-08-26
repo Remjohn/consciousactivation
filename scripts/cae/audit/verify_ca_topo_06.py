@@ -203,17 +203,21 @@ def verify_control_state() -> bool:
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
     all_ok = True
 
-    if "**Control status:** `F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED`" not in content:
-        log_fail("Control status is not F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED")
+    valid_statuses = [
+        "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
+        "F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY",
+    ]
+    if not any(f"**Control status:** `{st}`" in content for st in valid_statuses):
+        log_fail("Control status is not F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED or downstream")
         all_ok = False
     else:
-        log_pass("Control status verified (F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED)")
+        log_pass("Control status verified (F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED or downstream)")
 
-    if "current_work_package: CA-TOPO-06 F-02 Table-Family Topology Reconciliation and Canonical Route Decision" not in content:
-        log_fail("Control state current_work_package is not CA-TOPO-06")
+    if "CA-TOPO-06" not in content:
+        log_fail("Control state does not contain CA-TOPO-06")
         all_ok = False
     else:
-        log_pass("Control state current_work_package verified (CA-TOPO-06)")
+        log_pass("Control state contains CA-TOPO-06")
 
     if "operational_authority_change: ZERO_AUTHORITY_CHANGED" not in content:
         log_fail("Missing explicit zero operational authority change assertion")

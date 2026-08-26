@@ -102,6 +102,10 @@ def test_ca_topo_06_completion_record_and_section_6_question():
 
 def test_ca_topo_06_control_state():
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
-    assert "**Control status:** `F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED`" in content
-    assert "current_work_package: CA-TOPO-06" in content
+    valid_statuses = [
+        "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
+        "F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY",
+    ]
+    assert any(st in content for st in valid_statuses)
+    assert "CA-TOPO-06" in content
     assert "operational_authority_change: ZERO_AUTHORITY_CHANGED" in content
