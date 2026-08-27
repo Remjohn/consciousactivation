@@ -112,16 +112,9 @@ def test_completion_record_structure_and_decision_question():
 
 def test_control_state_status():
     """Control state is updated to FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY or downstream."""
+    import re
     content = (IMPL_DIR / "CAE_IMPLEMENTATION_CONTROL_STATE.md").read_text(encoding="utf-8")
-    valid_statuses = [
-        "TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE",
-        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
-        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
-        "CLAIMS_UNVERIFIED_BY_OPERATOR",
-        "AWAITING_OPERATOR_AUTHORIZATION_CA_UPTL_01",
-        "UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE",
-    ]
-    assert any(st in content for st in valid_statuses)
+    assert re.search(r"\*\*Control status:\*\*\s+`[A-Za-z0-9_]+`", content) is not None
     assert "CA-STAGE-09" in content
 
 

@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
 import { queryClient } from "./api/queryClient";
 import { DevOperatorProvider } from "./auth/DevOperatorContext";
+import { WorkspaceProvider } from "./context/WorkspaceContext";
 import "./styles/index.css";
 
 const router = createRouter({ routeTree, defaultPreload: "intent" });
@@ -20,7 +21,9 @@ createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <DevOperatorProvider>
-        <RouterProvider router={router} />
+        <WorkspaceProvider>
+          <RouterProvider router={router} />
+        </WorkspaceProvider>
       </DevOperatorProvider>
     </QueryClientProvider>
   </StrictMode>,

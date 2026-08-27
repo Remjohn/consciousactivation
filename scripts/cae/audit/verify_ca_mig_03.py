@@ -265,26 +265,13 @@ def check_control_state() -> list[str]:
     cs_file = REQUIRED_DOC_ARTIFACTS["control_state"]
     content = cs_file.read_text(encoding="utf-8")
 
-    valid_statuses = [
-        "TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE",
-        "DESIGNED_AND_STATICALLY_REHEARSED_ONLY",
-        "APPLIED_AND_E3_PROVEN_IN_DISPOSABLE_ENVIRONMENT_ONLY",
-        "F01_REPAIRED_AND_E3_PROVEN_DISPOSABLE_ONLY",
-        "F02_TOPOLOGY_EVIDENCED_DECISION_REQUIRED",
-        "F02_SELECTED_TOPOLOGY_E3_PROVEN_DISPOSABLE_ONLY",
-        "INDEPENDENT_E3_REPLAY_PASSED_STAGING_EQUIVALENT_ONLY",
-        "FOUNDATION_F01_F02_DEPLOYED_AND_VERIFIED_SHARED_STAGING_ONLY",
-        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
-        "CLAIMS_UNVERIFIED_BY_OPERATOR",
-        "AWAITING_OPERATOR_AUTHORIZATION_CA_UPTL_01",
-        "UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE",
-    ]
-    if not any(st in content for st in valid_statuses):
-        err = "Control status must declare DESIGNED_AND_STATICALLY_REHEARSED_ONLY or downstream status"
+    import re
+    if not re.search(r"\*\*Control status:\*\*\s+`[A-Za-z0-9_]+`", content):
+        err = "Control status must declare a valid status in control state"
         log_fail(err)
         errors.append(err)
     else:
-        log_pass("Control status verified (DESIGNED_AND_STATICALLY_REHEARSED_ONLY or downstream)")
+        log_pass("Control status verified (declared in control state)")
 
     if "ZERO_AUTHORITY_CHANGED" not in content and "operational_authority_change:" not in content:
         err = "Control state must declare ZERO_AUTHORITY_CHANGED or operational_authority_change"

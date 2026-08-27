@@ -638,3 +638,88 @@ def revoke_operator_grant(
                 created_at=row[7],
                 receipt_id=receipt_id,
             )
+
+
+def list_workspaces(
+    session: TenantContext,
+    conn: psycopg.Connection[Any],
+) -> List[WorkspaceResult]:
+    """List all workspaces accessible to the session actor (or all workspaces if operator)."""
+    with conn.cursor() as cur:
+        if session.is_operator:
+            cur.execute("SET LOCAL app.is_system_operator = 'true';")
+            cur.execute(
+                """
+                SELECT workspace_id, slug, display_name, status, created_at, updated_at
+                FROM cae.workspace
+                ORDER BY created_at DESC;
+                """
+            )
+        else:
+            apply_tenant_session(cur, session)
+            cur.execute(
+                """
+                SELECT w.workspace_id, w.slug, w.display_name, w.status, w.created_at, w.updated_at
+                FROM cae.workspace w
+                JOIN cae.workspace_membership m ON w.workspace_id = m.workspace_id
+                WHERE m.actor_id = %s AND m.status = 'ACTIVE'
+                ORDER BY w.created_at DESC;
+                """,
+                (session.actor_id,),
+            )
+        rows = cur.fetchall()
+        results: List[WorkspaceResult] = []
+        for row in rows:
+            results.append(
+                WorkspaceResult(
+                    workspace_id=row[0],
+                    slug=row[1],
+                    display_name=row[2],
+                    status=row[3],
+                    created_at=row[4],
+                    updated_at=row[5],
+                    receipt_id=uuid4(),
+                )
+            )
+        return results
+
+
+def list_memberships(
+    workspace_id: UUID,
+    session: TenantContext,
+    conn: psycopg.Connection[Any],
+) -> List[MembershipResult]:
+    """List all memberships for a workspace under tenant context."""
+    if session.workspace_id != workspace_id and not session.is_operator:
+        raise CrossWorkspaceLeakError(f"Cross-workspace read denied: {session.workspace_id} != {workspace_id}")
+
+    with conn.cursor() as cur:
+        apply_tenant_session(cur, session)
+        cur.execute(
+            """
+            SELECT membership_id, workspace_id, actor_id, role, status, created_at
+            FROM cae.workspace_membership
+            WHERE workspace_id = %s
+            ORDER BY created_at ASC;
+            """,
+            (workspace_id,),
+        )
+        rows = cur.fetchall()
+        results: List[MembershipResult] = []
+        for row in rows:
+            results.append(
+                MembershipResult(
+                    membership_id=row[0],
+                    workspace_id=row[1],
+                    actor_id=row[2],
+                    role=row[3],
+                    status=row[4],
+                    created_at=row[5],
+                    receipt_id=uuid4(),
+                )
+            )
+        return results
+
+
+list_workspace_memberships = list_memberships
+

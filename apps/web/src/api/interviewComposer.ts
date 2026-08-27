@@ -7,15 +7,25 @@ import type {
   ComposeBriefInput,
   ComposeSessionInput,
   PlannedQuestionInput,
+  ContextClass,
+  RefModel,
+  SourceUrlItem,
 } from "./types";
 
 // Re-export types for convenience
 export type { ComposeBriefInput, ComposeSessionInput, PlannedQuestionInput };
 
+export interface DocumentMetadataItem {
+  readonly context_class?: ContextClass;
+  readonly caption_for?: string | null;
+  readonly brand_ref?: RefModel | null;
+}
+
 export interface CreateResearchPackageInput {
   guestName: string;
-  sourceUrls: string[];
-  documents: File[];
+  sourceUrls: readonly string[] | readonly SourceUrlItem[];
+  documents: readonly File[];
+  documentMetadata?: readonly DocumentMetadataItem[];
   workspaceId: string;
   projectId: string;
   operatorId: string;
@@ -27,6 +37,9 @@ export async function createResearchPackage(input: CreateResearchPackageInput): 
   const form = new FormData();
   form.set("guest_name", input.guestName);
   form.set("source_urls_json", JSON.stringify(input.sourceUrls));
+  if (input.documentMetadata && input.documentMetadata.length > 0) {
+    form.set("document_metadata_json", JSON.stringify(input.documentMetadata));
+  }
   form.set("workspace_id", input.workspaceId);
   form.set("project_id", input.projectId);
   form.set("operator_id", input.operatorId);

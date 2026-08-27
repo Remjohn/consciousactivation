@@ -2,6 +2,8 @@ import { render } from "@testing-library/react";
 import { RouterProvider, createRouter, createMemoryHistory } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { routeTree } from "../routeTree.gen";
+import { DevOperatorProvider } from "../auth/DevOperatorContext";
+import { WorkspaceProvider } from "../context/WorkspaceContext";
 
 /**
  * Mounts the real route tree behind a memory-history RouterProvider, starting at
@@ -19,7 +21,11 @@ export function renderWithRouter(initialUrl: string) {
 
   const utils = render(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <DevOperatorProvider>
+        <WorkspaceProvider>
+          <RouterProvider router={router} />
+        </WorkspaceProvider>
+      </DevOperatorProvider>
     </QueryClientProvider>,
   );
 

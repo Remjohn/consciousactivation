@@ -11,12 +11,26 @@ class RefModel(BaseModel):
     sha256: str
 
 
+ContextClass = Literal[
+    "IDENTITY_DNA",
+    "CONTEXT_PREMISE",
+    "RESONANCE_REFERENCE",
+    "BRAND_VOICE",
+    "EVIDENCE_SOURCE",
+    "INTERVIEW_RECORDING",
+    "CAPTION_TRACK",
+]
+
+
 class UploadedDocumentSummary(BaseModel):
     asset_id: str
     sha256: str
     bytes: int
     media_type: str
     original_filename: str
+    context_class: str = "EVIDENCE_SOURCE"
+    caption_for: str | None = None
+    brand_ref: RefModel | None = None
 
 
 class GuestResearchPackageResponse(BaseModel):

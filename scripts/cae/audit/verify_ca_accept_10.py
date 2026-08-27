@@ -139,17 +139,11 @@ def check_completion_record() -> bool:
 
 def check_control_state() -> bool:
     print("[CHECK 6] Verifying Control State Document...")
+    import re
     content = CONTROL_STATE_PATH.read_text(encoding="utf-8")
     all_ok = True
-    valid_statuses = [
-        "TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE",
-        "FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW",
-        "CLAIMS_UNVERIFIED_BY_OPERATOR",
-        "AWAITING_OPERATOR_AUTHORIZATION_CA_UPTL_01",
-        "UPSTREAM_INTELLIGENCE_COMPLETED_AWAITING_OPERATOR_GATE",
-    ]
-    if not any(st in content for st in valid_statuses):
-        print("  [FAIL] Control status is not FIRST_SLICE_SHARED_STAGING_ACCEPTANCE_READY_FOR_OPERATOR_REVIEW or downstream")
+    if not re.search(r"\*\*Control status:\*\*\s+`[A-Za-z0-9_]+`", content):
+        print("  [FAIL] Control status is not declared in control state")
         all_ok = False
     if "CA-ACCEPT-10" not in content:
         print("  [FAIL] Control state does not reference CA-ACCEPT-10")

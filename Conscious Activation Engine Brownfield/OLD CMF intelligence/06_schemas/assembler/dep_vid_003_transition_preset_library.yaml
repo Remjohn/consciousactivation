@@ -1,0 +1,125 @@
+# Transition Preset Library (DEP-VID-003)
+# FR-VID-01 §4 Stage 1 Step 5, §6 Gate E Q5
+#
+# Maps arc_stage + beat_type combinations to transition presets.
+# Transition types: crossfade, cut, dip_to_black, zoom_transition, dissolve, wipe
+#
+# Each preset defines:
+#   type: transition visual type
+#   duration_frames: default transition length (at 24fps baseline)
+#   preset_id: unique identifier for traceability
+
+# -----------------------------------------------------------------------
+# Arc Stage Defaults (used when beat_type has no specific override)
+# -----------------------------------------------------------------------
+arc_stage_defaults:
+  opening:
+    type: crossfade
+    duration_frames: 12
+    preset_id: TR-OPENING-CROSSFADE
+  hook:
+    type: crossfade
+    duration_frames: 12
+    preset_id: TR-HOOK-CROSSFADE
+  rising_action:
+    type: dissolve
+    duration_frames: 10
+    preset_id: TR-RISING-DISSOLVE
+  tension:
+    type: cut
+    duration_frames: 2
+    preset_id: TR-TENSION-CUT
+  climax:
+    type: dip_to_black
+    duration_frames: 8
+    preset_id: TR-CLIMAX-DIP
+  falling_action:
+    type: dissolve
+    duration_frames: 12
+    preset_id: TR-FALLING-DISSOLVE
+  resolution:
+    type: crossfade
+    duration_frames: 18
+    preset_id: TR-RESOLUTION-CROSSFADE
+  transition:
+    type: wipe
+    duration_frames: 8
+    preset_id: TR-TRANSITION-WIPE
+  establishing:
+    type: crossfade
+    duration_frames: 14
+    preset_id: TR-ESTABLISHING-CROSSFADE
+  montage:
+    type: cut
+    duration_frames: 2
+    preset_id: TR-MONTAGE-CUT
+  static:
+    type: cut
+    duration_frames: 2
+    preset_id: TR-STATIC-CUT
+  coda:
+    type: dip_to_black
+    duration_frames: 24
+    preset_id: TR-CODA-DIP
+
+# -----------------------------------------------------------------------
+# Beat Type Overrides (arc_stage + beat_type → specific preset)
+# These take priority over arc_stage_defaults when the combination matches.
+# -----------------------------------------------------------------------
+beat_type_overrides:
+  climax:
+    turning_point:
+      type: zoom_transition
+      duration_frames: 6
+      preset_id: TR-CLIMAX-TURNING-ZOOM
+    revelation:
+      type: dip_to_black
+      duration_frames: 10
+      preset_id: TR-CLIMAX-REVELATION-DIP
+  hook:
+    question:
+      type: cut
+      duration_frames: 2
+      preset_id: TR-HOOK-QUESTION-CUT
+  resolution:
+    reflection:
+      type: dissolve
+      duration_frames: 18
+      preset_id: TR-RESOLUTION-REFLECTION-DISSOLVE
+    callback:
+      type: crossfade
+      duration_frames: 14
+      preset_id: TR-RESOLUTION-CALLBACK-CROSSFADE
+
+# -----------------------------------------------------------------------
+# Arc Stage Sequence Definitions (Gate E Q5)
+# Defines valid orderings per arc type for narrative grammar enforcement.
+# -----------------------------------------------------------------------
+arc_sequences:
+  witness:
+    - opening
+    - hook
+    - rising_action
+    - tension
+    - climax
+    - falling_action
+    - resolution
+    - coda
+  transformation:
+    - opening
+    - hook
+    - rising_action
+    - tension
+    - climax
+    - falling_action
+    - resolution
+    - coda
+  discovery:
+    - opening
+    - establishing
+    - rising_action
+    - tension
+    - climax
+    - falling_action
+    - resolution
+    - coda

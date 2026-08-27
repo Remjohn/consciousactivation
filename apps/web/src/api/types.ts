@@ -264,12 +264,47 @@ export interface RefModel {
   readonly sha256: string;
 }
 
+export type ContextClass =
+  | "IDENTITY_DNA"
+  | "CONTEXT_PREMISE"
+  | "RESONANCE_REFERENCE"
+  | "BRAND_VOICE"
+  | "EVIDENCE_SOURCE"
+  | "INTERVIEW_RECORDING"
+  | "CAPTION_TRACK";
+
+export const CONTEXT_CLASSES: readonly ContextClass[] = [
+  "IDENTITY_DNA",
+  "CONTEXT_PREMISE",
+  "RESONANCE_REFERENCE",
+  "BRAND_VOICE",
+  "EVIDENCE_SOURCE",
+  "INTERVIEW_RECORDING",
+  "CAPTION_TRACK",
+] as const;
+
+export interface SourceUrlItem {
+  readonly url: string;
+  readonly context_class: ContextClass;
+}
+
+export const TIER_LIMITS_BYTES = {
+  DOCS: 50 * 1024 * 1024, // 50 MB
+  AUDIO_COMPRESSED: 500 * 1024 * 1024, // 500 MB
+  AUDIO_WAV: 1024 * 1024 * 1024, // 1 GB (1024 MB)
+  VIDEO: 4 * 1024 * 1024 * 1024, // 4 GB
+  CAPTION: 10 * 1024 * 1024, // 10 MB
+} as const;
+
 export interface UploadedDocumentSummary {
   readonly asset_id: string;
   readonly sha256: string;
   readonly bytes: number;
   readonly media_type: string;
   readonly original_filename: string;
+  readonly context_class?: ContextClass;
+  readonly caption_for?: string | null;
+  readonly brand_ref?: RefModel | null;
 }
 
 export interface GuestResearchPackageResponse {

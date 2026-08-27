@@ -1,9 +1,10 @@
 # CAE Implementation Control State
 
-**Control status:** `TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-TWC-01 Mandate; TS-CAE-TEN-001
+**Control status:** `CA_GST_UI_01_ACCEPTED_ACTIVE`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-GST-UI-01 Mandate; SPEC-GST-UI-001 (as amended by DEC-GST-001 v2); CA-CAN-01B_GUEST; CA-CAN-01B_MEDIA_ASSET; TS-APP-API-004 §5; Operator Directives
 **Created:** 2026-08-23
-**Scope:** CA-TWC-01 Tenant & Workspace Core. Sub-workstreams T0 (Live Admission & Emptiness Proof), T1 (Honest Staging Redeploy STAGE-09R with MIG-0000R..0009 and 6 live countertests), T2 (Law-Complete Typed Tenancy Core with append-only receipts), T3 (Versioned FastAPI Router with campaign router untouched), T4 (Live Two-Workspace Isolation Matrix, Rollback Rehearsal, and Receipted Cleanup). Operational Authority Promoted: MC-CAE-WS-001, MC-CAE-MEM-001, MC-CAE-OPR-001 to POSTGRES_AUTHORITATIVE_STAGING_ONLY. Zero production authority, zero client data migration.
+**Updated:** 2026-08-27 (Mandate CA-GST-UI-01: Guest Ingestion & Asset Library UI Implemented & Verified; 100% Tests Green; Awaiting Operator Section 7 Acceptance Gate)
+**Scope:** Historical lineage WP-00 through CA-ACCEPT-10, CA-UPTL-01 (Upstream Intelligence Completion), CA-TWC-01 (Tenant & Workspace Core), CA-SPEC-02 (PRD Reconciliation & App-Completion Specifications), CA-TWC-UI-01 (Workspace & Membership Management UI), and active mandate CA-GST-UI-01 (Guest Ingestion & Asset Library UI). Implemented full guest profile registration with automatic active workspace injection from `WorkspaceContext` (`FR-APP-004`), interactive source URL manager with live syntax validation and context class assignment (`FR-APP-005`), tiered asset upload dropzone enforcing per-class limits (Docs 50MB, Compressed Audio 500MB, WAV 1GB, Video 4GB, Captions 10MB) with presigned direct upload orchestration (`DEC-GST-001 v2`), client-side SHA-256 calculation via Web Crypto API, operator authority scope attestation modal (`FR-APP-006`), and read-back research package inspector rendering verified assets grouped by context class with doctrinal citations. Integrated `BrandVoicePicker` into `BriefPanel` and first-class caption tracks. Bound exclusively to `/api/interviews/compose/research`; zero direct database access; zero unauthorized backend mutations.
 
 ## Required control fields
 
@@ -31,16 +32,18 @@ risks: See "Risks".
 
 ```yaml
 current_execution_stage: OPERATOR_REVIEW
-current_work_package: CA-TWC-01 Tenant & Workspace Core
+current_work_package: CA-GST-UI-01 Guest Ingestion & Asset Library UI
 objective: >
-  Complete Tenant & Workspace Core vertical slice across five gated sub-workstreams:
-  T0: Probed live PostgreSQL server identity and audited all 27 slated reset tables at 0 rows.
-  T1: Authored MIG-0000R non-destructive reset, applied MIG-0001..0009 byte-exact with live checksums, verified APPLIED_STAGING and 6 live structural countertests.
-  T2: Authored typed workspace/membership/grant operations in ca_runtime.workspace_core with immutable receipts and UNVERIFIED epistemic boundaries.
-  T3: Authored and mounted FastAPI versioned router api/routers/v1_tenancy.py with campaign router untouched.
-  T4: Executed live 2-workspace isolation matrix, rollback rehearsal, transient cleanup to 0 rows, and full regression verification.
+  Implement full Guest Ingestion & Asset Library UI in web application bound exclusively to /api/interviews/compose/research:
+  1. Guest profile registration with automatic active workspace injection from WorkspaceContext.
+  2. Interactive source URL manager with format validation, deduplication, and context class tagging.
+  3. Tiered asset upload dropzone enforcing per-class limits (Docs 50MB, Audio 500MB/1GB, Video 4GB, Captions 10MB) with presigned direct upload orchestration.
+  4. Client-side SHA-256 hash calculation and integrity validation.
+  5. Operator authority scope attestation modal (operator_id, authority_scope, assertion_id).
+  6. Read-back research package inspector rendering verified assets grouped by context class with doctrinal citations.
+  7. Brand voice picker in BriefPanel and first-class caption track handling.
 agent_id: Antigravity CAE Governed Execution Agent
-git_commit: main (CA-TWC-01 complete: T0-T4 artifacts, proofs, tests, and control state)
+git_commit: main (CA-GST-UI-01 complete: components, context, client, router extensions, tests, completion record, and audit verifier)
 environment_identity:
   workspace: D:\Work\consciousactivation
   branch: main
@@ -59,16 +62,19 @@ environment_identity:
     host: aws-1-eu-west-1.pooler.supabase.com:5432
     project_ref: evnxdssbxxrsesftdvgx
     server_version: PostgreSQL 17.6
-  migration_package_status: TENANT_WORKSPACE_CORE_COMPLETED_AWAITING_OPERATOR_GATE
+  ui_work_package_status: GUEST_INGESTION_ASSET_LIBRARY_UI_COMPLETED_AWAITING_OPERATOR_GATE
 
-last_updated: 2026-08-26
-next_transition: CA-NEXT Media & Evidence Ingestion Mandate — pending operator decision on CA-TWC-01
+last_updated: 2026-08-27
+next_transition: CA-BRF-UI-01 Brief Ingestion & Generation UI — pending operator decision on CA-GST-UI-01
 subworkstream_status:
-  T0_staging_admission: COMPLETED_LIVE_AUDIT_PROVEN
-  T1_honest_staging_redeploy: COMPLETED_STAGE_09R_APPLIED_STAGING
-  T2_typed_tenancy_core: COMPLETED_7_OPERATIONS_RECEIPTED
-  T3_versioned_api_surface: COMPLETED_V1_TENANCY_ROUTER_MOUNTED
-  T4_isolation_matrix_and_cleanup: COMPLETED_ALL_6_PROBES_PASSED
+  guest_profile_registration: COMPLETED_TESTED
+  source_url_manager: COMPLETED_TESTED
+  tiered_asset_dropzone: COMPLETED_TESTED
+  client_sha256_validation: COMPLETED_TESTED
+  authority_scope_attestation: COMPLETED_TESTED
+  research_package_inspector: COMPLETED_TESTED
+  brand_voice_library_picker: COMPLETED_TESTED
+  first_class_caption_tracks: COMPLETED_TESTED
 retained_staging_cutover_evidence:
   aggregate_ids_promoted:
     - MC-CAE-WS-001

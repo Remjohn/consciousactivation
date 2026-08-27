@@ -54,7 +54,12 @@ def _error_code(response) -> str:
     body = response.json()
     if "error_code" in body:
         return body["error_code"]
-    return body["detail"]["error_code"]
+    detail = body.get("detail")
+    if isinstance(detail, dict) and "error_code" in detail:
+        return detail["error_code"]
+    if isinstance(detail, list) and detail:
+        return detail[0].get("msg", "VALIDATION_FAILED")
+    return "UNKNOWN_ERROR"
 
 
 def _brief_payload(research_package_id: str, brand_ref: dict, voice_ref: dict,
@@ -298,3 +303,198 @@ def test_brief_get(api_app):
         get_resp = client.get(f"/api/interviews/compose/briefs/{brief_id}")
         assert get_resp.status_code == 200
         assert get_resp.json()["brief_id"] == brief_id
+
+
+def test_gst_context_class_and_caption_linking(api_app):
+    """Verify research package with tiered context taxonomy and caption-for link."""
+    with TestClient(api_app) as client:
+        video_content = b"fake video content mp4"
+        vtt_content = b"WEBVTT\n1\n00:00:00.000 --> 00:00:05.000\nHello world"
+        brand_content = b"brand voice guide text"
+        meta = [
+            {"context_class": "INTERVIEW_RECORDING"},
+            {"context_class": "CAPTION_TRACK", "caption_for": "interview_raw.mp4"},
+            {"context_class": "BRAND_VOICE"},
+        ]
+        files = [
+            ("documents", ("interview_raw.mp4", video_content, "video/mp4")),
+            ("documents", ("transcript.vtt", vtt_content, "text/vtt")),
+            ("documents", ("brand_guide.pdf", brand_content, "application/pdf")),
+        ]
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "Audrey Context",
+                "source_urls_json": json.dumps([
+                    "https://example.com/bio",
+                    "https://example.com/resonance",
+                ]),
+                "document_metadata_json": json.dumps(meta),
+                "workspace_id": "ws-context",
+                "project_id": "prj-context",
+                "operator_id": "op-context",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-context-01",
+            },
+            files=files,
+            headers={"Idempotency-Key": "research:audrey-context"},
+        )
+        assert response.status_code == 201, response.text
+        body = response.json()
+        assert len(body["uploaded_documents"]) == 3
+        docs = {d["original_filename"]: d for d in body["uploaded_documents"]}
+        assert docs["interview_raw.mp4"]["context_class"] == "INTERVIEW_RECORDING"
+        assert docs["transcript.vtt"]["context_class"] == "CAPTION_TRACK"
+        assert docs["transcript.vtt"]["caption_for"] == "interview_raw.mp4"
+        assert docs["brand_guide.pdf"]["context_class"] == "BRAND_VOICE"
+
+
+def test_hn_gst_01_empty_guest_name_rejected(api_app):
+    """HN-GST-01: Empty or whitespace guest name rejected with 422."""
+    with TestClient(api_app) as client:
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "   ",
+                "source_urls_json": json.dumps([]),
+                "workspace_id": "ws-test",
+                "project_id": "prj-test",
+                "operator_id": "op-test",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "GUEST_NAME_INVALID"
+
+
+def test_hn_gst_04_missing_workspace_rejected(api_app):
+    """HN-GST-04: Missing workspace_id rejected with 422."""
+    with TestClient(api_app) as client:
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "No Workspace Guest",
+                "source_urls_json": json.dumps([]),
+                "workspace_id": "   ",
+                "project_id": "prj-test",
+                "operator_id": "op-test",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "WORKSPACE_REQUIRED"
+
+
+def test_hn_gst_05_missing_authority_rejected(api_app):
+    """HN-GST-05: Missing operator authority scope/id/assertion rejected with 422."""
+    with TestClient(api_app) as client:
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "No Auth Guest",
+                "source_urls_json": json.dumps([]),
+                "workspace_id": "ws-test",
+                "project_id": "prj-test",
+                "operator_id": "",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "AUTHORITY_REQUIRED"
+
+
+def test_hn_gst_06_unknown_context_class_rejected(api_app):
+    """HN-GST-06: Unknown context_class rejected with 422."""
+    with TestClient(api_app) as client:
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "Bad Context Guest",
+                "source_urls_json": json.dumps([]),
+                "document_metadata_json": json.dumps([{"context_class": "INVALID_UNKNOWN_CLASS"}]),
+                "workspace_id": "ws-test",
+                "project_id": "prj-test",
+                "operator_id": "op-test",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+            files={"documents": ("test.txt", b"sample content", "text/plain")},
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "INVALID_CONTEXT_CLASS"
+
+
+def test_hn_gst_07_invalid_caption_target_rejected(api_app):
+    """HN-GST-07: caption_for pointing to non-recording asset rejected with 422."""
+    with TestClient(api_app) as client:
+        # Here doc1 is EVIDENCE_SOURCE (not INTERVIEW_RECORDING), and doc2 references doc1 in caption_for
+        meta = [
+            {"context_class": "EVIDENCE_SOURCE"},
+            {"context_class": "CAPTION_TRACK", "caption_for": "doc1.pdf"},
+        ]
+        files = [
+            ("documents", ("doc1.pdf", b"pdf content", "application/pdf")),
+            ("documents", ("transcript.vtt", b"WEBVTT", "text/vtt")),
+        ]
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "Bad Caption Target Guest",
+                "source_urls_json": json.dumps([]),
+                "document_metadata_json": json.dumps(meta),
+                "workspace_id": "ws-test",
+                "project_id": "prj-test",
+                "operator_id": "op-test",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+            files=files,
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "INVALID_CAPTION_TARGET"
+
+
+def test_hn_gst_02_oversized_file_rejected(api_app):
+    """HN-GST-02: File exceeding per-class tier limit is rejected."""
+    with TestClient(api_app) as client:
+        # Document class limit is 50MB
+        large_content = b"x" * (50 * 1024 * 1024 + 1)
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "Large Doc Guest",
+                "source_urls_json": json.dumps([]),
+                "workspace_id": "ws-test",
+                "project_id": "prj-test",
+                "operator_id": "op-test",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+            files={"documents": ("too_big.pdf", large_content, "application/pdf")},
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "MEDIA_SIZE_EXCEEDED"
+
+
+def test_hn_gst_03_corrupted_hash_rejected(api_app):
+    """HN-GST-03: Corrupted or forged SHA-256 hash validation."""
+    with TestClient(api_app) as client:
+        response = client.post(
+            "/api/interviews/compose/research",
+            data={
+                "guest_name": "Corrupt Hash Guest",
+                "source_urls_json": json.dumps([]),
+                "document_metadata_json": json.dumps([{"context_class": "EVIDENCE_SOURCE", "client_sha256": "0000000000000000000000000000000000000000000000000000000000000000"}]),
+                "workspace_id": "ws-test",
+                "project_id": "prj-test",
+                "operator_id": "op-test",
+                "authority_scope": "DEVELOPMENT_TEST",
+                "assertion_id": "assert-test",
+            },
+            files={"documents": ("valid.pdf", b"real content", "application/pdf")},
+        )
+        assert response.status_code == 422
+        assert _error_code(response) == "MEDIA_HASH_MISMATCH"

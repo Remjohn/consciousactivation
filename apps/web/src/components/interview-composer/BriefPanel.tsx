@@ -3,6 +3,7 @@ import { useComposeBrief } from "../../hooks/useComposeBrief";
 import type { ComposeBriefInput, PlannedQuestionInput } from "../../api/interviewComposer";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
+import { BrandVoicePicker } from "./BrandVoicePicker";
 
 interface BriefPanelProps {
   researchPackageId: string;
@@ -109,7 +110,13 @@ export function BriefPanel({ researchPackageId, onReady }: BriefPanelProps) {
       <textarea value={tensionHypothesis} onChange={(e) => setTensionHypothesis(e.target.value)} placeholder="Tension hypothesis" required rows={3} className="w-full rounded border border-border bg-surface-raised px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground" data-testid="tension-hypothesis-input" />
       <textarea value={expressionTargets} onChange={(e) => setExpressionTargets(e.target.value)} placeholder="Expression targets (one per line)" required rows={3} className="w-full rounded border border-border bg-surface-raised px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground" data-testid="expression-targets-input" />
 
-      <input type="text" value={brandContextRef} onChange={(e) => setBrandContextRef(e.target.value)} placeholder='Brand Context Ref (JSON: {"object_id":"...","version":"...","sha256":"..."})' className="w-full rounded border border-border bg-surface-raised px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground" data-testid="brand-context-ref-input" />
+      <BrandVoicePicker
+        researchPackageId={researchPackageId}
+        value={brandContextRef ? (() => { try { return JSON.parse(brandContextRef); } catch { return null; } })() : null}
+        rawJson={brandContextRef}
+        onChange={(_ref, raw) => setBrandContextRef(raw)}
+      />
+
       <input type="text" value={voiceDnaRef} onChange={(e) => setVoiceDnaRef(e.target.value)} placeholder='Voice DNA Ref (JSON)' className="w-full rounded border border-border bg-surface-raised px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground" data-testid="voice-dna-ref-input" />
 
       <div className="space-y-2">

@@ -41,38 +41,145 @@ def _domain_error_to_http(exc: InterviewComposerError) -> HTTPException:
     return _error(code, str(exc), status_code)
 
 
+VALID_CONTEXT_CLASSES = {
+    "IDENTITY_DNA",
+    "CONTEXT_PREMISE",
+    "RESONANCE_REFERENCE",
+    "BRAND_VOICE",
+    "EVIDENCE_SOURCE",
+    "INTERVIEW_RECORDING",
+    "CAPTION_TRACK",
+}
+
+
 @router.post("/research", status_code=201, response_model=schemas.GuestResearchPackageResponse)
 async def create_research_package(
-    guest_name: str = Form(...),
+    guest_name: str = Form(default=""),
     source_urls_json: str = Form("[]"),
-    workspace_id: str = Form(...),
-    project_id: str = Form(...),
-    operator_id: str = Form(...),
-    authority_scope: str = Form(...),
-    assertion_id: str = Form(...),
+    workspace_id: str = Form(default=""),
+    project_id: str = Form(default=""),
+    operator_id: str = Form(default=""),
+    authority_scope: str = Form(default=""),
+    assertion_id: str = Form(default=""),
     documents: list[UploadFile] = File(default=[]),
+    document_metadata_json: str = Form("[]"),
     idempotency_key: str | None = Header(None, alias="Idempotency-Key"),
     composer: InterviewComposerApplication = Depends(get_composer),
 ):
+    if not guest_name or not guest_name.strip():
+        raise _error("GUEST_NAME_INVALID", "guest_name cannot be empty or whitespace only", 422)
+    if not workspace_id or not workspace_id.strip():
+        raise _error("WORKSPACE_REQUIRED", "workspace_id is required", 422)
+    if not operator_id or not operator_id.strip() or not authority_scope or not authority_scope.strip() or not assertion_id or not assertion_id.strip():
+        raise _error("AUTHORITY_REQUIRED", "operator_id, authority_scope, and assertion_id are required", 422)
+
     try:
-        source_urls = json.loads(source_urls_json)
+        source_urls_raw = json.loads(source_urls_json)
     except json.JSONDecodeError as exc:
         raise _error("VALIDATION_FAILED", f"source_urls_json is not valid JSON: {exc}", 422) from exc
+
+    try:
+        doc_metadata_raw = json.loads(document_metadata_json) if document_metadata_json else []
+    except json.JSONDecodeError as exc:
+        raise _error("VALIDATION_FAILED", f"document_metadata_json is not valid JSON: {exc}", 422) from exc
+
+    source_urls = []
+    for item in source_urls_raw:
+        if isinstance(item, str):
+            source_urls.append(item)
+        elif isinstance(item, dict) and "url" in item:
+            source_urls.append(item["url"])
+
     config = load_config()
     uploaded = []
-    for doc in documents:
+    for idx, doc in enumerate(documents):
         data = await doc.read()
         dest_path, logical_uri = save_upload(
             doc, media_root=config.ca_media_root,
-            workspace_id=workspace_id, project_id="composer",
+            workspace_id=workspace_id, project_id=project_id,
         )
+        meta = {}
+        if isinstance(doc_metadata_raw, list) and idx < len(doc_metadata_raw) and isinstance(doc_metadata_raw[idx], dict):
+            meta = doc_metadata_raw[idx]
+        elif isinstance(doc_metadata_raw, dict):
+            meta = doc_metadata_raw.get(doc.filename or "", {})
+
+        context_class = meta.get("context_class")
+        if not context_class:
+            # Check if file is caption track by extension (.vtt, .srt)
+            fname = (doc.filename or "").lower()
+            if fname.endswith(".vtt") or fname.endswith(".srt"):
+                context_class = "CAPTION_TRACK"
+            else:
+                context_class = "EVIDENCE_SOURCE"
+
+        if context_class not in VALID_CONTEXT_CLASSES:
+            raise _error("INVALID_CONTEXT_CLASS", f"Unknown context_class '{context_class}'. Must be one of {sorted(VALID_CONTEXT_CLASSES)}", 422)
+
+        # Tiered limit checks per DEC-GST-001 v2
+        fname = (doc.filename or "").lower()
+        content_type = (doc.content_type or "").lower()
+        if context_class == "CAPTION_TRACK":
+            max_bytes = 10 * 1024 * 1024  # 10MB
+        elif context_class == "INTERVIEW_RECORDING":
+            if content_type.startswith("video/") or fname.endswith((".mp4", ".mov", ".mkv", ".webm")):
+                max_bytes = 4 * 1024 * 1024 * 1024  # 4GB
+            elif content_type in ("audio/wav", "audio/x-wav") or fname.endswith(".wav"):
+                max_bytes = 1024 * 1024 * 1024  # 1GB
+            elif content_type.startswith("audio/"):
+                max_bytes = 500 * 1024 * 1024  # 500MB
+            else:
+                max_bytes = 4 * 1024 * 1024 * 1024
+        else:
+            max_bytes = 50 * 1024 * 1024  # 50MB Documents
+
+        if len(data) > max_bytes:
+            raise _error(
+                "MEDIA_SIZE_EXCEEDED",
+                f"File '{doc.filename}' ({len(data)} bytes) exceeds tier limit of {max_bytes} bytes for class '{context_class}'",
+                422,
+            )
+
+        client_sha = meta.get("client_sha256")
+        server_sha = bytes_sha256(data)
+        if client_sha and client_sha.lower() != server_sha.lower():
+            raise _error(
+                "MEDIA_HASH_MISMATCH",
+                f"Client SHA-256 mismatch for '{doc.filename}': provided {client_sha}, computed {server_sha}",
+                422,
+            )
+
+        caption_for = meta.get("caption_for")
+        brand_ref = meta.get("brand_ref")
+
         uploaded.append({
             "asset_id": logical_uri,
-            "sha256": bytes_sha256(data),
+            "sha256": server_sha,
             "bytes": len(data),
             "media_type": doc.content_type or "application/octet-stream",
             "original_filename": doc.filename or "unnamed",
+            "context_class": context_class,
+            "caption_for": caption_for,
+            "brand_ref": brand_ref,
         })
+
+    # Validate caption_for references
+    recording_identifiers = {
+        u["asset_id"] for u in uploaded if u["context_class"] == "INTERVIEW_RECORDING"
+    } | {
+        u["original_filename"] for u in uploaded if u["context_class"] == "INTERVIEW_RECORDING"
+    }
+
+    for u in uploaded:
+        if u["caption_for"]:
+            target = u["caption_for"]
+            if target not in recording_identifiers:
+                raise _error(
+                    "INVALID_CAPTION_TARGET",
+                    f"caption_for '{target}' does not reference an asset with context_class 'INTERVIEW_RECORDING'",
+                    422,
+                )
+
     key = idempotency_key or f"research:{workspace_id}:{project_id}:{guest_name}"
     try:
         result = composer.research.create_package(

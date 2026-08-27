@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-from typing import Any, Generator, Optional
+from typing import Any, Generator, List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
@@ -43,6 +43,8 @@ from ca_runtime.workspace_core import (
     create_workspace,
     get_workspace,
     issue_operator_grant,
+    list_memberships,
+    list_workspaces,
     remove_workspace_membership,
     revoke_operator_grant,
     update_workspace,
@@ -164,6 +166,18 @@ def provision_workspace_endpoint(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(err)) from err
 
 
+@router.get("", response_model=List[WorkspaceResult])
+def list_workspaces_endpoint(
+    session: TenantContext = Depends(get_tenant_context),
+    conn: psycopg.Connection[Any] = Depends(get_db_connection),
+) -> List[WorkspaceResult]:
+    """List all workspaces accessible to the requesting session."""
+    try:
+        return list_workspaces(session=session, conn=conn)
+    except Exception as err:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(err)) from err
+
+
 @router.get("/{workspace_id}", response_model=WorkspaceResult)
 def get_workspace_endpoint(
     workspace_id: UUID,
@@ -199,6 +213,21 @@ def update_workspace_endpoint(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(err)) from err
     except UnauthorizedAccessError as err:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(err)) from err
+    except CrossWorkspaceLeakError as err:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(err)) from err
+    except Exception as err:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(err)) from err
+
+
+@router.get("/{workspace_id}/memberships", response_model=List[MembershipResult])
+def list_memberships_endpoint(
+    workspace_id: UUID,
+    session: TenantContext = Depends(get_tenant_context),
+    conn: psycopg.Connection[Any] = Depends(get_db_connection),
+) -> List[MembershipResult]:
+    """List all memberships in a workspace."""
+    try:
+        return list_memberships(workspace_id=workspace_id, session=session, conn=conn)
     except CrossWorkspaceLeakError as err:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(err)) from err
     except Exception as err:

@@ -1,16 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PlaceholderPage } from "../../components/layout/PlaceholderPage";
+/**
+ * Workspace Management Console Route.
+ * Governed by SPEC-TWC-UI-001, FR-APP-001..003, MC-CAE-WS-001, and TS-APP-API-004 §5.
+ */
 
-export function WorkspaceIndexPage() {
-  return (
-    <PlaceholderPage
-      title="Workspace"
-      frRange="FR-APP-001..003"
-      builtIn="TS-APP-UI (not yet queued)"
-    />
-  );
-}
+import { createFileRoute } from "@tanstack/react-router";
+import { WorkspaceConsole } from "../../components/workspace/WorkspaceConsole";
 
 export const Route = createFileRoute("/workspace/")({
-  component: WorkspaceIndexPage,
+  component: WorkspaceConsole,
 });
