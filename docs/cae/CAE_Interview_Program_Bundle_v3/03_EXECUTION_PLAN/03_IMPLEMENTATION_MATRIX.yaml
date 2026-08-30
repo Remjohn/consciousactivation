@@ -1,0 +1,56 @@
+implementation_matrix:
+  - mandate: M01
+    depends_on: [ratified_prd_delta, accepted_tech_spec]
+    target: brownfield_authority_reconciliation
+    primary_requirement: FR-IP-001
+    verification: repository_inspection + ownership_tests
+  - mandate: M02
+    depends_on: [M01]
+    target: hypothesis_candidate_adapter
+    primary_requirement: FR-IP-001, FR-IP-002
+    verification: live_reference_integrity + diversity_selection_test
+  - mandate: M03
+    depends_on: [M01, M02, question_intelligence_synthesis]
+    target: question_resolution
+    primary_requirement: FR-IP-003, FR-IP-004
+    verification: mechanism_lineage_tests + compatibility_tests
+  - mandate: M04
+    depends_on: [M03]
+    target: existing_activative_interview_brief_compilation
+    primary_requirement: FR-IP-009
+    verification: real_composer_compile + fresh_readback
+  - mandate: M05
+    depends_on: [M04]
+    target: operator_studio
+    primary_requirement: FR-IP-008, FR-IP-009
+    verification: persistence + auth + concurrency + UI reality contact
+  - mandate: M06
+    depends_on: [M04]
+    target: adaptive_frontier
+    primary_requirement: FR-IP-005
+    verification: staging_trace + deterministic_tie_breaking
+  - mandate: M07
+    depends_on: [M04]
+    target: answer_observation_and_state_transition
+    primary_requirement: FR-IP-006, FR-IP-007
+    verification: response_observation_trace + evidence/inference separation
+  - mandate: M08
+    depends_on: [M03, M06, M07]
+    target: composition_compatibility
+    primary_requirement: FR-IP-004
+    verification: contract_tests + operator_review
+  - mandate: M09
+    depends_on: [M07, M08]
+    target: evidence_handoff
+    primary_requirement: FR-IP-007, FR-IP-010
+    verification: lineage_integrity + anti_fabrication tests
+  - mandate: M10
+    depends_on: [M09, M05]
+    target: content_menu_readiness
+    primary_requirement: FR-IP-010
+    verification: real_candidate_to_menu trace
+  - mandate: M11
+    depends_on: [M06, M07, M08, M09, M10]
+    target: end_to_end_reality_contact_regression
+    primary_requirement: all
+    verification: staging + adversarial + docs_integrity

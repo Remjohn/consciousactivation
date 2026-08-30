@@ -1,0 +1,63 @@
+program_acceptance:
+  version: 3
+  claims:
+    - id: PA-01
+      claim: existing Composer remains authoritative for Guest Research Package, Activative Interview Brief, and Composer Session
+      evidence: current_repo_inspection
+      gate: G1
+    - id: PA-02
+      claim: no duplicate canonical Interview/Hypothesis ontology is introduced
+      evidence: schema_inventory + source_review
+      gate: G2
+    - id: PA-03
+      claim: candidate hypotheses preserve upstream lineage
+      evidence: adapter_fixture + integration_test
+      gate: G2
+    - id: PA-04
+      claim: portfolio selection maximizes useful diversity rather than raw score only
+      evidence: deterministic selection fixture + operator review
+      gate: G2
+    - id: PA-05
+      claim: question mechanisms are traceable to the approved synthesis
+      evidence: provenance test
+      gate: G3
+    - id: PA-06
+      claim: existing Activative Interview Brief is the actual compilation boundary
+      evidence: real repository write/readback
+      gate: G4
+    - id: PA-07
+      claim: Operator actions persist through an authoritative path
+      evidence: UI/API/stored-state trace
+      gate: G5
+    - id: PA-08
+      claim: locks are enforced server-side
+      evidence: negative mutation test
+      gate: G5
+    - id: PA-09
+      claim: answer state changes next-question selection
+      evidence: scripted staging trace
+      gate: G6
+    - id: PA-10
+      claim: same state yields deterministic next choice
+      evidence: repeat execution
+      gate: G6
+    - id: PA-11
+      claim: evidence/inference/Guest-validation remain distinct
+      evidence: runtime payload + test
+      gate: G7
+    - id: PA-12
+      claim: format/archetype intent is visible in question compatibility
+      evidence: compatibility fixture + operator review
+      gate: G8
+    - id: PA-13
+      claim: downstream content candidate retains evidence lineage
+      evidence: lineage test
+      gate: G9
+    - id: PA-14
+      claim: false proofs fail
+      evidence: adversarial suite
+      gate: G10
+    - id: PA-15
+      claim: durable implementation truth is reflected in PRD/spec surfaces
+      evidence: diff/review
+      gate: G11
