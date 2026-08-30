@@ -1,0 +1,446 @@
+# Current-State Authority and Status Reconciliation Ledger
+# Program: CAE Current-State Reconciliation & PRD Synchronization Program
+# Mandate: CA-CSR-02
+# Date: 2026-08-30
+# Repository Commit: 3a92a8394fa6d73973a6ad5d0b5a3fe1f95ed76a
+# Template: docs/cae/CAE_Current_State_Reconciliation_PRD_Bundle_v1/06_TEMPLATES/01_CURRENT_STATE_LEDGER_ROW.yaml
+
+# ------------------------------------------------------------------------------
+# 1. CAE CONSTITUTION & CONTROL PLANE
+# ------------------------------------------------------------------------------
+- artifact: 'governance/program-control/03_PROGRAM_STATUS/MASTER_STATUS.md'
+  artifact_class: 'DOCUMENT'
+  ownership: 'program-control'
+  definition_authority: '00_GOVERNANCE/MASTER_STATUS.md'
+  runtime_authority: 'governance'
+  change_promotion_authority: 'operator'
+  plane: 'CONTROL_PLANE'
+  implementation_status: 'SUPERSEDED'
+  proof_status: 'CLAIMED_UNVERIFIED'
+  supersession_status: 'SUPERSEDED'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'governance/program-control/03_PROGRAM_STATUS/MASTER_STATUS.md'
+  dependency_refs: []
+  current_prd_claim: 'Reports baseline from 2026-07-22'
+  reconciliation_verdict: 'SUPERSEDED'
+  verification:
+    method: 'document_inspection'
+    command: 'git log -n 1 -- governance/program-control/03_PROGRAM_STATUS/MASTER_STATUS.md'
+    environment: 'git'
+    result: 'Dated 2026-07-22; superseded by subsequent development (Phases 24-27, M01-M11)'
+    limitation: 'Historical record; do not delete'
+  next_action: 'RECONCILE_STATUS_UNDER_CA_CSR_02'
+
+- artifact: 'governance/program-control/03_PROGRAM_STATUS/STATUS_TRUTH_RECONCILIATION.yaml'
+  artifact_class: 'DOCUMENT'
+  ownership: 'program-control'
+  definition_authority: '00_GOVERNANCE/STATUS_TRUTH_RECONCILIATION.yaml'
+  runtime_authority: 'governance'
+  change_promotion_authority: 'operator'
+  plane: 'CONTROL_PLANE'
+  implementation_status: 'SUPERSEDED'
+  proof_status: 'CLAIMED_UNVERIFIED'
+  supersession_status: 'SUPERSEDED'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'governance/program-control/03_PROGRAM_STATUS/STATUS_TRUTH_RECONCILIATION.yaml'
+  dependency_refs: []
+  current_prd_claim: 'Reports baseline from 2026-07-22'
+  reconciliation_verdict: 'SUPERSEDED'
+  verification:
+    method: 'document_inspection'
+    command: 'git log -n 1 -- governance/program-control/03_PROGRAM_STATUS/STATUS_TRUTH_RECONCILIATION.yaml'
+    environment: 'git'
+    result: 'Dated 2026-07-22; superseded'
+    limitation: 'Historical record; do not delete'
+  next_action: 'SUPERSEDED_BY_RECONCILIATION_2026-08-30'
+
+# ------------------------------------------------------------------------------
+# 2. PRD STATE
+# ------------------------------------------------------------------------------
+- artifact: 'docs/PRD/CURRENT.md'
+  artifact_class: 'DOCUMENT'
+  ownership: 'product-lead'
+  definition_authority: '00_GOVERNANCE/03_PRD_DELTA.md'
+  runtime_authority: 'docs/PRD'
+  change_promotion_authority: 'operator'
+  plane: 'DEFINITION_PLANE'
+  implementation_status: 'VERIFIED_PARTIAL'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT_WITH_DRIFT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'docs/PRD/CURRENT.md'
+  dependency_refs: []
+  current_prd_claim: 'v0.2.8-draft (2026-08-26): Covers up to Phase 26 (PostgreSQL staging, ModelReasoningEngine, 49 visual syntax harnesses)'
+  reconciliation_verdict: 'VERIFIED_PARTIAL'
+  verification:
+    method: 'document_and_code_inspection'
+    command: 'git diff docs/PRD/CURRENT.md'
+    environment: 'git'
+    result: 'Does not yet formally index CAE Interview Program (M01-M11) or 11 Intelligence Services'
+    limitation: 'PRD synchronization is deferred to CA-CSR-03'
+  next_action: 'SYNCHRONIZE_TO_V030_IN_CA_CSR_03'
+
+# ------------------------------------------------------------------------------
+# 3. TECH SPEC STATE
+# ------------------------------------------------------------------------------
+- artifact: 'docs/cae/specs/current/'
+  artifact_class: 'DOCUMENT'
+  ownership: 'cae-architect'
+  definition_authority: '02_TECH_SPEC/01_TS_INTERVIEW_PROGRAM_001.md'
+  runtime_authority: 'docs/cae/specs'
+  change_promotion_authority: 'operator'
+  plane: 'DEFINITION_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'docs/cae/specs/current/SPEC-BRF-001.md'
+    - 'docs/cae/specs/current/SPEC-CMP-002.md'
+    - 'docs/cae/specs/current/SPEC-GST-UI-001.md'
+    - 'docs/cae/specs/current/SPEC-HAR-001.md'
+    - 'docs/cae/specs/current/SPEC-STU-001.md'
+    - 'docs/cae/specs/current/SPEC-TWC-UI-001.md'
+  dependency_refs: []
+  current_prd_claim: '6 core active specs governing Briefs, Compilation, Tenancy, UI, and Harnesses'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/cae/test_ca_spec_02_structure.py -v'
+    environment: 'local_python311'
+    result: 'All 6 specs pass 14-section structural and quality gate verification'
+    limitation: 'none'
+  next_action: 'RETAIN_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 4. POSTGRESQL / STATE / TYPED-OPERATION FOUNDATION
+# ------------------------------------------------------------------------------
+- artifact: 'packages/ca_runtime'
+  artifact_class: 'RUNTIME'
+  ownership: 'ca-runtime-custodian'
+  definition_authority: '02_TECH_SPEC/01_TS_INTERVIEW_PROGRAM_001.md'
+  runtime_authority: 'packages/ca_runtime'
+  change_promotion_authority: 'operator'
+  plane: 'DATA_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'packages/ca_runtime/tenancy.py'
+    - 'packages/ca_runtime/workspace_core.py'
+    - 'packages/ca_runtime/registry.py'
+    - 'packages/ca_runtime/semantic_operations.py'
+    - 'packages/ca_runtime/migration_runner.py'
+  dependency_refs:
+    - 'packages/ca_contracts'
+  current_prd_claim: 'PostgreSQL tenancy schema and typed runtime operations live on staging and local SQLite'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/cae/test_tenant_slice_*.py tests/cae/test_ca_twc_01_structure.py -v'
+    environment: 'local_e2e_python311'
+    result: '121 passed'
+    limitation: 'none'
+  next_action: 'RETAIN_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 5. EVIDENCE / RECEIPT FIRST SLICES
+# ------------------------------------------------------------------------------
+- artifact: 'packages/ca_runtime/database.py (ProductDatabase & Receipt Scaffolding)'
+  artifact_class: 'RUNTIME'
+  ownership: 'ca-runtime-custodian'
+  definition_authority: '02_TECH_SPEC/01_TS_INTERVIEW_PROGRAM_001.md'
+  runtime_authority: 'packages/ca_runtime'
+  change_promotion_authority: 'operator'
+  plane: 'DATA_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'packages/ca_runtime/database.py'
+    - 'packages/ca_contracts/canonical.py'
+  dependency_refs:
+    - 'packages/ca_contracts'
+  current_prd_claim: 'Immutable receipt envelopes with SHA-256 hashes persisted per command'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/cae/test_tenant_slice_operations.py::test_build_receipt_envelope_structure -v'
+    environment: 'local_python311'
+    result: 'PASSED'
+    limitation: 'none'
+  next_action: 'RETAIN_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 6. INTERVIEW COMPOSER & INTERVIEW EXPRESSION BOUNDARIES
+# ------------------------------------------------------------------------------
+- artifact: 'services/interview-composer'
+  artifact_class: 'EXECUTABLE'
+  ownership: 'interview-composer-custodian'
+  definition_authority: 'docs/cae/CAE_Interview_Program_Bundle_v3/'
+  runtime_authority: 'services/interview-composer'
+  change_promotion_authority: 'operator'
+  plane: 'SEMANTIC_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'services/interview-composer/brief_service.py'
+    - 'services/interview-composer/research_service.py'
+    - 'services/interview-composer/repository.py'
+  dependency_refs:
+    - 'packages/ca_contracts'
+    - 'packages/ca_runtime'
+  current_prd_claim: 'Responsible for interview briefing graph and research package compilation'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/interview_composer/ -v'
+    environment: 'local_e2e_python311'
+    result: '16 passed'
+    limitation: 'Distinct boundary from services/interview-intelligence'
+  next_action: 'ADD_TO_PRD_V030'
+
+- artifact: 'services/interview-intelligence'
+  artifact_class: 'EXECUTABLE'
+  ownership: 'interview-intelligence-custodian'
+  definition_authority: 'docs/cae/CAE_Interview_Program_Bundle_v3/'
+  runtime_authority: 'services/interview-intelligence'
+  change_promotion_authority: 'operator'
+  plane: 'SEMANTIC_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'services/interview-intelligence/question_resolver.py'
+    - 'services/interview-intelligence/semantic_acquisition.py'
+    - 'services/interview-intelligence/composition_compatibility.py'
+    - 'services/interview-intelligence/evidence_handoff.py'
+    - 'services/interview-intelligence/content_menu.py'
+    - 'services/interview-intelligence/operator_studio.py'
+  dependency_refs:
+    - 'packages/ca_contracts'
+    - 'packages/ca_runtime'
+  current_prd_claim: 'Responsible for adaptive question frontier, evidence handoff, and operator candidate menu'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/interview_intelligence/ -v'
+    environment: 'local_e2e_python311'
+    result: '80 passed'
+    limitation: 'none'
+  next_action: 'ADD_TO_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 7. EDITORIAL INTELLIGENCE OBJECT & DEPENDENCY CHAIN
+# ------------------------------------------------------------------------------
+- artifact: 'docs/cae/editorial_intelligence/CAE_EDITORIAL_OBJECT_REGISTER.md'
+  artifact_class: 'DOCUMENT'
+  ownership: 'editorial-architect'
+  definition_authority: 'docs/cae/editorial_intelligence/CAE_EDITORIAL_OBJECT_REGISTER.md'
+  runtime_authority: 'services/ (11 intelligence services)'
+  change_promotion_authority: 'operator'
+  plane: 'DEFINITION_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'docs/cae/editorial_intelligence/CAE_EDITORIAL_OBJECT_REGISTER.md'
+    - 'docs/cae/editorial_intelligence/CAE_EDITORIAL_AUTHORITY_MATRIX.md'
+    - 'docs/cae/editorial_intelligence/CAE_EDITORIAL_DEPENDENCY_GRAPH.md'
+    - 'docs/cae/editorial_intelligence/CAE_EDITORIAL_CONTRADICTION_REGISTER.md'
+    - 'docs/cae/editorial_intelligence/CAE_EDITORIAL_PLANE_AND_CLASS_MATRIX.md'
+  dependency_refs: []
+  current_prd_claim: '17 core editorial objects defined across 11 intelligence stages'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/*_intelligence/ tests/production_program/ -v'
+    environment: 'local_python311'
+    result: '81 passed'
+    limitation: 'none'
+  next_action: 'INDEX_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 8. SDA / SFL / PRIMITIVE REGISTRY & QUARANTINE STATUS
+# ------------------------------------------------------------------------------
+- artifact: 'services/air/registries/ (Primitive Registry)'
+  artifact_class: 'REGISTRY_SOURCE'
+  ownership: 'air-custodian'
+  definition_authority: '01_PRODUCT_AUTHORITIES/air/'
+  runtime_authority: 'services/air'
+  change_promotion_authority: 'operator'
+  plane: 'DATA_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'services/air/src/cmf_activative_intelligence/application.py'
+  dependency_refs:
+    - 'packages/ca_contracts'
+  current_prd_claim: '243 registered primitives loaded dynamically into SQLite'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/cae/test_ca_uptl_01_structure.py::test_u1_registry_typed_refusals -v'
+    environment: 'local_python311'
+    result: 'PASSED'
+    limitation: 'Legacy Phase 2 tests assert obsolete count of 242 primitives (catalogued in KNOWN_LEGACY_TEST_DEBT.md)'
+  next_action: 'RETAIN_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 9. WORLD / AUDIENCE / GUEST / COLLISION / INTERVIEW STAGES
+# ------------------------------------------------------------------------------
+- artifact: 'services/world-intelligence, relational-intelligence, collision-intelligence'
+  artifact_class: 'EXECUTABLE'
+  ownership: 'intelligence-custodians'
+  definition_authority: 'docs/cae/cae_mandate_bundle/'
+  runtime_authority: 'services/'
+  change_promotion_authority: 'operator'
+  plane: 'INTELLIGENCE_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'services/world-intelligence/'
+    - 'services/relational-intelligence/'
+    - 'services/collision-intelligence/'
+  dependency_refs:
+    - 'packages/ca_contracts'
+  current_prd_claim: 'Upstream intelligence stages (Worlds, Relational State, Collision Hypotheses)'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/world_intelligence/ tests/relational_intelligence/ tests/collision_intelligence/ -v'
+    environment: 'local_python311'
+    result: '23 passed'
+    limitation: 'none'
+  next_action: 'RETAIN_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 10. DOWNSTREAM EDITORIAL & PRODUCTION STAGES
+# ------------------------------------------------------------------------------
+- artifact: 'services/candidate-intelligence, scoring-intelligence, operator-intelligence, asset-intelligence, production-program, outcome-intelligence'
+  artifact_class: 'EXECUTABLE'
+  ownership: 'intelligence-custodians'
+  definition_authority: 'docs/cae/cae_mandate_bundle/'
+  runtime_authority: 'services/'
+  change_promotion_authority: 'operator'
+  plane: 'INTELLIGENCE_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'services/segmentation-intelligence/'
+    - 'services/attribution-intelligence/'
+    - 'services/candidate-intelligence/'
+    - 'services/scoring-intelligence/'
+    - 'services/operator-intelligence/'
+    - 'services/asset-intelligence/'
+    - 'services/production-program/'
+    - 'services/outcome-intelligence/'
+  dependency_refs:
+    - 'packages/ca_contracts'
+  current_prd_claim: 'Downstream candidate formation, multi-dimensional scoring, operator selection, and compiler'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'automated_tests'
+    command: 'python -m pytest tests/segmentation_intelligence/ tests/attribution_intelligence/ tests/candidate_intelligence/ tests/scoring_intelligence/ tests/operator_intelligence/ tests/asset_intelligence/ tests/production_program/ tests/outcome_intelligence/ -v'
+    environment: 'local_python311'
+    result: '58 passed'
+    limitation: 'none'
+  next_action: 'RETAIN_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 11. MANDATE EXECUTION RECORDS (5-STAGE EVALUATION)
+# ------------------------------------------------------------------------------
+- artifact: 'CAE Mandates M01 through M11'
+  artifact_class: 'RECEIPT'
+  ownership: 'mandate-custodian'
+  definition_authority: 'docs/cae/CAE_Interview_Program_Bundle_v3/02_MANDATES/'
+  runtime_authority: 'services/interview-intelligence, services/interview-composer'
+  change_promotion_authority: 'operator'
+  plane: 'CONTROL_PLANE'
+  implementation_status: 'VERIFIED_IMPLEMENTED'
+  proof_status: 'VERIFIED'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'docs/cae/CAE_Interview_Program_Bundle_v3/07_VALIDATION/M11_END_TO_END_REALITY_CONTACT_REPORT.md'
+  dependency_refs: []
+  current_prd_claim: 'M01-M11 executed and validated end-to-end'
+  reconciliation_verdict: 'VERIFIED_IMPLEMENTED'
+  verification:
+    method: 'five_stage_evaluation'
+    command: 'python -m pytest tests/interview_intelligence/ tests/interview_composer/ -v'
+    environment: 'local_e2e_python311'
+    result: |
+      MANDATE_DOCUMENTED: YES
+      CODE_CHANGED: YES
+      TEST_VERIFIED: YES (96/96 passed)
+      RUNTIME_VERIFIED: YES
+      OPERATOR_ACCEPTED: YES
+    limitation: 'none'
+  next_action: 'RECORD_COMPLETED_IN_PRD_V030'
+
+# ------------------------------------------------------------------------------
+# 12. OPEN BLOCKERS & DECISIONS
+# ------------------------------------------------------------------------------
+- artifact: 'services/studio/dist/rpc.js'
+  artifact_class: 'EXECUTABLE'
+  ownership: 'studio-custodian'
+  definition_authority: '02_TECH_SPEC/01_TS_INTERVIEW_PROGRAM_001.md'
+  runtime_authority: 'services/studio'
+  change_promotion_authority: 'operator'
+  plane: 'EXECUTION_PLANE'
+  implementation_status: 'CLAIMED_UNVERIFIED'
+  proof_status: 'NOT_FOUND'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'BLOCKED'
+  source_refs:
+    - 'services/studio/'
+  dependency_refs: []
+  current_prd_claim: 'StudioBridge communicates via TypeScript RPC'
+  reconciliation_verdict: 'CLAIMED_UNVERIFIED'
+  verification:
+    method: 'file_system_inspection'
+    command: 'Test-Path services/studio/dist/rpc.js'
+    environment: 'local'
+    result: 'File missing; requires npm run build in services/studio'
+    limitation: 'Non-blocking for core python runtime'
+  next_action: 'NEXT_RUNTIME_CONVERGENCE_NPM_BUILD'
+
+- artifact: 'KNOWN_LEGACY_TEST_DEBT.md (7 Catalogued Tests)'
+  artifact_class: 'DOCUMENT'
+  ownership: 'operator'
+  definition_authority: 'KNOWN_LEGACY_TEST_DEBT.md'
+  runtime_authority: 'tests/'
+  change_promotion_authority: 'operator'
+  plane: 'TEST_PLANE'
+  implementation_status: 'VERIFIED_PARTIAL'
+  proof_status: 'KNOWN_DEFECT'
+  supersession_status: 'CURRENT'
+  quarantine_status: 'CLEARED'
+  source_refs:
+    - 'KNOWN_LEGACY_TEST_DEBT.md'
+  dependency_refs: []
+  current_prd_claim: '7 legacy tests catalogued with root cause analysis'
+  reconciliation_verdict: 'VERIFIED_PARTIAL'
+  verification:
+    method: 'document_and_test_audit'
+    command: 'cat KNOWN_LEGACY_TEST_DEBT.md'
+    environment: 'local'
+    result: 'Bucket A is 100% GREEN; Bucket B has 7 catalogued legacy test debts'
+    limitation: 'Do not count legacy debt against active completion claims'
+  next_action: 'RETAIN_REGISTER_IN_PRD_V030'

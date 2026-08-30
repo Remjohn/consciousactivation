@@ -1,0 +1,91 @@
+{
+  "packet_id": "pkt:ca-csr-01:2026-08-30:001",
+  "program": "CAE Current-State Reconciliation & PRD Synchronization Program",
+  "mandate": "CA-CSR-01",
+  "execution_timestamp": "2026-08-30T04:45:00Z",
+  "git_commit": "3a92a8394fa6d73973a6ad5d0b5a3fe1f95ed76a",
+  "environment": {
+    "os": "windows",
+    "python_version": "3.11.9",
+    "pytest_collected_tests": 611
+  },
+  "summary_counts": {
+    "total_packages": 4,
+    "total_services": 21,
+    "active_api_routers": 9,
+    "current_phase_tests_passed": 298,
+    "legacy_test_debt_catalogued": 7
+  },
+  "subsystem_status": {
+    "ca_runtime": {
+      "status": "VERIFIED_IMPLEMENTED",
+      "modules": ["tenancy", "workspace_core", "registry", "semantic_operations", "migration_runner"]
+    },
+    "api_layer": {
+      "status": "VERIFIED_IMPLEMENTED",
+      "mounted_routers": [
+        "/api/health",
+        "/api/air",
+        "/api/harnesses",
+        "/api/interviews",
+        "/api/campaigns",
+        "/api/pipeline-status",
+        "/api/revisions",
+        "/api/ship",
+        "/api/interviews/compose",
+        "/api/v1/workspaces"
+      ]
+    },
+    "interview_intelligence": {
+      "status": "VERIFIED_IMPLEMENTED",
+      "test_pass_count": 80,
+      "mandates_completed": ["M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09", "M10", "M11"]
+    },
+    "interview_composer": {
+      "status": "VERIFIED_IMPLEMENTED",
+      "test_pass_count": 16
+    },
+    "intelligence_services": {
+      "status": "VERIFIED_IMPLEMENTED",
+      "module_count": 11,
+      "test_pass_count": 81
+    },
+    "control_plane_master_status": {
+      "status": "SUPERSEDED",
+      "date": "2026-07-22",
+      "action_required": "RECONCILE_UNDER_CA_CSR_02"
+    },
+    "prd_current": {
+      "status": "SPECIFICATION_DRIFT",
+      "version": "v0.2.8-draft",
+      "date": "2026-08-26",
+      "action_required": "SYNCHRONIZE_UNDER_CA_CSR_03"
+    }
+  },
+  "verification_receipts": [
+    {
+      "suite": "tests/cae/",
+      "passed": 121,
+      "failed": 0,
+      "command": "python -m pytest tests/cae/ -v"
+    },
+    {
+      "suite": "tests/interview_intelligence/ + tests/interview_composer/",
+      "passed": 96,
+      "failed": 0,
+      "command": "python -m pytest tests/interview_intelligence/ tests/interview_composer/ -v"
+    },
+    {
+      "suite": "tests/*_intelligence/ + tests/production_program/",
+      "passed": 81,
+      "failed": 0,
+      "command": "python -m pytest tests/world_intelligence/ tests/relational_intelligence/ tests/collision_intelligence/ tests/segmentation_intelligence/ tests/attribution_intelligence/ tests/candidate_intelligence/ tests/scoring_intelligence/ tests/operator_intelligence/ tests/asset_intelligence/ tests/production_program/ tests/outcome_intelligence/ -v"
+    }
+  ],
+  "custodian_signature": {
+    "signer": "Gemini CAE Reconciliation Custodian",
+    "mandate": "CA-CSR-01",
+    "status": "COMPLETED",
+    "gate_decision_pending": "OPERATOR_AUTHORIZATION"
+  }
+}

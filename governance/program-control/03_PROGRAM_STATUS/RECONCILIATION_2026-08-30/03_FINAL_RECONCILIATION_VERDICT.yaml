@@ -1,0 +1,65 @@
+﻿mandate_id: CA-CSR-04
+mandate_title: "Final Verification, Freeze & Runtime-Convergence Handoff"
+verification_date: "2026-08-30"
+repository_revision: "3a92a8394fa6d73973a6ad5d0b5a3fe1f95ed76a"
+verdict: PASS_WITH_LIMITATIONS
+completion_state: CURRENT_STATE_FROZEN_FOR_NEXT_PROGRAM
+
+evidence_summary:
+  test_suites_executed:
+    - suite: "tests/interview_intelligence"
+      passed: 80
+      failed: 0
+      command: "python -m pytest tests/interview_intelligence tests/interview_composer tests/cae -q"
+    - suite: "tests/interview_composer"
+      passed: 16
+      failed: 0
+    - suite: "tests/cae"
+      passed: 121
+      failed: 0
+    - suite: "tests/*_intelligence & tests/production_program"
+      passed: 81
+      failed: 0
+      command: "python -m pytest tests/world_intelligence tests/relational_intelligence tests/collision_intelligence tests/segmentation_intelligence tests/attribution_intelligence tests/candidate_intelligence tests/scoring_intelligence tests/operator_intelligence tests/asset_intelligence tests/outcome_intelligence tests/production_program -q"
+  total_tests_passed: 298
+  total_tests_failed: 0
+  legacy_test_debt_acknowledged: 7
+
+prd_verification:
+  target_file: "docs/PRD/CURRENT.md"
+  synchronized_version: "0.3.0"
+  verification_date: "2026-08-30"
+  change_log_present: true
+  status: VERIFIED_SYNCHRONIZED
+
+domain_verifications:
+  tenancy_core:
+    status: VERIFIED_NOW
+    evidence: "121 passing tests in tests/cae; 23 base tables in cae schema with RLS enforced"
+  interview_program_m01_m11:
+    status: VERIFIED_NOW
+    evidence: "96 passing tests across tests/interview_intelligence and tests/interview_composer; frontier, resolution, candidate menu verified"
+  editorial_intelligence_chain:
+    status: VERIFIED_NOW
+    evidence: "81 passing tests across 11 standalone services; 17 core objects from CAE_EDITORIAL_OBJECT_REGISTER.md instantiated"
+  anti_collapse_invariants:
+    status: VERIFIED_PRESERVED
+    evidence: "Distinct types preserved for ResearchSignal, CollisionHypothesis, EvidenceSegment, ContentCandidate, SemanticProgram"
+
+open_blockers:
+  - id: BLOCKER_2
+    location: "api/routers/campaigns.py::_try_compile_harness"
+    description: "capability_metadata is hardcoded to {} on campaign creation"
+  - id: BLOCKER_5
+    location: "api/routers/campaigns.py::_try_compile_harness"
+    description: "workflow is hardcoded to None on campaign creation"
+  - id: VAE_UNWIRED
+    location: "api/main.py & services/pipeline/src/cmf_pipeline/delegation/service.py"
+    description: "No /api/vae router mounted and Pipeline configure_visual_delegation() is uninvoked"
+  - id: STUDIO_FRONTEND_DECOUPLING
+    location: "apps/web/src"
+    description: "Frontend duplicates Studio domain types rather than importing services/studio package"
+
+limitations:
+  - "PostgreSQL staging authority confirmed; production database migration pending live rollout."
+  - "7 pre-existing brownfield legacy test debts in KNOWN_LEGACY_TEST_DEBT.md preserved for dedicated remediation."
