@@ -1,8 +1,8 @@
-﻿# Mandate Report
+# Mandate Report
 
 Mandate ID: M12
 Title: Phase 1 Acceptance + Frozen Baseline + CURRENT.md Synchronization
-Commit SHA: 1b65889723e0eda405543e74a43304703307abca
+Commit SHA: 8f5c8f1f21beafe53a5a05acc01d406136bdad40
 
 ## Files read
 - `docs/PRD/CURRENT.md`

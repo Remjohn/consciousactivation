@@ -1,8 +1,8 @@
-﻿# Phase 1 Gate — Mandates 1–12
+# Phase 1 Gate — Mandates 1–12
 
 **Status:** `PHASE_1_COMPLETE_PENDING_OPERATOR_RATIFICATION`  
 **Evaluation Date:** `2026-08-31`  
-**Repository Commit:** `1b65889723e0eda405543e74a43304703307abca`  
+**Repository Commit:** `8f5c8f1f21beafe53a5a05acc01d406136bdad40`  
 **Baseline Snapshot:** `00_CONTROL/20_PHASE1_BASELINE_SNAPSHOT.json`  
 
 ---
