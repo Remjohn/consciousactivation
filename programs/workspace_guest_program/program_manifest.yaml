@@ -1,0 +1,64 @@
+program:
+  id: "workspace_guest_operating_context_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Initializes and governs the one-Workspace / one-active-Guest operating context and subordinate Persona/Brand dimensions."
+  operator_entrypoint: "run_workspace_guest_session"
+  inputs:
+    - "workspace_configuration"
+    - "guest_profile_intake"
+  preconditions:
+    - "workspace_active"
+    - "operator_authorized"
+    - "single_active_guest_enforced"
+  outputs:
+    - "active_guest_operating_context"
+    - "derived_brand_context"
+  artifacts:
+    - "workspace_guest_operating_context_package"
+  harness: "WORKSPACE_GUEST_HARNESS_V1"
+  state_machine: "WORKSPACE_GUEST_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+  agents:
+    - "WorkspaceGovernanceAgent"
+    - "GuestParticipantHunterAgent"
+    - "BrandContextAnalystAgent"
+  subagents: []
+  skills:
+    - name: "workspace_boundary_verifier"
+      path: "skills/workspace_boundary_verifier/SKILL.md"
+      version: "1.0.0"
+    - name: "guest_evidence_indexer"
+      path: "skills/guest_evidence_indexer/SKILL.md"
+      version: "1.0.0"
+    - name: "brand_context_deriver"
+      path: "skills/brand_context_deriver/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.workspace.configure@1.0.0"
+    - "cae.guest.register@1.0.0"
+    - "cae.guest.bind_evidence@1.0.0"
+    - "cae.guest.activate_context@1.0.0"
+    - "cae.guest.repair_context@1.0.0"
+  tools:
+    - "tenancy_validator"
+    - "evidence_hasher"
+  connections:
+    - "postgresql_tenancy_slice"
+  hooks:
+    - "pre_workspace_configuration_hook"
+    - "post_context_activation_receipt"
+  extensions: []
+  evals:
+    - "workspace_isolation_eval"
+    - "lineage_integrity_eval"
+  operator_gates:
+    - "workspace_activation_gate"
+  recovery:
+    - "checkpoint_per_transition"
+  receipts:
+    - "workspace_guest_transition_receipt"
+  dependencies: []

@@ -399,7 +399,7 @@ def get_canonical_interview_state_machine() -> ProgramStateMachineDefinition:
 
 
 def get_canonical_collision_state_machine() -> ProgramStateMachineDefinition:
-    """State machine for collision_discovery_program."""
+    """State machine for collision_discovery_program (Phase 3 M32)."""
     transitions = {
         "ingest_corpus": ProgramTransitionContract(
             from_state="INITIAL",
@@ -443,7 +443,7 @@ def get_canonical_collision_state_machine() -> ProgramStateMachineDefinition:
             transition_name="operator_approve",
             trigger_operation="record_collision_hypothesis",
             required_lane=AuthorityLane.COMMANDER,
-            preconditions=("workspace_active", "operator_confirmed"),
+            preconditions=("workspace_active",),
             side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
         ),
         "operator_reject": ProgramTransitionContract(
@@ -455,11 +455,29 @@ def get_canonical_collision_state_machine() -> ProgramStateMachineDefinition:
             preconditions=("workspace_active",),
             side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
         ),
+        "rebuild_portfolio": ProgramTransitionContract(
+            from_state="APPROVED",
+            to_state="HYPOTHESIS_FORMED",
+            transition_name="rebuild_portfolio",
+            trigger_operation="record_collision_hypothesis",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "rebuild_from_rejected": ProgramTransitionContract(
+            from_state="REJECTED",
+            to_state="HYPOTHESIS_FORMED",
+            transition_name="rebuild_from_rejected",
+            trigger_operation="record_collision_hypothesis",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
     }
     repair_transitions = {
         "retry_discovery": ProgramTransitionContract(
             from_state="REPAIRING",
-            to_state="CORPUS_LOADED",
+            to_state="SIGNAL_HUNTING",
             transition_name="retry_discovery",
             trigger_operation="retry_with_diversity_penalty",
             required_lane=AuthorityLane.COMMANDER,
@@ -475,6 +493,7 @@ def get_canonical_collision_state_machine() -> ProgramStateMachineDefinition:
         transitions=transitions,
         repair_transitions=repair_transitions,
     )
+
 
 
 def get_canonical_storyboard_state_machine() -> ProgramStateMachineDefinition:

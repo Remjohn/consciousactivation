@@ -21,6 +21,7 @@ class SchemaCliBoundaryTests(unittest.TestCase):
             ROOT / "packages" / "ca_runtime" / "src",
             ROOT / "packages" / "ca_delegation_rc4" / "src",
             ROOT / "services/air" / "src",
+            ROOT / "services/collision-intelligence" / "src",
             ROOT / "services/pipeline" / "src",
             ROOT / "services/interview" / "src",
             ROOT / "services/world-intelligence" / "src",

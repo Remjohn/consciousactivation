@@ -1,0 +1,75 @@
+program:
+  id: "audience_context_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Operationalizes Audience setup, protected Cognitive Islands, and mutable current-state projections as a supervised Program."
+  operator_entrypoint: "run_audience_context"
+  inputs:
+    - "workspace_id"
+    - "audience_id"
+    - "target_segment"
+    - "guest_dna"
+    - "market_signals"
+  preconditions:
+    - "workspace_active"
+    - "operator_authorized"
+  outputs:
+    - "audience_profile"
+    - "cognitive_islands"
+    - "audience_state_projection"
+  artifacts:
+    - "audience_profile_artifact"
+    - "cognitive_island_map_artifact"
+    - "audience_state_projection_artifact"
+  harness: "AUDIENCE_HARNESS_V1"
+  state_machine: "AUDIENCE_CONTEXT_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "AudienceCommander"
+    - "AudienceTensionHunter"
+    - "CognitiveIslandMapper"
+    - "ViewerStateComposer"
+  subagents: []
+  skills:
+    - name: "audience_tension_hunting"
+      path: "skills/audience_tension_hunting/SKILL.md"
+      version: "1.0.0"
+    - name: "cognitive_island_mapping"
+      path: "skills/cognitive_island_mapping/SKILL.md"
+      version: "1.0.0"
+    - name: "viewer_state_composition"
+      path: "skills/viewer_state_composition/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.audience.initialize_profile@1.0.0"
+    - "cae.audience.hunt_tensions@1.0.0"
+    - "cae.audience.map_cognitive_islands@1.0.0"
+    - "cae.audience.project_current_state@1.0.0"
+    - "cae.audience.approve_context@1.0.0"
+    - "cae.audience.repair_context@1.0.0"
+  tools:
+    - "vector_search"
+    - "knowledge_query"
+  connections:
+    - "postgres_state_store"
+  hooks:
+    - "protected_cognitive_island_invariance_check"
+    - "lineage_provenance_validation_hook"
+  extensions: []
+  evals:
+    - "cognitive_island_integrity_eval"
+    - "lineage_traceability_eval"
+  operator_gates:
+    - "audience_context_activation_gate"
+  recovery:
+    - "recover_to_repairing"
+  receipts:
+    - "receipt_audience_profiled"
+    - "receipt_islands_mapped"
+    - "receipt_context_projected"
+    - "receipt_audience_active"
+  dependencies: []

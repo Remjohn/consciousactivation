@@ -1,0 +1,51 @@
+program:
+  id: "interview_semantic_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Elicits authentic guest voice and perspective through adaptive interview questioning."
+  operator_entrypoint: "run_interview_session"
+  inputs:
+    - "interview_brief"
+    - "guest_profile"
+  preconditions:
+    - "workspace_active"
+    - "interview_brief_approved"
+  outputs:
+    - "interview_recording"
+    - "interview_transcript"
+  artifacts:
+    - "authenticated_interview_source_package"
+  harness: "INTERVIEW_HARNESS_V1"
+  state_machine: "INTERVIEW_STATE_MACHINE_V1"
+  lanes:
+    - "HUNTER"
+    - "ANALYST"
+  agents:
+    - "InterviewElicitationAgent"
+    - "AnswerObservationAgent"
+  subagents: []
+  skills:
+    - name: "interview_elicitation"
+      path: "skills/interview_elicitation/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "ingest_interview_source"
+    - "record_interview_turn"
+  tools:
+    - "audio_recorder"
+    - "transcript_parser"
+  connections:
+    - "media_storage"
+  hooks:
+    - "pre_session_validation"
+    - "post_session_hash"
+  extensions: []
+  evals:
+    - "elicitation_quality_eval"
+  operator_gates:
+    - "guest_consent_gate"
+  recovery:
+    - "checkpoint_per_turn"
+  receipts:
+    - "interview_ingestion_receipt"
+  dependencies: []

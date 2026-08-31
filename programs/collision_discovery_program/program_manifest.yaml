@@ -1,0 +1,80 @@
+program:
+  id: "collision_discovery_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Discovers, evaluates, and composes semantic collision hypotheses between world research signals, audience cognitive tensions, guest lived authority, and Matrix of Edging."
+  operator_entrypoint: "run_collision_discovery"
+  inputs:
+    - "research_signal_corpus"
+    - "guest_dna"
+    - "audience_cognitive_island"
+    - "matrix_of_edging"
+  preconditions:
+    - "workspace_active"
+    - "guest_profile_verified"
+  outputs:
+    - "collision_hypotheses"
+    - "collision_hypothesis_portfolio"
+  artifacts:
+    - "hypothesis_portfolio"
+  harness: "COLLISION_HARNESS_V1"
+  state_machine: "COLLISION_STATE_MACHINE_V1"
+  lanes:
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+    - "COMMANDER"
+  agents:
+    - "CollisionHuntingAgent"
+    - "MatrixOfEdgingAnalystAgent"
+    - "CollisionHypothesisComposerAgent"
+    - "CollisionCommanderAgent"
+  subagents: []
+  skills:
+    - name: "audience_guest_resonator"
+      path: "skills/audience_guest_resonator/SKILL.md"
+      version: "1.0.0"
+    - name: "matrix_of_edging_evaluator"
+      path: "skills/matrix_of_edging_evaluator/SKILL.md"
+      version: "1.0.0"
+    - name: "collision_hypothesis_composer"
+      path: "skills/collision_hypothesis_composer/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "discover_resonance"
+    - "evaluate_matrix_of_edging"
+    - "compose_hypotheses"
+    - "evaluate_portfolio"
+    - "approve_hypothesis"
+    - "reject_hypothesis"
+    - "rebuild_portfolio"
+    - "retry_discovery"
+  tools:
+    - "vector_search"
+    - "relational_query"
+  connections:
+    - "supabase_postgres"
+  hooks:
+    - "anti_merge_boundary_check"
+    - "falsification_gate_check"
+    - "anti_cliche_trope_check"
+  extensions: []
+  evals:
+    - "collision_novelty_eval"
+    - "heritage_cmf_eval"
+    - "diversity_signature_eval"
+  operator_gates:
+    - "hypothesis_approval_gate"
+  recovery:
+    - "retry_with_diversity_penalty"
+    - "quarantine_hypothesis"
+  receipts:
+    - "collision_hypothesis_receipt"
+    - "comparative_evaluation_receipt"
+  dependencies:
+    - program_id: "knowledge_cluster_signal_program"
+      version_requirement: ">=1.0.0"
+    - program_id: "audience_context_program"
+      version_requirement: ">=1.0.0"
+    - program_id: "workspace_guest_program"
+      version_requirement: ">=1.0.0"
