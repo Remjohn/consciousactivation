@@ -1,9 +1,9 @@
-﻿# Phase 1 — Agent / Skill / Operation Ownership Graph
+# Phase 1 — Agent / Skill / Operation Ownership Graph
 
 **Mandate ID:** `M05`  
 **Status:** `RATIFIED_INVENTORY_AND_CONTRACTS_BASELINE`  
 **Governing Authority:** `docs/CANONICAL_SKILL_AUTHORING_CONSTITUTION.md`, `docs/PRD/CURRENT.md` (v0.3.0), `00_CONTROL/05_PROGRAM_PACKAGE_AND_AGENT_CONVENTION.md`  
-**Repository Revision:** `2a769677edbece460c0c968ecb325e138003b5f0`  
+**Repository Revision:** `479afcd78f4feb3b30a22ecc9213b5cec9fd9a1f`  
 **Execution Date:** `2026-08-31`  
 
 ---

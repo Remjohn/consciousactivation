@@ -1,8 +1,8 @@
-﻿# Mandate Report
+# Mandate Report
 
 Mandate ID: M05
 Title: Agent / Skill / Operation Ownership Graph
-Commit SHA: 2a769677edbece460c0c968ecb325e138003b5f0
+Commit SHA: 479afcd78f4feb3b30a22ecc9213b5cec9fd9a1f
 
 ## Files read
 - `docs/PRD/CURRENT.md`
