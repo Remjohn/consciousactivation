@@ -1,8 +1,8 @@
-﻿# Mandate Report
+# Mandate Report
 
 Mandate ID: M08
 Title: Programs + Artifacts + Chat Operator Contract
-Commit SHA: 4ddc2e1d2ed2877ae50a4fe46516d5603fa25b8e
+Commit SHA: 6d6e901d68907b0a4096c22d94e2895d956d7c9b
 
 ## Files read
 - `docs/PRD/CURRENT.md`

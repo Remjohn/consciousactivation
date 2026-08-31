@@ -1,9 +1,9 @@
-﻿# Phase 1 — Programs + Artifacts + Chat Operator Contract
+# Phase 1 — Programs + Artifacts + Chat Operator Contract
 
 **Mandate ID:** `M08`  
 **Status:** `RATIFIED_INVENTORY_AND_CONTRACTS_BASELINE`  
 **Governing Authority:** `docs/CANONICAL_SKILL_AUTHORING_CONSTITUTION.md`, `docs/PRD/CURRENT.md` (v0.3.0), `00_CONTROL/05_PROGRAM_PACKAGE_AND_AGENT_CONVENTION.md`, `00_CONTROL/06_STATE_AND_HOOKS_MODEL.md`  
-**Repository Revision:** `4ddc2e1d2ed2877ae50a4fe46516d5603fa25b8e`  
+**Repository Revision:** `6d6e901d68907b0a4096c22d94e2895d956d7c9b`  
 **Execution Date:** `2026-08-31`  
 
 ---
