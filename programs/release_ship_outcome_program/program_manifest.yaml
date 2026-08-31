@@ -1,0 +1,84 @@
+program:
+  id: "release_ship_outcome_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Release / Ship / Outcome Runtime providing final Dual-Axis QA verification, backend-authoritative operator release authorization, distribution shipping with fail-closed semantics, anti-reward-hacking outcome capture, and operator-ratified selective learning proposals."
+  operator_entrypoint: "run_release_ship_outcome_session"
+  inputs:
+    - "release_candidate"
+    - "evidence_segments"
+    - "wrong_reading_locks"
+  preconditions:
+    - "workspace_active"
+    - "candidate_admitted"
+    - "evidence_verified"
+  outputs:
+    - "final_qa_verification_record"
+    - "operator_release_authorization"
+    - "shipment_receipt"
+    - "outcome_observation_record"
+    - "evaluation_receipt"
+    - "selective_learning_proposals"
+  artifacts:
+    - "qa_verification_record"
+    - "release_authorization"
+    - "shipment_receipt"
+    - "outcome_record"
+    - "evaluation_receipt"
+    - "learning_proposals"
+  harness: "RELEASE_SHIP_OUTCOME_HARNESS_V1"
+  state_machine: "RELEASE_SHIP_OUTCOME_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "ReleaseShipCommanderAgent"
+    - "OutcomeHunterAgent"
+    - "ShipmentComposerAgent"
+    - "FinalQAAnalystAgent"
+  subagents: []
+  skills:
+    - name: "final_qa_verifier"
+      path: "skills/final_qa_verifier/SKILL.md"
+      version: "1.0.0"
+    - name: "release_authorization_operator"
+      path: "skills/release_authorization_operator/SKILL.md"
+      version: "1.0.0"
+    - name: "shipment_distribution_composer"
+      path: "skills/shipment_distribution_composer/SKILL.md"
+      version: "1.0.0"
+    - name: "outcome_empirical_hunter"
+      path: "skills/outcome_empirical_hunter/SKILL.md"
+      version: "1.0.0"
+    - name: "selective_learning_analyst"
+      path: "skills/selective_learning_analyst/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.release_ship.verify_qa@1.0.0"
+    - "cae.release_ship.authorize_release@1.0.0"
+    - "cae.release_ship.execute_ship@1.0.0"
+    - "cae.release_ship.capture_outcome@1.0.0"
+    - "cae.release_ship.propose_learning@1.0.0"
+    - "cae.release_ship.ratify_proposal@1.0.0"
+    - "cae.release_ship.repair@1.0.0"
+  tools:
+    - "source_fidelity_validator"
+    - "render_container_inspector"
+    - "anti_reward_hack_verifier"
+    - "disagreement_exposure_analyzer"
+  connections:
+    - "production_sqlite_repository"
+    - "distribution_channel_dispatcher"
+    - "outcome_telemetry_store"
+  hooks:
+    - "validate_lane_and_preconditions"
+    - "persist_state_and_emit_receipt"
+  receipts:
+    - "receipt_qa_verified"
+    - "receipt_release_authorized"
+    - "receipt_shipped"
+    - "receipt_outcome_captured"
+    - "receipt_learning_proposed"
+  dependencies: []

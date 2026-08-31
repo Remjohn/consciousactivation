@@ -19,13 +19,18 @@ class SchemaCliBoundaryTests(unittest.TestCase):
             ROOT / "tests" / "phase1",
             ROOT / "packages" / "ca_contracts" / "src",
             ROOT / "packages" / "ca_runtime" / "src",
-            ROOT / "packages" / "ca_delegation_rc4" / "src",
             ROOT / "services/air" / "src",
             ROOT / "services/collision-intelligence" / "src",
             ROOT / "services/pipeline" / "src",
             ROOT / "services/interview" / "src",
             ROOT / "services/world-intelligence" / "src",
             ROOT / "services/interview-composer" / "src",
+            ROOT / "services/interview-intelligence" / "src",
+            ROOT / "services/segmentation-intelligence" / "src",
+            ROOT / "services/attribution-intelligence" / "src",
+            ROOT / "services/candidate-intelligence" / "src",
+            ROOT / "services/scoring-intelligence" / "src",
+            ROOT / "services/operator-intelligence" / "src",
         ]
         env = dict(os.environ)
         env["PYTHONPATH"] = os.pathsep.join(str(item) for item in paths)

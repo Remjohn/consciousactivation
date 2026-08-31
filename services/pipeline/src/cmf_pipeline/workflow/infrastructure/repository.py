@@ -241,6 +241,14 @@ class PipelineRepository:
                 raise PipelineNotFound(f"object not found: {object_id}")
             return self._object_from_row(row)
 
+    def has_object(self, object_id: str, *, revision: int | None = None) -> bool:
+        try:
+            self.get_object(object_id, revision=revision)
+            return True
+        except PipelineNotFound:
+            return False
+
+
     def list_objects(self, *, object_type: str | None = None) -> list[dict[str, Any]]:
         self.initialize()
         with closing(self._connect()) as connection:

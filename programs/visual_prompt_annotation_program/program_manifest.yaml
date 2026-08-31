@@ -1,0 +1,71 @@
+program:
+  id: "visual_prompt_annotation_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Turns verified SemanticProgram specifications into precise visual demands and AssetAnnotation packages with wrong-reading locks, somatic requirements, rights clearance, and cryptographic source lineage."
+  operator_entrypoint: "run_visual_prompt_annotation_session"
+  inputs:
+    - "semantic_program"
+    - "evidence_segments"
+  preconditions:
+    - "workspace_active"
+    - "program_admitted"
+    - "evidence_verified"
+  outputs:
+    - "visual_prompt_specs"
+    - "asset_annotation_packages"
+    - "visual_asset_demands"
+  artifacts:
+    - "visual_package_snapshot"
+    - "visual_package_receipt"
+  harness: "VISUAL_PROMPT_ANNOTATION_HARNESS_V1"
+  state_machine: "VISUAL_PROMPT_ANNOTATION_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "VisualPromptCommanderAgent"
+    - "VisualRequirementHunterAgent"
+    - "AssetAnnotationAnalystAgent"
+    - "VisualDemandComposerAgent"
+  subagents: []
+  skills:
+    - name: "visual_requirement_extractor"
+      path: "skills/visual_requirement_extractor/SKILL.md"
+      version: "1.0.0"
+    - name: "asset_annotation_curator"
+      path: "skills/asset_annotation_curator/SKILL.md"
+      version: "1.0.0"
+    - name: "visual_demand_compiler"
+      path: "skills/visual_demand_compiler/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.visual_prompt.admit_program@1.0.0"
+    - "cae.visual_prompt.extract_requirements@1.0.0"
+    - "cae.visual_prompt.annotate_assets@1.0.0"
+    - "cae.visual_prompt.compile_demands@1.0.0"
+    - "cae.visual_prompt.approve_package@1.0.0"
+    - "cae.visual_prompt.repair@1.0.0"
+  tools:
+    - "evidence_quote_verifier"
+    - "asset_rights_analyzer"
+    - "wrong_reading_lock_validator"
+  connections:
+    - "postgresql_visual_slice"
+  hooks:
+    - "pre_admission_integrity_hook"
+    - "post_annotation_rights_hook"
+    - "post_demand_compilation_receipt"
+  extensions: []
+  evals:
+    - "source_lineage_integrity_eval"
+    - "wrong_reading_lock_eval"
+    - "somatic_resonance_eval"
+  operator_gates:
+    - "visual_package_approval_gate"
+  recovery:
+    - "repair_visual_package"
+  receipts:
+    - "cae.receipt.visual.prompt_package@1.0.0"

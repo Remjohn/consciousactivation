@@ -57,12 +57,14 @@ class SemanticProgram(BaseModel):
     program_id: str = Field(default_factory=lambda: f"PRG-{uuid.uuid4().hex[:12]}")
     candidate_id: str = Field(...)
     workspace_id: str = Field(...)
+    storyboard_id: Optional[str] = None
     title: str = Field(..., min_length=3)
     semantic_intent: str = Field(..., min_length=10)
     story_arc: str = Field(...)
     scenes: List[SemanticSceneSpec] = Field(..., min_length=1)
     total_duration: float = Field(..., ge=1.0)
     visual_audio_specs: VisualAudioSpecs = Field(default_factory=VisualAudioSpecs)
+    wrong_reading_locks: List[str] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
@@ -72,8 +74,11 @@ class CompositionHandoffReceipt(BaseModel):
     receipt_id: str = Field(default_factory=lambda: f"PRG-RCP-{uuid.uuid4().hex[:12]}")
     program_id: str = Field(...)
     candidate_id: str = Field(...)
+    storyboard_id: Optional[str] = None
     compiler_version: str = Field(default="1.0.0")
     evidence_sha256_list: List[str] = Field(..., min_length=1)
     asset_id_list: List[str] = Field(default_factory=list)
+    wrong_reading_locks: List[str] = Field(default_factory=list)
+    receipt_sha256: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: Dict[str, Any] = Field(default_factory=dict)

@@ -21,7 +21,21 @@ class ProductionProgramVerifier:
     """Enforces that downstream realization engines faithfully realize the SemanticProgram without altering meaning."""
 
     @classmethod
+    def verify_program_conformance(
+        cls,
+        program: SemanticProgram,
+        expected_story_arc: str,
+    ) -> bool:
+        """Verifies that a compiled SemanticProgram strictly matches the expected candidate story arc."""
+        if program.story_arc != expected_story_arc:
+            raise StoryArcGeometryMutationError(
+                f"Story arc mutation detected! Expected '{expected_story_arc}', got '{program.story_arc}'."
+            )
+        return True
+
+    @classmethod
     def verify_render_conformance(
+
         cls,
         program: SemanticProgram,
         render_spec: Dict[str, Any],

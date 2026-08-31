@@ -1,0 +1,72 @@
+program:
+  id: "visual_derivative_production_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Compiles source-grounded visual derivatives (Carousel, SuperVisual, Animation) from authentic SemanticProgram specifications, executing physical render passes with dual-axis QA (Semantic QA vs Render QA) and cryptographic operator release receipts."
+  operator_entrypoint: "run_visual_derivative_production_session"
+  inputs:
+    - "semantic_program"
+    - "evidence_segments"
+  preconditions:
+    - "workspace_active"
+    - "program_admitted"
+    - "evidence_verified"
+  outputs:
+    - "derivative_compositions"
+    - "derivative_render_artifacts"
+    - "dual_axis_qa_receipts"
+  artifacts:
+    - "derivative_package_snapshot"
+    - "derivative_release_receipt"
+  harness: "VISUAL_DERIVATIVE_PRODUCTION_HARNESS_V1"
+  state_machine: "VISUAL_DERIVATIVE_PRODUCTION_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "VisualDerivativeCommanderAgent"
+    - "DerivativeSourceHunterAgent"
+    - "DerivativeQAAnalystAgent"
+    - "DerivativeCompositionComposerAgent"
+  subagents: []
+  skills:
+    - name: "derivative_source_extractor"
+      path: "skills/derivative_source_extractor/SKILL.md"
+      version: "1.0.0"
+    - name: "derivative_qa_evaluator"
+      path: "skills/derivative_qa_evaluator/SKILL.md"
+      version: "1.0.0"
+    - name: "derivative_composition_compiler"
+      path: "skills/derivative_composition_compiler/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.visual_derivative.admit_program@1.0.0"
+    - "cae.visual_derivative.extract_sources@1.0.0"
+    - "cae.visual_derivative.compile_compositions@1.0.0"
+    - "cae.visual_derivative.realize_renders@1.0.0"
+    - "cae.visual_derivative.evaluate_qa@1.0.0"
+    - "cae.visual_derivative.authorize_release@1.0.0"
+    - "cae.visual_derivative.repair@1.0.0"
+  tools:
+    - "evidence_quote_verifier"
+    - "render_reparse_evaluator"
+    - "wrong_reading_lock_validator"
+  connections:
+    - "postgresql_visual_slice"
+  hooks:
+    - "pre_admission_integrity_hook"
+    - "post_render_reparse_hook"
+    - "post_release_receipt_hook"
+  extensions: []
+  evals:
+    - "source_lineage_integrity_eval"
+    - "wrong_reading_lock_eval"
+    - "dual_axis_qa_eval"
+  operator_gates:
+    - "derivative_release_authorization_gate"
+  recovery:
+    - "repair_derivative_program"
+  receipts:
+    - "cae.receipt.visual.derivative_release@1.0.0"

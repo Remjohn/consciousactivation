@@ -1,0 +1,75 @@
+program:
+  id: "vae_delegation_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Connects Content Harness Pipeline visual demands to Visual Asset Editor (VAE) execution and returns signed, governed AssetResult and ResultAcknowledgement envelopes without merging Pipeline/VAE authority or state."
+  operator_entrypoint: "run_vae_delegation_session"
+  inputs:
+    - "visual_asset_demand"
+    - "evidence_segments"
+  preconditions:
+    - "workspace_active"
+    - "demand_admitted"
+    - "evidence_verified"
+  outputs:
+    - "vae_production_plan"
+    - "visual_asset_artifacts"
+    - "asset_result_contract"
+    - "result_acknowledgement"
+  artifacts:
+    - "delegation_receipt"
+    - "asset_result_contract"
+    - "result_acknowledgement"
+  harness: "VAE_DELEGATION_HARNESS_V1"
+  state_machine: "VAE_DELEGATION_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "VAEDelegationCommanderAgent"
+    - "VAEPlanHunterAgent"
+    - "VAEAssetComposerAgent"
+    - "VAEEvaluationAnalystAgent"
+  subagents: []
+  skills:
+    - name: "demand_admission_verifier"
+      path: "skills/demand_admission_verifier/SKILL.md"
+      version: "1.0.0"
+    - name: "visual_render_composer"
+      path: "skills/visual_render_composer/SKILL.md"
+      version: "1.0.0"
+    - name: "visual_production_analyst"
+      path: "skills/visual_production_analyst/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.vae_delegation.admit_demand@1.0.0"
+    - "cae.vae_delegation.compile_plan@1.0.0"
+    - "cae.vae_delegation.generate_asset@1.0.0"
+    - "cae.vae_delegation.evaluate_asset@1.0.0"
+    - "cae.vae_delegation.acknowledge_result@1.0.0"
+    - "cae.vae_delegation.repair@1.0.0"
+  tools:
+    - "demand_integrity_validator"
+    - "render_geometry_evaluator"
+    - "dual_axis_qa_verifier"
+  connections:
+    - "vae_sqlite_repository"
+    - "vae_content_addressed_store"
+  hooks:
+    - "pre_admission_integrity_hook"
+    - "post_generation_artifact_hook"
+    - "post_acknowledgement_receipt_hook"
+  extensions: []
+  evals:
+    - "source_fidelity_eval"
+    - "negative_space_eval"
+    - "wrong_reading_lock_eval"
+    - "dual_axis_semantic_eval"
+  operator_gates:
+    - "delegation_acknowledgement_gate"
+  recovery:
+    - "repair_delegation_program"
+  receipts:
+    - "cae.receipt.vae.delegation@1.0.0"

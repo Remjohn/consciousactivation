@@ -87,6 +87,9 @@ class ProgramStateVersionConflictError(ProgramStateRuntimeError):
     """Raised on optimistic locking conflict when aggregate version mismatches expected version."""
 
     def __init__(self, aggregate_id: str, expected_version: int, actual_version: int):
+        self.aggregate_id = aggregate_id
+        self.expected_version = expected_version
+        self.actual_version = actual_version
         super().__init__(
             f"Optimistic lock conflict on ProgramStateAggregate '{aggregate_id}': "
             f"expected version {expected_version}, but current version is {actual_version}",
@@ -162,9 +165,13 @@ class ProgramStateLifecycle(str, enum.Enum):
     INITIALIZED = "INITIALIZED"
     RUNNING = "RUNNING"
     SUSPENDED = "SUSPENDED"
+    PAUSED = "PAUSED"
+    AWAITING_APPROVAL = "AWAITING_APPROVAL"
+    UNDER_REPAIR = "UNDER_REPAIR"
     REPAIRING = "REPAIRING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
 
 
 class SideEffectClass(str, enum.Enum):
@@ -190,6 +197,11 @@ class ProgramStateAggregate:
     last_receipt_id: Optional[str]
     created_at: str
     updated_at: str
+
+    @property
+    def metadata(self) -> Dict[str, Any]:
+        """Convenience property referencing state_data."""
+        return self.state_data
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -329,12 +341,59 @@ class ProgramTransitionResult:
 # ============================================================================
 
 def get_canonical_interview_state_machine() -> ProgramStateMachineDefinition:
-    """State machine for interview_semantic_program."""
+    """State machine for interview_semantic_program (CAE M33)."""
     transitions = {
+        # Brief Preparation & Compilation Lifecycle
+        "ingest_hypothesis": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="HYPOTHESIS_LOADED",
+            transition_name="ingest_hypothesis",
+            trigger_operation="record_interview_brief",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "evaluate_matrix": ProgramTransitionContract(
+            from_state="HYPOTHESIS_LOADED",
+            to_state="MATRIX_EVALUATED",
+            transition_name="evaluate_matrix",
+            trigger_operation="record_interview_brief",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_brief": ProgramTransitionContract(
+            from_state="MATRIX_EVALUATED",
+            to_state="BRIEF_COMPILED",
+            transition_name="compile_brief",
+            trigger_operation="record_interview_brief",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "seal_brief": ProgramTransitionContract(
+            from_state="BRIEF_COMPILED",
+            to_state="BRIEF_SEALED",
+            transition_name="seal_brief",
+            trigger_operation="seal_interview_brief",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        # Elicitation Session Lifecycle
         "start_elicitation": ProgramTransitionContract(
             from_state="INITIAL",
             to_state="QUESTIONING",
             transition_name="start_elicitation",
+            trigger_operation="ingest_interview_source",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "interview_brief_approved"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "start_elicitation_from_brief": ProgramTransitionContract(
+            from_state="BRIEF_SEALED",
+            to_state="QUESTIONING",
+            transition_name="start_elicitation_from_brief",
             trigger_operation="ingest_interview_source",
             required_lane=AuthorityLane.HUNTER,
             preconditions=("workspace_active", "interview_brief_approved"),
@@ -376,12 +435,84 @@ def get_canonical_interview_state_machine() -> ProgramStateMachineDefinition:
             preconditions=("workspace_active",),
             side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
         ),
+        "cancel_from_brief": ProgramTransitionContract(
+            from_state="BRIEF_SEALED",
+            to_state="CANCELLED",
+            transition_name="cancel_from_brief",
+            trigger_operation="cancel_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "cancel_from_initial": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="CANCELLED",
+            transition_name="cancel_from_initial",
+            trigger_operation="cancel_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "quarantine_session": ProgramTransitionContract(
+            from_state="HYPOTHESIS_LOADED",
+            to_state="REPAIRING",
+            transition_name="quarantine_session",
+            trigger_operation="repair_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "quarantine_from_brief": ProgramTransitionContract(
+            from_state="BRIEF_SEALED",
+            to_state="REPAIRING",
+            transition_name="quarantine_from_brief",
+            trigger_operation="repair_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "repair_to_initial": ProgramTransitionContract(
+            from_state="HYPOTHESIS_LOADED",
+            to_state="INITIAL",
+            transition_name="repair_to_initial",
+            trigger_operation="repair_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "repair_to_brief": ProgramTransitionContract(
+            from_state="BRIEF_COMPILED",
+            to_state="BRIEF_SEALED",
+            transition_name="repair_to_brief",
+            trigger_operation="repair_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
     }
     repair_transitions = {
         "repair_session": ProgramTransitionContract(
             from_state="REPAIRING",
             to_state="QUESTIONING",
             transition_name="repair_session",
+            trigger_operation="repair_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "repair_to_brief": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="BRIEF_SEALED",
+            transition_name="repair_to_brief",
+            trigger_operation="repair_session",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "repair_to_initial": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="INITIAL",
+            transition_name="repair_to_initial",
             trigger_operation="repair_session",
             required_lane=AuthorityLane.COMMANDER,
             preconditions=("workspace_active",),
@@ -992,6 +1123,589 @@ def get_canonical_knowledge_cluster_signal_state_machine() -> ProgramStateMachin
     )
 
 
+def get_canonical_visual_prompt_state_machine() -> ProgramStateMachineDefinition:
+    """State machine definition for visual_prompt_annotation_program (Phase 4 M41)."""
+    transitions = {
+        "admit_semantic_program": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="PROGRAM_ADMITTED",
+            transition_name="admit_semantic_program",
+            trigger_operation="cae.visual_prompt.admit_program@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "extract_visual_requirements": ProgramTransitionContract(
+            from_state="PROGRAM_ADMITTED",
+            to_state="REQUIREMENTS_EXTRACTED",
+            transition_name="extract_visual_requirements",
+            trigger_operation="cae.visual_prompt.extract_requirements@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "program_admitted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "annotate_asset_packages": ProgramTransitionContract(
+            from_state="REQUIREMENTS_EXTRACTED",
+            to_state="ASSETS_ANNOTATED",
+            transition_name="annotate_asset_packages",
+            trigger_operation="cae.visual_prompt.annotate_assets@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "requirements_extracted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_visual_demands": ProgramTransitionContract(
+            from_state="ASSETS_ANNOTATED",
+            to_state="DEMANDS_COMPILED",
+            transition_name="compile_visual_demands",
+            trigger_operation="cae.visual_prompt.compile_demands@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "assets_annotated"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "approve_visual_package": ProgramTransitionContract(
+            from_state="DEMANDS_COMPILED",
+            to_state="PACKAGE_COMMITTED",
+            transition_name="approve_visual_package",
+            trigger_operation="cae.visual_prompt.approve_package@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "demands_compiled"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "recompile_visual_demands": ProgramTransitionContract(
+            from_state="PACKAGE_COMMITTED",
+            to_state="DEMANDS_COMPILED",
+            transition_name="recompile_visual_demands",
+            trigger_operation="cae.visual_prompt.recompile_demands@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "recompile_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "reannotate_assets": ProgramTransitionContract(
+            from_state="PACKAGE_COMMITTED",
+            to_state="ASSETS_ANNOTATED",
+            transition_name="reannotate_assets",
+            trigger_operation="cae.visual_prompt.annotate_assets@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "requirements_extracted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "reextract_requirements": ProgramTransitionContract(
+            from_state="PACKAGE_COMMITTED",
+            to_state="REQUIREMENTS_EXTRACTED",
+            transition_name="reextract_requirements",
+            trigger_operation="cae.visual_prompt.extract_requirements@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "program_admitted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+    }
+    repair_transitions = {
+        "repair_visual_package": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="REQUIREMENTS_EXTRACTED",
+            transition_name="repair_visual_package",
+            trigger_operation="cae.visual_prompt.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+    }
+    return ProgramStateMachineDefinition(
+        machine_id="VISUAL_PROMPT_ANNOTATION_STATE_MACHINE_V1",
+        program_id="visual_prompt_annotation_program",
+        initial_state="INITIAL",
+        terminal_states=set(),
+        transitions=transitions,
+        repair_transitions=repair_transitions,
+    )
+
+
+def get_canonical_script_state_machine() -> ProgramStateMachineDefinition:
+    """State machine definition for script_program (Phase 4 Mandate M40)."""
+    transitions = {
+        "request_jit_authoring": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="JIT_REQUESTED",
+            transition_name="request_jit_authoring",
+            trigger_operation="cae.script.request_jit@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "semantic_program_verified"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "propose_script": ProgramTransitionContract(
+            from_state="JIT_REQUESTED",
+            to_state="SCRIPT_PROPOSED",
+            transition_name="propose_script",
+            trigger_operation="cae.script.propose@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "jit_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "evaluate_semantic_qa": ProgramTransitionContract(
+            from_state="SCRIPT_PROPOSED",
+            to_state="SEMANTIC_QA_EVALUATED",
+            transition_name="evaluate_semantic_qa",
+            trigger_operation="cae.script.evaluate_qa@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "script_proposal_present"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_final_script": ProgramTransitionContract(
+            from_state="SEMANTIC_QA_EVALUATED",
+            to_state="SCRIPT_COMPILED",
+            transition_name="compile_final_script",
+            trigger_operation="cae.script.compile_package@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "semantic_qa_passed"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "approve_script": ProgramTransitionContract(
+            from_state="SCRIPT_COMPILED",
+            to_state="SCRIPT_APPROVED",
+            transition_name="approve_script",
+            trigger_operation="cae.script.approve@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_gate_approved"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "create_transfer_contract": ProgramTransitionContract(
+            from_state="SCRIPT_APPROVED",
+            to_state="TRANSFER_CONTRACT_CREATED",
+            transition_name="create_transfer_contract",
+            trigger_operation="cae.script.create_transfer_contract@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_approved_enforced"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "revise_script": ProgramTransitionContract(
+            from_state="SCRIPT_APPROVED",
+            to_state="SCRIPT_PROPOSED",
+            transition_name="revise_script",
+            trigger_operation="cae.script.revise@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "revision_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+    }
+    repair_transitions = {
+        "repair_script": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="JIT_REQUESTED",
+            transition_name="repair_script",
+            trigger_operation="cae.script.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+    }
+    return ProgramStateMachineDefinition(
+        machine_id="SCRIPT_STATE_MACHINE_V1",
+        program_id="script_program",
+        initial_state="INITIAL",
+        terminal_states=set(),
+        transitions=transitions,
+        repair_transitions=repair_transitions,
+    )
+
+
+def get_canonical_visual_derivative_state_machine() -> ProgramStateMachineDefinition:
+    """State machine definition for visual_derivative_production_program (Phase 4 Mandate M42)."""
+    transitions = {
+        "admit_semantic_program": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="DERIVATIVE_ADMITTED",
+            transition_name="admit_semantic_program",
+            trigger_operation="cae.visual_derivative.admit_program@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "extract_derivative_sources": ProgramTransitionContract(
+            from_state="DERIVATIVE_ADMITTED",
+            to_state="SOURCES_EXTRACTED",
+            transition_name="extract_derivative_sources",
+            trigger_operation="cae.visual_derivative.extract_sources@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "derivative_admitted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_derivative_compositions": ProgramTransitionContract(
+            from_state="SOURCES_EXTRACTED",
+            to_state="COMPOSITIONS_COMPILED",
+            transition_name="compile_derivative_compositions",
+            trigger_operation="cae.visual_derivative.compile_compositions@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "sources_extracted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "realize_derivative_renders": ProgramTransitionContract(
+            from_state="COMPOSITIONS_COMPILED",
+            to_state="RENDERS_REALIZED",
+            transition_name="realize_derivative_renders",
+            trigger_operation="cae.visual_derivative.realize_renders@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "compositions_compiled"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "evaluate_dual_axis_qa": ProgramTransitionContract(
+            from_state="RENDERS_REALIZED",
+            to_state="QA_EVALUATED",
+            transition_name="evaluate_dual_axis_qa",
+            trigger_operation="cae.visual_derivative.evaluate_qa@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "renders_realized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "authorize_derivative_release": ProgramTransitionContract(
+            from_state="QA_EVALUATED",
+            to_state="RELEASE_AUTHORIZED",
+            transition_name="authorize_derivative_release",
+            trigger_operation="cae.visual_derivative.authorize_release@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "qa_passed", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "recompile_compositions": ProgramTransitionContract(
+            from_state="RELEASE_AUTHORIZED",
+            to_state="COMPOSITIONS_COMPILED",
+            transition_name="recompile_compositions",
+            trigger_operation="cae.visual_derivative.compile_compositions@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "recompile_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+    }
+    repair_transitions = {
+        "repair_derivative_program": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="SOURCES_EXTRACTED",
+            transition_name="repair_derivative_program",
+            trigger_operation="cae.visual_derivative.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+    }
+    return ProgramStateMachineDefinition(
+        machine_id="VISUAL_DERIVATIVE_PRODUCTION_STATE_MACHINE_V1",
+        program_id="visual_derivative_production_program",
+        initial_state="INITIAL",
+        terminal_states=set(),
+        transitions=transitions,
+        repair_transitions=repair_transitions,
+    )
+
+
+
+
+def get_canonical_video_edit_state_machine() -> ProgramStateMachineDefinition:
+    """State machine definition for video_edit_program (Phase 4 Mandate M43)."""
+    transitions = {
+        "admit_semantic_material": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="MATERIAL_ADMITTED",
+            transition_name="admit_semantic_material",
+            trigger_operation="cae.video_edit.admit_material@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "register_source_media": ProgramTransitionContract(
+            from_state="MATERIAL_ADMITTED",
+            to_state="SOURCE_REGISTERED",
+            transition_name="register_source_media",
+            trigger_operation="cae.video_edit.register_source@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "material_admitted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_word_boundary_edl": ProgramTransitionContract(
+            from_state="SOURCE_REGISTERED",
+            to_state="EDL_COMPILED",
+            transition_name="compile_word_boundary_edl",
+            trigger_operation="cae.video_edit.compile_edl@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "source_registered"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_video_edit_program": ProgramTransitionContract(
+            from_state="EDL_COMPILED",
+            to_state="PROGRAM_COMPILED",
+            transition_name="compile_video_edit_program",
+            trigger_operation="cae.video_edit.compile_program@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "edl_compiled"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_export_bindings": ProgramTransitionContract(
+            from_state="PROGRAM_COMPILED",
+            to_state="BINDINGS_COMPILED",
+            transition_name="compile_export_bindings",
+            trigger_operation="cae.video_edit.compile_bindings@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "program_compiled"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "realize_ffmpeg_render": ProgramTransitionContract(
+            from_state="BINDINGS_COMPILED",
+            to_state="VIDEO_RENDERED",
+            transition_name="realize_ffmpeg_render",
+            trigger_operation="cae.video_edit.render_video@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "bindings_compiled"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "evaluate_dual_axis_qa": ProgramTransitionContract(
+            from_state="VIDEO_RENDERED",
+            to_state="QA_EVALUATED",
+            transition_name="evaluate_dual_axis_qa",
+            trigger_operation="cae.video_edit.evaluate_qa@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "video_rendered"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "authorize_video_release": ProgramTransitionContract(
+            from_state="QA_EVALUATED",
+            to_state="RELEASE_AUTHORIZED",
+            transition_name="authorize_video_release",
+            trigger_operation="cae.video_edit.authorize_release@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "qa_passed", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "recompile_edl": ProgramTransitionContract(
+            from_state="RELEASE_AUTHORIZED",
+            to_state="EDL_COMPILED",
+            transition_name="recompile_edl",
+            trigger_operation="cae.video_edit.compile_edl@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "recompile_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+    }
+    repair_transitions = {
+        "repair_video_edit_program": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="SOURCE_REGISTERED",
+            transition_name="repair_video_edit_program",
+            trigger_operation="cae.video_edit.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+    }
+    return ProgramStateMachineDefinition(
+        machine_id="VIDEO_EDIT_STATE_MACHINE_V1",
+        program_id="video_edit_program",
+        initial_state="INITIAL",
+        terminal_states=set(),
+        transitions=transitions,
+        repair_transitions=repair_transitions,
+    )
+
+
+def get_canonical_vae_delegation_state_machine() -> ProgramStateMachineDefinition:
+    """State machine definition for vae_delegation_program (Phase 4 Mandate M44)."""
+    transitions = {
+        "admit_visual_demand": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="DEMAND_ADMITTED",
+            transition_name="admit_visual_demand",
+            trigger_operation="cae.vae_delegation.admit_demand@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "compile_production_plan": ProgramTransitionContract(
+            from_state="DEMAND_ADMITTED",
+            to_state="PRODUCTION_PLAN_COMPILED",
+            transition_name="compile_production_plan",
+            trigger_operation="cae.vae_delegation.compile_plan@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "demand_admitted"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "generate_visual_asset": ProgramTransitionContract(
+            from_state="PRODUCTION_PLAN_COMPILED",
+            to_state="VISUAL_ASSET_GENERATED",
+            transition_name="generate_visual_asset",
+            trigger_operation="cae.vae_delegation.generate_asset@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "plan_compiled"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "evaluate_technical_quality": ProgramTransitionContract(
+            from_state="VISUAL_ASSET_GENERATED",
+            to_state="TECHNICAL_EVALUATED",
+            transition_name="evaluate_technical_quality",
+            trigger_operation="cae.vae_delegation.evaluate_asset@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "asset_generated"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "acknowledge_result": ProgramTransitionContract(
+            from_state="TECHNICAL_EVALUATED",
+            to_state="RESULT_ACKNOWLEDGED",
+            transition_name="acknowledge_result",
+            trigger_operation="cae.vae_delegation.acknowledge_result@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "technical_evaluated", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "recompile_plan": ProgramTransitionContract(
+            from_state="RESULT_ACKNOWLEDGED",
+            to_state="PRODUCTION_PLAN_COMPILED",
+            transition_name="recompile_plan",
+            trigger_operation="cae.vae_delegation.compile_plan@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "recompile_authorized"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "regenerate_asset": ProgramTransitionContract(
+            from_state="RESULT_ACKNOWLEDGED",
+            to_state="VISUAL_ASSET_GENERATED",
+            transition_name="regenerate_asset",
+            trigger_operation="cae.vae_delegation.generate_asset@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "plan_compiled"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+    }
+    repair_transitions = {
+        "repair_delegation_program": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="PRODUCTION_PLAN_COMPILED",
+            transition_name="repair_delegation_program",
+            trigger_operation="cae.vae_delegation.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+    }
+    return ProgramStateMachineDefinition(
+        machine_id="VAE_DELEGATION_STATE_MACHINE_V1",
+        program_id="vae_delegation_program",
+        initial_state="INITIAL",
+        terminal_states=set(),
+        transitions=transitions,
+        repair_transitions=repair_transitions,
+    )
+
+
+def get_canonical_release_ship_outcome_state_machine() -> ProgramStateMachineDefinition:
+    """State machine definition for release_ship_outcome_program (Phase 4 Mandate M45)."""
+    transitions = {
+        "verify_final_qa": ProgramTransitionContract(
+            from_state="INITIAL",
+            to_state="QA_VERIFIED",
+            transition_name="verify_final_qa",
+            trigger_operation="cae.release_ship.verify_qa@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "material_present"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "authorize_release": ProgramTransitionContract(
+            from_state="QA_VERIFIED",
+            to_state="RELEASE_AUTHORIZED",
+            transition_name="authorize_release",
+            trigger_operation="cae.release_ship.authorize_release@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "qa_verified", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "execute_ship": ProgramTransitionContract(
+            from_state="RELEASE_AUTHORIZED",
+            to_state="SHIPPED",
+            transition_name="execute_ship",
+            trigger_operation="cae.release_ship.execute_ship@1.0.0",
+            required_lane=AuthorityLane.COMPOSER,
+            preconditions=("workspace_active", "release_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "capture_outcome": ProgramTransitionContract(
+            from_state="SHIPPED",
+            to_state="OUTCOME_CAPTURED",
+            transition_name="capture_outcome",
+            trigger_operation="cae.release_ship.capture_outcome@1.0.0",
+            required_lane=AuthorityLane.HUNTER,
+            preconditions=("workspace_active", "shipped"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "propose_learning": ProgramTransitionContract(
+            from_state="OUTCOME_CAPTURED",
+            to_state="LEARNING_PROPOSED",
+            transition_name="propose_learning",
+            trigger_operation="cae.release_ship.propose_learning@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active", "outcome_captured"),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+        "ratify_proposal": ProgramTransitionContract(
+            from_state="LEARNING_PROPOSED",
+            to_state="LEARNING_PROPOSED",
+            transition_name="ratify_proposal",
+            trigger_operation="cae.release_ship.ratify_proposal@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "reverify_qa": ProgramTransitionContract(
+            from_state="LEARNING_PROPOSED",
+            to_state="QA_VERIFIED",
+            transition_name="reverify_qa",
+            trigger_operation="cae.release_ship.verify_qa@1.0.0",
+            required_lane=AuthorityLane.ANALYST,
+            preconditions=("workspace_active",),
+            side_effect_class=SideEffectClass.LOCAL_STATE_WRITE,
+        ),
+    }
+    repair_transitions = {
+        "fail_qa_to_repair": ProgramTransitionContract(
+            from_state="QA_VERIFIED",
+            to_state="REPAIRING",
+            transition_name="fail_qa_to_repair",
+            trigger_operation="cae.release_ship.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "fail_ship_to_repair": ProgramTransitionContract(
+            from_state="SHIPPED",
+            to_state="REPAIRING",
+            transition_name="fail_ship_to_repair",
+            trigger_operation="cae.release_ship.repair@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "repair_to_initial": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="INITIAL",
+            transition_name="repair_to_initial",
+            trigger_operation="cae.release_ship.resume@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+        "repair_to_qa_verified": ProgramTransitionContract(
+            from_state="REPAIRING",
+            to_state="QA_VERIFIED",
+            transition_name="repair_to_qa_verified",
+            trigger_operation="cae.release_ship.resume@1.0.0",
+            required_lane=AuthorityLane.COMMANDER,
+            preconditions=("workspace_active", "operator_authorized"),
+            side_effect_class=SideEffectClass.TRANSACTIONAL_COMMIT,
+        ),
+    }
+    return ProgramStateMachineDefinition(
+        machine_id="RELEASE_SHIP_OUTCOME_STATE_MACHINE_V1",
+        program_id="release_ship_outcome_program",
+        initial_state="INITIAL",
+        terminal_states=set(),
+        transitions=transitions,
+        repair_transitions=repair_transitions,
+    )
+
 
 # ============================================================================
 # 4. State Persistence Interfaces and Implementations
@@ -1008,6 +1722,18 @@ class IProgramStateStore(abc.ABC):
     @abc.abstractmethod
     def get_aggregate(self, aggregate_id: str) -> Optional[ProgramStateAggregate]:
         """Retrieves an aggregate by ID."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def list_aggregates(
+        self,
+        workspace_id: Optional[str] = None,
+        program_id: Optional[str] = None,
+        lifecycle: Optional[ProgramStateLifecycle] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[ProgramStateAggregate]:
+        """Lists state aggregates matching optional filters."""
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -1041,6 +1767,24 @@ class InMemoryProgramStateStore(IProgramStateStore):
 
     def get_aggregate(self, aggregate_id: str) -> Optional[ProgramStateAggregate]:
         return self._aggregates.get(aggregate_id)
+
+    def list_aggregates(
+        self,
+        workspace_id: Optional[str] = None,
+        program_id: Optional[str] = None,
+        lifecycle: Optional[ProgramStateLifecycle] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[ProgramStateAggregate]:
+        results = list(self._aggregates.values())
+        if workspace_id is not None:
+            results = [a for a in results if str(a.workspace_id) == str(workspace_id)]
+        if program_id is not None:
+            results = [a for a in results if a.program_id == program_id]
+        if lifecycle is not None:
+            results = [a for a in results if a.lifecycle == lifecycle]
+        results.sort(key=lambda a: a.updated_at, reverse=True)
+        return results[offset : offset + limit]
 
     def record_transition(self, transition: ProgramStateTransition) -> None:
         if transition.aggregate_id not in self._transitions:
@@ -1199,6 +1943,51 @@ class SqliteProgramStateStore(IProgramStateStore):
                 created_at=row["created_at"],
                 updated_at=row["updated_at"],
             )
+
+    def list_aggregates(
+        self,
+        workspace_id: Optional[str] = None,
+        program_id: Optional[str] = None,
+        lifecycle: Optional[ProgramStateLifecycle] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[ProgramStateAggregate]:
+        query = "SELECT * FROM cae_program_state_aggregates WHERE 1=1"
+        params: List[Any] = []
+        if workspace_id is not None:
+            query += " AND workspace_id = ?"
+            params.append(str(workspace_id))
+        if program_id is not None:
+            query += " AND program_id = ?"
+            params.append(program_id)
+        if lifecycle is not None:
+            query += " AND lifecycle = ?"
+            params.append(lifecycle.value if isinstance(lifecycle, ProgramStateLifecycle) else str(lifecycle))
+        query += " ORDER BY updated_at DESC LIMIT ? OFFSET ?"
+        params.extend([limit, offset])
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, tuple(params))
+            rows = cursor.fetchall()
+            return [
+                ProgramStateAggregate(
+                    aggregate_id=row["aggregate_id"],
+                    workspace_id=row["workspace_id"],
+                    cae_run_id=row["cae_run_id"],
+                    program_id=row["program_id"],
+                    program_version=row["program_version"],
+                    current_state=row["current_state"],
+                    state_data=json.loads(row["state_data"]),
+                    version=row["version"],
+                    state_hash=row["state_hash"],
+                    lifecycle=ProgramStateLifecycle(row["lifecycle"]),
+                    last_receipt_id=row["last_receipt_id"],
+                    created_at=row["created_at"],
+                    updated_at=row["updated_at"],
+                )
+                for row in rows
+            ]
 
     def record_transition(self, transition: ProgramStateTransition) -> None:
         with self._get_connection() as conn:
@@ -1367,6 +2156,12 @@ class UniversalProgramStateRuntime:
         self.register_state_machine(get_canonical_research_canonicalization_state_machine())
         self.register_state_machine(get_canonical_knowledge_compiler_state_machine())
         self.register_state_machine(get_canonical_knowledge_cluster_signal_state_machine())
+        self.register_state_machine(get_canonical_visual_prompt_state_machine())
+        self.register_state_machine(get_canonical_script_state_machine())
+        self.register_state_machine(get_canonical_visual_derivative_state_machine())
+        self.register_state_machine(get_canonical_video_edit_state_machine())
+        self.register_state_machine(get_canonical_vae_delegation_state_machine())
+        self.register_state_machine(get_canonical_release_ship_outcome_state_machine())
 
     def register_state_machine(self, machine_def: ProgramStateMachineDefinition) -> None:
         """Registers a Program State Machine Definition."""
@@ -1458,6 +2253,137 @@ class UniversalProgramStateRuntime:
             raise ProgramStateAggregateNotFoundError(aggregate_id)
         return agg
 
+    def list_aggregates(
+        self,
+        workspace_id: Optional[str] = None,
+        program_id: Optional[str] = None,
+        lifecycle: Optional[ProgramStateLifecycle] = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> List[ProgramStateAggregate]:
+        """Lists state aggregates matching optional filters."""
+        return self.store.list_aggregates(
+            workspace_id=workspace_id,
+            program_id=program_id,
+            lifecycle=lifecycle,
+            limit=limit,
+            offset=offset,
+        )
+
+    def set_lifecycle(
+        self,
+        *,
+        aggregate_id: str,
+        new_lifecycle: ProgramStateLifecycle,
+        actor_id: str,
+        expected_version: Optional[int] = None,
+        expected_state_sha256: Optional[str] = None,
+        receipt_id: Optional[str] = None,
+        state_updates: Optional[Dict[str, Any]] = None,
+    ) -> ProgramStateAggregate:
+        """Atomically updates the aggregate lifecycle with optimistic CAS verification."""
+        agg = self.get_aggregate(aggregate_id)
+        if expected_version is not None and agg.version != expected_version:
+            raise ProgramStateVersionConflictError(
+                aggregate_id=aggregate_id,
+                expected_version=expected_version,
+                actual_version=agg.version,
+            )
+        if expected_state_sha256 is not None and agg.state_hash != expected_state_sha256:
+            raise ProgramStateVersionConflictError(
+                aggregate_id=aggregate_id,
+                expected_version=agg.version,
+                actual_version=agg.version,
+            )
+
+        now = utc_now_rfc3339()
+        new_version = agg.version + 1
+        new_state_data = dict(agg.state_data)
+        if state_updates:
+            new_state_data.update(state_updates)
+
+        new_state_hash = _compute_state_hash(
+            aggregate_id=agg.aggregate_id,
+            program_id=agg.program_id,
+            program_version=agg.program_version,
+            current_state=agg.current_state,
+            version=new_version,
+            state_data=new_state_data,
+        )
+
+        eff_receipt_id = receipt_id or f"rcpt_lifecycle_{hashlib.sha256(f'{agg.aggregate_id}:{new_version}:{new_lifecycle.value}'.encode('utf-8')).hexdigest()[:24]}"
+
+        updated_agg = ProgramStateAggregate(
+            aggregate_id=agg.aggregate_id,
+            workspace_id=agg.workspace_id,
+            cae_run_id=agg.cae_run_id,
+            program_id=agg.program_id,
+            program_version=agg.program_version,
+            current_state=agg.current_state,
+            state_data=new_state_data,
+            version=new_version,
+            state_hash=new_state_hash,
+            lifecycle=new_lifecycle,
+            last_receipt_id=eff_receipt_id,
+            created_at=agg.created_at,
+            updated_at=now,
+        )
+
+        self.store.save_aggregate(updated_agg, expected_version=agg.version)
+        return updated_agg
+
+    def pause_execution(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        expected_version: Optional[int] = None,
+        expected_state_sha256: Optional[str] = None,
+    ) -> ProgramStateAggregate:
+        """Transitions execution lifecycle to PAUSED with CAS concurrency protection."""
+        agg = self.get_aggregate(aggregate_id)
+        if agg.lifecycle in (ProgramStateLifecycle.COMPLETED, ProgramStateLifecycle.FAILED, ProgramStateLifecycle.CANCELLED):
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name="pause",
+                reason=f"Cannot pause program in terminal state '{agg.lifecycle.value}'",
+            )
+        receipt_id = f"rcpt_pause_{hashlib.sha256(f'{aggregate_id}:{agg.version + 1}'.encode('utf-8')).hexdigest()[:24]}"
+        return self.set_lifecycle(
+            aggregate_id=aggregate_id,
+            new_lifecycle=ProgramStateLifecycle.PAUSED,
+            actor_id=actor_id,
+            expected_version=expected_version,
+            expected_state_sha256=expected_state_sha256,
+            receipt_id=receipt_id,
+        )
+
+    def resume_execution(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        expected_version: Optional[int] = None,
+        expected_state_sha256: Optional[str] = None,
+    ) -> ProgramStateAggregate:
+        """Resumes a PAUSED execution back to RUNNING with CAS concurrency protection."""
+        agg = self.get_aggregate(aggregate_id)
+        if agg.lifecycle != ProgramStateLifecycle.PAUSED:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name="resume",
+                reason=f"Cannot resume program from lifecycle state '{agg.lifecycle.value}'. Expected 'PAUSED'",
+            )
+        receipt_id = f"rcpt_resume_{hashlib.sha256(f'{aggregate_id}:{agg.version + 1}'.encode('utf-8')).hexdigest()[:24]}"
+        return self.set_lifecycle(
+            aggregate_id=aggregate_id,
+            new_lifecycle=ProgramStateLifecycle.RUNNING,
+            actor_id=actor_id,
+            expected_version=expected_version,
+            expected_state_sha256=expected_state_sha256,
+            receipt_id=receipt_id,
+        )
+
     def get_local_context(
         self,
         aggregate_id: str,
@@ -1521,7 +2447,7 @@ class UniversalProgramStateRuntime:
 
         # Check in normal transitions and repair transitions
         contract = state_machine.transitions.get(transition_name)
-        if contract is None and agg.lifecycle == ProgramStateLifecycle.REPAIRING:
+        if contract is None:
             contract = state_machine.repair_transitions.get(transition_name)
 
         if contract is None:
@@ -1600,7 +2526,9 @@ class UniversalProgramStateRuntime:
         # Update lifecycle state
         state_machine = self.get_state_machine(agg.program_id)
         new_lifecycle = agg.lifecycle
-        if contract.to_state in state_machine.terminal_states:
+        if contract.to_state == "REPAIRING":
+            new_lifecycle = ProgramStateLifecycle.REPAIRING
+        elif contract.to_state in state_machine.terminal_states:
             new_lifecycle = ProgramStateLifecycle.COMPLETED
         elif agg.lifecycle == ProgramStateLifecycle.INITIALIZED:
             new_lifecycle = ProgramStateLifecycle.RUNNING
@@ -1712,6 +2640,16 @@ class UniversalProgramStateRuntime:
         new_state_data = dict(agg.state_data)
         if state_updates:
             new_state_data.update(state_updates)
+
+        # Record repair ledger entry
+        repairs_ledger = list(new_state_data.get("repairs", []))
+        repairs_ledger.append({
+            "repair_action": repair_action,
+            "repair_payload": repair_payload,
+            "actor_id": actor_id,
+            "timestamp": now,
+        })
+        new_state_data["repairs"] = repairs_ledger
 
         new_state_hash = _compute_state_hash(
             aggregate_id=agg.aggregate_id,

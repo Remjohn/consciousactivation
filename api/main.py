@@ -23,6 +23,7 @@ async def lifespan(app: FastAPI):
     pipeline = PipelineApplication(database_path=db_path / "pipeline.db")
     pipeline.initialize()
     pipeline.load_default_development_candidates()
+    pipeline.configure_visual_delegation(config.ca_delegation_root)
     app.state.pipeline = pipeline
     logger.info("pipeline service initialised: %s", db_path / "pipeline.db")
 
@@ -146,4 +147,9 @@ from api.routers import interview_composer; app.include_router(interview_compose
 from api.routers import v1_tenancy; app.include_router(v1_tenancy.router, prefix="/api", tags=["tenancy-v1"])  # noqa: E702
 # CAE (TS-CAE-PROG-001 / Mandate M14): Program Package Discovery and Registry router
 from api.routers import programs; app.include_router(programs.router, prefix="/api/programs", tags=["programs"])  # noqa: E702
+# CAE (Phase 4 Mandate M44 / F15): VAE Delegation and Visual Asset Runtime router
+from api.routers import vae; app.include_router(vae.router, prefix="/api/vae", tags=["vae"])  # noqa: E702
+# CAE (Phase 4 Mandate M45): Release / Ship / Outcome Runtime router
+from api.routers import release_ship; app.include_router(release_ship.router, prefix="/api/release", tags=["release-ship"])  # noqa: E702
+
 

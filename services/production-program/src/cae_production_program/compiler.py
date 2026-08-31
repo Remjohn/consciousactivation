@@ -39,6 +39,8 @@ class ProductionProgramCompiler:
         story_arc: str,
         scenes_data: List[Dict[str, Any]],
         approved_asset_ids: List[str],
+        storyboard_id: Optional[str] = None,
+        wrong_reading_locks: Optional[List[str]] = None,
         visual_audio_specs: Optional[VisualAudioSpecs] = None,
     ) -> Tuple[SemanticProgram, CompositionHandoffReceipt]:
         """Compiles scene data, verifies evidence hashes and asset IDs, and generates a handoff receipt."""
@@ -92,24 +94,36 @@ class ProductionProgramCompiler:
             current_time = end_t
 
         total_duration = round(sum(sc.duration for sc in compiled_scenes), 2)
+        locks = wrong_reading_locks or []
 
         program = SemanticProgram(
             candidate_id=candidate_id,
             workspace_id=workspace_id,
+            storyboard_id=storyboard_id,
             title=title,
             semantic_intent=semantic_intent,
             story_arc=story_arc,
             scenes=compiled_scenes,
             total_duration=total_duration,
             visual_audio_specs=visual_audio_specs or VisualAudioSpecs(),
+            wrong_reading_locks=locks,
         )
 
+        receipt_id = f"PRG-RCP-{program.program_id.replace('PRG-', '')}"
+        receipt_core = f"{program.program_id}:{candidate_id}:{storyboard_id or ''}:{':'.join(evidence_hashes)}"
+        receipt_sha256 = hashlib.sha256(receipt_core.encode("utf-8")).hexdigest()
+
         receipt = CompositionHandoffReceipt(
+            receipt_id=receipt_id,
             program_id=program.program_id,
             candidate_id=candidate_id,
+            storyboard_id=storyboard_id,
             compiler_version="1.0.0",
             evidence_sha256_list=evidence_hashes,
             asset_id_list=referenced_assets,
+            wrong_reading_locks=locks,
+            receipt_sha256=receipt_sha256,
         )
 
         return program, receipt
+

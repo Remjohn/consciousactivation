@@ -2,50 +2,101 @@ program:
   id: "interview_semantic_program"
   version: "1.0.0"
   status: ACTIVE
-  purpose: "Elicits authentic guest voice and perspective through adaptive interview questioning."
+  purpose: "Elicits authentic guest voice and compiles operator-approved collision hypotheses into canonical Activative Interview Briefs through the Composer boundary."
   operator_entrypoint: "run_interview_session"
   inputs:
+    - "approved_collision_hypothesis"
+    - "guest_research_package"
     - "interview_brief"
     - "guest_profile"
   preconditions:
     - "workspace_active"
     - "interview_brief_approved"
   outputs:
+    - "activative_interview_brief"
+    - "interview_semantic_receipt"
     - "interview_recording"
     - "interview_transcript"
   artifacts:
     - "authenticated_interview_source_package"
+    - "activative_interview_brief"
   harness: "INTERVIEW_HARNESS_V1"
   state_machine: "INTERVIEW_STATE_MACHINE_V1"
   lanes:
     - "HUNTER"
     - "ANALYST"
+    - "COMPOSER"
+    - "COMMANDER"
   agents:
-    - "InterviewElicitationAgent"
-    - "AnswerObservationAgent"
+    - "InterviewQuestionHunter"
+    - "QuestionResolutionAnalyst"
+    - "InterviewBriefComposer"
+    - "InterviewSemanticCommander"
   subagents: []
   skills:
     - name: "interview_elicitation"
       path: "skills/interview_elicitation/SKILL.md"
+      version: "1.1.0"
+    - name: "semantic_acquisition_observer"
+      path: "skills/semantic_acquisition_observer/SKILL.md"
+      version: "1.0.0"
+    - name: "authenticated_evidence_packager"
+      path: "skills/authenticated_evidence_packager/SKILL.md"
+      version: "1.0.0"
+    - name: "interview_question_hunter"
+      path: "skills/interview_question_hunter/SKILL.md"
+      version: "1.0.0"
+    - name: "question_resolution_analyst"
+      path: "skills/question_resolution_analyst/SKILL.md"
+      version: "1.0.0"
+    - name: "interview_brief_composer"
+      path: "skills/interview_brief_composer/SKILL.md"
       version: "1.0.0"
   operations:
-    - "ingest_interview_source"
+    - "record_interview_brief"
+    - "seal_interview_brief"
+    - "start_interview_session"
+    - "get_next_question_attempt"
     - "record_interview_turn"
+    - "package_interview_evidence"
+    - "authenticate_evidence"
+    - "quarantine_session"
+    - "repair_session"
   tools:
     - "audio_recorder"
     - "transcript_parser"
+    - "brief_compiler"
+    - "adaptive_frontier_engine"
+    - "semantic_acquisition_observer"
+    - "evidence_handoff_engine"
   connections:
     - "media_storage"
+    - "composer_repository"
   hooks:
     - "pre_session_validation"
     - "post_session_hash"
+    - "brief_sealing_audit"
+    - "evidence_lineage_audit"
   extensions: []
   evals:
     - "elicitation_quality_eval"
+    - "non_scripted_prompt_eval"
+    - "matrix_pressure_path_eval"
+    - "anti_fabrication_eval"
+    - "six_link_lineage_eval"
   operator_gates:
     - "guest_consent_gate"
+    - "brief_operator_authorization_gate"
+    - "evidence_authentication_gate"
   recovery:
     - "checkpoint_per_turn"
+    - "repair_session"
+    - "quarantine_session"
   receipts:
     - "interview_ingestion_receipt"
-  dependencies: []
+    - "interview_semantic_receipt"
+    - "evidence_authentication_receipt"
+  dependencies:
+    - program_id: "collision_discovery_program"
+    - program_id: "workspace_guest_operating_context_program"
+

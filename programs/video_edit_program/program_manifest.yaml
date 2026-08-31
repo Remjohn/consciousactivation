@@ -1,0 +1,81 @@
+program:
+  id: "video_edit_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Compiles source-grounded VideoEditProgram and WordBoundaryEdl from authentic interview evidence and semantic packages, executing real FFmpeg source-led rendering passes with dual-axis QA (Semantic QA vs Render QA) and cryptographic operator release receipts."
+  operator_entrypoint: "run_video_edit_production_session"
+  inputs:
+    - "semantic_program"
+    - "source_media"
+    - "evidence_segments"
+    - "word_boundary_timings"
+  preconditions:
+    - "workspace_active"
+    - "material_admitted"
+    - "source_media_registered"
+    - "evidence_verified"
+  outputs:
+    - "word_boundary_edl"
+    - "video_edit_program"
+    - "remotion_bindings"
+    - "hyperframes_bindings"
+    - "rendered_video_artifacts"
+    - "dual_axis_qa_receipts"
+  artifacts:
+    - "video_edit_package_snapshot"
+    - "video_release_receipt"
+  harness: "VIDEO_EDIT_PRODUCTION_HARNESS_V1"
+  state_machine: "VIDEO_EDIT_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "VideoEditCommanderAgent"
+    - "VideoSourceHunterAgent"
+    - "VideoQAAnalystAgent"
+    - "VideoEditComposerAgent"
+  subagents: []
+  skills:
+    - name: "video_source_extractor"
+      path: "skills/video_source_extractor/SKILL.md"
+      version: "1.0.0"
+    - name: "video_edl_compiler"
+      path: "skills/video_edl_compiler/SKILL.md"
+      version: "1.0.0"
+    - name: "video_qa_evaluator"
+      path: "skills/video_qa_evaluator/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.video_edit.admit_material@1.0.0"
+    - "cae.video_edit.register_source@1.0.0"
+    - "cae.video_edit.compile_edl@1.0.0"
+    - "cae.video_edit.compile_program@1.0.0"
+    - "cae.video_edit.compile_bindings@1.0.0"
+    - "cae.video_edit.render_video@1.0.0"
+    - "cae.video_edit.evaluate_qa@1.0.0"
+    - "cae.video_edit.authorize_release@1.0.0"
+    - "cae.video_edit.repair@1.0.0"
+  tools:
+    - "evidence_quote_verifier"
+    - "ffprobe_media_inspector"
+    - "rendered_video_evaluator"
+    - "wrong_reading_lock_validator"
+  connections:
+    - "postgresql_media_slice"
+  hooks:
+    - "pre_admission_integrity_hook"
+    - "post_render_evaluation_hook"
+    - "post_release_receipt_hook"
+  extensions: []
+  evals:
+    - "source_lineage_integrity_eval"
+    - "wrong_reading_lock_eval"
+    - "dual_axis_qa_eval"
+  operator_gates:
+    - "video_release_authorization_gate"
+  recovery:
+    - "repair_video_edit_program"
+  receipts:
+    - "cae.receipt.video.release@1.0.0"

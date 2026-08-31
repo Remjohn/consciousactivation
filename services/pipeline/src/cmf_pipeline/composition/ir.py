@@ -1,12 +1,14 @@
 from __future__ import annotations
 from collections.abc import Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from ca_contracts import canonical_sha256
 from ..domain.errors import PipelineValidationError
 from ..domain.validation import require_int, require_ref, require_string, require_string_list, reject_noncanonical, semantic_identity
-from ..workflow.infrastructure.repository import PipelineRepository
 from .geometry import BBox, GeometryValidator
 from .pretext import PretextEngine
+
+if TYPE_CHECKING:
+    from ..workflow.infrastructure.repository import PipelineRepository
 
 class CompositionIRService:
     def __init__(self,repository:PipelineRepository): self.repository=repository;self.geometry=GeometryValidator();self.pretext=PretextEngine()

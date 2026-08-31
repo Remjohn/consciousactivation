@@ -27,3 +27,19 @@ class MissingRationaleError(OperatorIntelligenceError):
 class UnapprovedExecutionError(OperatorIntelligenceError):
     """Raised when downstream production attempts to execute an unapproved candidate."""
     pass
+
+
+class CandidateLockedError(OperatorIntelligenceError):
+    """Raised when attempting to modify, overwrite, or re-rank a locked candidate."""
+    pass
+
+
+class InvalidRegenerationSpecError(OperatorIntelligenceError):
+    """Raised when an operator candidate regeneration specification is invalid or ungrounded."""
+    pass
+
+
+class EvidenceTamperingDetectedError(OperatorIntelligenceError):
+    """Raised when evidence text, segment ID, or SHA-256 checksum fails integrity verification."""
+    pass
+

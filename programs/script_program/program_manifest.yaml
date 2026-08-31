@@ -1,0 +1,79 @@
+program:
+  id: "script_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Governed program runtime for script authoring, semantic QA evaluation, authoritative operator gate approval, and activation transfer contracts."
+  operator_entrypoint: "run_script_program"
+  inputs:
+    - "workspace_id"
+    - "script_id"
+    - "semantic_program_ref"
+    - "voice_dna_ref"
+    - "role_tension_ref"
+    - "primitive_coalition_ref"
+    - "archetype_coalition_ref"
+  preconditions:
+    - "workspace_active"
+    - "semantic_program_verified"
+  outputs:
+    - "jit_authoring_request"
+    - "script_proposal"
+    - "semantic_qa_receipt"
+    - "final_script_package"
+    - "final_script_approval_receipt"
+    - "activation_transfer_contract"
+  artifacts:
+    - "script_proposal_artifact"
+    - "final_script_package_artifact"
+    - "activation_transfer_contract_artifact"
+  harness: "SCRIPT_HARNESS_V1"
+  state_machine: "SCRIPT_STATE_MACHINE_V1"
+  lanes:
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+    - "COMMANDER"
+  agents:
+    - "ScriptContextHunter"
+    - "SemanticQAScriptAnalyst"
+    - "ScriptComposerAgent"
+    - "ScriptCommanderSupervisor"
+  subagents: []
+  skills:
+    - name: "script_generation"
+      path: "skills/script_generation/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.script.request_jit@1.0.0"
+    - "cae.script.propose@1.0.0"
+    - "cae.script.evaluate_qa@1.0.0"
+    - "cae.script.compile_package@1.0.0"
+    - "cae.script.approve@1.0.0"
+    - "cae.script.create_transfer_contract@1.0.0"
+    - "cae.script.revise@1.0.0"
+    - "cae.script.repair@1.0.0"
+  tools:
+    - "quote_integrity_validator"
+    - "voice_dna_checker"
+  connections:
+    - "postgres_state_store"
+  hooks:
+    - "quote_fidelity_check"
+    - "anti_self_approval_gate"
+    - "unapproved_transfer_block_hook"
+  extensions: []
+  evals:
+    - "speaker_authenticity_eval"
+    - "sfl_register_eval"
+  operator_gates:
+    - "final_script_operator_approval_gate"
+  recovery:
+    - "recover_to_repairing"
+    - "repair_script"
+  receipts:
+    - "semantic_qa_receipt"
+    - "final_script_approval_receipt"
+    - "activation_transfer_contract"
+  dependencies:
+    - program_id: "editorial_discovery_program"
+      version_requirement: "^1.0.0"
