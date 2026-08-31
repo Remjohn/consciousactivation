@@ -184,3 +184,6 @@ def run_product_cli(product_id: str, product_version: str, argv: list[str] | Non
         for key, value in result.items():
             print(f"{key}: {value}")
     return 0
+
+
+cli_main = run_product_cli

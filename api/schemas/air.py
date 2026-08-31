@@ -268,3 +268,145 @@ class TransferContractRequest(BaseModel):
 class TransferContractResponse(BaseModel):
     contract_ref: RefModel
     final_script_ref: RefModel
+
+
+# ---- Brand Genesis, Voice DNA, Visual DNA, Distillation & Semantic Territory (M27 / F30) ----
+
+class BrandContextCreateRequest(BaseModel):
+    brand_context_id: str
+    authority: AirAuthorityRefModel
+    brand_genesis_session_ref: RefModel
+    identity_truths: list[str]
+    audience_relationship: str
+    positioning_tension: str
+    source_refs: list[RefModel]
+    idempotency_key: str
+
+
+class BrandContextResponse(BaseModel):
+    brand_context_ref: RefModel
+    brand_context_id: str
+    lifecycle_state: str
+    epistemic_state: str
+    identity_truths: list[str]
+    audience_relationship: str
+    positioning_tension: str
+    source_refs: list[RefModel]
+
+
+class VoiceDnaCreateRequest(BaseModel):
+    voice_dna_id: str
+    authority: AirAuthorityRefModel
+    brand_context_ref: RefModel
+    vocabulary_patterns: list[str]
+    rhythm_patterns: list[str]
+    sentence_pressure_patterns: list[str]
+    stance_patterns: list[str]
+    specificity_patterns: list[str]
+    metaphor_range: list[str]
+    emotional_distance: str
+    prohibited_centroid_patterns: list[str]
+    source_evidence_refs: list[RefModel]
+    idempotency_key: str
+
+
+class VoiceDnaResponse(BaseModel):
+    voice_dna_ref: RefModel
+    voice_dna_id: str
+    brand_context_ref: RefModel
+    lifecycle_state: str
+    epistemic_state: str
+    vocabulary_patterns: list[str]
+    rhythm_patterns: list[str]
+    sentence_pressure_patterns: list[str]
+    stance_patterns: list[str]
+    specificity_patterns: list[str]
+    metaphor_range: list[str]
+    emotional_distance: str
+    prohibited_centroid_patterns: list[str]
+    source_evidence_refs: list[RefModel]
+
+
+class VisualDnaCreateRequest(BaseModel):
+    visual_dna_id: str
+    authority: AirAuthorityRefModel
+    brand_context_ref: RefModel
+    real_life_reference_refs: list[RefModel]
+    subject_treatment: list[str]
+    visual_temperature: list[str]
+    materiality: list[str]
+    composition_tendencies: list[str]
+    negative_space_functions: list[str]
+    edge_behaviors: list[str]
+    typographic_posture: list[str]
+    motion_character: list[str]
+    prohibited_centroid_defaults: list[str]
+    idempotency_key: str
+
+
+class VisualDnaResponse(BaseModel):
+    visual_dna_ref: RefModel
+    visual_dna_id: str
+    brand_context_ref: RefModel
+    real_life_reference_refs: list[RefModel]
+    subject_treatment: list[str]
+    visual_temperature: list[str]
+    materiality: list[str]
+    composition_tendencies: list[str]
+    negative_space_functions: list[str]
+    edge_behaviors: list[str]
+    typographic_posture: list[str]
+    motion_character: list[str]
+    prohibited_centroid_defaults: list[str]
+
+
+class DistillationReceiptCreateRequest(BaseModel):
+    receipt_id: str
+    authority: AirAuthorityRefModel
+    layer: Literal["saturation", "collision", "compression", "evaluation", "recursion"]
+    input_refs: list[RefModel]
+    output_refs: list[RefModel]
+    decisions: list[str]
+    edge_product_preserved: bool
+    role_tension_preserved: bool
+    voice_dna_preserved: bool | None = None
+    visual_dna_preserved: bool | None = None
+    rejection_refs: list[RefModel] = []
+    idempotency_key: str
+
+
+class DistillationReceiptResponse(BaseModel):
+    receipt_ref: RefModel
+    receipt_id: str
+    layer: str
+    edge_product_preserved: bool
+    role_tension_preserved: bool
+
+
+class DistillationSynthesizeRequest(BaseModel):
+    receipt_id_prefix: str
+    brand_context_ref: RefModel
+    voice_dna_ref: RefModel
+    input_evidence_refs: list[RefModel]
+    authority: AirAuthorityRefModel
+    idempotency_prefix: str = "idem:distill"
+
+
+class SemanticTerritoryRequest(BaseModel):
+    brand_context_ref: RefModel
+    voice_dna_ref: RefModel
+    protected_source_refs: list[RefModel]
+    wrong_reading_locks: list[str]
+    prohibited_centroid_patterns: list[str]
+    authority: AirAuthorityRefModel
+
+
+class SemanticTerritoryResponse(BaseModel):
+    brand_context_ref: RefModel
+    voice_dna_ref: RefModel
+    protected_territory: dict[str, list[str]]
+    centroid_territory: dict[str, list[str]]
+    wrong_reading_locks: list[str]
+    source_evidence_refs: list[RefModel]
+    ratified: bool
+

@@ -1,19 +1,86 @@
 # Builder → Harness → Pipeline Runtime Binding Contract
 
-| Meaning | Builder source | Portable Harness field | Pipeline consumer | Binding compiler | Pi field | Required | Version/migration | Proof |
+This document provides the field-level, end-to-end runtime contract governing the lifecycle of workflow, actor, capability, state, hook, and receipt metadata across all four representations:
+1. **Authoring Manifest (`OperatorManifestDocument`):** The governed authoring input accepted by Builder.
+2. **Distribution Package (`PortableAtomicHarnessDefinition`):** The 32-key immutable export envelope produced by Builder.
+3. **Pipeline Intake Projection (`AtomicHarnessDefinitionIntake`):** The 14-key runtime intake shape validated by Pipeline intake (`compile_portable_to_intake`).
+4. **Execution Workflow Projection (`RuntimeWorkflowCompiler` / `validate_runtime_workflow` / `Pi Substrate`):** The fully resolved executable graph, bound implementations, sandbox policies, and runtime event streams.
+
+---
+
+## 1. Field-Level Binding Matrix
+
+| Dimension / Meaning | Layer 1: Builder Source (`operator_manifest.json`) | Layer 2: Portable Harness Export (`PortableAtomicHarnessDefinition`) | Layer 3: Pipeline Intake (`AtomicHarnessDefinitionIntake`) | Layer 4: Binding Compiler (`HarnessExecutionBindingCompiler` / `RuntimeWorkflowCompiler`) | Layer 5: Runtime Substrate (`Pi Substrate` / `PipelineRunService`) | Required | Versioning & Migration Policy | Proof & Verification Symbol |
 |---|---|---|---|---|---|---|---|---|
+| **Definition Identity** | `manifest_id`, `task_id` | `definition_id` (`atomic-harness-definition_{digest}`) | `definition_id` | `source_projection_id`, `workflow_id` | `run.workflow_id`, `harness_package_id` | **REQUIRED** | Immutable SHA-256 digest over canonical bytes. Any field modification produces a new definition ID. | `cmf_builder.domain.portable_export.py:PortableAtomicHarnessDefinition.create`, `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake` |
+| **Definition Version** | `manifest_version` | `manifest_version` (SemVer) | `definition_version` | `workflow_version` ("1.0.0") | `run.context_refs[version]` | **REQUIRED** | SemVer 2.0.0 enforced by Blocker 4 (`TS-APP-BRIDGE-001#blocker-4`). Non-SemVer rejected closed. | `cmf_pipeline.intake.harness_compiler.py:_validate_semver`, `tests/pipeline/test_harness_compiler.py:TestBlocker4Semver` |
+| **Category Binding** | `category_id`, `mode` (`activative`) | `category_binding.category_id` ("short_video", "format02", etc.) | `category_id` | `runtime_projection.category_id` | `run.category_id` | **REQUIRED** | Generic mode harnesses rejected at intake by Blocker 3 (`TS-APP-BRIDGE-001#blocker-3`). Activative binding required. | `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake`, `tests/pipeline/test_harness_compiler.py:TestBlocker3GenericMode` |
+| **Execution Profile** | `activative_input.intelligence_profile` | `activative_intelligence.intelligence_profile` | `profile_id` ("portable-activative-v1") | `runtime_projection.profile_id` | `fingerprint.hardware_profile`, `sandbox_declaration` | **REQUIRED** | Profile ID resolved from Pipeline registry; backward compatible schema `v1`. | `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake`, `tests/pipeline/test_harness_compiler.py:TestFullRoundTrip.test_profile_id_matches_existing_registry` |
+| **Harness Purpose / Goal** | `task.goal` | `goal` | `purpose` | `runtime_projection.purpose` | `session.goal_statement` | **REQUIRED** | Direct 1:1 text mapping from task goal. Immutable once packaged. | `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake` |
+| **Semantic Lineage / Context** | `task.required_context`, `task.provenance_refs` | `minimum_complete_context`, `provenance_refs`, `lineage` | `semantic_dependencies` (`list[{object_id, version, sha256}]`) | `runtime_projection.semantic_dependency_refs` | `run.context_refs`, `node_dispatch.context_refs` | **REQUIRED** | Caller-supplied at compilation time; verified by Blocker 1 (`TS-APP-BRIDGE-001#blocker-1`). Enforces cryptographic lineage. | `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake`, `tests/pipeline/test_harness_compiler.py:TestBlocker1SemanticDependencies` |
+| **Capability Requirements** | `task.capability_requirements` (`tuple[str, ...]`) | `capability_requirements` (`list[str]`) | `capabilities` (`list[{capability_id, owner_kind, required_features, authority_boundary}]`) | `binding_manifest.bindings` (`list[{capability_id, implementation_id, implementation_version, implementation_sha256, ...}]`) | `node_dispatch.allowed_actions`, `node_dispatch.tool_ids` | **REQUIRED** | Blocker 2 (`TS-APP-BRIDGE-001#blocker-2`) enforces 100% coverage of declared capability requirements with typed metadata. Resolved against `ImplementationEligibilityRegistry`. | `cmf_pipeline.bindings.compiler.py:HarnessExecutionBindingCompiler.compile`, `tests/pipeline/test_harness_compiler.py:TestBlocker2CapabilityMetadata` |
+| **Workflow Nodes** | `task.execution_plan` | `execution_plan` (`list[str]`) | `workflow.nodes` (`list[{node_id, capability_id, phase_order, purpose, actor_kind, role, product_boundary, input_contracts, output_contracts, side_effect_class}]`) | `runtime_workflow.nodes` (augmented with `implementation` record) | `node_id`, `app.runs.ready_nodes()`, `app.runs.start_node()` | **REQUIRED** | Blocker 5 (`TS-APP-BRIDGE-001#blocker-5`) requires caller/compiler to project execution plan into validated DAG nodes. | `cmf_pipeline.workflow.domain.models.py:validate_runtime_node`, `tests/pipeline/test_harness_compiler.py:TestBlocker5Workflow` |
+| **Workflow Edges** | `task.input_contract`, `task.output_contract` | `input_contract`, `output_contract` | `workflow.edges` (`list[{source_node_id, target_node_id, contract_id}]`) | `runtime_workflow.edges`, `repository.add_edge(..., "workflow_dependency")` | `run_graph.edges`, deterministic topological dispatcher | **REQUIRED** | Edges declare explicit dataflow contracts; must form a strictly acyclic directed graph (DAG). | `cmf_pipeline.workflow.domain.models.py:validate_runtime_workflow`, `cmf_pipeline.workflow.application.compiler.py:RuntimeWorkflowCompiler.compile` |
+| **Actor Kind** | N/A (inferred from capability owner) | `capability_ownership.owner_kind` (`CODE`, `AGENT`, `HUMAN`) | `workflow.nodes[].actor_kind` (`NodeKind`) | `nodes[].actor_kind` (`DETERMINISTIC_MODULE`, `AGENT_PROGRAM`, `PROGRAMMED_MODEL`, `HUMAN_GATE`, `EXTERNAL_PRODUCT`, `RUNTIME_ADAPTER`, `CONTROL`) | Pi execution environment runner (Python worker, LLM prompt runner, Operator approval gate) | **REQUIRED** | Mapped from `NodeKind` enum (`cmf_pipeline.domain.enums.NodeKind`). Prevents undeclared execution modes. | `cmf_pipeline.domain.enums.py:NodeKind`, `cmf_pipeline.workflow.domain.models.py:validate_runtime_node` |
+| **Workflow Role / Authority Lane** | N/A (governed by Constitution) | `authority_lanes` (`HUNTER`, `ANALYST`, `COMPOSER`, `COMMANDER`) | `workflow.nodes[].role` (`WorkflowRole`) | `nodes[].role` (`WorkflowRole.HUNTER`, `WorkflowRole.ANALYST`, `WorkflowRole.COMPOSER`, `WorkflowRole.COMMANDER`, `WorkflowRole.NOT_APPLICABLE`) | Pi agent prompt system preamble, authority boundary enforcement | **REQUIRED** | Strict 4 Authority Lanes from `CANONICAL_SKILL_AUTHORING_CONSTITUTION.md`. No lane collapsing permitted. | `cmf_pipeline.domain.enums.py:WorkflowRole`, `cmf_pipeline.workflow.domain.models.py:validate_runtime_node` |
+| **Product Boundary** | N/A (domain authority) | N/A (module boundary) | `workflow.nodes[].product_boundary` (`ProductBoundary`) | `nodes[].product_boundary` (`AIR`, `AHP`, `INTERVIEW`, `STUDIO`, `VAE`, `DELEGATION`, `BUILDER`) | Pi tenant / workspace isolation context | **REQUIRED** | Governed enum (`cmf_pipeline.domain.enums.ProductBoundary`). Cross-boundary transitions require explicit contracts. | `cmf_pipeline.domain.enums.py:ProductBoundary`, `cmf_pipeline.workflow.domain.models.py:validate_runtime_node` |
+| **Side Effect Class** | N/A (inferred from contract) | `input_contract`, `output_contract` | `workflow.nodes[].side_effect_class` | `nodes[].side_effect_class`, `implementation.side_effect_class` (`READ_ONLY`, `LOCAL_STATE_WRITE`, `MUTATION_OPERATION`, `HUMAN_DECISION`) | Pi sandbox policy (`allowed_actions`, `forbidden_actions`, `network_policy`) | **REQUIRED** | Enforces least-privilege runtime sandboxing. Nodes with `READ_ONLY` cannot emit mutations. | `cmf_pipeline.workflow.domain.models.py:validate_runtime_node`, `cmf_pipeline.demo.py:run_demo` |
+| **State Machine Reference** | `manifest_version` | `schema_id: cmf-builder-atomic-harness-definition/v1` | `invalidation_state` ("NOT_INVALIDATED") | `lifecycle_state: "COMPILED"` | `cae.harness_template`, `cae.harness_run`, `CA-CAN-01C_HARNESS_RUN.yaml` (`CREATED` → `RUNNING` → `SUCCEEDED`/`FAILED`) | **REQUIRED** | State transitions governed strictly by typed SQL schema `cae` and domain state machine models. | `services/pipeline/src/cmf_pipeline/domain/enums.py:RunState`, `services/pipeline/src/cmf_pipeline/runs/application/service.py` |
+| **Canonical Skills Binding** | N/A (passive skill inventory) | `external_skills_required: 0`, `dynamic_skill_discovery_allowed: False` | N/A (flat skills bound at implementation level) | `implementation.implementation_id` (resolves canonical flat skill package) | Pi skill capsule injection (prompt, schema, flat scripts; no nested skill invocations) | **REQUIRED** | Passive and flat. Skills have no sub-agent execution authority; invoked only through Pi runtime substrate. | `CANONICAL_SKILL_AUTHORING_CONSTITUTION.md`, `services/builder/src/cmf_builder/domain/skill_registry.py` |
+| **Tool References & Discovery** | `task.capability_requirements` | `capability_requirements` | `capabilities[].required_features` | `binding_manifest.bindings[].implementation_id`, `fingerprint.tool_refs` | `app.runs.dispatch_node(..., tool_ids=[...])` | **REQUIRED** | Tools statically bound at compile time via `ImplementationEligibilityRegistry`; dynamic tool injection forbidden. | `cmf_pipeline.bindings.compiler.py:HarnessExecutionBindingCompiler`, `cmf_pipeline.assurance.application.service.py` |
+| **Pre/Post-Step Hooks & Guarantees** | `task.acceptance_tests` | `acceptance_tests` | `evaluation_requirements` | `runtime_projection.evaluation_requirements`, `graph_receipt.semantic_parity_digest` | CBAR (Context & Boundary Assurance Receipt), MCDA (Mutation & Concurrency Defense Assertion), `app.runs.checkpoint()` | **REQUIRED** | Deterministically executed before dispatch and after node completion. Pre-step asserts input hash; post-step validates output contract. | `06_STATE_AND_HOOKS_MODEL.md`, `13_PHASE1_HOOK_GUARANTEE_MATRIX.md`, `cmf_pipeline.demo.py:run_demo` |
+| **Receipts & Audit Lineage** | `task.authority_ref`, `task.provenance_refs` | `lineage`, `manifest_hash`, `binding_hash` | `semantic_dependencies` | `graph_receipt`, `binding_manifest.manifest_id`, `runtime_workflow.runtime_projection_digest` | `cae.receipt`, `event_stream_sha256`, `validation_receipt_refs`, `output_ref` | **REQUIRED** | Every transition and node completion emits an immutable SHA-256 receipt linked to upstream causal history. | `cmf_pipeline.workflow.application.compiler.py`, `cmf_pipeline.runs.application.service.py:PipelineRunService.complete_node` |
+| **Recovery & Invalidation Laws** | `task.atomic_boundary` | `compatibility_status`, `repair_retry_policy` | `repair_laws` (`list[str]`) | `runtime_projection.repair_laws`, `invalidation_plan` | `app.invalidation.plan()`, `app.invalidation.rerun_plan()`, descendant-only rerun | **REQUIRED** | Blocker 6 (`TS-APP-BRIDGE-001#blocker-6`) mandates explicit repair laws (`descendant_only_rerun`, `preserve_upstream_semantic_truth`). | `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake`, `cmf_pipeline.invalidation.application.service.py` |
+| **Evaluation & Invalidation Guards** | `task.acceptance_tests` | `category_binding.wrong_reading_locks`, `acceptance_tests` | `wrong_reading_locks`, `evaluation_requirements` | `runtime_projection.wrong_reading_locks`, `runtime_projection.evaluation_requirements` | `app.candidates.evaluate()`, `assurance_check()`, falsification gates | **REQUIRED** | Wrong-reading locks pass through untransformed (Blocker 10); evaluated before candidate promotion or operator approval. | `cmf_pipeline.intake.harness_compiler.py:compile_portable_to_intake`, `cmf_pipeline.assurance.application.service.py` |
+| **Production & Certification Ceilings** | Forbidden in manifest (`FORBIDDEN_CLAIM_KEYS`) | `production_eligible: False`, `certified: False`, `certification_state: "uncertified_nonproduction"` | `production_ready: False`, `certified: False` | `binding_manifest.execution_eligible: True` (local dev eligibility only) | `production_authorized: False`, `certified: False` | **REQUIRED** | Hard constitutional invariant: Builder and Pipeline exports cannot self-certify for production. Promotion requires independent human operator gate. | `cmf_builder.domain.operator_manifest.py:reject_forbidden_claims`, `cmf_pipeline.demo.py:run_demo` |
 
-At minimum reconcile:
-- workflow nodes
-- workflow edges
-- actor/role kind
-- capability metadata
-- state machine reference
-- Skills
-- tool/capability references
-- hooks/checks
-- receipts
-- recovery
-- evaluation
+---
 
-No new field without live-repository proof that reuse is impossible.
+## 2. Reconciled Architectural Dimensions
+
+### 2.1 Workflow Nodes & Edges
+- **Source Authority:** The authoring manifest defines `execution_plan`, `input_contract`, and `output_contract`.
+- **Builder Export:** `PortableAtomicHarnessDefinition` serializes these contracts and marks `workflow_execution_performed: False`.
+- **Pipeline Intake:** `compile_portable_to_intake()` validates that caller/compiler provides explicit DAG `workflow` `{nodes, edges}`.
+- **Runtime Graph:** `RuntimeWorkflowCompiler` compiles the intake nodes, validates topological ordering, verifies acyclicity, attaches concrete implementation records, and commits the graph to `PipelineRepository` with cryptographic edge receipts (`workflow_dependency`).
+
+### 2.2 Actor Kind & Workflow Role
+- **Lane Separation:** 4 Authority Lanes (`HUNTER`, `ANALYST`, `COMPOSER`, `COMMANDER`) are strictly typed via `WorkflowRole` (`cmf_pipeline.domain.enums.WorkflowRole`).
+- **Actor Kinds:** Governed by `NodeKind` (`DETERMINISTIC_MODULE`, `AGENT_PROGRAM`, `PROGRAMMED_MODEL`, `HUMAN_GATE`, `EXTERNAL_PRODUCT`, `RUNTIME_ADAPTER`, `CONTROL`).
+- **Invariance:** No node may execute without an explicit role and actor kind. Human review gates (`HUMAN_GATE` / `COMMANDER`) are non-bypassable.
+
+### 2.3 Capability Metadata & Tool Binding
+- **Intake Enforcement:** Blocker 2 mandates that every declared `capability_requirement` must be matched by a typed capability descriptor containing `owner_kind`, `required_features`, and `authority_boundary`.
+- **Eligibility Resolution:** `HarnessExecutionBindingCompiler` queries `ImplementationEligibilityRegistry` for candidates matching `capability_id`. When eligible implementations exist, it generates `harness_execution_binding_manifest`.
+- **Runtime Dispatch:** `PipelineRunService.dispatch_node()` restricts runtime execution to the bound `tool_ids` and `allowed_actions`.
+
+### 2.4 State Machine & Mutation Boundary
+- **Canonical State Entities:** Governed by `cae.harness_template`, `cae.harness_run`, and `cae.node_execution`.
+- **State Progression:** Follows `RunState` (`CREATED` → `RUNNING` → `SUCCEEDED` / `FAILED` / `INVALIDATED`) and `NodeState` (`BLOCKED` → `READY` → `DISPATCHED` → `RUNNING` → `SUCCEEDED` / `FAILED` / `INVALIDATED`).
+- **Mutation Invariant:** All state changes occur exclusively through typed CAE operations and repository methods. No direct or untracked database mutations are permitted.
+
+### 2.5 Canonical Skills
+- **Skill Structure:** Governed by `CANONICAL_SKILL_AUTHORING_CONSTITUTION.md`. Skills remain flat, passive collections of instructions, schemas, and tools.
+- **No Skill-to-Skill Invocations:** Skills cannot invoke other skills. All multi-skill coordination occurs through the Pipeline workflow DAG.
+- **Packaging:** Assembled JIT into runtime capsules by the Pi substrate without modifying canonical skill files.
+
+### 2.6 Hooks, Receipts & Audit Lineage
+- **Deterministic Hook Execution:** Pre-execution hooks verify input contract hashes and context availability; post-execution hooks record cryptographic output hashes and validation receipts.
+- **Audit Stream:** Every state change emits a deterministic event into the run event stream (`event_stream_sha256`).
+- **Cryptographic Lineage:** Every receipt (`CBAR`, `MCDA`, `validation_receipt`) contains the SHA-256 hash of its input data, enabling full deterministic replay.
+
+### 2.7 Recovery & Evaluation Laws
+- **Wrong-Reading Locks:** Invariant rules specified in `category_binding` pass through untransformed and are enforced as mandatory falsification gates before any candidate promotion.
+- **Repair Laws:** Bounded local repair only (`descendant_only_rerun`, `preserve_upstream_semantic_truth`). Invalidation plans compute affected downstream subgraphs and rerun only invalidated nodes from cached checkpoints.
+
+---
+
+## 3. Live-Repository Proof & Verification
+
+The runtime binding contract is verified against existing repository test suites and real fixtures:
+1. **Intake Bridge Contract:** `tests/pipeline/test_harness_compiler.py` (17 test cases covering AC-001 through AC-011 and Blockers 1–7).
+2. **CAE Structural & Domain Contracts:** `tests/cae/` (121 test cases verifying state coverage, authority boundaries, mutation operations, and hooks).
+3. **Builder Productization & Release Contracts:** `services/builder/tests/productization/` & `services/builder/tests/release/` (72 test cases verifying `PortableAtomicHarnessDefinition` generation and operator manifest parsing).
+4. **End-to-End Pipeline Demo Execution:** `cmf_pipeline.demo.run_demo` (full lifecycle execution from zip import to binding compilation, topological node dispatch, candidate evaluation, assurance checks, and invalidation planning).
+
+No parallel manifest system is introduced; all runtime metadata flows through canonical dataclasses and governed repository schemas.

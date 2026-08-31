@@ -18,7 +18,7 @@ from cmf_builder.application.productization_contracts import (
 )
 
 
-FIXTURES = Path("tests/fixtures/productization/manifests")
+FIXTURES = Path(__file__).resolve().parents[3] / "tests/fixtures/productization/manifests"
 
 
 def _fixture(name: str) -> bytes:

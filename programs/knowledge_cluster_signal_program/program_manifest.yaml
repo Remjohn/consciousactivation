@@ -1,0 +1,66 @@
+program_id: knowledge_cluster_signal_program
+name: Knowledge Clusters + Research Signals + Context Projection Program
+version: 1.0.0
+description: Synthesizes canonical knowledge into semantic clusters, detects temporal research signals, and projects context against guest identity DNA and audience cognitive tensions.
+governing_mandate: CAE-M31
+phase: PHASE_3_INTELLIGENCE_AND_PROGRAMS
+
+state_machine:
+  definition_id: KNOWLEDGE_CLUSTER_SIGNAL_STATE_MACHINE_V1
+  initial_state: INITIAL
+  states:
+    - INITIAL
+    - CLUSTERS_FORMED
+    - SIGNALS_DETECTED
+    - CONTEXT_PROJECTED
+    - SIGNALS_COMMITTED
+    - REPAIRING
+    - QUARANTINED
+  terminal_states: []
+
+authority_lanes:
+  hunter:
+    name: Knowledge Cluster Formation Lane
+    description: Clusters canonical knowledge nodes into typed semantic clusters.
+    skills:
+      - knowledge_clusterer
+    operations:
+      - cae.research.form_clusters@1.0.0
+  analyst:
+    name: Research Signal Detection Lane
+    description: Computes temporal velocity, acceleration, divergence, novelty, and confidence for emergent world signals.
+    skills:
+      - research_signal_detector
+    operations:
+      - cae.research.detect_signals@1.0.0
+  composer:
+    name: Context Opportunity Projection Lane
+    description: Projects signals and clusters onto guest emotional DNA and audience cognitive tensions.
+    skills:
+      - context_opportunity_projector
+    operations:
+      - cae.research.project_context@1.0.0
+      - cae.research.rebuild_context_projections@1.0.0
+  commander:
+    name: Program Governance & Commitment Lane
+    description: Authorizes program initialization, commitment, idempotent rebuilds, retraction, and state recovery.
+    skills: []
+    operations:
+      - cae.research.commit_context_projections@1.0.0
+      - cae.research.repair_signals@1.0.0
+      - cae.research.quarantine_program@1.0.0
+
+receipts:
+  schema: cae.receipt.knowledge_cluster_signal@1.0.0
+  required_fields:
+    - receipt_id
+    - workspace_id
+    - aggregate_id
+    - transition_name
+    - cluster_count
+    - signal_count
+    - projection_count
+    - authority_lane
+    - actor_id
+    - state_hash
+    - timestamp_utc

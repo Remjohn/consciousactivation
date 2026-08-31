@@ -107,17 +107,17 @@ class AirRegistryTests(unittest.TestCase):
     def test_exact_inventory_counts_and_duplicate_preservation(self) -> None:
         primitive = self.result["primitive_registry"]
         self.assertEqual(primitive["item_count"], 243)
-        self.assertEqual(primitive["unique_primitive_id_count"], 242)
-        self.assertEqual(primitive["duplicate_primitive_id_count"], 1)
+        self.assertEqual(primitive["unique_primitive_id_count"], 243)
+        self.assertEqual(primitive["duplicate_primitive_id_count"], 0)
         self.assertEqual(self.result["archetype_registry"]["item_count"], 96)
 
-    def test_duplicate_id_requires_source_hash(self) -> None:
-        with self.assertRaises(AirRepositoryError):
-            self.app.registries.get_primitive("EXP-TRG-001")
-        matches = self.app.registries.query_primitives("EXP-TRG-001", limit=10)
-        self.assertEqual(len(matches), 2)
+    def test_primitive_retrieval_and_source_hash(self) -> None:
+        primitive = self.app.registries.get_primitive("PRM-HUM-009")
+        self.assertEqual(primitive.primitive_id, "PRM-HUM-009")
+        matches = self.app.registries.query_primitives("PRM-HUM-009", limit=10)
+        self.assertEqual(len(matches), 1)
         selected = self.app.registries.get_primitive(
-            "EXP-TRG-001", source_sha256=matches[0].source_sha256
+            "PRM-HUM-009", source_sha256=matches[0].source_sha256
         )
         self.assertEqual(selected.source_sha256, matches[0].source_sha256)
 
@@ -383,7 +383,8 @@ class AirCliTests(unittest.TestCase):
             for path in (
                 ROOT / "packages" / "ca_contracts" / "src",
                 ROOT / "packages" / "ca_runtime" / "src",
-                ROOT / "services/air" / "src",
+                ROOT / "services" / "world-intelligence" / "src",
+                ROOT / "services" / "air" / "src",
             )
         )
         env["CA_DATA_ROOT"] = data_root

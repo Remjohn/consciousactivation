@@ -10,6 +10,7 @@ for path in reversed([
     ROOT / "tests" / "phase1",
     ROOT / "packages" / "ca_contracts" / "src",
     ROOT / "packages" / "ca_runtime" / "src",
+    ROOT / "services/world-intelligence" / "src",
     ROOT / "services/air" / "src",
     ROOT / "services/pipeline" / "src",
     ROOT / "services/interview" / "src",

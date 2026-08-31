@@ -144,4 +144,6 @@ from api.routers import ship; app.include_router(ship.router, prefix="/api", tag
 from api.routers import interview_composer; app.include_router(interview_composer.router, prefix="/api/interviews/compose", tags=["interview-composer"])  # noqa: E702
 # CAE (TS-CAE-TEN-001): Versioned Tenancy and Workspace router
 from api.routers import v1_tenancy; app.include_router(v1_tenancy.router, prefix="/api", tags=["tenancy-v1"])  # noqa: E702
+# CAE (TS-CAE-PROG-001 / Mandate M14): Program Package Discovery and Registry router
+from api.routers import programs; app.include_router(programs.router, prefix="/api/programs", tags=["programs"])  # noqa: E702
 

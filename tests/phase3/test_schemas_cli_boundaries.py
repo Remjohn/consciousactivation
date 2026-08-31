@@ -23,6 +23,8 @@ class SchemaCliBoundaryTests(unittest.TestCase):
             ROOT / "services/air" / "src",
             ROOT / "services/pipeline" / "src",
             ROOT / "services/interview" / "src",
+            ROOT / "services/world-intelligence" / "src",
+            ROOT / "services/interview-composer" / "src",
         ]
         env = dict(os.environ)
         env["PYTHONPATH"] = os.pathsep.join(str(item) for item in paths)

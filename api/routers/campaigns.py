@@ -7,7 +7,13 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ca_contracts import canonical_sha256, utc_now_rfc3339
 from cmf_pipeline.application import PipelineApplication
-from api.dependencies import get_campaign_repository, get_interview, get_pipeline, get_studio_bridge
+from api.dependencies import (
+    get_air,
+    get_campaign_repository,
+    get_interview,
+    get_pipeline,
+    get_studio_bridge,
+)
 from api.routers.harnesses import find_by_definition_id, get_harness_library_root
 from api.domain.campaign import (
     CampaignValidationError,
@@ -127,53 +133,24 @@ def _try_resolve_air_refs(air, script_id: str) -> dict | None:
 
 
 def _try_compile_harness(
-    harness_definition_id: str, library_root: Any
-) -> dict | None:
-    """Attempt to bridge the Harness through compile_portable_to_intake().
-    Returns the intake-ready dict if successful; returns None when
-    HarnessCompilationBlocked fires (expected — see BRIDGE-001 Blocker 5).
-
-    This is the real integration point with TS-APP-BRIDGE-001.
+    harness_definition_id: str,
+    library_root: Any,
+    *,
+    air_refs: dict | None = None,
+    eligibility_registry: Any = None,
+) -> Any:
+    """Attempt to bridge the Harness through WorkflowCapabilityMetadataBridge.
+    Returns BridgeCompilationResult containing either the validated intake
+    projection or structured blocker diagnostics.
     """
-    from cmf_builder.application.export_service import PortableAtomicHarnessCompiler
-    from cmf_builder.domain.portable_export import PortableAtomicHarnessDefinition
-    from cmf_pipeline.intake.harness_compiler import compile_portable_to_intake
-    from cmf_pipeline.intake.harness_compiler_contracts import HarnessCompilationBlocked
+    from ca_runtime.metadata_bridge import WorkflowCapabilityMetadataBridge
 
     entry = find_by_definition_id(library_root, harness_definition_id)
     if entry is None:
         return None
 
-    # Re-build a real PortableAtomicHarnessDefinition from the library entry
-    # so compile_portable_to_intake() gets the real object it expects.
-    try:
-        definition = PortableAtomicHarnessDefinition.create(
-            content=entry.definition.content,
-            definition_id=entry.definition.definition_id,
-            definition_hash=entry.definition.definition_hash,
-        )
-    except Exception as exc:
-        logger.warning("Failed to rebuild PortableAtomicHarnessDefinition: %s", exc)
-        return None
-
-    try:
-        intake = compile_portable_to_intake(
-            definition,
-            semantic_dependencies=[],
-            capability_metadata={},
-            workflow=None,   # ← BRIDGE-001 Blocker 5: always None here
-            evaluation_requirements=[],
-            repair_laws=[],
-        )
-        return intake
-    except HarnessCompilationBlocked as exc:
-        # This is the expected, documented Blocker 5 hit.
-        # Log it and return None so the caller can record the reason.
-        logger.info(
-            "HarnessCompilationBlocked for '%s': field=%s reason=%s",
-            harness_definition_id, exc.field, exc.reason,
-        )
-        return None
+    bridge = WorkflowCapabilityMetadataBridge(eligibility_registry=eligibility_registry)
+    return bridge.compile(entry.definition, air_refs=air_refs)
 
 
 # ---------------------------------------------------------------------------
@@ -186,7 +163,10 @@ def create_campaign(
     repository: CampaignRepository = Depends(get_campaign_repository),
     library_root=Depends(get_harness_library_root),
     interview=Depends(get_interview),
+    air=Depends(get_air),
+    pipeline: PipelineApplication = Depends(get_pipeline),
 ):
+
     """Create a campaign.  When body.pipeline_trigger is supplied, this
     endpoint patches the original spec by calling AIR endpoints and
     compile_portable_to_intake() to obtain real refs.
@@ -272,28 +252,36 @@ def create_campaign(
     pipeline_refs: dict | None = None
 
     if body.pipeline_trigger is not None:
-        air = interview.app.state.air  # type: ignore[attr-defined]
         script_id = body.pipeline_trigger.get("final_script_id")
+        air_refs = None
 
-        if script_id:
-            air_refs = _try_resolve_air_refs(air, script_id)
-            if air_refs:
-                pipeline_refs = dict(air_refs)
+        if script_id and air is not None:
+            resolved_refs = _try_resolve_air_refs(air, script_id)
+            if resolved_refs:
+                pipeline_refs = dict(resolved_refs)
+                air_refs = resolved_refs
 
-        intake = _try_compile_harness(body.harness_definition_id, library_root)
-        if intake is not None:
+        bridge_result = _try_compile_harness(
+            body.harness_definition_id,
+            library_root,
+            air_refs=air_refs,
+            eligibility_registry=getattr(pipeline, "eligibility", None),
+        )
+        if bridge_result is not None and getattr(bridge_result, "success", False):
             ingestion_status = "BRIDGE_SUCCEEDED"
+        elif bridge_result is not None and getattr(bridge_result, "blocked_reason", None):
+            ingestion_status = "BRIDGE_BLOCKED"
+            blocked_reason = bridge_result.formatted_blocked_reason
         else:
+
             ingestion_status = "BRIDGE_BLOCKED"
             blocked_reason = (
-                "BRIDGE-001 Blocker 5: workflow must be caller-supplied. "
-                "compile_portable_to_intake() was called with workflow=None, "
-                "which raises HarnessCompilationBlocked on every real call. "
-                "See TS-APP-BRIDGE-001 Section 4 Blocker 5 for the open "
-                "product decision."
+                f"BRIDGE-001 Blocker (harness): Harness definition "
+                f"'{body.harness_definition_id}' could not be resolved from the library"
             )
 
     result = repository.create(order, state, idempotency_key=body.idempotency_key)
+
     return _detail(
         result["order"], result["state"], package["payload"],
         result["idempotent_replay"],
