@@ -706,6 +706,23 @@ from .workflow_control_flow import (
     WorkflowControlFlowCompiler,
     WorkflowControlFlowError,
 )
+from .step_contracts import (
+    EmptyOutputContractsError,
+    HiddenModelDependenceError,
+    MissingMutationValidatorError,
+    SideEffectDeclarationMismatchError,
+    StepContract,
+    StepContractCoverageReport,
+    StepContractError,
+    StepContractNotFoundError,
+    StepContractRegistry,
+    StepContractValidationError,
+    StepContractValidator,
+    StepExecutionVerificationReport,
+    UnregisteredStepContractError,
+    create_collision_program_step_contracts,
+    create_research_canonicalization_step_contracts,
+)
 
 
 __all__ = [
@@ -1299,6 +1316,21 @@ __all__ = [
     "HumanGateSuspendedError",
     "HumanGateLaneViolationError",
     "ConditionEvaluationError",
+    "StepContract",
+    "StepContractCoverageReport",
+    "StepExecutionVerificationReport",
+    "StepContractValidator",
+    "StepContractRegistry",
+    "StepContractError",
+    "StepContractValidationError",
+    "EmptyOutputContractsError",
+    "MissingMutationValidatorError",
+    "HiddenModelDependenceError",
+    "SideEffectDeclarationMismatchError",
+    "StepContractNotFoundError",
+    "UnregisteredStepContractError",
+    "create_research_canonicalization_step_contracts",
+    "create_collision_program_step_contracts",
 ]
 
 __version__ = "0.1.0.dev1"

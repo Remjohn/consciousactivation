@@ -1,0 +1,98 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M60",
+  "mandate_title": "Workflow Step Contracts",
+  "phase": "PHASE_07_WORKFLOW_ENGINEERING",
+  "parallel_group": "P7-C",
+  "phase_completion_status": "PHASE_07_COMPLETE",
+  "timestamp_utc": "2026-09-02T05:25:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/02_WORKFLOW_ENGINEERING/M60_workflow_step_contracts.md"
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/step_contracts.py",
+      "artifact_class": "Workflow Step Contract Architecture, Validator, Registry & Migration Engine",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m60_workflow_step_contracts.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 8,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_complete_contract": {
+      "status": "PASSED",
+      "description": "Every production workflow step has a complete hash-addressed StepContract."
+    },
+    "gate_2_agent_vs_code_typing": {
+      "status": "PASSED",
+      "description": "Step contracts explicitly distinguish AGENT_CALL reasoning from CODE_FUNCTION execution."
+    },
+    "gate_3_explicit_side_effects": {
+      "status": "PASSED",
+      "description": "Side effects are strictly categorized as NONE, READ_ONLY, or MUTATION_OPERATION."
+    },
+    "gate_4_explicit_failure_routing": {
+      "status": "PASSED",
+      "description": "Failure, timeout, and repair targets are explicitly mapped in failure_routing dictionary."
+    },
+    "gate_5_mutation_step_rigor": {
+      "status": "PASSED",
+      "description": "MUTATION_OPERATION steps strictly require non-empty postconditions and validators."
+    },
+    "gate_6_statem_boundary_anchor": {
+      "status": "PASSED",
+      "description": "Contracts name state_boundary, state_entry_context_requirements, blocking_exit_checks, and transition evidence."
+    },
+    "gate_7_host_controlled_state_commit": {
+      "status": "PASSED",
+      "description": "Internal Agent reasoning is never mistaken for a state transition; only host runtime commits state."
+    }
+  },
+  "program_migrations": [
+    {
+      "program_id": "research_canonicalization_program",
+      "steps_migrated": 4,
+      "coverage_percentage": 100
+    },
+    {
+      "program_id": "collision_program",
+      "steps_migrated": 4,
+      "coverage_percentage": 100
+    }
+  ],
+  "false_proof_defenses": [
+    {
+      "vector": "empty_outputs_rejected",
+      "rule": "INV-WFP-003",
+      "error_code": "ERR_EMPTY_OUTPUT_CONTRACTS",
+      "verified": true
+    },
+    {
+      "vector": "code_step_with_hidden_model_dependence_rejected",
+      "rule": "INV-WFP-001",
+      "error_code": "ERR_HIDDEN_MODEL_DEPENDENCE",
+      "verified": true
+    },
+    {
+      "vector": "mutation_step_missing_postconditions_rejected",
+      "rule": "INV-WFP-004",
+      "error_code": "ERR_MISSING_MUTATION_VALIDATOR",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m60_tests_passed": 8,
+    "combined_phase_5_6_7_tests_passed": 128,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}
