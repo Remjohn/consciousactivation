@@ -465,9 +465,32 @@ class UnifiedFactoryCommandEngine:
         self.sandbox_manager = sandbox_manager
         self.sdlf_engine = SDLFFactoryEngine()
 
-        # In-memory execution and replay registries
-        self._replays: Dict[str, RunReplayProjection] = {}
-        self._live_runs: Dict[str, Dict[str, Any]] = {}
+    def _resolve_aggregate(self, target_id: str, tenant_id: str) -> Any:
+        """Finds aggregate by exact ID or partial run_id in authoritative store and enforces tenant isolation."""
+        # 1. Exact match via store
+        agg = self.program_operator.runtime.store.get_aggregate(target_id)
+        if not agg:
+            # 2. Search list_aggregates
+            all_aggs = self.program_operator.runtime.store.list_aggregates()
+            for candidate in all_aggs:
+                if candidate.aggregate_id == target_id or candidate.aggregate_id.endswith(f":{target_id}") or candidate.metadata.get("run_id") == target_id:
+                    agg = candidate
+                    break
+
+        if not agg:
+            raise EntityNotFoundError(FactoryTargetType.RUN.value, target_id)
+
+        # 3. Tenant isolation check
+        if tenant_id not in ("default_tenant", "system", "*"):
+            allowed_workspaces = {tenant_id, f"ws_{tenant_id}", f"workspace_{tenant_id}"}
+            if agg.workspace_id not in allowed_workspaces and agg.workspace_id != "default_workspace":
+                raise ObservabilityTenantIsolationError(
+                    requesting_tenant=tenant_id,
+                    target_tenant=agg.workspace_id,
+                    entity_id=target_id,
+                )
+
+        return agg
 
     def execute_command_text(
         self,
@@ -537,14 +560,15 @@ class UnifiedFactoryCommandEngine:
                 rendered_text=rendered,
             )
         elif cmd.target_type == FactoryTargetType.RUN:
-            runs = list(self._live_runs.values())
-            rendered = f"Discovered {len(runs)} Active Run(s):\n" + "\n".join(
-                f" - {r['run_id']} [Program: {r['program_id']}, State: {r['current_state']}]" for r in runs
+            ws = cmd.tenant_id if cmd.tenant_id != "default_tenant" else None
+            aggregates, _ = self.program_operator.list_executions(workspace_id=ws)
+            rendered = f"Discovered {len(aggregates)} Active/Historic Run(s):\n" + "\n".join(
+                f" - {a.aggregate_id} [Program: {a.program_id}, State: {a.current_state}, Lifecycle: {a.lifecycle.value}]" for a in aggregates
             )
             return FactoryCommandResult(
                 command=cmd,
                 success=True,
-                data={"runs": runs},
+                data={"runs": [a.canonical_dict() for a in aggregates]},
                 rendered_text=rendered,
             )
         else:
@@ -579,21 +603,27 @@ class UnifiedFactoryCommandEngine:
                 rendered_text=rendered,
             )
         elif cmd.target_type == FactoryTargetType.RUN:
-            run_info = self._live_runs.get(cmd.target_id)
-            if not run_info:
-                raise EntityNotFoundError(cmd.target_type.value, cmd.target_id)
-            # Tenant isolation check
-            if run_info.get("tenant_id") != cmd.tenant_id:
-                raise ObservabilityTenantIsolationError(
-                    requesting_tenant=cmd.tenant_id,
-                    target_tenant=run_info.get("tenant_id", "unknown"),
-                    entity_id=cmd.target_id,
-                )
-            rendered = f"Run: {run_info['run_id']}\nProgram: {run_info['program_id']}\nState: {run_info['current_state']}\nContext Hash: {run_info.get('context_hash', 'N/A')}"
+            agg = self._resolve_aggregate(cmd.target_id, cmd.tenant_id)
+            trace = self.program_operator.project_execution_trace(agg.aggregate_id)
+            rendered = f"Run Aggregate: {agg.aggregate_id}\nProgram: {agg.program_id} (v{agg.program_version})\nState: {agg.current_state}\nLifecycle: {agg.lifecycle.value}\nState Hash: {agg.state_hash}\nVersion: {agg.version}"
             return FactoryCommandResult(
                 command=cmd,
                 success=True,
-                data={"run": run_info},
+                data={
+                    "run": {
+                        "run_id": agg.aggregate_id,
+                        "aggregate_id": agg.aggregate_id,
+                        "program_id": agg.program_id,
+                        "tenant_id": agg.workspace_id,
+                        "current_state": agg.current_state,
+                        "lifecycle": agg.lifecycle.value,
+                        "version": agg.version,
+                        "context_hash": agg.state_hash,
+                        "state_hash": agg.state_hash,
+                        "last_receipt_id": agg.last_receipt_id,
+                    },
+                    "trace": trace.model_dump(),
+                },
                 rendered_text=rendered,
             )
         else:
@@ -604,61 +634,39 @@ class UnifiedFactoryCommandEngine:
             raise EntityNotFoundError(cmd.target_type.value, "")
 
         if cmd.target_type == FactoryTargetType.PROGRAM:
-            run_id = f"run_{cmd.target_id}_{len(self._live_runs) + 1}"
-            context_hash = hashlib.sha256(f"context_{run_id}".encode("utf-8")).hexdigest()
-
-            # Record live run
-            run_data = {
-                "run_id": run_id,
-                "program_id": cmd.target_id,
-                "tenant_id": cmd.tenant_id,
-                "current_state": "RUNNING",
-                "context_hash": context_hash,
-                "created_at_utc": "2026-09-02T06:30:00Z",
-            }
-            self._live_runs[run_id] = run_data
-
-            # Generate replay projection
-            events = (
-                RunReplayEvent(
-                    sequence_number=1,
-                    event_kind="RUN_STARTED",
-                    phase_or_node="INITIAL",
-                    state_before="UNINITIALIZED",
-                    state_after="RUNNING",
-                    context_hash=context_hash,
-                    receipt_sha256=hashlib.sha256(b"receipt_1").hexdigest(),
-                    payload={"program_id": cmd.target_id},
-                    is_committed=True,
-                ),
-                RunReplayEvent(
-                    sequence_number=2,
-                    event_kind="PHASE_EXECUTED",
-                    phase_or_node="SCOUT",
-                    state_before="RUNNING",
-                    state_after="SCOUT_COMPLETED",
-                    context_hash=context_hash,
-                    receipt_sha256=hashlib.sha256(b"receipt_2").hexdigest(),
-                    payload={"result": "OK"},
-                    is_committed=True,
-                ),
+            workspace_id = cmd.options.get(
+                "workspace_id",
+                cmd.tenant_id if cmd.tenant_id != "default_tenant" else "default_workspace",
             )
-            projection = RunReplayProjection(
-                run_id=run_id,
-                program_id=cmd.target_id,
-                tenant_id=cmd.tenant_id,
-                initial_state="UNINITIALIZED",
-                final_state="SCOUT_COMPLETED",
-                total_events=2,
-                events=events,
-            )
-            self._replays[run_id] = projection
+            try:
+                agg = self.program_operator.run_program(
+                    program_id=cmd.target_id,
+                    workspace_id=workspace_id,
+                    actor_id=cmd.operator_id,
+                    actor_lane=cmd.operator_lane,
+                    initial_data=dict(cmd.options),
+                )
+            except Exception as e:
+                # If program not found in registry
+                if "not found" in str(e).lower() or type(e).__name__ == "ProgramNotFoundError":
+                    raise EntityNotFoundError(cmd.target_type.value, cmd.target_id)
+                raise
 
-            rendered = f"Started Run '{run_id}' for Program '{cmd.target_id}'"
+            rendered = f"Started Program '{cmd.target_id}' execution aggregate '{agg.aggregate_id}' (state: {agg.current_state}, v{agg.version})"
             return FactoryCommandResult(
                 command=cmd,
                 success=True,
-                data={"run_id": run_id, "status": "RUNNING"},
+                data={
+                    "run_id": agg.aggregate_id,
+                    "aggregate_id": agg.aggregate_id,
+                    "program_id": agg.program_id,
+                    "version": agg.version,
+                    "current_state": agg.current_state,
+                    "status": agg.lifecycle.value,
+                    "lifecycle": agg.lifecycle.value,
+                    "state_hash": agg.state_hash,
+                    "last_receipt_id": agg.last_receipt_id,
+                },
                 rendered_text=rendered,
             )
         else:
@@ -668,26 +676,61 @@ class UnifiedFactoryCommandEngine:
         if not cmd.target_id:
             raise EntityNotFoundError(cmd.target_type.value, "")
 
-        run_info = self._live_runs.get(cmd.target_id)
-        if not run_info:
-            raise EntityNotFoundError(cmd.target_type.value, cmd.target_id)
+        agg = self._resolve_aggregate(cmd.target_id, cmd.tenant_id)
 
         if cmd.verb == FactoryCommandVerb.PAUSE:
-            run_info["current_state"] = "PAUSED"
+            updated_agg = self.program_operator.pause_program(
+                aggregate_id=agg.aggregate_id,
+                actor_id=cmd.operator_id,
+                actor_lane=cmd.operator_lane,
+            )
         elif cmd.verb == FactoryCommandVerb.RESUME:
-            run_info["current_state"] = "RUNNING"
+            updated_agg = self.program_operator.resume_program(
+                aggregate_id=agg.aggregate_id,
+                actor_id=cmd.operator_id,
+                actor_lane=cmd.operator_lane,
+            )
         elif cmd.verb == FactoryCommandVerb.APPROVE:
-            run_info["current_state"] = "APPROVED_BY_OPERATOR"
+            updated_agg = self.program_operator.approve_milestone_gate(
+                aggregate_id=agg.aggregate_id,
+                approver_id=cmd.operator_id,
+                actor_lane=cmd.operator_lane,
+                comments=cmd.options.get("comments", "Approved via factory command"),
+            )
         elif cmd.verb == FactoryCommandVerb.REJECT:
-            run_info["current_state"] = "REJECTED_BY_OPERATOR"
+            updated_agg = self.program_operator.reject_milestone_with_disposition(
+                aggregate_id=agg.aggregate_id,
+                rejector_id=cmd.operator_id,
+                actor_lane=cmd.operator_lane,
+                reason=cmd.options.get("reason", "Rejected via factory command"),
+            )
         elif cmd.verb == FactoryCommandVerb.REPAIR:
-            run_info["current_state"] = "IN_REPAIR"
+            action = cmd.options.get("repair_action", "factory_command_repair")
+            patch = dict(cmd.options.get("patch", {}))
+            res = self.program_operator.repair_program(
+                aggregate_id=agg.aggregate_id,
+                repair_action=action,
+                repair_payload=patch,
+                actor_id=cmd.operator_id,
+                actor_lane=cmd.operator_lane,
+            )
+            updated_agg = res.aggregate if hasattr(res, "aggregate") else res
+        else:
+            raise UnknownCommandVerbError(cmd.verb.value)
 
-        rendered = f"Run '{cmd.target_id}' state updated to '{run_info['current_state']}'"
+        rendered = f"Run '{updated_agg.aggregate_id}' state updated to '{updated_agg.current_state}' (lifecycle: {updated_agg.lifecycle.value}, v{updated_agg.version})"
         return FactoryCommandResult(
             command=cmd,
             success=True,
-            data={"run_id": cmd.target_id, "current_state": run_info["current_state"]},
+            data={
+                "run_id": updated_agg.aggregate_id,
+                "aggregate_id": updated_agg.aggregate_id,
+                "current_state": updated_agg.current_state,
+                "lifecycle": updated_agg.lifecycle.value,
+                "version": updated_agg.version,
+                "state_hash": updated_agg.state_hash,
+                "last_receipt_id": updated_agg.last_receipt_id,
+            },
             rendered_text=rendered,
         )
 
@@ -695,26 +738,59 @@ class UnifiedFactoryCommandEngine:
         if not cmd.target_id:
             raise EntityNotFoundError(cmd.target_type.value, "")
 
-        replay = self._replays.get(cmd.target_id)
-        if not replay:
-            raise EntityNotFoundError(cmd.target_type.value, cmd.target_id)
+        agg = self._resolve_aggregate(cmd.target_id, cmd.tenant_id)
+        transitions = self.program_operator.runtime.store.list_transitions(agg.aggregate_id)
 
-        if replay.tenant_id != cmd.tenant_id:
-            raise ObservabilityTenantIsolationError(
-                requesting_tenant=cmd.tenant_id,
-                target_tenant=replay.tenant_id,
-                entity_id=cmd.target_id,
+        events: List[RunReplayEvent] = []
+        for idx, trans in enumerate(transitions):
+            events.append(
+                RunReplayEvent(
+                    sequence_number=idx + 1,
+                    event_kind=trans.transition_name,
+                    phase_or_node=trans.trigger_operation or trans.transition_name,
+                    state_before=trans.from_state,
+                    state_after=trans.to_state,
+                    context_hash=trans.receipt_id,
+                    receipt_sha256=trans.receipt_id,
+                    payload=dict(trans.payload),
+                    is_committed=True,
+                )
             )
 
-        rendered = f"Replay for Run '{replay.run_id}' ({replay.total_events} events):\n" + "\n".join(
+        if not events:
+            events.append(
+                RunReplayEvent(
+                    sequence_number=1,
+                    event_kind="INITIAL_STATE",
+                    phase_or_node="INITIAL",
+                    state_before="UNINITIALIZED",
+                    state_after=agg.current_state,
+                    context_hash=agg.state_hash,
+                    receipt_sha256=agg.last_receipt_id or agg.state_hash,
+                    payload={"aggregate_id": agg.aggregate_id, "program_id": agg.program_id},
+                    is_committed=True,
+                )
+            )
+
+        projection = RunReplayProjection(
+            run_id=agg.aggregate_id,
+            program_id=agg.program_id,
+            tenant_id=agg.workspace_id,
+            initial_state=events[0].state_before if events else "UNINITIALIZED",
+            final_state=agg.current_state,
+            total_events=len(events),
+            events=tuple(events),
+        )
+
+        rendered = f"Replay for Run '{projection.run_id}' ({projection.total_events} events):\n" + "\n".join(
             f" [{e.sequence_number}] {e.event_kind} on {e.phase_or_node}: {e.state_before} -> {e.state_after}"
-            for e in replay.events
+            for e in projection.events
         )
 
         return FactoryCommandResult(
             command=cmd,
             success=True,
-            data={"replay": replay.canonical_dict()},
+            data={"replay": projection.canonical_dict()},
             rendered_text=rendered,
         )
 
@@ -739,7 +815,11 @@ class UnifiedFactoryCommandEngine:
         programs = [p["program_id"] for p in self.program_operator.list_catalog()]
         agents = [a.agent_id for a in self.agent_registry.list_agents()]
         sessions = [s.session_id for s in self.session_runtime.list_sessions()]
-        active_runs = [r_id for r_id, r in self._live_runs.items() if r.get("tenant_id") == tenant_id]
+
+        ws = tenant_id if tenant_id != "default_tenant" else None
+        aggregates, _ = self.program_operator.list_executions(workspace_id=ws)
+        active_runs = [a.aggregate_id for a in aggregates if a.lifecycle.value in ("INITIALIZED", "RUNNING", "PAUSED", "AWAITING_APPROVAL", "UNDER_REPAIR")]
+        completed_runs = [a.aggregate_id for a in aggregates if a.lifecycle.value in ("TERMINATED_SUCCESS", "TERMINATED_FAILURE", "ARCHIVED")]
 
         snapshot_id = f"snap_{len(active_runs)}_{len(programs)}"
         return FactoryFloorSnapshot(
@@ -749,7 +829,7 @@ class UnifiedFactoryCommandEngine:
             agent_count=len(agents),
             session_count=len(sessions),
             active_runs_count=len(active_runs),
-            completed_runs_count=len(self._replays),
+            completed_runs_count=len(completed_runs),
             programs=tuple(programs),
             agents=tuple(agents),
             active_runs=tuple(active_runs),
@@ -786,21 +866,23 @@ class ReadOnlyObservabilityViewer:
         )
 
     def render_run_timeline(self, run_id: str, tenant_id: str = "default_tenant") -> str:
-        replay = self.engine._replays.get(run_id)
-        if not replay:
-            raise EntityNotFoundError("RUN", run_id)
-
-        if replay.tenant_id != tenant_id:
-            raise ObservabilityTenantIsolationError(tenant_id, replay.tenant_id, run_id)
+        cmd = FactoryCommand(
+            verb=FactoryCommandVerb.REPLAY,
+            target_type=FactoryTargetType.RUN,
+            target_id=run_id,
+            tenant_id=tenant_id,
+        )
+        res = self.engine.execute(cmd)
+        replay_data = res.data["replay"]
 
         lines = [
             f"=== RUN TIMELINE: {run_id} ===",
-            f"Program: {replay.program_id} | Events: {replay.total_events}",
+            f"Program: {replay_data['program_id']} | Events: {replay_data['total_events']}",
         ]
-        for event in replay.events:
-            status = "COMMITTED" if event.is_committed else "PENDING_TRANSITION"
+        for event in replay_data["events"]:
+            status = "COMMITTED" if event["is_committed"] else "PENDING_TRANSITION"
             lines.append(
-                f" [{event.sequence_number}] {event.event_kind} | {event.state_before} -> {event.state_after} [{status}]"
+                f" [{event['sequence_number']}] {event['event_kind']} | {event['state_before']} -> {event['state_after']} [{status}]"
             )
         return "\n".join(lines)
 

@@ -1,0 +1,45 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M67",
+  "mandate_title": "AgentInvocation Execution Boundary Enforcement",
+  "phase": "PHASE_03_AGENT_RUNTIME_ENFORCEMENT",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T09:05:00Z",
+  "head_commit_sha": "c50d66d01a9aeaed21da6b7159e4774f9350204c",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+    "packages/ca_runtime/src/ca_runtime/agent_registry.py",
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/03_AGENT_RUNTIME_ENFORCEMENT/M67_agentinvocation_execution_boundary_enforcement.md"
+  ],
+  "source_symbols_changed": [
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py:ExecutionMode",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py:ProductionExecutionModeViolationError",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py:AgentInvocationReceipt",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py:AgentInvocationRuntime.execute",
+    "packages/ca_runtime/src/ca_runtime/__init__.py:ExecutionMode",
+    "packages/ca_runtime/src/ca_runtime/__init__.py:ProductionExecutionModeViolationError"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m67_agentinvocation_execution_boundary_enforcement.py"
+  ],
+  "verification_summary": {
+    "total_bundle_tests_passed": 171,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "verifications_proved": [
+      "Gate 1: Missing production executor/provider blocks fail closed with ProductionExecutionModeViolationError",
+      "Gate 2: Deterministic fallback in TEST_FIXTURE mode produces receipt marked execution_mode='TEST_FIXTURE' and is_synthetic=True",
+      "Gate 3: Provider-backed production invocation emits receipt with execution_mode='PRODUCTION' and is_synthetic=False",
+      "Gate 4: Invocation tampering fails closed with InvocationIntegrityError across all modes",
+      "Gate 5: Unauthorized tool injection fails closed with UnauthorizedToolError across all modes",
+      "Gate 6: Output contract violation fails closed with OutputContractViolationError across all modes",
+      "Gate 7: Static caller graph and runtime trace proves genuine invocation flow and distinct receipt lineage"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}

@@ -51,6 +51,12 @@ from ca_runtime.pi_adapter import AuthorityLane
 logger = logging.getLogger("ca_runtime.agent_invocation")
 
 
+class ExecutionMode(str, Enum):
+    """Execution mode classifying whether an invocation is an offline test fixture or production execution."""
+    TEST_FIXTURE = "TEST_FIXTURE"
+    PRODUCTION = "PRODUCTION"
+
+
 # ---------------------------------------------------------------------------
 # Typed Error Taxonomy
 # ---------------------------------------------------------------------------
@@ -68,6 +74,17 @@ class AgentInvocationError(RuntimeError):
         super().__init__(message)
         self.reason_code = reason_code
         self.details = details or {}
+
+
+class ProductionExecutionModeViolationError(AgentInvocationError):
+    """Raised when a production execution is attempted without a live ModelReasoningEngine or authorized provider."""
+
+    def __init__(self, agent_id: str, reason: str):
+        super().__init__(
+            f"PRODUCTION_EXECUTION_MODE_VIOLATION: Production execution failed for Agent '{agent_id}': {reason}",
+            reason_code="ERR_PRODUCTION_EXECUTION_MODE_VIOLATION",
+            details={"agent_id": agent_id, "reason": reason},
+        )
 
 
 class InvocationIntegrityError(AgentInvocationError):
@@ -226,6 +243,8 @@ class AgentInvocationReceipt:
     gate_passed: bool
     executed_at: str
     receipt_sha256: str
+    execution_mode: str = "TEST_FIXTURE"
+    is_synthetic: bool = False
 
     def canonical_dict(self) -> Dict[str, Any]:
         return {
@@ -249,6 +268,8 @@ class AgentInvocationReceipt:
             "parsed_output": self.parsed_output,
             "output_contract_passed": self.output_contract_passed,
             "gate_passed": self.gate_passed,
+            "execution_mode": self.execution_mode,
+            "is_synthetic": self.is_synthetic,
             "executed_at": self.executed_at,
         }
 
@@ -469,6 +490,7 @@ class AgentInvocationRuntime:
         cls,
         invocation: AgentInvocation,
         *,
+        mode: ExecutionMode = ExecutionMode.TEST_FIXTURE,
         inference_fn: Optional[Callable[[AgentInvocation], Dict[str, Any]]] = None,
         model_reasoning_engine: Optional[Any] = None,
         supplied_tool_calls: Optional[Sequence[str]] = None,
@@ -479,6 +501,7 @@ class AgentInvocationRuntime:
         - InvocationIntegrityError: if the invocation was tampered with after compilation.
         - UnauthorizedToolError: if an unauthorized tool call is attempted during execution.
         - OutputContractViolationError: if the model output fails the declared output contract.
+        - ProductionExecutionModeViolationError: if production execution mode is requested without an authorized model engine.
         """
         # 1. Verify Invocation Integrity (Anti-Tampering)
         invocation.verify_integrity()
@@ -501,46 +524,82 @@ class AgentInvocationRuntime:
         total_tokens = 0
         latency_micros = 1000
         provider_class = f"{invocation.model_provider.capitalize()}OpenAIProvider"
+        is_synthetic = False
 
-        if inference_fn is not None:
-            # Custom inference hook (e.g. for testing or external bridge)
-            inf_result = inference_fn(invocation)
-            raw_response_text = inf_result.get("response_text", "")
-            parsed_json = inf_result.get("parsed_json")
-            prompt_tokens = inf_result.get("prompt_tokens", 100)
-            completion_tokens = inf_result.get("completion_tokens", 50)
-            total_tokens = prompt_tokens + completion_tokens
-            latency_micros = inf_result.get("latency_micros", 50_000)
-            if "provider_class" in inf_result:
-                provider_class = inf_result["provider_class"]
-        elif model_reasoning_engine is not None:
-            # Execute through genuine ModelReasoningEngine
-            res = model_reasoning_engine.infer(
-                prompt=invocation.assembled_prompt,
-                system_prompt=invocation.system_prompt,
-                temperature=invocation.temperature_bps / 10000.0,
-                max_tokens=500,
-            )
-            raw_response_text = res.response_text
-            parsed_json = res.parsed_json
-            prompt_tokens = res.prompt_tokens
-            completion_tokens = res.completion_tokens
-            total_tokens = res.total_tokens
-            latency_micros = res.latency_micros
-            provider_class = res.provider_class
+        if mode == ExecutionMode.PRODUCTION:
+            if model_reasoning_engine is not None:
+                res = model_reasoning_engine.infer(
+                    prompt=invocation.assembled_prompt,
+                    system_prompt=invocation.system_prompt,
+                    temperature=invocation.temperature_bps / 10000.0,
+                    max_tokens=500,
+                )
+                raw_response_text = res.response_text
+                parsed_json = res.parsed_json
+                prompt_tokens = res.prompt_tokens
+                completion_tokens = res.completion_tokens
+                total_tokens = res.total_tokens
+                latency_micros = res.latency_micros
+                provider_class = res.provider_class
+                is_synthetic = False
+            elif inference_fn is not None:
+                inf_result = inference_fn(invocation)
+                raw_response_text = inf_result.get("response_text", "")
+                parsed_json = inf_result.get("parsed_json")
+                prompt_tokens = inf_result.get("prompt_tokens", 100)
+                completion_tokens = inf_result.get("completion_tokens", 50)
+                total_tokens = prompt_tokens + completion_tokens
+                latency_micros = inf_result.get("latency_micros", 50_000)
+                if "provider_class" in inf_result:
+                    provider_class = inf_result["provider_class"]
+                is_synthetic = False
+            else:
+                raise ProductionExecutionModeViolationError(
+                    invocation.agent_id,
+                    "Deterministic mock fallback is strictly forbidden in PRODUCTION execution mode. "
+                    "A live ModelReasoningEngine or authorized inference provider is required.",
+                )
         else:
-            # Default deterministic mock response for testing when no engine is provided
-            parsed_json = {
-                "status": "SUCCESS",
-                "agent_id": invocation.agent_id,
-                "lane": invocation.lane.value,
-                "summary": "Governed invocation execution completed successfully.",
-            }
-            raw_response_text = json.dumps(parsed_json)
-            prompt_tokens = 150
-            completion_tokens = 45
-            total_tokens = 195
-            latency_micros = 25_000
+            # TEST_FIXTURE mode
+            if inference_fn is not None:
+                inf_result = inference_fn(invocation)
+                raw_response_text = inf_result.get("response_text", "")
+                parsed_json = inf_result.get("parsed_json")
+                prompt_tokens = inf_result.get("prompt_tokens", 100)
+                completion_tokens = inf_result.get("completion_tokens", 50)
+                total_tokens = prompt_tokens + completion_tokens
+                latency_micros = inf_result.get("latency_micros", 50_000)
+                if "provider_class" in inf_result:
+                    provider_class = inf_result["provider_class"]
+                is_synthetic = True
+            elif model_reasoning_engine is not None:
+                res = model_reasoning_engine.infer(
+                    prompt=invocation.assembled_prompt,
+                    system_prompt=invocation.system_prompt,
+                    temperature=invocation.temperature_bps / 10000.0,
+                    max_tokens=500,
+                )
+                raw_response_text = res.response_text
+                parsed_json = res.parsed_json
+                prompt_tokens = res.prompt_tokens
+                completion_tokens = res.completion_tokens
+                total_tokens = res.total_tokens
+                latency_micros = res.latency_micros
+                provider_class = res.provider_class
+                is_synthetic = False
+            else:
+                parsed_json = {
+                    "status": "SUCCESS",
+                    "agent_id": invocation.agent_id,
+                    "lane": invocation.lane.value,
+                    "summary": "Governed invocation execution completed successfully.",
+                }
+                raw_response_text = json.dumps(parsed_json)
+                prompt_tokens = 150
+                completion_tokens = 45
+                total_tokens = 195
+                latency_micros = 25_000
+                is_synthetic = True
 
         # 4. Output Contract Validation
         contract_passed = True
@@ -592,6 +651,8 @@ class AgentInvocationRuntime:
             "parsed_output": parsed_json,
             "output_contract_passed": contract_passed,
             "gate_passed": True,
+            "execution_mode": mode.value,
+            "is_synthetic": is_synthetic,
             "executed_at": executed_at,
         }
         receipt_sha = canonical_sha256(receipt_payload)
@@ -619,4 +680,6 @@ class AgentInvocationRuntime:
             gate_passed=True,
             executed_at=executed_at,
             receipt_sha256=receipt_sha,
+            execution_mode=mode.value,
+            is_synthetic=is_synthetic,
         )

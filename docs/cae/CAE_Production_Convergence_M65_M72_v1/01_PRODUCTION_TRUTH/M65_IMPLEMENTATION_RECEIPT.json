@@ -1,0 +1,80 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M65",
+  "mandate_title": "Brownfield Production Truth Reconciliation",
+  "phase": "PHASE_01_PRODUCTION_TRUTH",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T08:30:00Z",
+  "head_commit_sha": "c50d66d01a9aeaed21da6b7159e4774f9350204c",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/CANONICAL_SKILL_AUTHORING_CONSTITUTION.md",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/00_CONTROL/00_BUNDLE_MANIFEST.md",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/00_CONTROL/01_BROWNFIELDS_AUDIT_REGISTER.md",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/00_CONTROL/03_GEMINI_EXECUTION_CONTRACT.md",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/00_CONTROL/05_CLAIM_CEILING.md",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/01_PRODUCTION_TRUTH/M65_brownfield_production_truth_reconciliation.md"
+  ],
+  "source_symbols_audited": [
+    "packages/ca_runtime/src/ca_runtime/agent_registry.py:AgentRegistry",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py:AgentInvocationCompiler,AgentInvocationRuntime",
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py:HierarchicalContextResolver,CompiledAgentPackage",
+    "packages/ca_runtime/src/ca_runtime/program_registry.py:ProgramRegistry",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py:UniversalProgramStateRuntime,SQLiteProgramStateStore",
+    "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py:ProgramOperatorRuntimeService",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py:UnifiedFactoryCommandEngine",
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py:FactoryCertificationRunner",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine",
+    "services/pipeline/src/cmf_pipeline/application.py:PipelineApplication"
+  ],
+  "defects_proved": [
+    {
+      "defect_id": "DEF-001",
+      "summary": "SDLF Agent-labelled phases return hard-coded synthetic outputs without invoking AgentInvocationRuntime",
+      "severity": "CRITICAL",
+      "target_mandate": "M70"
+    },
+    {
+      "defect_id": "DEF-002",
+      "summary": "AgentInvocationRuntime defaults to synthetic mock JSON inference when model reasoning engine unprovided",
+      "severity": "HIGH",
+      "target_mandate": "M67"
+    },
+    {
+      "defect_id": "DEF-003",
+      "summary": "UnifiedFactoryCommandEngine owns in-memory duplicate execution truth disconnected from UniversalProgramStateRuntime",
+      "severity": "CRITICAL",
+      "target_mandate": "M66"
+    },
+    {
+      "defect_id": "DEF-004",
+      "summary": "FactoryCertificationRunner generates pre-passed criteria not derived from dynamic execution evidence",
+      "severity": "HIGH",
+      "target_mandate": "M69"
+    },
+    {
+      "defect_id": "DEF-005",
+      "summary": "UniversalProgramStateRuntime defaults to ephemeral InMemoryProgramStateStore rather than persistent SQLite",
+      "severity": "HIGH",
+      "target_mandate": "M68"
+    },
+    {
+      "defect_id": "DEF-006",
+      "summary": "PipelineApplication does not compose AgentInvocationRuntime or AgentRegistry",
+      "severity": "MEDIUM",
+      "target_mandate": "M66_M67"
+    }
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "docs/cae/CAE_Production_Convergence_M65_M72_v1/01_PRODUCTION_TRUTH/M65_RECONCILIATION_REPORT.md",
+      "artifact_class": "Brownfield Reconciliation & Defect Proof Report",
+      "status": "DELIVERED"
+    }
+  ],
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

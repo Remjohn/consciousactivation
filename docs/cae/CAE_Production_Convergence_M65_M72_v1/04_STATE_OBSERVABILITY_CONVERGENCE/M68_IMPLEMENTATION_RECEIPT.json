@@ -1,0 +1,46 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M68",
+  "mandate_title": "State + Observability + Persistence Convergence",
+  "phase": "PHASE_04_STATE_OBSERVABILITY_CONVERGENCE",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T09:15:00Z",
+  "head_commit_sha": "c50d66d01a9aeaed21da6b7159e4774f9350204c",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/program_registry.py",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/04_STATE_OBSERVABILITY_CONVERGENCE/M68_state_observability_persistence_convergence.md"
+  ],
+  "source_symbols_changed": [
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py:UniversalProgramStateRuntime.get_local_context",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py:UniversalProgramStateRuntime.validate_transition",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py:UniversalProgramStateRuntime.execute_transition",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py:UnifiedFactoryCommandEngine",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py:ReadOnlyObservabilityViewer"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m68_state_observability_persistence_convergence.py"
+  ],
+  "verification_summary": {
+    "total_bundle_tests_passed": 179,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "verifications_proved": [
+      "Gate 1: Durable Program Run Creation and Immediate Aggregate Verification in SQLite",
+      "Gate 2: Authoritative State Transitions & Monotonic Version/Receipt Progression in SQLite",
+      "Gate 3: StateM State-Entry Context Refresh at State Boundaries with state hash binding",
+      "Gate 4 (Checked Transfer Rule): Failed Transitions Leave Aggregate Strictly in Source State",
+      "Gate 5: Unified Observability Projects Pure Operational Truth directly from persistent SQLite store",
+      "Gate 6: Process Restart & Re-Read from Persistent SQLite Database with seamless execution resumption",
+      "Gate 7 (Countertest): Stale-Context Reuse Detected and Blocked with STALE_VERSION_CONFLICT",
+      "Gate 8 (Countertest): Cross-Tenant State and Replay Queries Fail Closed with ObservabilityTenantIsolationError"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}

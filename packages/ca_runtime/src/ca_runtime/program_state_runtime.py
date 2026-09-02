@@ -19,6 +19,7 @@ all executable Programs while strictly enforcing:
 from __future__ import annotations
 
 import abc
+import contextlib
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import enum
@@ -1802,11 +1803,15 @@ class SqliteProgramStateStore(IProgramStateStore):
         self.db_path = str(db_path)
         self._init_schema()
 
-    def _get_connection(self) -> sqlite3.Connection:
+    @contextlib.contextmanager
+    def _get_connection(self):
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
-        return conn
+        try:
+            yield conn
+        finally:
+            conn.close()
 
     def _init_schema(self) -> None:
         with self._get_connection() as conn:

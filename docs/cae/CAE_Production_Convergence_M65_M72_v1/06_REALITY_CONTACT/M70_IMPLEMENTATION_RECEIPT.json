@@ -1,0 +1,53 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M70",
+  "mandate_title": "Real SDLF Agent Execution",
+  "phase": "PHASE_06_REALITY_CONTACT",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T11:01:00Z",
+  "head_commit_sha": "c50d66d01a9aeaed21da6b7159e4774f9350204c",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+    "packages/ca_runtime/src/ca_runtime/agent_registry.py",
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py",
+    "packages/ca_runtime/src/ca_runtime/step_contracts.py",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/06_REALITY_CONTACT/M70_real_sdlf_agent_execution.md"
+  ],
+  "source_symbols_changed": [
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFAgentPhaseAdapter (NEW)",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine.__init__",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._ensure_canonical_agents",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._get_agent",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._execute_scout",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._execute_plan",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._execute_build",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._execute_review",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._execute_repair",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py:SDLFFactoryEngine._execute_document"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m70_real_sdlf_agent_execution.py"
+  ],
+  "verification_summary": {
+    "m70_tests_passed": 8,
+    "total_bundle_tests_passed": 194,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "verifications_proved": [
+      "Gate 1: Every Agent-labelled SDLF phase executes through real AgentInvocation compilation and runtime, emitting AgentInvocationReceipts",
+      "Gate 2: Deterministic code phases (INTAKE, QUALITY, INTEGRATE, SHIP, OBSERVE) remain pure code functions with no agent invocations",
+      "Gate 3: Sandbox write restrictions remain enforced in BUILD, failing closed on path escapes with SDLFSandboxViolationError",
+      "Gate 4: Deterministic QUALITY gate failure blocks REVIEW auto-approval without agent evidence",
+      "Gate 5: Bounded repair generates real AgentInvocationReceipts per repair attempt",
+      "Gate 6: Operator SHIP gate strictly enforces Commander approval and lane containment",
+      "Gate 7: Production execution mode fails closed without an authorized inference provider (ProductionExecutionModeViolationError)",
+      "Gate 8 (Countertest): Demonstrates that work_unit_kind=AGENT_CALL without receipt evidence is rejected"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}

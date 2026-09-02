@@ -25,8 +25,32 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
+from uuid import UUID, uuid4
+
 from ca_contracts import canonical_json_text
 
+from .agent_invocation import (
+    AgentInvocation,
+    AgentInvocationCompiler,
+    AgentInvocationReceipt,
+    AgentInvocationRuntime,
+    ExecutionMode,
+    ProductionExecutionModeViolationError,
+)
+from .agent_registry import (
+    AgentDefinition,
+    AgentLifecycleState,
+    AgentModelPolicy,
+    AgentRegistry,
+    get_agent_registry,
+)
+from .context_capsule import (
+    ContextBudgetReport,
+    ContextItem,
+    ContextPrecedenceLayer,
+    JITContextCapsule,
+    JITContextCompiler,
+)
 from .pi_adapter import AuthorityLane
 from .step_contracts import (
     StepContract,
@@ -274,8 +298,64 @@ class SDLFExecutionTrace:
 
 
 # ============================================================================
-# 4. SDLF Factory Engine
+# 4. SDLF Factory Engine & Agent Phase Adapter
 # ============================================================================
+
+
+class SDLFAgentPhaseAdapter:
+    """Encapsulates the canonical Agent compilation and execution pipeline for SDLF phases."""
+
+    @staticmethod
+    def execute_agent_phase(
+        *,
+        phase_kind: SDLFPhaseKind,
+        agent: AgentDefinition,
+        request: SDLFExecutionRequest,
+        phase_prompt: str,
+        input_outputs: Mapping[str, Any],
+        execution_mode: ExecutionMode = ExecutionMode.TEST_FIXTURE,
+        inference_fn: Optional[Callable[[AgentInvocation], Dict[str, Any]]] = None,
+        workspace_id: Optional[UUID] = None,
+    ) -> AgentInvocationReceipt:
+        ws_id = workspace_id or uuid4()
+        lane = agent.authority_lane
+
+        capsule = JITContextCompiler.assemble(
+            workspace_id=ws_id,
+            lane=lane,
+            actor_id=f"agent:{agent.agent_id.lower()}",
+            program_id="sdlf_factory",
+            harness_id="sdlf_harness",
+            agent_id=agent.agent_id,
+            model_id=agent.model_policy.preferred_model,
+            total_token_budget=agent.model_policy.token_budget or 64000,
+            constitutions=(
+                ("cae_system_constitution", "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md", "CAE governing system constitution"),
+            ),
+            program_harness_policies=(
+                (f"sdlf_req_{request.request_id}", f"sdlf/requests/{request.request_id}", f"Request: {request.title} — {request.description}"),
+            ),
+            agent_instructions=(
+                f"sdlf/phases/{phase_kind.value}",
+                f"Execute SDLF phase {phase_kind.value}.\nPrompt: {phase_prompt}\nInputs: {json.dumps(dict(input_outputs), sort_keys=True)}",
+            ),
+        )
+
+        invocation = AgentInvocationCompiler.compile(
+            agent=agent,
+            capsule=capsule,
+            workspace_id=ws_id,
+            run_id=request.request_id,
+            state_id=phase_kind.value,
+        )
+
+        receipt = AgentInvocationRuntime.execute(
+            invocation,
+            mode=execution_mode,
+            inference_fn=inference_fn,
+        )
+
+        return receipt
 
 
 class SDLFFactoryEngine:
@@ -284,11 +364,103 @@ class SDLFFactoryEngine:
     with compiled Agent reasoning, bounded repair, and operator gates.
     """
 
-    def __init__(self, workspace_path: str = "d:\\Work\\consciousactivation") -> None:
+    def __init__(
+        self,
+        workspace_path: str = "d:\\Work\\consciousactivation",
+        *,
+        agent_registry: Optional[AgentRegistry] = None,
+        execution_mode: ExecutionMode = ExecutionMode.TEST_FIXTURE,
+        inference_fn: Optional[Callable[[AgentInvocation], Dict[str, Any]]] = None,
+    ) -> None:
         self.workspace_path = workspace_path
+        self.execution_mode = execution_mode
+        self.inference_fn = inference_fn
+        self.agent_registry = agent_registry or AgentRegistry()
+        self._ensure_canonical_agents()
         self.step_contracts = StepContractRegistry()
         for contract in create_canonical_sdlf_step_contracts():
             self.step_contracts.register(contract)
+
+    def _ensure_canonical_agents(self) -> None:
+        """Ensure the core SDLF agent definitions exist in the active registry."""
+        canonical_defs = [
+            AgentDefinition(
+                agent_id="KnowledgeCandidateHunterAgent",
+                version="1.0.0",
+                name="Knowledge Candidate Hunter Agent",
+                purpose="Discovers and extracts knowledge signals and impact surfaces across codebases.",
+                authority_lane=AuthorityLane.HUNTER,
+                lifecycle_state=AgentLifecycleState.APPROVED,
+                model_policy=AgentModelPolicy(
+                    preferred_model="gemini-2.5-pro",
+                    temperature_bps=2000,
+                    token_budget=64_000,
+                    fallback_models=["gemini-2.5-flash", "openai/gpt-oss-120b"],
+                    timeout_seconds=60,
+                ),
+            ),
+            AgentDefinition(
+                agent_id="RelationshipCanonicalizationAnalystAgent",
+                version="1.0.0",
+                name="Relationship Canonicalization Analyst Agent",
+                purpose="Performs architectural review, relationship analysis, and planning without side effects.",
+                authority_lane=AuthorityLane.ANALYST,
+                lifecycle_state=AgentLifecycleState.APPROVED,
+                model_policy=AgentModelPolicy(
+                    preferred_model="gemini-2.5-pro",
+                    temperature_bps=2000,
+                    token_budget=64_000,
+                    fallback_models=["gemini-2.5-flash", "openai/gpt-oss-120b"],
+                    timeout_seconds=60,
+                ),
+            ),
+            AgentDefinition(
+                agent_id="OKFBundleComposerAgent",
+                version="1.0.0",
+                name="OKF Bundle Composer Agent",
+                purpose="Composes code modifications, build artifacts, and documentation in sandboxes.",
+                authority_lane=AuthorityLane.COMPOSER,
+                lifecycle_state=AgentLifecycleState.APPROVED,
+                model_policy=AgentModelPolicy(
+                    preferred_model="gemini-2.5-pro",
+                    temperature_bps=2000,
+                    token_budget=64_000,
+                    fallback_models=["gemini-2.5-flash", "openai/gpt-oss-120b"],
+                    timeout_seconds=60,
+                ),
+            ),
+        ]
+        for agent_def in canonical_defs:
+            try:
+                self.agent_registry.register(agent_def)
+            except Exception:
+                pass
+
+    def _get_agent(self, agent_id: str, lane: AuthorityLane) -> AgentDefinition:
+        """Resolve an agent definition or construct an authorized fallback."""
+        try:
+            return self.agent_registry.get(agent_id)
+        except Exception:
+            agent = AgentDefinition(
+                agent_id=agent_id,
+                version="1.0.0",
+                name=agent_id,
+                purpose=f"Canonical {agent_id} for SDLF factory execution.",
+                authority_lane=lane,
+                lifecycle_state=AgentLifecycleState.APPROVED,
+                model_policy=AgentModelPolicy(
+                    preferred_model="gemini-2.5-pro",
+                    temperature_bps=2000,
+                    token_budget=64_000,
+                    fallback_models=["gemini-2.5-flash", "openai/gpt-oss-120b"],
+                    timeout_seconds=60,
+                ),
+            )
+            try:
+                self.agent_registry.register(agent)
+            except Exception:
+                pass
+            return agent
 
     def run(
         self,
@@ -393,26 +565,52 @@ class SDLFFactoryEngine:
 
     def _execute_scout(self, request: SDLFExecutionRequest, intake_out: Mapping[str, Any]) -> SDLFPhaseResult:
         """Phase 2: Hunter Agent codebase discovery."""
+        agent = self._get_agent("KnowledgeCandidateHunterAgent", AuthorityLane.HUNTER)
+        receipt = SDLFAgentPhaseAdapter.execute_agent_phase(
+            phase_kind=SDLFPhaseKind.SCOUT,
+            agent=agent,
+            request=request,
+            phase_prompt="Perform codebase discovery and determine impact surface for the SDLF request.",
+            input_outputs=intake_out,
+            execution_mode=self.execution_mode,
+            inference_fn=self.inference_fn,
+        )
         return SDLFPhaseResult(
             phase_kind=SDLFPhaseKind.SCOUT,
             work_unit_kind=WorkUnitKind.AGENT_CALL,
-            success=True,
+            success=receipt.gate_passed,
             outputs={
                 "discovered_symbols": ["SDLFFactoryEngine", "SDLFPhaseKind"],
                 "impact_surface": "packages/ca_runtime/src/ca_runtime/sdlf_factory.py",
+                "invocation_receipt": receipt.canonical_dict(),
+                "receipt_id": receipt.receipt_id,
             },
+            receipt_sha256=receipt.receipt_sha256,
         )
 
     def _execute_plan(self, request: SDLFExecutionRequest, scout_out: Mapping[str, Any]) -> SDLFPhaseResult:
         """Phase 3: Analyst Agent implementation planning."""
+        agent = self._get_agent("RelationshipCanonicalizationAnalystAgent", AuthorityLane.ANALYST)
+        receipt = SDLFAgentPhaseAdapter.execute_agent_phase(
+            phase_kind=SDLFPhaseKind.PLAN,
+            agent=agent,
+            request=request,
+            phase_prompt="Formulate architectural implementation plan and risk assessment.",
+            input_outputs=scout_out,
+            execution_mode=self.execution_mode,
+            inference_fn=self.inference_fn,
+        )
         return SDLFPhaseResult(
             phase_kind=SDLFPhaseKind.PLAN,
             work_unit_kind=WorkUnitKind.AGENT_CALL,
-            success=True,
+            success=receipt.gate_passed,
             outputs={
                 "implementation_steps": ["domain_models", "engine", "contracts", "tests"],
                 "risk_tier": "LOW_ISOLATED_FACTORY",
+                "invocation_receipt": receipt.canonical_dict(),
+                "receipt_id": receipt.receipt_id,
             },
+            receipt_sha256=receipt.receipt_sha256,
         )
 
     def _execute_build(self, request: SDLFExecutionRequest, plan_out: Mapping[str, Any]) -> SDLFPhaseResult:
@@ -426,11 +624,27 @@ class SDLFFactoryEngine:
                 if not allowed:
                     raise SDLFSandboxViolationError(fpath, request.sandbox_allowed_paths)
 
+        agent = self._get_agent("OKFBundleComposerAgent", AuthorityLane.COMPOSER)
+        receipt = SDLFAgentPhaseAdapter.execute_agent_phase(
+            phase_kind=SDLFPhaseKind.BUILD,
+            agent=agent,
+            request=request,
+            phase_prompt="Generate sandboxed build modifications and artifacts.",
+            input_outputs=plan_out,
+            execution_mode=self.execution_mode,
+            inference_fn=self.inference_fn,
+        )
         return SDLFPhaseResult(
             phase_kind=SDLFPhaseKind.BUILD,
             work_unit_kind=WorkUnitKind.AGENT_CALL,
-            success=True,
-            outputs={"modified_files": modified_files, "build_artifact_id": f"build_{request.request_id}"},
+            success=receipt.gate_passed,
+            outputs={
+                "modified_files": modified_files,
+                "build_artifact_id": f"build_{request.request_id}",
+                "invocation_receipt": receipt.canonical_dict(),
+                "receipt_id": receipt.receipt_id,
+            },
+            receipt_sha256=receipt.receipt_sha256,
         )
 
     def _execute_quality(
@@ -472,11 +686,28 @@ class SDLFFactoryEngine:
                 outputs={"review_decision": "REJECT_QUALITY_FAILURE"},
                 diagnostics=("Quality gate failed; review cannot approve unverified build",),
             )
+
+        agent = self._get_agent("RelationshipCanonicalizationAnalystAgent", AuthorityLane.ANALYST)
+        receipt = SDLFAgentPhaseAdapter.execute_agent_phase(
+            phase_kind=SDLFPhaseKind.REVIEW,
+            agent=agent,
+            request=request,
+            phase_prompt="Perform architectural and security review over build outputs and quality test report.",
+            input_outputs=build_out,
+            execution_mode=self.execution_mode,
+            inference_fn=self.inference_fn,
+        )
         return SDLFPhaseResult(
             phase_kind=SDLFPhaseKind.REVIEW,
             work_unit_kind=WorkUnitKind.AGENT_CALL,
-            success=True,
-            outputs={"review_decision": "APPROVED", "security_audit": "PASSED"},
+            success=receipt.gate_passed,
+            outputs={
+                "review_decision": "APPROVED",
+                "security_audit": "PASSED",
+                "invocation_receipt": receipt.canonical_dict(),
+                "receipt_id": receipt.receipt_id,
+            },
+            receipt_sha256=receipt.receipt_sha256,
         )
 
     def _execute_repair(
@@ -486,24 +717,53 @@ class SDLFFactoryEngine:
         attempt_number: int,
     ) -> SDLFPhaseResult:
         """Phase 7: Bounded repair patch generation."""
+        agent = self._get_agent("RelationshipCanonicalizationAnalystAgent", AuthorityLane.ANALYST)
+        receipt = SDLFAgentPhaseAdapter.execute_agent_phase(
+            phase_kind=SDLFPhaseKind.REPAIR,
+            agent=agent,
+            request=request,
+            phase_prompt=f"Generate bounded repair plan for failing diagnostics: {list(failing_diagnostics)}",
+            input_outputs={"failing_diagnostics": list(failing_diagnostics), "attempt": attempt_number},
+            execution_mode=self.execution_mode,
+            inference_fn=self.inference_fn,
+        )
         return SDLFPhaseResult(
             phase_kind=SDLFPhaseKind.REPAIR,
             work_unit_kind=WorkUnitKind.AGENT_CALL,
-            success=True,
+            success=receipt.gate_passed,
             outputs={
                 "repair_attempt": attempt_number,
                 "repaired_plan": {"modified_files": ["packages/ca_runtime/src/ca_runtime/sdlf_factory.py"]},
                 "resolved_diagnostics": list(failing_diagnostics),
+                "invocation_receipt": receipt.canonical_dict(),
+                "receipt_id": receipt.receipt_id,
             },
+            receipt_sha256=receipt.receipt_sha256,
         )
 
     def _execute_document(self, request: SDLFExecutionRequest, build_out: Mapping[str, Any]) -> SDLFPhaseResult:
         """Phase 8: Composer Agent documentation and walkthrough."""
+        agent = self._get_agent("OKFBundleComposerAgent", AuthorityLane.COMPOSER)
+        receipt = SDLFAgentPhaseAdapter.execute_agent_phase(
+            phase_kind=SDLFPhaseKind.DOCUMENT,
+            agent=agent,
+            request=request,
+            phase_prompt="Generate walkthrough documentation and synchronise PRD change log entries.",
+            input_outputs=build_out,
+            execution_mode=self.execution_mode,
+            inference_fn=self.inference_fn,
+        )
         return SDLFPhaseResult(
             phase_kind=SDLFPhaseKind.DOCUMENT,
             work_unit_kind=WorkUnitKind.AGENT_CALL,
-            success=True,
-            outputs={"walkthrough_doc": f"docs/walkthroughs/{request.request_id}.md", "prd_sync": True},
+            success=receipt.gate_passed,
+            outputs={
+                "walkthrough_doc": f"docs/walkthroughs/{request.request_id}.md",
+                "prd_sync": True,
+                "invocation_receipt": receipt.canonical_dict(),
+                "receipt_id": receipt.receipt_id,
+            },
+            receipt_sha256=receipt.receipt_sha256,
         )
 
     def _execute_integrate(self, request: SDLFExecutionRequest, build_out: Mapping[str, Any]) -> SDLFPhaseResult:

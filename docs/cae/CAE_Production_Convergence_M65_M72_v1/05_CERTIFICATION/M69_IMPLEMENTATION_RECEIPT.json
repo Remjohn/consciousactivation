@@ -1,0 +1,44 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M69",
+  "mandate_title": "Evidence-Derived Certification",
+  "phase": "PHASE_05_CERTIFICATION",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T09:19:00Z",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/05_CERTIFICATION/M69_evidence_derived_certification.md"
+  ],
+  "source_symbols_changed": [
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py:CriterionEvaluation (added required_evidence, observed_evidence_refs, reason, trace_digest fields)",
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py:FactoryCertificationRunner._evaluate_criterion (NEW — evidence-derived per-criterion evaluator)",
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py:FactoryCertificationRunner.run_full_certification (replaced unconditional PASS loop with 3-phase evidence-derived evaluation)"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m69_evidence_derived_certification.py"
+  ],
+  "verification_summary": {
+    "m69_tests_passed": 7,
+    "total_bundle_tests_passed": 186,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "verifications_proved": [
+      "Gate 1: Genuine benchmark executions produce 12 PASSED criteria with observed evidence refs and READY disposition",
+      "Gate 2: Missing mandatory reality-contact evidence evaluates strictly to BLOCKED and NOT_READY disposition",
+      "Gate 3: Undefeated adversarial attacks evaluate strictly to FAILED and NOT_READY disposition",
+      "Gate 4: Benchmark failures prevent READY disposition",
+      "Gate 5: Zero unconditional PASSED construction exists in evaluator — all 12 criteria return BLOCKED when inputs are None",
+      "Gate 6: All 12 certification criteria declare explicit non-empty required evidence contracts",
+      "Gate 7 (Countertest): Synthetic SDLF phase results without cryptographic receipts evaluate to FAILED"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}
