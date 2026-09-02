@@ -1,0 +1,43 @@
+agent:
+  agent_id: "CollisionHypothesisComposerAgent"
+  version: "1.0.0"
+  name: "Collision Portfolio Composer"
+  purpose: "Synthesizes evaluated hypotheses into a balanced collision portfolio."
+  authority_lane: "COMPOSER"
+  lifecycle_state: "APPROVED"
+  model_policy:
+    preferred_model: "gemini-2.5-pro"
+    temperature: 0.2
+    token_budget: 128000
+    timeout_seconds: 30.0
+    allowed_tool_choice: "AUTO"
+  prompt_reference:
+    instructions_ref: "instructions.md"
+    cae_md_ref: "CAE.md"
+  skills:
+    - name: "collision_hypothesis_composer"
+      version: "1.0.0"
+      required_maturity: "STABLE"
+  tools: []
+  capabilities:
+    - scope: "CAE_TYPED_OPERATION"
+      mode: "READ_WRITE"
+      target: "compose_hypotheses"
+      approval_required: false
+  hooks: []
+  harness_refs:
+    - "COLLISION_HARNESS_V1"
+  output_contract:
+    contract_id: "hypothesis_portfolio"
+    output_type: "JSON"
+    description: "Composed collision hypothesis portfolio"
+  subagent_policy:
+    allow_subagents: false
+    allowed_subagent_ids: []
+    max_subagents: 0
+    enforce_same_lane: true
+  observability_policy:
+    trace_level: "INFO"
+    log_retention_days: 30
+    include_budget_report: true
+    emit_receipts: true

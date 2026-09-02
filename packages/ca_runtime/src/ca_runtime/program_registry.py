@@ -157,7 +157,7 @@ class ProgramManifest(BaseModel):
     state_machine: Optional[str] = Field(default=None)
 
     lanes: List[str] = Field(default_factory=list, description="Must be a subset of HUNTER, ANALYST, COMPOSER, COMMANDER")
-    agents: List[str] = Field(default_factory=list)
+    agents: List[Any] = Field(default_factory=list, description="Agent names, versioned strings (e.g. Agent@1.0.0), or dicts")
     subagents: List[str] = Field(default_factory=list)
     skills: List[SkillBinding] = Field(default_factory=list)
     operations: List[str] = Field(default_factory=list)
@@ -188,6 +188,55 @@ class ProgramManifest(BaseModel):
                 f"Invalid authority lanes: {invalid}. Permitted: {sorted(CANONICAL_AUTHORITY_LANES)}"
             )
         return lanes
+
+    def get_agent_references(self) -> List[Tuple[str, Optional[str]]]:
+        """Extracts (agent_id, version_or_none) for all declared agents."""
+        refs: List[Tuple[str, Optional[str]]] = []
+        for a in self.agents:
+            if isinstance(a, str):
+                if "@" in a:
+                    aid, aver = a.split("@", 1)
+                    refs.append((aid.strip(), aver.strip()))
+                else:
+                    refs.append((a.strip(), None))
+            elif isinstance(a, dict):
+                aid = a.get("agent_id", a.get("name", ""))
+                aver = a.get("version", a.get("version_requirement", None))
+                refs.append((str(aid).strip(), str(aver).strip() if aver else None))
+        return refs
+
+    def validate_agent_bindings(self, agent_resolver: Optional[Any] = None) -> Dict[str, Any]:
+        """Validates all referenced agents against the canonical AgentRegistry.
+        
+        Enforces:
+        1. Referenced agent exists in registry.
+        2. Referenced agent is in APPROVED or ACTIVE lifecycle state.
+        3. Referenced agent's Authority Lane is included in the program's declared lanes.
+        """
+        from ca_runtime.agent_registry import (
+            AgentLifecycleState,
+            AgentNotFoundError,
+            AgentLifecycleViolationError,
+            AgentLaneMismatchError,
+            get_agent_resolver,
+        )
+
+        resolver = agent_resolver or get_agent_resolver()
+        validated_agents: Dict[str, Any] = {}
+
+        for aid, aver in self.get_agent_references():
+            if not aid:
+                continue
+            agent_def = resolver.resolve(aid, version=aver, min_lifecycle=AgentLifecycleState.APPROVED)
+            if agent_def.authority_lane.value not in self.lanes:
+                raise AgentLaneMismatchError(
+                    agent_def.agent_id,
+                    agent_def.authority_lane.value,
+                    f"Program declared lanes: {self.lanes}",
+                )
+            validated_agents[f"{aid}@{agent_def.version}"] = agent_def
+
+        return validated_agents
 
 
 class ProgramPackage(BaseModel):

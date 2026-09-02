@@ -1,0 +1,45 @@
+agent:
+  agent_id: "MatrixOfEdgingAnalystAgent"
+  version: "1.0.0"
+  name: "Matrix of Edging Collision Analyst"
+  purpose: "Performs adversarial falsification and Matrix of Edging evaluation of candidate collision hypotheses."
+  authority_lane: "ANALYST"
+  lifecycle_state: "APPROVED"
+  model_policy:
+    preferred_model: "gemini-2.5-pro"
+    temperature: 0.1
+    token_budget: 128000
+    timeout_seconds: 30.0
+    allowed_tool_choice: "AUTO"
+  prompt_reference:
+    instructions_ref: "instructions.md"
+    cae_md_ref: "CAE.md"
+  skills:
+    - name: "matrix_of_edging_evaluator"
+      version: "1.0.0"
+      required_maturity: "STABLE"
+  tools:
+    - "relational_query"
+  capabilities:
+    - scope: "CAE_TYPED_OPERATION"
+      mode: "READ_ONLY"
+      target: "evaluate_matrix_of_edging"
+      approval_required: false
+  hooks:
+    - "falsification_gate_check"
+  harness_refs:
+    - "COLLISION_HARNESS_V1"
+  output_contract:
+    contract_id: "collision_analysis_receipt"
+    output_type: "JSON"
+    description: "Evaluated collision analysis receipt"
+  subagent_policy:
+    allow_subagents: false
+    allowed_subagent_ids: []
+    max_subagents: 0
+    enforce_same_lane: true
+  observability_policy:
+    trace_level: "INFO"
+    log_retention_days: 30
+    include_budget_report: true
+    emit_receipts: true

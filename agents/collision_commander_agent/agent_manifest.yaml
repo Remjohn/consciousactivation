@@ -1,0 +1,52 @@
+agent:
+  agent_id: "CollisionCommanderAgent"
+  version: "1.0.0"
+  name: "Collision Discovery Governance Commander"
+  purpose: "Authorizes and governs collision hypothesis portfolios against operator gates."
+  authority_lane: "COMMANDER"
+  lifecycle_state: "APPROVED"
+  model_policy:
+    preferred_model: "gemini-2.5-pro"
+    temperature: 0.1
+    token_budget: 128000
+    timeout_seconds: 45.0
+    allowed_tool_choice: "AUTO"
+  prompt_reference:
+    instructions_ref: "instructions.md"
+    cae_md_ref: "CAE.md"
+  skills:
+    - name: "operator-gate-authorizer"
+      version: "1.0.0"
+      required_maturity: "STABLE"
+  tools: []
+  capabilities:
+    - scope: "CAE_TYPED_OPERATION"
+      mode: "MUTATION_OPERATION"
+      target: "approve_hypothesis"
+      approval_required: true
+    - scope: "CAE_TYPED_OPERATION"
+      mode: "MUTATION_OPERATION"
+      target: "reject_hypothesis"
+      approval_required: false
+    - scope: "POSTGRES_STORAGE"
+      mode: "READ_WRITE"
+      target: "cae.collision_hypothesis"
+      approval_required: false
+  hooks:
+    - "anti_merge_boundary_check"
+  harness_refs:
+    - "COLLISION_HARNESS_V1"
+  output_contract:
+    contract_id: "collision_decision_receipt"
+    output_type: "JSON"
+    description: "Ratified collision portfolio decision receipt"
+  subagent_policy:
+    allow_subagents: false
+    allowed_subagent_ids: []
+    max_subagents: 0
+    enforce_same_lane: true
+  observability_policy:
+    trace_level: "INFO"
+    log_retention_days: 30
+    include_budget_report: true
+    emit_receipts: true
