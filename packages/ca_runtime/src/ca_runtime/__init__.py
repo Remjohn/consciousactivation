@@ -248,6 +248,22 @@ from .bounded_repair import (
     RepairFailureClassification,
     RepairSessionCorruptedError,
 )
+from .standalone_session_runtime import (
+    AgentSessionError,
+    AgentSessionReceipt,
+    AgentSessionRecord,
+    AgentSessionRuntime,
+    AgentSessionScope,
+    SessionAuthorizationRequiredError,
+    SessionCanonicalWriteBlockedError,
+    SessionContextLeakError,
+    SessionLifecycleState,
+    SessionLifecycleViolationError,
+    SessionNotFoundError,
+    SessionPurpose,
+    SessionScopeViolationError,
+    SessionToolEscalationError,
+)
 from .harness_loader import (
     HarnessBindingAdapter,
     HarnessBindingProvenance,
@@ -1149,6 +1165,20 @@ __all__ = [
     "RepairContractDriftError",
     "RepairFailureClassification",
     "RepairSessionCorruptedError",
+    "AgentSessionError",
+    "AgentSessionReceipt",
+    "AgentSessionRecord",
+    "AgentSessionRuntime",
+    "AgentSessionScope",
+    "SessionAuthorizationRequiredError",
+    "SessionCanonicalWriteBlockedError",
+    "SessionContextLeakError",
+    "SessionLifecycleState",
+    "SessionLifecycleViolationError",
+    "SessionNotFoundError",
+    "SessionPurpose",
+    "SessionScopeViolationError",
+    "SessionToolEscalationError",
 ]
 
 __version__ = "0.1.0.dev1"
