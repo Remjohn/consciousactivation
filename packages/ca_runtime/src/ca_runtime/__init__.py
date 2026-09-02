@@ -186,6 +186,8 @@ from .context_capsule import (
     ContextPrecedenceConflictError,
     ContextPrecedenceLayer,
     ForbiddenContextError,
+    HierarchicalContextChain,
+    HierarchicalContextResolver,
     JITContextCapsule,
     JITContextCompiler,
     MissingContextError,
@@ -195,6 +197,7 @@ from .context_capsule import (
     SkillMaturity,
     SkillMaturityViolationError,
     SkillPackageRef,
+    StateContextRefreshRecord,
     estimate_tokens,
 )
 from .harness_loader import (
@@ -1055,6 +1058,9 @@ __all__ = [
     "PackageDriftError",
     "PackageManifestValidationError",
     "PackageQuarantinedError",
+    "HierarchicalContextChain",
+    "HierarchicalContextResolver",
+    "StateContextRefreshRecord",
 ]
 
 __version__ = "0.1.0.dev1"

@@ -1,0 +1,50 @@
+{
+  "receipt_id": "cae.mandate.receipt.m51@1.0.0",
+  "mandate_id": "CAE-M51",
+  "title": "Hierarchical Portable CAE.md Resolution",
+  "phase": "PHASE 5 — AGENT EXECUTION FOUNDATION",
+  "parallel_group": "P5-B",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T06:02:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "statem_contract_ref": "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_higher_authority_override_protection": "VERIFIED (Lower local CAE.md attempting to permit synthetic evidence, bypass operator gates, or mutate database raises ContextPrecedenceConflictError)",
+    "gate_2_missing_optional_layers_inherit_safely": "VERIFIED (Missing intermediate workspace or program CAE.md layers inherit higher authority without failure)",
+    "gate_3_inapplicable_rules_excluded_with_reason": "VERIFIED (Phase-mismatched or prior-state rules are excluded with INAPPLICABLE_PHASE)",
+    "gate_4_hash_addressed_and_reproducible_chain": "VERIFIED (Repeated resolution of identical context hierarchy yields byte-identical hierarchy_sha256)",
+    "gate_5_explicit_budget_limits_enforced": "VERIFIED (Items exceeding total token budget are excluded with BUDGET_EXCEEDED)",
+    "gate_6_state_entry_context_refresh": "VERIFIED (State transition triggers refresh_state_context creating a refreshed context capsule)",
+    "gate_7_refresh_record_audit_lineage": "VERIFIED (StateContextRefreshRecord captures source state, target state, included refs, excluded refs, and new hash)",
+    "gate_8_stale_context_rejected_after_transition": "VERIFIED (Prior-state rules do not contaminate new target-state capsule)"
+  },
+  "false_proof_defenses": {
+    "malicious_child_override_attack": "BLOCKED (Child CAE.md injecting forbidden permission strings is blocked before inclusion)",
+    "sibling_resolution_order_invariance": "BLOCKED (Precedence is governed strictly by layer order, not file read or declaration order)"
+  },
+  "concrete_trace_demonstrated": {
+    "ancestry_tree": "Global -> Program (research_canonicalization_program) -> Agent (ResearchCommanderAgent) -> Phase (CANONICAL_ADJUDICATION)",
+    "state_transition": "CANDIDATE_EXTRACTION -> CANONICAL_ADJUDICATION",
+    "refresh_record_id": "run_e2e_trace_51",
+    "resulting_context_hash": "VERIFIED",
+    "gate_status": "PASSED"
+  },
+  "test_evidence": {
+    "suite_m51_and_capsule": "40/40 passed in 2.77s",
+    "suite_regression": "32/32 passed in 4.43s"
+  },
+  "limitations": [
+    "Model Policy & Tool Gating will be hardened in Mandate M52",
+    "Program-Agent Phase Binding Compiler will be formalized in Mandate M53"
+  ]
+}

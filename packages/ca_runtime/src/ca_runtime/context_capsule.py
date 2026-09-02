@@ -1025,3 +1025,350 @@ class JITContextCompiler:
             capsule_sha256=capsule_digest,
             assembled_at=capsule_core["assembled_at"],
         )
+
+
+# ---------------------------------------------------------------------------
+# Hierarchical Context Chain & Resolver (Mandate M51)
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True, slots=True)
+class HierarchicalContextChain:
+    """Resolved hierarchical context chain across global, workspace, program, agent, and phase boundaries."""
+    chain_id: str
+    workspace_id: UUID
+    lane: AuthorityLane
+    agent_id: str
+    included_items: Tuple[ContextItem, ...]
+    exclusion_trace: Tuple[ContextExclusionRecord, ...]
+    hierarchy_sha256: str
+    precedence_valid: bool
+    resolved_at: str
+
+    def canonical_dict(self) -> Dict[str, Any]:
+        return {
+            "chain_id": self.chain_id,
+            "workspace_id": str(self.workspace_id),
+            "lane": self.lane.value,
+            "agent_id": self.agent_id,
+            "included_items": [item.canonical_dict() for item in self.included_items],
+            "exclusion_trace": [e.canonical_dict() for e in self.exclusion_trace],
+            "hierarchy_sha256": self.hierarchy_sha256,
+            "precedence_valid": self.precedence_valid,
+            "resolved_at": self.resolved_at,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class StateContextRefreshRecord:
+    """StateM-compliant record of context refresh across a state/phase boundary."""
+    run_id: str
+    source_state: str
+    target_state: str
+    included_refs: Tuple[str, ...]
+    excluded_refs: Tuple[ContextExclusionRecord, ...]
+    resulting_context_hash: str
+    refreshed_at: str
+
+    def canonical_dict(self) -> Dict[str, Any]:
+        return {
+            "run_id": self.run_id,
+            "source_state": self.source_state,
+            "target_state": self.target_state,
+            "included_refs": list(self.included_refs),
+            "excluded_refs": [e.canonical_dict() for e in self.excluded_refs],
+            "resulting_context_hash": self.resulting_context_hash,
+            "refreshed_at": self.refreshed_at,
+        }
+
+
+class HierarchicalContextResolver:
+    """Resolves hierarchical CAE.md context ancestry and validates non-negotiable precedence.
+    
+    Governed by Mandate M51 and 00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md.
+    
+    Enforces:
+    1. Precedence Hierarchy:
+       Global Constitutions > Workspace/Tenant Governance > Program Policy > Agent CAE.md > Phase/State Local Context > Agent Instructions > Skills.
+    2. Constitutional Invariant Protection:
+       Lower-level CAE.md files cannot override or relax higher constitutional invariants.
+       Forbidden relaxations (e.g. synthetic evidence permission, unauthorized mutation in HUNTER/ANALYST lane, bypassing operator gates)
+       trigger ContextPrecedenceConflictError.
+    3. StateM Context Refresh:
+       Transitioning between states/phases refreshes phase-local context, excluding rules bound to the source state with INAPPLICABLE_PHASE.
+    """
+    
+    FORBIDDEN_OVERRIDE_PATTERNS: List[Tuple[re.Pattern, str]] = [
+        (re.compile(r"\b(synthetic|fabricated)\s+(evidence|candidate)s?\s+(allowed|permitted|enabled|approved)\b", re.IGNORECASE), "Synthetic evidence allowance is forbidden by CAE Civil Code"),
+        (re.compile(r"\b(skip|bypass|disable|override)\s+(operator|human)\s+(gate|approval|ratification)\b", re.IGNORECASE), "Operator gate bypass is forbidden by CAE Civil Code"),
+        (re.compile(r"\b(allow|grant|enable)\s+(direct\s+)?(sql\s+)?(mutation|write)\s+for\s+(hunter|analyst)\b", re.IGNORECASE), "Mutation grants for Hunter/Analyst lanes are forbidden by Authority Lane Governance"),
+    ]
+
+    @classmethod
+    def validate_precedence(cls, lower_content: str, lower_ref: str, higher_ref: str = "CAE_CIVIL_CODE") -> None:
+        """Inspects lower-level context content to ensure it does not attempt to violate higher invariants."""
+        for pattern, invariant_msg in cls.FORBIDDEN_OVERRIDE_PATTERNS:
+            if pattern.search(lower_content):
+                raise ContextPrecedenceConflictError(
+                    lower_ref=lower_ref,
+                    higher_ref=higher_ref,
+                    invariant=invariant_msg,
+                )
+
+    @classmethod
+    def resolve_ancestry_chain(
+        cls,
+        *,
+        workspace_id: UUID,
+        lane: AuthorityLane,
+        agent_id: str,
+        global_constitutions: Sequence[Tuple[str, str, str]] = (),  # (id, ref, text)
+        workspace_cae_md: Optional[Tuple[str, str]] = None,  # (ref, text)
+        program_cae_md: Optional[Tuple[str, str]] = None,  # (ref, text)
+        agent_cae_md: Optional[Tuple[str, str]] = None,  # (ref, text)
+        phase_cae_md: Optional[Tuple[str, str]] = None,  # (ref, text)
+        agent_instructions: Optional[Tuple[str, str]] = None,  # (ref, text)
+        skills: Sequence[Tuple[SkillPackageRef, str]] = (),
+        total_token_budget: int = 128_000,
+        production_mode: bool = False,
+    ) -> HierarchicalContextChain:
+        """Resolves the complete hierarchical context chain in deterministic order."""
+        included_items: List[ContextItem] = []
+        exclusion_records: List[ContextExclusionRecord] = []
+        consumed_tokens = 0
+
+        # Validate Precedence Overrides before inclusion
+        if workspace_cae_md:
+            cls.validate_precedence(workspace_cae_md[1], workspace_cae_md[0], "CAE_GLOBAL_CONSTITUTION")
+        if program_cae_md:
+            cls.validate_precedence(program_cae_md[1], program_cae_md[0], "CAE_GLOBAL_CONSTITUTION")
+        if agent_cae_md:
+            cls.validate_precedence(agent_cae_md[1], agent_cae_md[0], "CAE_PROGRAM_GOVERNANCE")
+        if phase_cae_md:
+            cls.validate_precedence(phase_cae_md[1], phase_cae_md[0], "CAE_AGENT_GOVERNANCE")
+        if agent_instructions:
+            cls.validate_precedence(agent_instructions[1], agent_instructions[0], "CAE_AGENT_GOVERNANCE")
+
+        # Helper to check budget
+        def _try_add(item: ContextItem) -> bool:
+            nonlocal consumed_tokens
+            if consumed_tokens + item.token_count > total_token_budget:
+                exclusion_records.append(
+                    ContextExclusionRecord(
+                        context_id=item.context_id,
+                        layer=item.layer,
+                        source_ref=item.source_ref,
+                        reason=ContextExclusionReason.BUDGET_EXCEEDED,
+                        justification=f"Item exceeds remaining token budget ({total_token_budget - consumed_tokens} remaining, requires {item.token_count})",
+                        attempted_token_count=item.token_count,
+                    )
+                )
+                return False
+            included_items.append(item)
+            consumed_tokens += item.token_count
+            return True
+
+        # 1. Global Constitutions (Precedence 1)
+        for c_id, s_ref, c_text in global_constitutions:
+            item = ContextItem.create(
+                context_id=c_id,
+                layer=ContextPrecedenceLayer.CAE_CONSTITUTION,
+                source_ref=s_ref,
+                content=c_text,
+                inclusion_reason="Global CAE Constitution invariant",
+            )
+            _try_add(item)
+
+        # 2. Workspace / Tenant Governance (Precedence 2)
+        if workspace_cae_md:
+            s_ref, w_text = workspace_cae_md
+            item = ContextItem.create(
+                context_id="workspace_cae_governance",
+                layer=ContextPrecedenceLayer.OPERATOR_AUTHORIZATION,
+                source_ref=s_ref,
+                content=w_text,
+                inclusion_reason=f"Workspace '{workspace_id}' tenancy governance",
+            )
+            _try_add(item)
+
+        # 3. Program / Harness Policy (Precedence 3)
+        if program_cae_md:
+            s_ref, p_text = program_cae_md
+            item = ContextItem.create(
+                context_id="program_cae_governance",
+                layer=ContextPrecedenceLayer.PROGRAM_HARNESS_POLICY,
+                source_ref=s_ref,
+                content=p_text,
+                inclusion_reason="Program and Harness operational governance",
+            )
+            _try_add(item)
+
+        # 4. Agent Package CAE.md (Precedence 4)
+        if agent_cae_md:
+            s_ref, a_text = agent_cae_md
+            item = ContextItem.create(
+                context_id=f"agent_cae_governance_{agent_id}",
+                layer=ContextPrecedenceLayer.LOCAL_GOVERNANCE,
+                source_ref=s_ref,
+                content=a_text,
+                inclusion_reason=f"Agent '{agent_id}' local governance constraints",
+            )
+            _try_add(item)
+
+        # 5. Phase / State Local Context (Precedence 4 / Local)
+        if phase_cae_md:
+            s_ref, ph_text = phase_cae_md
+            item = ContextItem.create(
+                context_id="phase_cae_governance",
+                layer=ContextPrecedenceLayer.LOCAL_GOVERNANCE,
+                source_ref=s_ref,
+                content=ph_text,
+                inclusion_reason="Active state/phase local context",
+            )
+            _try_add(item)
+
+        # 6. Agent Instructions (Precedence 5)
+        if agent_instructions:
+            s_ref, inst_text = agent_instructions
+            item = ContextItem.create(
+                context_id=f"agent_instructions_{agent_id}",
+                layer=ContextPrecedenceLayer.AGENT_INSTRUCTIONS,
+                source_ref=s_ref,
+                content=inst_text,
+                inclusion_reason=f"Role behavioral instructions for agent '{agent_id}'",
+            )
+            _try_add(item)
+
+        # 7. Flat Skills (Precedence 6)
+        for s_ref_obj, s_procedure_text in skills:
+            if production_mode and s_ref_obj.maturity == SkillMaturity.DRAFT:
+                exclusion_records.append(
+                    ContextExclusionRecord(
+                        context_id=s_ref_obj.skill_id,
+                        layer=ContextPrecedenceLayer.SKILL_PROCEDURE,
+                        source_ref=s_ref_obj.procedure_ref,
+                        reason=ContextExclusionReason.UNCERTIFIED_SKILL,
+                        justification=f"DRAFT skill '{s_ref_obj.skill_id}' is blocked from production JIT capsule",
+                        attempted_token_count=estimate_tokens(s_procedure_text),
+                    )
+                )
+                raise SkillMaturityViolationError(s_ref_obj.skill_id, s_ref_obj.maturity)
+
+            item = ContextItem.create(
+                context_id=f"skill_{s_ref_obj.skill_id}",
+                layer=ContextPrecedenceLayer.SKILL_PROCEDURE,
+                source_ref=s_ref_obj.procedure_ref,
+                content=s_procedure_text,
+                inclusion_reason=f"Flat passive Canonical Skill '{s_ref_obj.skill_id}' v{s_ref_obj.version}",
+            )
+            _try_add(item)
+
+        # Deterministic sorting by layer precedence
+        sorted_included = sorted(included_items, key=lambda x: x.layer.value)
+
+        # Compute deterministic composite SHA-256 for the hierarchy
+        hierarchy_payload = {
+            "workspace_id": str(workspace_id),
+            "lane": lane.value,
+            "agent_id": agent_id,
+            "included_items": [item.canonical_dict() for item in sorted_included],
+            "exclusion_trace": [e.canonical_dict() for e in exclusion_records],
+        }
+        hierarchy_sha = canonical_sha256(hierarchy_payload)
+        chain_id = f"ctx_chain_{hierarchy_sha[:24]}"
+
+        return HierarchicalContextChain(
+            chain_id=chain_id,
+            workspace_id=workspace_id,
+            lane=lane,
+            agent_id=agent_id,
+            included_items=tuple(sorted_included),
+            exclusion_trace=tuple(exclusion_records),
+            hierarchy_sha256=hierarchy_sha,
+            precedence_valid=True,
+            resolved_at=utc_now_rfc3339(),
+        )
+
+    @classmethod
+    def refresh_state_context(
+        cls,
+        *,
+        run_id: str,
+        source_state: str,
+        target_state: str,
+        workspace_id: UUID,
+        lane: AuthorityLane,
+        actor_id: str,
+        program_id: str,
+        harness_id: str,
+        agent_id: str,
+        global_constitutions: Sequence[Tuple[str, str, str]] = (),
+        program_cae_md: Optional[Tuple[str, str]] = None,
+        agent_cae_md: Optional[Tuple[str, str]] = None,
+        target_phase_cae_md: Optional[Tuple[str, str]] = None,
+        prior_state_context_refs: Sequence[Tuple[str, str]] = (),  # (context_id, reason)
+        agent_instructions: Optional[Tuple[str, str]] = None,
+        skills: Sequence[Tuple[SkillPackageRef, str]] = (),
+        production_mode: bool = False,
+    ) -> Tuple[JITContextCapsule, StateContextRefreshRecord]:
+        """Refreshes context at a StateM state/phase transition boundary, recording inclusions/exclusions."""
+        # 1. Resolve hierarchy for target state
+        chain = cls.resolve_ancestry_chain(
+            workspace_id=workspace_id,
+            lane=lane,
+            agent_id=agent_id,
+            global_constitutions=global_constitutions,
+            program_cae_md=program_cae_md,
+            agent_cae_md=agent_cae_md,
+            phase_cae_md=target_phase_cae_md,
+            agent_instructions=agent_instructions,
+            skills=skills,
+            production_mode=production_mode,
+        )
+
+        # 2. Track excluded prior state context
+        excluded_prior_records: List[ContextExclusionRecord] = list(chain.exclusion_trace)
+        for ctx_id, s_ref in prior_state_context_refs:
+            excluded_prior_records.append(
+                ContextExclusionRecord(
+                    context_id=ctx_id,
+                    layer=ContextPrecedenceLayer.LOCAL_GOVERNANCE,
+                    source_ref=s_ref,
+                    reason=ContextExclusionReason.INAPPLICABLE_PHASE,
+                    justification=f"Context from prior state '{source_state}' is inapplicable in target state '{target_state}'",
+                    attempted_token_count=0,
+                )
+            )
+
+        # 3. Assemble target JITContextCapsule
+        policies: List[Tuple[str, str, str]] = []
+        if program_cae_md:
+            policies.append(("program_cae_governance", program_cae_md[0], program_cae_md[1]))
+        if target_phase_cae_md:
+            policies.append(("phase_cae_governance", target_phase_cae_md[0], target_phase_cae_md[1]))
+
+        capsule = JITContextCompiler.assemble(
+            workspace_id=workspace_id,
+            lane=lane,
+            actor_id=actor_id,
+            program_id=program_id,
+            harness_id=harness_id,
+            agent_id=agent_id,
+            constitutions=global_constitutions,
+            program_harness_policies=policies,
+            local_governance_cae_md=agent_cae_md,
+            agent_instructions=agent_instructions,
+            skills=skills,
+            production_mode=production_mode,
+        )
+
+        refresh_record = StateContextRefreshRecord(
+            run_id=run_id,
+            source_state=source_state,
+            target_state=target_state,
+            included_refs=tuple(item.source_ref for item in chain.included_items),
+            excluded_refs=tuple(excluded_prior_records),
+            resulting_context_hash=capsule.capsule_sha256,
+            refreshed_at=utc_now_rfc3339(),
+        )
+
+        return capsule, refresh_record
