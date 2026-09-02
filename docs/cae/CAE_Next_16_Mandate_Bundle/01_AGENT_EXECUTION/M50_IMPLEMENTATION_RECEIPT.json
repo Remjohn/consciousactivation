@@ -1,0 +1,49 @@
+{
+  "receipt_id": "cae.mandate.receipt.m50@1.0.0",
+  "mandate_id": "CAE-M50",
+  "title": "Compiled Agent Package Contract",
+  "phase": "PHASE 5 — AGENT EXECUTION FOUNDATION",
+  "parallel_group": "P5-A",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T05:57:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py",
+    "tests/cae/test_jit_context_capsule.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_missing_required_constituents": "VERIFIED (Missing CAE.md or instructions.md causes deterministic failure during compilation)",
+    "gate_2_constituent_changes_change_package_identity": "VERIFIED (Constituent changes produce new package_sha256 and trigger PackageDriftError on integrity check)",
+    "gate_3_uncertified_skills_blocked_in_production": "VERIFIED (DRAFT skills raise SkillMaturityViolationError when production_mode=True)",
+    "gate_4_nested_skill_subagent_violations_rejected": "VERIFIED (Nested skills/subagents in skill packages raise ContextNestingViolationError)",
+    "gate_5_same_package_inputs_produce_same_hash": "VERIFIED (Recompiling unchanged package produces byte-identical package_sha256 and component manifest)"
+  },
+  "false_proof_defenses": {
+    "constituent_removal_after_compilation": "BLOCKED (Deleting CAE.md after compilation triggers PackageDriftError reporting missing constituent)",
+    "skill_tampering_after_compilation": "BLOCKED (Modifying SKILL.md after compilation triggers drift detection reporting modified file)",
+    "quarantine_invalidation": "BLOCKED (Quarantining a package immediately fails closed on verify_integrity() with PackageQuarantinedError)",
+    "prohibited_skill_nesting_injection": "BLOCKED (Injecting nested skill directory fails compilation immediately with ContextNestingViolationError)"
+  },
+  "concrete_trace_demonstrated": {
+    "agent_package": "agents/research_commander_agent",
+    "compiled_package_sha256": "VERIFIED",
+    "component_hashes_manifest": "VERIFIED",
+    "jit_context_capsule_sha256": "VERIFIED",
+    "typed_output_contract": "research_canonicalization_receipt",
+    "gate_status": "PASSED"
+  },
+  "test_evidence": {
+    "suite_m50_and_capsule": "31/31 passed in 3.36s",
+    "suite_regression": "32/32 passed in 5.47s"
+  },
+  "limitations": [
+    "Hierarchical portable CAE.md ancestry resolution across workspaces will be formalized in Mandate M51",
+    "Model Policy & Tool Gating will be hardened in Mandate M52"
+  ]
+}

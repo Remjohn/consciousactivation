@@ -189,6 +189,9 @@ from .context_capsule import (
     JITContextCapsule,
     JITContextCompiler,
     MissingContextError,
+    PackageDriftError,
+    PackageManifestValidationError,
+    PackageQuarantinedError,
     SkillMaturity,
     SkillMaturityViolationError,
     SkillPackageRef,
@@ -1049,6 +1052,9 @@ __all__ = [
     "get_agent_registry",
     "get_agent_resolver",
     "reset_global_agent_registry",
+    "PackageDriftError",
+    "PackageManifestValidationError",
+    "PackageQuarantinedError",
 ]
 
 __version__ = "0.1.0.dev1"

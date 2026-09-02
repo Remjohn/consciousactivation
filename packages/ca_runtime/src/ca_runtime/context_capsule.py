@@ -177,6 +177,42 @@ class ContextPrecedenceConflictError(ContextCapsuleError):
         )
 
 
+class PackageDriftError(ContextCapsuleError):
+    """Raised when on-disk package files differ from the compiled component-hash manifest."""
+
+    def __init__(self, agent_id: str, drift_details: Dict[str, Any]):
+        super().__init__(
+            f"Agent package '{agent_id}' has drifted from its compiled manifest: "
+            f"{len(drift_details.get('modified', []))} modified, "
+            f"{len(drift_details.get('missing', []))} missing, "
+            f"{len(drift_details.get('added', []))} added",
+            reason_code="PACKAGE_DRIFT",
+            details={"agent_id": agent_id, **drift_details},
+        )
+
+
+class PackageQuarantinedError(ContextCapsuleError):
+    """Raised when an agent package has been placed in quarantine and cannot be used."""
+
+    def __init__(self, agent_id: str, reason: str):
+        super().__init__(
+            f"Agent package '{agent_id}' is quarantined: {reason}",
+            reason_code="PACKAGE_QUARANTINED",
+            details={"agent_id": agent_id, "quarantine_reason": reason},
+        )
+
+
+class PackageManifestValidationError(ContextCapsuleError):
+    """Raised when agent_manifest.yaml or package metadata violates constitutional invariants."""
+
+    def __init__(self, agent_id: str, reason: str):
+        super().__init__(
+            f"Agent package manifest validation failed for '{agent_id}': {reason}",
+            reason_code="PACKAGE_MANIFEST_VALIDATION",
+            details={"agent_id": agent_id, "reason": reason},
+        )
+
+
 # ---------------------------------------------------------------------------
 # Data Models
 # ---------------------------------------------------------------------------
@@ -348,6 +384,10 @@ class CompiledAgentPackage:
     evals: Tuple[str, ...]
     package_sha256: str
     compiled_at: str
+    component_hashes: Dict[str, str] = field(default_factory=dict)
+    is_quarantined: bool = False
+    quarantine_reason: Optional[str] = None
+    quarantined_at: Optional[str] = None
 
     def canonical_dict(self) -> Dict[str, Any]:
         return {
@@ -365,9 +405,161 @@ class CompiledAgentPackage:
             "hooks": list(sorted(self.hooks)),
             "extensions": list(sorted(self.extensions)),
             "evals": list(sorted(self.evals)),
+            "component_hashes": dict(sorted(self.component_hashes.items())),
+            "is_quarantined": self.is_quarantined,
+            "quarantine_reason": self.quarantine_reason,
+            "quarantined_at": self.quarantined_at,
             "package_sha256": self.package_sha256,
             "compiled_at": self.compiled_at,
         }
+
+    def detect_drift(self, package_root: Optional[Path] = None) -> Tuple[bool, Dict[str, Any]]:
+        """Detects whether on-disk files differ from the compiled component_hashes manifest.
+        
+        Returns (has_drift, drift_details) where drift_details lists:
+        - modified: files whose sha256 changed
+        - missing: files present in manifest but missing on disk
+        - added: new files present on disk but not in manifest
+        """
+        root = package_root or Path(self.package_root)
+        if not root.exists() or not root.is_dir():
+            return True, {
+                "error": f"Package root directory does not exist: {root}",
+                "modified": [],
+                "missing": list(self.component_hashes.keys()),
+                "added": [],
+                "has_drift": True,
+            }
+
+        current_hashes: Dict[str, str] = {}
+        for file_path in sorted(root.rglob("*")):
+            if file_path.is_file():
+                if any(part.startswith(".") or part == "__pycache__" for part in file_path.parts):
+                    continue
+                rel_path = file_path.relative_to(root).as_posix()
+                current_hashes[rel_path] = hashlib.sha256(file_path.read_bytes()).hexdigest()
+
+        manifest_keys = set(self.component_hashes.keys())
+        current_keys = set(current_hashes.keys())
+
+        missing = sorted(manifest_keys - current_keys)
+        added = sorted(current_keys - manifest_keys)
+        modified: List[Dict[str, str]] = []
+
+        for common_key in sorted(manifest_keys & current_keys):
+            expected = self.component_hashes[common_key]
+            actual = current_hashes[common_key]
+            if expected != actual:
+                modified.append({
+                    "file": common_key,
+                    "expected_sha256": expected,
+                    "actual_sha256": actual,
+                })
+
+        has_drift = bool(missing or added or modified)
+        return has_drift, {
+            "has_drift": has_drift,
+            "modified": modified,
+            "missing": missing,
+            "added": added,
+            "checked_at": utc_now_rfc3339(),
+        }
+
+    def verify_integrity(self, package_root: Optional[Path] = None) -> None:
+        """Verifies package integrity against on-disk files and checks quarantine state.
+        
+        Raises PackageQuarantinedError if quarantined.
+        Raises PackageDriftError if any drift is detected.
+        """
+        if self.is_quarantined:
+            raise PackageQuarantinedError(self.agent_id, self.quarantine_reason or "Unspecified quarantine")
+
+        has_drift, details = self.detect_drift(package_root)
+        if has_drift:
+            raise PackageDriftError(self.agent_id, details)
+
+    def quarantine(self, reason: str) -> "CompiledAgentPackage":
+        """Returns a new immutable CompiledAgentPackage marked as quarantined."""
+        return CompiledAgentPackage(
+            agent_id=self.agent_id,
+            lane=self.lane,
+            version=self.version,
+            package_root=self.package_root,
+            cae_governance_ref=self.cae_governance_ref,
+            agents_guidance_ref=self.agents_guidance_ref,
+            instructions_ref=self.instructions_ref,
+            skills=self.skills,
+            subagents=self.subagents,
+            capabilities=self.capabilities,
+            tools=self.tools,
+            connections=self.connections,
+            hooks=self.hooks,
+            extensions=self.extensions,
+            evals=self.evals,
+            package_sha256=self.package_sha256,
+            compiled_at=self.compiled_at,
+            component_hashes=dict(self.component_hashes),
+            is_quarantined=True,
+            quarantine_reason=reason,
+            quarantined_at=utc_now_rfc3339(),
+        )
+
+    def inspect(self) -> Dict[str, Any]:
+        """Returns comprehensive inspection metadata including component-hash breakdown."""
+        return {
+            "agent_id": self.agent_id,
+            "lane": self.lane.value,
+            "version": self.version,
+            "package_root": self.package_root,
+            "package_sha256": self.package_sha256,
+            "compiled_at": self.compiled_at,
+            "is_quarantined": self.is_quarantined,
+            "quarantine_reason": self.quarantine_reason,
+            "quarantined_at": self.quarantined_at,
+            "skills": [
+                {
+                    "skill_id": s.skill_id,
+                    "version": s.version,
+                    "maturity": s.maturity.value,
+                    "sha256": s.package_sha256,
+                    "procedure_ref": s.procedure_ref,
+                }
+                for s in self.skills
+            ],
+            "subagents": list(self.subagents),
+            "capabilities": [c.canonical_dict() for c in self.capabilities],
+            "tools": list(self.tools),
+            "hooks": list(self.hooks),
+            "component_hashes": dict(sorted(self.component_hashes.items())),
+            "total_constituents": len(self.component_hashes),
+        }
+
+    def to_inspection_report(self) -> str:
+        """Renders a structured markdown inspection report of the compiled package."""
+        lines = [
+            f"# Compiled Agent Package Inspection: {self.agent_id} (v{self.version})",
+            f"- **Authority Lane:** `{self.lane.value}`",
+            f"- **Package SHA-256:** `{self.package_sha256}`",
+            f"- **Package Root:** `{self.package_root}`",
+            f"- **Compiled At:** `{self.compiled_at}`",
+            f"- **Quarantine Status:** `{'QUARANTINED (' + (self.quarantine_reason or '') + ')' if self.is_quarantined else 'CLEAN'}`",
+            "",
+            "## Constituents & Component Hashes",
+        ]
+        for rel_path, digest in sorted(self.component_hashes.items()):
+            lines.append(f"- `{rel_path}`: `{digest}`")
+
+        lines.append("")
+        lines.append(f"## Bound Skills ({len(self.skills)})")
+        for s in self.skills:
+            lines.append(f"- **{s.skill_id}** (v{s.version}) [{s.maturity.value}] — `{s.package_sha256[:16]}...`")
+
+        lines.append("")
+        lines.append(f"## Bound Capabilities ({len(self.capabilities)})")
+        for c in self.capabilities:
+            lines.append(f"- `{c.capability_id}` ({c.scope.value}:{c.mode.value})")
+
+        return "\n".join(lines)
 
 
 @dataclass(frozen=True, slots=True)
@@ -442,7 +634,7 @@ class AgentPackageCompiler:
         2. Optional AGENTS.md reconciled.
         3. Skills are flat (SKILL.md) and do not contain nested subagents or skills.
         4. In production mode, all skills must be TESTED or STABLE (not DRAFT).
-        5. Computes composite deterministic package hash.
+        5. Computes composite deterministic package hash and component_hashes manifest.
         """
         if not package_root.exists() or not package_root.is_dir():
             raise ContextCapsuleError(f"Agent package root is not a directory: {package_root}")
@@ -524,7 +716,7 @@ class AgentPackageCompiler:
         extensions = _list_dir_names(package_root / "extensions")
         evals = _list_dir_names(package_root / "evals")
 
-        # Compute package composite hash
+        # Compute package composite hash and constituent hashes
         file_hashes: Dict[str, str] = {}
         for file_path in sorted(package_root.rglob("*")):
             if file_path.is_file():
@@ -556,6 +748,7 @@ class AgentPackageCompiler:
             evals=tuple(evals),
             package_sha256=package_sha256,
             compiled_at=utc_now_rfc3339(),
+            component_hashes=file_hashes,
         )
 
 
