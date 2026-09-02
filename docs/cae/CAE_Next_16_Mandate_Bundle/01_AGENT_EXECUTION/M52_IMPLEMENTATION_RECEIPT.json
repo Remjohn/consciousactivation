@@ -1,0 +1,51 @@
+{
+  "receipt_id": "cae.mandate.receipt.m52@1.0.0",
+  "mandate_id": "CAE-M52",
+  "title": "Canonical Agent Invocation Contract",
+  "phase": "PHASE 5 — AGENT EXECUTION FOUNDATION",
+  "parallel_group": "P5-C",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T06:20:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "statem_contract_ref": "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m52_canonical_agent_invocation_contract.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m52_canonical_agent_invocation_contract.py",
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py",
+    "tests/cae/test_jit_context_capsule.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_program_owned_agent_call_produces_invocation": "VERIFIED (Compiling program-bound agent produces single typed AgentInvocation with complete provenance)",
+    "gate_2_standalone_session_produces_same_invocation_shape": "VERIFIED (Compiling standalone session agent produces identical AgentInvocation schema and shape)",
+    "gate_3_hashes_captured_in_invocation": "VERIFIED (Prompt, context capsule sha256, compiled package sha256, model id, and invocation sha256 are captured and verified)",
+    "gate_4_tool_action_constraints_travel_with_invocation": "VERIFIED (Allowed tools and forbidden actions travel deterministically with invocation payload)",
+    "gate_5_execution_receipt_emitted_and_hashed": "VERIFIED (AgentInvocationRuntime execution emits cryptographically signed AgentInvocationReceipt linking all causal digests)"
+  },
+  "false_proof_defenses": {
+    "defense_1_invocation_tampering_hash_drift": "BLOCKED (Altered fields or prompt injection causes verify_integrity to fail closed with InvocationIntegrityError)",
+    "defense_2_unauthorized_tool_injection": "BLOCKED (Ungranted tools or forbidden skill actions raise UnauthorizedToolError at compile and runtime)",
+    "defense_3_unauthorized_model_policy_violation": "BLOCKED (Requesting an unapproved model family raises UnauthorizedModelError)",
+    "defense_4_output_contract_violation": "BLOCKED (Unstructured or malformed output failing typed contract schema raises OutputContractViolationError)"
+  },
+  "concrete_trace_demonstrated": {
+    "agent_id": "ResearchSynthesisAgent",
+    "authority_lane": "HUNTER",
+    "pipeline_path": "AgentDefinition -> JITContextCapsule -> AgentInvocation -> AgentInvocationRuntime -> AgentInvocationReceipt",
+    "receipt_id": "rcpt_inv_verified",
+    "gate_status": "PASSED"
+  },
+  "test_evidence": {
+    "suite_phase5": "50/50 passed in 3.38s",
+    "suite_regression": "32/32 passed in 5.77s"
+  },
+  "limitations": [
+    "Program-Agent Phase Binding Compiler and Topology Orchestration will be formalized in Mandate M53",
+    "Multi-agent collaborative session state synchronization will be expanded in Mandate M54"
+  ]
+}

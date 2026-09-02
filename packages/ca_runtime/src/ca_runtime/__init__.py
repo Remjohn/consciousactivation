@@ -200,6 +200,18 @@ from .context_capsule import (
     StateContextRefreshRecord,
     estimate_tokens,
 )
+from .agent_invocation import (
+    AgentInvocation,
+    AgentInvocationCompiler,
+    AgentInvocationError,
+    AgentInvocationReceipt,
+    AgentInvocationRuntime,
+    InvocationBypassError,
+    InvocationIntegrityError,
+    OutputContractViolationError,
+    UnauthorizedModelError,
+    UnauthorizedToolError,
+)
 from .harness_loader import (
     HarnessBindingAdapter,
     HarnessBindingProvenance,
@@ -1061,6 +1073,16 @@ __all__ = [
     "HierarchicalContextChain",
     "HierarchicalContextResolver",
     "StateContextRefreshRecord",
+    "AgentInvocation",
+    "AgentInvocationCompiler",
+    "AgentInvocationError",
+    "AgentInvocationReceipt",
+    "AgentInvocationRuntime",
+    "InvocationBypassError",
+    "InvocationIntegrityError",
+    "OutputContractViolationError",
+    "UnauthorizedModelError",
+    "UnauthorizedToolError",
 ]
 
 __version__ = "0.1.0.dev1"
