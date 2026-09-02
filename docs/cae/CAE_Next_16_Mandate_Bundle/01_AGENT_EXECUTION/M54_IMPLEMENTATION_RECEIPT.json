@@ -1,0 +1,52 @@
+{
+  "receipt_id": "cae.mandate.receipt.m54@1.0.0",
+  "mandate_id": "CAE-M54",
+  "title": "Typed Agent Result + Explicit Gate Engine",
+  "phase": "PHASE 6 — AGENT / PROGRAM EXECUTION CONVERGENCE",
+  "parallel_group": "P6-B",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T06:30:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "statem_contract_ref": "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/agent_result_gates.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m54_typed_agent_result_explicit_gate_engine.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m54_typed_agent_result_explicit_gate_engine.py",
+    "tests/cae/test_m53_program_agent_phase_binding_compiler.py",
+    "tests/cae/test_m52_canonical_agent_invocation_contract.py",
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_invalid_schema_cannot_succeed": "VERIFIED (Unparseable responses or schema-invalid JSON payloads fail closed with SchemaValidationGateError)",
+    "gate_2_missing_required_evidence_refs_cannot_succeed": "VERIFIED (Hallucinated or ungrounded evidence/artifact references fail closed with EvidenceRefGateError)",
+    "gate_3_gate_results_are_individually_visible": "VERIFIED (AgentResultGateEvaluation provides granular, inspectable check details and scores for each gate)",
+    "gate_4_agent_done_text_never_equals_completion": "VERIFIED (Unstructured narrative completion claims raise AgentCompletionClaimRejectedError)",
+    "gate_5_handoff_validator_interoperability": "VERIFIED (TypedAgentResult.to_handoff_payload produces bilateral handoff records validated by HandoffValidator)"
+  },
+  "false_proof_defenses": {
+    "defense_1_arbitrary_json_wrong_schema": "BLOCKED (Arbitrary valid JSON fails schema_conformance and required_fields checks)",
+    "defense_2_fake_artifact_references": "BLOCKED (Fake/ungrounded artifact IDs fail evidence_refs_verifiable check)",
+    "defense_3_plausible_narrative_missing_fields": "BLOCKED (Long explanatory narratives lacking contract keys fail required_fields check)",
+    "defense_4_authority_lane_mutation_attempt": "BLOCKED (Read-only lane agents proposing SQL database mutations fail authority_lane_parity check)"
+  },
+  "concrete_trace_demonstrated": {
+    "pipeline_path": "AgentDefinition -> AgentInvocation -> Model Inference -> AgentResultGateEngine -> TypedAgentResult -> HandoffValidator",
+    "agent_id": "RelationshipCanonicalizationAnalystAgent",
+    "contract_id": "contract:canonical-relationship:v1",
+    "handoff_lifecycle_state": "ACCEPTED",
+    "gate_status": "PASSED"
+  },
+  "test_evidence": {
+    "suite_phase5_and_6": "70/70 passed in 3.40s",
+    "suite_regression": "32/32 passed in 5.62s"
+  },
+  "limitations": [
+    "Bounded Repair Same-Session Retry loops will be implemented in Mandate M55",
+    "Standalone Agent Session Runtime execution boundary will be formalized in Mandate M56"
+  ]
+}

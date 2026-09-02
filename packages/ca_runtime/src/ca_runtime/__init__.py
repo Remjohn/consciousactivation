@@ -224,6 +224,19 @@ from .program_agent_binding import (
     UnresolvedAgentAssignmentError,
     UnresolvedOutputContractError,
 )
+from .agent_result_gates import (
+    AgentCompletionClaimRejectedError,
+    AgentResultGateEngine,
+    AgentResultGateError,
+    AgentResultGateEvaluation,
+    AuthorityGateError,
+    EvidenceRefGateError,
+    GateEvaluationFailedError,
+    IndividualGateCheck,
+    RequiredFieldGateError,
+    SchemaValidationGateError,
+    TypedAgentResult,
+)
 from .harness_loader import (
     HarnessBindingAdapter,
     HarnessBindingProvenance,
@@ -1105,6 +1118,17 @@ __all__ = [
     "ProgramAgentPhaseBindingManifest",
     "UnresolvedAgentAssignmentError",
     "UnresolvedOutputContractError",
+    "AgentCompletionClaimRejectedError",
+    "AgentResultGateEngine",
+    "AgentResultGateError",
+    "AgentResultGateEvaluation",
+    "AuthorityGateError",
+    "EvidenceRefGateError",
+    "GateEvaluationFailedError",
+    "IndividualGateCheck",
+    "RequiredFieldGateError",
+    "SchemaValidationGateError",
+    "TypedAgentResult",
 ]
 
 __version__ = "0.1.0.dev1"
