@@ -237,6 +237,17 @@ from .agent_result_gates import (
     SchemaValidationGateError,
     TypedAgentResult,
 )
+from .bounded_repair import (
+    BoundedRepairError,
+    BoundedRepairRuntimeEngine,
+    BoundedRepairSession,
+    NonRetryableFailureError,
+    RepairAttemptRecord,
+    RepairBudgetExhaustedError,
+    RepairContractDriftError,
+    RepairFailureClassification,
+    RepairSessionCorruptedError,
+)
 from .harness_loader import (
     HarnessBindingAdapter,
     HarnessBindingProvenance,
@@ -1129,6 +1140,15 @@ __all__ = [
     "RequiredFieldGateError",
     "SchemaValidationGateError",
     "TypedAgentResult",
+    "BoundedRepairError",
+    "BoundedRepairRuntimeEngine",
+    "BoundedRepairSession",
+    "NonRetryableFailureError",
+    "RepairAttemptRecord",
+    "RepairBudgetExhaustedError",
+    "RepairContractDriftError",
+    "RepairFailureClassification",
+    "RepairSessionCorruptedError",
 ]
 
 __version__ = "0.1.0.dev1"
