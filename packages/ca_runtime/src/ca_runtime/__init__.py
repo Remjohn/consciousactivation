@@ -723,6 +723,22 @@ from .step_contracts import (
     create_collision_program_step_contracts,
     create_research_canonicalization_step_contracts,
 )
+from .sdlf_factory import (
+    SDLFExecutionRequest,
+    SDLFExecutionTrace,
+    SDLFFactoryEngine,
+    SDLFFactoryError,
+    SDLFOperatorShipDeniedError,
+    SDLFPhaseExecutionError,
+    SDLFPhaseKind,
+    SDLFPhaseResult,
+    SDLFQualityGateFailedError,
+    SDLFRepairExhaustedError,
+    SDLFReviewRejectedError,
+    SDLFSandboxViolationError,
+    build_canonical_sdlf_workflow_ir,
+    create_canonical_sdlf_step_contracts,
+)
 
 
 __all__ = [
@@ -1331,6 +1347,20 @@ __all__ = [
     "UnregisteredStepContractError",
     "create_research_canonicalization_step_contracts",
     "create_collision_program_step_contracts",
+    "SDLFPhaseKind",
+    "SDLFExecutionRequest",
+    "SDLFPhaseResult",
+    "SDLFExecutionTrace",
+    "SDLFFactoryEngine",
+    "SDLFFactoryError",
+    "SDLFPhaseExecutionError",
+    "SDLFQualityGateFailedError",
+    "SDLFReviewRejectedError",
+    "SDLFSandboxViolationError",
+    "SDLFRepairExhaustedError",
+    "SDLFOperatorShipDeniedError",
+    "build_canonical_sdlf_workflow_ir",
+    "create_canonical_sdlf_step_contracts",
 ]
 
 __version__ = "0.1.0.dev1"
