@@ -778,6 +778,16 @@ from .factory_observability import (
     UnknownCommandVerbError,
     UnknownTargetTypeError,
 )
+from .factory_certification import (
+    AdversarialAttackVector,
+    BenchmarkTraceSummary,
+    CertificationCriterion,
+    CertificationResultStatus,
+    CriterionEvaluation,
+    FactoryCertificationReport,
+    FactoryCertificationRunner,
+    ProductionReadinessStatus,
+)
 
 
 __all__ = [
@@ -1435,6 +1445,14 @@ __all__ = [
     "FactoryCommandParser",
     "UnifiedFactoryCommandEngine",
     "ReadOnlyObservabilityViewer",
+    "CertificationCriterion",
+    "CertificationResultStatus",
+    "ProductionReadinessStatus",
+    "CriterionEvaluation",
+    "AdversarialAttackVector",
+    "BenchmarkTraceSummary",
+    "FactoryCertificationReport",
+    "FactoryCertificationRunner",
 ]
 
 __version__ = "0.1.0.dev1"
