@@ -673,6 +673,23 @@ from .workflow_primitives import (
     WorkflowTransitionSemantics,
     WorkUnitKind,
 )
+from .workflow_ir import (
+    ExecutableWorkflowIR,
+    IREdgeType,
+    WorkflowIRBranchTargetMissingError,
+    WorkflowIRCompilationError,
+    WorkflowIRCompiler,
+    WorkflowIRCyclicGraphError,
+    WorkflowIRDiff,
+    WorkflowIRDiffResult,
+    WorkflowIRDuplicateNodeError,
+    WorkflowIREdge,
+    WorkflowIRError,
+    WorkflowIRNode,
+    WorkflowIRNodeNotFoundError,
+    WorkflowIRValidationError,
+    WorkflowIRValidator,
+)
 
 
 __all__ = [
@@ -1237,6 +1254,21 @@ __all__ = [
     "StateRetentionViolationError",
     "UnsupportedPrimitiveError",
     "HumanGateBypassError",
+    "ExecutableWorkflowIR",
+    "WorkflowIRNode",
+    "WorkflowIREdge",
+    "IREdgeType",
+    "WorkflowIRDiffResult",
+    "WorkflowIRValidator",
+    "WorkflowIRDiff",
+    "WorkflowIRCompiler",
+    "WorkflowIRError",
+    "WorkflowIRValidationError",
+    "WorkflowIRCyclicGraphError",
+    "WorkflowIRNodeNotFoundError",
+    "WorkflowIRBranchTargetMissingError",
+    "WorkflowIRDuplicateNodeError",
+    "WorkflowIRCompilationError",
 ]
 
 __version__ = "0.1.0.dev1"
