@@ -760,6 +760,24 @@ from .workflow_isolation import (
     WorkflowIsolationError,
     WorkflowSandboxManager,
 )
+from .factory_observability import (
+    EntityNotFoundError,
+    FactoryCommand,
+    FactoryCommandParser,
+    FactoryCommandResult,
+    FactoryCommandVerb,
+    FactoryFloorSnapshot,
+    FactoryObservabilityError,
+    FactoryTargetType,
+    ObservabilityTenantIsolationError,
+    ReadOnlyObservabilityMutationError,
+    ReadOnlyObservabilityViewer,
+    RunReplayEvent,
+    RunReplayProjection,
+    UnifiedFactoryCommandEngine,
+    UnknownCommandVerbError,
+    UnknownTargetTypeError,
+)
 
 
 __all__ = [
@@ -1401,6 +1419,22 @@ __all__ = [
     "ParallelExecutionReport",
     "WorkflowSandboxManager",
     "ParallelExecutionCoordinator",
+    "FactoryTargetType",
+    "FactoryCommandVerb",
+    "FactoryObservabilityError",
+    "UnknownCommandVerbError",
+    "UnknownTargetTypeError",
+    "ReadOnlyObservabilityMutationError",
+    "ObservabilityTenantIsolationError",
+    "EntityNotFoundError",
+    "FactoryCommand",
+    "FactoryCommandResult",
+    "RunReplayEvent",
+    "RunReplayProjection",
+    "FactoryFloorSnapshot",
+    "FactoryCommandParser",
+    "UnifiedFactoryCommandEngine",
+    "ReadOnlyObservabilityViewer",
 ]
 
 __version__ = "0.1.0.dev1"
