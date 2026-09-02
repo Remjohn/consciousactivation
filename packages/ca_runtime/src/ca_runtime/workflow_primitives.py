@@ -440,6 +440,7 @@ class WorkflowPrimitiveDefinition:
     parallel_branches: Tuple[ParallelBranchDefinition, ...] = ()
     join_condition: Optional[JoinCondition] = None
     human_gate: Optional[HumanGateRequirement] = None
+    timeout_seconds: Optional[int] = None
     transition_semantics: Optional[WorkflowTransitionSemantics] = None
     primitive_sha256: str = field(default="")
 
@@ -477,6 +478,7 @@ class WorkflowPrimitiveDefinition:
             "parallel_branches": [pb.canonical_dict() for pb in self.parallel_branches],
             "join_condition": self.join_condition.canonical_dict() if self.join_condition else None,
             "human_gate": self.human_gate.canonical_dict() if self.human_gate else None,
+            "timeout_seconds": self.timeout_seconds,
             "transition_semantics": self.transition_semantics.canonical_dict() if self.transition_semantics else None,
         }
         return data

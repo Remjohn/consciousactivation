@@ -623,24 +623,28 @@ class WorkflowIRCompiler:
         """Compile raw node/edge mappings into a canonical ExecutableWorkflowIR."""
         ir_nodes: List[WorkflowIRNode] = []
         for n in nodes:
-            prim_kind_str = n.get("primitive_kind", WorkflowPrimitiveKind.SEQUENCE.value)
+            # Parse optional primitive definition
+            prim_def = n.get("primitive_definition")
+            if prim_def is not None and isinstance(prim_def, WorkflowPrimitiveDefinition):
+                parsed_prim = prim_def
+                default_prim_kind = parsed_prim.primitive_kind.value
+                default_wu_kind = parsed_prim.work_unit_kind.value
+            else:
+                parsed_prim = None
+                default_prim_kind = WorkflowPrimitiveKind.SEQUENCE.value
+                default_wu_kind = WorkUnitKind.NOT_APPLICABLE.value
+
+            prim_kind_str = n.get("primitive_kind", default_prim_kind)
             try:
                 prim_kind = WorkflowPrimitiveKind(prim_kind_str)
             except Exception as exc:
                 raise WorkflowIRValidationError(f"Invalid primitive kind '{prim_kind_str}' in node '{n.get('node_id')}'") from exc
 
-            wu_kind_str = n.get("work_unit_kind", WorkUnitKind.NOT_APPLICABLE.value)
+            wu_kind_str = n.get("work_unit_kind", default_wu_kind)
             try:
                 wu_kind = WorkUnitKind(wu_kind_str)
             except Exception as exc:
                 raise WorkflowIRValidationError(f"Invalid work unit kind '{wu_kind_str}' in node '{n.get('node_id')}'") from exc
-
-            # Parse optional primitive definition
-            prim_def = n.get("primitive_definition")
-            if prim_def is not None and isinstance(prim_def, WorkflowPrimitiveDefinition):
-                parsed_prim = prim_def
-            else:
-                parsed_prim = None
 
             raw_boundary = n.get("product_boundary", "ATOMIC_HARNESS_PIPELINE")
             normalized_boundary = PRODUCT_BOUNDARY_NORM.get(raw_boundary, raw_boundary)

@@ -690,6 +690,22 @@ from .workflow_ir import (
     WorkflowIRValidationError,
     WorkflowIRValidator,
 )
+from .workflow_control_flow import (
+    CompiledWorkflowExecutionGraph,
+    ConditionEvaluationError,
+    ControlFlowExecutionSnapshot,
+    ControlFlowSchedulingError,
+    DeterministicControlFlowScheduler,
+    HumanGateLaneViolationError,
+    HumanGateSuspendedError,
+    JoinSynchronizationError,
+    LoopBoundExceededError,
+    OperatorGrantRecord,
+    RoutingDecision,
+    TimeoutExceededError,
+    WorkflowControlFlowCompiler,
+    WorkflowControlFlowError,
+)
 
 
 __all__ = [
@@ -1269,6 +1285,20 @@ __all__ = [
     "WorkflowIRBranchTargetMissingError",
     "WorkflowIRDuplicateNodeError",
     "WorkflowIRCompilationError",
+    "CompiledWorkflowExecutionGraph",
+    "ControlFlowExecutionSnapshot",
+    "RoutingDecision",
+    "OperatorGrantRecord",
+    "DeterministicControlFlowScheduler",
+    "WorkflowControlFlowCompiler",
+    "WorkflowControlFlowError",
+    "ControlFlowSchedulingError",
+    "LoopBoundExceededError",
+    "JoinSynchronizationError",
+    "TimeoutExceededError",
+    "HumanGateSuspendedError",
+    "HumanGateLaneViolationError",
+    "ConditionEvaluationError",
 ]
 
 __version__ = "0.1.0.dev1"
