@@ -739,6 +739,27 @@ from .sdlf_factory import (
     build_canonical_sdlf_workflow_ir,
     create_canonical_sdlf_step_contracts,
 )
+from .workflow_isolation import (
+    ArtifactAttributionMismatchError,
+    ArtifactAttributionRecord,
+    BranchState,
+    CancellationPropagationError,
+    CleanupReceipt,
+    ConcurrentMutationConflictError,
+    IsolationLevel,
+    JoinStrategy,
+    ParallelBranch,
+    ParallelExecutionCoordinator,
+    ParallelExecutionReport,
+    SandboxIsolationPolicy,
+    SandboxPathEscapeError,
+    SandboxRecord,
+    SandboxState,
+    StaleSandboxAccessError,
+    TenantSandboxIsolationViolationError,
+    WorkflowIsolationError,
+    WorkflowSandboxManager,
+)
 
 
 __all__ = [
@@ -1361,6 +1382,25 @@ __all__ = [
     "SDLFOperatorShipDeniedError",
     "build_canonical_sdlf_workflow_ir",
     "create_canonical_sdlf_step_contracts",
+    "IsolationLevel",
+    "SandboxState",
+    "JoinStrategy",
+    "BranchState",
+    "WorkflowIsolationError",
+    "ConcurrentMutationConflictError",
+    "TenantSandboxIsolationViolationError",
+    "SandboxPathEscapeError",
+    "CancellationPropagationError",
+    "ArtifactAttributionMismatchError",
+    "StaleSandboxAccessError",
+    "SandboxIsolationPolicy",
+    "SandboxRecord",
+    "ArtifactAttributionRecord",
+    "ParallelBranch",
+    "CleanupReceipt",
+    "ParallelExecutionReport",
+    "WorkflowSandboxManager",
+    "ParallelExecutionCoordinator",
 ]
 
 __version__ = "0.1.0.dev1"
