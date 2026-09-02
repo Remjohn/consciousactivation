@@ -1,0 +1,73 @@
+{
+  "receipt_id": "cae.mandate.receipt.m53@1.0.0",
+  "mandate_id": "CAE-M53",
+  "title": "Program -> Agent -> Phase Binding Compiler",
+  "phase": "PHASE 6 — AGENT / PROGRAM EXECUTION CONVERGENCE",
+  "parallel_group": "P6-A",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T06:26:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "statem_contract_ref": "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/program_agent_binding.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m53_program_agent_phase_binding_compiler.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m53_program_agent_phase_binding_compiler.py",
+    "tests/cae/test_m52_canonical_agent_invocation_contract.py",
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_every_agent_owned_node_resolves_exactly_one_agent": "VERIFIED (All agent-owned nodes resolve 1-to-1 to registered AgentDefinitions across Research Canonicalization and Script Program)",
+    "gate_2_lane_skill_tool_contract_compatibility_validated": "VERIFIED (Authority Lane parity, skill availability, tool capabilities, and typed output contracts are verified per node)",
+    "gate_3_missing_agent_or_ambiguous_mapping_fails_closed": "VERIFIED (Missing agents raise UnresolvedAgentAssignmentError; un-disambiguated multi-agent matches raise AmbiguousAgentAssignmentError)",
+    "gate_4_runtime_node_stores_binding_identity_and_hash": "VERIFIED (CompiledAgentNodeAssignment captures agent_content_sha256 and deterministic binding_sha256)",
+    "gate_5_evidence_links_to_program_manifest": "VERIFIED (ProgramAgentPhaseBindingManifest captures program_id, program_version, program_manifest_sha256, and state_machine_id)"
+  },
+  "false_proof_defenses": {
+    "defense_1_agent_removed_from_manifest": "BLOCKED (Removing an agent from program manifest raises UnresolvedAgentAssignmentError)",
+    "defense_2_authority_lane_mismatch": "BLOCKED (Assigning a COMPOSER Agent to a HUNTER node raises LaneBindingMismatchError)",
+    "defense_3_incompatible_skill_binding": "BLOCKED (Declaring a skill not granted to the agent raises IncompatibleSkillBindingError)",
+    "defense_4_unresolved_output_contract": "BLOCKED (Agent-owned node without declared or agent-derived output contract raises UnresolvedOutputContractError)"
+  },
+  "proof_matrix_demonstrated": {
+    "programs_verified": [
+      {
+        "program_id": "research_canonicalization_program",
+        "version": "1.0.0",
+        "nodes_bound": 4,
+        "lanes_covered": ["HUNTER", "ANALYST", "COMPOSER", "COMMANDER"],
+        "agents": [
+          "KnowledgeCandidateHunterAgent",
+          "RelationshipCanonicalizationAnalystAgent",
+          "OKFBundleComposerAgent",
+          "ResearchCommanderAgent"
+        ]
+      },
+      {
+        "program_id": "script_program",
+        "version": "1.0.0",
+        "nodes_bound": 4,
+        "lanes_covered": ["HUNTER", "ANALYST", "COMPOSER", "COMMANDER"],
+        "agents": [
+          "ScriptContextHunter",
+          "SemanticQAScriptAnalyst",
+          "ScriptComposerAgent",
+          "ScriptCommanderSupervisor"
+        ]
+      }
+    ],
+    "gate_status": "PASSED"
+  },
+  "test_evidence": {
+    "suite_phase5_and_6": "60/60 passed in 3.68s",
+    "suite_regression": "32/32 passed in 5.63s"
+  },
+  "limitations": [
+    "Typed Agent Result Explicit Gate Engine will be formalized in Mandate M54",
+    "Bounded Repair Same-Session Retry loops will be implemented in Mandate M55"
+  ]
+}

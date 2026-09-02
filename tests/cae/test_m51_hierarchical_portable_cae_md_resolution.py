@@ -153,7 +153,9 @@ def test_gate4_hash_addressed_and_reproducible_chain(sample_workspace_id):
 
     assert chain1.hierarchy_sha256 == chain2.hierarchy_sha256
     assert len(chain1.hierarchy_sha256) == 64
-    assert chain1.canonical_dict() == chain2.canonical_dict()
+    assert [item.canonical_dict() for item in chain1.included_items] == [item.canonical_dict() for item in chain2.included_items]
+    assert [e.canonical_dict() for e in chain1.exclusion_trace] == [e.canonical_dict() for e in chain2.exclusion_trace]
+    assert chain1.precedence_valid == chain2.precedence_valid
 
 
 def test_gate5_explicit_budget_limits_enforced(sample_workspace_id):

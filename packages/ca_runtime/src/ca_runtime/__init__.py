@@ -212,6 +212,18 @@ from .agent_invocation import (
     UnauthorizedModelError,
     UnauthorizedToolError,
 )
+from .program_agent_binding import (
+    AmbiguousAgentAssignmentError,
+    CompiledAgentNodeAssignment,
+    IncompatibleSkillBindingError,
+    IncompatibleToolBindingError,
+    LaneBindingMismatchError,
+    ProgramAgentBindingCompiler,
+    ProgramAgentBindingError,
+    ProgramAgentPhaseBindingManifest,
+    UnresolvedAgentAssignmentError,
+    UnresolvedOutputContractError,
+)
 from .harness_loader import (
     HarnessBindingAdapter,
     HarnessBindingProvenance,
@@ -1083,6 +1095,16 @@ __all__ = [
     "OutputContractViolationError",
     "UnauthorizedModelError",
     "UnauthorizedToolError",
+    "AmbiguousAgentAssignmentError",
+    "CompiledAgentNodeAssignment",
+    "IncompatibleSkillBindingError",
+    "IncompatibleToolBindingError",
+    "LaneBindingMismatchError",
+    "ProgramAgentBindingCompiler",
+    "ProgramAgentBindingError",
+    "ProgramAgentPhaseBindingManifest",
+    "UnresolvedAgentAssignmentError",
+    "UnresolvedOutputContractError",
 ]
 
 __version__ = "0.1.0.dev1"
