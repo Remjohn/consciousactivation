@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Code Forensics Report Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "generated_date",
+    "classes_inspected",
+    "functions_inspected",
+    "line_proofs",
+    "verdict"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "generated_date": { "type": "string" },
+    "classes_inspected": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["class_name", "file_path", "methods", "verified"],
+        "properties": {
+          "class_name": { "type": "string" },
+          "file_path": { "type": "string" },
+          "methods": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "functions_inspected": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["function_name", "file_path", "signature", "verified"],
+        "properties": {
+          "function_name": { "type": "string" },
+          "file_path": { "type": "string" },
+          "signature": { "type": "string" },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "line_proofs": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["claim", "file_path", "line_number_range", "exact_code_snippet", "verified"],
+        "properties": {
+          "claim": { "type": "string" },
+          "file_path": { "type": "string" },
+          "line_number_range": { "type": "string" },
+          "exact_code_snippet": { "type": "string" },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["VERIFIED_GROUND_TRUTH", "PARTIAL_GROUND_TRUTH", "CONTRADICTED_GROUND_TRUTH"]
+    }
+  }
+}

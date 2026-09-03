@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Product Reconstruction Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "product_name",
+    "status",
+    "reconstruction_date",
+    "sources_analyzed",
+    "product_mission",
+    "lineage_breakdown",
+    "capability_pillars",
+    "brownfield_crosswalk",
+    "unresolved_contradictions"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "product_name": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "reconstruction_date": { "type": "string" },
+    "sources_analyzed": { "type": "integer", "enum": [216] },
+    "product_mission": { "type": "string" },
+    "lineage_breakdown": {
+      "type": "object",
+      "required": ["ccp_lineage", "cmf_lineage", "ccf_lineage", "visual_syntax", "runtime_canon"],
+      "properties": {
+        "ccp_lineage": { "type": "string" },
+        "cmf_lineage": { "type": "string" },
+        "ccf_lineage": { "type": "string" },
+        "visual_syntax": { "type": "string" },
+        "runtime_canon": { "type": "string" }
+      }
+    },
+    "capability_pillars": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["pillar_id", "name", "description", "historical_roots", "active_runtime_path"],
+        "properties": {
+          "pillar_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "historical_roots": { "type": "string" },
+          "active_runtime_path": { "type": "string" }
+        }
+      }
+    },
+    "brownfield_crosswalk": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["concept", "historical_origin", "modern_code_path", "fidelity_status"],
+        "properties": {
+          "concept": { "type": "string" },
+          "historical_origin": { "type": "string" },
+          "modern_code_path": { "type": "string" },
+          "fidelity_status": {
+            "type": "string",
+            "enum": ["KNOWN", "INHERITED", "VERIFIED", "PROPOSED", "INFERRED", "MISSING", "CONTRADICTED", "DEPRECATED"]
+          }
+        }
+      }
+    },
+    "unresolved_contradictions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

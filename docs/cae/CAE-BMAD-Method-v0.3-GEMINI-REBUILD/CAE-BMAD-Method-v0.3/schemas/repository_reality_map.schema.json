@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Repository Reality Map Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "generated_date",
+    "root_path",
+    "workspace_directories",
+    "cross_repo_contracts",
+    "orphaned_or_legacy_paths",
+    "hygiene_verdict"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "generated_date": { "type": "string" },
+    "root_path": { "type": "string" },
+    "workspace_directories": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["path", "purpose", "managed_by", "file_count_estimate"],
+        "properties": {
+          "path": { "type": "string" },
+          "purpose": { "type": "string" },
+          "managed_by": { "type": "string" },
+          "file_count_estimate": { "type": "string" }
+        }
+      }
+    },
+    "cross_repo_contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["contract_name", "schema_path", "verified"],
+        "properties": {
+          "contract_name": { "type": "string" },
+          "schema_path": { "type": "string" },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "orphaned_or_legacy_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "hygiene_verdict": {
+      "type": "string",
+      "enum": ["CLEAN", "NEEDS_CLEANUP", "CRITICAL_DRIFT", "GOVERNED"]
+    }
+  }
+}

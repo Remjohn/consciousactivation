@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Decision Ledger Schema",
+  "type": "object",
+  "required": ["version", "decisions"],
+  "properties": {
+    "version": { "type": "string" },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "decision_id",
+          "title",
+          "status",
+          "category",
+          "operating_level",
+          "initiator",
+          "context_and_evidence",
+          "options_considered",
+          "chosen_option",
+          "operator_ratification"
+        ],
+        "properties": {
+          "decision_id": { "type": "string" },
+          "title": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["PROPOSED", "GRILL_ACTIVE", "RATIFIED", "REJECTED", "SUPERSEDED"]
+          },
+          "category": { "type": "string" },
+          "operating_level": { "type": "string" },
+          "initiator": { "type": "string" },
+          "context_and_evidence": { "type": "string" },
+          "options_considered": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "chosen_option": { "type": "string" },
+          "rationale": { "type": "string" },
+          "operator_ratification": {
+            "type": "object",
+            "required": ["ratified", "timestamp"],
+            "properties": {
+              "ratified": { "type": "boolean" },
+              "operator_notes": { "type": "string" },
+              "timestamp": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

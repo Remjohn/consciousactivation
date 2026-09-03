@@ -1,0 +1,38 @@
+code: cae-bmad
+name: "CAE-BMAD"
+description: "CAE-specific brownfield reconstruction and product-development method layered on the real BMad Method"
+default_selected: false
+
+project_knowledge:
+  prompt:
+    - "Where is the canonical CAE research library?"
+    - "Where is the current brownfield reality map?"
+    - "What historical repositories must be preserved?"
+    - "What is the CAE product scope for this initiative?"
+  scope: project
+  default: ".caebmad/research"
+
+research_library:
+  prompt:
+    - "Research library path"
+  scope: project
+  default: ".caebmad/research/CAE_RESEARCH_LIBRARY.yaml"
+
+product_output:
+  prompt:
+    - "CAE planning artifact output path"
+  scope: project
+  default: "docs/cae-bmad"
+
+user_skill_level:
+  prompt:
+    - "How much engineering detail should the method expose?"
+  scope: user
+  default: "expert"
+  single-select:
+    - value: "beginner"
+      label: "Beginner - explain the reasoning"
+    - value: "intermediate"
+      label: "Intermediate - balanced"
+    - value: "expert"
+      label: "Expert - direct and technical"

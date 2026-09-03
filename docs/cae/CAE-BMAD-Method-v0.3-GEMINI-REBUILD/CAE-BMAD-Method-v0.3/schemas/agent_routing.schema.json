@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Agent Routing Schema",
+  "type": "object",
+  "required": ["version", "agents", "level_mappings", "delegation_rules"],
+  "properties": {
+    "version": { "type": "string" },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "name", "operating_level", "mission", "skills", "input_contract", "output_contract", "boundaries"],
+        "properties": {
+          "agent_id": { "type": "string" },
+          "name": { "type": "string" },
+          "operating_level": { "type": "string" },
+          "mission": { "type": "string" },
+          "skills": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "input_contract": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "output_contract": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "boundaries": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "level_mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["level_number", "level_name", "primary_agent"],
+        "properties": {
+          "level_number": { "type": "integer" },
+          "level_name": { "type": "string" },
+          "primary_agent": { "type": "string" }
+        }
+      }
+    },
+    "delegation_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["trigger", "from_agent", "to_agent", "rationale"],
+        "properties": {
+          "trigger": { "type": "string" },
+          "from_agent": { "type": "string" },
+          "to_agent": { "type": "string" },
+          "rationale": { "type": "string" }
+        }
+      }
+    }
+  }
+}

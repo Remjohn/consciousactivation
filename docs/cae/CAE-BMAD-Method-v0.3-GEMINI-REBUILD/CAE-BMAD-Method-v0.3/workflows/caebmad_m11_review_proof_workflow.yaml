@@ -1,0 +1,43 @@
+name: "CAE-BMAD M11 Review, Proof, Gates and Promotion Workflow"
+workflow_id: "WF-M11-REVIEW-PROOF-GATES"
+version: "0.3.0-rebuild"
+primary_agent: "cae-adversarial-reviewer"
+
+description: "Execution pipeline for Mandate M11: Rebuilding adversarial review, countertesting, false-proof defenses, and operator gate decision recording across all 13 operating levels."
+
+preconditions:
+  - "Mandates M01-M10 completed and passed"
+  - "Test suites and deliverables across all mandates available"
+
+steps:
+  - step_id: "01_EXECUTE_ADVERSARIAL_AUDIT"
+    name: "Execute Adversarial Review & Countertest Audit"
+    agent: "cae-adversarial-reviewer"
+    operating_level: "ALL LEVELS (Level 01 through Level 13)"
+    action: "Run false-proof screening checks and countertest evaluations across all mandates."
+    output_artifacts:
+      - "docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.json"
+      - "docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.md"
+
+  - step_id: "02_COMPILE_GATE_DECISIONS_REGISTRY"
+    name: "Compile Master Operator Gate Decisions Registry"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Synthesize all mandate gate statuses into the master operator gate registry."
+    output_artifacts:
+      - "docs/cae-bmad/00_governance/OPERATOR_GATE_DECISIONS.json"
+      - "docs/cae-bmad/00_governance/OPERATOR_GATE_DECISIONS.md"
+
+  - step_id: "03_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_review_proof_system.py and test_m11_review_proof.py, then assemble OPERATOR_GATE_M11.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M11.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Review and Gate Record validates against schema (min 5 audited mandates, min 3 countertests)"
+  - "Operator Gate Decisions Registry validates against schema (min 10 gates recorded)"
+  - "100% positive and countertests pass"

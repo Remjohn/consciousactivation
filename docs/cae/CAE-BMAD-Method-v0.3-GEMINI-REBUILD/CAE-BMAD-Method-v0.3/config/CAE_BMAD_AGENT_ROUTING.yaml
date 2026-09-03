@@ -1,0 +1,236 @@
+version: "0.3.0-rebuild"
+
+agents:
+  - agent_id: "cae-method-orchestrator"
+    name: "Method Orchestrator"
+    operating_level: "PRODUCT / INTENT"
+    mission: "Owns the rebuild graph, phase gates, dependencies, and artifact promotion."
+    skills: ["caebmad-help", "caebmad-grill", "caebmad-grill-protocol", "caebmad-handoff"]
+    input_contract: ["config/caebmad-config.yaml", "config/CAE_BMAD_ARTIFACT_GRAPH.yaml"]
+    output_contract: ["docs/cae-bmad/00_governance/DECISION_LEDGER.md", "docs/cae-bmad/08_handoff/IMPLEMENTATION_HANDOFF.md"]
+    boundaries: ["Must not bypass operator gates", "Must not make unilateral product decisions"]
+
+  - agent_id: "cae-product-reconstructor"
+    name: "Product Reconstructor"
+    operating_level: "PRODUCT / INTENT"
+    mission: "Reconstructs the product from 216 sources, historical lineage, transcripts, artifacts, and current docs."
+    skills: ["caebmad-product-reconstruction", "caebmad-operating-level"]
+    input_contract: [".caebmad/research/CAE_RESEARCH_LIBRARY.yaml"]
+    output_contract: ["docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md"]
+    boundaries: ["Must not erase historical lineage", "Must not invent unsupported capabilities"]
+
+  - agent_id: "cae-documentation-analyst"
+    name: "Documentation Analyst"
+    operating_level: "DOCUMENTATION"
+    mission: "Audits specifications, RFCs, PRDs, and detects documentation-to-code drift."
+    skills: ["caebmad-operating-level", "caebmad-prd"]
+    input_contract: ["docs/"]
+    output_contract: ["docs/cae-bmad/02_investigation/OPERATING_LEVEL_ASSESSMENT.md"]
+    boundaries: ["Must not treat documentation existence as code proof"]
+
+  - agent_id: "cae-plan-analyst"
+    name: "Plan Analyst"
+    operating_level: "PLAN"
+    mission: "Traces plan genealogy, milestone dependencies, cutover plans, and sequencing."
+    skills: ["caebmad-epics-stories", "caebmad-operating-level"]
+    input_contract: ["docs/cae/state/", "docs/cae-bmad/05_planning/"]
+    output_contract: ["docs/cae-bmad/05_planning/PLAN_GENEALOGY.md"]
+    boundaries: ["Must not mark milestones complete without reality evidence"]
+
+  - agent_id: "cae-agent-systems-analyst"
+    name: "Agent Systems Analyst"
+    operating_level: "AGENT"
+    mission: "Audits agent personas, system prompts, boundary enforcement, and tool definitions."
+    skills: ["caebmad-operating-level"]
+    input_contract: ["agents/", "gemini_execution/agents/"]
+    output_contract: ["docs/cae-bmad/02_investigation/AGENT_ARCHITECTURE_MAP.md"]
+    boundaries: ["Must not permit agents to act outside declared boundaries"]
+
+  - agent_id: "cae-workflow-factory-analyst"
+    name: "Workflow/Factory Analyst"
+    operating_level: "AI WORKFLOW / FACTORY"
+    mission: "Maps multi-agent graphs, state pipelines, task handoffs, and factory orchestration."
+    skills: ["caebmad-operating-level"]
+    input_contract: ["programs/", "governance/"]
+    output_contract: ["docs/cae-bmad/02_investigation/WORKFLOW_FACTORY_MAP.md"]
+    boundaries: ["Must not omit error handling and retry boundaries"]
+
+  - agent_id: "cae-repository-analyst"
+    name: "Repository Analyst"
+    operating_level: "REPOSITORY"
+    mission: "Audits git structure, package hierarchies, cross-repository links, and directory truth."
+    skills: ["caebmad-brownfield", "caebmad-operating-level"]
+    input_contract: ["WORKSPACE_MANIFEST.json", "FOLDER_MAP.md"]
+    output_contract: ["docs/cae-bmad/07_brownfield/REPOSITORY_REALITY_MAP.md"]
+    boundaries: ["Must not invent unmapped directory structures"]
+
+  - agent_id: "cae-application-analyst"
+    name: "Application Analyst"
+    operating_level: "APPLICATION"
+    mission: "Maps deployable services, web applications, API endpoints, and daemon configurations."
+    skills: ["caebmad-brownfield", "caebmad-operating-level"]
+    input_contract: ["apps/", "services/"]
+    output_contract: ["docs/cae-bmad/07_brownfield/APPLICATION_MAP.md"]
+    boundaries: ["Must verify service runnable state rather than assume from config"]
+
+  - agent_id: "cae-cli-script-analyst"
+    name: "Script/CLI Analyst"
+    operating_level: "SCRIPT / CLI"
+    mission: "Analyzes scripts, CLI entrypoints, migration runners, and command tools."
+    skills: ["caebmad-brownfield", "caebmad-operating-level"]
+    input_contract: ["scripts/", "tools/"]
+    output_contract: ["docs/cae-bmad/07_brownfield/COMMAND_CONTROL_MAP.md"]
+    boundaries: ["Must test CLI execution contracts against active Python runtime"]
+
+  - agent_id: "cae-data-analyst"
+    name: "Data Analyst"
+    operating_level: "DATABASE / TABLE"
+    mission: "Maps database schemas, migrations, table definitions, and data dictionaries."
+    skills: ["caebmad-brownfield", "caebmad-operating-level"]
+    input_contract: ["storage/", "services/*/models/"]
+    output_contract: ["docs/cae-bmad/07_brownfield/DATA_REALITY_MAP.md"]
+    boundaries: ["Must check schema migration status against real database fixtures"]
+
+  - agent_id: "cae-module-analyst"
+    name: "Module Analyst"
+    operating_level: "MODULE / DIRECTORY"
+    mission: "Audits Python and TypeScript modules, import trees, and circular dependency boundaries."
+    skills: ["caebmad-brownfield", "caebmad-operating-level"]
+    input_contract: ["packages/", "src/"]
+    output_contract: ["docs/cae-bmad/07_brownfield/MODULE_MAP.md"]
+    boundaries: ["Must verify module importability"]
+
+  - agent_id: "cae-code-forensics-analyst"
+    name: "Code Forensics Analyst"
+    operating_level: "FILE / TYPE / CLASS / FUNCTION / LINE / BLOCK"
+    mission: "Deep code inspection, AST verification, symbol tracking, and reality contact testing."
+    skills: ["caebmad-brownfield", "caebmad-operating-level"]
+    input_contract: ["services/", "packages/", "src/"]
+    output_contract: ["docs/cae-bmad/07_brownfield/CODE_FORENSICS_REPORT.md"]
+    boundaries: ["Must never assert behavior without inspecting exact function lines"]
+
+  - agent_id: "cae-product-brief-agent"
+    name: "Product Brief Agent"
+    operating_level: "PRODUCT / INTENT"
+    mission: "Synthesizes intent into concise, authoritative Product Briefs backed by research."
+    skills: ["caebmad-product-brief"]
+    input_contract: ["docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md", "docs/cae-bmad/00_governance/DECISION_LEDGER.md"]
+    output_contract: ["docs/cae-bmad/03_product/PRODUCT_BRIEF.md"]
+    boundaries: ["Must not introduce un-reconstructed features without grill resolution"]
+
+  - agent_id: "cae-prd-agent"
+    name: "Modular PRD Agent"
+    operating_level: "DOCUMENTATION"
+    mission: "Authors modular PRDs and Functional Requirements linked bidirectionally to research."
+    skills: ["caebmad-prd", "caebmad-fr"]
+    input_contract: ["docs/cae-bmad/03_product/PRODUCT_BRIEF.md"]
+    output_contract: ["docs/cae-bmad/03_product/PRD_INDEX.md", "docs/cae-bmad/03_product/modules/PRD-*.md", "docs/cae-bmad/03_product/FUNCTIONAL_REQUIREMENTS.md"]
+    boundaries: ["Must ensure every PRD requirement has an explicit source citation"]
+
+  - agent_id: "cae-architecture-agent"
+    name: "Architecture Agent"
+    operating_level: "DOCUMENTATION / APPLICATION"
+    mission: "Designs technical architecture, typed interfaces, and subsystem interaction contracts."
+    skills: ["caebmad-architecture"]
+    input_contract: ["docs/cae-bmad/03_product/FUNCTIONAL_REQUIREMENTS.md"]
+    output_contract: ["docs/cae-bmad/04_architecture/ARCHITECTURE.md"]
+    boundaries: ["Must reconcile architecture with existing brownfield services"]
+
+  - agent_id: "cae-delivery-agent"
+    name: "Epic/Story Agent"
+    operating_level: "PLAN"
+    mission: "Decomposes architecture into implementable Epics and User Stories with acceptance criteria."
+    skills: ["caebmad-epics-stories"]
+    input_contract: ["docs/cae-bmad/04_architecture/ARCHITECTURE.md"]
+    output_contract: ["docs/cae-bmad/05_planning/EPICS.md", "docs/cae-bmad/05_planning/STORIES.md"]
+    boundaries: ["Stories must include reality-contact verification criteria"]
+
+  - agent_id: "cae-ux-agent"
+    name: "UI/UX Agent"
+    operating_level: "PRODUCT / APPLICATION"
+    mission: "Designs user flows, operator interaction patterns, and Atomic Harness visual syntax."
+    skills: ["caebmad-ui"]
+    input_contract: ["docs/cae-bmad/03_product/PRODUCT_BRIEF.md", "docs/cae-bmad/04_architecture/ARCHITECTURE.md"]
+    output_contract: ["docs/cae-bmad/06_ui_ux/UI_UX_SPECIFICATION.md"]
+    boundaries: ["Must align with Atomic Harness design tokens"]
+
+  - agent_id: "cae-brownfield-auditor"
+    name: "Brownfield Auditor"
+    operating_level: "REPOSITORY → LINE"
+    mission: "Challenges unsupported implementation claims and maps missing layers."
+    skills: ["caebmad-brownfield"]
+    input_contract: ["docs/cae-bmad/05_planning/STORIES.md", "services/", "packages/"]
+    output_contract: ["docs/cae-bmad/07_brownfield/BROWNFIELD_REALITY_MAP.md"]
+    boundaries: ["Must reject claims of completion without code proof"]
+
+  - agent_id: "cae-adversarial-reviewer"
+    name: "Adversarial Reviewer"
+    operating_level: "ALL"
+    mission: "Audits deliverables for false proof, lineage loss, over-abstraction, and gaps."
+    skills: ["caebmad-review"]
+    input_contract: ["docs/cae-bmad/"]
+    output_contract: ["docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.md"]
+    boundaries: ["Must execute negative tests and challenge assumptions"]
+
+level_mappings:
+  - level_number: 1
+    level_name: "PRODUCT / INTENT"
+    primary_agent: "cae-product-reconstructor"
+  - level_number: 2
+    level_name: "DOCUMENTATION"
+    primary_agent: "cae-documentation-analyst"
+  - level_number: 3
+    level_name: "PLAN"
+    primary_agent: "cae-plan-analyst"
+  - level_number: 4
+    level_name: "AGENT"
+    primary_agent: "cae-agent-systems-analyst"
+  - level_number: 5
+    level_name: "AI WORKFLOW / FACTORY"
+    primary_agent: "cae-workflow-factory-analyst"
+  - level_number: 6
+    level_name: "REPOSITORY"
+    primary_agent: "cae-repository-analyst"
+  - level_number: 7
+    level_name: "APPLICATION"
+    primary_agent: "cae-application-analyst"
+  - level_number: 8
+    level_name: "SCRIPT / CLI"
+    primary_agent: "cae-cli-script-analyst"
+  - level_number: 9
+    level_name: "DATABASE / TABLE"
+    primary_agent: "cae-data-analyst"
+  - level_number: 10
+    level_name: "MODULE / DIRECTORY"
+    primary_agent: "cae-module-analyst"
+  - level_number: 11
+    level_name: "FILE / TYPE / CLASS"
+    primary_agent: "cae-code-forensics-analyst"
+  - level_number: 12
+    level_name: "FUNCTION"
+    primary_agent: "cae-code-forensics-analyst"
+  - level_number: 13
+    level_name: "LINE / BLOCK"
+    primary_agent: "cae-brownfield-auditor"
+
+delegation_rules:
+  - trigger: "Uncertainty in documentation vs codebase"
+    from_agent: "cae-documentation-analyst"
+    to_agent: "cae-code-forensics-analyst"
+    rationale: "Descent to function/line level is required to resolve doc drift."
+  - trigger: "Database schema drift detected"
+    from_agent: "cae-repository-analyst"
+    to_agent: "cae-data-analyst"
+    rationale: "Specialized schema and migration analysis needed."
+  - trigger: "Unresolved product question requiring human choice"
+    from_agent: "cae-product-brief-agent"
+    to_agent: "cae-method-orchestrator"
+    rationale: "Must trigger single-question CAE Grill to operator."
+  - trigger: "Story marked ready without code verification"
+    from_agent: "cae-delivery-agent"
+    to_agent: "cae-brownfield-auditor"
+    rationale: "Brownfield reality check required before story sign-off."
+  - trigger: "Milestone promotion requested"
+    from_agent: "cae-method-orchestrator"
+    to_agent: "cae-adversarial-reviewer"
+    rationale: "Independent adversarial review required prior to operator gate."

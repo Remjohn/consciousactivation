@@ -1,0 +1,43 @@
+name: "CAE-BMAD M12 Method Certification Workflow"
+workflow_id: "WF-M12-METHOD-CERTIFICATION"
+version: "0.3.0-rebuild"
+primary_agent: "cae-method-orchestrator"
+
+description: "Execution pipeline for Mandate M12: Comprehensive method integration, vertical end-to-end slice verification, cross-mandate certification (M01-M12), and master certification package assembly."
+
+preconditions:
+  - "Mandates M01-M11 completed and passed"
+  - "Full regression test suite passing in tests/"
+
+steps:
+  - step_id: "01_EXECUTE_VERTICAL_SLICE_TRACE"
+    name: "Execute End-to-End Vertical Slice Trace"
+    agent: "cae-method-orchestrator"
+    operating_level: "ALL LEVELS (Level 01 through Level 13)"
+    action: "Trace execution from Level 01 (Product Intent) down to Level 13 (Line/Block) on a real CAE capability slice."
+    output_artifacts:
+      - "docs/cae-bmad/10_certification/END_TO_END_INTEGRATION_RUN.json"
+      - "docs/cae-bmad/10_certification/END_TO_END_INTEGRATION_RUN.md"
+
+  - step_id: "02_COMPILE_MASTER_CERTIFICATION_PACKAGE"
+    name: "Compile Master Method Certification Package"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Synthesize all 12 mandate validations, 13 operating level bindings, and acknowledged residual gaps into master certification deliverable."
+    output_artifacts:
+      - "docs/cae-bmad/10_certification/CAE_BMAD_METHOD_CERTIFICATION.json"
+      - "docs/cae-bmad/10_certification/CAE_BMAD_METHOD_CERTIFICATION.md"
+
+  - step_id: "03_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Final Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_method_certification.py and test_m12_method_certification.py, then assemble OPERATOR_GATE_M12.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M12.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Method Certification Package validates against schema (min 12 mandate validations, min 13 operating level bindings)"
+  - "End-to-End Integration Run validates against schema (min 4 trace steps, min 3 line-level proofs)"
+  - "100% positive and countertests pass across full regression test suite"

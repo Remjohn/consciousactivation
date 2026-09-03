@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Operating Level Assessment Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "assessment_date",
+    "levels_evaluated",
+    "findings",
+    "drift_matrix",
+    "recommendations"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "assessment_date": { "type": "string" },
+    "levels_evaluated": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "items": {
+        "type": "object",
+        "required": ["level_number", "level_name", "analyst_agent", "fidelity_status", "evidence_paths"],
+        "properties": {
+          "level_number": { "type": "integer", "minimum": 1, "maximum": 13 },
+          "level_name": { "type": "string" },
+          "analyst_agent": { "type": "string" },
+          "fidelity_status": {
+            "type": "string",
+            "enum": ["KNOWN", "INHERITED", "VERIFIED", "PROPOSED", "INFERRED", "MISSING", "CONTRADICTED", "DEPRECATED"]
+          },
+          "evidence_paths": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["finding_id", "starting_level", "terminal_level", "claim", "evidence", "verdict"],
+        "properties": {
+          "finding_id": { "type": "string" },
+          "starting_level": { "type": "string" },
+          "terminal_level": { "type": "string" },
+          "claim": { "type": "string" },
+          "evidence": { "type": "string" },
+          "verdict": {
+            "type": "string",
+            "enum": ["CONFIRMED", "CONTRADICTED", "MISSING_IMPLEMENTATION", "DRIFT_DETECTED"]
+          }
+        }
+      }
+    },
+    "drift_matrix": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["component", "documented_state", "codebase_state", "remediation"],
+        "properties": {
+          "component": { "type": "string" },
+          "documented_state": { "type": "string" },
+          "codebase_state": { "type": "string" },
+          "remediation": { "type": "string" }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

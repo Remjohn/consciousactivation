@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Constitution Schema",
+  "type": "object",
+  "required": [
+    "method_name",
+    "version",
+    "status",
+    "authority",
+    "operating_levels",
+    "non_negotiable_rules",
+    "evidence_taxonomy",
+    "error_taxonomy",
+    "artifact_families"
+  ],
+  "properties": {
+    "method_name": { "type": "string" },
+    "version": { "type": "string" },
+    "status": { "type": "string" },
+    "authority": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "operating_levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["level", "name", "analyst_agent"],
+        "properties": {
+          "level": { "type": "integer", "minimum": 1, "maximum": 13 },
+          "name": { "type": "string" },
+          "analyst_agent": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "non_negotiable_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "title", "statement"],
+        "properties": {
+          "rule_id": { "type": "string" },
+          "title": { "type": "string" },
+          "statement": { "type": "string" }
+        }
+      }
+    },
+    "evidence_taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tag", "definition", "evidence_standard"],
+        "properties": {
+          "tag": { "type": "string" },
+          "definition": { "type": "string" },
+          "evidence_standard": { "type": "string" }
+        }
+      }
+    },
+    "error_taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "trigger"],
+        "properties": {
+          "code": { "type": "string" },
+          "trigger": { "type": "string" }
+        }
+      }
+    },
+    "artifact_families": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "family", "standard_path", "primary_agent"],
+        "properties": {
+          "id": { "type": "string" },
+          "family": { "type": "string" },
+          "standard_path": { "type": "string" },
+          "primary_agent": { "type": "string" }
+        }
+      }
+    }
+  }
+}

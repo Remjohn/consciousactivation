@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Application Map Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "generated_date",
+    "total_services",
+    "services",
+    "runtime_dependencies",
+    "application_health_summary"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "generated_date": { "type": "string" },
+    "total_services": { "type": "integer", "minimum": 4 },
+    "services": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "service_id",
+          "name",
+          "directory_path",
+          "entrypoint",
+          "service_type",
+          "status"
+        ],
+        "properties": {
+          "service_id": { "type": "string" },
+          "name": { "type": "string" },
+          "directory_path": { "type": "string" },
+          "entrypoint": { "type": "string" },
+          "service_type": {
+            "type": "string",
+            "enum": ["MICROSERVICE", "DAEMON_WORKER", "PIPELINE_RUNTIME", "UI_CLIENT", "LIBRARY_PACKAGE"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "STANDALONE", "MIGRATING", "PLANNED", "DEPRECATED"]
+          },
+          "endpoints_or_handlers": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "runtime_dependencies": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "application_health_summary": { "type": "string" }
+  }
+}

@@ -1,0 +1,66 @@
+name: "CAE-BMAD M05 Documentation and Planning Workflow"
+workflow_id: "WF-M05-DOC-PLANNING"
+version: "0.3.0-rebuild"
+primary_agent: "cae-documentation-analyst"
+
+description: "Execution pipeline for Mandate M05: Rebuilding the Documentation and Planning Agent System across Levels 02-03."
+
+preconditions:
+  - "Mandates M01-M04 completed and passed"
+  - "Product Reconstruction Record available"
+  - "216-source research library active"
+
+steps:
+  - step_id: "01_AUDIT_EXISTING_DOCUMENTATION"
+    name: "Audit Existing Documentation Surface"
+    agent: "cae-documentation-analyst"
+    operating_level: "Level 02: DOCUMENTATION"
+    action: "Scan docs/, governance/, and specs/ directories for existing documentation quality and drift."
+    output_artifacts: ["Documentation Audit Report"]
+
+  - step_id: "02_AUTHOR_PRD_MODULES"
+    name: "Author Modular PRD Modules"
+    agent: "cae-prd-agent"
+    operating_level: "Level 02: DOCUMENTATION"
+    action: "Decompose Product Reconstruction into modular PRD-xxx modules with FR-xxx entries."
+    output_artifacts:
+      - "docs/cae-bmad/03_product/PRD_INDEX.md"
+      - "docs/cae-bmad/03_product/modules/PRD-*.md"
+
+  - step_id: "03_COMPILE_FR_MATRIX"
+    name: "Compile Functional Requirements Matrix"
+    agent: "cae-prd-agent"
+    operating_level: "Level 02: DOCUMENTATION"
+    action: "Aggregate all FR entries across PRD modules into the central FR matrix."
+    output_artifacts: ["docs/cae-bmad/03_product/FUNCTIONAL_REQUIREMENTS.md"]
+
+  - step_id: "04_PLAN_GENEALOGY"
+    name: "Map Plan Genealogy and Execution Gaps"
+    agent: "cae-plan-analyst"
+    operating_level: "Level 03: PLAN"
+    action: "Trace historical milestone genealogy and identify delivery gaps."
+    output_artifacts: ["docs/cae-bmad/05_planning/PLAN_GENEALOGY.md"]
+
+  - step_id: "05_EPIC_STORY_DECOMPOSITION"
+    name: "Decompose PRDs into Epics and Stories"
+    agent: "cae-delivery-agent"
+    operating_level: "Level 03: PLAN"
+    action: "Group FRs into epics and author user stories with testable acceptance criteria."
+    output_artifacts:
+      - "docs/cae-bmad/05_planning/EPICS.md"
+      - "docs/cae-bmad/05_planning/STORIES.md"
+
+  - step_id: "06_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_doc_planning_system.py and test_m05_doc_planning.py, then assemble OPERATOR_GATE_M05.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M05.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "PRD modules validate against schema"
+  - "Epics/stories validate against schema"
+  - "All agent skills are loadable"
+  - "100% positive and countertests pass"

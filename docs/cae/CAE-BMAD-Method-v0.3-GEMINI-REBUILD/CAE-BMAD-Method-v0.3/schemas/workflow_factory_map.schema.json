@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Workflow & Factory Map Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "generated_date",
+    "factory_primitives",
+    "pipelines",
+    "adw_patterns",
+    "error_recovery_matrix"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "generated_date": { "type": "string" },
+    "factory_primitives": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["primitive_id", "name", "description", "runtime_binding"],
+        "properties": {
+          "primitive_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "runtime_binding": { "type": "string" }
+        }
+      }
+    },
+    "pipelines": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["pipeline_id", "name", "trigger", "steps", "terminal_condition", "rollback_strategy"],
+        "properties": {
+          "pipeline_id": { "type": "string" },
+          "name": { "type": "string" },
+          "trigger": { "type": "string" },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["step_number", "agent", "action", "output_artifact"],
+              "properties": {
+                "step_number": { "type": "integer" },
+                "agent": { "type": "string" },
+                "action": { "type": "string" },
+                "output_artifact": { "type": "string" }
+              }
+            }
+          },
+          "terminal_condition": { "type": "string" },
+          "rollback_strategy": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "adw_patterns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["pattern_id", "name", "description", "jit_capsule_strategy"],
+        "properties": {
+          "pattern_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "jit_capsule_strategy": { "type": "string" }
+        }
+      }
+    },
+    "error_recovery_matrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["error_type", "detection_agent", "recovery_action", "operator_escalation"],
+        "properties": {
+          "error_type": { "type": "string" },
+          "detection_agent": { "type": "string" },
+          "recovery_action": { "type": "string" },
+          "operator_escalation": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

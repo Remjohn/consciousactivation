@@ -1,0 +1,83 @@
+name: "CAE-BMAD M01 Method Rebuild Workflow"
+workflow_id: "WF-M01-CONSTITUTION"
+version: "0.3.0-rebuild"
+primary_agent: "cae-method-orchestrator"
+
+description: "Execution pipeline for Mandate M01: Rebuilding the CAE-BMAD Constitution and Method Contract."
+
+preconditions:
+  - "Workspace repository mounted"
+  - "Historical lineage sources identified"
+  - "Original BMAD equivalent capabilities defined"
+
+steps:
+  - step_id: "01_INSPECT_CURRENT_TRUTH"
+    name: "Inspect Current Repository & BMAD Surfaces"
+    agent: "cae-brownfield-auditor"
+    operating_level: "Level 06: REPOSITORY"
+    action: "Scan codebase, historical constitutions, and BMAD equivalence matrix."
+    output_artifacts: ["Current Truth Assessment"]
+
+  - step_id: "02_SELECT_OPERATING_LEVELS"
+    name: "Select Operating Levels & Traversal"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Define descent to Level 04: AGENT and Level 05: WORKFLOW for routing verification."
+    output_artifacts: ["Operating Level Strategy"]
+
+  - step_id: "03_AUTHOR_CONSTITUTION_AND_CONTRACTS"
+    name: "Author Method Constitution and Governed Contracts"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Construct CAE_BMAD_CONSTITUTION.md, CAE_BMAD_METHOD_CONTRACT.md, and governing policies."
+    output_artifacts:
+      - "method/CAE_BMAD_CONSTITUTION.md"
+      - "method/CAE_BMAD_METHOD_CONTRACT.md"
+      - "method/CAE_BMAD_OPERATING_LEVELS.md"
+      - "method/CAE_BMAD_ARTIFACT_GOVERNANCE.md"
+      - "method/CAE_BMAD_SOURCE_AUTHORITY.md"
+      - "method/CAE_BMAD_UPSTREAM_POLICY.md"
+
+  - step_id: "04_BUILD_SCHEMAS_AND_CONFIG"
+    name: "Build Formal Schemas and Routing Config"
+    agent: "cae-workflow-factory-analyst"
+    operating_level: "Level 05: AI WORKFLOW / FACTORY"
+    action: "Author JSON Schemas and YAML routing/artifact/state models."
+    output_artifacts:
+      - "schemas/constitution.schema.json"
+      - "schemas/artifact_graph.schema.json"
+      - "schemas/method_states.schema.json"
+      - "schemas/agent_routing.schema.json"
+      - "schemas/decision_ledger.schema.json"
+      - "config/caebmad-config.yaml"
+      - "config/CAE_BMAD_ARTIFACT_GRAPH.yaml"
+      - "config/CAE_BMAD_METHOD_STATES.yaml"
+      - "config/CAE_BMAD_AGENT_ROUTING.yaml"
+
+  - step_id: "05_DIFFERENTIATE_AGENT_DEFINITIONS"
+    name: "Differentiate 19 Specialized Agent Specifications"
+    agent: "cae-agent-systems-analyst"
+    operating_level: "Level 04: AGENT"
+    action: "Upgrade all 19 agent definitions with explicit missions, contracts, boundaries, and skills."
+    output_artifacts: ["gemini_execution/agents/cae-*.md"]
+
+  - step_id: "06_VALIDATE_AND_TEST"
+    name: "Execute Positive and Negative Validation Tests"
+    agent: "cae-adversarial-reviewer"
+    operating_level: "Level 08: SCRIPT / CLI"
+    action: "Run validate_constitution.py and test_m01_constitution.py against all deliverables."
+    output_artifacts: ["Test Execution Results"]
+
+  - step_id: "07_OPERATOR_GATE_SUBMISSION"
+    name: "Assemble Operator Gate Packet and Ledger Update"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Populate OPERATOR_GATE_M01.md and update MANDATE_EXECUTION_LEDGER.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M01.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "All M01 artifacts validated against JSON schemas"
+  - "100% positive, negative, and countertests pass"
+  - "Operator gate awaiting human sign-off"

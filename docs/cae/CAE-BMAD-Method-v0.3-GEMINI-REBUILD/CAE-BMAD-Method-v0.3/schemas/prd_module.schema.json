@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD PRD Module Schema",
+  "type": "object",
+  "required": [
+    "module_id",
+    "title",
+    "status",
+    "capability_pillar",
+    "source_lineage",
+    "functional_requirements",
+    "acceptance_criteria"
+  ],
+  "properties": {
+    "module_id": {
+      "type": "string",
+      "pattern": "^PRD-[0-9]{3}$"
+    },
+    "title": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "capability_pillar": {
+      "type": "string",
+      "enum": [
+        "PIL-01: Audience & Guest Intelligence",
+        "PIL-02: Question & Interview Intelligence",
+        "PIL-03: Evidence & Receipt Provenance",
+        "PIL-04: Editorial & Storyboard Production",
+        "PIL-05: Multi-Agent Runtime & Factory Scheduling"
+      ]
+    },
+    "source_lineage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source_id", "fidelity_status"],
+        "properties": {
+          "source_id": { "type": "string", "pattern": "^SRC-[0-9]{3}$" },
+          "fidelity_status": {
+            "type": "string",
+            "enum": ["KNOWN", "INHERITED", "VERIFIED", "PROPOSED", "INFERRED", "MISSING", "CONTRADICTED", "DEPRECATED"]
+          }
+        }
+      }
+    },
+    "functional_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["fr_id", "description", "testable", "acceptance_criteria"],
+        "properties": {
+          "fr_id": { "type": "string", "pattern": "^FR-[0-9]{3}$" },
+          "description": { "type": "string" },
+          "testable": { "type": "boolean", "const": true },
+          "acceptance_criteria": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Data Reality Map Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "generated_date",
+    "total_entities",
+    "entities",
+    "canonical_state_alignments",
+    "storage_engines"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "generated_date": { "type": "string" },
+    "total_entities": { "type": "integer", "minimum": 4 },
+    "entities": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["entity_name", "storage_engine", "model_file", "key_fields", "status"],
+        "properties": {
+          "entity_name": { "type": "string" },
+          "storage_engine": {
+            "type": "string",
+            "enum": ["IN_MEMORY_CAS", "FILESYSTEM_YAML", "SQLITE", "POSTGRES", "REDIS"]
+          },
+          "model_file": { "type": "string" },
+          "key_fields": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "INHERITED", "MIGRATING", "PLANNED"]
+          }
+        }
+      }
+    },
+    "canonical_state_alignments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["constitution_ref", "state_model", "verified"],
+        "properties": {
+          "constitution_ref": { "type": "string" },
+          "state_model": { "type": "string" },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "storage_engines": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+name: "CAE-BMAD M03 Multi-Level Investigation Workflow"
+workflow_id: "WF-M03-INVESTIGATION"
+version: "0.3.0-rebuild"
+primary_agent: "cae-documentation-analyst"
+
+description: "Execution pipeline for Mandate M03: Multi-Level Engineering Investigation across the 13 operating levels."
+
+preconditions:
+  - "Mandate M01 constitution and M02 research library approved"
+  - "Workspace repository mounted and readable"
+
+steps:
+  - step_id: "01_INITIALIZE_ASSESSMENT"
+    name: "Initialize Operating Level Matrix"
+    agent: "cae-documentation-analyst"
+    operating_level: "Level 02: DOCUMENTATION"
+    action: "Scan documentation against active repository file trees."
+    output_artifacts: ["Initial Assessment Skeleton"]
+
+  - step_id: "02_EXECUTE_CODE_FORENSICS_DESCENT"
+    name: "Perform Deep Code Forensics Descent"
+    agent: "cae-code-forensics-analyst"
+    operating_level: "Level 11: FILE / TYPE / CLASS down to Level 13: LINE / BLOCK"
+    action: "Inspect class models, function signatures, and exact lines of code."
+    output_artifacts: ["Code Forensics Evidence"]
+
+  - step_id: "03_DATA_AND_SCHEMA_AUDIT"
+    name: "Audit Database Models & Migration Drift"
+    agent: "cae-data-analyst"
+    operating_level: "Level 09: DATABASE / TABLE"
+    action: "Inspect database models, storage schemas, and canonical state aggregate links."
+    output_artifacts: ["Data Reality Findings"]
+
+  - step_id: "04_DRIFT_CLASSIFICATION"
+    name: "Compile Documentation-to-Code Drift Matrix"
+    agent: "cae-brownfield-auditor"
+    operating_level: "Level 06: REPOSITORY"
+    action: "Classify findings into CONFIRMED, DRIFT_DETECTED, CONTRADICTED, and MISSING_IMPLEMENTATION."
+    output_artifacts: ["Drift Matrix"]
+
+  - step_id: "05_EMIT_ASSESSMENT_RECORD"
+    name: "Generate Canonical Operating Level Assessment"
+    agent: "cae-documentation-analyst"
+    operating_level: "Level 02: DOCUMENTATION"
+    action: "Assemble docs/cae-bmad/02_investigation/OPERATING_LEVEL_ASSESSMENT.md."
+    output_artifacts: ["docs/cae-bmad/02_investigation/OPERATING_LEVEL_ASSESSMENT.md"]
+
+  - step_id: "06_VALIDATE_AND_GATE"
+    name: "Validate Assessment and Prepare Operator Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Execute test_m03_investigation_system.py and assemble OPERATOR_GATE_M03.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M03.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Operating Level Assessment validates against schema"
+  - "All 13 levels evaluated with concrete evidence paths"
+  - "100% positive and negative tests pass"

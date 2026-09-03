@@ -1,0 +1,164 @@
+version: "0.3.0-rebuild"
+
+artifacts:
+  - id: ART-01
+    name: "Research Corpus Registry"
+    family: "research_corpus"
+    producer_agent: "cae-product-reconstructor"
+    output_path: ".caebmad/research/CAE_RESEARCH_LIBRARY.yaml"
+    template: "templates/research_library.yaml"
+    schema: "schemas/research_source.schema.json"
+
+  - id: ART-02
+    name: "Product Reconstruction Record"
+    family: "product_reconstruction"
+    producer_agent: "cae-product-reconstructor"
+    output_path: "docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md"
+    template: "templates/product_reconstruction.md"
+
+  - id: ART-03
+    name: "Operating Level Assessment"
+    family: "operating_level_assessment"
+    producer_agent: "cae-documentation-analyst"
+    output_path: "docs/cae-bmad/02_investigation/OPERATING_LEVEL_ASSESSMENT.md"
+    template: "templates/operating_level_assessment.md"
+
+  - id: ART-04
+    name: "Decision Ledger & Grill Records"
+    family: "decision_ledger"
+    producer_agent: "cae-method-orchestrator"
+    output_path: "docs/cae-bmad/00_governance/DECISION_LEDGER.md"
+    schema: "schemas/decision_ledger.schema.json"
+
+  - id: ART-05
+    name: "Product Brief"
+    family: "product_brief"
+    producer_agent: "cae-product-brief-agent"
+    output_path: "docs/cae-bmad/03_product/PRODUCT_BRIEF.md"
+    template: "templates/product_brief.md"
+
+  - id: ART-06
+    name: "PRD Index"
+    family: "prd_index"
+    producer_agent: "cae-prd-agent"
+    output_path: "docs/cae-bmad/03_product/PRD_INDEX.md"
+    template: "templates/prd_index.md"
+
+  - id: ART-07
+    name: "PRD Modules"
+    family: "prd_modules"
+    producer_agent: "cae-prd-agent"
+    output_path: "docs/cae-bmad/03_product/modules/PRD-*.md"
+    template: "templates/prd_module.md"
+
+  - id: ART-08
+    name: "Functional Requirements Matrix"
+    family: "functional_requirements"
+    producer_agent: "cae-prd-agent"
+    output_path: "docs/cae-bmad/03_product/FUNCTIONAL_REQUIREMENTS.md"
+    template: "templates/fr_matrix.md"
+
+  - id: ART-09
+    name: "Architecture Specification"
+    family: "architecture"
+    producer_agent: "cae-architecture-agent"
+    output_path: "docs/cae-bmad/04_architecture/ARCHITECTURE.md"
+    template: "templates/architecture.md"
+
+  - id: ART-10
+    name: "Epics Matrix"
+    family: "epics"
+    producer_agent: "cae-delivery-agent"
+    output_path: "docs/cae-bmad/05_planning/EPICS.md"
+    template: "templates/epics.md"
+
+  - id: ART-11
+    name: "Stories Matrix"
+    family: "stories"
+    producer_agent: "cae-delivery-agent"
+    output_path: "docs/cae-bmad/05_planning/STORIES.md"
+    template: "templates/stories.md"
+
+  - id: ART-12
+    name: "UI/UX Specification"
+    family: "ui_ux"
+    producer_agent: "cae-ux-agent"
+    output_path: "docs/cae-bmad/06_ui_ux/UI_UX_SPECIFICATION.md"
+    template: "templates/ui_ux.md"
+
+  - id: ART-13
+    name: "Brownfield Reality Map"
+    family: "brownfield_reality_map"
+    producer_agent: "cae-brownfield-auditor"
+    output_path: "docs/cae-bmad/07_brownfield/BROWNFIELD_REALITY_MAP.md"
+    template: "templates/brownfield_reality_map.md"
+
+  - id: ART-14
+    name: "Implementation / Handoff Packet"
+    family: "implementation_handoff"
+    producer_agent: "cae-method-orchestrator"
+    output_path: "docs/cae-bmad/08_handoff/IMPLEMENTATION_HANDOFF.md"
+    template: "templates/implementation_handoff.md"
+
+  - id: ART-15
+    name: "Review & Promotion Gate Record"
+    family: "review_record"
+    producer_agent: "cae-adversarial-reviewer"
+    output_path: "docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.md"
+    template: "templates/review_record.md"
+
+dependencies:
+  - artifact_id: ART-02
+    depends_on: [ART-01]
+  - artifact_id: ART-03
+    depends_on: [ART-01, ART-02]
+  - artifact_id: ART-04
+    depends_on: [ART-02, ART-03]
+  - artifact_id: ART-05
+    depends_on: [ART-02, ART-04]
+  - artifact_id: ART-06
+    depends_on: [ART-05]
+  - artifact_id: ART-07
+    depends_on: [ART-06]
+  - artifact_id: ART-08
+    depends_on: [ART-06, ART-07]
+  - artifact_id: ART-09
+    depends_on: [ART-07, ART-08]
+  - artifact_id: ART-10
+    depends_on: [ART-09]
+  - artifact_id: ART-11
+    depends_on: [ART-10]
+  - artifact_id: ART-12
+    depends_on: [ART-09, ART-11]
+  - artifact_id: ART-13
+    depends_on: [ART-09, ART-11, ART-12]
+  - artifact_id: ART-14
+    depends_on: [ART-11, ART-13]
+  - artifact_id: ART-15
+    depends_on: [ART-14]
+
+gates:
+  - gate_id: GATE-01
+    name: "Research & Reconstruction Gate"
+    required_artifacts: [ART-01, ART-02]
+    approval_authority: "OPERATOR"
+  - gate_id: GATE-02
+    name: "Grill & Operating Level Assessment Gate"
+    required_artifacts: [ART-03, ART-04]
+    approval_authority: "OPERATOR"
+  - gate_id: GATE-03
+    name: "Product & Requirements Gate"
+    required_artifacts: [ART-05, ART-06, ART-07, ART-08]
+    approval_authority: "OPERATOR"
+  - gate_id: GATE-04
+    name: "Architecture & Planning Gate"
+    required_artifacts: [ART-09, ART-10, ART-11, ART-12]
+    approval_authority: "OPERATOR"
+  - gate_id: GATE-05
+    name: "Brownfield Reality & Handoff Gate"
+    required_artifacts: [ART-13, ART-14]
+    approval_authority: "OPERATOR"
+  - gate_id: GATE-06
+    name: "Final Promotion Gate"
+    required_artifacts: [ART-15]
+    approval_authority: "OPERATOR"

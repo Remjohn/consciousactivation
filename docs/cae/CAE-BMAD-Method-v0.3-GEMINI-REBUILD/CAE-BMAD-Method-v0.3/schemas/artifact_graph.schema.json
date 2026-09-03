@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Artifact Graph Schema",
+  "type": "object",
+  "required": ["version", "artifacts", "dependencies", "gates"],
+  "properties": {
+    "version": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "family", "producer_agent", "output_path"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "family": { "type": "string" },
+          "producer_agent": { "type": "string" },
+          "output_path": { "type": "string" },
+          "template": { "type": "string" },
+          "schema": { "type": "string" }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["artifact_id", "depends_on"],
+        "properties": {
+          "artifact_id": { "type": "string" },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gate_id", "name", "required_artifacts", "approval_authority"],
+        "properties": {
+          "gate_id": { "type": "string" },
+          "name": { "type": "string" },
+          "required_artifacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "approval_authority": { "type": "string" }
+        }
+      }
+    }
+  }
+}

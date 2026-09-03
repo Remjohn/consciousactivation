@@ -1,0 +1,53 @@
+name: "CAE-BMAD M09 Product Artifact Pipeline Workflow"
+workflow_id: "WF-M09-PRODUCT-PIPELINE"
+version: "0.3.0-rebuild"
+primary_agent: "cae-product-brief-agent"
+
+description: "Execution pipeline for Mandate M09: Rebuilding the full Product Artifact Production Pipeline from Product Brief down through UI/UX and Stories."
+
+preconditions:
+  - "Mandates M01-M08 completed and passed"
+  - "Product Reconstruction Record and 216-source research library available"
+
+steps:
+  - step_id: "01_AUTHOR_PRODUCT_BRIEF"
+    name: "Author Canonical Product Brief"
+    agent: "cae-product-brief-agent"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Synthesize product mission, pillars, target personas, and non-goals."
+    output_artifacts:
+      - "docs/cae-bmad/03_product/PRODUCT_BRIEF.json"
+      - "docs/cae-bmad/03_product/PRODUCT_BRIEF.md"
+
+  - step_id: "02_AUTHOR_ARCHITECTURE_SPEC"
+    name: "Author Technical Architecture Specification"
+    agent: "cae-architecture-agent"
+    operating_level: "Level 02: DOCUMENTATION / Level 07: APPLICATION"
+    action: "Define subsystem boundaries, typed interface schemas, and brownfield integration."
+    output_artifacts:
+      - "docs/cae-bmad/04_architecture/ARCHITECTURE.json"
+      - "docs/cae-bmad/04_architecture/ARCHITECTURE.md"
+
+  - step_id: "03_AUTHOR_UI_UX_SPEC"
+    name: "Author Operator UI/UX Specification"
+    agent: "cae-ux-agent"
+    operating_level: "Level 01: PRODUCT / INTENT / Level 07: APPLICATION"
+    action: "Map operator studio views, interaction flows, and Atomic Harness visual syntax tokens."
+    output_artifacts:
+      - "docs/cae-bmad/06_ui_ux/UI_UX_SPECIFICATION.json"
+      - "docs/cae-bmad/06_ui_ux/UI_UX_SPECIFICATION.md"
+
+  - step_id: "04_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_product_artifact_pipeline.py and test_m09_product_pipeline.py, then assemble OPERATOR_GATE_M09.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M09.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Product Brief validates against schema"
+  - "Architecture Specification validates against schema (min 4 subsystems)"
+  - "UI/UX Specification validates against schema (min 3 views, Atomic Harness tokens)"
+  - "100% positive and countertests pass"

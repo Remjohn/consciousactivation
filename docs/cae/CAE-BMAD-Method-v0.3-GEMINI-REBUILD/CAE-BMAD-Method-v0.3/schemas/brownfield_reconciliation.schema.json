@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Brownfield Reconciliation Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "generated_date",
+    "total_evaluated_subsystems",
+    "subsystem_evaluations",
+    "layer_gap_summary",
+    "quarantine_and_migration_strategy",
+    "reconciliation_verdict"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "generated_date": { "type": "string" },
+    "total_evaluated_subsystems": { "type": "integer", "minimum": 5 },
+    "subsystem_evaluations": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "subsystem_name",
+          "operating_level",
+          "planned_capability",
+          "actual_code_surface",
+          "fidelity_verdict",
+          "evidence_notes"
+        ],
+        "properties": {
+          "subsystem_name": { "type": "string" },
+          "operating_level": { "type": "string" },
+          "planned_capability": { "type": "string" },
+          "actual_code_surface": { "type": "string" },
+          "fidelity_verdict": {
+            "type": "string",
+            "enum": ["VERIFIED_COMPLETE", "PARTIAL_IMPLEMENTATION", "MISSING_LAYER", "CONTRADICTED"]
+          },
+          "evidence_notes": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "layer_gap_summary": {
+      "type": "object",
+      "required": ["verified_count", "partial_count", "missing_count", "contradicted_count"],
+      "properties": {
+        "verified_count": { "type": "integer" },
+        "partial_count": { "type": "integer" },
+        "missing_count": { "type": "integer" },
+        "contradicted_count": { "type": "integer" }
+      }
+    },
+    "quarantine_and_migration_strategy": { "type": "string", "minLength": 20 },
+    "reconciliation_verdict": {
+      "type": "string",
+      "enum": ["RECONCILED_WITH_GAPS_VISIBLE", "FULLY_RECONCILED", "UNRECONCILED_DRIFT"]
+    }
+  }
+}

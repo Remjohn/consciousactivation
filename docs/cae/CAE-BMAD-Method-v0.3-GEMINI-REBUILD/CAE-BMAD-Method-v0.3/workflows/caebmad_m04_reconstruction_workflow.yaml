@@ -1,0 +1,56 @@
+name: "CAE-BMAD M04 Product Reconstruction Workflow"
+workflow_id: "WF-M04-RECONSTRUCTION"
+version: "0.3.0-rebuild"
+primary_agent: "cae-product-reconstructor"
+
+description: "Execution pipeline for Mandate M04: Rebuilding the Product and Research Reconstruction Agent System."
+
+preconditions:
+  - "Mandates M01, M02, and M03 completed and passed"
+  - "216-source research library active"
+  - "Operating level framework validated"
+
+steps:
+  - step_id: "01_INGEST_CORPUS"
+    name: "Ingest and Scan 216 Sources"
+    agent: "cae-product-reconstructor"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Scan the 216 sources across the 8 categories."
+    output_artifacts: ["Corpus Lineage Index"]
+
+  - step_id: "02_EXTRACT_CAPABILITY_PILLARS"
+    name: "Extract 5 Core Capability Pillars"
+    agent: "cae-product-reconstructor"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Synthesize guest intelligence, interview intelligence, evidence provenance, editorial production, and multi-agent runtime."
+    output_artifacts: ["Pillars Definition"]
+
+  - step_id: "03_MAP_BROWNFIELD_CROSSWALKS"
+    name: "Audit Brownfield Crosswalks"
+    agent: "cae-brownfield-auditor"
+    operating_level: "Level 06: REPOSITORY"
+    action: "Verify historical origins against modern code paths."
+    output_artifacts: ["Brownfield Crosswalk Matrix"]
+
+  - step_id: "04_ASSEMBLE_RECONSTRUCTION_RECORD"
+    name: "Generate Canonical Reconstruction Deliverable"
+    agent: "cae-product-reconstructor"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Compile docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md and .json."
+    output_artifacts:
+      - "docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md"
+      - "docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.json"
+
+  - step_id: "05_VALIDATE_AND_GATE"
+    name: "Validate Deliverables and Assemble Operator Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_product_reconstruction.py and assemble OPERATOR_GATE_M04.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M04.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Product Reconstruction Record validates against schema"
+  - "All 5 Capability Pillars defined with verified code paths"
+  - "100% positive and countertests pass"

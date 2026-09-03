@@ -1,0 +1,78 @@
+{
+  "artifact_id": "CAE-ART-APP-001",
+  "status": "APPROVED",
+  "generated_date": "2026-09-03T11:07:50.415897",
+  "total_services": 5,
+  "services": [
+    {
+      "service_id": "SVC-WORLD-INTEL",
+      "name": "World Intelligence Service",
+      "directory_path": "services/world-intelligence/",
+      "entrypoint": "services/world-intelligence/src/cae_world_intelligence/domain.py",
+      "service_type": "MICROSERVICE",
+      "status": "ACTIVE",
+      "endpoints_or_handlers": [
+        "ResearchSignalIngestionHandler",
+        "WorldSignalProvenanceVerifier",
+        "NormalizationPipeline"
+      ]
+    },
+    {
+      "service_id": "SVC-PIPELINE",
+      "name": "CMF Workflow Pipeline Runtime",
+      "directory_path": "services/pipeline/",
+      "entrypoint": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py",
+      "service_type": "PIPELINE_RUNTIME",
+      "status": "ACTIVE",
+      "endpoints_or_handlers": [
+        "WorkflowCompiler",
+        "WorkflowRunService",
+        "DeterministicStepScheduler"
+      ]
+    },
+    {
+      "service_id": "SVC-BUILDER",
+      "name": "Service Builder Engine",
+      "directory_path": "services/builder/",
+      "entrypoint": "services/builder/main.py",
+      "service_type": "MICROSERVICE",
+      "status": "STANDALONE",
+      "endpoints_or_handlers": [
+        "ServiceCompilationHandler",
+        "CodeGenerationEngine"
+      ]
+    },
+    {
+      "service_id": "SVC-DELEGATION",
+      "name": "Task Delegation Daemon",
+      "directory_path": "services/delegation/",
+      "entrypoint": "services/delegation/worker.py",
+      "service_type": "DAEMON_WORKER",
+      "status": "STANDALONE",
+      "endpoints_or_handlers": [
+        "TaskQueueConsumer",
+        "WorkerStateWatcher"
+      ]
+    },
+    {
+      "service_id": "SVC-CA-RUNTIME",
+      "name": "Conscious Activation Core Runtime Package",
+      "directory_path": "packages/ca_runtime/",
+      "entrypoint": "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+      "service_type": "LIBRARY_PACKAGE",
+      "status": "ACTIVE",
+      "endpoints_or_handlers": [
+        "AgentInvocationContract",
+        "ProgramStateRuntime",
+        "CASMutationEngine"
+      ]
+    }
+  ],
+  "runtime_dependencies": [
+    "Python >= 3.11",
+    "PyYAML >= 6.0",
+    "jsonschema >= 4.20",
+    "pytest >= 8.0"
+  ],
+  "application_health_summary": "All 5 core microservices and runtime packages have verified entrypoints on disk and satisfy constitutional contracts."
+}
