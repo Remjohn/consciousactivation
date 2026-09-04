@@ -14,7 +14,7 @@ agents:
     name: "Product Reconstructor"
     operating_level: "PRODUCT / INTENT"
     mission: "Reconstructs the product from 216 sources, historical lineage, transcripts, artifacts, and current docs."
-    skills: ["caebmad-product-reconstruction", "caebmad-operating-level"]
+    skills: ["caebmad-product-reconstruction", "caebmad-operating-level", "caebmad-grill-protocol"]
     input_contract: [".caebmad/research/CAE_RESEARCH_LIBRARY.yaml"]
     output_contract: ["docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md"]
     boundaries: ["Must not erase historical lineage", "Must not invent unsupported capabilities"]
@@ -113,7 +113,7 @@ agents:
     name: "Product Brief Agent"
     operating_level: "PRODUCT / INTENT"
     mission: "Synthesizes intent into concise, authoritative Product Briefs backed by research."
-    skills: ["caebmad-product-brief"]
+    skills: ["caebmad-product-brief", "caebmad-grill-protocol"]
     input_contract: ["docs/cae-bmad/01_reconstruction/PRODUCT_RECONSTRUCTION.md", "docs/cae-bmad/00_governance/DECISION_LEDGER.md"]
     output_contract: ["docs/cae-bmad/03_product/PRODUCT_BRIEF.md"]
     boundaries: ["Must not introduce un-reconstructed features without grill resolution"]
@@ -122,7 +122,7 @@ agents:
     name: "Modular PRD Agent"
     operating_level: "DOCUMENTATION"
     mission: "Authors modular PRDs and Functional Requirements linked bidirectionally to research."
-    skills: ["caebmad-prd", "caebmad-fr"]
+    skills: ["caebmad-prd", "caebmad-fr", "caebmad-grill-protocol"]
     input_contract: ["docs/cae-bmad/03_product/PRODUCT_BRIEF.md"]
     output_contract: ["docs/cae-bmad/03_product/PRD_INDEX.md", "docs/cae-bmad/03_product/modules/PRD-*.md", "docs/cae-bmad/03_product/FUNCTIONAL_REQUIREMENTS.md"]
     boundaries: ["Must ensure every PRD requirement has an explicit source citation"]
@@ -131,7 +131,7 @@ agents:
     name: "Architecture Agent"
     operating_level: "DOCUMENTATION / APPLICATION"
     mission: "Designs technical architecture, typed interfaces, and subsystem interaction contracts."
-    skills: ["caebmad-architecture"]
+    skills: ["caebmad-architecture", "caebmad-grill-protocol"]
     input_contract: ["docs/cae-bmad/03_product/FUNCTIONAL_REQUIREMENTS.md"]
     output_contract: ["docs/cae-bmad/04_architecture/ARCHITECTURE.md"]
     boundaries: ["Must reconcile architecture with existing brownfield services"]
@@ -158,7 +158,7 @@ agents:
     name: "Brownfield Auditor"
     operating_level: "REPOSITORY → LINE"
     mission: "Challenges unsupported implementation claims and maps missing layers."
-    skills: ["caebmad-brownfield"]
+    skills: ["caebmad-brownfield", "caebmad-grill-protocol"]
     input_contract: ["docs/cae-bmad/05_planning/STORIES.md", "services/", "packages/"]
     output_contract: ["docs/cae-bmad/07_brownfield/BROWNFIELD_REALITY_MAP.md"]
     boundaries: ["Must reject claims of completion without code proof"]
@@ -167,7 +167,7 @@ agents:
     name: "Adversarial Reviewer"
     operating_level: "ALL"
     mission: "Audits deliverables for false proof, lineage loss, over-abstraction, and gaps."
-    skills: ["caebmad-review"]
+    skills: ["caebmad-review", "caebmad-grill-protocol"]
     input_contract: ["docs/cae-bmad/"]
     output_contract: ["docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.md"]
     boundaries: ["Must execute negative tests and challenge assumptions"]

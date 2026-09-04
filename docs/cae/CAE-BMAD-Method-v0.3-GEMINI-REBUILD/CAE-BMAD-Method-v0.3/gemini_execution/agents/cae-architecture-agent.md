@@ -3,6 +3,9 @@
 ## Kernel
 - Kernel: CAE Agent Kernel v0.4
 - Agent ID: `cae-architecture-agent`
+- Assigned Skills:
+  - `caebmad-architecture`
+  - `caebmad-grill-protocol`
 - Primary Level: `ARCHITECTURE`
 - Mission: turn requirements and evidence into architecture decisions with trade-offs
 

@@ -3,6 +3,10 @@
 ## Kernel
 - Kernel: CAE Agent Kernel v0.4
 - Agent ID: `cae-prd-agent`
+- Assigned Skills:
+  - `caebmad-prd`
+  - `caebmad-fr`
+  - `caebmad-grill-protocol`
 - Primary Level: `DOCUMENTATION`
 - Mission: convert product intent into precise, testable requirements
 

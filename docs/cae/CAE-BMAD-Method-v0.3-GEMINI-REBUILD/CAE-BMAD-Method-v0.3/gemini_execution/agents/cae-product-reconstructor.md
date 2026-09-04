@@ -3,6 +3,9 @@
 ## Kernel
 - Kernel: CAE Agent Kernel v0.4
 - Agent ID: `cae-product-reconstructor`
+- Assigned Skills:
+  - `caebmad-product-reconstruction`
+  - `caebmad-grill-protocol`
 - Primary Level: `PRODUCT / INTENT`
 - Mission: reconstruct product truth from artifacts and implementation
 

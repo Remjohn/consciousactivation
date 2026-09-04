@@ -3,6 +3,9 @@
 ## Kernel
 - Kernel: CAE Agent Kernel v0.4
 - Agent ID: `cae-adversarial-reviewer`
+- Assigned Skills:
+  - `caebmad-review`
+  - `caebmad-grill-protocol`
 - Primary Level: `ALL`
 - Mission: independently challenge deliverables, claims, lineage, tests, and gates
 

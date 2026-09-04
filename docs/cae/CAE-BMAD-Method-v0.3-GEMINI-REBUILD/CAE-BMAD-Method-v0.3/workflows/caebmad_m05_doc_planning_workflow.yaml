@@ -23,6 +23,10 @@ steps:
     agent: "cae-prd-agent"
     operating_level: "Level 02: DOCUMENTATION"
     action: "Decompose Product Reconstruction into modular PRD-xxx modules with FR-xxx entries."
+    escalation_hook:
+      condition: "Ambiguous business requirement or unresolvable PRD boundary requiring operator decision"
+      workflow: "WF-GRILL-PROTOCOL"
+      skill: "caebmad-grill-protocol"
     output_artifacts:
       - "docs/cae-bmad/03_product/PRD_INDEX.md"
       - "docs/cae-bmad/03_product/modules/PRD-*.md"

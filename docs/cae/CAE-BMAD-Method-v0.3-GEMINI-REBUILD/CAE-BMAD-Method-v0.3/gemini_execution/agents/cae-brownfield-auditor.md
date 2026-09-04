@@ -3,6 +3,9 @@
 ## Kernel
 - Kernel: CAE Agent Kernel v0.4
 - Agent ID: `cae-brownfield-auditor`
+- Assigned Skills:
+  - `caebmad-brownfield`
+  - `caebmad-grill-protocol`
 - Primary Level: `REPOSITORY → LINE`
 - Mission: audit system reality before change recommendations
 

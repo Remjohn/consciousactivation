@@ -24,6 +24,10 @@ steps:
     agent: "cae-architecture-agent"
     operating_level: "Level 02: DOCUMENTATION / Level 07: APPLICATION"
     action: "Define subsystem boundaries, typed interface schemas, and brownfield integration."
+    escalation_hook:
+      condition: "Ambiguous subsystem trade-offs requiring operator resolution"
+      workflow: "WF-GRILL-PROTOCOL"
+      skill: "caebmad-grill-protocol"
     output_artifacts:
       - "docs/cae-bmad/04_architecture/ARCHITECTURE.json"
       - "docs/cae-bmad/04_architecture/ARCHITECTURE.md"

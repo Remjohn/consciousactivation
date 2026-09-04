@@ -108,3 +108,38 @@ def test_grill_scripts_skills_templates_exist():
     assert (ROOT / "templates" / "grill_question.md").exists()
     assert (ROOT / "scripts" / "generate_canonical_grill_session.py").exists()
     assert (ROOT / "scripts" / "validate_grill_protocol.py").exists()
+    assert (ROOT / "workflows" / "caebmad_grill_workflow.yaml").exists()
+
+def test_grill_workflow_and_agent_integration():
+    import yaml
+    
+    # 1. Workflow exists and parses
+    wf_path = ROOT / "workflows" / "caebmad_grill_workflow.yaml"
+    wf = yaml.safe_load(wf_path.read_text(encoding="utf-8"))
+    assert wf["workflow_id"] == "WF-GRILL-PROTOCOL"
+    assert len(wf["steps"]) == 5
+
+    # 2. Agent routing integration
+    routing_path = ROOT / "config" / "CAE_BMAD_AGENT_ROUTING.yaml"
+    routing = yaml.safe_load(routing_path.read_text(encoding="utf-8"))
+    agent_map = {a["agent_id"]: a for a in routing["agents"]}
+
+    expected_grill_agents = [
+        "cae-method-orchestrator",
+        "cae-product-reconstructor",
+        "cae-prd-agent",
+        "cae-architecture-agent",
+        "cae-product-brief-agent",
+        "cae-brownfield-auditor",
+        "cae-adversarial-reviewer"
+    ]
+    for aid in expected_grill_agents:
+        assert aid in agent_map, f"Missing agent: {aid}"
+        assert "caebmad-grill-protocol" in agent_map[aid]["skills"], f"Agent {aid} missing caebmad-grill-protocol skill"
+
+    # 3. Artifact graph integration
+    graph_path = ROOT / "config" / "CAE_BMAD_ARTIFACT_GRAPH.yaml"
+    graph = yaml.safe_load(graph_path.read_text(encoding="utf-8"))
+    art_ids = {a["id"] for a in graph["artifacts"]}
+    assert "ART-04B" in art_ids, "ART-04B missing from CAE_BMAD_ARTIFACT_GRAPH.yaml"
+

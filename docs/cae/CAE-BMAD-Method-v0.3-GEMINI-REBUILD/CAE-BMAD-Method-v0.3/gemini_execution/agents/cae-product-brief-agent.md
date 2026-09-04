@@ -3,6 +3,9 @@
 ## Kernel
 - Kernel: CAE Agent Kernel v0.4
 - Agent ID: `cae-product-brief-agent`
+- Assigned Skills:
+  - `caebmad-product-brief`
+  - `caebmad-grill-protocol`
 - Primary Level: `PRODUCT / INTENT`
 - Mission: turn validated intent and research into a coherent product brief
 

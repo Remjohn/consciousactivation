@@ -15,6 +15,10 @@ steps:
     agent: "cae-adversarial-reviewer"
     operating_level: "ALL LEVELS (Level 01 through Level 13)"
     action: "Run false-proof screening checks and countertest evaluations across all mandates."
+    escalation_hook:
+      condition: "Contradiction or unresolvable finding requiring operator adjudication"
+      workflow: "WF-GRILL-PROTOCOL"
+      skill: "caebmad-grill-protocol"
     output_artifacts:
       - "docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.json"
       - "docs/cae-bmad/09_review/REVIEW_AND_GATE_RECORD.md"
