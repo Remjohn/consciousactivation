@@ -1,7 +1,7 @@
 # CAE Mandate Bundle — Wave 05
 
 **Bundle ID:** `CAE_MANDATE_BUNDLE_WAVE_05`  
-**Scope:** Canonical Questions Q32–Q39  
+**Scope:** Canonical Questions Q32–Q40 (including Gate Suspension & Resumption)  
 **Status:** Execution-ready mandate bundle  
 **Date:** 2026-09-06  
 **Predecessor:** Wave 04 (Authorization, composition, release & distribution)  
@@ -49,6 +49,8 @@ Inherited Wave 01–04 evidence (causal ordering, sovereign media, multi-dimensi
 | `07_CA_MANDATE_037.md` | Q37 | `INV-RUN-001` |
 | `08_CA_MANDATE_038.md` | Q38 | `INV-ROUT-001` |
 | `09_CA_MANDATE_039.md` | Q39 | `INV-OUT-001` |
+| `10_CA_MANDATE_040.md` | Q40 | `INV-GATE-001` |
+| `11_CA_MANDATE_041.md` | Q40 | `INV-GATE-002` / `INV-AUTH-001` |
 
 ## Status discipline
 
