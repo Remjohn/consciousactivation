@@ -1,0 +1,71 @@
+{
+  "artifact_id": "CAE-ART-MOD-001",
+  "status": "APPROVED",
+  "generated_date": "2026-09-03T11:10:04.154265",
+  "total_modules": 4,
+  "modules": [
+    {
+      "module_namespace": "cae_world_intelligence",
+      "root_directory": "services/world-intelligence/src/cae_world_intelligence/",
+      "public_symbols": [
+        "ResearchSignal",
+        "WorldSignalProvenanceVerifier",
+        "NormalizationPipeline"
+      ],
+      "internal_dependencies": [
+        "typing",
+        "pydantic",
+        "datetime"
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "module_namespace": "cmf_pipeline.workflow",
+      "root_directory": "services/pipeline/src/cmf_pipeline/workflow/",
+      "public_symbols": [
+        "WorkflowCompiler",
+        "WorkflowRunService",
+        "DeterministicStepScheduler"
+      ],
+      "internal_dependencies": [
+        "ca_runtime",
+        "typing",
+        "pathlib"
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "module_namespace": "ca_runtime",
+      "root_directory": "packages/ca_runtime/src/ca_runtime/",
+      "public_symbols": [
+        "AgentInvocationContract",
+        "ProgramStateRuntime",
+        "CASMutationEngine"
+      ],
+      "internal_dependencies": [
+        "typing",
+        "json",
+        "asyncio"
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "module_namespace": "caebmad_rebuild_tools",
+      "root_directory": "docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/CAE-BMAD-Method-v0.3/scripts/",
+      "public_symbols": [
+        "validate_rebuild",
+        "investigate_operating_levels",
+        "reconstruct_product_lineage"
+      ],
+      "internal_dependencies": [
+        "yaml",
+        "json",
+        "pathlib",
+        "pytest"
+      ],
+      "status": "ACTIVE"
+    }
+  ],
+  "dependency_graph_summary": "Clean acyclic module hierarchy: packages/ca_runtime serves as foundational leaf dependency consumed by services/pipeline and services/world-intelligence.",
+  "circular_dependencies_detected": false
+}

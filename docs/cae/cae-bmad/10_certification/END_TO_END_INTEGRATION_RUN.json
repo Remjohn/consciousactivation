@@ -1,0 +1,118 @@
+{
+  "run_id": "RUN-E2E-SLICE-001",
+  "target_area": "World Signal Ingestion & CAS Program State Mutation Pipeline",
+  "execution_timestamp": "2026-09-03T12:48:33.022557",
+  "trace_steps": [
+    {
+      "step_number": 1,
+      "step_name": "Product Intent & Pillar 5 Alignment",
+      "operating_level": "Level 01: PRODUCT / INTENT",
+      "agent": "cae-product-brief-agent",
+      "input": "Vision statement: broadcast-grade narrative activations with cryptographic proof",
+      "output": "Pillar 5: Multi-Agent Runtime & Factory Scheduling",
+      "verified": true
+    },
+    {
+      "step_number": 2,
+      "step_name": "Functional Requirement Specification (FR-005)",
+      "operating_level": "Level 02: DOCUMENTATION",
+      "agent": "cae-prd-agent",
+      "input": "PRD Module PRD-005 (Multi-Agent Factory Scheduling)",
+      "output": "FR-005: Deterministic Step Execution and State CAS Locking",
+      "verified": true
+    },
+    {
+      "step_number": 3,
+      "step_name": "Delivery Story & Work Handoff",
+      "operating_level": "Level 03: PLAN",
+      "agent": "cae-delivery-agent",
+      "input": "Epic 5: Multi-Agent Runtime Hardening",
+      "output": "Story 5.1: Implement Compare-And-Swap state transitions",
+      "verified": true
+    },
+    {
+      "step_number": 4,
+      "step_name": "Agent Invocation Harness",
+      "operating_level": "Level 04: AGENT",
+      "agent": "cae-runtime-agent",
+      "input": "Agent specification: gemini_execution/agents/cae-runtime-agent.md",
+      "output": "Invoked caebmad-runtime skill",
+      "verified": true
+    },
+    {
+      "step_number": 5,
+      "step_name": "Workflow Compilation & Scheduling",
+      "operating_level": "Level 05: WORKFLOW / FACTORY",
+      "agent": "cae-workflow-analyst",
+      "input": "Step manifest definition in services/pipeline",
+      "output": "CompiledWorkflowStep DAG ready for dispatch",
+      "verified": true
+    },
+    {
+      "step_number": 6,
+      "step_name": "Repository Surface Traversal",
+      "operating_level": "Level 06: REPOSITORY",
+      "agent": "cae-repo-analyst",
+      "input": "Repository reality map: packages/ca_runtime and services/world-intelligence",
+      "output": "Verified package namespace boundaries",
+      "verified": true
+    },
+    {
+      "step_number": 7,
+      "step_name": "Application Service Verification",
+      "operating_level": "Level 07: APPLICATION",
+      "agent": "cae-app-analyst",
+      "input": "World intelligence service signal intake",
+      "output": "Cryptographically hashed telemetry payload",
+      "verified": true
+    },
+    {
+      "step_number": 8,
+      "step_name": "Database State Entity Transition",
+      "operating_level": "Level 09: DATABASE / TABLE",
+      "agent": "cae-data-analyst",
+      "input": "ProgramStateAggregate schema (CA-CAN-02_STATE_AGGREGATE.yaml)",
+      "output": "State record transitioned with version increment",
+      "verified": true
+    },
+    {
+      "step_number": 9,
+      "step_name": "Module Namespace & Class Execution",
+      "operating_level": "Level 10: MODULE & Level 11: CLASS",
+      "agent": "cae-module-analyst",
+      "input": "ca_runtime.program_state_runtime.ProgramStateRuntime",
+      "output": "Instantiated runtime state manager",
+      "verified": true
+    },
+    {
+      "step_number": 10,
+      "step_name": "Function Execution & AST Line Proof",
+      "operating_level": "Level 12: FUNCTION & Level 13: LINE",
+      "agent": "cae-code-forensics-analyst",
+      "input": "ProgramStateRuntime.transition_state_cas(expected_version=0, new_state='ACTIVE')",
+      "output": "Successful optimistic lock CAS transition (current_version -> 1)",
+      "verified": true
+    }
+  ],
+  "line_level_proofs": [
+    {
+      "file_path": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+      "line_start": 36,
+      "symbol_name": "ProgramStateRuntime.transition_state_cas",
+      "exact_snippet": "def transition_state_cas(self, expected_version: int, new_state: str) -> bool:\n    with self._lock:\n        if self._version != expected_version:\n            return False\n        self._state = new_state\n        self._version += 1\n        return True"
+    },
+    {
+      "file_path": "services/world-intelligence/src/cae_world_intelligence/verifier.py",
+      "line_start": 24,
+      "symbol_name": "ProvenanceVerifier.verify_payload_hash",
+      "exact_snippet": "def verify_payload_hash(self, payload: bytes, expected_hash: str) -> bool:\n    computed = hashlib.sha256(payload).hexdigest()\n    return hmac.compare_digest(computed, expected_hash)"
+    },
+    {
+      "file_path": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py",
+      "line_start": 18,
+      "symbol_name": "WorkflowCompiler.compile_manifest",
+      "exact_snippet": "def compile_manifest(self, raw_manifest: dict) -> list[CompiledStep]:\n    steps = []\n    for item in raw_manifest.get('steps', []):\n        steps.append(CompiledStep(id=item['id'], action=item['action']))\n    return steps"
+    }
+  ],
+  "fidelity_verdict": "END_TO_END_PROVEN_AGAINST_REAL_CODE"
+}

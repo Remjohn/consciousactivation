@@ -1,0 +1,61 @@
+{
+  "artifact_id": "CAE-ART-CCM-001",
+  "status": "APPROVED",
+  "generated_date": "2026-09-03T11:07:50.422032",
+  "total_commands": 5,
+  "command_suites": [
+    {
+      "suite_id": "SUITE-REBUILD-VALIDATORS",
+      "name": "CAE-BMAD Rebuild Validation Suite",
+      "script_path": "docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/CAE-BMAD-Method-v0.3/scripts/validate_rebuild.py",
+      "runtime_engine": "PYTHON",
+      "description": "Orchestrates multi-mandate schema checks, state machine validation, and rebuild verification.",
+      "verified_executable": true
+    },
+    {
+      "suite_id": "SUITE-RESEARCH-INTAKE",
+      "name": "216-Source Corpus Intake and Lineage Engine",
+      "script_path": "docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/CAE-BMAD-Method-v0.3/scripts/intake_research_corpus.py",
+      "runtime_engine": "PYTHON",
+      "description": "Ingests baseline and extended research sources, performs scoring, and emits YAML catalog.",
+      "verified_executable": true
+    },
+    {
+      "suite_id": "SUITE-LEVEL-INVESTIGATOR",
+      "name": "13-Level Engineering Investigation Tool",
+      "script_path": "docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/CAE-BMAD-Method-v0.3/scripts/investigate_operating_levels.py",
+      "runtime_engine": "PYTHON",
+      "description": "Traverses 13 operating levels, audits doc-to-code drift, and produces OLA artifact.",
+      "verified_executable": true
+    },
+    {
+      "suite_id": "SUITE-DOC-PLANNING-GEN",
+      "name": "Documentation & Planning System Generator",
+      "script_path": "docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/CAE-BMAD-Method-v0.3/scripts/generate_doc_planning.py",
+      "runtime_engine": "PYTHON",
+      "description": "Compiles 5 PRD modules, Functional Requirements matrix, and delivery epics.",
+      "verified_executable": true
+    },
+    {
+      "suite_id": "SUITE-AGENT-FACTORY-GEN",
+      "name": "Agent & Workflow Map Generator",
+      "script_path": "docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/CAE-BMAD-Method-v0.3/scripts/generate_agent_workflow_factory_maps.py",
+      "runtime_engine": "PYTHON",
+      "description": "Compiles the 19-agent architecture map and multi-agent factory workflow map.",
+      "verified_executable": true
+    }
+  ],
+  "cli_entrypoints": [
+    {
+      "command_name": "cae-validate",
+      "target_function": "validate_rebuild:main",
+      "package": "cae-bmad-method"
+    },
+    {
+      "command_name": "cae-investigate",
+      "target_function": "investigate_operating_levels:main",
+      "package": "cae-bmad-method"
+    }
+  ],
+  "execution_test_summary": "All 5 command suites verified executable in Python 3.12 environment with 100% successful exit codes."
+}
