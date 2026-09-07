@@ -325,7 +325,7 @@ class ProgramOperatorRuntimeService:
         initial_data: Optional[Dict[str, Any]] = None,
         context_claims: Optional[Sequence[str]] = None,
     ) -> ProgramStateAggregate:
-        """Instantiates and starts a Program execution under COMMANDER authorization."""
+        """Starts a program through CA-M034 two-phase atomic lease dispatch."""
         if actor_lane != AuthorityLane.COMMANDER:
             raise ProgramAuthorityLaneViolationError(
                 aggregate_id=f"prog-state:{workspace_id}:{program_id}:*",
@@ -340,9 +340,9 @@ class ProgramOperatorRuntimeService:
         except ProgramNotFoundError:
             pass
 
-        # Perform fail-closed preflight validation if package is registered
+        claims = list(context_claims) if context_claims is not None else (list(pkg.manifest.preconditions) if pkg else [])
+
         if pkg:
-            claims = list(context_claims) if context_claims is not None else list(pkg.manifest.preconditions)
             preflight = self.program_registry.preflight(
                 program_id=program_id,
                 workspace_id=workspace_id,
@@ -360,23 +360,24 @@ class ProgramOperatorRuntimeService:
                     },
                 )
 
-        aggregate = self.runtime.initialize_program_state(
+        # Phase 1: durable v0 aggregate + LEASE_ENQUEUED.
+        aggregate = self.runtime.register_program_dispatch(
             program_package=pkg,
             program_id=program_id,
             workspace_id=workspace_id,
             actor_id=actor_id,
             initial_data=initial_data,
-            context_claims=claims,
         )
 
-        # Transition lifecycle from INITIALIZED to RUNNING
-        updated_agg = self.runtime.set_lifecycle(
+        # Phase 2: refresh canonical local context, atomically CAS lease 0 -> 1,
+        # and enqueue the real workflow-dispatch boundary in the same persistence transaction.
+        # A failed claim remains INITIALIZED + LEASE_ENQUEUED; never synthesize RUNNING.
+        return self.runtime.acquire_execution_lease_and_trigger(
             aggregate_id=aggregate.aggregate_id,
-            new_lifecycle=ProgramStateLifecycle.RUNNING,
             actor_id=actor_id,
-            receipt_id=aggregate.last_receipt_id,
+            expected_lease_version=0,
+            context_claims=claims,
         )
-        return updated_agg
 
     def pause_program(
         self,

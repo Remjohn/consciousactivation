@@ -151,5 +151,7 @@ from api.routers import programs; app.include_router(programs.router, prefix="/a
 from api.routers import vae; app.include_router(vae.router, prefix="/api/vae", tags=["vae"])  # noqa: E702
 # CAE (Phase 4 Mandate M45): Release / Ship / Outcome Runtime router
 from api.routers import release_ship; app.include_router(release_ship.router, prefix="/api/release", tags=["release-ship"])  # noqa: E702
+# CAE (CA-M002 / FR-CONV-001): Dual-Context Convergence Gate router
+from api.routers import convergence; app.include_router(convergence.router, prefix="/api/convergence", tags=["convergence"])  # noqa: E702
 
 

@@ -13,7 +13,7 @@ from .candidates import CandidateSearchService
 from .intake import AtomicHarnessDefinitionIntake, HarnessDefinitionProfileRegistry, HarnessGraphReconciler, HarnessPackageVerifier
 from .workflow import RuntimeDependencyGraph, RuntimeInvalidationPlanner, RuntimeWorkflowCompiler, WorkflowRunService
 from .workflow.infrastructure import PipelineRepository
-from .media import SourceMediaService, VideoEditProgramService, WordBoundaryEdlService
+from .media import SourceMediaService, TemporalEvidenceMomentService, VideoEditProgramService, WordBoundaryEdlService
 from .composition import CompositionIRService
 from .evaluation import EvaluationService, BoundedRepairService
 from .delegation import VisualDelegationService
@@ -43,6 +43,7 @@ class PipelineApplication:
         self.assurance = AssuranceService(self.repository)
         self.candidates = CandidateSearchService()
         self.source_media = SourceMediaService(self.repository)
+        self.evidence_moments = TemporalEvidenceMomentService(self.repository)
         self.video_programs = VideoEditProgramService(self.repository)
         self.edls = WordBoundaryEdlService(self.repository)
         self.compositions = CompositionIRService(self.repository)

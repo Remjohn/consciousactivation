@@ -71,6 +71,31 @@ class CandidateSearchService:
         return {"portfolio_id": semantic_identity("candidate-portfolio", core), **core, "candidates": observed}
 
     @staticmethod
+    def enforce_preproduction_gate(gate_result: Mapping[str, Any], *, candidate_id: str) -> dict[str, Any]:
+        """
+        CA-M005 runtime admission seam. The pipeline cannot advance a candidate unless
+        an upstream deterministic format/archetype gate explicitly returned PASS.
+        """
+        if not isinstance(gate_result, Mapping):
+            raise PipelineValidationError("CA-M005 gate result must be a mapping")
+        status = gate_result.get("gate_status")
+        decision_sha = gate_result.get("decision_sha256")
+        reasons = gate_result.get("incompatible_reasons") or []
+        if status != "PASS" or not decision_sha or reasons:
+            reason_text = "; ".join(str(item) for item in reasons) or "format/archetype feasibility gate did not pass"
+            raise PipelineValidationError(
+                f"PreProduction admission blocked for candidate '{candidate_id}': {reason_text}"
+            )
+        return {
+            "candidate_id": candidate_id,
+            "gate_status": status,
+            "decision_sha256": str(decision_sha),
+            "gate_version": str(gate_result.get("gate_version", "CA-M005-v1")),
+            "compatible_reasons": list(gate_result.get("compatible_reasons") or []),
+            "incompatible_reasons": list(reasons),
+        }
+
+    @staticmethod
     def _rank_key(candidate: Mapping[str, Any]) -> tuple[int, int, str]:
         return (-int(candidate["quality_score_bps"]), int(candidate["cost_units"]), str(candidate["candidate_id"]))
 

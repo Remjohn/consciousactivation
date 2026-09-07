@@ -116,6 +116,9 @@ from cae_operator_intelligence.errors import (
     UnapprovedExecutionError,
 )
 from cmf_pipeline.candidates.service import CandidateSearchService
+from cae_interview_intelligence.composition_compatibility import CompositionCompatibilityEvaluator
+from cae_interview_intelligence.hypothesis_adapter import SemanticRef
+from cae_interview_intelligence.question_resolver import CompositionCompatibility
 
 
 
@@ -775,6 +778,35 @@ class EditorialDiscoveryProgramCoordinator:
             plateau_delta_bps=plateau_delta_bps,
         )
 
+    def _evaluate_preproduction_format_gate(
+        self,
+        *,
+        candidate: ContentCandidateRecord,
+        target_format: str = "FMT-01-STORY",
+        target_archetype: Optional[str] = None,
+        target_narrative_role: Optional[str] = "ROLE-PROTAGONIST-CRUCIBLE",
+        target_aspect_ratio: Optional[str] = None,
+        format_capabilities: Optional[List[str]] = None,
+        narrative_ref: Optional[SemanticRef] = None,
+        hypothesis_ref: Optional[SemanticRef] = None,
+    ) -> CompositionCompatibility:
+        """Build and evaluate the authoritative CA-M005 Stage 05 admission decision."""
+        archetype = target_archetype or candidate.archetypal_container or "ARCH-CRUCIBLE"
+        result = CompositionCompatibilityEvaluator.evaluate_preproduction_admission(
+            target_archetype=archetype,
+            target_format=target_format,
+            target_narrative_role=target_narrative_role,
+            target_aspect_ratio=target_aspect_ratio,
+            provided_format_capabilities=format_capabilities,
+            narrative_ref=narrative_ref,
+            hypothesis_ref=hypothesis_ref,
+        )
+        self.search_service.enforce_preproduction_gate(
+            result.model_dump(mode="json"),
+            candidate_id=candidate.candidate_id,
+        )
+        return result
+
     def operator_select_candidate(
         self,
         *,
@@ -786,6 +818,13 @@ class EditorialDiscoveryProgramCoordinator:
         rationale: str,
         taste_delta: Optional[str] = None,
         notes: Optional[str] = None,
+        target_format: str = "FMT-01-STORY",
+        target_archetype: Optional[str] = None,
+        target_narrative_role: Optional[str] = "ROLE-PROTAGONIST-CRUCIBLE",
+        target_aspect_ratio: Optional[str] = None,
+        format_capabilities: Optional[List[str]] = None,
+        narrative_ref: Optional[SemanticRef] = None,
+        hypothesis_ref: Optional[SemanticRef] = None,
     ) -> EditorialStoryboardRecord:
         """Executes human operator candidate selection for production, enforcing synthetic-proof blocks."""
         if lane != AuthorityLane.COMMANDER:
@@ -803,6 +842,21 @@ class EditorialDiscoveryProgramCoordinator:
             operator_id=operator_id,
         )
 
+        # CA-M005 must pass before any SELECT receipt, storyboard, or production-status mutation.
+        gate_result = self._evaluate_preproduction_format_gate(
+            candidate=cand,
+            target_format=target_format,
+            target_archetype=target_archetype,
+            target_narrative_role=target_narrative_role,
+            target_aspect_ratio=target_aspect_ratio,
+            format_capabilities=format_capabilities,
+            narrative_ref=narrative_ref,
+            hypothesis_ref=hypothesis_ref,
+        )
+        gate_payload = gate_result.model_dump(mode="json")
+        gate_note = "CA-M005 PASS: " + "; ".join(gate_result.compatible_reasons)
+        effective_notes = " | ".join(part for part in (notes, gate_note) if part)
+
         session = OperatorSelectionManager.create_session(workspace_id=workspace_id, operator_id=operator_id)
         snapshot = OperatorSelectionManager.select_candidate(
             session,
@@ -813,7 +867,7 @@ class EditorialDiscoveryProgramCoordinator:
             evidence_links=cand.evidence_links,
             rationale=rationale,
             taste_delta=taste_delta,
-            notes=notes,
+            notes=effective_notes,
         )
 
         # Store Storyboard record
@@ -826,7 +880,7 @@ class EditorialDiscoveryProgramCoordinator:
             priority_rank=snapshot.priority_rank,
             evidence_links=snapshot.evidence_links,
             approved_by=operator_id,
-            notes=notes,
+            notes=effective_notes,
         )
         self.editorial_store.insert_editorial_storyboard(storyboard)
 
@@ -850,7 +904,11 @@ class EditorialDiscoveryProgramCoordinator:
             rationale=rationale,
             taste_delta=taste_delta,
             is_synthetic_blocked=False,
-            metadata_payload={"storyboard_id": storyboard.storyboard_id, "priority_rank": priority_rank},
+            metadata_payload={
+                "storyboard_id": storyboard.storyboard_id,
+                "priority_rank": priority_rank,
+                "format_gate": gate_payload,
+            },
             receipt_sha256=canonical_sha256(receipt_core),
         )
         self.editorial_store.insert_decision_receipt(rec)
@@ -1148,7 +1206,25 @@ class EditorialDiscoveryProgramCoordinator:
                 f"Candidate '{candidate_id}' cannot proceed to production: missing authoritative SELECT receipt or status is '{cand.production_status}'."
             )
 
-        # 4. Verify evidence immutability against store segments
+        # 4. CA-M005: require an intact, cryptographically verifiable format/archetype gate receipt.
+        latest_select = select_receipts[-1]
+        gate_payload = latest_select.metadata_payload.get("format_gate")
+        if not isinstance(gate_payload, dict):
+            raise UnapprovedExecutionError(
+                f"Candidate '{candidate_id}' cannot proceed to production: missing CA-M005 format/archetype admission receipt."
+            )
+        try:
+            gate_result = CompositionCompatibility(**gate_payload)
+        except Exception as exc:
+            raise UnapprovedExecutionError(
+                f"Candidate '{candidate_id}' cannot proceed to production: invalid CA-M005 admission receipt ({exc})."
+            ) from exc
+        if gate_result.gate_status != "PASS" or not CompositionCompatibilityEvaluator.verify_admission_result(gate_result):
+            raise UnapprovedExecutionError(
+                f"Candidate '{candidate_id}' cannot proceed to production: CA-M005 admission receipt failed verification."
+            )
+
+        # 5. Verify evidence immutability against store segments
         for link in cand.evidence_links:
             seg_id = link.get("segment_id")
             seg = self.editorial_store.get_evidence_segment(workspace_id, seg_id)

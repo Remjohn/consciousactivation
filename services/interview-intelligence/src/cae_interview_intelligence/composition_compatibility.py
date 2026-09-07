@@ -13,8 +13,10 @@ Provides:
 - CompositionCompatibilityEvaluator enforcing semantic vs syntax alignment and anti-evidence-manufacturing invariants.
 """
 
+import hashlib
+import json
 import uuid
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 from pydantic import BaseModel, Field
 
 from conscious_activations_interview_composer.errors import ValidationError
@@ -56,6 +58,9 @@ class FormatSpec(BaseModel):
     harness_description: str
     supported_archetype_ids: List[str]
     pacing_and_roll_structure: List[str]
+    supported_aspect_ratios: List[str] = Field(default_factory=list)
+    required_capabilities: List[str] = Field(default_factory=list)
+    registry_version: str = "1.0.0"
 
 
 class NarrativeRoleSpec(BaseModel):
@@ -160,6 +165,7 @@ KNOWN_FORMATS: Dict[str, FormatSpec] = {
         harness_description="Rich narrative editing combining A-roll, B-roll, C-roll, and E-roll sonic integration.",
         supported_archetype_ids=["ARCH-CRUCIBLE", "ARCH-WITNESS", "ARCH-ACHIEVEMENT"],
         pacing_and_roll_structure=["A_ROLL_NARRATIVE", "B_ROLL_CONTEXT", "C_ROLL_EVIDENCE", "E_ROLL_SONIC"],
+        required_capabilities=["A_ROLL_NARRATIVE", "B_ROLL_CONTEXT", "C_ROLL_EVIDENCE", "E_ROLL_SONIC"],
     ),
     "FMT-02-REACTION": FormatSpec(
         format_id="FMT-02-REACTION",
@@ -167,6 +173,8 @@ KNOWN_FORMATS: Dict[str, FormatSpec] = {
         harness_description="Dynamic perspective juxtaposition and emotional commentary.",
         supported_archetype_ids=["ARCH-DEBUNK", "ARCH-OBSERVATIONAL", "ARCH-WITNESS"],
         pacing_and_roll_structure=["HOOK_STIMULUS", "GUEST_REACTION", "SEMANTIC_SYNTHESIS"],
+        supported_aspect_ratios=["9:16"],
+        required_capabilities=["HOOK_STIMULUS", "GUEST_REACTION", "SEMANTIC_SYNTHESIS"],
     ),
     "FMT-03-BREAKDOWN": FormatSpec(
         format_id="FMT-03-BREAKDOWN",
@@ -174,6 +182,7 @@ KNOWN_FORMATS: Dict[str, FormatSpec] = {
         harness_description="High-density step-by-step causal flow with diagrams and evidence callouts.",
         supported_archetype_ids=["ARCH-INVESTIGATIVE", "ARCH-DEBUNK"],
         pacing_and_roll_structure=["ANOMALY_HOOK", "CAUSAL_TRACE", "EMPIRICAL_PROOF", "SYSTEM_CONCLUSION"],
+        required_capabilities=["ANOMALY_HOOK", "CAUSAL_TRACE", "EMPIRICAL_PROOF", "SYSTEM_CONCLUSION"],
     ),
     "FMT-04-CAROUSEL": FormatSpec(
         format_id="FMT-04-CAROUSEL",
@@ -181,6 +190,7 @@ KNOWN_FORMATS: Dict[str, FormatSpec] = {
         harness_description="Swipeable visual card progression requiring concise self-contained beats.",
         supported_archetype_ids=["ARCH-ACHIEVEMENT", "ARCH-INVESTIGATIVE", "ARCH-DEBUNK"],
         pacing_and_roll_structure=["SLIDE_HOOK", "SLIDE_CONFLICT", "SLIDE_INSIGHT", "SLIDE_PAYOFF"],
+        required_capabilities=["SLIDE_HOOK", "SLIDE_CONFLICT", "SLIDE_INSIGHT", "SLIDE_PAYOFF"],
     ),
 }
 
@@ -412,6 +422,131 @@ class CompositionCompatibilityEvaluator:
             compatible_reasons=compatible_reasons,
             incompatible_reasons=incompatible_reasons,
         )
+
+    @staticmethod
+    def _profile_ref(object_id: str, object_type: str, payload: Any, version: str) -> SemanticRef:
+        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+        return SemanticRef(
+            object_id=object_id,
+            object_type=object_type,
+            version=version,
+            sha256=hashlib.sha256(canonical.encode("utf-8")).hexdigest(),
+        )
+
+    @staticmethod
+    def _binding_ref(ref: Optional[SemanticRef]) -> Optional[SemanticRef]:
+        if ref is None:
+            return None
+        return SemanticRef(**ref.model_dump())
+
+    @classmethod
+    def evaluate_preproduction_admission(
+        cls,
+        *,
+        target_archetype: str,
+        target_format: str,
+        target_narrative_role: Optional[str] = None,
+        target_aspect_ratio: Optional[str] = None,
+        provided_format_capabilities: Optional[List[str]] = None,
+        narrative_ref: Optional[SemanticRef] = None,
+        hypothesis_ref: Optional[SemanticRef] = None,
+        target_resolution: AnswerResolution = AnswerResolution.EPISODIC,
+        evidence_mode: EvidenceMode = EvidenceMode.STORY,
+    ) -> CompositionCompatibility:
+        """
+        CA-M005 authoritative admission check for Stage 05 PreProduction.
+
+        The calculation is deterministic and fail-closed: unknown profiles, unsupported
+        archetype/format pairs, declared aspect-ratio conflicts, and missing declared
+        format capabilities all block admission. Narrative/hypothesis refs are carried
+        into the result so the operator/runtime can persist the exact binding when one
+        is available.
+        """
+        evaluator = cls()
+        arch_key = evaluator.resolve_archetype_key(target_archetype)
+        fmt_key = evaluator.resolve_format_key(target_format)
+        role_key = evaluator.resolve_role_key(target_narrative_role) if target_narrative_role else None
+        arch_spec = KNOWN_ARCHETYPES.get(arch_key) if arch_key else None
+        fmt_spec = KNOWN_FORMATS.get(fmt_key) if fmt_key else None
+
+        base = evaluator.evaluate_compatibility(
+            target_archetype=target_archetype,
+            target_format=target_format,
+            target_narrative_role=target_narrative_role,
+            target_resolution=target_resolution,
+            evidence_mode=evidence_mode,
+        )
+
+        incompatible = list(base.incompatible_reasons)
+        compatible = list(base.compatible_reasons)
+        required = list(fmt_spec.required_capabilities) if fmt_spec else []
+        provided = sorted(set(required if provided_format_capabilities is None and fmt_spec else (provided_format_capabilities or [])))
+        missing = sorted(set(required) - set(provided))
+
+        if fmt_spec is None:
+            incompatible.append(f"Unknown delivery format profile '{target_format}' is not admitted by the current format registry.")
+        if arch_spec is None:
+            incompatible.append(f"Unknown archetype profile '{target_archetype}' is not admitted by the current archetype registry.")
+        if role_key is not None and role_key not in KNOWN_NARRATIVE_ROLES:
+            incompatible.append(f"Unknown narrative role profile '{target_narrative_role}' is not admitted by the current narrative-role registry.")
+        if arch_spec and fmt_spec and arch_spec.archetype_id not in fmt_spec.supported_archetype_ids:
+            incompatible.append(
+                f"Archetype '{arch_spec.canonical_name}' is not supported by delivery format '{fmt_spec.canonical_name}'."
+            )
+        if target_aspect_ratio and fmt_spec and fmt_spec.supported_aspect_ratios:
+            if target_aspect_ratio not in fmt_spec.supported_aspect_ratios:
+                incompatible.append(
+                    f"Aspect ratio '{target_aspect_ratio}' is not supported by delivery format '{fmt_spec.canonical_name}'; "
+                    f"supported ratios are {fmt_spec.supported_aspect_ratios}."
+                )
+            else:
+                compatible.append(
+                    f"Aspect ratio '{target_aspect_ratio}' is supported by delivery format '{fmt_spec.canonical_name}'."
+                )
+        if missing:
+            incompatible.append(
+                "Required format capabilities are missing: " + ", ".join(missing) + "."
+            )
+
+        status = "PASS" if not incompatible and base.is_compatible() else "BLOCK"
+        format_ref = evaluator._profile_ref(fmt_spec.format_id, "delivery_format_profile", fmt_spec.model_dump(), fmt_spec.registry_version) if fmt_spec else None
+        archetype_ref = evaluator._profile_ref(arch_spec.archetype_id, "content_archetype_profile", arch_spec.model_dump(), "1.0.0") if arch_spec else None
+        result = CompositionCompatibility(
+            **base.model_dump(exclude={
+                "gate_status", "target_aspect_ratio", "required_format_capabilities",
+                "provided_format_capabilities", "missing_format_capabilities",
+                "narrative_ref", "hypothesis_ref", "format_profile_ref",
+                "archetype_profile_ref", "gate_version", "decision_sha256",
+                "compatible_reasons", "incompatible_reasons",
+            }),
+            gate_status=status,
+            target_aspect_ratio=target_aspect_ratio,
+            required_format_capabilities=required,
+            provided_format_capabilities=provided,
+            missing_format_capabilities=missing,
+            narrative_ref=cls._binding_ref(narrative_ref),
+            hypothesis_ref=cls._binding_ref(hypothesis_ref),
+            format_profile_ref=format_ref,
+            archetype_profile_ref=archetype_ref,
+            gate_version="CA-M005-v1",
+            compatible_reasons=compatible,
+            incompatible_reasons=sorted(set(incompatible)),
+        )
+        core = result.model_dump(exclude={"decision_sha256"}, mode="json")
+        result.decision_sha256 = hashlib.sha256(
+            json.dumps(core, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+        ).hexdigest()
+        return result
+
+    @staticmethod
+    def verify_admission_result(result: CompositionCompatibility) -> bool:
+        if not result.decision_sha256:
+            return False
+        core = result.model_dump(exclude={"decision_sha256"}, mode="json")
+        expected = hashlib.sha256(
+            json.dumps(core, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+        ).hexdigest()
+        return expected == result.decision_sha256
 
     def assert_archetype_does_not_manufacture_evidence(
         self,

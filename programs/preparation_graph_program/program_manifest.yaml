@@ -1,0 +1,49 @@
+program:
+  id: "preparation_graph_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Implements the preparation graph as a first-class, operator-controlled, revisioned planning artifact."
+  operator_entrypoint: "run_preparation_graph"
+  inputs:
+    - "campaign_id"
+    - "preparation_parameters"
+  preconditions:
+    - "workspace_active"
+    - "campaign_exists"
+  outputs:
+    - "preparation_graph"
+    - "graph_revision"
+    - "graph_run_binding"
+  artifacts:
+    - "preparation_graph_revision"
+    - "graph_run_binding_receipt"
+  harness: "PREPARATION_GRAPH_HARNESS_V1"
+  state_machine: "PREPARATION_GRAPH_STATE_MACHINE_V1"
+  lanes:
+    - "ANALYST"
+    - "COMMANDER"
+  agents:
+    - "PreparationGraphCoordinatorAgent"
+  subagents: []
+  skills: []
+  operations:
+    - "create_graph"
+    - "save_graph_revision"
+    - "bind_run_to_revision"
+    - "get_graph_operator_view"
+    - "verify_active_run_integrity"
+  tools: []
+  connections: []
+  hooks: []
+  extensions: []
+  evals: []
+  operator_gates:
+    - "operator_preparation_approval"
+  recovery: []
+  receipts:
+    - "preparation_graph_receipt"
+  dependencies:
+    - program_id: "collision_discovery_program"
+      version_requirement: "^1.0.0"
+    - program_id: "audience_context_program"
+      version_requirement: "^1.0.0"

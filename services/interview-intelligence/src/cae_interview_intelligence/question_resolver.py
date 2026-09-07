@@ -18,7 +18,7 @@ import hashlib
 import uuid
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Literal, Optional, Set
 from pydantic import BaseModel, Field, field_validator
 
 from .hypothesis_adapter import (
@@ -284,8 +284,25 @@ class CompositionCompatibility(BaseModel):
     compatible_reasons: List[str] = Field(default_factory=list)
     incompatible_reasons: List[str] = Field(default_factory=list)
 
+    # CA-M005: explicit, inspectable admission state and provenance binding.
+    gate_status: Literal["PASS", "BLOCK"] = "PASS"
+    target_aspect_ratio: Optional[str] = None
+    required_format_capabilities: List[str] = Field(default_factory=list)
+    provided_format_capabilities: List[str] = Field(default_factory=list)
+    missing_format_capabilities: List[str] = Field(default_factory=list)
+    narrative_ref: Optional[SemanticRef] = None
+    hypothesis_ref: Optional[SemanticRef] = None
+    format_profile_ref: Optional[SemanticRef] = None
+    archetype_profile_ref: Optional[SemanticRef] = None
+    gate_version: str = "CA-M005-v1"
+    decision_sha256: Optional[str] = None
+
     def is_compatible(self, min_threshold: float = 0.50) -> bool:
-        return self.compatibility_score >= min_threshold and len(self.incompatible_reasons) == 0
+        return (
+            self.gate_status == "PASS"
+            and self.compatibility_score >= min_threshold
+            and len(self.incompatible_reasons) == 0
+        )
 
 
 class QuestionCandidate(BaseModel):

@@ -27,6 +27,7 @@ import hashlib
 import json
 from pathlib import Path
 import sqlite3
+import threading
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 from uuid import UUID, uuid4
 
@@ -81,6 +82,28 @@ class ProgramStateAggregateNotFoundError(ProgramStateRuntimeError):
             f"ProgramStateAggregate '{aggregate_id}' not found",
             reason_code="AGGREGATE_NOT_FOUND",
             details={"aggregate_id": aggregate_id},
+        )
+
+
+class ProgramLeaseConflictError(ProgramStateRuntimeError):
+    """Raised when an execution lease cannot be acquired by the current claimant."""
+
+    def __init__(self, aggregate_id: str, expected_lease_version: int, actual_status: Optional[str], actual_lease_version: Optional[int]):
+        self.aggregate_id = aggregate_id
+        self.expected_lease_version = expected_lease_version
+        self.actual_status = actual_status
+        self.actual_lease_version = actual_lease_version
+        super().__init__(
+            f"Execution lease conflict on aggregate '{aggregate_id}': "
+            f"expected lease version {expected_lease_version} in LEASE_ENQUEUED, "
+            f"found status={actual_status!r}, version={actual_lease_version!r}",
+            reason_code="LEASE_CONFLICT",
+            details={
+                "aggregate_id": aggregate_id,
+                "expected_lease_version": expected_lease_version,
+                "actual_status": actual_status,
+                "actual_lease_version": actual_lease_version,
+            },
         )
 
 
@@ -154,6 +177,63 @@ class ProgramStateRepairError(ProgramStateRuntimeError):
             f"State repair on aggregate '{aggregate_id}' failed: {reason}",
             reason_code="STATE_REPAIR_ERROR",
             details=details or {"aggregate_id": aggregate_id},
+        )
+
+
+# --- CA-M036: INV-CTX-002 Context Projection Exceptions ---
+
+class ContextProjectionError(ProgramStateRuntimeError):
+    """Base error for context projection failures (CA-M036 / INV-CTX-002)."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        reason_code: str = "CONTEXT_PROJECTION_ERROR",
+        details: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        super().__init__(message, reason_code=reason_code, details=details)
+
+
+class NodeDeclarationMissingError(ContextProjectionError):
+    """Raised when a node has no declared inputs and no lane metadata is available.
+
+    Per mandate CA-M036: stop and report rather than projecting full state as a workaround.
+    """
+
+    def __init__(self, node_id: str, aggregate_id: str) -> None:
+        super().__init__(
+            f"Node '{node_id}' on aggregate '{aggregate_id}' has no declared inputs; "
+            "cannot project context without risking full-state leakage. "
+            "Declare explicit inputs or supply lane metadata.",
+            reason_code="NODE_DECLARATION_MISSING",
+            details={"node_id": node_id, "aggregate_id": aggregate_id},
+        )
+
+
+class ContextStateHashParityError(ContextProjectionError):
+    """Raised when the aggregate's committed state_hash does not match the recomputed digest.
+
+    The snapshot would otherwise be bound to stale or tampered state.
+    Projection is aborted fail-closed (INV-CTX-002).
+    """
+
+    def __init__(
+        self,
+        aggregate_id: str,
+        committed_hash: str,
+        recomputed_hash: str,
+    ) -> None:
+        super().__init__(
+            f"state_hash parity failure on aggregate '{aggregate_id}': "
+            f"committed={committed_hash!r} recomputed={recomputed_hash!r}. "
+            "Projection aborted fail-closed.",
+            reason_code="CONTEXT_STATE_HASH_PARITY_FAILURE",
+            details={
+                "aggregate_id": aggregate_id,
+                "committed_hash": committed_hash,
+                "recomputed_hash": recomputed_hash,
+            },
         )
 
 
@@ -325,6 +405,76 @@ class ProgramStateLocalContext:
     workspace_id: str
     active_lane: Optional[AuthorityLane]
     pi_session_id: Optional[str]
+
+
+# ---------------------------------------------------------------------------
+# CA-M036 (INV-CTX-002): Authority-lane field allow-lists
+#
+# Each lane sees only the keys enumerated here.  Keys present in state_data
+# that are NOT in the lane's allow-list are masked (omitted) from the snapshot.
+# An empty frozenset means the lane receives NO state_data fields.
+# ---------------------------------------------------------------------------
+
+#: Per-lane field allow-lists used by get_pruned_local_context.
+_LANE_FIELD_ALLOW_LISTS: Dict[AuthorityLane, "Set[str]"] = {
+    AuthorityLane.HUNTER: {
+        "hypothesis", "corpus_refs", "source_refs", "guest_profile",
+        "evidence_segments", "interview_brief", "node_id", "declared_inputs",
+        "repairs",
+    },
+    AuthorityLane.ANALYST: {
+        "hypothesis", "matrix_scores", "collision_candidates", "signals",
+        "qa_scores", "semantic_qa", "transcript_refs", "audience_tensions",
+        "node_id", "declared_inputs", "repairs",
+    },
+    AuthorityLane.COMPOSER: {
+        "brief_content", "narrative_draft", "script_draft", "visual_demands",
+        "edl_content", "production_plan", "compiled_output",
+        "node_id", "declared_inputs", "repairs",
+    },
+    AuthorityLane.COMMANDER: {
+        "approved_by", "approval_timestamp", "rejection_reason",
+        "operator_decision", "repair_action", "repairs",
+        "node_id", "declared_inputs", "lifecycle_override",
+        # Governance summary fields required for gate decisions
+        "hypothesis", "signals", "qa_scores",
+    },
+}
+
+
+@dataclass(frozen=True, slots=True)
+class PrunedContextSnapshot:
+    """A pruned, lane-masked, hash-bound context snapshot for a single node (CA-M036).
+
+    Invariant (INV-CTX-002):
+        pruned_state_data  âŠ†  declared_inputs  âˆ©  lane_allow_list(active_lane)
+        committed_state_hash  ==  canonical_sha256(aggregate fields)  [verified at compile time]
+
+    This is the only context object that should be delivered to a node for
+    execution.  The full aggregate state_data MUST NOT be passed to a node.
+    """
+    aggregate_id: str
+    program_id: str
+    node_id: str
+    active_lane: AuthorityLane
+    committed_state_hash: str     # The aggregate.state_hash verified at compile time
+    snapshot_hash: str            # SHA-256 of the pruned envelope (self-binding)
+    pruned_state_data: Dict[str, Any]
+    masked_keys: List[str]        # Keys omitted by lane mask (audit trail, no values)
+    declared_inputs: List[str]    # Inputs declared by the node (normative source of truth)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "aggregate_id": self.aggregate_id,
+            "program_id": self.program_id,
+            "node_id": self.node_id,
+            "active_lane": self.active_lane.value,
+            "committed_state_hash": self.committed_state_hash,
+            "snapshot_hash": self.snapshot_hash,
+            "pruned_state_data": self.pruned_state_data,
+            "masked_keys": self.masked_keys,
+            "declared_inputs": self.declared_inputs,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -1721,6 +1871,40 @@ class IProgramStateStore(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def register_execution_dispatch(
+        self,
+        aggregate: ProgramStateAggregate,
+        lease_id: str,
+        enqueued_at: str,
+    ) -> None:
+        """Atomically registers a version-0 aggregate and its queued execution lease."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def acquire_execution_lease(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        expected_lease_version: int,
+        refreshed_context_state_hash: str,
+        lease_acquired_at: str,
+        workflow_payload: Dict[str, Any],
+    ) -> ProgramStateAggregate:
+        """Atomically claims a queued lease and makes the aggregate RUNNING while enqueueing workflow dispatch."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_execution_lease(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieves durable execution lease metadata for an aggregate."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_workflow_dispatch(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieves the durable workflow-dispatch queue entry for an aggregate."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_aggregate(self, aggregate_id: str) -> Optional[ProgramStateAggregate]:
         """Retrieves an aggregate by ID."""
         raise NotImplementedError
@@ -1754,17 +1938,137 @@ class InMemoryProgramStateStore(IProgramStateStore):
     def __init__(self) -> None:
         self._aggregates: Dict[str, ProgramStateAggregate] = {}
         self._transitions: Dict[str, List[ProgramStateTransition]] = {}
+        self._leases: Dict[str, Dict[str, Any]] = {}
+        self._workflow_dispatches: Dict[str, Dict[str, Any]] = {}
+        self._lock = threading.RLock()
 
     def save_aggregate(self, aggregate: ProgramStateAggregate, expected_version: Optional[int] = None) -> None:
-        current = self._aggregates.get(aggregate.aggregate_id)
-        if current is not None and expected_version is not None:
-            if current.version != expected_version:
-                raise ProgramStateVersionConflictError(
-                    aggregate_id=aggregate.aggregate_id,
-                    expected_version=expected_version,
-                    actual_version=current.version,
+        with self._lock:
+            current = self._aggregates.get(aggregate.aggregate_id)
+            if current is not None and expected_version is not None:
+                if current.version != expected_version:
+                    raise ProgramStateVersionConflictError(
+                        aggregate_id=aggregate.aggregate_id,
+                        expected_version=expected_version,
+                        actual_version=current.version,
+                    )
+            self._aggregates[aggregate.aggregate_id] = aggregate
+
+    def register_execution_dispatch(
+        self,
+        aggregate: ProgramStateAggregate,
+        lease_id: str,
+        enqueued_at: str,
+    ) -> None:
+        with self._lock:
+            if aggregate.version != 0 or aggregate.lifecycle != ProgramStateLifecycle.INITIALIZED:
+                raise ProgramStateRuntimeError(
+                    f"CA-M034 Phase 1 requires a version-0 INITIALIZED aggregate, got version={aggregate.version}, lifecycle={aggregate.lifecycle.value}",
+                    reason_code="INVALID_DISPATCH_REGISTRATION",
                 )
-        self._aggregates[aggregate.aggregate_id] = aggregate
+            if aggregate.aggregate_id in self._aggregates or aggregate.aggregate_id in self._leases:
+                raise ProgramStateRuntimeError(
+                    f"Execution aggregate '{aggregate.aggregate_id}' is already registered",
+                    reason_code="DUPLICATE_DISPATCH_REGISTRATION",
+                )
+            self._aggregates[aggregate.aggregate_id] = aggregate
+            self._leases[aggregate.aggregate_id] = {
+                "lease_id": lease_id,
+                "aggregate_id": aggregate.aggregate_id,
+                "status": "LEASE_ENQUEUED",
+                "lease_version": 0,
+                "holder_id": None,
+                "enqueued_at": enqueued_at,
+                "acquired_at": None,
+                "updated_at": enqueued_at,
+            }
+
+    def acquire_execution_lease(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        expected_lease_version: int,
+        refreshed_context_state_hash: str,
+        lease_acquired_at: str,
+        workflow_payload: Dict[str, Any],
+    ) -> ProgramStateAggregate:
+        with self._lock:
+            lease = self._leases.get(aggregate_id)
+            aggregate = self._aggregates.get(aggregate_id)
+            if lease is None or aggregate is None:
+                raise ProgramStateAggregateNotFoundError(aggregate_id)
+            if (
+                lease["status"] != "LEASE_ENQUEUED"
+                or lease["lease_version"] != expected_lease_version
+                or aggregate.version != expected_lease_version
+                or aggregate.lifecycle != ProgramStateLifecycle.INITIALIZED
+                or aggregate.state_data.get("lease_version", expected_lease_version) != expected_lease_version
+                or aggregate.state_data.get("lease_status") in ("LEASE_ACQUIRED", "LEASE_HELD")
+            ):
+                raise ProgramLeaseConflictError(
+                    aggregate_id=aggregate_id,
+                    expected_lease_version=expected_lease_version,
+                    actual_status=aggregate.state_data.get("lease_status") or lease.get("status"),
+                    actual_lease_version=aggregate.state_data.get("lease_version") or lease.get("lease_version"),
+                )
+
+            new_version = aggregate.version + 1
+            new_hash = _compute_state_hash(
+                aggregate_id=aggregate.aggregate_id,
+                program_id=aggregate.program_id,
+                program_version=aggregate.program_version,
+                current_state=aggregate.current_state,
+                version=new_version,
+                state_data=aggregate.state_data,
+            )
+            receipt_id = f"rcpt_dispatch_{hashlib.sha256(f'{aggregate_id}:{new_version}:{actor_id}'.encode('utf-8')).hexdigest()[:24]}"
+            updated = ProgramStateAggregate(
+                aggregate_id=aggregate.aggregate_id,
+                workspace_id=aggregate.workspace_id,
+                cae_run_id=aggregate.cae_run_id,
+                program_id=aggregate.program_id,
+                program_version=aggregate.program_version,
+                current_state=aggregate.current_state,
+                state_data=dict(aggregate.state_data),
+                version=new_version,
+                state_hash=new_hash,
+                lifecycle=ProgramStateLifecycle.RUNNING,
+                last_receipt_id=receipt_id,
+                created_at=aggregate.created_at,
+                updated_at=lease_acquired_at,
+            )
+            lease.update({
+                "status": "LEASE_ACQUIRED",
+                "lease_version": expected_lease_version + 1,
+                "holder_id": actor_id,
+                "acquired_at": lease_acquired_at,
+                "updated_at": lease_acquired_at,
+            })
+            self._aggregates[aggregate_id] = updated
+            payload = dict(workflow_payload)
+            payload["context_state_hash"] = refreshed_context_state_hash
+            self._workflow_dispatches[aggregate_id] = {
+                "aggregate_id": aggregate_id,
+                "lease_id": lease["lease_id"],
+                "status": "ENQUEUED",
+                "trigger_operation": "cae.program.dispatch@1.0.0",
+                "actor_id": actor_id,
+                "context_state_hash": refreshed_context_state_hash,
+                "payload": payload,
+                "enqueued_at": lease_acquired_at,
+            }
+            return updated
+
+    def get_execution_lease(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
+        with self._lock:
+            lease = self._leases.get(aggregate_id)
+            return dict(lease) if lease is not None else None
+
+    def get_workflow_dispatch(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
+        with self._lock:
+            dispatch = self._workflow_dispatches.get(aggregate_id)
+            return dict(dispatch) if dispatch is not None else None
 
     def get_aggregate(self, aggregate_id: str) -> Optional[ProgramStateAggregate]:
         return self._aggregates.get(aggregate_id)
@@ -1852,9 +2156,261 @@ class SqliteProgramStateStore(IProgramStateStore):
 
                 CREATE INDEX IF NOT EXISTS idx_transitions_agg ON cae_program_state_transitions(aggregate_id);
                 CREATE INDEX IF NOT EXISTS idx_aggregates_ws ON cae_program_state_aggregates(workspace_id);
+
+                CREATE TABLE IF NOT EXISTS cae_program_execution_leases (
+                    aggregate_id TEXT PRIMARY KEY,
+                    lease_id TEXT NOT NULL UNIQUE,
+                    status TEXT NOT NULL,
+                    lease_version INTEGER NOT NULL,
+                    holder_id TEXT,
+                    enqueued_at TEXT NOT NULL,
+                    acquired_at TEXT,
+                    updated_at TEXT NOT NULL,
+                    FOREIGN KEY (aggregate_id) REFERENCES cae_program_state_aggregates(aggregate_id)
+                );
+
+                CREATE TABLE IF NOT EXISTS cae_program_workflow_dispatch_queue (
+                    aggregate_id TEXT PRIMARY KEY,
+                    lease_id TEXT NOT NULL UNIQUE,
+                    status TEXT NOT NULL,
+                    trigger_operation TEXT NOT NULL,
+                    actor_id TEXT NOT NULL,
+                    context_state_hash TEXT NOT NULL,
+                    payload TEXT NOT NULL,
+                    enqueued_at TEXT NOT NULL,
+                    FOREIGN KEY (aggregate_id) REFERENCES cae_program_state_aggregates(aggregate_id)
+                );
                 """
             )
             conn.commit()
+
+    def register_execution_dispatch(
+        self,
+        aggregate: ProgramStateAggregate,
+        lease_id: str,
+        enqueued_at: str,
+    ) -> None:
+        if aggregate.version != 0 or aggregate.lifecycle != ProgramStateLifecycle.INITIALIZED:
+            raise ProgramStateRuntimeError(
+                f"CA-M034 Phase 1 requires a version-0 INITIALIZED aggregate, got version={aggregate.version}, lifecycle={aggregate.lifecycle.value}",
+                reason_code="INVALID_DISPATCH_REGISTRATION",
+            )
+        with self._get_connection() as conn:
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                existing = conn.execute(
+                    "SELECT aggregate_id FROM cae_program_state_aggregates WHERE aggregate_id = ?",
+                    (aggregate.aggregate_id,),
+                ).fetchone()
+                if existing is not None:
+                    raise ProgramStateRuntimeError(
+                        f"Execution aggregate '{aggregate.aggregate_id}' is already registered",
+                        reason_code="DUPLICATE_DISPATCH_REGISTRATION",
+                    )
+                conn.execute(
+                    """
+                    INSERT INTO cae_program_state_aggregates (
+                        aggregate_id, workspace_id, cae_run_id, program_id, program_version,
+                        current_state, state_data, version, state_hash, lifecycle,
+                        last_receipt_id, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        aggregate.aggregate_id,
+                        aggregate.workspace_id,
+                        aggregate.cae_run_id,
+                        aggregate.program_id,
+                        aggregate.program_version,
+                        aggregate.current_state,
+                        json.dumps(aggregate.state_data),
+                        aggregate.state_hash,
+                        aggregate.lifecycle.value,
+                        aggregate.last_receipt_id,
+                        aggregate.created_at,
+                        aggregate.updated_at,
+                    ),
+                )
+                conn.execute(
+                    """
+                    INSERT INTO cae_program_execution_leases (
+                        aggregate_id, lease_id, status, lease_version, holder_id,
+                        enqueued_at, acquired_at, updated_at
+                    ) VALUES (?, ?, 'LEASE_ENQUEUED', 0, NULL, ?, NULL, ?)
+                    """,
+                    (aggregate.aggregate_id, lease_id, enqueued_at, enqueued_at),
+                )
+                conn.commit()
+            except Exception:
+                conn.rollback()
+                raise
+
+    def acquire_execution_lease(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        expected_lease_version: int,
+        refreshed_context_state_hash: str,
+        lease_acquired_at: str,
+        workflow_payload: Dict[str, Any],
+    ) -> ProgramStateAggregate:
+        with self._get_connection() as conn:
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                row = conn.execute(
+                    """
+                    SELECT aggregate_id, lease_id, status, lease_version, holder_id,
+                           enqueued_at, acquired_at, updated_at
+                    FROM cae_program_execution_leases
+                    WHERE aggregate_id = ?
+                    """,
+                    (aggregate_id,),
+                ).fetchone()
+                agg_row = conn.execute(
+                    "SELECT * FROM cae_program_state_aggregates WHERE aggregate_id = ?",
+                    (aggregate_id,),
+                ).fetchone()
+                if row is None or agg_row is None:
+                    raise ProgramStateAggregateNotFoundError(aggregate_id)
+
+                cas = conn.execute(
+                    """
+                    UPDATE cae_program_execution_leases
+                    SET status = 'LEASE_ACQUIRED',
+                        lease_version = lease_version + 1,
+                        holder_id = ?,
+                        acquired_at = ?,
+                        updated_at = ?
+                    WHERE aggregate_id = ?
+                      AND status = 'LEASE_ENQUEUED'
+                      AND lease_version = ?
+                    """,
+                    (actor_id, lease_acquired_at, lease_acquired_at, aggregate_id, expected_lease_version),
+                )
+                if cas.rowcount != 1:
+                    raise ProgramLeaseConflictError(
+                        aggregate_id=aggregate_id,
+                        expected_lease_version=expected_lease_version,
+                        actual_status=row["status"],
+                        actual_lease_version=row["lease_version"],
+                    )
+
+                current_aggregate = ProgramStateAggregate(
+                    aggregate_id=agg_row["aggregate_id"],
+                    workspace_id=agg_row["workspace_id"],
+                    cae_run_id=agg_row["cae_run_id"],
+                    program_id=agg_row["program_id"],
+                    program_version=agg_row["program_version"],
+                    current_state=agg_row["current_state"],
+                    state_data=json.loads(agg_row["state_data"]),
+                    version=agg_row["version"],
+                    state_hash=agg_row["state_hash"],
+                    lifecycle=ProgramStateLifecycle(agg_row["lifecycle"]),
+                    last_receipt_id=agg_row["last_receipt_id"],
+                    created_at=agg_row["created_at"],
+                    updated_at=agg_row["updated_at"],
+                )
+                if (
+                    current_aggregate.version != expected_lease_version
+                    or current_aggregate.lifecycle != ProgramStateLifecycle.INITIALIZED
+                    or current_aggregate.state_data.get("lease_version", expected_lease_version) != expected_lease_version
+                    or current_aggregate.state_data.get("lease_status") in ("LEASE_ACQUIRED", "LEASE_HELD")
+                ):
+                    raise ProgramLeaseConflictError(
+                        aggregate_id=aggregate_id,
+                        expected_lease_version=expected_lease_version,
+                        actual_status=current_aggregate.state_data.get("lease_status") or row["status"],
+                        actual_lease_version=current_aggregate.state_data.get("lease_version") or row["lease_version"],
+                    )
+
+                new_version = current_aggregate.version + 1
+                new_hash = _compute_state_hash(
+                    aggregate_id=current_aggregate.aggregate_id,
+                    program_id=current_aggregate.program_id,
+                    program_version=current_aggregate.program_version,
+                    current_state=current_aggregate.current_state,
+                    version=new_version,
+                    state_data=current_aggregate.state_data,
+                )
+                receipt_id = f"rcpt_dispatch_{hashlib.sha256(f'{aggregate_id}:{new_version}:{actor_id}'.encode('utf-8')).hexdigest()[:24]}"
+                updated_aggregate = ProgramStateAggregate(
+                    aggregate_id=current_aggregate.aggregate_id,
+                    workspace_id=current_aggregate.workspace_id,
+                    cae_run_id=current_aggregate.cae_run_id,
+                    program_id=current_aggregate.program_id,
+                    program_version=current_aggregate.program_version,
+                    current_state=current_aggregate.current_state,
+                    state_data=dict(current_aggregate.state_data),
+                    version=new_version,
+                    state_hash=new_hash,
+                    lifecycle=ProgramStateLifecycle.RUNNING,
+                    last_receipt_id=receipt_id,
+                    created_at=current_aggregate.created_at,
+                    updated_at=lease_acquired_at,
+                )
+
+                aggregate_cas = conn.execute(
+                    """
+                    UPDATE cae_program_state_aggregates
+                    SET lifecycle = 'RUNNING', version = ?, state_hash = ?,
+                        last_receipt_id = ?, updated_at = ?
+                    WHERE aggregate_id = ?
+                       AND version = ?
+                       AND lifecycle = 'INITIALIZED'
+                    """,
+                    (new_version, new_hash, receipt_id, lease_acquired_at, aggregate_id, expected_lease_version),
+                )
+                if aggregate_cas.rowcount != 1:
+                    raise ProgramLeaseConflictError(
+                        aggregate_id=aggregate_id,
+                        expected_lease_version=expected_lease_version,
+                        actual_status=row["status"],
+                        actual_lease_version=row["lease_version"],
+                    )
+
+                payload = dict(workflow_payload)
+                payload["context_state_hash"] = refreshed_context_state_hash
+                conn.execute(
+                    """
+                    INSERT INTO cae_program_workflow_dispatch_queue (
+                        aggregate_id, lease_id, status, trigger_operation, actor_id,
+                        context_state_hash, payload, enqueued_at
+                    ) VALUES (?, ?, 'ENQUEUED', 'cae.program.dispatch@1.0.0', ?, ?, ?, ?)
+                    """,
+                    (
+                        aggregate_id,
+                        row["lease_id"],
+                        actor_id,
+                        refreshed_context_state_hash,
+                        json.dumps(payload),
+                        lease_acquired_at,
+                    ),
+                )
+                conn.commit()
+                return updated_aggregate
+            except Exception:
+                conn.rollback()
+                raise
+
+    def get_execution_lease(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM cae_program_execution_leases WHERE aggregate_id = ?",
+                (aggregate_id,),
+            ).fetchone()
+            return dict(row) if row is not None else None
+
+    def get_workflow_dispatch(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM cae_program_workflow_dispatch_queue WHERE aggregate_id = ?",
+                (aggregate_id,),
+            ).fetchone()
+            if row is None:
+                return None
+            data = dict(row)
+            data["payload"] = json.loads(data["payload"])
+            return data
 
     def save_aggregate(self, aggregate: ProgramStateAggregate, expected_version: Optional[int] = None) -> None:
         with self._get_connection() as conn:
@@ -2075,6 +2631,47 @@ def _compute_state_hash(
     return canonical_sha256(payload)
 
 
+def _verify_state_hash_parity(aggregate: "ProgramStateAggregate") -> str:
+    """Recompute and verify the aggregate's state_hash (CA-M036 / INV-CTX-002).
+
+    Returns the committed state_hash on success.
+    Raises ContextStateHashParityError if the recomputed digest does not match.
+    """
+    recomputed = _compute_state_hash(
+        aggregate_id=aggregate.aggregate_id,
+        program_id=aggregate.program_id,
+        program_version=aggregate.program_version,
+        current_state=aggregate.current_state,
+        version=aggregate.version,
+        state_data=aggregate.state_data,
+    )
+    if recomputed != aggregate.state_hash:
+        raise ContextStateHashParityError(
+            aggregate_id=aggregate.aggregate_id,
+            committed_hash=aggregate.state_hash,
+            recomputed_hash=recomputed,
+        )
+    return aggregate.state_hash
+
+
+def _compute_pruned_snapshot_hash(
+    aggregate_id: str,
+    node_id: str,
+    lane: str,
+    committed_state_hash: str,
+    pruned_state_data: "Dict[str, Any]",
+) -> str:
+    """Compute a deterministic snapshot hash binding the pruned context to committed state."""
+    payload = {
+        "aggregate_id": aggregate_id,
+        "node_id": node_id,
+        "lane": lane,
+        "committed_state_hash": committed_state_hash,
+        "pruned_state_data": pruned_state_data,
+    }
+    return canonical_sha256(payload)
+
+
 def _generate_transition_id(
     aggregate_id: str,
     transition_name: str,
@@ -2180,6 +2777,89 @@ class UniversalProgramStateRuntime:
         raise ProgramStateRuntimeError(
             f"No state machine registered for '{program_id_or_machine_id}'",
             reason_code="STATE_MACHINE_NOT_FOUND",
+        )
+
+    def register_program_dispatch(
+        self,
+        *,
+        program_package: Optional[ProgramPackage],
+        program_id: Optional[str],
+        workspace_id: str | UUID,
+        actor_id: str,
+        cae_run_id: Optional[str] = None,
+        initial_data: Optional[Dict[str, Any]] = None,
+    ) -> ProgramStateAggregate:
+        """CA-M034 Phase 1: register a version-0 aggregate and enqueue its execution lease."""
+        ws_str = str(workspace_id)
+        prog_id = program_package.program_id if program_package else (program_id or "")
+        if not prog_id:
+            raise ProgramStateRuntimeError("program_package or program_id must be provided")
+        prog_ver = program_package.manifest.version if program_package else "1.0.0"
+        run_id = cae_run_id or f"run_{uuid4().hex[:16]}"
+        aggregate_id = f"prog-state:{ws_str}:{prog_id}:{run_id}"
+        state_machine = self.get_state_machine(prog_id)
+        init_data = dict(initial_data or {})
+        now = utc_now_rfc3339()
+        state_hash = _compute_state_hash(
+            aggregate_id=aggregate_id,
+            program_id=prog_id,
+            program_version=prog_ver,
+            current_state=state_machine.initial_state,
+            version=0,
+            state_data=init_data,
+        )
+        aggregate = ProgramStateAggregate(
+            aggregate_id=aggregate_id,
+            workspace_id=ws_str,
+            cae_run_id=run_id,
+            program_id=prog_id,
+            program_version=prog_ver,
+            current_state=state_machine.initial_state,
+            state_data=init_data,
+            version=0,
+            state_hash=state_hash,
+            lifecycle=ProgramStateLifecycle.INITIALIZED,
+            last_receipt_id=f"rcpt_register_{hashlib.sha256(f'{aggregate_id}:0'.encode('utf-8')).hexdigest()[:24]}",
+            created_at=now,
+            updated_at=now,
+        )
+        lease_id = f"lease_{hashlib.sha256(f'{aggregate_id}:0'.encode('utf-8')).hexdigest()[:24]}"
+        self.store.register_execution_dispatch(aggregate, lease_id, now)
+        return aggregate
+
+    def acquire_execution_lease_and_trigger(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        expected_lease_version: int = 0,
+        context_claims: Optional[Sequence[str]] = None,
+    ) -> ProgramStateAggregate:
+        """CA-M034 Phase 2: refresh context, atomically claim lease, and enqueue workflow dispatch."""
+        current = self.get_aggregate(aggregate_id)
+        if current.version != expected_lease_version:
+            raise ProgramLeaseConflictError(
+                aggregate_id=aggregate_id,
+                expected_lease_version=expected_lease_version,
+                actual_status=None,
+                actual_lease_version=current.version,
+            )
+        context = self.get_local_context(aggregate_id=aggregate_id)
+        refreshed_hash = context.aggregate.state_hash
+        workflow_payload = {
+            "aggregate_id": aggregate_id,
+            "program_id": current.program_id,
+            "program_version": current.program_version,
+            "context_state_hash": refreshed_hash,
+            "context_claims": sorted(set(context_claims or [])),
+        }
+        return self.store.acquire_execution_lease(
+            aggregate_id=aggregate_id,
+            actor_id=actor_id,
+            expected_lease_version=expected_lease_version,
+            refreshed_context_state_hash=refreshed_hash,
+            lease_acquired_at=utc_now_rfc3339(),
+            workflow_payload=workflow_payload,
         )
 
     def initialize_program_state(
@@ -2395,7 +3075,15 @@ class UniversalProgramStateRuntime:
         active_lane: Optional[AuthorityLane] = None,
         pi_session_id: Optional[str] = None,
     ) -> ProgramStateLocalContext:
-        """Assembles the state-local context for an active Program instance."""
+        """Assembles the state-local context for an active Program instance.
+
+        Note: This method returns the full ``ProgramStateLocalContext`` including
+        the entire aggregate.  Callers that need to supply context to a node for
+        execution MUST use :meth:`get_pruned_local_context` instead so that
+        INV-CTX-002 (input-scoped pruning + lane masking + state_hash parity) is
+        enforced.  This method is retained for governance/operator surfaces that
+        legitimately require full aggregate visibility.
+        """
         agg = self.get_aggregate(aggregate_id)
         state_machine = self.get_state_machine(agg.program_id)
 
@@ -2421,6 +3109,104 @@ class UniversalProgramStateRuntime:
             workspace_id=agg.workspace_id,
             active_lane=active_lane,
             pi_session_id=pi_session_id,
+        )
+
+    def get_pruned_local_context(
+        self,
+        aggregate_id: str,
+        *,
+        node_id: str,
+        declared_inputs: Optional[List[str]],
+        active_lane: AuthorityLane,
+        pi_session_id: Optional[str] = None,
+    ) -> PrunedContextSnapshot:
+        """Return a pruned, lane-masked, hash-bound context snapshot (CA-M036 / INV-CTX-002).
+
+        This is the authoritative entry-point for node execution context.  It replaces
+        the pattern of passing a full aggregate or the raw state_data dict to a node.
+
+        Steps enforced (in order):
+        1. Fetch the aggregate from the store.
+        2. Verify committed state_hash parity (fail-closed on mismatch).
+        3. Prune state_data to declared_inputs only.
+        4. Apply authority-lane mask (field allow-list for active_lane).
+        5. Compute a snapshot_hash binding the result to the committed state_hash.
+
+        Parameters
+        ----------
+        aggregate_id:
+            Identity of the ProgramStateAggregate.
+        node_id:
+            Identity of the active node requesting context (used for audit binding).
+        declared_inputs:
+            Keys in state_data that this node has declared it needs.  Must be a
+            non-empty list.  If empty or None, raises ``NodeDeclarationMissingError``
+            (fail-closed â€” never returns full state as a fallback).
+        active_lane:
+            The authority lane of the requesting actor.  Used to mask fields that
+            the lane is not permitted to see.
+        pi_session_id:
+            Optional Pi session ID for audit correlation (not used in projection logic).
+
+        Returns
+        -------
+        PrunedContextSnapshot
+            Strictly pruned, lane-masked, state_hash-bound snapshot.
+
+        Raises
+        ------
+        NodeDeclarationMissingError
+            When ``declared_inputs`` is empty or None.
+        ContextStateHashParityError
+            When the aggregate's state_hash does not match the recomputed digest.
+        ProgramStateAggregateNotFoundError
+            When the aggregate does not exist.
+        """
+        # --- Fetch aggregate ---
+        agg = self.get_aggregate(aggregate_id)
+
+        # --- Guard: declared inputs must be present ---
+        effective_declared: List[str] = list(declared_inputs or [])
+        if not effective_declared:
+            raise NodeDeclarationMissingError(
+                node_id=node_id,
+                aggregate_id=aggregate_id,
+            )
+
+        # --- Verify state_hash parity (fail-closed) ---
+        committed_hash = _verify_state_hash_parity(agg)
+
+        # --- Prune to declared inputs ---
+        declared_set: Set[str] = set(effective_declared)
+        candidate_keys: Set[str] = declared_set & set(agg.state_data.keys())
+
+        # --- Apply lane mask ---
+        lane_allow: Set[str] = _LANE_FIELD_ALLOW_LISTS.get(active_lane, set())
+        allowed_keys: Set[str] = candidate_keys & lane_allow
+        masked_keys: List[str] = sorted(candidate_keys - allowed_keys)
+        pruned_state_data: Dict[str, Any] = {
+            k: agg.state_data[k] for k in sorted(allowed_keys)
+        }
+
+        # --- Compute snapshot hash ---
+        snapshot_hash = _compute_pruned_snapshot_hash(
+            aggregate_id=agg.aggregate_id,
+            node_id=node_id,
+            lane=active_lane.value,
+            committed_state_hash=committed_hash,
+            pruned_state_data=pruned_state_data,
+        )
+
+        return PrunedContextSnapshot(
+            aggregate_id=agg.aggregate_id,
+            program_id=agg.program_id,
+            node_id=node_id,
+            active_lane=active_lane,
+            committed_state_hash=committed_hash,
+            snapshot_hash=snapshot_hash,
+            pruned_state_data=pruned_state_data,
+            masked_keys=masked_keys,
+            declared_inputs=effective_declared,
         )
 
     def validate_transition(

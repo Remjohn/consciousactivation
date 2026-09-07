@@ -4,6 +4,7 @@ from .edl import WordBoundaryEdlService
 from .ffmpeg_adapter import FFmpegSourceLedRenderer
 from .bindings import RemotionBindingCompiler, HyperFramesBindingCompiler
 from .evaluation import RenderedVideoEvaluator
+from .evidence import TemporalEvidenceMomentService
 
 __all__ = [
     "SOURCE_MEDIA_AUTHORITY",
@@ -15,4 +16,5 @@ __all__ = [
     "RemotionBindingCompiler",
     "HyperFramesBindingCompiler",
     "RenderedVideoEvaluator",
+    "TemporalEvidenceMomentService",
 ]
