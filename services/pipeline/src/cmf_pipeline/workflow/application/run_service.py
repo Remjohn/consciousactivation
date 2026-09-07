@@ -11,6 +11,11 @@ from ca_contracts import canonical_json_text, canonical_sha256, utc_now_rfc3339
 from ...domain.enums import NodeState, RunState
 from ...domain.errors import PipelineConflict, PipelineLifecycleError, PipelineNotFound, PipelineValidationError
 from ...domain.validation import reject_noncanonical, require_ref, require_string, semantic_identity
+from ..admission.causal_admission import (
+    AncestorBinding,
+    CausalAdmissionError,
+    CausalAdmissionService,
+)
 from ..domain.models import validate_runtime_workflow
 from ..infrastructure.repository import PipelineRepository
 from .jit_context import JITContextCompiler
@@ -18,9 +23,10 @@ from .scheduler import DeterministicScheduler
 
 
 class WorkflowRunService:
-    def __init__(self, repository: PipelineRepository):
+    def __init__(self, repository: PipelineRepository, causal_admission: CausalAdmissionService | None = None):
         self.repository = repository
-        self.scheduler = DeterministicScheduler()
+        self.causal_admission = causal_admission or CausalAdmissionService()
+        self.scheduler = DeterministicScheduler(causal_admission=self.causal_admission)
         self.jit = JITContextCompiler()
 
     def register_workflow(self, workflow: Mapping[str, Any]) -> dict[str, Any]:
@@ -171,6 +177,18 @@ class WorkflowRunService:
             states = self._node_state_map(connection, run_id)
             if node_id not in self.scheduler.ready_nodes(workflow, states):
                 raise PipelineLifecycleError(f"node is not ready: {node_id}")
+            # INV-CAUSAL-001: explicit causal admission at dispatch boundary (fail-closed)
+            # Bindings may be empty here; absence of authoritative identity is a block.
+            try:
+                self.scheduler.admit_node(
+                    workflow,
+                    states,
+                    node_id,
+                    ancestor_bindings={},  # callers may later pass real artifact bindings
+                    force=False,
+                )
+            except CausalAdmissionError as exc:
+                raise PipelineLifecycleError(str(exc)) from exc
             node = self._node(workflow, node_id)
             capsule = self.jit.compile(
                 node,

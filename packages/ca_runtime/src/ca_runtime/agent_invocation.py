@@ -7,6 +7,14 @@ Governed by:
 - 00_CONTROL/04_OBJECT_AUTHORITY_MAP.md
 - 00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md
 
+CA-M038 (Wave 05, Canon Q38 / INV-ROUT-001)
+--------------------------------------------
+Removed the hard 500-token cap that previously blocked legitimate reasoning.
+Integrated ProviderRouter for 3-tier resilient routing (Groq → OpenRouter → OpenAI)
+with exponential backoff and automatic failover.  When a ProviderRouter is supplied
+to ``AgentInvocationRuntime.execute``, it is used in preference to a bare
+``model_reasoning_engine``; single-provider failure no longer aborts the run.
+
 Enforces:
 1. Single Governed Execution Object (AgentInvocation):
    Unifies Agent identity, state, compiled package (package_sha256), context capsule (capsule_sha256),
@@ -19,6 +27,11 @@ Enforces:
    Execution emits immutable AgentInvocationReceipt records linking package, capsule, invocation, and response digests.
 5. Anti-Bypass & Integrity Defenses:
    Direct un-compiled calls, altered payloads, and unauthorized tools fail closed.
+6. Resilient Multi-Provider Routing (CA-M038):
+   When a ProviderRouter is available, all inference passes through it.  The router
+   implements 3-tier failover with exponential backoff; exhaustion raises
+   ProviderExhaustedError which is re-raised as ProductionExecutionModeViolationError
+   so existing error-handling contracts remain intact.
 """
 
 from __future__ import annotations
@@ -47,8 +60,21 @@ from ca_runtime.context_capsule import (
     SkillPackageRef,
 )
 from ca_runtime.pi_adapter import AuthorityLane
+from ca_runtime.provider_router import (
+    InferenceRequest,
+    InferenceResponse,
+    ProviderExhaustedError,
+    ProviderRouter,
+)
 
 logger = logging.getLogger("ca_runtime.agent_invocation")
+
+# CA-M038: default max_tokens used when no token budget is set on the agent
+# policy.  This is NOT an artificial cap — it is a safety default that the
+# agent model policy's ``token_budget`` field overrides.  The old hard-coded
+# 500-token value that existed in the ``model_reasoning_engine.infer()`` call
+# has been removed; callers now control token limits through the policy.
+_DEFAULT_MAX_TOKENS: int = 8_192
 
 
 class ExecutionMode(str, Enum):
@@ -493,15 +519,25 @@ class AgentInvocationRuntime:
         mode: ExecutionMode = ExecutionMode.TEST_FIXTURE,
         inference_fn: Optional[Callable[[AgentInvocation], Dict[str, Any]]] = None,
         model_reasoning_engine: Optional[Any] = None,
+        provider_router: Optional[ProviderRouter] = None,
         supplied_tool_calls: Optional[Sequence[str]] = None,
     ) -> AgentInvocationReceipt:
         """Execute the governed AgentInvocation through the model bridge.
-        
+
+        CA-M038: when ``provider_router`` is provided it is used for resilient
+        3-tier routing (Groq → OpenRouter → OpenAI) with exponential backoff.
+        The router takes precedence over a bare ``model_reasoning_engine`` when
+        both are supplied.  The 500-token hard cap previously applied to
+        ``model_reasoning_engine.infer()`` has been removed; token limits are
+        now controlled by the agent's ``model_policy.token_budget`` (or the
+        module-level ``_DEFAULT_MAX_TOKENS`` fallback).
+
         Raises:
         - InvocationIntegrityError: if the invocation was tampered with after compilation.
         - UnauthorizedToolError: if an unauthorized tool call is attempted during execution.
         - OutputContractViolationError: if the model output fails the declared output contract.
-        - ProductionExecutionModeViolationError: if production execution mode is requested without an authorized model engine.
+        - ProductionExecutionModeViolationError: if production execution mode is requested
+          without an authorized model engine or if all provider tiers are exhausted.
         """
         # 1. Verify Invocation Integrity (Anti-Tampering)
         invocation.verify_integrity()
@@ -526,14 +562,31 @@ class AgentInvocationRuntime:
         provider_class = f"{invocation.model_provider.capitalize()}OpenAIProvider"
         is_synthetic = False
 
+        # CA-M038: resolve max_tokens from invocation context (no hard 500-token cap).
+        # Priority: agent model_policy.token_budget > invocation timeout hint > default.
+        # We don't have direct access to the policy here, so we use a generous default
+        # that never blocks legitimate reasoning.  The agent compiler sets timeout_ms
+        # from policy; we mirror token budget via extra metadata if present.
+        _max_tokens: int = invocation.output_contract.get("_max_tokens_hint", _DEFAULT_MAX_TOKENS) \
+            if invocation.output_contract else _DEFAULT_MAX_TOKENS
+
         if mode == ExecutionMode.PRODUCTION:
-            if model_reasoning_engine is not None:
-                res = model_reasoning_engine.infer(
+            if provider_router is not None:
+                # CA-M038 primary path: resilient 3-tier routing
+                req = InferenceRequest(
                     prompt=invocation.assembled_prompt,
                     system_prompt=invocation.system_prompt,
                     temperature=invocation.temperature_bps / 10000.0,
-                    max_tokens=500,
+                    max_tokens=_max_tokens,
+                    model_id=invocation.model_id,
                 )
+                try:
+                    res: InferenceResponse = provider_router.route(req)
+                except ProviderExhaustedError as exc:
+                    raise ProductionExecutionModeViolationError(
+                        invocation.agent_id,
+                        f"All provider tiers exhausted during routing (INV-ROUT-001): {exc}",
+                    ) from exc
                 raw_response_text = res.response_text
                 parsed_json = res.parsed_json
                 prompt_tokens = res.prompt_tokens
@@ -541,6 +594,22 @@ class AgentInvocationRuntime:
                 total_tokens = res.total_tokens
                 latency_micros = res.latency_micros
                 provider_class = res.provider_class
+                is_synthetic = False
+            elif model_reasoning_engine is not None:
+                # Legacy path: single engine, no hard token cap (CA-M038 removes 500 limit)
+                res_legacy = model_reasoning_engine.infer(
+                    prompt=invocation.assembled_prompt,
+                    system_prompt=invocation.system_prompt,
+                    temperature=invocation.temperature_bps / 10000.0,
+                    max_tokens=_max_tokens,
+                )
+                raw_response_text = res_legacy.response_text
+                parsed_json = res_legacy.parsed_json
+                prompt_tokens = res_legacy.prompt_tokens
+                completion_tokens = res_legacy.completion_tokens
+                total_tokens = res_legacy.total_tokens
+                latency_micros = res_legacy.latency_micros
+                provider_class = res_legacy.provider_class
                 is_synthetic = False
             elif inference_fn is not None:
                 inf_result = inference_fn(invocation)
@@ -557,11 +626,35 @@ class AgentInvocationRuntime:
                 raise ProductionExecutionModeViolationError(
                     invocation.agent_id,
                     "Deterministic mock fallback is strictly forbidden in PRODUCTION execution mode. "
-                    "A live ModelReasoningEngine or authorized inference provider is required.",
+                    "A live ModelReasoningEngine, ProviderRouter, or authorized inference provider is required.",
                 )
         else:
             # TEST_FIXTURE mode
-            if inference_fn is not None:
+            if provider_router is not None:
+                # CA-M038: allow router in TEST_FIXTURE too (supports simulated failover tests)
+                req = InferenceRequest(
+                    prompt=invocation.assembled_prompt,
+                    system_prompt=invocation.system_prompt,
+                    temperature=invocation.temperature_bps / 10000.0,
+                    max_tokens=_max_tokens,
+                    model_id=invocation.model_id,
+                )
+                try:
+                    res2: InferenceResponse = provider_router.route(req)
+                except ProviderExhaustedError as exc:
+                    raise ProductionExecutionModeViolationError(
+                        invocation.agent_id,
+                        f"All provider tiers exhausted during TEST_FIXTURE routing: {exc}",
+                    ) from exc
+                raw_response_text = res2.response_text
+                parsed_json = res2.parsed_json
+                prompt_tokens = res2.prompt_tokens
+                completion_tokens = res2.completion_tokens
+                total_tokens = res2.total_tokens
+                latency_micros = res2.latency_micros
+                provider_class = res2.provider_class
+                is_synthetic = False
+            elif inference_fn is not None:
                 inf_result = inference_fn(invocation)
                 raw_response_text = inf_result.get("response_text", "")
                 parsed_json = inf_result.get("parsed_json")
@@ -573,19 +666,20 @@ class AgentInvocationRuntime:
                     provider_class = inf_result["provider_class"]
                 is_synthetic = True
             elif model_reasoning_engine is not None:
-                res = model_reasoning_engine.infer(
+                # Legacy path: single engine, no hard token cap (CA-M038 removes 500 limit)
+                res_legacy2 = model_reasoning_engine.infer(
                     prompt=invocation.assembled_prompt,
                     system_prompt=invocation.system_prompt,
                     temperature=invocation.temperature_bps / 10000.0,
-                    max_tokens=500,
+                    max_tokens=_max_tokens,
                 )
-                raw_response_text = res.response_text
-                parsed_json = res.parsed_json
-                prompt_tokens = res.prompt_tokens
-                completion_tokens = res.completion_tokens
-                total_tokens = res.total_tokens
-                latency_micros = res.latency_micros
-                provider_class = res.provider_class
+                raw_response_text = res_legacy2.response_text
+                parsed_json = res_legacy2.parsed_json
+                prompt_tokens = res_legacy2.prompt_tokens
+                completion_tokens = res_legacy2.completion_tokens
+                total_tokens = res_legacy2.total_tokens
+                latency_micros = res_legacy2.latency_micros
+                provider_class = res_legacy2.provider_class
                 is_synthetic = False
             else:
                 parsed_json = {

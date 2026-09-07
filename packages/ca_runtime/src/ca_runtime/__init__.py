@@ -214,6 +214,20 @@ from .agent_invocation import (
     UnauthorizedModelError,
     UnauthorizedToolError,
 )
+# CA-M038: Resilient Multi-Provider Routing (INV-ROUT-001)
+from .provider_router import (
+    BackoffPolicy,
+    InferenceRequest,
+    InferenceResponse,
+    ProviderConfigurationError,
+    ProviderDescriptor,
+    ProviderExhaustedError,
+    ProviderRouter,
+    ProviderRoutingError,
+    ProviderTierFailure,
+    build_canonical_provider_router,
+    CANONICAL_PROVIDER_ORDER,
+)
 from .program_agent_binding import (
     AmbiguousAgentAssignmentError,
     CompiledAgentNodeAssignment,
@@ -1284,6 +1298,18 @@ __all__ = [
     "ProductionExecutionModeViolationError",
     "UnauthorizedModelError",
     "UnauthorizedToolError",
+    # CA-M038: Resilient Multi-Provider Routing
+    "BackoffPolicy",
+    "InferenceRequest",
+    "InferenceResponse",
+    "ProviderConfigurationError",
+    "ProviderDescriptor",
+    "ProviderExhaustedError",
+    "ProviderRouter",
+    "ProviderRoutingError",
+    "ProviderTierFailure",
+    "build_canonical_provider_router",
+    "CANONICAL_PROVIDER_ORDER",
     "AmbiguousAgentAssignmentError",
     "CompiledAgentNodeAssignment",
     "IncompatibleSkillBindingError",

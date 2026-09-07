@@ -3,17 +3,75 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
-    "logical_uri": {},
-    "original_bytes_immutable": {},
-    "production_authorized": {},
-    "registration_id": {},
-    "registration_is_edit_authority": {},
-    "registration_version": {},
-    "restrictions": {},
-    "source_package_ref": {},
-    "technical": {},
-    "transcript_alignment_ref": {},
-    "visual_index_ref": {}
+    "logical_uri": {
+      "type": "string"
+    },
+    "original_bytes_immutable": {
+      "const": true
+    },
+    "production_authorized": {
+      "const": false
+    },
+    "registration_id": {
+      "type": "string"
+    },
+    "registration_is_edit_authority": {
+      "const": false
+    },
+    "registration_version": {
+      "type": "string"
+    },
+    "restrictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_package_ref": {
+      "$ref": "#/$defs/immutable_ref"
+    },
+    "transcript_alignment_ref": {
+      "$ref": "#/$defs/immutable_ref"
+    },
+    "visual_index_ref": {
+      "$ref": "#/$defs/immutable_ref"
+    },
+    "source_media_ref": {
+      "$ref": "#/$defs/immutable_ref"
+    },
+    "source_media_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_authority": {
+      "const": "SOVEREIGN_SOURCE_MEDIA_BYTES"
+    },
+    "technical": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "immutable_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ]
+    }
   },
   "required": [
     "registration_id",
@@ -22,6 +80,9 @@
     "source_package_ref",
     "transcript_alignment_ref",
     "visual_index_ref",
+    "source_media_ref",
+    "source_media_sha256",
+    "source_authority",
     "technical",
     "restrictions",
     "original_bytes_immutable",

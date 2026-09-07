@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { to: "/campaigns", label: "Campaigns" },
   { to: "/campaigns/new", label: "New Campaign" },
   { to: "/harnesses", label: "Harnesses" },
+  { to: "/operator", label: "Program Operator" },
 ] as const;
 
 const linkClassName =

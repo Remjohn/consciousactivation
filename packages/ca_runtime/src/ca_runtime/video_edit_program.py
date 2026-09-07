@@ -252,7 +252,8 @@ class VideoEditProductionCoordinator:
 
         self.runtime = runtime
         self.pipeline_app = pipeline_app
-        self.renderer = FFmpegSourceLedRenderer()
+        self._renderer_type = FFmpegSourceLedRenderer
+        self.renderer = FFmpegSourceLedRenderer(pipeline_app.repository) if pipeline_app is not None else None
         self.evaluator = RenderedVideoEvaluator()
         self.remotion_compiler = RemotionBindingCompiler()
         self.hyperframes_compiler = HyperFramesBindingCompiler()
@@ -265,6 +266,8 @@ class VideoEditProductionCoordinator:
             app = PipelineApplication(db_path)
             app.initialize()
             self.pipeline_app = app
+        if self.renderer is None:
+            self.renderer = self._renderer_type(self.pipeline_app.repository)
         return self.pipeline_app
 
     def _check_tenant(self, workspace_id: str) -> None:
@@ -462,6 +465,9 @@ class VideoEditProductionCoordinator:
             raise SourceLineageMissingError("Source media registration is missing from state")
 
         app = self._ensure_pipeline_app(workspace_id)
+        source_path = agg.state_data.get("source_path")
+        if not source_path:
+            raise SourceLineageMissingError("Source media path is missing from state")
         source_reg_ref = {
             "object_id": reg["registration_id"],
             "version": reg["registration_version"],
@@ -496,6 +502,7 @@ class VideoEditProductionCoordinator:
 
         edl_result = app.edls.compile(
             source_registration_ref=source_reg_ref,
+            source_path=source_path,
             expression_moment_ref=moment_ref,
             words=normalized_words,
             selections=normalized_selections,
@@ -556,6 +563,9 @@ class VideoEditProductionCoordinator:
             raise VideoEditError("Missing source registration or compiled EDL")
 
         app = self._ensure_pipeline_app(workspace_id)
+        source_path = agg.state_data.get("source_path")
+        if not source_path:
+            raise SourceLineageMissingError("Source media path is missing from state")
 
         source_reg_ref = {
             "object_id": reg["registration_id"],
@@ -645,7 +655,9 @@ class VideoEditProductionCoordinator:
             "wrong_reading_locks": sorted_locks,
         }
 
-        prg_result = app.video_programs.compile(req, idempotency_key=f"{idempotency_key or aggregate_id}:vep")
+        prg_result = app.video_programs.compile(
+            req, source_path=source_path, idempotency_key=f"{idempotency_key or aggregate_id}:vep"
+        )
         video_program = prg_result["object"]["payload"]
 
         payload = {

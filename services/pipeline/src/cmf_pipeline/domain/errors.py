@@ -9,6 +9,14 @@ class PipelineValidationError(ValueError):
     pass
 
 
+class PipelineSourceIntegrityError(PipelineValidationError):
+    """Raised when physical source bytes no longer match their sovereign digest."""
+
+
+class PipelineSourceLineageError(PipelineValidationError):
+    """Raised when a source reference cannot prove its immutable registration lineage."""
+
+
 class PipelineAuthorityError(PipelineError):
     pass
 
