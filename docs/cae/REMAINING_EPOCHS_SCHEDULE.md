@@ -6,7 +6,7 @@
 > - ✅ **Epoch 3**: Ingested & Verified (`ff98713f`) — 7 mandates verified.
 > - ✅ **Epoch 4**: Ingested & Verified (`c7fc9036`) — 6 mandates verified.
 > - ✅ **Epoch 5**: Ingested & Verified (`4beed5df`) — 7 mandates, 173 passed / 2 skipped.
-> - ✅ **Epoch 6**: Ingested & Verified — 7 mandates, 135 passed / 0 failed.
+> - ✅ **Epoch 6**: Ingested & Verified (`fc60d8c4`) — 7 mandates, 135 passed / 0 failed.
 > - 🎯 **Current Active Target**: **Epoch 7** (6 Mandates).
 
 ---

@@ -1,6 +1,6 @@
 # Epoch 06 Walkthrough — Memory Write-Back, CAS Concurrency & Registry
 
-**Status:** Verified  
+**Status:** Verified and committed (`fc60d8c4`)  
 **Date:** 2026-09-08  
 **Result:** 135 passed, 0 failed (100% pass rate)
 
