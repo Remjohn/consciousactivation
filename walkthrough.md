@@ -186,3 +186,49 @@ pytest -q \
 ```
 
 **Unified result:** `89 passed in 23.06s (100% pass rate)`.
+
+---
+
+# Epoch 09 Walkthrough — Benchmark Certification, Autonomous Approval, WAL Tuning & Live Proof
+
+**Status:** Verified and committed
+**Date:** 2026-09-08
+**Result:** 51 passed, 0 failed (100% pass rate)
+
+## Mandates applied
+
+| Mandate | Requirement / Invariant | Exact destination surfaces |
+|---|---|---|
+| CA-M053 | INV-BENCH-001 | `services/pipeline/src/cmf_pipeline/benchmarks/cseb_suite.py`<br>`tests/pipeline/test_ca_m053_cseb_benchmark.py` |
+| CA-M055 | INV-AUTO-001 | `services/pipeline/src/cmf_pipeline/collision/autonomous_gate.py`<br>`tests/pipeline/test_ca_m055_autonomous_gate.py` |
+| CA-M056 | INV-WAL-001 | `packages/ca_runtime/src/ca_runtime/sqlite_tuning.py`<br>`tests/cae/test_ca_m056_sqlite_tuning.py` |
+| CA-M057 | INV-PROOF-001 / governing `INV-LIVE-001` | `tests/e2e/test_live_e2e_proof_harness.py` |
+
+## Integration notes
+
+- **Exact mappings:** All four bundles were applied to their handoff-specified destinations. The missing destination parent directories for M053, M055, and M057 were created only to preserve those exact paths.
+- **Authority notes:** M053 follows the supplied pipeline execution boundary despite the checked-in mandate’s broader canonical-surface note. M055 follows the supplied `INV-AUTO-001` autonomous gate boundary while recording the older checked-in `INV-COLL-002` discrepancy exactly as required by its handoff.
+- **Bounded changes:** No existing production file was modified; M057 remains a test-only live proof harness as specified.
+- **Syntax and hygiene:** Targeted `py_compile`/`compileall` checks passed; `git diff --check` passed.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|---:|
+| CA-M053 | INV-BENCH-001 | `tests/pipeline/test_ca_m053_cseb_benchmark.py` | 17 | PASS (17/17) |
+| CA-M055 | INV-AUTO-001 | `tests/pipeline/test_ca_m055_autonomous_gate.py` | 20 | PASS (20/20) |
+| CA-M056 | INV-WAL-001 | `tests/cae/test_ca_m056_sqlite_tuning.py` | 11 | PASS (11/11) |
+| CA-M057 | INV-PROOF-001 / INV-LIVE-001 | `tests/e2e/test_live_e2e_proof_harness.py` | 3 | PASS (3/3) |
+| **Unified Epoch 09** | | all four suites above | **51** | **PASS (51/51, 100%)** |
+
+### Unified command
+
+```bash
+pytest -q \
+  tests/pipeline/test_ca_m053_cseb_benchmark.py \
+  tests/pipeline/test_ca_m055_autonomous_gate.py \
+  tests/cae/test_ca_m056_sqlite_tuning.py \
+  tests/e2e/test_live_e2e_proof_harness.py
+```
+
+**Unified result:** `51 passed in 26.04s (100% pass rate)`.
