@@ -823,7 +823,11 @@ class ProgramOperatorRuntimeService:
         if agg.lifecycle == ProgramStateLifecycle.PAUSED:
             blockers.append("Program is PAUSED by operator. Awaiting /resume command.")
         elif agg.lifecycle == ProgramStateLifecycle.AWAITING_APPROVAL:
-            blockers.append("Program reached a HUMAN_GATE. Awaiting operator approval (/approve or /reject).")
+            suspension = self.runtime.get_gate_suspension(aggregate_id)
+            gate_label = suspension.gate_id if suspension else "UNKNOWN_GATE"
+            blockers.append(
+                f"Program reached HUMAN_GATE '{gate_label}'. Awaiting COMMANDER approval; downstream execution is blocked."
+            )
         elif agg.lifecycle == ProgramStateLifecycle.UNDER_REPAIR:
             blockers.append("Program is UNDER_REPAIR. Awaiting repair completion or revision apply.")
 

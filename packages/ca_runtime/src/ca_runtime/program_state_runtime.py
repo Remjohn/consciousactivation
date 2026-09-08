@@ -263,6 +263,40 @@ class SideEffectClass(str, enum.Enum):
 
 
 @dataclass(frozen=True, slots=True)
+class GateSuspensionSnapshot:
+    """Immutable evidence captured at the exact human gate boundary."""
+
+    aggregate_id: str
+    gate_id: str
+    required_lane: AuthorityLane
+    suspended_at: str
+    state_version: int
+    state_hash: str
+    current_state: str
+    node_id: str
+    candidate_outputs: Dict[str, Any]
+    violations: List[Dict[str, Any]]
+    thresholds: Dict[str, Any]
+    snapshot_hash: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "aggregate_id": self.aggregate_id,
+            "gate_id": self.gate_id,
+            "required_lane": self.required_lane.value,
+            "suspended_at": self.suspended_at,
+            "state_version": self.state_version,
+            "state_hash": self.state_hash,
+            "current_state": self.current_state,
+            "node_id": self.node_id,
+            "candidate_outputs": self.candidate_outputs,
+            "violations": self.violations,
+            "thresholds": self.thresholds,
+            "snapshot_hash": self.snapshot_hash,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class ProgramStateAggregate:
     """Authoritative durable state aggregate for an active Program instance."""
     aggregate_id: str
@@ -485,6 +519,7 @@ class ProgramTransitionResult:
     receipt: Dict[str, Any]
     receipt_id: str
     audit_digest: str
+    gate_suspension: Optional[GateSuspensionSnapshot] = None
 
 
 # ============================================================================
@@ -1895,6 +1930,19 @@ class IProgramStateStore(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def suspend_execution_at_gate(
+        self,
+        *,
+        updated_aggregate: ProgramStateAggregate,
+        transition: ProgramStateTransition,
+        expected_version: int,
+        gate_snapshot: GateSuspensionSnapshot,
+        gate_event: Dict[str, Any],
+    ) -> ProgramStateAggregate:
+        """Atomically persists gate suspension, audit event, queue suspension, and lease de-escalation."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_execution_lease(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
         """Retrieves durable execution lease metadata for an aggregate."""
         raise NotImplementedError
@@ -2059,6 +2107,51 @@ class InMemoryProgramStateStore(IProgramStateStore):
                 "enqueued_at": lease_acquired_at,
             }
             return updated
+
+    def suspend_execution_at_gate(
+        self,
+        *,
+        updated_aggregate: ProgramStateAggregate,
+        transition: ProgramStateTransition,
+        expected_version: int,
+        gate_snapshot: GateSuspensionSnapshot,
+        gate_event: Dict[str, Any],
+    ) -> ProgramStateAggregate:
+        with self._lock:
+            current = self._aggregates.get(updated_aggregate.aggregate_id)
+            lease = self._leases.get(updated_aggregate.aggregate_id)
+            if current is None or lease is None:
+                raise ProgramStateAggregateNotFoundError(updated_aggregate.aggregate_id)
+            if current.version != expected_version:
+                raise ProgramStateVersionConflictError(
+                    aggregate_id=updated_aggregate.aggregate_id,
+                    expected_version=expected_version,
+                    actual_version=current.version,
+                )
+            if current.lifecycle != ProgramStateLifecycle.RUNNING:
+                raise ProgramTransitionBlockedError(
+                    aggregate_id=current.aggregate_id,
+                    transition_name=transition.transition_name,
+                    reason=f"Gate suspension requires RUNNING lifecycle, found '{current.lifecycle.value}'",
+                )
+
+            lease.update({
+                "status": "SUSPENDED",
+                "lease_version": int(lease.get("lease_version", 0)) + 1,
+                "holder_id": None,
+                "updated_at": gate_snapshot.suspended_at,
+            })
+            dispatch = self._workflow_dispatches.get(updated_aggregate.aggregate_id)
+            if dispatch is not None:
+                dispatch = dict(dispatch)
+                dispatch["status"] = "SUSPENDED"
+                dispatch["payload"] = dict(dispatch.get("payload") or {})
+                dispatch["payload"]["gate_suspension"] = gate_event
+                self._workflow_dispatches[updated_aggregate.aggregate_id] = dispatch
+
+            self._aggregates[updated_aggregate.aggregate_id] = updated_aggregate
+            self._transitions.setdefault(updated_aggregate.aggregate_id, []).append(transition)
+            return updated_aggregate
 
     def get_execution_lease(self, aggregate_id: str) -> Optional[Dict[str, Any]]:
         with self._lock:
@@ -2384,6 +2477,112 @@ class SqliteProgramStateStore(IProgramStateStore):
                         refreshed_context_state_hash,
                         json.dumps(payload),
                         lease_acquired_at,
+                    ),
+                )
+                conn.commit()
+                return updated_aggregate
+            except Exception:
+                conn.rollback()
+                raise
+
+    def suspend_execution_at_gate(
+        self,
+        *,
+        updated_aggregate: ProgramStateAggregate,
+        transition: ProgramStateTransition,
+        expected_version: int,
+        gate_snapshot: GateSuspensionSnapshot,
+        gate_event: Dict[str, Any],
+    ) -> ProgramStateAggregate:
+        with self._get_connection() as conn:
+            try:
+                conn.execute("BEGIN IMMEDIATE")
+                current = conn.execute(
+                    "SELECT * FROM cae_program_state_aggregates WHERE aggregate_id = ?",
+                    (updated_aggregate.aggregate_id,),
+                ).fetchone()
+                lease = conn.execute(
+                    "SELECT * FROM cae_program_execution_leases WHERE aggregate_id = ?",
+                    (updated_aggregate.aggregate_id,),
+                ).fetchone()
+                if current is None or lease is None:
+                    raise ProgramStateAggregateNotFoundError(updated_aggregate.aggregate_id)
+                if int(current["version"]) != expected_version:
+                    raise ProgramStateVersionConflictError(
+                        aggregate_id=updated_aggregate.aggregate_id,
+                        expected_version=expected_version,
+                        actual_version=int(current["version"]),
+                    )
+                if ProgramStateLifecycle(current["lifecycle"]) != ProgramStateLifecycle.RUNNING:
+                    raise ProgramTransitionBlockedError(
+                        aggregate_id=updated_aggregate.aggregate_id,
+                        transition_name=transition.transition_name,
+                        reason=f"Gate suspension requires RUNNING lifecycle, found '{current['lifecycle']}'",
+                    )
+
+                conn.execute(
+                    """
+                    UPDATE cae_program_state_aggregates
+                    SET current_state = ?, state_data = ?, version = ?, state_hash = ?,
+                        lifecycle = 'AWAITING_APPROVAL', last_receipt_id = ?, updated_at = ?
+                    WHERE aggregate_id = ?
+                    """,
+                    (
+                        updated_aggregate.current_state,
+                        json.dumps(updated_aggregate.state_data),
+                        updated_aggregate.version,
+                        updated_aggregate.state_hash,
+                        updated_aggregate.last_receipt_id,
+                        updated_aggregate.updated_at,
+                        updated_aggregate.aggregate_id,
+                    ),
+                )
+                conn.execute(
+                    """
+                    UPDATE cae_program_execution_leases
+                    SET status = 'SUSPENDED', lease_version = lease_version + 1,
+                        holder_id = NULL, updated_at = ?
+                    WHERE aggregate_id = ?
+                    """,
+                    (gate_snapshot.suspended_at, updated_aggregate.aggregate_id),
+                )
+                queue_row = conn.execute(
+                    "SELECT payload FROM cae_program_workflow_dispatch_queue WHERE aggregate_id = ?",
+                    (updated_aggregate.aggregate_id,),
+                ).fetchone()
+                if queue_row is not None:
+                    queue_payload = json.loads(queue_row["payload"] or "{}")
+                    queue_payload["gate_suspension"] = gate_event
+                    conn.execute(
+                        """
+                        UPDATE cae_program_workflow_dispatch_queue
+                        SET status = 'SUSPENDED', payload = ?
+                        WHERE aggregate_id = ?
+                        """,
+                        (json.dumps(queue_payload), updated_aggregate.aggregate_id),
+                    )
+                conn.execute(
+                    """
+                    INSERT INTO cae_program_state_transitions (
+                        transition_id, aggregate_id, from_state, to_state, transition_name,
+                        trigger_operation, lane, actor_id, payload, expected_version,
+                        committed_version, receipt_id, timestamp
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        transition.transition_id,
+                        transition.aggregate_id,
+                        transition.from_state,
+                        transition.to_state,
+                        transition.transition_name,
+                        transition.trigger_operation,
+                        transition.lane.value,
+                        transition.actor_id,
+                        json.dumps(transition.payload),
+                        transition.expected_version,
+                        transition.committed_version,
+                        transition.receipt_id,
+                        transition.timestamp,
                     ),
                 )
                 conn.commit()
@@ -2955,6 +3154,268 @@ class UniversalProgramStateRuntime:
             offset=offset,
         )
 
+    def get_gate_suspension(self, aggregate_id: str) -> Optional[GateSuspensionSnapshot]:
+        """Returns the durable immutable gate snapshot currently attached to an aggregate."""
+        agg = self.get_aggregate(aggregate_id)
+        raw = agg.state_data.get("gate_suspension")
+        if not isinstance(raw, dict):
+            return None
+        snapshot = raw.get("snapshot")
+        if not isinstance(snapshot, dict):
+            return None
+        snapshot_payload = {key: value for key, value in snapshot.items() if key != "snapshot_hash"}
+        expected_snapshot_hash = snapshot.get("snapshot_hash")
+        if not expected_snapshot_hash or canonical_sha256(snapshot_payload) != expected_snapshot_hash:
+            raise ProgramStateRuntimeError(
+                f"Gate suspension snapshot integrity check failed for aggregate '{aggregate_id}'",
+                reason_code="GATE_SNAPSHOT_INTEGRITY_VIOLATION",
+                details={"aggregate_id": aggregate_id, "gate_id": snapshot.get("gate_id")},
+            )
+        return GateSuspensionSnapshot(
+            aggregate_id=str(snapshot["aggregate_id"]),
+            gate_id=str(snapshot["gate_id"]),
+            required_lane=AuthorityLane(snapshot["required_lane"]),
+            suspended_at=str(snapshot["suspended_at"]),
+            state_version=int(snapshot["state_version"]),
+            state_hash=str(snapshot["state_hash"]),
+            current_state=str(snapshot["current_state"]),
+            node_id=str(snapshot["node_id"]),
+            candidate_outputs=dict(snapshot.get("candidate_outputs", {})),
+            violations=[dict(v) for v in snapshot.get("violations", [])],
+            thresholds=dict(snapshot.get("thresholds", {})),
+            snapshot_hash=str(snapshot["snapshot_hash"]),
+        )
+
+    def _declared_operator_gates(self, program_id: str) -> List[str]:
+        """Load declared operator gates without making manifest absence an execution error."""
+        try:
+            pkg = self.program_registry.get_program(program_id)
+        except Exception:
+            return []
+        return [str(g) for g in pkg.manifest.operator_gates]
+
+    def _resolve_gate_id_for_boundary(
+        self,
+        aggregate: ProgramStateAggregate,
+        transition: ProgramStateTransition,
+        payload: Mapping[str, Any],
+    ) -> Optional[str]:
+        declared = self._declared_operator_gates(aggregate.program_id)
+        if not declared:
+            return None
+
+        explicit = payload.get("gate_id")
+        if explicit is not None:
+            gate_id = str(explicit)
+            return gate_id if gate_id in declared else None
+
+        machine = self.get_state_machine(aggregate.program_id)
+        has_human_boundary = any(
+            c.from_state == aggregate.current_state
+            and c.required_lane == AuthorityLane.COMMANDER
+            and any(token in c.transition_name.lower() for token in ("approve", "authorize", "commit", "select", "lock"))
+            for c in machine.transitions.values()
+        )
+        if not has_human_boundary:
+            return None
+
+        recorded = []
+        existing = aggregate.state_data.get("gate_suspensions", [])
+        if isinstance(existing, list):
+            recorded = [str(e.get("gate_id")) for e in existing if isinstance(e, dict) and e.get("gate_id")]
+        remaining = [gate for gate in declared if gate not in recorded]
+        if len(remaining) == 1:
+            return remaining[0]
+        if transition.payload.get("gate_id") in declared:
+            return str(transition.payload["gate_id"])
+        return remaining[0] if remaining else None
+
+    def evaluate_gate_milestone(
+        self,
+        *,
+        aggregate_id: str,
+        gate_id: str,
+        node_id: Optional[str] = None,
+        candidate_outputs: Optional[Mapping[str, Any]] = None,
+        violations: Optional[Sequence[Mapping[str, Any]]] = None,
+        thresholds: Optional[Mapping[str, Any]] = None,
+        actor_id: str = "cae-gate-runtime",
+        actor_lane: AuthorityLane = AuthorityLane.COMMANDER,
+    ) -> ProgramTransitionResult:
+        """Fail-closed evaluation entrypoint that suspends a declared gate before downstream work."""
+        agg = self.get_aggregate(aggregate_id)
+        declared = self._declared_operator_gates(agg.program_id)
+        if gate_id not in declared:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name=f"gate:{gate_id}",
+                reason=f"Gate '{gate_id}' is not declared by program manifest",
+                details={"gate_id": gate_id, "declared_gates": declared},
+            )
+        if agg.lifecycle == ProgramStateLifecycle.AWAITING_APPROVAL:
+            existing = self.get_gate_suspension(aggregate_id)
+            if existing is None:
+                raise ProgramTransitionBlockedError(
+                    aggregate_id=aggregate_id,
+                    transition_name=f"gate:{gate_id}",
+                    reason="Aggregate is already awaiting approval without a valid suspension snapshot",
+                    details={"reason_code": "GATE_AWAITING_APPROVAL"},
+                )
+            return ProgramTransitionResult(
+                aggregate=agg,
+                transition=self.store.list_transitions(aggregate_id)[-1],
+                receipt={"gate_suspension": existing.to_dict()},
+                receipt_id=agg.last_receipt_id or "",
+                audit_digest=canonical_sha256(existing.to_dict()),
+                gate_suspension=existing,
+            )
+        if agg.lifecycle != ProgramStateLifecycle.RUNNING:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name=f"gate:{gate_id}",
+                reason=f"Gate evaluation requires RUNNING lifecycle, found '{agg.lifecycle.value}'",
+                details={"reason_code": "GATE_NOT_RUNNABLE"},
+            )
+
+        payload = {
+            "gate_id": gate_id,
+            "node_id": node_id or str(agg.state_data.get("node_id") or agg.current_state),
+            "candidate_outputs": dict(candidate_outputs or {}),
+            "violations": [dict(v) for v in (violations or [])],
+            "thresholds": dict(thresholds or {}),
+        }
+        transition = ProgramStateTransition(
+            transition_id=f"gateeval_{hashlib.sha256(f'{aggregate_id}:{agg.version}:{gate_id}'.encode('utf-8')).hexdigest()[:24]}",
+            aggregate_id=aggregate_id,
+            from_state=agg.current_state,
+            to_state=agg.current_state,
+            transition_name=f"gate_suspend:{gate_id}",
+            trigger_operation="cae.gate.suspend@1.0.0",
+            lane=actor_lane,
+            actor_id=actor_id,
+            payload=payload,
+            expected_version=agg.version,
+            committed_version=agg.version + 1,
+            receipt_id=f"rcpt_gate_{hashlib.sha256(f'{aggregate_id}:{agg.version + 1}:{gate_id}'.encode('utf-8')).hexdigest()[:24]}",
+            timestamp=utc_now_rfc3339(),
+        )
+        snapshot_payload = {
+            "aggregate_id": agg.aggregate_id,
+            "gate_id": gate_id,
+            "required_lane": AuthorityLane.COMMANDER.value,
+            "suspended_at": transition.timestamp,
+            "state_version": agg.version,
+            "state_hash": agg.state_hash,
+            "current_state": agg.current_state,
+            "node_id": payload["node_id"],
+            "candidate_outputs": payload["candidate_outputs"],
+            "violations": payload["violations"],
+            "thresholds": payload["thresholds"],
+        }
+        snapshot_hash = canonical_sha256(snapshot_payload)
+        snapshot = GateSuspensionSnapshot(
+            aggregate_id=str(snapshot_payload["aggregate_id"]),
+            gate_id=str(snapshot_payload["gate_id"]),
+            required_lane=AuthorityLane.COMMANDER,
+            suspended_at=str(snapshot_payload["suspended_at"]),
+            state_version=int(snapshot_payload["state_version"]),
+            state_hash=str(snapshot_payload["state_hash"]),
+            current_state=str(snapshot_payload["current_state"]),
+            node_id=str(snapshot_payload["node_id"]),
+            candidate_outputs=dict(snapshot_payload["candidate_outputs"]),
+            violations=[dict(v) for v in snapshot_payload["violations"]],
+            thresholds=dict(snapshot_payload["thresholds"]),
+            snapshot_hash=snapshot_hash,
+        )
+        gate_event = {
+            "event_type": "GateSuspensionEvent",
+            "event_id": f"gateevt_{hashlib.sha256(f'{aggregate_id}:{gate_id}:{agg.version}'.encode('utf-8')).hexdigest()[:24]}",
+            "invariant": "INV-GATE-001",
+            "alert_level": "CRITICAL",
+            "aggregate_id": agg.aggregate_id,
+            "gate_id": gate_id,
+            "required_lane": AuthorityLane.COMMANDER.value,
+            "reason_code": "GATE_AWAITING_APPROVAL",
+            "suspended_at": transition.timestamp,
+            "state_version": agg.version,
+            "state_hash": agg.state_hash,
+            "snapshot_hash": snapshot_hash,
+            "violations": payload["violations"],
+            "thresholds": payload["thresholds"],
+        }
+        new_data = dict(agg.state_data)
+        new_data["gate_suspension"] = {
+            "snapshot": snapshot.to_dict(),
+            "event": gate_event,
+        }
+        history = list(new_data.get("gate_suspensions", []))
+        history.append({"gate_id": gate_id, "snapshot_hash": snapshot_hash, "state_version": agg.version})
+        new_data["gate_suspensions"] = history
+        new_data["alerts"] = list(new_data.get("alerts", [])) + [gate_event]
+        new_hash = _compute_state_hash(
+            aggregate_id=agg.aggregate_id,
+            program_id=agg.program_id,
+            program_version=agg.program_version,
+            current_state=agg.current_state,
+            version=agg.version + 1,
+            state_data=new_data,
+        )
+        suspended = ProgramStateAggregate(
+            aggregate_id=agg.aggregate_id,
+            workspace_id=agg.workspace_id,
+            cae_run_id=agg.cae_run_id,
+            program_id=agg.program_id,
+            program_version=agg.program_version,
+            current_state=agg.current_state,
+            state_data=new_data,
+            version=agg.version + 1,
+            state_hash=new_hash,
+            lifecycle=ProgramStateLifecycle.AWAITING_APPROVAL,
+            last_receipt_id=transition.receipt_id,
+            created_at=agg.created_at,
+            updated_at=transition.timestamp,
+        )
+        self.store.suspend_execution_at_gate(
+            updated_aggregate=suspended,
+            transition=transition,
+            expected_version=agg.version,
+            gate_snapshot=snapshot,
+            gate_event=gate_event,
+        )
+        import logging as _logging
+        _logging.getLogger("ca_runtime.gate_suspension").critical(
+            "GateSuspensionEvent %s", json.dumps(gate_event, sort_keys=True)
+        )
+        return ProgramTransitionResult(
+            aggregate=suspended,
+            transition=transition,
+            receipt=gate_event,
+            receipt_id=transition.receipt_id,
+            audit_digest=canonical_sha256(gate_event),
+            gate_suspension=snapshot,
+        )
+
+    def _assert_not_gate_suspended(
+        self,
+        agg: ProgramStateAggregate,
+        transition_name: str,
+    ) -> None:
+        if agg.lifecycle == ProgramStateLifecycle.AWAITING_APPROVAL:
+            if any(token in transition_name.lower() for token in ("approve", "authorize", "reject")):
+                return
+            suspension = agg.state_data.get("gate_suspension") or {}
+            gate_id = ((suspension.get("snapshot") or {}).get("gate_id") if isinstance(suspension, dict) else None)
+            raise ProgramTransitionBlockedError(
+                aggregate_id=agg.aggregate_id,
+                transition_name=transition_name,
+                reason="Aggregate is AWAITING_APPROVAL at a human gate; downstream execution is fail-closed",
+                details={
+                    "reason_code": "GATE_AWAITING_APPROVAL",
+                    "gate_id": gate_id,
+                    "lifecycle": agg.lifecycle.value,
+                },
+            )
+
     def set_lifecycle(
         self,
         *,
@@ -2968,6 +3429,13 @@ class UniversalProgramStateRuntime:
     ) -> ProgramStateAggregate:
         """Atomically updates the aggregate lifecycle with optimistic CAS verification."""
         agg = self.get_aggregate(aggregate_id)
+        if agg.lifecycle == ProgramStateLifecycle.AWAITING_APPROVAL and new_lifecycle != ProgramStateLifecycle.AWAITING_APPROVAL:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name=f"lifecycle:{new_lifecycle.value}",
+                reason="Gate-suspended aggregate cannot leave AWAITING_APPROVAL through direct lifecycle mutation",
+                details={"reason_code": "GATE_AWAITING_APPROVAL"},
+            )
         if expected_version is not None and agg.version != expected_version:
             raise ProgramStateVersionConflictError(
                 aggregate_id=aggregate_id,
@@ -3227,6 +3695,8 @@ class UniversalProgramStateRuntime:
                 actual_version=agg.version,
             )
 
+        self._assert_not_gate_suspended(agg, transition_name)
+
         if agg.lifecycle in (ProgramStateLifecycle.COMPLETED, ProgramStateLifecycle.FAILED):
             raise ProgramTransitionBlockedError(
                 aggregate_id=aggregate_id,
@@ -3395,12 +3865,39 @@ class UniversalProgramStateRuntime:
 
         audit_digest = canonical_sha256(receipt_envelope)
 
+        gate_id = self._resolve_gate_id_for_boundary(updated_agg, transition_record, dict(payload or {}))
+        gate_suspension: Optional[GateSuspensionSnapshot] = None
+        result_aggregate = updated_agg
+        result_receipt = receipt_envelope
+        result_receipt_id = receipt_id
+        result_digest = audit_digest
+        if gate_id and updated_agg.lifecycle == ProgramStateLifecycle.RUNNING:
+            suspension_result = self.evaluate_gate_milestone(
+                aggregate_id=updated_agg.aggregate_id,
+                gate_id=gate_id,
+                node_id=(payload or {}).get("node_id"),
+                candidate_outputs=(payload or {}).get("candidate_outputs"),
+                violations=(payload or {}).get("violations") or (payload or {}).get("gate_violations"),
+                thresholds=(payload or {}).get("thresholds") or (payload or {}).get("gate_thresholds"),
+                actor_id="cae-gate-runtime",
+                actor_lane=actor_lane,
+            )
+            gate_suspension = suspension_result.gate_suspension
+            result_aggregate = suspension_result.aggregate
+            result_receipt = {
+                "transition": receipt_envelope,
+                "gate_suspension": suspension_result.receipt,
+            }
+            result_receipt_id = suspension_result.receipt_id
+            result_digest = canonical_sha256(result_receipt)
+
         return ProgramTransitionResult(
-            aggregate=updated_agg,
+            aggregate=result_aggregate,
             transition=transition_record,
-            receipt=receipt_envelope,
-            receipt_id=receipt_id,
-            audit_digest=audit_digest,
+            receipt=result_receipt,
+            receipt_id=result_receipt_id,
+            audit_digest=result_digest,
+            gate_suspension=gate_suspension,
         )
 
     def repair_state(
@@ -3415,6 +3912,15 @@ class UniversalProgramStateRuntime:
         state_updates: Optional[Dict[str, Any]] = None,
     ) -> ProgramTransitionResult:
         """Executes a bounded, operator-governed state repair under the COMMANDER lane."""
+        agg = self.get_aggregate(aggregate_id)
+        if agg.lifecycle == ProgramStateLifecycle.AWAITING_APPROVAL and not (repair_action.startswith("gate_approval:") or repair_action.startswith("rejection:")):
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name=f"repair:{repair_action}",
+                reason="Gate-suspended aggregate cannot be repaired downstream while awaiting Commander disposition",
+                details={"reason_code": "GATE_AWAITING_APPROVAL"},
+            )
+
         if actor_lane != AuthorityLane.COMMANDER:
             raise ProgramAuthorityLaneViolationError(
                 aggregate_id=aggregate_id,

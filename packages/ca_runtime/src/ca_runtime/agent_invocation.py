@@ -148,6 +148,20 @@ class UnauthorizedToolError(AgentInvocationError):
         )
 
 
+class GateSuspensionExecutionBlockedError(AgentInvocationError):
+    """Raised when an agent invocation is attempted while a gate is suspended."""
+
+    def __init__(self, aggregate_id: str, gate_id: Optional[str] = None):
+        details = {"aggregate_id": aggregate_id}
+        if gate_id:
+            details["gate_id"] = gate_id
+        super().__init__(
+            f"GATE_AWAITING_APPROVAL: execution is blocked for aggregate '{aggregate_id}'",
+            reason_code="GATE_AWAITING_APPROVAL",
+            details=details,
+        )
+
+
 class InvocationBypassError(AgentInvocationError):
     """Raised when execution or reasoning is attempted outside a governed AgentInvocation."""
 
@@ -521,6 +535,7 @@ class AgentInvocationRuntime:
         model_reasoning_engine: Optional[Any] = None,
         provider_router: Optional[ProviderRouter] = None,
         supplied_tool_calls: Optional[Sequence[str]] = None,
+        execution_guard: Optional[Callable[[AgentInvocation], None]] = None,
     ) -> AgentInvocationReceipt:
         """Execute the governed AgentInvocation through the model bridge.
 
@@ -552,7 +567,14 @@ class AgentInvocationRuntime:
                         f"Tool was not declared in compiled invocation tools: {list(invocation.tools)}"
                     )
 
-        # 3. Model Inference Execution
+        # 3. Gate / execution guard boundary
+        # The guard is deliberately caller-supplied so the invocation object does not
+        # acquire an unsafe implicit dependency on aggregate storage. Production callers
+        # should bind it to the authoritative program state runtime.
+        if execution_guard is not None:
+            execution_guard(invocation)
+
+        # 4. Model Inference Execution
         raw_response_text = ""
         parsed_json: Optional[Dict[str, Any]] = None
         prompt_tokens = 0
