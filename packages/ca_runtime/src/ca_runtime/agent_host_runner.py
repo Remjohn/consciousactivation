@@ -39,6 +39,8 @@ import time
 import unicodedata
 from typing import Any, Callable, Mapping, Optional, Sequence
 
+from ca_runtime.operator_preemption import ExecutionCancelledError
+
 
 DEFAULT_MAX_TURNS = 5
 DEFAULT_WALL_CLOCK_TIMEOUT_MS = 30_000
@@ -422,7 +424,10 @@ class IsolatedRuntimeContainer:
         *,
         timeout_ms: Optional[int] = None,
         byte_quota: Optional[int] = None,
+        cancellation_token: Optional[Any] = None,
     ) -> _IsolatedResult:
+        if cancellation_token is not None and cancellation_token.is_cancelled:
+            cancellation_token.raise_if_cancelled()
         request = sanitize_structured(argument)
         request_bytes = _canonical_json_bytes(request)
         effective_quota = self.byte_quota if byte_quota is None else byte_quota
@@ -478,7 +483,15 @@ class IsolatedRuntimeContainer:
 
             thread = threading.Thread(target=_target, daemon=True)
             thread.start()
-            finished = worker_done.wait(effective_timeout_ms / 1000.0)
+            deadline = time.monotonic() + (effective_timeout_ms / 1000.0)
+            while not worker_done.is_set():
+                if cancellation_token is not None and cancellation_token.is_cancelled:
+                    cancellation_token.raise_if_cancelled()
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                worker_done.wait(min(0.05, remaining))
+            finished = worker_done.is_set()
             if not finished:
                 raise WallClockTimeoutError(
                     "external call exceeded strict wall-clock timeout",
@@ -541,7 +554,19 @@ class IsolatedRuntimeContainer:
         try:
             deadline = started + (effective_timeout_ms / 1000.0)
             remaining = max(0.0, deadline - time.monotonic())
-            process.join(remaining)
+            while process.is_alive() and remaining > 0:
+                if cancellation_token is not None and cancellation_token.is_cancelled:
+                    process.terminate()
+                    process.join(1.0)
+                    if process.is_alive():
+                        try:
+                            process.kill()
+                            process.join(1.0)
+                        except AttributeError:
+                            pass
+                    cancellation_token.raise_if_cancelled()
+                process.join(min(0.05, remaining))
+                remaining = max(0.0, deadline - time.monotonic())
 
             if process.is_alive():
                 try:
@@ -731,7 +756,10 @@ class AgentHostRunner:
         invocation: Any,
         *,
         allowed_tool_names: Optional[Sequence[str]] = None,
+        cancellation_token: Optional[Any] = None,
     ) -> HostRunReceipt:
+        if cancellation_token is not None and cancellation_token.is_cancelled:
+            cancellation_token.raise_if_cancelled()
         envelope = dict(_validate_envelope(invocation))
         agent_id = envelope["agent_id"]
         prompt = envelope["prompt"]
@@ -825,10 +853,13 @@ class AgentHostRunner:
                 "turn": turns,
             }
 
+            if cancellation_token is not None:
+                cancellation_token.raise_if_cancelled()
             result, selected_provider, provider_failovers, provider_bytes = self._invoke_with_failover(
                 request,
                 deadline=deadline,
                 remaining_bytes=self.config.byte_quota - bytes_consumed,
+                cancellation_token=cancellation_token,
             )
             bytes_consumed += provider_bytes
             provider_name = selected_provider
@@ -907,6 +938,7 @@ class AgentHostRunner:
                     },
                     timeout_ms=remaining_time_ms,
                     byte_quota=remaining_bytes,
+                    cancellation_token=cancellation_token,
                 )
                 if tool_result.output_bytes > remaining_bytes:
                     raise ByteQuotaExceededError(
@@ -988,9 +1020,12 @@ class AgentHostRunner:
         *,
         deadline: float,
         remaining_bytes: int,
+        cancellation_token: Optional[Any] = None,
     ) -> tuple[Mapping[str, Any], str, int, int]:
         failures: list[str] = []
         for index, provider in enumerate(self.providers):
+            if cancellation_token is not None:
+                cancellation_token.raise_if_cancelled()
             remaining_time_ms = int(max(0.0, (deadline - time.monotonic()) * 1000.0))
             if remaining_time_ms <= 0:
                 raise WallClockTimeoutError(
@@ -1010,6 +1045,7 @@ class AgentHostRunner:
                     request,
                     timeout_ms=remaining_time_ms,
                     byte_quota=remaining_bytes,
+                    cancellation_token=cancellation_token,
                 )
                 if not isinstance(result.payload, Mapping):
                     raise HostRunnerError(
@@ -1017,6 +1053,8 @@ class AgentHostRunner:
                         reason_code="ERR_PROVIDER_RESPONSE_TYPE",
                     )
                 return dict(result.payload), provider.name, index, result.output_bytes
+            except ExecutionCancelledError:
+                raise
             except ByteQuotaExceededError as exc:
                 if exc.reason_code == "ERR_BYTE_QUOTA_OUTPUT":
                     failures.append(f"{provider.name}: {exc.reason_code}")

@@ -124,3 +124,65 @@ pytest -q \
 **Unified result:** `113 passed, 0 failed, 2 skipped in 31.29s`.
 
 The two skips are the M047 cross-workspace and cross-campaign symlink-alias cases. Windows returned `WinError 1314` because this host does not grant symbolic-link creation and Developer Mode is disabled; the tests retain their fail-closed assertions and are not altered or suppressed.
+
+---
+
+# Epoch 08 Walkthrough — Distribution, Attribution, Replay, Recovery, Control, DAG & Telemetry
+
+**Status:** Verified and committed
+**Date:** 2026-09-08
+**Result:** 89 passed, 0 failed (100% pass rate for all seven Epoch 08 mandate suites)
+
+## Mandates applied
+
+| Mandate | Requirement / Invariant | Exact destination surfaces |
+|---|---|---|
+| CA-M031 | FR-DIST-001 | `packages/ca_runtime/src/ca_runtime/distribution_delivery.py`<br>`tests/wave04/test_ca_m031_distribution_delivery.py` |
+| CA-M032b | FR-OUT-001 | `packages/ca_runtime/src/ca_runtime/outcome_attribution.py`<br>`tests/wave04/test_ca_m032b_outcome_attribution.py` |
+| CA-M044 | INV-RPL-001 | `packages/ca_runtime/src/ca_runtime/replay_engine.py`<br>`tests/cae/test_ca_m044_replay_engine.py` |
+| CA-M045 | INV-REC-001 | `packages/ca_runtime/src/ca_runtime/zombie_reconciler.py`<br>`tests/cae/test_ca_m045_zombie_reconciler.py` |
+| CA-M046 | INV-PREEMPT-001 | `packages/ca_runtime/src/ca_runtime/operator_preemption.py`<br>`packages/ca_runtime/src/ca_runtime/program_operator_runtime.py`<br>`packages/ca_runtime/src/ca_runtime/agent_host_runner.py`<br>`api/routers/programs.py`<br>`tests/cae/test_ca_m046_operator_preemption.py` |
+| CA-M050 | INV-DAG-001 | `services/pipeline/src/cmf_pipeline/evidence/__init__.py`<br>`services/pipeline/src/cmf_pipeline/evidence/dag.py`<br>`tests/pipeline/test_ca_m050_evidence_dag.py` |
+| CA-M054 | INV-TELEM-001 | `packages/ca_runtime/src/ca_runtime/factory_observability.py`<br>`packages/ca_runtime/src/ca_runtime/program_operator_runtime.py`<br>`tests/cae/test_ca_m054_telemetry_flywheel.py` |
+
+## Integration notes
+
+- **Exact mappings:** M031, M032b, M044, M045, M046, and M050 were applied from their handoffs without alternate paths.
+- **M054 authority decision:** The operator approved the canonical Q53 scope (`INV-TELEM-001`) rather than the conflicting pipeline reference (`INV-TEL-001`). Implementation is therefore bounded to runtime telemetry and genuine operator gate capture in `factory_observability.py` and `program_operator_runtime.py`.
+- **M054 behavior:** The canonical runtime now exposes six telemetry classes, redacted content-addressed events, attributable `HumanResolutionEpisode` records, eligible chosen/rejected preference derivatives, manifest verification, and read-only training exports. Missing alternatives remain recorded but are never promoted into synthetic preference data.
+- **Syntax and hygiene:** All Epoch 08 implementation/test files passed compilation; `git diff --check` passed.
+
+## Test matrix
+
+| Mandate | Invariant | Handoff/mandate test suite | Tests | Result |
+|---|---|---|:---:|---:|
+| CA-M031 | FR-DIST-001 | `tests/wave04/test_ca_m031_distribution_delivery.py` | 11 | PASS (11/11) |
+| CA-M032b | FR-OUT-001 | `tests/wave04/test_ca_m032b_outcome_attribution.py` | 12 | PASS (12/12) |
+| CA-M044 | INV-RPL-001 | `tests/cae/test_ca_m044_replay_engine.py` | 10 | PASS (10/10) |
+| CA-M045 | INV-REC-001 | `tests/cae/test_ca_m045_zombie_reconciler.py` | 9 | PASS (9/9) |
+| CA-M046 | INV-PREEMPT-001 | `tests/cae/test_ca_m046_operator_preemption.py` | 11 | PASS (11/11) |
+| CA-M050 | INV-DAG-001 | `tests/pipeline/test_ca_m050_evidence_dag.py` | 26 | PASS (26/26) |
+| CA-M054 | INV-TELEM-001 | `tests/cae/test_ca_m054_telemetry_flywheel.py` | 10 | PASS (10/10) |
+| **Unified Epoch 08** | | all seven suites above | **89** | **PASS (89/89, 100%)** |
+
+### Targeted handoff regressions
+
+- CA-M031 + CA-M030 release manifest: **25 passed**.
+- CA-M032b + CA-M030 release manifest: **26 passed**.
+- CA-M054 affected direct regressions: `tests/cae/test_program_operator_runtime.py` **12 passed** and `tests/cae/test_m63_unified_factory_commands_read_only_observability.py` **9 passed**.
+- The separately run legacy M68 persistence suite had **3 passed / 5 failed** on unchanged state-version expectations (`expected v2/v3`, runtime returns v1/v2). It is outside the Epoch 08 mandate suite and no Epoch 08 change touched the state-version implementation; the failures were recorded rather than weakened.
+
+### Unified command
+
+```bash
+pytest -q \
+  tests/wave04/test_ca_m031_distribution_delivery.py \
+  tests/wave04/test_ca_m032b_outcome_attribution.py \
+  tests/cae/test_ca_m044_replay_engine.py \
+  tests/cae/test_ca_m045_zombie_reconciler.py \
+  tests/cae/test_ca_m046_operator_preemption.py \
+  tests/pipeline/test_ca_m050_evidence_dag.py \
+  tests/cae/test_ca_m054_telemetry_flywheel.py
+```
+
+**Unified result:** `89 passed in 23.06s (100% pass rate)`.

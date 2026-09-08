@@ -11,6 +11,7 @@ Endpoints:
   - GET /api/programs/executions/{aggregate_id}: Inspect single execution aggregate & context
   - POST /api/programs/executions/{aggregate_id}/pause: Safely pause running program (CAS-protected)
   - POST /api/programs/executions/{aggregate_id}/resume: Resume paused program (CAS-protected)
+  - POST /api/programs/executions/{aggregate_id}/abort: Operator preemption to CANCELLED (CAS-protected)
   - POST /api/programs/executions/{aggregate_id}/approve: Authorize human gate (CAS-protected, COMMANDER lane)
   - POST /api/programs/executions/{aggregate_id}/reject: Reject milestone with disposition routing (CAS-protected)
   - POST /api/programs/executions/{aggregate_id}/repair: Governed state repair / direct manipulation
@@ -47,6 +48,7 @@ from ca_runtime.program_state_runtime import (
     ProgramStateVersionConflictError,
     ProgramTransitionBlockedError,
 )
+from ca_runtime.tenancy import CrossWorkspaceLeakError, UnauthorizedOperatorAccessError, TenantContext
 from ca_runtime.program_operator_runtime import (
     ArtifactLineageGraph,
     ExecutionTraceProjection,
@@ -91,6 +93,13 @@ class ProgramListResponse(BaseModel):
     total: int
 
 
+class AbortExecutionRequest(BaseModel):
+    actor_id: str = Field(default="operator")
+    reason: str = Field(default="operator abort", min_length=1, max_length=1000)
+    expected_version: Optional[int] = None
+    expected_state_sha256: Optional[str] = None
+
+
 class PreflightRequest(BaseModel):
     workspace_id: str = Field(..., min_length=1)
     context_refs: List[str] = Field(default_factory=list)
@@ -99,6 +108,25 @@ class PreflightRequest(BaseModel):
 
 _default_operator_service: Optional[ProgramOperatorRuntimeService] = None
 
+
+
+def get_operator_tenant_context(
+    x_actor_id: Optional[str] = Header(None, alias="X-Actor-Id"),
+    x_workspace_id: Optional[str] = Header(None, alias="X-Workspace-Id"),
+    x_role: Optional[str] = Header("MEMBER", alias="X-Role"),
+    x_is_operator: Optional[str] = Header("false", alias="X-Is-Operator"),
+    x_operator_grant_id: Optional[str] = Header(None, alias="X-Operator-Grant-Id"),
+) -> TenantContext:
+    """Reuse the canonical tenancy header parser without importing its router at module load."""
+    from api.routers.v1_tenancy import get_tenant_context
+
+    return get_tenant_context(
+        x_actor_id=x_actor_id,
+        x_workspace_id=x_workspace_id,
+        x_role=x_role,
+        x_is_operator=x_is_operator,
+        x_operator_grant_id=x_operator_grant_id,
+    )
 
 def get_registry() -> ProgramRegistry:
     return get_program_registry()
@@ -457,6 +485,76 @@ def pause_execution(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={"error_code": "TRANSITION_BLOCKED", "message": str(e)},
         )
+    except ProgramStateAggregateNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error_code": "NOT_FOUND", "message": f"Execution aggregate '{aggregate_id}' not found"},
+        )
+
+
+@router.post("/executions/{aggregate_id:path}/abort", response_model=ProgramExecutionSummaryResponse)
+def abort_execution(
+    aggregate_id: str,
+    request: AbortExecutionRequest,
+    response: Response,
+    if_match_version: Optional[str] = Header(default=None, alias="If-Match-State-Version"),
+    if_match_sha256: Optional[str] = Header(default=None, alias="If-Match-State-SHA256"),
+    tenant: TenantContext = Depends(get_operator_tenant_context),
+    service: ProgramOperatorRuntimeService = Depends(get_operator_service),
+) -> ProgramExecutionSummaryResponse:
+    """Preempts an active execution through the authoritative operator/CAS boundary."""
+    exp_version, exp_sha256 = _resolve_cas_headers(
+        request.expected_version, request.expected_state_sha256, if_match_version, if_match_sha256
+    )
+    try:
+        agg = service.abort_program(
+            aggregate_id=aggregate_id,
+            actor_id=request.actor_id,
+            operator_context=tenant,
+            expected_version=exp_version,
+            expected_state_sha256=exp_sha256,
+            reason=request.reason,
+        )
+        _set_state_headers(response, agg)
+        return ProgramExecutionSummaryResponse(
+            aggregate_id=agg.aggregate_id,
+            workspace_id=agg.workspace_id,
+            program_id=agg.program_id,
+            program_version=agg.program_version,
+            lifecycle=agg.lifecycle.value,
+            current_state=agg.current_state,
+            version=agg.version,
+            state_hash=agg.state_hash,
+            last_receipt_id=agg.last_receipt_id,
+            created_at=agg.created_at,
+            updated_at=agg.updated_at,
+        )
+    except UnauthorizedOperatorAccessError as e:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={"error_code": "OPERATOR_AUTH_REQUIRED", "message": str(e)},
+        ) from e
+    except CrossWorkspaceLeakError as e:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={"error_code": "CROSS_WORKSPACE_FORBIDDEN", "message": str(e)},
+        ) from e
+    except ProgramStateVersionConflictError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={
+                "error_code": "STALE_STATE_MUTATION_REJECTED",
+                "message": str(e),
+                "aggregate_id": e.aggregate_id,
+                "expected_version": e.expected_version,
+                "actual_version": e.actual_version,
+            },
+        ) from e
+    except ProgramTransitionBlockedError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error_code": "TRANSITION_BLOCKED", "message": str(e)},
+        ) from e
     except ProgramStateAggregateNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

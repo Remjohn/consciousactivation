@@ -38,6 +38,7 @@ from .program_registry import (
     ProgramRegistry,
     get_program_registry,
 )
+from .operator_preemption import ExecutionControlRegistry, PreemptionReceipt
 from .program_state_runtime import (
     IProgramStateStore,
     InMemoryProgramStateStore,
@@ -201,9 +202,69 @@ class ProgramOperatorRuntimeService:
         self,
         runtime: Optional[UniversalProgramStateRuntime] = None,
         program_registry: Optional[ProgramRegistry] = None,
+        execution_controls: Optional[ExecutionControlRegistry] = None,
+        telemetry_flywheel: Optional[Any] = None,
     ) -> None:
         self.program_registry = program_registry or get_program_registry()
         self.runtime = runtime or UniversalProgramStateRuntime(program_registry=self.program_registry)
+        self.execution_controls = execution_controls or ExecutionControlRegistry()
+        self.telemetry_flywheel = telemetry_flywheel
+
+    def _get_telemetry_flywheel(self) -> Any:
+        """Resolve the canonical CA-M054 derivative boundary without a module cycle."""
+        if self.telemetry_flywheel is None:
+            from .factory_observability import TelemetryFlywheel
+
+            self.telemetry_flywheel = TelemetryFlywheel()
+        return self.telemetry_flywheel
+
+    def _emit_telemetry(
+        self,
+        event_class: str,
+        *,
+        aggregate: ProgramStateAggregate,
+        actor_id: Optional[str],
+        payload: Optional[Mapping[str, Any]] = None,
+    ) -> None:
+        self._get_telemetry_flywheel().emit(
+            event_class,
+            workspace_id=str(aggregate.workspace_id),
+            aggregate_id=aggregate.aggregate_id,
+            actor_id=actor_id,
+            payload=payload,
+            timestamp=aggregate.updated_at,
+        )
+
+    def _record_operator_resolution(
+        self,
+        *,
+        aggregate: ProgramStateAggregate,
+        actor_id: str,
+        gate_id: str,
+        decision: str,
+        receipt_id: Optional[str],
+        source_state: Optional[str] = None,
+        chosen: Any = None,
+        rejected: Optional[Sequence[Any]] = None,
+        rationale: Optional[str] = None,
+    ) -> None:
+        """Record only after the canonical gate mutation has committed."""
+        if not receipt_id:
+            raise ProgramStateRuntimeError("Committed operator gate decision is missing its receipt")
+        self._get_telemetry_flywheel().capture_operator_resolution(
+            aggregate_id=aggregate.aggregate_id,
+            workspace_id=str(aggregate.workspace_id),
+            gate_id=gate_id,
+            decision=decision,
+            operator_id=actor_id,
+            source_state=source_state or aggregate.current_state,
+            target_state=aggregate.current_state,
+            receipt_id=receipt_id,
+            chosen=chosen,
+            rejected=rejected,
+            rationale=rationale,
+            timestamp=aggregate.updated_at,
+        )
 
     # ------------------------------------------------------------------------
     # 2.1 Program Discovery & Catalog
@@ -372,12 +433,102 @@ class ProgramOperatorRuntimeService:
         # Phase 2: refresh canonical local context, atomically CAS lease 0 -> 1,
         # and enqueue the real workflow-dispatch boundary in the same persistence transaction.
         # A failed claim remains INITIALIZED + LEASE_ENQUEUED; never synthesize RUNNING.
-        return self.runtime.acquire_execution_lease_and_trigger(
+        started = self.runtime.acquire_execution_lease_and_trigger(
             aggregate_id=aggregate.aggregate_id,
             actor_id=actor_id,
             expected_lease_version=0,
             context_claims=claims,
         )
+        self._emit_telemetry(
+            "EXECUTION",
+            aggregate=started,
+            actor_id=actor_id,
+            payload={"operation": "RUN", "program_id": program_id, "state": started.current_state},
+        )
+        return started
+
+    def abort_program(
+        self,
+        *,
+        aggregate_id: str,
+        actor_id: str,
+        operator_context: Any,
+        expected_version: Optional[int] = None,
+        expected_state_sha256: Optional[str] = None,
+        reason: str = "operator abort",
+    ) -> ProgramStateAggregate:
+        """Atomically commit CANCELLED through the canonical CAS path, then preempt the worker."""
+        if operator_context is None:
+            raise ValueError("operator_context is required for abort")
+        if getattr(operator_context, "role", None) != "OPERATOR" and not getattr(operator_context, "is_operator", False):
+            from .tenancy import UnauthorizedOperatorAccessError
+            raise UnauthorizedOperatorAccessError(
+                f"Actor '{getattr(operator_context, 'actor_id', actor_id)}' does not have operator clearance"
+            )
+
+        agg = self.runtime.get_aggregate(aggregate_id)
+        if str(operator_context.workspace_id) != str(agg.workspace_id):
+            from .tenancy import CrossWorkspaceLeakError
+            raise CrossWorkspaceLeakError(
+                f"Execution '{aggregate_id}' belongs to workspace '{agg.workspace_id}', "
+                f"not operator workspace '{operator_context.workspace_id}'"
+            )
+        if getattr(operator_context, "actor_id", actor_id) != actor_id:
+            raise ValueError("actor_id must match the authenticated operator context")
+
+        terminal = {
+            ProgramStateLifecycle.COMPLETED,
+            ProgramStateLifecycle.FAILED,
+            ProgramStateLifecycle.CANCELLED,
+        }
+        if agg.lifecycle in terminal:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name="abort",
+                reason=f"Cannot abort program in terminal state '{agg.lifecycle.value}'",
+            )
+        if agg.lifecycle == ProgramStateLifecycle.AWAITING_APPROVAL:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name="abort",
+                reason="Cannot abort a gate-suspended execution through direct lifecycle mutation; use the canonical gate decision path",
+            )
+
+        token = self.execution_controls.bind(aggregate_id)
+        receipt_id = f"rcpt_abort_{hashlib.sha256(f'{aggregate_id}:{agg.version + 1}:{actor_id}'.encode('utf-8')).hexdigest()[:24]}"
+        requested_at = datetime.now(timezone.utc).isoformat()
+        receipt = PreemptionReceipt(
+            receipt_id=receipt_id,
+            aggregate_id=aggregate_id,
+            workspace_id=str(agg.workspace_id),
+            actor_id=actor_id,
+            source_state=agg.lifecycle.value,
+            target_state=ProgramStateLifecycle.CANCELLED.value,
+            expected_version=expected_version,
+            committed_version=agg.version + 1,
+            cancellation_requested_at=requested_at,
+            cancellation_observed_at=None,
+            cancellation_latency_ms=None,
+            cancellation_observed=False,
+            resources_notified=(),
+            callback_failures=(),
+            reason=reason,
+        )
+
+        # Canonical CAS/state path is the authority.  The durable receipt explicitly
+        # distinguishes the request from interruption observation; worker execution
+        # may only report observed cancellation after this commit.
+        updated = self.runtime.set_lifecycle(
+            aggregate_id=aggregate_id,
+            new_lifecycle=ProgramStateLifecycle.CANCELLED,
+            actor_id=actor_id,
+            expected_version=expected_version,
+            expected_state_sha256=expected_state_sha256,
+            receipt_id=receipt_id,
+            state_updates={"preemption": receipt.canonical_dict()},
+        )
+        token.cancel()
+        return updated
 
     def pause_program(
         self,
@@ -396,12 +547,19 @@ class ProgramOperatorRuntimeService:
                 actor_lane=actor_lane,
                 required_lane=AuthorityLane.COMMANDER,
             )
-        return self.runtime.pause_execution(
+        updated = self.runtime.pause_execution(
             aggregate_id=aggregate_id,
             actor_id=actor_id,
             expected_version=expected_version,
             expected_state_sha256=expected_state_sha256,
         )
+        self._emit_telemetry(
+            "TRANSITION",
+            aggregate=updated,
+            actor_id=actor_id,
+            payload={"operation": "PAUSE", "state": updated.current_state},
+        )
+        return updated
 
     def resume_program(
         self,
@@ -420,12 +578,19 @@ class ProgramOperatorRuntimeService:
                 actor_lane=actor_lane,
                 required_lane=AuthorityLane.COMMANDER,
             )
-        return self.runtime.resume_execution(
+        updated = self.runtime.resume_execution(
             aggregate_id=aggregate_id,
             actor_id=actor_id,
             expected_version=expected_version,
             expected_state_sha256=expected_state_sha256,
         )
+        self._emit_telemetry(
+            "TRANSITION",
+            aggregate=updated,
+            actor_id=actor_id,
+            payload={"operation": "RESUME", "state": updated.current_state},
+        )
+        return updated
 
     def approve_program(
         self,
@@ -485,7 +650,7 @@ class ProgramOperatorRuntimeService:
                 "authorized_by": actor_id,
                 "approved_at": now,
             })
-            return self.runtime.execute_transition(
+            result = self.runtime.execute_transition(
                 aggregate_id=aggregate_id,
                 transition_name=approval_transition_name,
                 payload=approval_payload,
@@ -493,6 +658,19 @@ class ProgramOperatorRuntimeService:
                 actor_lane=AuthorityLane.COMMANDER,
                 expected_version=expected_version,
             )
+            committed = self.runtime.get_aggregate(aggregate_id)
+            self._record_operator_resolution(
+                aggregate=committed,
+                actor_id=actor_id,
+                gate_id=gate_id,
+                decision="APPROVE",
+                receipt_id=committed.last_receipt_id,
+                source_state=agg.current_state,
+                chosen=approval_payload.get("chosen", approval_payload.get("selected")),
+                rejected=approval_payload.get("rejected", approval_payload.get("alternatives", ())),
+                rationale=approval_payload.get("rationale", approval_payload.get("comments")),
+            )
+            return result
         else:
             # Emit signed human gate approval receipt and record repair/governed transition
             receipt_id = f"rcpt_appr_{hashlib.sha256(f'{aggregate_id}:{agg.version + 1}:{gate_id}'.encode('utf-8')).hexdigest()[:24]}"
@@ -506,7 +684,7 @@ class ProgramOperatorRuntimeService:
                 "payload": payload or {},
             })
 
-            return self.runtime.repair_state(
+            result = self.runtime.repair_state(
                 aggregate_id=aggregate_id,
                 repair_action=f"gate_approval:{gate_id}",
                 repair_payload={"gate_id": gate_id, "decision": decision, "payload": payload or {}},
@@ -514,6 +692,19 @@ class ProgramOperatorRuntimeService:
                 actor_lane=AuthorityLane.COMMANDER,
                 state_updates={"approvals": approval_data["approvals"]},
             )
+            committed = self.runtime.get_aggregate(aggregate_id)
+            self._record_operator_resolution(
+                aggregate=committed,
+                actor_id=actor_id,
+                gate_id=gate_id,
+                decision="APPROVE",
+                receipt_id=committed.last_receipt_id,
+                source_state=agg.current_state,
+                chosen=(payload or {}).get("chosen", (payload or {}).get("selected")),
+                rejected=(payload or {}).get("rejected", (payload or {}).get("alternatives", ())),
+                rationale=(payload or {}).get("rationale", (payload or {}).get("comments")),
+            )
+            return result
 
     def reject_program(
         self,
@@ -579,7 +770,7 @@ class ProgramOperatorRuntimeService:
         rejections = list(agg.state_data.get("rejections", []))
         rejections.append(rejection_entry)
 
-        return self.runtime.repair_state(
+        result = self.runtime.repair_state(
             aggregate_id=aggregate_id,
             repair_action=f"rejection:{disposition_route.value}",
             repair_payload=rejection_entry,
@@ -588,6 +779,19 @@ class ProgramOperatorRuntimeService:
             target_state=target_state or agg.current_state,
             state_updates={"rejections": rejections, "last_rejection": rejection_entry},
         )
+        committed = self.runtime.get_aggregate(aggregate_id)
+        self._record_operator_resolution(
+            aggregate=committed,
+            actor_id=actor_id,
+            gate_id=gate_id,
+            decision="REJECT",
+            receipt_id=committed.last_receipt_id,
+            source_state=agg.current_state,
+            chosen=None,
+            rejected=({"reason": rejection_reason, "disposition_route": disposition_route.value},),
+            rationale=feedback_notes,
+        )
+        return result
 
     def repair_program(
         self,

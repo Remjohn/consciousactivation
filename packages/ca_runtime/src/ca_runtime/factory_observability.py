@@ -20,7 +20,9 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import threading
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
@@ -889,3 +891,402 @@ class ReadOnlyObservabilityViewer:
     def attempt_mutation(self, operation: str) -> None:
         """Explicitly defends Gate 4: Observability surface is strictly read-only."""
         raise ReadOnlyObservabilityMutationError(operation)
+
+
+# ============================================================================
+# 7. CA-M054 Unified Telemetry Flywheel
+# ============================================================================
+
+
+class TelemetryIntegrityError(FactoryObservabilityError):
+    """Raised when a telemetry derivative is malformed, mutable, or tampered."""
+
+    def __init__(self, message: str) -> None:
+        super().__init__(message, reason_code="ERR_TELEMETRY_INTEGRITY")
+
+
+class TelemetryRedactionError(FactoryObservabilityError):
+    """Raised when a telemetry payload still contains protected raw data."""
+
+    def __init__(self, message: str) -> None:
+        super().__init__(message, reason_code="ERR_TELEMETRY_REDACTION")
+
+
+class TelemetryEventClass(str, Enum):
+    """The six governed runtime telemetry classes authorized by CA-M054."""
+
+    EXECUTION = "EXECUTION"
+    TRANSITION = "TRANSITION"
+    OPERATOR_GATE = "OPERATOR_GATE"
+    RESOURCE = "RESOURCE"
+    FAILURE = "FAILURE"
+    SYSTEM = "SYSTEM"
+
+
+TELEMETRY_SCHEMA_VERSION = "ca-telemetry/v1"
+HUMAN_RESOLUTION_SCHEMA_VERSION = "ca-human-resolution/v1"
+TELEMETRY_EXPORT_SCHEMA_VERSION = "ca-telemetry-export/v1"
+_PROTECTED_KEY_PARTS = (
+    "email",
+    "phone",
+    "secret",
+    "password",
+    "token",
+    "api_key",
+    "apikey",
+    "raw_text",
+    "transcript",
+    "address",
+    "full_name",
+    "personal",
+)
+_EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
+
+
+def _operator_ref(operator_id: str) -> str:
+    """Create a stable non-reversible reference for an operator identity."""
+
+    return "operator_ref:" + hashlib.sha256(str(operator_id).encode("utf-8")).hexdigest()[:32]
+
+
+def redact_telemetry(value: Any, *, key: str = "") -> Any:
+    """Recursively redact protected data before it enters telemetry or training output."""
+
+    lowered = key.lower()
+    if any(part in lowered for part in _PROTECTED_KEY_PARTS):
+        return "[REDACTED]"
+    if lowered in {"actor_id", "operator_id", "user_id", "person_id"}:
+        return _operator_ref(str(value))
+    if isinstance(value, Mapping):
+        return {str(k): redact_telemetry(v, key=str(k)) for k, v in sorted(value.items(), key=lambda item: str(item[0]))}
+    if isinstance(value, (list, tuple)):
+        return [redact_telemetry(item, key=key) for item in value]
+    if isinstance(value, str):
+        return _EMAIL_RE.sub("[REDACTED_EMAIL]", value)
+    return value
+
+
+def _canonical_json(value: Any) -> str:
+    return canonical_json_text(redact_telemetry(value))
+
+
+def _digest_without(value: Mapping[str, Any], excluded: str) -> str:
+    body = {key: value[key] for key in sorted(value) if key != excluded}
+    return hashlib.sha256(canonical_json_text(body).encode("utf-8")).hexdigest()
+
+
+@dataclass(frozen=True, slots=True)
+class TelemetryEvent:
+    """Immutable redacted runtime event; telemetry is evidence, never authority."""
+
+    event_id: str
+    event_class: TelemetryEventClass
+    workspace_id: str
+    aggregate_id: Optional[str]
+    actor_ref: Optional[str]
+    timestamp: str
+    payload: Mapping[str, Any]
+    schema_version: str = TELEMETRY_SCHEMA_VERSION
+    event_sha256: str = ""
+
+    def __post_init__(self) -> None:
+        redacted = redact_telemetry(self.payload)
+        object.__setattr__(self, "payload", redacted)
+        if not self.event_sha256:
+            object.__setattr__(self, "event_sha256", _digest_without(self.canonical_dict(), "event_sha256"))
+
+    def canonical_dict(self) -> Dict[str, Any]:
+        return {
+            "event_id": self.event_id,
+            "event_class": self.event_class.value,
+            "workspace_id": self.workspace_id,
+            "aggregate_id": self.aggregate_id,
+            "actor_ref": self.actor_ref,
+            "timestamp": self.timestamp,
+            "payload": redact_telemetry(self.payload),
+            "schema_version": self.schema_version,
+            "event_sha256": self.event_sha256,
+        }
+
+    def verify(self) -> None:
+        expected = _digest_without(self.canonical_dict(), "event_sha256")
+        if expected != self.event_sha256:
+            raise TelemetryIntegrityError(f"Telemetry event '{self.event_id}' digest mismatch")
+        if _EMAIL_RE.search(canonical_json_text(self.payload)):
+            raise TelemetryRedactionError(f"Telemetry event '{self.event_id}' contains an unredacted email")
+
+
+@dataclass(frozen=True, slots=True)
+class PreferencePair:
+    """Immutable read-only training derivative of one authentic operator episode."""
+
+    episode_id: str
+    chosen_json: str
+    rejected_json: Tuple[str, ...]
+    source_receipt_id: str
+    pair_sha256: str = ""
+
+    def __post_init__(self) -> None:
+        if not self.chosen_json or not self.rejected_json:
+            raise TelemetryIntegrityError("A preference pair requires chosen and rejected alternatives")
+        if not self.pair_sha256:
+            object.__setattr__(self, "pair_sha256", _digest_without(self.canonical_dict(), "pair_sha256"))
+
+    def canonical_dict(self) -> Dict[str, Any]:
+        return {
+            "episode_id": self.episode_id,
+            "chosen_json": self.chosen_json,
+            "rejected_json": list(self.rejected_json),
+            "source_receipt_id": self.source_receipt_id,
+            "pair_sha256": self.pair_sha256,
+        }
+
+    def verify(self) -> None:
+        if _digest_without(self.canonical_dict(), "pair_sha256") != self.pair_sha256:
+            raise TelemetryIntegrityError(f"Preference pair '{self.episode_id}' digest mismatch")
+
+
+@dataclass(frozen=True, slots=True)
+class HumanResolutionEpisode:
+    """Attributable, redacted record of a genuine operator gate decision."""
+
+    episode_id: str
+    aggregate_id: str
+    workspace_id: str
+    gate_id: str
+    decision: str
+    operator_ref: str
+    source_state: str
+    target_state: str
+    receipt_id: str
+    chosen_json: Optional[str]
+    rejected_json: Tuple[str, ...]
+    rationale: Optional[str]
+    timestamp: str
+    preference_eligible: bool
+    schema_version: str = HUMAN_RESOLUTION_SCHEMA_VERSION
+    episode_sha256: str = ""
+
+    def __post_init__(self) -> None:
+        if self.decision not in {"APPROVE", "REJECT"}:
+            raise TelemetryIntegrityError(f"Unsupported operator decision '{self.decision}'")
+        if not self.receipt_id or not self.operator_ref.startswith("operator_ref:"):
+            raise TelemetryIntegrityError("Human resolution requires receipt and pseudonymous operator identity")
+        if not self.episode_sha256:
+            object.__setattr__(self, "episode_sha256", _digest_without(self.canonical_dict(), "episode_sha256"))
+
+    def canonical_dict(self) -> Dict[str, Any]:
+        return {
+            "episode_id": self.episode_id,
+            "aggregate_id": self.aggregate_id,
+            "workspace_id": self.workspace_id,
+            "gate_id": self.gate_id,
+            "decision": self.decision,
+            "operator_ref": self.operator_ref,
+            "source_state": self.source_state,
+            "target_state": self.target_state,
+            "receipt_id": self.receipt_id,
+            "chosen_json": self.chosen_json,
+            "rejected_json": list(self.rejected_json),
+            "rationale": self.rationale,
+            "timestamp": self.timestamp,
+            "preference_eligible": self.preference_eligible,
+            "schema_version": self.schema_version,
+            "episode_sha256": self.episode_sha256,
+        }
+
+    def verify(self) -> None:
+        if _digest_without(self.canonical_dict(), "episode_sha256") != self.episode_sha256:
+            raise TelemetryIntegrityError(f"Human resolution '{self.episode_id}' digest mismatch")
+        encoded = canonical_json_text(self.canonical_dict())
+        if _EMAIL_RE.search(encoded) or "[REDACTED]" not in encoded and any(
+            marker in encoded.lower() for marker in ("password", "api_key", "transcript")
+        ):
+            raise TelemetryRedactionError(f"Human resolution '{self.episode_id}' is not redaction-safe")
+
+    def preference_pair(self) -> PreferencePair:
+        if not self.preference_eligible or not self.chosen_json or not self.rejected_json:
+            raise TelemetryIntegrityError(f"Human resolution '{self.episode_id}' has no eligible preference pair")
+        return PreferencePair(
+            episode_id=self.episode_id,
+            chosen_json=self.chosen_json,
+            rejected_json=self.rejected_json,
+            source_receipt_id=self.receipt_id,
+        )
+
+
+class TelemetryFlywheel:
+    """Append-only telemetry and governed training-derivative boundary for CA-M054."""
+
+    def __init__(self) -> None:
+        self._lock = threading.RLock()
+        self._events: Dict[str, TelemetryEvent] = {}
+        self._episodes: Dict[str, HumanResolutionEpisode] = {}
+
+    @property
+    def event_classes(self) -> Tuple[TelemetryEventClass, ...]:
+        return tuple(TelemetryEventClass)
+
+    @property
+    def events(self) -> Tuple[TelemetryEvent, ...]:
+        with self._lock:
+            return tuple(self._events.values())
+
+    @property
+    def episodes(self) -> Tuple[HumanResolutionEpisode, ...]:
+        with self._lock:
+            return tuple(self._episodes.values())
+
+    def emit(
+        self,
+        event_class: TelemetryEventClass | str,
+        *,
+        workspace_id: str,
+        aggregate_id: Optional[str] = None,
+        actor_id: Optional[str] = None,
+        payload: Optional[Mapping[str, Any]] = None,
+        timestamp: Optional[str] = None,
+    ) -> TelemetryEvent:
+        try:
+            normalized_class = TelemetryEventClass(event_class)
+        except ValueError as exc:
+            raise TelemetryIntegrityError(f"Unknown telemetry class '{event_class}'") from exc
+        event_payload = redact_telemetry(dict(payload or {}))
+        event_time = timestamp or datetime.now(timezone.utc).isoformat()
+        event_seed = {
+            "event_class": normalized_class.value,
+            "workspace_id": workspace_id,
+            "aggregate_id": aggregate_id,
+            "actor_ref": _operator_ref(actor_id) if actor_id else None,
+            "timestamp": event_time,
+            "payload": event_payload,
+        }
+        event_id = "tel_" + hashlib.sha256(canonical_json_text(event_seed).encode("utf-8")).hexdigest()[:32]
+        event = TelemetryEvent(
+            event_id=event_id,
+            event_class=normalized_class,
+            workspace_id=workspace_id,
+            aggregate_id=aggregate_id,
+            actor_ref=_operator_ref(actor_id) if actor_id else None,
+            timestamp=event_time,
+            payload=event_payload,
+        )
+        event.verify()
+        with self._lock:
+            prior = self._events.get(event_id)
+            if prior is not None and prior.canonical_dict() != event.canonical_dict():
+                raise TelemetryIntegrityError(f"Telemetry event collision for '{event_id}'")
+            self._events[event_id] = event
+        return event
+
+    def capture_operator_resolution(
+        self,
+        *,
+        aggregate_id: str,
+        workspace_id: str,
+        gate_id: str,
+        decision: str,
+        operator_id: str,
+        source_state: str,
+        target_state: str,
+        receipt_id: str,
+        chosen: Any = None,
+        rejected: Optional[Sequence[Any]] = None,
+        rationale: Optional[str] = None,
+        timestamp: Optional[str] = None,
+    ) -> HumanResolutionEpisode:
+        """Record a real committed gate decision; never manufacture missing alternatives."""
+
+        redacted_chosen = redact_telemetry(chosen) if chosen is not None else None
+        redacted_rejected = tuple(redact_telemetry(item) for item in (rejected or ()))
+        chosen_json = _canonical_json(redacted_chosen) if redacted_chosen is not None else None
+        rejected_json = tuple(_canonical_json(item) for item in redacted_rejected)
+        eligible = bool(chosen_json and rejected_json)
+        now = timestamp or datetime.now(timezone.utc).isoformat()
+        seed = f"{aggregate_id}:{gate_id}:{receipt_id}:{decision}"
+        episode_id = "hre_" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:32]
+        episode = HumanResolutionEpisode(
+            episode_id=episode_id,
+            aggregate_id=aggregate_id,
+            workspace_id=workspace_id,
+            gate_id=gate_id,
+            decision=decision,
+            operator_ref=_operator_ref(operator_id),
+            source_state=source_state,
+            target_state=target_state,
+            receipt_id=receipt_id,
+            chosen_json=chosen_json,
+            rejected_json=rejected_json,
+            rationale=redact_telemetry(rationale) if rationale else None,
+            timestamp=now,
+            preference_eligible=eligible,
+        )
+        episode.verify()
+        self.emit(
+            TelemetryEventClass.OPERATOR_GATE,
+            workspace_id=workspace_id,
+            aggregate_id=aggregate_id,
+            actor_id=operator_id,
+            timestamp=now,
+            payload={
+                "gate_id": gate_id,
+                "decision": decision,
+                "source_state": source_state,
+                "target_state": target_state,
+                "receipt_id": receipt_id,
+                "episode_id": episode_id,
+                "preference_eligible": eligible,
+            },
+        )
+        with self._lock:
+            prior = self._episodes.get(episode_id)
+            if prior is not None and prior.canonical_dict() != episode.canonical_dict():
+                raise TelemetryIntegrityError(f"Human resolution collision for '{episode_id}'")
+            self._episodes[episode_id] = episode
+        return episode
+
+    def preference_pairs(self) -> Tuple[PreferencePair, ...]:
+        with self._lock:
+            pairs = tuple(
+                episode.preference_pair()
+                for episode in self._episodes.values()
+                if episode.preference_eligible
+            )
+        for pair in pairs:
+            pair.verify()
+        return pairs
+
+    def export_manifest(self) -> Dict[str, Any]:
+        """Return a redacted, content-addressed export; no method mutates canonical runtime state."""
+
+        with self._lock:
+            for event in self._events.values():
+                event.verify()
+            for episode in self._episodes.values():
+                episode.verify()
+            pairs = self.preference_pairs()
+            body: Dict[str, Any] = {
+                "schema_version": TELEMETRY_EXPORT_SCHEMA_VERSION,
+                "event_ids": [event.event_id for event in self._events.values()],
+                "events": [event.canonical_dict() for event in self._events.values()],
+                "human_resolution_episodes": [episode.canonical_dict() for episode in self._episodes.values()],
+                "preference_pairs": [pair.canonical_dict() for pair in pairs],
+                "read_only_derivation": True,
+                "redaction_verified": True,
+            }
+            body["manifest_sha256"] = hashlib.sha256(canonical_json_text(body).encode("utf-8")).hexdigest()
+            return body
+
+    def verify_export(self, manifest: Mapping[str, Any]) -> None:
+        if manifest.get("schema_version") != TELEMETRY_EXPORT_SCHEMA_VERSION:
+            raise TelemetryIntegrityError("Unsupported telemetry export schema")
+        if manifest.get("read_only_derivation") is not True or manifest.get("redaction_verified") is not True:
+            raise TelemetryIntegrityError("Telemetry export is not marked as a read-only redacted derivation")
+        expected = hashlib.sha256(
+            canonical_json_text({key: manifest[key] for key in manifest if key != "manifest_sha256"}).encode("utf-8")
+        ).hexdigest()
+        if expected != manifest.get("manifest_sha256"):
+            raise TelemetryIntegrityError("Telemetry export manifest digest mismatch")
+        serialized = canonical_json_text(manifest)
+        if _EMAIL_RE.search(serialized) or "password" in serialized.lower() or "api_key" in serialized.lower():
+            raise TelemetryRedactionError("Telemetry export contains protected raw data")
