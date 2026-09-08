@@ -1,17 +1,21 @@
-# CAE Multi-Epoch Execution Plan: Remaining Epochs (Epoch 3 to Epoch 9)
+# CAE Multi-Epoch Execution Plan: Remaining Epochs (Epoch 5 to Epoch 9)
 
-This document details the schedule, functional requirements, invariant constraints, target subsystems, and core objectives for all remaining execution epochs (**Epoch 3 through Epoch 9**).
+> **Status Update**: 
+> - ✅ **Epoch 1**: Ingested & Verified (`9985a6af`) — 121/121 tests passed.
+> - ✅ **Epoch 2**: Ingested & Verified (`515bdf3f`) — 139/139 tests passed.
+> - ✅ **Epoch 3**: Ingested & Verified (`ff98713f`) — 7 mandates verified.
+> - ✅ **Epoch 4**: Ingested & Verified (`c7fc9036`) — 6 mandates verified.
+> - ✅ **Epoch 5**: Ingested & Verified — 7 mandates, 173 passed / 2 skipped.
+> - 🎯 **Current Active Target**: **Epoch 6** (7 Mandates).
 
 ---
 
-## Epoch Overview Matrix
+## Epoch Overview Matrix (Remaining Pipeline)
 
 | Epoch | Theme / Subsystem Focus | Mandates Count | Target Functional Requirements & Invariants | Primary Codebases Affected |
 | :--- | :--- | :---: | :--- | :--- |
-| **Epoch 3** | **Anchoring, Workflows & Pre-Production Sealing** | 7 | `FR-006`, `FR-PREP-001`, `FR-014`, `FR-016`, `FR-ANCH-001`, `INV-DISP-002`, `INV-HOST-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
-| **Epoch 4** | **Evidence Admission, Lineage & Gate Halting** | 6 | `FR-007`, `FR-EV-001`, `FR-CTX-001`, `FR-SEM-001`, `INV-OUT-001`, `INV-GATE-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
-| **Epoch 5** | **Gate Resumption, Receipts & Policy Binding** | 7 | `FR-003`, `FR-020`, `FR-022`, `FR-POL-001`, `FR-POL-002`, `INV-GATE-002`, `INV-SEC-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
-| **Epoch 6** | **Memory Write-Back, CAS Concurrency & Registry** | 7 | `FR-008`, `FR-023`, `FR-024`, `FR-AUTH-001`, `INV-MEM-001`, `INV-CAS-001`, `INV-REG-001` | `packages/ca_runtime`, `services/interview-intelligence`, `services/pipeline` |
+| **Epoch 5** (Complete) | **Gate Resumption, Receipts & Policy Binding** | 7 | `FR-003`, `FR-020`, `FR-022`, `FR-POL-001`, `FR-POL-002`, `INV-GATE-002`, `INV-SEC-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
+| **Epoch 6** (Active) | **Memory Write-Back, CAS Concurrency & Registry** | 7 | `FR-008`, `FR-023`, `FR-024`, `FR-AUTH-001`, `INV-MEM-001`, `INV-CAS-001`, `INV-REG-001` | `packages/ca_runtime`, `services/interview-intelligence`, `services/pipeline` |
 | **Epoch 7** | **Merkle Receipts, Composition & Isolation** | 6 | `FR-029`, `FR-REL-001`, `INV-MRK-001`, `INV-ISO-001`, `INV-ECON-001`, `INV-VOICE-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
 | **Epoch 8** | **Distribution, Replay, Preemption & Evidence DAG** | 7 | `FR-DIST-001`, `FR-OUT-001`, `INV-RPL-001`, `INV-REC-001`, `INV-CTRL-001`, `INV-DAG-001`, `INV-TEL-001` | `packages/ca_runtime`, `services/pipeline` |
 | **Epoch 9** | **Autonomous Collisions, Benchmarking & Live Proof** | 4 | `INV-BENCH-001`, `INV-AUTO-001`, `INV-WAL-001`, `INV-PROOF-001` | `packages/ca_runtime`, `tests/e2e`, `services/pipeline` |
@@ -20,36 +24,7 @@ This document details the schedule, functional requirements, invariant constrain
 
 ## Detailed Epoch Schedules
 
-### Epoch 3: Anchoring, Workflows & Pre-Production Sealing
-**Goal:** Establish immutable pre-production packaging, exact coordinate audio/video anchor hits, collision tension matrices, and distributed host runner dispatching.
-
-| Mandate ID | Mandate Title | Requirement / Invariant | Target Subsystem / Files | Core Acceptance Criteria & Invariant Rule |
-| :--- | :--- | :--- | :--- | :--- |
-| **`CA-M006`** | Activative to Elicitation Linking | `FR-006` | `packages/ca_runtime/src/ca_runtime/activative_elicitation_link.py` | Guarantees deterministic linking between activative triggers and interview elicitation steps with bi-directional trace hashing. |
-| **`CA-M011`** | Sealed Pre-Production Pack | `FR-PREP-001` | `services/pipeline/src/cmf_pipeline/preproduction/sealer.py` | Enforces cryptographic sealing of pre-production assets before downstream rendering; fails closed on missing assets. |
-| **`CA-M014`** | Cross-Window Chunking Protection | `FR-014` | `services/pipeline/src/cmf_pipeline/media/chunking.py` | Prevents semantic clipping and lost boundary frames across media sliding windows with deterministic overlap stitching. |
-| **`CA-M016`** | Grounded Collision Tension Matrix | `FR-016` | `services/interview/src/conscious_activations_interview_expression/collision_matrix.py` | Computes collision tension scores across audience-subject divergence axes; enforces strict mathematical normalization. |
-| **`CA-M021`** | Anchor Hits Exact Coordinates | `FR-ANCH-001` | `services/interview/src/conscious_activations_interview_expression/anchor_coordinates.py` | Maps verbatim quotes and reaction cues to exact microsecond/sample-accurate coordinates in the master media stream. |
-| **`CA-M035`** | Workflow Dispatcher Runtime | `INV-DISP-002` | `packages/ca_runtime/src/ca_runtime/workflow_dispatch.py` | Orchestrates multi-stage program pipelines with idempotency keys, state rollback, and distributed lease lifecycle tracking. |
-| **`CA-M037`** | Agent Invocation Host Runner | `INV-HOST-001` | `packages/ca_runtime/src/ca_runtime/agent_host_runner.py` | Executes external LLM / tool invocations inside an isolated runtime container with strict wall-clock timeout and byte quota limits. |
-
----
-
-### Epoch 4: Evidence Admission, Lineage & Gate Halting
-**Goal:** Implement multi-dimensional evidence admission, contextual hierarchy lineage, semantic bridge moments, and gate suspension mechanisms.
-
-| Mandate ID | Mandate Title | Requirement / Invariant | Target Subsystem / Files | Core Acceptance Criteria & Invariant Rule |
-| :--- | :--- | :--- | :--- | :--- |
-| **`CA-M007`** | Activative Strategic Execution Object | `FR-007` | `packages/ca_runtime/src/ca_runtime/strategic_execution.py` | Validates that strategic execution payloads contain complete lineage ancestry and cannot be instantiated without signed intent. |
-| **`CA-M017`** | Multi-Dimensional Evidence Admission | `FR-EV-001` | `services/interview/src/conscious_activations_interview_expression/evidence_admission.py` | Gates media and claim admission across confidence, corroboration, and verbatim fidelity thresholds. |
-| **`CA-M018`** | Hierarchical Context Lineage | `FR-CTX-001` | `services/interview/src/conscious_activations_interview_expression/context_lineage.py` | Implements hierarchical parent-child context trees with immutable revision hashing and cycle detection. |
-| **`CA-M019`** | Expression Moments Semantic Bridge | `FR-SEM-001` | `services/interview/src/conscious_activations_interview_expression/semantic_bridge.py` | Bridges raw spoken utterances with high-level conceptual activation vectors without hallucinated intermediary frames. |
-| **`CA-M039`** | Deterministic Output Contract & Self-Repair | `INV-OUT-001` | `packages/ca_runtime/src/ca_runtime/output_contract_repair.py` | Enforces strict JSON/Pydantic schema validation on program outputs with deterministic AST repair on malformed model payloads. |
-| **`CA-M040`** | Gate Milestone Suspension Contract | `INV-GATE-001` | `packages/ca_runtime/src/ca_runtime/gate_suspension.py` | Safely pauses pipeline execution when gate invariant thresholds are violated, storing durable suspension receipts. |
-
----
-
-### Epoch 5: Gate Resumption, Receipts & Policy Binding
+### Epoch 5: Gate Resumption, Receipts & Policy Binding (COMPLETE)
 **Goal:** Deploy reactive gate resumption, audit receipts, subject constitution exception lifecycles, and security sandboxing.
 
 | Mandate ID | Mandate Title | Requirement / Invariant | Target Subsystem / Files | Core Acceptance Criteria & Invariant Rule |

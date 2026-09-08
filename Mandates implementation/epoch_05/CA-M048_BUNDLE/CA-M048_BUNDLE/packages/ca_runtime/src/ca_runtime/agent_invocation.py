@@ -419,12 +419,16 @@ class AgentInvocationCompiler:
         for cap_proj in capsule.capability_projections:
             all_allowed_tools.update(cap_proj.bound_tools)
 
+        # CA-M048 / INV-SEC-001: The ``tool:default-`` bypass that previously
+        # allowed unverified tool names to pass through by matching the prefix
+        # ``"tool:default-"`` has been REMOVED.  Every requested tool must now
+        # be explicitly present in ``all_allowed_tools``.  There is no escape
+        # hatch for unregistered tool classes.
         effective_tools: List[str] = []
         if requested_tools is not None:
             for t in requested_tools:
                 if t in forbidden_actions:
                     raise UnauthorizedToolError(agent_id, t, "Tool is explicitly forbidden by skill policy")
-                # CA-M048 / INV-SEC-001: tool:default- prefix bypass removed.
                 if t not in all_allowed_tools:
                     raise UnauthorizedToolError(
                         agent_id,

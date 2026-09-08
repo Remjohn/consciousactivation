@@ -1,60 +1,114 @@
-# Antigravity Launch & Verification Prompts (Epoch 03 to Epoch 09)
+# Antigravity Launch & Verification Prompts (Active: Epoch 06 to Epoch 09)
 
-Use these exact prompts to instruct Antigravity to ingest, wire, test, and commit each epoch bundle once you place the executed folders into `Mandates implementation/epoch_XX/`.
+> **Status:** Epoch 01, 02, 03, 04, and 05 are committed and verified.
+> The prompts below incorporate the machine-readable, fail-closed safeguards established during ATC protocol review.
 
 ---
 
-### 🚀 Epoch 03 Launch Prompt
+### ✅ Epoch 05 Launch Prompt (COMPLETE)
 ```text
-Apply all bundles in Mandates implementation/epoch_03/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 7 mandates (CA-M006, CA-M011, CA-M014, CA-M016, CA-M021, CA-M035, CA-M037), resolve any dependency/fixture gaps, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
+Apply all bundles in Mandates implementation/epoch_05/.
+
+INTEGRATION PROTOCOL:
+1. For each bundle, read AGENT_HANDOFF.md and follow exact source-to-destination mappings.
+2. Do not invent alternative file paths or architectural changes when exact destinations are specified.
+3. If an existing file is modified by multiple bundles, cleanly merge the additions without overwriting prior work.
+4. Run the targeted tests specified in each bundle's AGENT_HANDOFF.md.
+5. If tests fail, resolve genuine integration, import, or fixture gaps. NEVER weaken, skip, or delete tests to make them pass.
+6. Run the unified Epoch 05 regression test suite across all 7 mandates:
+   - CA-M003: Subject Constitution Lifecycle (FR-003)
+   - CA-M020: Reaction Receipts First-Class Evidence (FR-020)
+   - CA-M022: Adaptive Elicitation Remediation (FR-022)
+   - CA-M025: Campaign Auth Policy Production (FR-POL-001)
+   - CA-M028: Policy Revisions Execution Binding (FR-POL-002)
+   - CA-M041: Reactive Gate Resumption & Receipts (INV-GATE-002)
+   - CA-M048: Path Traversal & Tool Sandbox (INV-SEC-001)
+7. Verify a 100% pass rate, update walkthrough.md with the test matrix, and commit the verified epoch to git.
 ```
 
 ---
 
-### 🚀 Epoch 04 Launch Prompt
-```text
-Apply all bundles in Mandates implementation/epoch_04/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 6 mandates (CA-M007, CA-M017, CA-M018, CA-M019, CA-M039, CA-M040), resolve any dependency/fixture gaps, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
-```
+### 🚀 Epoch 06 Launch Prompt (ACTIVE)```text
+Apply all bundles in Mandates implementation/epoch_06/.
 
----
-
-### 🚀 Epoch 05 Launch Prompt
-```text
-Apply all bundles in Mandates implementation/epoch_05/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 7 mandates (CA-M003, CA-M020, CA-M022, CA-M025, CA-M028, CA-M041, CA-M048), resolve any dependency/fixture gaps, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
-```
-
----
-
-### 🚀 Epoch 06 Launch Prompt
-```text
-Apply all bundles in Mandates implementation/epoch_06/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 7 mandates (CA-M008, CA-M023, CA-M024, CA-M026, CA-M032, CA-M042, CA-M049), resolve any dependency/fixture gaps, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
+INTEGRATION PROTOCOL:
+1. For each bundle, read AGENT_HANDOFF.md and follow exact source-to-destination mappings.
+2. Do not invent alternative file paths or architectural changes when exact destinations are specified.
+3. If an existing file is modified by multiple bundles, cleanly merge the additions without overwriting prior work.
+4. Run the targeted tests specified in each bundle's AGENT_HANDOFF.md.
+5. If tests fail, resolve genuine integration, import, or fixture gaps. NEVER weaken, skip, or delete tests to make them pass.
+6. Run the unified Epoch 06 regression test suite across all 7 mandates:
+   - CA-M008: Frozen Content Portfolio (FR-008)
+   - CA-M023: Deterministic Portfolio Yield Gating (FR-023)
+   - CA-M024: Preliminary Auth Policy (FR-024)
+   - CA-M026: Durable Auth Decision Receipts (FR-AUTH-001)
+   - CA-M032: Governed Memory Write-Back (INV-MEM-001)
+   - CA-M042: Atomic CAS SQLite Transitions (INV-CAS-001)
+   - CA-M049: Program Registry Immutability (INV-REG-001)
+7. Verify a 100% pass rate, update walkthrough.md with the test matrix, and commit the verified epoch to git.
 ```
 
 ---
 
 ### 🚀 Epoch 07 Launch Prompt
 ```text
-Apply all bundles in Mandates implementation/epoch_07/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 6 mandates (CA-M029, CA-M030, CA-M043, CA-M047, CA-M051, CA-M052), resolve any dependency/fixture gaps, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
+Apply all bundles in Mandates implementation/epoch_07/.
+
+INTEGRATION PROTOCOL:
+1. For each bundle, read AGENT_HANDOFF.md and follow exact source-to-destination mappings.
+2. Do not invent alternative file paths or architectural changes when exact destinations are specified.
+3. If an existing file is modified by multiple bundles, cleanly merge the additions without overwriting prior work.
+4. Run the targeted tests specified in each bundle's AGENT_HANDOFF.md.
+5. If tests fail, resolve genuine integration, import, or fixture gaps. NEVER weaken, skip, or delete tests to make them pass.
+6. Run the unified Epoch 07 regression test suite across all 6 mandates:
+   - CA-M029: No-Unanchored-Invention Invariant (FR-029)
+   - CA-M030: Immutable Release Manifest (FR-REL-001)
+   - CA-M043: Merkle Receipt Chaining (INV-MRK-001)
+   - CA-M047: Multi-Tenant Workspace Isolation (INV-ISO-001)
+   - CA-M051: Model Economics & Quotas (INV-ECON-001)
+   - CA-M052: Subject Constitution Voice DNA (INV-VOICE-001)
+7. Verify a 100% pass rate, update walkthrough.md with the test matrix, and commit the verified epoch to git.
 ```
 
 ---
 
 ### 🚀 Epoch 08 Launch Prompt
 ```text
-Apply all bundles in Mandates implementation/epoch_08/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 7 mandates (CA-M031, CA-M032b, CA-M044, CA-M045, CA-M046, CA-M050, CA-M054), resolve any dependency/fixture gaps, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
+Apply all bundles in Mandates implementation/epoch_08/.
+
+INTEGRATION PROTOCOL:
+1. For each bundle, read AGENT_HANDOFF.md and follow exact source-to-destination mappings.
+2. Do not invent alternative file paths or architectural changes when exact destinations are specified.
+3. If an existing file is modified by multiple bundles, cleanly merge the additions without overwriting prior work.
+4. Run the targeted tests specified in each bundle's AGENT_HANDOFF.md.
+5. If tests fail, resolve genuine integration, import, or fixture gaps. NEVER weaken, skip, or delete tests to make them pass.
+6. Run the unified Epoch 08 regression test suite across all 7 mandates:
+   - CA-M031: External Distribution Delivery (FR-DIST-001)
+   - CA-M032b: Outcome Measurement Attribution (FR-OUT-001)
+   - CA-M044: Persisted Replay Verification Engine (INV-RPL-001)
+   - CA-M045: Worker Restart & Zombie Lease Reconcile (INV-REC-001)
+   - CA-M046: Real Operator Control & Preemption (INV-CTRL-001)
+   - CA-M050: Cryptographic Evidence DAG (INV-DAG-001)
+   - CA-M054: Unified Telemetry Flywheel (INV-TEL-001)
+7. Verify a 100% pass rate, update walkthrough.md with the test matrix, and commit the verified epoch to git.
 ```
 
 ---
 
 ### 🚀 Epoch 09 Launch Prompt
 ```text
-Apply all bundles in Mandates implementation/epoch_09/. Read their AGENT_HANDOFF.md files, copy and wire the files into the repo under the ATC protocol, run the relevant tests across all 4 mandates (CA-M053, CA-M055, CA-M056, CA-M057), execute the live end-to-end proof harness, verify 100% pass rate, update walkthrough.md, and commit the final verified epoch to git.
-```
+Apply all bundles in Mandates implementation/epoch_09/.
 
----
-
-### 🔄 Universal One-Liner (For Any Epoch)
-If you want a single adaptable prompt, use:
-```text
-Apply all bundles in Mandates implementation/epoch_XX/. Read their AGENT_HANDOFF.md files, copy and wire the files to the repo under the ATC protocol, run the relevant test suites, resolve any missing fixtures or dependency collisions, verify 100% pass rate, update walkthrough.md, and commit the verified epoch to git.
+INTEGRATION PROTOCOL:
+1. For each bundle, read AGENT_HANDOFF.md and follow exact source-to-destination mappings.
+2. Do not invent alternative file paths or architectural changes when exact destinations are specified.
+3. If an existing file is modified by multiple bundles, cleanly merge the additions without overwriting prior work.
+4. Run the targeted tests specified in each bundle's AGENT_HANDOFF.md.
+5. If tests fail, resolve genuine integration, import, or fixture gaps. NEVER weaken, skip, or delete tests to make them pass.
+6. Run the unified Epoch 09 regression test suite across all 4 mandates:
+   - CA-M053: CSEB Golden Benchmark Certification (INV-BENCH-001)
+   - CA-M055: Autonomous Collision Approval Gate (INV-AUTO-001)
+   - CA-M056: SQLite WAL Concurrency & Tuning (INV-WAL-001)
+   - CA-M057: Live End-to-End Proof Harness (INV-PROOF-001)
+7. Verify a 100% pass rate, update walkthrough.md with the test matrix, and commit the final verified epoch to git.
 ```
