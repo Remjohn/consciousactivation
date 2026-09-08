@@ -6,7 +6,8 @@
 > - ✅ **Epoch 3**: Ingested & Verified (`ff98713f`) — 7 mandates verified.
 > - ✅ **Epoch 4**: Ingested & Verified (`c7fc9036`) — 6 mandates verified.
 > - ✅ **Epoch 5**: Ingested & Verified (`4beed5df`) — 7 mandates, 173 passed / 2 skipped.
-> - 🎯 **Current Active Target**: **Epoch 6** (7 Mandates).
+> - ✅ **Epoch 6**: Ingested & Verified — 7 mandates, 135 passed / 0 failed.
+> - 🎯 **Current Active Target**: **Epoch 7** (6 Mandates).
 
 ---
 
@@ -15,7 +16,7 @@
 | Epoch | Theme / Subsystem Focus | Mandates Count | Target Functional Requirements & Invariants | Primary Codebases Affected |
 | :--- | :--- | :---: | :--- | :--- |
 | **Epoch 5** (Complete) | **Gate Resumption, Receipts & Policy Binding** | 7 | `FR-003`, `FR-020`, `FR-022`, `FR-POL-001`, `FR-POL-002`, `INV-GATE-002`, `INV-SEC-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
-| **Epoch 6** (Active) | **Memory Write-Back, CAS Concurrency & Registry** | 7 | `FR-008`, `FR-023`, `FR-024`, `FR-AUTH-001`, `INV-MEM-001`, `INV-CAS-001`, `INV-REG-001` | `packages/ca_runtime`, `services/interview-intelligence`, `services/pipeline` |
+| **Epoch 6** (Complete) | **Memory Write-Back, CAS Concurrency & Registry** | 7 | `FR-008`, `FR-023`, `FR-024`, `FR-AUTH-001`, `INV-MEM-001`, `INV-CAS-001`, `INV-REG-001` | `packages/ca_runtime`, `services/interview-intelligence`, `services/pipeline` |
 | **Epoch 7** | **Merkle Receipts, Composition & Isolation** | 6 | `FR-029`, `FR-REL-001`, `INV-MRK-001`, `INV-ISO-001`, `INV-ECON-001`, `INV-VOICE-001` | `packages/ca_runtime`, `services/pipeline`, `services/interview` |
 | **Epoch 8** | **Distribution, Replay, Preemption & Evidence DAG** | 7 | `FR-DIST-001`, `FR-OUT-001`, `INV-RPL-001`, `INV-REC-001`, `INV-CTRL-001`, `INV-DAG-001`, `INV-TEL-001` | `packages/ca_runtime`, `services/pipeline` |
 | **Epoch 9** | **Autonomous Collisions, Benchmarking & Live Proof** | 4 | `INV-BENCH-001`, `INV-AUTO-001`, `INV-WAL-001`, `INV-PROOF-001` | `packages/ca_runtime`, `tests/e2e`, `services/pipeline` |
@@ -39,7 +40,7 @@
 
 ---
 
-### Epoch 6: Memory Write-Back, CAS Concurrency & Registry
+### Epoch 6: Memory Write-Back, CAS Concurrency & Registry (COMPLETE)
 **Goal:** Implement frozen content portfolio yield gates, governed memory persistence, atomic SQLite compare-and-swap transitions, and immutable registry.
 
 | Mandate ID | Mandate Title | Requirement / Invariant | Target Subsystem / Files | Core Acceptance Criteria & Invariant Rule |

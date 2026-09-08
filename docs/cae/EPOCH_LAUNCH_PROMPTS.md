@@ -1,6 +1,6 @@
-# Antigravity Launch & Verification Prompts (Active: Epoch 06 to Epoch 09)
+# Antigravity Launch & Verification Prompts (Active: Epoch 07 to Epoch 09)
 
-> **Status:** Epoch 01, 02, 03, 04, and 05 are committed and verified.
+> **Status:** Epoch 01, 02, 03, 04, 05, and 06 are committed and verified.
 > The prompts below incorporate the machine-readable, fail-closed safeguards established during ATC protocol review.
 
 ---
@@ -28,7 +28,8 @@ INTEGRATION PROTOCOL:
 
 ---
 
-### 🚀 Epoch 06 Launch Prompt (ACTIVE)```text
+### ✅ Epoch 06 Launch Prompt (COMPLETE)
+```text
 Apply all bundles in Mandates implementation/epoch_06/.
 
 INTEGRATION PROTOCOL:
@@ -50,7 +51,7 @@ INTEGRATION PROTOCOL:
 
 ---
 
-### 🚀 Epoch 07 Launch Prompt
+### 🚀 Epoch 07 Launch Prompt (ACTIVE)
 ```text
 Apply all bundles in Mandates implementation/epoch_07/.
 
