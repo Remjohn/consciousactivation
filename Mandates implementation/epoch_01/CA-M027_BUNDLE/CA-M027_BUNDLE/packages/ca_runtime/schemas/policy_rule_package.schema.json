@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cae.policy_rule_package/1.0.0",
+  "title": "CAE Declarative Policy Rule Package",
+  "description": "Versioned, inspectable authorization rule package (CA-M027 / FR-AUTH-002). Unknown fields are rejected.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_id", "schema_version", "package_id", "version", "status", "rules"],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "cae.policy_rule_package"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "package_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "DEPRECATED", "REVOKED", "DRAFT"]
+    },
+    "applicable_program": { "type": ["string", "null"] },
+    "scope": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "rules": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/AuthorizationPredicate" }
+    },
+    "constitutional_dependencies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ConstitutionalDependency" }
+    }
+  },
+  "$defs": {
+    "EvidencePrerequisite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_class"],
+      "properties": {
+        "evidence_class": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean", "default": true },
+        "locator_hint": { "type": ["string", "null"] }
+      }
+    },
+    "EscalationCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["condition_id", "description", "escalate_to_lane", "trigger"],
+      "properties": {
+        "condition_id": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "escalate_to_lane": {
+          "type": "string",
+          "enum": ["HUNTER", "ANALYST", "COMPOSER", "COMMANDER"]
+        },
+        "trigger": { "type": "string", "minLength": 1 }
+      }
+    },
+    "AuthorizationPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate_id", "operation", "required_authority_lane"],
+      "properties": {
+        "predicate_id": { "type": "string", "minLength": 1 },
+        "operation": { "type": "string", "minLength": 1 },
+        "required_authority_lane": {
+          "type": "string",
+          "enum": ["HUNTER", "ANALYST", "COMPOSER", "COMMANDER"]
+        },
+        "actor_class": { "type": ["string", "null"] },
+        "evidence_prerequisites": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EvidencePrerequisite" }
+        },
+        "escalation_conditions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EscalationCondition" }
+        },
+        "allow_delegation": { "type": "boolean", "default": false },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "ConstitutionalDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dependency_id", "ref"],
+      "properties": {
+        "dependency_id": { "type": "string", "minLength": 1 },
+        "ref": { "type": "string", "minLength": 1 },
+        "immutable": { "type": "boolean", "default": true },
+        "digest": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
