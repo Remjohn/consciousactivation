@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from .anchor_coordinates import AnchorCoordinateService
 from .inventory import AssetInventoryService
 from .media import MediaInspector
 from .live_state import LiveSessionService
@@ -26,6 +27,8 @@ class InterviewExpressionApplication:
         self.inventory = AssetInventoryService(self.repository)
         self.live = LiveSessionService(self.repository)
         self.media = MediaInspector()
+        # CA-M021: Anchor Coordinate service — exact spatio-temporal coordinates
+        self.anchor_coordinates = AnchorCoordinateService(self.repository)
 
     def initialize(self):
         return self.repository.initialize()
