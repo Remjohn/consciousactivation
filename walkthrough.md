@@ -1,6 +1,6 @@
 # Epoch 05 Walkthrough — Gate Resumption, Receipts & Policy Binding
 
-**Status:** Verified and committed  
+**Status:** Verified and committed (`4beed5df`)  
 **Date:** 2026-09-08  
 **Result:** 173 passed, 2 skipped (Windows symlink privilege), 0 failed
 
