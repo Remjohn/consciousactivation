@@ -359,6 +359,360 @@ class ProgramStateAggregate:
             updated_at=data["updated_at"],
         )
 
+# ============================================================================
+# CA-M051 Model Economics & Quotas
+# ============================================================================
+
+from ca_runtime.agent_invocation import (
+    BudgetCeilingExceededError,
+    EconomicChargeReceipt,
+    EconomicCostUnmeteredError,
+    EconomicCircuitOpenError,
+    EconomicInvocationAlreadySettledError,
+    EconomicQuotaController,
+    EconomicReservation,
+    EconomicUsage,
+    ProviderRateLimitExceededError,
+)
+
+
+class EconomicCircuitState(str, enum.Enum):
+    CLOSED = "CLOSED"
+    OPEN = "OPEN"
+    HALF_OPEN = "HALF_OPEN"
+
+
+@dataclass(frozen=True, slots=True)
+class EconomicProviderRateLimit:
+    requests_per_window: int = 0
+    tokens_per_window: int = 0
+    window_seconds: int = 60
+
+    def __post_init__(self) -> None:
+        if self.requests_per_window < 0 or self.tokens_per_window < 0:
+            raise ValueError("Provider rate limits cannot be negative")
+        if self.window_seconds <= 0:
+            raise ValueError("Provider rate-limit window must be positive")
+
+
+@dataclass(frozen=True, slots=True)
+class EconomicPolicy:
+    workspace_budget_usd_micros: int
+    aggregate_budget_usd_micros: int
+    max_invocation_cost_usd_micros: int = 0
+    provider_rate_limits: Dict[str, EconomicProviderRateLimit] = field(default_factory=dict)
+    provider_input_cost_usd_micros_per_1k_tokens: Dict[str, int] = field(default_factory=dict)
+    provider_output_cost_usd_micros_per_1k_tokens: Dict[str, int] = field(default_factory=dict)
+    breaker_failure_threshold: int = 3
+    breaker_half_open_after_seconds: int = 60
+
+    def __post_init__(self) -> None:
+        if self.workspace_budget_usd_micros < 0 or self.aggregate_budget_usd_micros < 0:
+            raise ValueError("Economic budgets cannot be negative")
+        if self.max_invocation_cost_usd_micros < 0:
+            raise ValueError("Maximum invocation cost cannot be negative")
+        if self.breaker_failure_threshold <= 0 or self.breaker_half_open_after_seconds <= 0:
+            raise ValueError("Circuit-breaker thresholds must be positive")
+        for mapping in (self.provider_input_cost_usd_micros_per_1k_tokens, self.provider_output_cost_usd_micros_per_1k_tokens):
+            if any(int(value) < 0 for value in mapping.values()):
+                raise ValueError("Provider rates cannot be negative")
+
+    def estimate_cost_usd_micros(self, provider_name: str, prompt_tokens: int, completion_tokens: int) -> int:
+        input_rate = int(self.provider_input_cost_usd_micros_per_1k_tokens.get(provider_name, 0))
+        output_rate = int(self.provider_output_cost_usd_micros_per_1k_tokens.get(provider_name, 0))
+        return ((int(prompt_tokens) * input_rate + 999) // 1000) + ((int(completion_tokens) * output_rate + 999) // 1000)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "workspace_budget_usd_micros": self.workspace_budget_usd_micros,
+            "aggregate_budget_usd_micros": self.aggregate_budget_usd_micros,
+            "max_invocation_cost_usd_micros": self.max_invocation_cost_usd_micros,
+            "provider_rate_limits": {
+                name: {
+                    "requests_per_window": limit.requests_per_window,
+                    "tokens_per_window": limit.tokens_per_window,
+                    "window_seconds": limit.window_seconds,
+                }
+                for name, limit in sorted(self.provider_rate_limits.items())
+            },
+            "provider_input_cost_usd_micros_per_1k_tokens": dict(sorted(self.provider_input_cost_usd_micros_per_1k_tokens.items())),
+            "provider_output_cost_usd_micros_per_1k_tokens": dict(sorted(self.provider_output_cost_usd_micros_per_1k_tokens.items())),
+            "breaker_failure_threshold": self.breaker_failure_threshold,
+            "breaker_half_open_after_seconds": self.breaker_half_open_after_seconds,
+        }
+
+
+def _economic_state(raw: Optional[Mapping[str, Any]], policy: EconomicPolicy) -> Dict[str, Any]:
+    state = dict(raw or {})
+    state.setdefault("policy", policy.to_dict())
+    state.setdefault("spent_usd_micros", 0)
+    state.setdefault("reserved_usd_micros", 0)
+    state.setdefault("prompt_tokens", 0)
+    state.setdefault("completion_tokens", 0)
+    state.setdefault("total_tokens", 0)
+    state.setdefault("requests", 0)
+    state.setdefault("reservations", {})
+    state.setdefault("charges", {})
+    state.setdefault("receipts", {})
+    state.setdefault("failures", [])
+    state.setdefault("provider_windows", {})
+    state.setdefault("circuit_breaker", {
+        "state": EconomicCircuitState.CLOSED.value,
+        "failure_count": 0,
+        "opened_at": None,
+        "half_open_in_flight": False,
+    })
+    return state
+
+
+def _economic_seconds_since(start: str, end: str) -> float:
+    return max(0.0, (datetime.fromisoformat(end.replace("Z", "+00:00")) - datetime.fromisoformat(start.replace("Z", "+00:00"))).total_seconds())
+
+
+def _economic_prune(state: Dict[str, Any], now: str, policy: EconomicPolicy) -> None:
+    for provider_name, window in list(state.get("provider_windows", {}).items()):
+        limit = policy.provider_rate_limits.get(provider_name)
+        max_age = limit.window_seconds if limit else 3600
+        state["provider_windows"][provider_name] = {
+            "provider_name": provider_name,
+            "events": [event for event in window.get("events", []) if _economic_seconds_since(event["timestamp"], now) < max_age],
+        }
+
+
+def _economic_updated_aggregate(aggregate: ProgramStateAggregate, state: Dict[str, Any], now: str) -> ProgramStateAggregate:
+    data = dict(aggregate.state_data)
+    data["economics"] = state
+    version = aggregate.version + 1
+    return ProgramStateAggregate(
+        aggregate_id=aggregate.aggregate_id,
+        workspace_id=aggregate.workspace_id,
+        cae_run_id=aggregate.cae_run_id,
+        program_id=aggregate.program_id,
+        program_version=aggregate.program_version,
+        current_state=aggregate.current_state,
+        state_data=data,
+        version=version,
+        state_hash=_compute_state_hash(aggregate.aggregate_id, aggregate.program_id, aggregate.program_version, aggregate.current_state, version, data),
+        lifecycle=aggregate.lifecycle,
+        last_receipt_id=aggregate.last_receipt_id,
+        created_at=aggregate.created_at,
+        updated_at=now,
+    )
+
+
+def _economic_receipt(
+    *, aggregate: ProgramStateAggregate, invocation_id: str, workspace_id: str,
+    provider_name: str, prompt_tokens: int, completion_tokens: int, total_tokens: int,
+    cost_usd_micros: int, status: str, circuit_state: str,
+    aggregate_before: int, aggregate_after: int, workspace_before: int, workspace_after: int,
+    reservation_released: int, reason: Optional[str], created_at: str,
+) -> EconomicChargeReceipt:
+    receipt_id = "econ_rcpt_" + hashlib.sha256(
+        f"{aggregate.aggregate_id}:{invocation_id}:{status}:{created_at}:{cost_usd_micros}".encode("utf-8")
+    ).hexdigest()[:24]
+    unsigned = {
+        "receipt_id": receipt_id,
+        "receipt_type": "budget_overrun_receipt" if status != "CHARGED" else "economic_usage_receipt",
+        "invocation_id": invocation_id,
+        "workspace_id": str(workspace_id),
+        "aggregate_id": aggregate.aggregate_id,
+        "provider_name": provider_name,
+        "prompt_tokens": int(prompt_tokens),
+        "completion_tokens": int(completion_tokens),
+        "total_tokens": int(total_tokens),
+        "cost_usd_micros": int(cost_usd_micros),
+        "status": status,
+        "economic_circuit_state": circuit_state,
+        "aggregate_spend_before_usd_micros": int(aggregate_before),
+        "aggregate_spend_after_usd_micros": int(aggregate_after),
+        "workspace_spend_before_usd_micros": int(workspace_before),
+        "workspace_spend_after_usd_micros": int(workspace_after),
+        "reservation_released_usd_micros": int(reservation_released),
+        "reason": reason,
+        "created_at": created_at,
+    }
+    return EconomicChargeReceipt(
+        **unsigned,
+        receipt_sha256=canonical_sha256(unsigned),
+    )
+
+
+class EconomicQuotaStoreMixin:
+    """Shared fail-closed economic persistence logic for canonical state stores."""
+
+    def _economic_workspace_aggregates(self, workspace_id: str) -> List[ProgramStateAggregate]:
+        return self.list_aggregates(workspace_id=workspace_id, limit=10_000)
+
+    def _economic_lock(self):
+        return getattr(self, "_lock", contextlib.nullcontext())
+
+    def economic_reserve(
+        self, *, aggregate_id: str, workspace_id: str, invocation_id: str,
+        provider_name: str, reserved_tokens: int, reserved_cost_usd_micros: int,
+        reserved_at: str, policy: EconomicPolicy,
+    ) -> EconomicReservation:
+        if reserved_tokens < 0 or reserved_cost_usd_micros <= 0:
+            raise ProgramStateRuntimeError("Economic reservation must have non-negative tokens and positive reserved cost", reason_code="ECONOMIC_RESERVATION_INVALID")
+        with self._economic_lock():
+            aggregate = self.get_aggregate(aggregate_id)
+            if aggregate is None:
+                raise ProgramStateAggregateNotFoundError(aggregate_id)
+            if aggregate.workspace_id != str(workspace_id):
+                raise CrossWorkspaceLeakError("Economic reservation workspace does not match aggregate workspace")
+            state = _economic_state(aggregate.state_data.get("economics"), policy)
+            if state["policy"] != policy.to_dict():
+                raise ProgramStateRuntimeError("Economic policy mismatch; explicit policy transition required", reason_code="ECONOMIC_POLICY_MISMATCH")
+            if invocation_id in state["charges"]:
+                prior = state["charges"][invocation_id]
+                raise EconomicInvocationAlreadySettledError(invocation_id, str(prior["receipt_id"]))
+            breaker = state["circuit_breaker"]
+            if breaker["state"] == EconomicCircuitState.OPEN.value:
+                opened_at = breaker.get("opened_at")
+                if not opened_at or _economic_seconds_since(opened_at, reserved_at) < policy.breaker_half_open_after_seconds:
+                    raise EconomicCircuitOpenError("Economic circuit is OPEN", details={"aggregate_id": aggregate_id, "opened_at": opened_at})
+                breaker["state"] = EconomicCircuitState.HALF_OPEN.value
+                breaker["half_open_in_flight"] = False
+            if breaker["state"] == EconomicCircuitState.HALF_OPEN.value and breaker.get("half_open_in_flight"):
+                raise EconomicCircuitOpenError("Economic HALF_OPEN probe already in flight", details={"aggregate_id": aggregate_id})
+            workspace = self._economic_workspace_aggregates(workspace_id)
+            workspace_spent = sum(int(_economic_state(a.state_data.get("economics"), policy)["spent_usd_micros"]) for a in workspace)
+            workspace_reserved = sum(int(_economic_state(a.state_data.get("economics"), policy)["reserved_usd_micros"]) for a in workspace)
+            provider_events = []
+            provider_reservations = 0
+            provider_reserved_tokens = 0
+            for item in workspace:
+                other = _economic_state(item.state_data.get("economics"), policy)
+                _economic_prune(other, reserved_at, policy)
+                window = other["provider_windows"].get(provider_name, {})
+                provider_events.extend(window.get("events", []))
+                provider_reservations += sum(1 for r in other["reservations"].values() if r.get("provider_name") == provider_name)
+                provider_reserved_tokens += sum(int(r.get("reserved_tokens", 0)) for r in other["reservations"].values() if r.get("provider_name") == provider_name)
+            limit = policy.provider_rate_limits.get(provider_name)
+            used_tokens = sum(int(event.get("tokens", 0)) for event in provider_events) + provider_reserved_tokens
+            used_requests = len(provider_events) + provider_reservations
+            if limit and limit.requests_per_window and used_requests + 1 > limit.requests_per_window:
+                receipt = _economic_receipt(aggregate=aggregate, invocation_id=invocation_id, workspace_id=workspace_id, provider_name=provider_name, prompt_tokens=0, completion_tokens=0, total_tokens=0, cost_usd_micros=0, status="PROVIDER_RATE_LIMIT_EXCEEDED", circuit_state=EconomicCircuitState.OPEN.value, aggregate_before=int(state["spent_usd_micros"]), aggregate_after=int(state["spent_usd_micros"]), workspace_before=workspace_spent, workspace_after=workspace_spent, reservation_released=0, reason="Provider request-rate ceiling exhausted before inference", created_at=reserved_at)
+                state["receipts"][receipt.receipt_id] = receipt.canonical_dict()
+                state["circuit_breaker"].update({"state": EconomicCircuitState.OPEN.value, "opened_at": reserved_at, "half_open_in_flight": False})
+                self.save_aggregate(_economic_updated_aggregate(aggregate, state, reserved_at), expected_version=aggregate.version)
+                raise ProviderRateLimitExceededError("Provider request rate limit exhausted", details={"receipt_id": receipt.receipt_id})
+            if limit and limit.tokens_per_window and used_tokens + reserved_tokens > limit.tokens_per_window:
+                receipt = _economic_receipt(aggregate=aggregate, invocation_id=invocation_id, workspace_id=workspace_id, provider_name=provider_name, prompt_tokens=0, completion_tokens=0, total_tokens=0, cost_usd_micros=0, status="PROVIDER_RATE_LIMIT_EXCEEDED", circuit_state=EconomicCircuitState.OPEN.value, aggregate_before=int(state["spent_usd_micros"]), aggregate_after=int(state["spent_usd_micros"]), workspace_before=workspace_spent, workspace_after=workspace_spent, reservation_released=0, reason="Provider token-rate ceiling exhausted before inference", created_at=reserved_at)
+                state["receipts"][receipt.receipt_id] = receipt.canonical_dict()
+                state["circuit_breaker"].update({"state": EconomicCircuitState.OPEN.value, "opened_at": reserved_at, "half_open_in_flight": False})
+                self.save_aggregate(_economic_updated_aggregate(aggregate, state, reserved_at), expected_version=aggregate.version)
+                raise ProviderRateLimitExceededError("Provider token rate limit exhausted", details={"receipt_id": receipt.receipt_id})
+            if int(state["spent_usd_micros"]) + int(state["reserved_usd_micros"]) + reserved_cost_usd_micros > policy.aggregate_budget_usd_micros:
+                receipt = _economic_receipt(aggregate=aggregate, invocation_id=invocation_id, workspace_id=workspace_id, provider_name=provider_name, prompt_tokens=0, completion_tokens=0, total_tokens=0, cost_usd_micros=0, status="BUDGET_CEILING_EXCEEDED", circuit_state=EconomicCircuitState.OPEN.value, aggregate_before=int(state["spent_usd_micros"]), aggregate_after=int(state["spent_usd_micros"]), workspace_before=workspace_spent, workspace_after=workspace_spent, reservation_released=0, reason="Aggregate hard budget ceiling exhausted before inference", created_at=reserved_at)
+                state["receipts"][receipt.receipt_id] = receipt.canonical_dict()
+                state["circuit_breaker"].update({"state": EconomicCircuitState.OPEN.value, "opened_at": reserved_at, "half_open_in_flight": False})
+                self.save_aggregate(_economic_updated_aggregate(aggregate, state, reserved_at), expected_version=aggregate.version)
+                raise BudgetCeilingExceededError("Aggregate hard budget ceiling exceeded", details={"receipt_id": receipt.receipt_id})
+            if workspace_spent + workspace_reserved + reserved_cost_usd_micros > policy.workspace_budget_usd_micros:
+                receipt = _economic_receipt(aggregate=aggregate, invocation_id=invocation_id, workspace_id=workspace_id, provider_name=provider_name, prompt_tokens=0, completion_tokens=0, total_tokens=0, cost_usd_micros=0, status="BUDGET_CEILING_EXCEEDED", circuit_state=EconomicCircuitState.OPEN.value, aggregate_before=int(state["spent_usd_micros"]), aggregate_after=int(state["spent_usd_micros"]), workspace_before=workspace_spent, workspace_after=workspace_spent, reservation_released=0, reason="Workspace hard budget ceiling exhausted before inference", created_at=reserved_at)
+                state["receipts"][receipt.receipt_id] = receipt.canonical_dict()
+                state["circuit_breaker"].update({"state": EconomicCircuitState.OPEN.value, "opened_at": reserved_at, "half_open_in_flight": False})
+                self.save_aggregate(_economic_updated_aggregate(aggregate, state, reserved_at), expected_version=aggregate.version)
+                raise BudgetCeilingExceededError("Workspace hard budget ceiling exceeded", details={"receipt_id": receipt.receipt_id})
+            reservation_id = "resv_econ_" + hashlib.sha256(f"{aggregate_id}:{invocation_id}".encode("utf-8")).hexdigest()[:24]
+            probe = breaker["state"] == EconomicCircuitState.HALF_OPEN.value
+            state["reservations"][reservation_id] = {"invocation_id": invocation_id, "provider_name": provider_name, "reserved_tokens": int(reserved_tokens), "reserved_cost_usd_micros": int(reserved_cost_usd_micros), "reserved_at": reserved_at, "half_open_probe": probe}
+            state["reserved_usd_micros"] = int(state["reserved_usd_micros"]) + reserved_cost_usd_micros
+            breaker["half_open_in_flight"] = probe
+            self.save_aggregate(_economic_updated_aggregate(aggregate, state, reserved_at), expected_version=aggregate.version)
+            return EconomicReservation(reservation_id, invocation_id, UUID(str(workspace_id)), aggregate_id, provider_name, int(reserved_tokens), int(reserved_cost_usd_micros), reserved_at, probe)
+
+    def economic_settle(self, *, reservation: EconomicReservation, usage: EconomicUsage, policy: EconomicPolicy) -> EconomicChargeReceipt:
+        with self._economic_lock():
+            aggregate = self.get_aggregate(reservation.aggregate_id)
+            if aggregate is None:
+                raise ProgramStateAggregateNotFoundError(reservation.aggregate_id)
+            state = _economic_state(aggregate.state_data.get("economics"), policy)
+            stored = state["reservations"].get(reservation.reservation_id)
+            if stored is None:
+                prior = state["charges"].get(reservation.invocation_id)
+                if prior is not None:
+                    return EconomicChargeReceipt(**prior)
+                raise ProgramStateRuntimeError("Economic reservation is missing", reason_code="ECONOMIC_RESERVATION_MISSING")
+            observed = usage.observed_at or utc_now_rfc3339()
+            provider = usage.provider_name or reservation.provider_name
+            if usage.prompt_tokens < 0 or usage.completion_tokens < 0 or usage.total_tokens < 0:
+                raise ProgramStateRuntimeError("Provider token usage cannot be negative", reason_code="ECONOMIC_USAGE_INVALID")
+            if usage.total_tokens != usage.prompt_tokens + usage.completion_tokens:
+                raise ProgramStateRuntimeError("Provider token usage total must equal prompt plus completion tokens", reason_code="ECONOMIC_USAGE_INVALID")
+            if usage.cost_usd_micros is not None:
+                actual_cost = int(usage.cost_usd_micros)
+            else:
+                has_rate_card = (
+                    provider in policy.provider_input_cost_usd_micros_per_1k_tokens
+                    or provider in policy.provider_output_cost_usd_micros_per_1k_tokens
+                )
+                if not has_rate_card:
+                    raise EconomicCostUnmeteredError(provider)
+                actual_cost = policy.estimate_cost_usd_micros(provider, usage.prompt_tokens, usage.completion_tokens)
+            if actual_cost < 0:
+                raise ProgramStateRuntimeError("Provider cost cannot be negative", reason_code="ECONOMIC_USAGE_INVALID")
+            aggregate_before = int(state["spent_usd_micros"])
+            workspace = self._economic_workspace_aggregates(str(reservation.workspace_id))
+            workspace_before = sum(int(_economic_state(a.state_data.get("economics"), policy)["spent_usd_micros"]) for a in workspace)
+            aggregate_after = aggregate_before + actual_cost
+            workspace_after = workspace_before + actual_cost
+            status = "CHARGED"
+            reason: Optional[str] = None
+            if actual_cost > reservation.reserved_cost_usd_micros:
+                status = "BUDGET_CEILING_EXCEEDED"; reason = "Measured provider cost exceeded the hard reservation ceiling"
+            if aggregate_after > policy.aggregate_budget_usd_micros or workspace_after > policy.workspace_budget_usd_micros:
+                status = "BUDGET_CEILING_EXCEEDED"; reason = reason or "Measured provider spend crossed a hard budget ceiling"
+            limit = policy.provider_rate_limits.get(provider)
+            _economic_prune(state, observed, policy)
+            events = list(state["provider_windows"].setdefault(provider, {"provider_name": provider, "events": []}).get("events", []))
+            if limit and ((limit.requests_per_window and len(events) + 1 > limit.requests_per_window) or (limit.tokens_per_window and sum(int(e.get("tokens", 0)) for e in events) + usage.total_tokens > limit.tokens_per_window)):
+                status = "PROVIDER_RATE_LIMIT_EXCEEDED"; reason = "Measured provider usage crossed a configured rolling rate limit"
+            del state["reservations"][reservation.reservation_id]
+            state["reserved_usd_micros"] = max(0, int(state["reserved_usd_micros"]) - reservation.reserved_cost_usd_micros)
+            state["spent_usd_micros"] = aggregate_after
+            state["prompt_tokens"] = int(state["prompt_tokens"]) + int(usage.prompt_tokens)
+            state["completion_tokens"] = int(state["completion_tokens"]) + int(usage.completion_tokens)
+            state["total_tokens"] = int(state["total_tokens"]) + int(usage.total_tokens)
+            state["requests"] = int(state["requests"]) + 1
+            events.append({"timestamp": observed, "tokens": int(usage.total_tokens), "cost_usd_micros": actual_cost})
+            state["provider_windows"][provider] = {"provider_name": provider, "events": events}
+            breaker = state["circuit_breaker"]
+            if status == "CHARGED":
+                breaker.update({"state": EconomicCircuitState.CLOSED.value, "failure_count": 0, "opened_at": None, "half_open_in_flight": False})
+            else:
+                breaker.update({"state": EconomicCircuitState.OPEN.value, "opened_at": observed, "half_open_in_flight": False})
+            receipt = _economic_receipt(aggregate=aggregate, invocation_id=reservation.invocation_id, workspace_id=reservation.workspace_id, provider_name=provider, prompt_tokens=usage.prompt_tokens, completion_tokens=usage.completion_tokens, total_tokens=usage.total_tokens, cost_usd_micros=actual_cost, status=status, circuit_state=breaker["state"], aggregate_before=aggregate_before, aggregate_after=aggregate_after, workspace_before=workspace_before, workspace_after=workspace_after, reservation_released=reservation.reserved_cost_usd_micros, reason=reason, created_at=observed)
+            state["charges"][reservation.invocation_id] = receipt.canonical_dict(); state["receipts"][receipt.receipt_id] = receipt.canonical_dict()
+            self.save_aggregate(_economic_updated_aggregate(aggregate, state, observed), expected_version=aggregate.version)
+            if status == "BUDGET_CEILING_EXCEEDED":
+                raise BudgetCeilingExceededError("Economic settlement crossed a hard budget ceiling", details={"receipt_id": receipt.receipt_id})
+            if status == "PROVIDER_RATE_LIMIT_EXCEEDED":
+                raise ProviderRateLimitExceededError("Economic settlement crossed a provider rate limit", details={"receipt_id": receipt.receipt_id})
+            return receipt
+
+    def economic_failure(self, *, reservation: Optional[EconomicReservation], invocation_id: str, provider_name: str, reason: str, failure_at: str, policy: EconomicPolicy) -> None:
+        if reservation is None:
+            return
+        with self._economic_lock():
+            aggregate = self.get_aggregate(reservation.aggregate_id)
+            if aggregate is None:
+                return
+            state = _economic_state(aggregate.state_data.get("economics"), policy)
+            stored = state["reservations"].pop(reservation.reservation_id, None)
+            if stored is None:
+                return
+            state["reserved_usd_micros"] = max(0, int(state["reserved_usd_micros"]) - reservation.reserved_cost_usd_micros)
+            breaker = state["circuit_breaker"]
+            breaker["failure_count"] = int(breaker.get("failure_count", 0)) + 1
+            breaker["half_open_in_flight"] = False
+            if stored.get("half_open_probe") or breaker["failure_count"] >= policy.breaker_failure_threshold:
+                breaker["state"] = EconomicCircuitState.OPEN.value; breaker["opened_at"] = failure_at
+            state["failures"] = (list(state.get("failures", [])) + [{"invocation_id": invocation_id, "provider_name": provider_name, "reason": reason, "timestamp": failure_at}])[-32:]
+            self.save_aggregate(_economic_updated_aggregate(aggregate, state, failure_at), expected_version=aggregate.version)
+
+
+
 
 @dataclass(frozen=True, slots=True)
 class ProgramStateTransition:
@@ -1986,7 +2340,7 @@ class IProgramStateStore(abc.ABC):
         raise NotImplementedError
 
 
-class InMemoryProgramStateStore(IProgramStateStore):
+class InMemoryProgramStateStore(EconomicQuotaStoreMixin, IProgramStateStore):
     """In-memory thread-safe state store for testing and ephemeral execution."""
 
     def __init__(self) -> None:
@@ -2199,11 +2553,12 @@ class InMemoryProgramStateStore(IProgramStateStore):
         return list(self._transitions.get(aggregate_id, []))
 
 
-class SqliteProgramStateStore(IProgramStateStore):
+class SqliteProgramStateStore(EconomicQuotaStoreMixin, IProgramStateStore):
     """Durable SQLite state store with ACID transactions."""
 
     def __init__(self, db_path: str | Path) -> None:
         self.db_path = str(db_path)
+        self._lock = threading.RLock()
         self._init_schema()
 
     @contextlib.contextmanager
@@ -2843,6 +3198,59 @@ class SqliteProgramStateStore(IProgramStateStore):
                 )
                 for row in rows
             ]
+
+
+class ProgramStateEconomicQuotaController(EconomicQuotaController):
+    """Binds economic authorization to tenant-scoped canonical program state."""
+
+    def __init__(self, store: IProgramStateStore, policy: EconomicPolicy, *, clock: Callable[[], str] = utc_now_rfc3339) -> None:
+        self.store = store
+        self.policy = policy
+        self.clock = clock
+
+    def _require_workspace(self, workspace_id: UUID) -> TenantContext:
+        tenant = require_current_tenant_context()
+        if str(tenant.workspace_id) != str(workspace_id):
+            raise TenancyViolationError(
+                "Economic quota access is bound to the active tenant workspace "
+                f"{tenant.workspace_id}; requested workspace {workspace_id}."
+            )
+        return tenant
+
+    def authorize_invocation(
+        self, *, invocation_id: str, workspace_id: UUID, aggregate_id: str,
+        provider_name: str, reserved_tokens: int, reserved_cost_usd_micros: int,
+    ) -> EconomicReservation:
+        self._require_workspace(workspace_id)
+        if not aggregate_id:
+            raise ProgramStateRuntimeError("Economic authorization requires an aggregate_id", reason_code="ECONOMIC_AGGREGATE_REQUIRED")
+        if self.policy.max_invocation_cost_usd_micros and reserved_cost_usd_micros > self.policy.max_invocation_cost_usd_micros:
+            raise BudgetCeilingExceededError(
+                "Invocation cost exceeds the hard per-invocation economic ceiling",
+                details={"invocation_id": invocation_id, "reserved_cost_usd_micros": reserved_cost_usd_micros, "max_invocation_cost_usd_micros": self.policy.max_invocation_cost_usd_micros},
+            )
+        return self.store.economic_reserve(
+            aggregate_id=str(aggregate_id), workspace_id=str(workspace_id), invocation_id=str(invocation_id),
+            provider_name=provider_name, reserved_tokens=int(reserved_tokens),
+            reserved_cost_usd_micros=int(reserved_cost_usd_micros), reserved_at=self.clock(), policy=self.policy,
+        )
+
+    def settle_invocation(self, *, reservation: EconomicReservation, usage: EconomicUsage) -> EconomicChargeReceipt:
+        self._require_workspace(reservation.workspace_id)
+        return self.store.economic_settle(reservation=reservation, usage=usage, policy=self.policy)
+
+    def record_failure(self, *, reservation: Optional[EconomicReservation], invocation_id: str, provider_name: str, reason: str) -> None:
+        if reservation is not None:
+            self._require_workspace(reservation.workspace_id)
+            workspace_id = reservation.workspace_id
+        else:
+            tenant = require_current_tenant_context()
+            workspace_id = tenant.workspace_id
+        _ = workspace_id
+        self.store.economic_failure(
+            reservation=reservation, invocation_id=str(invocation_id), provider_name=provider_name,
+            reason=reason, failure_at=self.clock(), policy=self.policy,
+        )
 
 
 # ============================================================================

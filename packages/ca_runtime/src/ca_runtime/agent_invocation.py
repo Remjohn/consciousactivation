@@ -54,7 +54,7 @@ import hashlib
 import json
 import logging
 import re
-from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Set, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol, Sequence, Set, Tuple
 from uuid import UUID, uuid4
 
 from ca_contracts import canonical_json_text, canonical_sha256, utc_now_rfc3339
@@ -195,6 +195,181 @@ class OutputContractViolationError(AgentInvocationError):
         )
 
 
+class EconomicAccountingRequiredError(AgentInvocationError):
+    """Raised when a state-bound production invocation lacks economic accounting."""
+
+    def __init__(self, invocation_id: str, state_id: Optional[str], reason: Optional[str] = None):
+        message = (
+            f"ECONOMIC_ACCOUNTING_REQUIRED: invocation '{invocation_id}' is state-bound "
+            "but no admissible economic accounting source/controller was supplied."
+        )
+        if reason:
+            message += f" {reason}"
+        super().__init__(
+            message,
+            reason_code="ECONOMIC_ACCOUNTING_REQUIRED",
+            details={"invocation_id": invocation_id, "state_id": state_id, "reason": reason},
+        )
+
+
+class EconomicQuotaError(AgentInvocationError):
+    """Base exception for fail-closed economic governance failures."""
+
+
+class BudgetCeilingExceededError(EconomicQuotaError):
+    """Raised when a workspace or aggregate hard budget ceiling blocks execution."""
+
+    def __init__(self, message: str, *, details: Optional[Dict[str, Any]] = None):
+        super().__init__(message, reason_code="BUDGET_CEILING_EXCEEDED", details=details)
+
+
+class EconomicCostUnmeteredError(EconomicQuotaError):
+    """Raised when a provider supplies no cost and no deterministic rate card exists."""
+
+    def __init__(self, provider_name: str):
+        super().__init__(
+            f"ECONOMIC_COST_UNMETERED: provider '{provider_name}' supplied no cost and no configured rate card exists.",
+            reason_code="ECONOMIC_COST_UNMETERED",
+            details={"provider_name": provider_name},
+        )
+
+
+class ProviderRateLimitExceededError(EconomicQuotaError):
+    """Raised when a provider's configured request/token window is exhausted."""
+
+    def __init__(self, message: str, *, details: Optional[Dict[str, Any]] = None):
+        super().__init__(message, reason_code="PROVIDER_RATE_LIMIT_EXCEEDED", details=details)
+
+
+class EconomicCircuitOpenError(EconomicQuotaError):
+    """Raised when the economics circuit breaker is OPEN or already probing."""
+
+    def __init__(self, message: str, *, details: Optional[Dict[str, Any]] = None):
+        super().__init__(message, reason_code="ECONOMIC_CIRCUIT_OPEN", details=details)
+
+
+class EconomicInvocationAlreadySettledError(EconomicQuotaError):
+    """Raised when a completed invocation is retried with the same invocation identity."""
+
+    def __init__(self, invocation_id: str, receipt_id: str):
+        super().__init__(
+            f"ECONOMIC_INVOCATION_ALREADY_SETTLED: invocation '{invocation_id}' already has "
+            f"economic receipt '{receipt_id}'; replay is blocked to prevent double charging.",
+            reason_code="ECONOMIC_INVOCATION_ALREADY_SETTLED",
+            details={"invocation_id": invocation_id, "receipt_id": receipt_id},
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class EconomicUsage:
+    """Provider-reported execution usage at the economic accounting boundary."""
+
+    provider_name: str
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
+    cost_usd_micros: Optional[int] = None
+    observed_at: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class EconomicReservation:
+    """Durable pre-execution reservation that fences a maximum possible charge."""
+
+    reservation_id: str
+    invocation_id: str
+    workspace_id: UUID
+    aggregate_id: str
+    provider_name: str
+    reserved_tokens: int
+    reserved_cost_usd_micros: int
+    reserved_at: str
+    half_open_probe: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class EconomicChargeReceipt:
+    """Immutable durable receipt for an economically accounted invocation or overrun."""
+
+    receipt_id: str
+    receipt_type: str
+    invocation_id: str
+    workspace_id: UUID
+    aggregate_id: str
+    provider_name: str
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
+    cost_usd_micros: int
+    status: str
+    economic_circuit_state: str
+    aggregate_spend_before_usd_micros: int
+    aggregate_spend_after_usd_micros: int
+    workspace_spend_before_usd_micros: int
+    workspace_spend_after_usd_micros: int
+    reservation_released_usd_micros: int
+    reason: Optional[str]
+    created_at: str
+    receipt_sha256: str
+
+    def canonical_dict(self) -> Dict[str, Any]:
+        return {
+            "receipt_id": self.receipt_id,
+            "receipt_type": self.receipt_type,
+            "invocation_id": self.invocation_id,
+            "workspace_id": str(self.workspace_id),
+            "aggregate_id": self.aggregate_id,
+            "provider_name": self.provider_name,
+            "prompt_tokens": int(self.prompt_tokens),
+            "completion_tokens": int(self.completion_tokens),
+            "total_tokens": int(self.total_tokens),
+            "cost_usd_micros": int(self.cost_usd_micros),
+            "status": self.status,
+            "economic_circuit_state": self.economic_circuit_state,
+            "aggregate_spend_before_usd_micros": int(self.aggregate_spend_before_usd_micros),
+            "aggregate_spend_after_usd_micros": int(self.aggregate_spend_after_usd_micros),
+            "workspace_spend_before_usd_micros": int(self.workspace_spend_before_usd_micros),
+            "workspace_spend_after_usd_micros": int(self.workspace_spend_after_usd_micros),
+            "reservation_released_usd_micros": int(self.reservation_released_usd_micros),
+            "reason": self.reason,
+            "created_at": self.created_at,
+        }
+
+
+class EconomicQuotaController(Protocol):
+    """Runtime economics contract bound to canonical durable program state."""
+
+    def authorize_invocation(
+        self,
+        *,
+        invocation_id: str,
+        workspace_id: UUID,
+        aggregate_id: str,
+        provider_name: str,
+        reserved_tokens: int,
+        reserved_cost_usd_micros: int,
+    ) -> EconomicReservation:
+        ...
+
+    def settle_invocation(
+        self,
+        *,
+        reservation: EconomicReservation,
+        usage: EconomicUsage,
+    ) -> EconomicChargeReceipt:
+        ...
+
+    def record_failure(
+        self,
+        *,
+        reservation: Optional[EconomicReservation],
+        invocation_id: str,
+        provider_name: str,
+        reason: str,
+    ) -> None:
+        ...
+
+
 # ---------------------------------------------------------------------------
 # Domain Models: AgentInvocation & AgentInvocationReceipt
 # ---------------------------------------------------------------------------
@@ -296,6 +471,9 @@ class AgentInvocationReceipt:
     receipt_sha256: str
     execution_mode: str = "TEST_FIXTURE"
     is_synthetic: bool = False
+    cost_usd_micros: int = 0
+    economic_receipt_id: Optional[str] = None
+    economic_status: str = "UNTRACKED"
 
     def canonical_dict(self) -> Dict[str, Any]:
         return {
@@ -321,6 +499,9 @@ class AgentInvocationReceipt:
             "gate_passed": self.gate_passed,
             "execution_mode": self.execution_mode,
             "is_synthetic": self.is_synthetic,
+            "cost_usd_micros": int(self.cost_usd_micros),
+            "economic_receipt_id": self.economic_receipt_id,
+            "economic_status": self.economic_status,
             "executed_at": self.executed_at,
         }
 
@@ -553,6 +734,9 @@ class AgentInvocationRuntime:
         provider_router: Optional[ProviderRouter] = None,
         supplied_tool_calls: Optional[Sequence[str]] = None,
         execution_guard: Optional[Callable[[AgentInvocation], None]] = None,
+        economic_controller: Optional[EconomicQuotaController] = None,
+        economic_max_cost_usd_micros: Optional[int] = None,
+        economic_provider_name: Optional[str] = None,
     ) -> AgentInvocationReceipt:
         """Execute the governed AgentInvocation through the model bridge.
 
@@ -600,6 +784,7 @@ class AgentInvocationRuntime:
         latency_micros = 1000
         provider_class = f"{invocation.model_provider.capitalize()}OpenAIProvider"
         is_synthetic = False
+        cost_usd_micros: Optional[int] = None
 
         # CA-M038: resolve max_tokens from invocation context (no hard 500-token cap).
         # Priority: agent model_policy.token_budget > invocation timeout hint > default.
@@ -608,6 +793,37 @@ class AgentInvocationRuntime:
         # from policy; we mirror token budget via extra metadata if present.
         _max_tokens: int = invocation.output_contract.get("_max_tokens_hint", _DEFAULT_MAX_TOKENS) \
             if invocation.output_contract else _DEFAULT_MAX_TOKENS
+
+        economic_reservation: Optional[EconomicReservation] = None
+        economic_receipt: Optional[EconomicChargeReceipt] = None
+        economic_cap_requested = (
+            economic_controller is not None
+            or economic_max_cost_usd_micros is not None
+            or bool(invocation.output_contract and "_max_cost_usd_micros" in invocation.output_contract)
+        )
+        if mode == ExecutionMode.PRODUCTION and invocation.state_id is not None and economic_cap_requested and economic_controller is None:
+            raise EconomicAccountingRequiredError(invocation.invocation_id, invocation.state_id)
+        if economic_controller is not None:
+            if mode == ExecutionMode.PRODUCTION and invocation.state_id is not None and inference_fn is not None and provider_router is None and model_reasoning_engine is None:
+                raise EconomicAccountingRequiredError(
+                    invocation.invocation_id,
+                    invocation.state_id,
+                    "State-bound production economics require provider-reported usage; synthetic inference_fn execution is not an admissible accounting source.",
+                )
+            max_cost = economic_max_cost_usd_micros
+            if max_cost is None and invocation.output_contract:
+                raw_max_cost = invocation.output_contract.get("_max_cost_usd_micros")
+                max_cost = int(raw_max_cost) if raw_max_cost is not None else None
+            if max_cost is None:
+                raise EconomicAccountingRequiredError(invocation.invocation_id, invocation.state_id)
+            economic_reservation = economic_controller.authorize_invocation(
+                invocation_id=invocation.invocation_id,
+                workspace_id=invocation.workspace_id,
+                aggregate_id=str(invocation.state_id or ""),
+                provider_name=economic_provider_name or invocation.model_provider,
+                reserved_tokens=_max_tokens,
+                reserved_cost_usd_micros=int(max_cost),
+            )
 
         if mode == ExecutionMode.PRODUCTION:
             if provider_router is not None:
@@ -622,6 +838,13 @@ class AgentInvocationRuntime:
                 try:
                     res: InferenceResponse = provider_router.route(req)
                 except ProviderExhaustedError as exc:
+                    if economic_controller is not None:
+                        economic_controller.record_failure(
+                            reservation=economic_reservation,
+                            invocation_id=invocation.invocation_id,
+                            provider_name=economic_provider_name or invocation.model_provider,
+                            reason=str(exc),
+                        )
                     raise ProductionExecutionModeViolationError(
                         invocation.agent_id,
                         f"All provider tiers exhausted during routing (INV-ROUT-001): {exc}",
@@ -633,15 +856,26 @@ class AgentInvocationRuntime:
                 total_tokens = res.total_tokens
                 latency_micros = res.latency_micros
                 provider_class = res.provider_class
+                cost_usd_micros = getattr(res, "cost_usd_micros", None)
                 is_synthetic = False
             elif model_reasoning_engine is not None:
                 # Legacy path: single engine, no hard token cap (CA-M038 removes 500 limit)
-                res_legacy = model_reasoning_engine.infer(
-                    prompt=invocation.assembled_prompt,
-                    system_prompt=invocation.system_prompt,
-                    temperature=invocation.temperature_bps / 10000.0,
-                    max_tokens=_max_tokens,
-                )
+                try:
+                    res_legacy = model_reasoning_engine.infer(
+                        prompt=invocation.assembled_prompt,
+                        system_prompt=invocation.system_prompt,
+                        temperature=invocation.temperature_bps / 10000.0,
+                        max_tokens=_max_tokens,
+                    )
+                except Exception as exc:
+                    if economic_controller is not None:
+                        economic_controller.record_failure(
+                            reservation=economic_reservation,
+                            invocation_id=invocation.invocation_id,
+                            provider_name=economic_provider_name or invocation.model_provider,
+                            reason=str(exc),
+                        )
+                    raise
                 raw_response_text = res_legacy.response_text
                 parsed_json = res_legacy.parsed_json
                 prompt_tokens = res_legacy.prompt_tokens
@@ -649,15 +883,27 @@ class AgentInvocationRuntime:
                 total_tokens = res_legacy.total_tokens
                 latency_micros = res_legacy.latency_micros
                 provider_class = res_legacy.provider_class
+                cost_usd_micros = getattr(res_legacy, "cost_usd_micros", None)
                 is_synthetic = False
             elif inference_fn is not None:
-                inf_result = inference_fn(invocation)
+                try:
+                    inf_result = inference_fn(invocation)
+                except Exception as exc:
+                    if economic_controller is not None:
+                        economic_controller.record_failure(
+                            reservation=economic_reservation,
+                            invocation_id=invocation.invocation_id,
+                            provider_name=economic_provider_name or invocation.model_provider,
+                            reason=str(exc),
+                        )
+                    raise
                 raw_response_text = inf_result.get("response_text", "")
                 parsed_json = inf_result.get("parsed_json")
                 prompt_tokens = inf_result.get("prompt_tokens", 100)
                 completion_tokens = inf_result.get("completion_tokens", 50)
                 total_tokens = prompt_tokens + completion_tokens
                 latency_micros = inf_result.get("latency_micros", 50_000)
+                cost_usd_micros = inf_result.get("cost_usd_micros")
                 if "provider_class" in inf_result:
                     provider_class = inf_result["provider_class"]
                 is_synthetic = False
@@ -681,6 +927,13 @@ class AgentInvocationRuntime:
                 try:
                     res2: InferenceResponse = provider_router.route(req)
                 except ProviderExhaustedError as exc:
+                    if economic_controller is not None:
+                        economic_controller.record_failure(
+                            reservation=economic_reservation,
+                            invocation_id=invocation.invocation_id,
+                            provider_name=economic_provider_name or invocation.model_provider,
+                            reason=str(exc),
+                        )
                     raise ProductionExecutionModeViolationError(
                         invocation.agent_id,
                         f"All provider tiers exhausted during TEST_FIXTURE routing: {exc}",
@@ -692,26 +945,48 @@ class AgentInvocationRuntime:
                 total_tokens = res2.total_tokens
                 latency_micros = res2.latency_micros
                 provider_class = res2.provider_class
+                cost_usd_micros = getattr(res2, "cost_usd_micros", None)
                 is_synthetic = False
             elif inference_fn is not None:
-                inf_result = inference_fn(invocation)
+                try:
+                    inf_result = inference_fn(invocation)
+                except Exception as exc:
+                    if economic_controller is not None:
+                        economic_controller.record_failure(
+                            reservation=economic_reservation,
+                            invocation_id=invocation.invocation_id,
+                            provider_name=economic_provider_name or invocation.model_provider,
+                            reason=str(exc),
+                        )
+                    raise
                 raw_response_text = inf_result.get("response_text", "")
                 parsed_json = inf_result.get("parsed_json")
                 prompt_tokens = inf_result.get("prompt_tokens", 100)
                 completion_tokens = inf_result.get("completion_tokens", 50)
                 total_tokens = prompt_tokens + completion_tokens
                 latency_micros = inf_result.get("latency_micros", 50_000)
+                cost_usd_micros = inf_result.get("cost_usd_micros")
                 if "provider_class" in inf_result:
                     provider_class = inf_result["provider_class"]
                 is_synthetic = True
             elif model_reasoning_engine is not None:
                 # Legacy path: single engine, no hard token cap (CA-M038 removes 500 limit)
-                res_legacy2 = model_reasoning_engine.infer(
-                    prompt=invocation.assembled_prompt,
-                    system_prompt=invocation.system_prompt,
-                    temperature=invocation.temperature_bps / 10000.0,
-                    max_tokens=_max_tokens,
-                )
+                try:
+                    res_legacy2 = model_reasoning_engine.infer(
+                        prompt=invocation.assembled_prompt,
+                        system_prompt=invocation.system_prompt,
+                        temperature=invocation.temperature_bps / 10000.0,
+                        max_tokens=_max_tokens,
+                    )
+                except Exception as exc:
+                    if economic_controller is not None:
+                        economic_controller.record_failure(
+                            reservation=economic_reservation,
+                            invocation_id=invocation.invocation_id,
+                            provider_name=economic_provider_name or invocation.model_provider,
+                            reason=str(exc),
+                        )
+                    raise
                 raw_response_text = res_legacy2.response_text
                 parsed_json = res_legacy2.parsed_json
                 prompt_tokens = res_legacy2.prompt_tokens
@@ -719,6 +994,7 @@ class AgentInvocationRuntime:
                 total_tokens = res_legacy2.total_tokens
                 latency_micros = res_legacy2.latency_micros
                 provider_class = res_legacy2.provider_class
+                cost_usd_micros = getattr(res_legacy2, "cost_usd_micros", None)
                 is_synthetic = False
             else:
                 parsed_json = {
@@ -734,7 +1010,23 @@ class AgentInvocationRuntime:
                 latency_micros = 25_000
                 is_synthetic = True
 
-        # 4. Output Contract Validation
+        # 5. Economic settlement is committed before output validation because the
+        # provider has already incurred usage even when a downstream contract fails.
+        if economic_controller is not None and economic_reservation is not None:
+            economic_receipt = economic_controller.settle_invocation(
+                reservation=economic_reservation,
+                usage=EconomicUsage(
+                    provider_name=economic_provider_name or invocation.model_provider,
+                    prompt_tokens=int(prompt_tokens),
+                    completion_tokens=int(completion_tokens),
+                    total_tokens=int(total_tokens),
+                    cost_usd_micros=(int(cost_usd_micros) if cost_usd_micros is not None else None),
+                    observed_at=utc_now_rfc3339(),
+                ),
+            )
+            cost_usd_micros = economic_receipt.cost_usd_micros
+
+        # 6. Output Contract Validation
         contract_passed = True
         if invocation.output_contract:
             contract_type = invocation.output_contract.get("output_type", "JSON")
@@ -786,6 +1078,9 @@ class AgentInvocationRuntime:
             "gate_passed": True,
             "execution_mode": mode.value,
             "is_synthetic": is_synthetic,
+            "cost_usd_micros": int(cost_usd_micros or 0),
+            "economic_receipt_id": economic_receipt.receipt_id if economic_receipt else None,
+            "economic_status": economic_receipt.status if economic_receipt else "UNTRACKED",
             "executed_at": executed_at,
         }
         receipt_sha = canonical_sha256(receipt_payload)
@@ -815,4 +1110,7 @@ class AgentInvocationRuntime:
             receipt_sha256=receipt_sha,
             execution_mode=mode.value,
             is_synthetic=is_synthetic,
+            cost_usd_micros=int(cost_usd_micros or 0),
+            economic_receipt_id=economic_receipt.receipt_id if economic_receipt else None,
+            economic_status=economic_receipt.status if economic_receipt else "UNTRACKED",
         )

@@ -55,3 +55,72 @@ python -m pytest -q \
 ```
 
 **Unified result:** `135 passed in 72.54s (100% pass rate)`
+
+---
+
+# Epoch 07 Walkthrough — Grounding, Release Integrity, Receipts, Isolation, Economics & Voice DNA
+
+**Status:** Verified and committed
+**Date:** 2026-09-08
+**Result:** 113 passed, 0 failed, 2 environment-capability skips
+
+## Mandates applied
+
+| Mandate | Requirement / Invariant | Exact destination surfaces |
+|---|---|---|
+| CA-M029 | FR-029 / INV-NO-INVENT-001 | `packages/ca_runtime/src/ca_runtime/no_unanchored_invention.py`<br>`tests/wave04/test_ca_m029_no_unanchored_invention.py` |
+| CA-M030 | FR-REL-001 / INV-REL-001 | `packages/ca_runtime/src/ca_runtime/release_manifest.py`<br>`tests/wave04/test_ca_m030_release_manifest.py` |
+| CA-M043 | INV-MRK-001 | `packages/ca_runtime/src/ca_runtime/merkle_receipt_chain.py`<br>`tests/cae/test_ca_m043_merkle_receipts.py` |
+| CA-M047 | INV-ISO-001 | `packages/ca_runtime/src/ca_runtime/workspace_isolation.py`<br>`tests/cae/test_ca_m047_workspace_isolation.py` |
+| CA-M051 | INV-ECON-001 | `packages/ca_runtime/src/ca_runtime/agent_invocation.py`<br>`packages/ca_runtime/src/ca_runtime/program_state_runtime.py`<br>`tests/pipeline/test_ca_m051_quota_engine.py` |
+| CA-M052 | INV-VOICE-001 | `services/collision-intelligence/src/cae_collision_intelligence/composer.py`<br>`packages/ca_runtime/src/ca_runtime/collision_hypothesis_program.py`<br>`tests/phase4/test_ca_m052_voice_dna.py` |
+
+## Integration notes
+
+- **Exact Source-to-Destination Mappings:** All six bundles from `Mandates implementation/epoch_07/` were applied according to their `AGENT_HANDOFF.md` files.
+- **Existing-file replacements:** CA-M051 replaced the canonical `agent_invocation.py` and `program_state_runtime.py` surfaces; CA-M052 replaced the canonical collision composer and hypothesis-program surfaces. No destination was shared by multiple Epoch 07 bundles, so no cross-bundle merge was required.
+- **Bounded implementations:** No migrations or unrelated API/storage surfaces were added. The handoff-defined runtime boundaries and mandate-specific tests were preserved exactly.
+- **Syntax and hygiene:** All 14 mandate files passed `py_compile`/`compileall`; `git diff --check` passed.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Collected | Result |
+|---|---|---|:---:|---:|
+| CA-M029 | FR-029 / INV-NO-INVENT-001 | `tests/wave04/test_ca_m029_no_unanchored_invention.py` | 12 | PASS (12/12) |
+| CA-M030 | FR-REL-001 / INV-REL-001 | `tests/wave04/test_ca_m030_release_manifest.py` | 14 | PASS (14/14) |
+| CA-M043 | INV-MRK-001 | `tests/cae/test_ca_m043_merkle_receipts.py` | 26 | PASS (26/26) |
+| CA-M047 | INV-ISO-001 | `tests/cae/test_ca_m047_workspace_isolation.py` | 39 | PASS (37/37 executed); 2 skipped |
+| CA-M051 | INV-ECON-001 | `tests/pipeline/test_ca_m051_quota_engine.py` | 14 | PASS (14/14) |
+| CA-M052 | INV-VOICE-001 | `tests/phase4/test_ca_m052_voice_dna.py` | 10 | PASS (10/10) |
+| **Unified Epoch 07** | | all six suites above | **115** | **113 passed, 0 failed, 2 skipped** |
+
+### Additional CA-M052 affected regressions
+
+```text
+17 passed
+```
+
+The complete command also covered:
+
+```text
+tests/collision_intelligence/test_collision_composition.py
+tests/collision_intelligence/test_four_world_intersection.py
+tests/collision_intelligence/test_collision_domain_contracts.py
+tests/collision_intelligence/test_collision_adversarial_cases.py
+```
+
+### Unified command
+
+```bash
+pytest -q \
+  tests/wave04/test_ca_m029_no_unanchored_invention.py \
+  tests/wave04/test_ca_m030_release_manifest.py \
+  tests/cae/test_ca_m043_merkle_receipts.py \
+  tests/cae/test_ca_m047_workspace_isolation.py \
+  tests/pipeline/test_ca_m051_quota_engine.py \
+  tests/phase4/test_ca_m052_voice_dna.py
+```
+
+**Unified result:** `113 passed, 0 failed, 2 skipped in 31.29s`.
+
+The two skips are the M047 cross-workspace and cross-campaign symlink-alias cases. Windows returned `WinError 1314` because this host does not grant symbolic-link creation and Developer Mode is disabled; the tests retain their fail-closed assertions and are not altered or suppressed.

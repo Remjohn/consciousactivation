@@ -13,6 +13,7 @@ Coordinates the four authority lanes:
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import uuid
@@ -41,7 +42,16 @@ from cae_collision_intelligence.domain import (
     NoveltyClicheAssessment,
     ObliqueLens,
 )
-from cae_collision_intelligence.composer import CollisionHypothesisComposer
+from cae_collision_intelligence.composer import (
+    CollisionHypothesisComposer,
+    QuoteSpan,
+    SubjectVoiceDNAVerifier,
+    TranscriptSegment,
+    VoiceDNAProfile,
+    VoiceDNAGateRejectedError,
+    VoiceDNAGateReport,
+    VoiceDNAVerificationInput,
+)
 from cae_collision_intelligence.verifier import CollisionHypothesisVerifier
 from cae_collision_intelligence.errors import (
     ClicheTropeError,
@@ -162,6 +172,7 @@ class CollisionHypothesisCandidate(BaseModel):
     emotion_score: float = 0.80
     specificity_score: float = 0.85
     diversity_axes: Dict[str, str] = Field(default_factory=dict)
+    voice_dna_request: Optional[Dict[str, Any]] = None
 
 
 class CollisionHypothesisReceipt(BaseModel):
@@ -176,6 +187,54 @@ class CollisionHypothesisReceipt(BaseModel):
     state_digest: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     signature: str
+
+
+class VoiceDNAVerificationRequest(BaseModel):
+    """Serialized runtime request for the INV-VOICE-001 verification boundary."""
+
+    tenant_id: str
+    subject_id: str
+    constitution_revision: int
+    constitution_content_sha256: str
+    profile: Dict[str, Any]
+    source_segments: List[Dict[str, str]]
+    synthesized_segments: List[Dict[str, str]]
+    synthesized_quotes: List[Dict[str, str]]
+    source_audio_wav_b64: str
+    synthesized_audio_wav_b64: str
+    generic_style_score: Optional[float] = None
+
+    def to_verification_input(self) -> tuple[VoiceDNAProfile, VoiceDNAVerificationInput]:
+        profile = VoiceDNAProfile(
+            tenant_id=self.profile["tenant_id"],
+            subject_id=self.profile["subject_id"],
+            constitution_revision=int(self.profile["constitution_revision"]),
+            constitution_content_sha256=str(self.profile["constitution_content_sha256"]).lower(),
+            acoustic_dna=self.profile["acoustic_dna"],
+            linguistic_dna=self.profile["linguistic_dna"],
+            max_drift_score=float(self.profile.get("max_drift_score", 0.25)),
+            min_distinctiveness_score=float(self.profile.get("min_distinctiveness_score", 0.65)),
+        )
+        source_segments = tuple(TranscriptSegment(**item) for item in self.source_segments)
+        synthesized_segments = tuple(TranscriptSegment(**item) for item in self.synthesized_segments)
+        synthesized_quotes = tuple(QuoteSpan(**item) for item in self.synthesized_quotes)
+        try:
+            source_audio = base64.b64decode(self.source_audio_wav_b64, validate=True)
+            synthesized_audio = base64.b64decode(self.synthesized_audio_wav_b64, validate=True)
+        except (ValueError, TypeError) as exc:
+            raise ValueError("Voice DNA audio payload is not valid base64") from exc
+        return profile, VoiceDNAVerificationInput(
+            tenant_id=self.tenant_id,
+            subject_id=self.subject_id,
+            constitution_revision=self.constitution_revision,
+            constitution_content_sha256=self.constitution_content_sha256,
+            source_segments=source_segments,
+            synthesized_segments=synthesized_segments,
+            synthesized_quotes=synthesized_quotes,
+            source_audio_wav=source_audio,
+            synthesized_audio_wav=synthesized_audio,
+            generic_style_score=self.generic_style_score,
+        )
 
 
 class CollisionHypothesisSnapshot(BaseModel):
@@ -460,6 +519,110 @@ class CollisionHypothesisProgramCoordinator:
 
         return stored
 
+    def verify_synthesis_voice_dna(
+        self,
+        *,
+        workspace_id: str,
+        portfolio_id: str,
+        hypothesis_id: str,
+        request: Mapping[str, Any] | VoiceDNAVerificationRequest,
+        lane: AuthorityLane = AuthorityLane.COMPOSER,
+    ) -> VoiceDNAGateReport:
+        """Verify synthesis against an immutable Subject Constitution-bound Voice DNA profile.
+
+        Rejection is persisted as an evaluation receipt before the typed gate error is re-raised.
+        Raw transcript/audio content is never placed into the receipt; only binding hashes and
+        deterministic score/gate evidence are persisted.
+        """
+        self._verify_workspace(workspace_id)
+        self._verify_lane(lane, AuthorityLane.COMPOSER, "verify_synthesis_voice_dna")
+        try:
+            runtime_request = (
+                request
+                if isinstance(request, VoiceDNAVerificationRequest)
+                else VoiceDNAVerificationRequest.model_validate(dict(request))
+            )
+            profile, verification_input = runtime_request.to_verification_input()
+            report = SubjectVoiceDNAVerifier.verify(profile=profile, request=verification_input)
+            return report
+        except VoiceDNAGateRejectedError as exc:
+            report = exc.report
+            self._persist_voice_dna_rejection(
+                workspace_id=workspace_id,
+                portfolio_id=portfolio_id,
+                hypothesis_id=hypothesis_id,
+                report=report,
+            )
+            raise
+        except ValueError as exc:
+            report = VoiceDNAGateReport(
+                invariant_id="INV-VOICE-001",
+                tenant_id=str(getattr(request, "tenant_id", "")) if isinstance(request, VoiceDNAVerificationRequest) else str(dict(request).get("tenant_id", "")),
+                subject_id=str(getattr(request, "subject_id", "")) if isinstance(request, VoiceDNAVerificationRequest) else str(dict(request).get("subject_id", "")),
+                constitution_revision=int(getattr(request, "constitution_revision", 0)) if isinstance(request, VoiceDNAVerificationRequest) else int(dict(request).get("constitution_revision", 0)),
+                constitution_binding_sha256="",
+                quote_diffs=tuple(),
+                quote_fidelity_passed=False,
+                acoustic_drift_score=1.0,
+                linguistic_drift_score=1.0,
+                voice_drift_score=1.0,
+                distinctiveness_score=0.0,
+                generic_style_score=None,
+                accepted=False,
+                max_drift_score=0.25,
+                min_distinctiveness_score=0.65,
+                rejection_reasons=("VOICE_DNA_INPUT_INVALID", str(exc)),
+            )
+            self._persist_voice_dna_rejection(
+                workspace_id=workspace_id,
+                portfolio_id=portfolio_id,
+                hypothesis_id=hypothesis_id,
+                report=report,
+            )
+            raise VoiceDNAGateRejectedError(
+                "Synthetic expression rejected because Voice DNA input is invalid",
+                report=report,
+            ) from exc
+
+    def _persist_voice_dna_rejection(
+        self,
+        *,
+        workspace_id: str,
+        portfolio_id: str,
+        hypothesis_id: str,
+        report: VoiceDNAGateReport,
+    ) -> HypothesisEvaluationReceiptRecord:
+        evidence = {
+            "invariant_id": report.invariant_id,
+            "constitution_revision": report.constitution_revision,
+            "constitution_binding_sha256": report.constitution_binding_sha256,
+            "quote_fidelity_passed": report.quote_fidelity_passed,
+            "acoustic_drift_score": report.acoustic_drift_score,
+            "linguistic_drift_score": report.linguistic_drift_score,
+            "voice_drift_score": report.voice_drift_score,
+            "distinctiveness_score": report.distinctiveness_score,
+            "max_drift_score": report.max_drift_score,
+            "min_distinctiveness_score": report.min_distinctiveness_score,
+            "rejection_reasons": list(report.rejection_reasons),
+        }
+        receipt = HypothesisEvaluationReceiptRecord(
+            workspace_id=workspace_id,
+            receipt_id=f"VOICE-DNA-RCP-{uuid.uuid4().hex[:12]}",
+            portfolio_id=portfolio_id,
+            hypothesis_id=hypothesis_id,
+            evaluator_lane=AuthorityLane.COMPOSER.value,
+            decision="REJECTED",
+            score_breakdown_micros={
+                "acoustic_drift": int(round(report.acoustic_drift_score * 1_000_000)),
+                "linguistic_drift": int(round(report.linguistic_drift_score * 1_000_000)),
+                "voice_drift": int(round(report.voice_drift_score * 1_000_000)),
+                "distinctiveness": int(round(report.distinctiveness_score * 1_000_000)),
+            },
+            gate_checks=[*report.as_gate_checks(), {"gate": "REJECTION_REASONS", "reasons": list(report.rejection_reasons)}],
+            signature=compute_canonical_sha256(evidence),
+        )
+        return self.store.store_evaluation_receipt(receipt)
+
     # -------------------------------------------------------------------------
     # 3. COMPOSER LANE: Compose Hypotheses and Form Portfolio
     # -------------------------------------------------------------------------
@@ -472,6 +635,7 @@ class CollisionHypothesisProgramCoordinator:
         candidates: List[CollisionHypothesisCandidate],
         matrix_id: str,
         lane: AuthorityLane = AuthorityLane.COMPOSER,
+        voice_dna_required: bool = False,
     ) -> CollisionHypothesisPortfolioRecord:
         """
         COMPOSER LANE: Composes typed CollisionHypothesis records and packages portfolio.
@@ -537,6 +701,20 @@ class CollisionHypothesisProgramCoordinator:
                 )
             except (UngroundedAnalogyError, ClicheTropeError, MissingFalsificationError) as exc:
                 raise UngroundedHypothesisError(str(exc)) from exc
+
+            # Verify the subject-specific Voice DNA gate before the hypothesis can enter storage.
+            if voice_dna_required and not item.voice_dna_request:
+                raise UngroundedHypothesisError(
+                    "INV-VOICE-001 requires a Voice DNA verification request for every synthesized candidate."
+                )
+            if item.voice_dna_request is not None:
+                self.verify_synthesis_voice_dna(
+                    workspace_id=workspace_id,
+                    portfolio_id=portfolio_id,
+                    hypothesis_id=composed.hypothesis_id,
+                    request=item.voice_dna_request,
+                    lane=AuthorityLane.COMPOSER,
+                )
 
             # Verify with domain verifier
             try:
