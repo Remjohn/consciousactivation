@@ -346,6 +346,54 @@ def get_campaign(
     return _detail(row["order"], row["state"], pkg_payload, False)
 
 
+@router.get("/{campaign_id}/control")
+def get_campaign_control_surface(
+    campaign_id: str,
+    repository: CampaignRepository = Depends(get_campaign_repository),
+) -> dict:
+    """Read-only campaign control projection backed by persisted campaign state."""
+    try:
+        row = repository.get(campaign_id)
+    except CampaignNotFoundError as error:
+        raise _error(404, "CAMPAIGN_NOT_FOUND", str(error)) from error
+
+    state = row["state"]
+    lifecycle = state["lifecycle_state"]
+    return {
+        "campaign_id": campaign_id,
+        "workspace_id": row["order"]["workspace_id"],
+        "project_id": row["order"]["project_id"],
+        "lifecycle_state": lifecycle,
+        "version": state["version"],
+        "active_checkpoint_id": state.get("active_checkpoint_id"),
+        "capabilities": {
+            "launch": False,
+            "pause": False,
+            "resume": False,
+            "cancel": lifecycle not in {"SHIPPED", "CANCELLED"},
+            "receipts": bool(state.get("run_refs") or state.get("artifact_refs") or state.get("evaluation_refs")),
+        },
+        "launch_note": (
+            "Campaign creation already commits the canonical LAUNCHED state; "
+            "the control surface does not invent a second launch transition."
+        ),
+        "run_refs": list(state.get("run_refs", [])),
+        "artifact_refs": list(state.get("artifact_refs", [])),
+        "evaluation_refs": list(state.get("evaluation_refs", [])),
+        "receipt_refs": [
+            ref.get("receipt_id")
+            for ref in state.get("run_refs", [])
+            if isinstance(ref, dict) and ref.get("receipt_id")
+        ],
+        "failure": {
+            "failed": lifecycle == "BLOCKED_EXCEPTION",
+            "exception_ids": list(state.get("exception_ids", [])),
+        },
+        "authority": dict(row["order"].get("authority", {})),
+        "operator_actor": dict(row["order"].get("operator_actor", {})),
+    }
+
+
 @router.post("/{campaign_id}/cancel", response_model=CampaignDetailResponse)
 def cancel_campaign(
     campaign_id: str,

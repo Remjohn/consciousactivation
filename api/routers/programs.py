@@ -51,6 +51,8 @@ from ca_runtime.program_state_runtime import (
 from ca_runtime.tenancy import CrossWorkspaceLeakError, UnauthorizedOperatorAccessError, TenantContext
 from ca_runtime.program_operator_runtime import (
     ArtifactLineageGraph,
+    ExecutionFailureProjection,
+    ExecutionReceiptProjection,
     ExecutionTraceProjection,
     ProgramOperatorRuntimeService,
     RejectionDispositionRoute,
@@ -376,6 +378,75 @@ def get_execution_trace(
             ],
             blockers=trace.blockers,
         )
+    except ProgramStateAggregateNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error_code": "NOT_FOUND", "message": f"Execution aggregate '{aggregate_id}' not found"},
+        )
+
+
+@router.get("/executions/{aggregate_id:path}/receipts")
+def get_execution_receipts(
+    aggregate_id: str,
+    receipt_id: Optional[str] = Query(default=None),
+    service: ProgramOperatorRuntimeService = Depends(get_operator_service),
+) -> Dict[str, Any]:
+    """Retrieve receipt evidence from the canonical runtime ledger."""
+    try:
+        receipts = service.get_execution_receipts(aggregate_id=aggregate_id, receipt_id=receipt_id)
+        if receipt_id is not None and not receipts:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "error_code": "RECEIPT_NOT_FOUND",
+                    "message": f"Receipt '{receipt_id}' not found for execution '{aggregate_id}'",
+                },
+            )
+        return {
+            "aggregate_id": aggregate_id,
+            "receipts": [receipt.model_dump() for receipt in receipts],
+            "total": len(receipts),
+        }
+    except ProgramStateAggregateNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error_code": "NOT_FOUND", "message": f"Execution aggregate '{aggregate_id}' not found"},
+        )
+
+
+@router.get("/executions/{aggregate_id:path}/receipts/{receipt_id}")
+def get_execution_receipt(
+    aggregate_id: str,
+    receipt_id: str,
+    service: ProgramOperatorRuntimeService = Depends(get_operator_service),
+) -> Dict[str, Any]:
+    """Retrieve one receipt by immutable receipt identifier."""
+    try:
+        receipts = service.get_execution_receipts(aggregate_id=aggregate_id, receipt_id=receipt_id)
+        if not receipts:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "error_code": "RECEIPT_NOT_FOUND",
+                    "message": f"Receipt '{receipt_id}' not found for execution '{aggregate_id}'",
+                },
+            )
+        return receipts[0].model_dump()
+    except ProgramStateAggregateNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error_code": "NOT_FOUND", "message": f"Execution aggregate '{aggregate_id}' not found"},
+        )
+
+
+@router.get("/executions/{aggregate_id:path}/failure")
+def get_execution_failure(
+    aggregate_id: str,
+    service: ProgramOperatorRuntimeService = Depends(get_operator_service),
+) -> Dict[str, Any]:
+    """Surface authoritative failure state and recovery-facing diagnostics."""
+    try:
+        return service.get_execution_failure(aggregate_id=aggregate_id).model_dump()
     except ProgramStateAggregateNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

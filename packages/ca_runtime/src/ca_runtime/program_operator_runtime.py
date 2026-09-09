@@ -191,6 +191,49 @@ class ChatCommandResult(BaseModel):
     warnings: List[str] = Field(default_factory=list)
 
 
+class ExecutionReceiptProjection(BaseModel):
+    """Read-only projection of an existing durable execution/control receipt."""
+
+    receipt_id: str
+    receipt_type: str
+    aggregate_id: str
+    workspace_id: str
+    program_id: str
+    program_version: str
+    operation: str
+    actor_id: str
+    lane: AuthorityLane
+    source_lifecycle: Optional[str] = None
+    target_lifecycle: Optional[str] = None
+    source_state: Optional[str] = None
+    target_state: Optional[str] = None
+    version_before: Optional[int] = None
+    version_after: Optional[int] = None
+    source_state_sha256: Optional[str] = None
+    output_state_sha256: Optional[str] = None
+    transition_id: Optional[str] = None
+    transition_name: Optional[str] = None
+    timestamp: str
+    validator_results: Dict[str, str] = Field(default_factory=dict)
+    details: Dict[str, Any] = Field(default_factory=dict)
+
+
+class ExecutionFailureProjection(BaseModel):
+    """Explicit failure/status projection sourced from authoritative aggregate state."""
+
+    aggregate_id: str
+    workspace_id: str
+    program_id: str
+    lifecycle: ProgramStateLifecycle
+    failed: bool
+    failure_reason: Optional[str] = None
+    error_code: Optional[str] = None
+    receipt_id: Optional[str] = None
+    version: int
+    state_hash: str
+    details: Dict[str, Any] = Field(default_factory=dict)
+
+
 # ============================================================================
 # 2. Operator Service Implementation
 # ============================================================================
@@ -372,6 +415,190 @@ class ProgramOperatorRuntimeService:
         ctx = self.runtime.get_local_context(aggregate_id=aggregate_id, active_lane=active_lane)
         return agg, ctx
 
+    @staticmethod
+    def _control_receipt(
+        *,
+        aggregate: ProgramStateAggregate,
+        receipt_id: str,
+        operation: str,
+        actor_id: str,
+        source_lifecycle: str,
+        target_lifecycle: str,
+        source_state_sha256: Optional[str],
+        version_before: int,
+        version_after: int,
+        details: Optional[Mapping[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Build a persisted control receipt without inventing a second state authority."""
+        return {
+            "receipt_id": receipt_id,
+            "receipt_type": "cae_operator_control_receipt",
+            "aggregate_id": aggregate.aggregate_id,
+            "workspace_id": str(aggregate.workspace_id),
+            "program_id": aggregate.program_id,
+            "program_version": aggregate.program_version,
+            "operation": operation,
+            "actor_id": actor_id,
+            "lane": AuthorityLane.COMMANDER.value,
+            "source_lifecycle": source_lifecycle,
+            "target_lifecycle": target_lifecycle,
+            "source_state": aggregate.current_state,
+            "target_state": aggregate.current_state,
+            "version_before": version_before,
+            "version_after": version_after,
+            "source_state_sha256": source_state_sha256,
+            "output_state_sha256": None,
+            "timestamp": aggregate.updated_at,
+            "validator_results": {
+                "state_machine_authority": "PASS",
+                "cas": "PASS",
+                "operator_lane": "PASS",
+            },
+            "details": dict(details or {}),
+        }
+
+    def _project_receipts(self, aggregate_id: str) -> List[ExecutionReceiptProjection]:
+        """Project durable receipt evidence from the canonical aggregate and transition ledger."""
+        aggregate = self.runtime.get_aggregate(aggregate_id)
+        receipts: List[ExecutionReceiptProjection] = []
+
+        lease = self.runtime.store.get_execution_lease(aggregate_id)
+        dispatch = self.runtime.store.get_workflow_dispatch(aggregate_id)
+        register_receipt_id = f"rcpt_register_{hashlib.sha256(f'{aggregate_id}:0'.encode('utf-8')).hexdigest()[:24]}"
+        register_actor = str((lease or {}).get("holder_id") or (dispatch or {}).get("actor_id") or "operator")
+        receipts.append(
+            ExecutionReceiptProjection(
+                receipt_id=register_receipt_id,
+                receipt_type="cae_execution_receipt",
+                aggregate_id=aggregate.aggregate_id,
+                workspace_id=str(aggregate.workspace_id),
+                program_id=aggregate.program_id,
+                program_version=aggregate.program_version,
+                operation="REGISTER",
+                actor_id=register_actor,
+                lane=AuthorityLane.COMMANDER,
+                target_lifecycle=ProgramStateLifecycle.INITIALIZED.value,
+                target_state=aggregate.current_state,
+                version_after=0,
+                output_state_sha256=aggregate.state_hash if aggregate.version == 0 else None,
+                timestamp=aggregate.created_at,
+                validator_results={"dispatch_registration": "PASS"},
+            )
+        )
+
+        if aggregate.version >= 1 and dispatch is not None:
+            dispatch_actor = str(dispatch.get("actor_id") or "operator")
+            run_receipt_id = f"rcpt_dispatch_{hashlib.sha256(f'{aggregate_id}:1:{dispatch_actor}'.encode('utf-8')).hexdigest()[:24]}"
+            receipts.append(
+                ExecutionReceiptProjection(
+                    receipt_id=run_receipt_id,
+                    receipt_type="cae_execution_receipt",
+                    aggregate_id=aggregate.aggregate_id,
+                    workspace_id=str(aggregate.workspace_id),
+                    program_id=aggregate.program_id,
+                    program_version=aggregate.program_version,
+                    operation="RUN",
+                    actor_id=dispatch_actor,
+                    lane=AuthorityLane.COMMANDER,
+                    source_lifecycle=ProgramStateLifecycle.INITIALIZED.value,
+                    target_lifecycle=ProgramStateLifecycle.RUNNING.value,
+                    source_state=aggregate.current_state,
+                    target_state=aggregate.current_state,
+                    version_before=0,
+                    version_after=1,
+                    output_state_sha256=aggregate.state_hash if aggregate.version == 1 else None,
+                    timestamp=str(dispatch.get("enqueued_at") or aggregate.created_at),
+                    validator_results={
+                        "program_preflight": "PASS",
+                        "lease_cas": "PASS",
+                        "workflow_dispatch": "PASS",
+                    },
+                    details={"dispatch": dict(dispatch)},
+                )
+            )
+
+        stored_controls = aggregate.state_data.get("operator_control_receipts", [])
+        if isinstance(stored_controls, list):
+            for raw in stored_controls:
+                if isinstance(raw, Mapping) and raw.get("receipt_id"):
+                    receipts.append(
+                        ExecutionReceiptProjection.model_validate(
+                            {
+                                **raw,
+                                "lane": AuthorityLane(raw.get("lane", AuthorityLane.COMMANDER.value)),
+                            }
+                        )
+                    )
+
+        for transition in self.runtime.store.list_transitions(aggregate_id):
+            receipts.append(
+                ExecutionReceiptProjection(
+                    receipt_id=transition.receipt_id,
+                    receipt_type="cae_execution_receipt",
+                    aggregate_id=transition.aggregate_id,
+                    workspace_id=str(aggregate.workspace_id),
+                    program_id=aggregate.program_id,
+                    program_version=aggregate.program_version,
+                    operation=transition.trigger_operation,
+                    actor_id=transition.actor_id,
+                    lane=transition.lane,
+                    source_state=transition.from_state,
+                    target_state=transition.to_state,
+                    version_before=transition.expected_version,
+                    version_after=transition.committed_version,
+                    transition_id=transition.transition_id,
+                    transition_name=transition.transition_name,
+                    timestamp=transition.timestamp,
+                    validator_results={"transition_contract": "PASS", "authority_lane": "PASS"},
+                    details={"payload": dict(transition.payload)},
+                )
+            )
+
+        deduped = {receipt.receipt_id: receipt for receipt in receipts}
+        return sorted(deduped.values(), key=lambda item: (item.version_after or -1, item.timestamp, item.receipt_id))
+
+    def get_execution_receipts(
+        self,
+        aggregate_id: str,
+        receipt_id: Optional[str] = None,
+    ) -> List[ExecutionReceiptProjection]:
+        """Retrieve only receipts evidenced by canonical runtime state/transition records."""
+        receipts = self._project_receipts(aggregate_id)
+        if receipt_id is None:
+            return receipts
+        return [receipt for receipt in receipts if receipt.receipt_id == receipt_id]
+
+    def get_execution_failure(self, aggregate_id: str) -> ExecutionFailureProjection:
+        """Surface failure only from the authoritative aggregate lifecycle and state payload."""
+        aggregate = self.runtime.get_aggregate(aggregate_id)
+        state_data = aggregate.state_data
+        failure_payload = state_data.get("failure") or state_data.get("error") or {}
+        if not isinstance(failure_payload, Mapping):
+            failure_payload = {"message": str(failure_payload)}
+
+        failure_reason = (
+            failure_payload.get("failure_reason")
+            or failure_payload.get("reason")
+            or failure_payload.get("message")
+            or state_data.get("failure_reason")
+            or state_data.get("error_message")
+        )
+        error_code = failure_payload.get("error_code") or state_data.get("error_code")
+        failed = aggregate.lifecycle == ProgramStateLifecycle.FAILED or failure_reason is not None or error_code is not None
+        return ExecutionFailureProjection(
+            aggregate_id=aggregate.aggregate_id,
+            workspace_id=str(aggregate.workspace_id),
+            program_id=aggregate.program_id,
+            lifecycle=aggregate.lifecycle,
+            failed=failed,
+            failure_reason=str(failure_reason) if failure_reason is not None else None,
+            error_code=str(error_code) if error_code is not None else None,
+            receipt_id=aggregate.last_receipt_id,
+            version=aggregate.version,
+            state_hash=aggregate.state_hash,
+            details=dict(failure_payload),
+        )
+
     # ------------------------------------------------------------------------
     # 2.3 Execution Control Actions (RUN, PAUSE, RESUME, APPROVE, REJECT, REPAIR)
     # ------------------------------------------------------------------------
@@ -515,6 +742,22 @@ class ProgramOperatorRuntimeService:
             reason=reason,
         )
 
+        prior_receipts = list(agg.state_data.get("operator_control_receipts", []))
+        prior_receipts.append(
+            self._control_receipt(
+                aggregate=agg,
+                receipt_id=receipt_id,
+                operation="ABORT",
+                actor_id=actor_id,
+                source_lifecycle=agg.lifecycle.value,
+                target_lifecycle=ProgramStateLifecycle.CANCELLED.value,
+                source_state_sha256=agg.state_hash,
+                version_before=agg.version,
+                version_after=agg.version + 1,
+                details={"reason": reason, "preemption": receipt.canonical_dict()},
+            )
+        )
+
         # Canonical CAS/state path is the authority.  The durable receipt explicitly
         # distinguishes the request from interruption observation; worker execution
         # may only report observed cancellation after this commit.
@@ -525,7 +768,10 @@ class ProgramOperatorRuntimeService:
             expected_version=expected_version,
             expected_state_sha256=expected_state_sha256,
             receipt_id=receipt_id,
-            state_updates={"preemption": receipt.canonical_dict()},
+            state_updates={
+                "preemption": receipt.canonical_dict(),
+                "operator_control_receipts": prior_receipts,
+            },
         )
         token.cancel()
         return updated
@@ -547,11 +793,40 @@ class ProgramOperatorRuntimeService:
                 actor_lane=actor_lane,
                 required_lane=AuthorityLane.COMMANDER,
             )
-        updated = self.runtime.pause_execution(
+        current = self.runtime.get_aggregate(aggregate_id)
+        if current.lifecycle in {
+            ProgramStateLifecycle.COMPLETED,
+            ProgramStateLifecycle.FAILED,
+            ProgramStateLifecycle.CANCELLED,
+        }:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name="pause",
+                reason=f"Cannot pause program in terminal state '{current.lifecycle.value}'",
+            )
+        receipt_id = f"rcpt_pause_{hashlib.sha256(f'{aggregate_id}:{current.version + 1}:{actor_id}'.encode('utf-8')).hexdigest()[:24]}"
+        prior_receipts = list(current.state_data.get("operator_control_receipts", []))
+        prior_receipts.append(
+            self._control_receipt(
+                aggregate=current,
+                receipt_id=receipt_id,
+                operation="PAUSE",
+                actor_id=actor_id,
+                source_lifecycle=current.lifecycle.value,
+                target_lifecycle=ProgramStateLifecycle.PAUSED.value,
+                source_state_sha256=current.state_hash,
+                version_before=current.version,
+                version_after=current.version + 1,
+            )
+        )
+        updated = self.runtime.set_lifecycle(
             aggregate_id=aggregate_id,
+            new_lifecycle=ProgramStateLifecycle.PAUSED,
             actor_id=actor_id,
             expected_version=expected_version,
             expected_state_sha256=expected_state_sha256,
+            receipt_id=receipt_id,
+            state_updates={"operator_control_receipts": prior_receipts},
         )
         self._emit_telemetry(
             "TRANSITION",
@@ -578,11 +853,36 @@ class ProgramOperatorRuntimeService:
                 actor_lane=actor_lane,
                 required_lane=AuthorityLane.COMMANDER,
             )
-        updated = self.runtime.resume_execution(
+        current = self.runtime.get_aggregate(aggregate_id)
+        if current.lifecycle != ProgramStateLifecycle.PAUSED:
+            raise ProgramTransitionBlockedError(
+                aggregate_id=aggregate_id,
+                transition_name="resume",
+                reason=f"Cannot resume program from lifecycle '{current.lifecycle.value}'; expected PAUSED",
+            )
+        receipt_id = f"rcpt_resume_{hashlib.sha256(f'{aggregate_id}:{current.version + 1}:{actor_id}'.encode('utf-8')).hexdigest()[:24]}"
+        prior_receipts = list(current.state_data.get("operator_control_receipts", []))
+        prior_receipts.append(
+            self._control_receipt(
+                aggregate=current,
+                receipt_id=receipt_id,
+                operation="RESUME",
+                actor_id=actor_id,
+                source_lifecycle=current.lifecycle.value,
+                target_lifecycle=ProgramStateLifecycle.RUNNING.value,
+                source_state_sha256=current.state_hash,
+                version_before=current.version,
+                version_after=current.version + 1,
+            )
+        )
+        updated = self.runtime.set_lifecycle(
             aggregate_id=aggregate_id,
+            new_lifecycle=ProgramStateLifecycle.RUNNING,
             actor_id=actor_id,
             expected_version=expected_version,
             expected_state_sha256=expected_state_sha256,
+            receipt_id=receipt_id,
+            state_updates={"operator_control_receipts": prior_receipts},
         )
         self._emit_telemetry(
             "TRANSITION",

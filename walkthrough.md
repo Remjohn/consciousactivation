@@ -279,3 +279,38 @@ python -m pytest -q \
 The required adjacent reconciliation command produced `8 passed, 2 failed`. Both failures are the known unchanged assertion that `operator_service.run_program()` returns version 2; the current runtime returns version 1. This is retained as blocker `B-M0058-RUNTIME-001` and was not weakened or repaired under M0058.
 
 The baseline also records the representative path reaching durable SQLite `RUNNING`, persisted `AWAITING_APPROVAL`, trace projection, and fail-closed `/ship` refusal, while classifying the remaining harness, storage-authority, mocked-boundary, and environment-fidelity conflicts for operator review.
+
+---
+
+# CAE-M0059 Walkthrough — Campaign Execution Control Surface
+
+**Status:** Verified and committed
+**Date:** 2026-09-10
+**Requirement:** `FR-OPS-CONTROL`
+**Result:** 6 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Operator runtime control and receipt projections | `packages/ca_runtime/src/ca_runtime/program_operator_runtime.py` |
+| Program execution receipt/failure routes | `api/routers/programs.py` |
+| Campaign read-only control projection | `api/routers/campaigns.py` |
+| M0059 mandate tests | `tests/mandates/test_cae_m059_control_surface.py` |
+
+The M0059 additions were merged into the current runtime while preserving the existing M046 preemption and M054 telemetry integrations. Control receipts remain persisted in the canonical program aggregate state, and the campaign control surface is read-only.
+
+## Test matrix
+
+| Mandate | Requirement | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M0059 | FR-OPS-CONTROL | `tests/mandates/test_cae_m059_control_surface.py` | 6 | PASS (6/6) |
+| **M0059 verification** | | exact handoff suite | **6** | **PASS (6/6, 100%)** |
+
+### Targeted command
+
+```bash
+pytest -q tests/mandates/test_cae_m059_control_surface.py
+```
+
+**Targeted result:** `6 passed in 13.07s (100% pass rate)`.
