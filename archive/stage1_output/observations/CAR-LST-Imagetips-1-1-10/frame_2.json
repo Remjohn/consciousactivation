@@ -1,0 +1,82 @@
+{
+  "observations": [
+    {
+      "object_type": "text_block",
+      "zone_observation": "header_zone",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.08,
+        "width": 0.9,
+        "height": 0.2
+      },
+      "text_or_visual_description": "01 Use ONLY context relevant images",
+      "confidence": 0.99,
+      "source_frame": 2
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "left_card",
+      "bbox_normalized": {
+        "x": 0.05,
+        "y": 0.35,
+        "width": 0.43,
+        "height": 0.55
+      },
+      "text_or_visual_description": "BAD example (red X): 'HOW TO COOK LIKE A CHEF?' with generic young man in white shirt - not context relevant",
+      "confidence": 0.98,
+      "source_frame": 2
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "right_card",
+      "bbox_normalized": {
+        "x": 0.52,
+        "y": 0.35,
+        "width": 0.43,
+        "height": 0.55
+      },
+      "text_or_visual_description": "GOOD example (green checkmark): 'HOW TO COOK LIKE A CHEF?' with boy in chef hat and apron holding vegetables - context relevant",
+      "confidence": 0.98,
+      "source_frame": 2
+    }
+  ],
+  "entries": [
+    {
+      "slide_index": 2,
+      "slide_role": "body",
+      "taxonomy_state": "CANONICAL",
+      "container_zones": [
+        "header_zone",
+        "left_card",
+        "right_card"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": true,
+          "notes": "01 Use ONLY context relevant images"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "left_card",
+          "dominant": false,
+          "notes": "Bad example - generic man"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "right_card",
+          "dominant": true,
+          "notes": "Good example - kid in chef gear"
+        }
+      ],
+      "reading_order": "tip_header, bad_example, good_example",
+      "anchor_elements": [
+        {
+          "label": "context_relevance_comparison"
+        }
+      ],
+      "layout_fingerprint": "do_dont_comparison_numbered_tip"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+version: 0.1
+name: ActivationEvent schema
+type: execution_event
+required:
+  - activation_event_id
+  - broad_primary_signal_id
+  - target_guest_id
+  - context_reference
+  - pressure_reference
+  - activation_intent
+  - question_text
+  - specificity_anchors
+  - prohibited_presuppositions
+  - provenance
+  - validation_status
+fields:
+  activation_event_id: string
+  broad_primary_signal_id: string
+  target_guest_id: string
+  context_reference: string
+  pressure_reference: string
+  activation_intent: string
+  question_text: string
+  specificity_anchors: array
+  prohibited_presuppositions: array
+  provenance: object
+  validation_status: string
+constraints:
+  - question_must_not_assert_guest_conclusion
+  - question_must_retain_pressure_specificity
+  - question_must_be_traceable_to_broad_signal
+  - prohibited_presuppositions_must_be_checked

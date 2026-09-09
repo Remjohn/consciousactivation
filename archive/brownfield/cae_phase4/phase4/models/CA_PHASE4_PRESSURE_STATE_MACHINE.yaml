@@ -1,0 +1,41 @@
+version: 0.1
+state_machine: tension
+states:
+  latent:
+    meaning: plausible but insufficiently activated
+  emerging:
+    meaning: evidence accumulating toward activation
+  active:
+    meaning: currently relevant and carrying meaningful pressure
+  saturated:
+    meaning: repeatedly activated with diminishing marginal signal
+  cooling:
+    meaning: pressure remains historically valid but current activation is declining
+  resolved:
+    meaning: evidence indicates the tension no longer remains materially unresolved in the modeled context
+  superseded:
+    meaning: another state or framing has replaced the current working interpretation
+  corrupted:
+    meaning: prior interpretation is contradicted, contaminated, or invalidated
+transitions:
+  - from: latent
+    to: emerging
+  - from: emerging
+    to: active
+  - from: active
+    to: saturated
+  - from: active
+    to: cooling
+  - from: cooling
+    to: resolved
+  - from: active
+    to: resolved
+  - from: any
+    to: superseded
+  - from: any
+    to: corrupted
+rules:
+  - historical_observations_are_immutable
+  - current_state_is_derived_from_observations
+  - reactivation_requires_fresh_or_newly_relevant_evidence
+  - saturation_does_not_mean_falsehood

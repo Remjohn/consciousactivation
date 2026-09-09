@@ -1,0 +1,240 @@
+---
+type: prd-index
+author: John (Product Manager)
+date: 2026-05-06
+status: Source of Truth — Modular PRD Router
+version: 6.0 (Post-Core-24 Decomposition)
+supersedes:
+  - docs/prd/April_Updates_Master_PRD.md (monolithic bridge — archived)
+  - docs/prd/April_Updates_PRD_Part1-5.md (early iterations — archived)
+foundation:
+  - docs/prd/prd.md (264KB foundational PRD — 90% architectural truth retained)
+---
+
+# CCP Modular PRD Index — Router & Master Reference
+
+**Version:** 6.0 (Post-Core-24 Brownfield Rebuild)
+**Status:** Source of Truth
+**Date:** 2026-05-06
+
+---
+
+## 1. Purpose
+
+This document serves as the **queryable router** for the CCP's modular PRD architecture. Any agent, skill, or human operator needing architectural context must consult this index first to identify which PRD module(s) contain the relevant requirements.
+
+### How to Use This Index
+
+1. **Identify your context** — what environment, primitive family, or capability area are you working in?
+2. **Consult the cross-reference tables below** to find the relevant PRD module(s)
+3. **Load the specific module(s)** from `docs/prd/modules/PRD_0X_*.md`
+4. **Adhere to the Operational Skills** — Consult `skills/prd/SKILL_PRD_Module_Writer.md` for writing standards and `docs/prd/evolution_timeline.md` for the mandatory discernment filter.
+5. **Never load all 9 modules simultaneously** — Each module is 4,800–5,400 words. Load only what you need.
+
+### Relationship to the Foundational PRD
+
+The original `docs/prd/prd.md` (264KB, March 2026) remains the **foundational architectural truth**. It contains the 14-step build sequence, 60+ functional requirements, the full dependency registry (DEP-ENG/LIB/PROTO/VIS), and the risk mitigation matrix. These 9 modular PRDs **do not replace** `prd.md` — they **extend and update** it with the April–May 2026 evolutions (the "Core 24" updates).
+
+### Lineage Discipline
+
+The modular PRDs should be written using a **retain / reframe / reject** discipline:
+
+- **Retain** older mechanisms that still improve truth, safety, control, determinism, or leverage.
+- **Reframe** older concepts when the product center or commercial positioning changed.
+- **Reject** only what the evolution timeline explicitly marks as superseded.
+
+This matters because several March and early-April documents still define active architecture, including:
+
+- Psychological Routing and the Semantic Affinity Guard
+- Audience Maturity and payload masking logic
+- Cultural Memory Map, Coach Story Archive, and Context Performance Registry
+- Context Reasoning and memetic calibration
+- first-frame visual control and deterministic webinar geometry
+
+---
+
+## 2. Module Registry
+
+| Module | File | Words | One-Line Description |
+|---|---|---|---|
+| **PRD-01** | `PRD_01_CCP_Platform_Strategy.md` | 4,800–5,400 | Platform DNA: Human-First doctrine, Invisible App (AFFiNE + Telegram), Voice DNA growth model, 4 Voice Notes Programs, Sovereign Growth criteria, Silent Referral, CAU, data sovereignty |
+| **PRD-02** | `PRD_02_CCF_Content_Factory.md` | 4,800–5,400 | Content Factory: Trigger-First CCF pipeline, edge extraction, archetype routing, Content Trinity, export governance |
+| **PRD-03** | `PRD_03_CMF_Media_Factory.md` | 4,800–5,400 | Media Factory: CMF pipeline (narrative → cinematic → sonic), VDP/VCP visual prompts, beat clusters, sonic phases, anti-slop visual standards |
+| **PRD-04** | `PRD_04_CVE_Experience_Design.md` | 4,800–5,400 | Experience Design: Voice-First doctrine, Communication Skill Ladder, Experience Primitive orchestration, async-first surfaces, Telegram continuity |
+| **PRD-05** | `PRD_05_CBCS_Law28.md` | 4,800–5,400 | CBCS Law28: 4-Engine coaching system, biometric-gated progression, 28-Command suite, accountability architecture, Sunday Postcard |
+| **PRD-06** | `PRD_06_Conscious_Reactions.md` | 4,800–5,400 | Conscious Reactions: Solo/Debate/Jury/Tier List modes, topic intelligence, viral thresholds, acquisition-through-reaction, co-created clips |
+| **PRD-07** | `PRD_07_V2WS_Webinar.md` | 4,800–5,400 | Webinar System: V2WS pipeline, YOLO/Interactive modes, slide generation, teaching-while-selling, CTA architecture |
+| **PRD-08** | `PRD_08_Conscious_Primitives.md` | 4,800–5,400 | Primitive Registry: Meaning vs Experience planes, registry schema, coalition formation, edging pipeline, orchestration dichotomy, YAML codification |
+| **PRD-09** | `PRD_09_CPSC_Silent_Referral.md` | 4,800–5,400 | Commercial Layer: Pricing architecture, Silent Referral viral loops, OFO, Trust-Transfer Ladder, Church vertical, B2B2C metering |
+
+---
+
+## 3. Cross-Reference: Capability Areas → PRD Modules
+
+This table maps the foundational PRD's Capability Areas (CA) and Feature Requirements (FR) to their modular PRD coverage.
+
+| Capability Area | FRs Covered | Primary Module | Secondary Module(s) |
+|---|---|---|---|
+| **CA-0: Pre-Production Intelligence** | FR0A–FR0E, FR-GA | PRD-01 | PRD-08 (primitive extraction) |
+| **CA-1: Coach Identity & Voice** | FR1–FR13 | PRD-01 | PRD-04 (Voice-First doctrine) |
+| **CA-2: Psychological Routing** | FR18–FR23 | PRD-02 | PRD-08 (primitive orchestration) |
+| **CA-3: CRAL Research Intelligence** | FR14–FR17 | PRD-02 | PRD-01 (CRAL strategy) |
+| **CA-4: Weekly Pipeline & Governance** | FR24–FR26 | PRD-02 | PRD-03 (media production) |
+| **CA-5: CBCS Client Coaching** | FR27–FR32 | PRD-05 | PRD-04 (experience design) |
+| **CA-5B: CBCS Relationship Intelligence** | FR-CBCS-01–14 | PRD-05 | PRD-09 (CPSC integration) |
+| **CA-6: Webinar & Visual Content** | FR33–FR36 | PRD-07 | PRD-03 (CMF pipeline) |
+| **CA-7: Cross-System Intelligence** | FR37–FR41 | PRD-01 | All modules |
+| **CA-8: Performance & Governance** | FR42–FR50 | PRD-01 | PRD-02 (CCF governance) |
+| **CA-9: CPSC Sales Cycle** | FR51–FR60 | PRD-09 | PRD-05 (CBCS gates) |
+| **CA-10: CVE & SVRE** | FR-VIS-01–18 | PRD-03 | PRD-08 (TIAR integration) |
+
+---
+
+## 4. Cross-Reference: April Update Features → PRD Modules
+
+| April Feature ID | Feature Name | Primary Module |
+|---|---|---|
+| FR-APR-01 | B2B2C Metered Billing | PRD-09 |
+| FR-APR-02 | 30-Day Challenge Funnel | PRD-05 |
+| FR-APR-03 | Speaker Audit Engine | PRD-04 |
+| FR-APR-04 | Telegram Mini App Platform | PRD-04 |
+| FR-APR-05 | WebRTC Roleplay Engine | PRD-04 | ⚠️ De-centered — async Skill Ladder replaces roleplay as primary surface |
+| FR-APR-06 | Conscious Reactions (absorbed Trivianar mechanics) | PRD-06 | ✅ Trivianar absorbed — async reaction modes replace synchronous events |
+| FR-APR-07 | Voice-First Orchestration | PRD-04 |
+| FR-APR-08 | Orchestration Dichotomy | PRD-08 |
+| FR-APR-09 | 28-Command Intelligence Suite | PRD-05 |
+| FR-APR-10 | Content Trinity & Export Limits | PRD-02 |
+| FR-APR-11 | Coach Dashboard | PRD-01 |
+
+---
+
+## 5. Cross-Reference: Primitive Families → PRD Modules
+
+### Meaning Plane Primitives
+
+| Family Code | Family Name | Count | Primary Module | Secondary Module |
+|---|---|---|---|---|
+| **STR** | Narrative Structure | 27 | PRD-02 | PRD-03 |
+| **PRS** | Persuasion | 35 | PRD-02 | PRD-07 |
+| **HUM** | Humor & Distortion | 12 | PRD-06 | PRD-02 |
+| **CON** | Contrast & Juxtaposition | 8 | PRD-02 | PRD-06 |
+| **PSY** | Psychological Diagnostics | 12 | PRD-05 | PRD-08 |
+| **VOC** | Voice & Audio Intimacy | 12 | PRD-04 | PRD-03 |
+| **VSG** | Visual & Sonic Guidance | 12 | PRD-03 | PRD-08 |
+| **ACT** | Performance & Delivery | 10 | PRD-04 | PRD-05 |
+| **REF** | Referral & Trust-Transfer | 9 | PRD-09 | PRD-01 |
+| **BUS** | Design & Business | 14 | PRD-01 | PRD-07 |
+
+### Experience Plane Primitives
+
+| Family Code | Family Name | Primary Module | Secondary Module |
+|---|---|---|---|
+| **TRG** | Trigger & Hook Design | PRD-04 | PRD-06 |
+| **FRC** | Friction & Flow Management | PRD-04 | PRD-05 |
+| **FBK** | Feedback & Scoring | PRD-05 | PRD-06 |
+| **PRG** | Progression & Mastery | PRD-05 | PRD-04 |
+| **SAF** | Safety & Trust Signals | PRD-05 | PRD-01 |
+| **PER** | Personalization & Adaptation | PRD-04 | PRD-02 |
+| **SOC** | Social & Community Dynamics | PRD-06 | PRD-09 |
+| **TRB** | Tribal Identity & Belonging | PRD-09 | PRD-06 |
+
+---
+
+## 6. Cross-Reference: Source Documents → PRD Modules
+
+### Architecture & Strategy Sources
+
+| Source Document | Location | Primary Module(s) |
+|---|---|---|
+| `prd.md` (Foundation PRD) | `docs/prd/` | ALL (foundation) |
+| `evolution_timeline.md` | `docs/prd/` | ALL (discernment filter) |
+| `Human_First_Brand_Doctrine.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-01 |
+| `Voice_DNA_Growth_Doctrine.md` | `lab/CCP APRIL Updates/04_Voice_Doctrines/` | PRD-01, PRD-04 |
+| `Voice_Coach_Growth_Engine_Positioning.md` | `lab/CCP APRIL Updates/03_Growth_Library/` | PRD-01 |
+| `Perceptual_Primitives_Architecture.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-08, PRD-01 |
+| `Sovereign_Growth_MCDA.md` | `lab/CCP APRIL Updates/02_MCDA_Synthesis/` | PRD-01 |
+| `MCDA_Master_Growth_Ranking.md` | `lab/CCP update/` | PRD-01 |
+| `Communication_Skill_Ladder_Architecture.md` | `lab/CCP APRIL Updates/01_Architecture_PRDs/` | PRD-04, PRD-05, PRD-07 |
+| `Law28_CBCS_Program_Architecture_Brief.md` | `lab/CCP APRIL Updates/01_Architecture_PRDs/` | PRD-05 |
+| `Conscious_Reactions_Source_of_Truth.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-06 |
+| `Conscious_Reactions_Viral_Thresholds.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-06, PRD-09 |
+| `Pricing_Silent_Referral_CoCreation_Architecture.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-09 |
+| `Church_Community_Growth_Architecture.md` | `lab/CCP APRIL Updates/03_Growth_Library/` | PRD-09 |
+| `Matrix of Edging.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-08, PRD-02 |
+| `Primitive_Family_Classification_CCP_CMF.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-08 |
+| `Primitive_Packets_and_Registry_Spec.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-08 |
+| `Primitive_Conscious_Orchestration_Architecture.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-08 |
+| `Experience_Primitive_Registry_Spec.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-04, PRD-08 |
+| `Meaning_Primitive_Registry_Spec.md` | `lab/CCP APRIL Updates/05_Core_Experience/` | PRD-08 |
+
+### Retained R&D Lineage Sources
+
+| Source Document | Location | Still-Active Contribution | Primary Module(s) |
+|---|---|---|---|
+| `CCP_Evolution_Architecture_Report_V2.docx.md` | `lab/CCP update/` | Psychological Routing, Client Intelligence Layer, 3-tier maturity model, payload masking, Semantic Affinity Guard | PRD-02, PRD-04, PRD-05, PRD-07 |
+| `CCP_Architecture_V5.0.docx.md` | `lab/CCP update/` | Cultural Memory Map, Coach Story Archive, Context Performance Registry, Context Reasoning, Memetic Engine | PRD-01, PRD-02, PRD-08 |
+| `CCP_Sales_Cycle_Documentation_V1.docx.md` | `lab/CCP update/` | business intelligence summary, OFAP lineage, commercial sequencing | PRD-01, PRD-09 |
+| `prd-update-how-we-got-here-svre-scre.md` | `docs/prd/` | sovereign research and visual intelligence convergence | PRD-01, PRD-02, PRD-03 |
+| `prd-update-visual-control-layer.md` | `docs/prd/` | first-frame control, visual hook engineering, deterministic visual hierarchy | PRD-03, PRD-07 |
+| `prd-update-CA11-quad-platform.md` | `docs/prd/` | AFFiNE integration lineage, studio/webinar execution memory | PRD-01, PRD-07 |
+| `Mood_State_Architecture_Documentation.docx.md` | `lab/CCP update/` | 4 Mood States, Semantic Affinity Guard, sequencing, audience maturity | PRD-02, PRD-04, PRD-07 |
+| `CVE_Documentation_V2.md` | `lab/CCP update/` | visual composition constraints, format validity, image-source discipline | PRD-03, PRD-07 |
+
+### MCDA & Technical Specs
+
+| Source Document | Location | Primary Module(s) |
+|---|---|---|
+| `Sovereign_Visual_Research_Engine_TechSpec_V1.md` | `lab/CCP update/` | PRD-03 |
+| `Sovereign_CRAL_Research_Engine_TechSpec_V1.md` | `lab/CCP update/` | PRD-02 |
+| `Conscious_Typography_Architecture.md` | `lab/CCP update/` | PRD-03 |
+| `MCDA_Geometrics_vs_CVE_Principles.md` | `lab/CCP update/` | PRD-03 |
+| `MCDA_Sovereign_NIM_Writing_Reasoning_Models.md` | `lab/CCP update/` | PRD-01 |
+| `Parametric_Template_Feasibility.md` | `lab/CCP update/` | PRD-03 |
+| `SearXNG_Custom_Scaffolding_Engine.md` | `lab/CCP update/` | PRD-02 |
+| `CVE_Documentation_V1-V3.md` | `lab/CCP update/` | PRD-03 |
+| `CRAL_Documentation_V1.docx.md` | `lab/CCP update/` | PRD-02 |
+| `JIT_Skill_Compiler_Architecture.docx.md` | `lab/CCP update/` | PRD-02 |
+| `CCP_CBCS_CPSC_V3.docx.md` | `lab/CCP update/` | PRD-05, PRD-09 |
+
+### Audit Library (Meaning Primitives)
+
+| Audit Source | Families Fed | Primary Module(s) |
+|---|---|---|
+| `AUDIT_Resonate_Nancy_Duarte.md` | STR, PRS | PRD-02 |
+| `AUDIT_TED_Talks_Chris_Anderson.md` | PRS, ACT | PRD-02, PRD-04 |
+| `AUDIT_Steal_the_Show_Michael_Port.md` | ACT, PRS | PRD-04 |
+| `AUDIT_HBR_Guide_Persuasive_Presentations.md` | PRS, BUS | PRD-02 |
+| `AUDIT_Talk_Like_TED_Carmine_Gallo.md` | PRS, STR | PRD-02 |
+| `AUDIT_Supercommunicators_Charles_Duhigg.md` | PSY, REF | PRD-05, PRD-09 |
+| `AUDIT_The_Psychology_Workbook_for_Writers.md` | PSY | PRD-05, PRD-08 |
+| `AUDIT_Born_a_Crime.md` | HUM, PSY, VSG | PRD-06, PRD-03 |
+| `AUDIT_Photography_Story_Composition.md` | VSG | PRD-03 |
+| `AUDIT_The_Filmmakers_Eye.md` | VSG | PRD-03 |
+| `AUDIT_Sound_Design_Harrison_Lawrence_Murch.md` | VOC, VSG | PRD-03, PRD-04 |
+| `AUDIT_Finding_Your_Voice_Barbara_McAfee.md` | VOC | PRD-04 |
+| `AUDIT_Interviewing_for_Radio_Jim_Beaman.md` | VOC | PRD-04 |
+| `AUDIT_Radio_Drama_Handbook_Richard_Hand.md` | VOC | PRD-04 |
+| `AUDIT_Design_Is_Storytelling.md` | BUS | PRD-01 |
+| `AUDIT_Beautiful_Users.md` | BUS | PRD-01 |
+| `AUDIT_Jay_Abraham_Referral_Systems.md` | REF | PRD-09 |
+| `AUDIT_Dont_Make_Me_Think.md` | BUS, FRC | PRD-01, PRD-04 |
+
+### Audit Library (Experience Primitives)
+
+| Audit Source | Families Fed | Primary Module(s) |
+|---|---|---|
+| `AUDIT_Beyond_Belief_Nir_Eyal.md` | TRG, FRC, FBK | PRD-04 |
+| `AUDIT_Gamify_Brian_Burke.md` | PRG, FBK, SOC | PRD-05, PRD-06 |
+| `AUDIT_Reality_Is_Broken_Jane_McGonigal.md` | PRG, SOC, TRB | PRD-05, PRD-06 |
+| `AUDIT_The_Art_of_Game_Design_Jesse_Schell.md` | FBK, PRG, PER | PRD-04, PRD-05 |
+
+---
+
+## 7. Version History & Evolution Timeline
+
+### The CCP Evolution Arc (March–May 2026)
+
+| Date | Event | Impact |
+|---|---|---|
+| **March 2026** | `prd.md` written — Foundation PRD (264KB) | Established 14-step build, 60+ FRs, 45 DEP IDs, 7 core pillars |
+| **March 10-17** | Trigger-First, Mood State, CRAL, JIT, and CBCS/CPSC documentation sprint | locked in retained routing, challenge, intake, and compiler mechanisms later inherited by the modular PRDs |

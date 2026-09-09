@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DEP-VID-004",
+  "title": "Whisper Transcript JSON",
+  "description": "Schema for Whisper transcription output produced by FR-VID-06 Stage 1. Contains word-level timestamps with frame number conversions. Per FR-VID-06 §5.",
+  "type": "object",
+  "required": [
+    "transcript_id",
+    "source_audio",
+    "model",
+    "language",
+    "total_duration_sec",
+    "total_frames",
+    "fps",
+    "word_count",
+    "segments"
+  ],
+  "properties": {
+    "transcript_id": {
+      "type": "string",
+      "pattern": "^TR-\\d{8}-[a-f0-9]+$",
+      "description": "Unique transcript identifier: TR-{YYYYMMDD}-{hex}"
+    },
+    "source_audio": {
+      "type": "string",
+      "description": "Filename of the source voiceover audio"
+    },
+    "model": {
+      "type": "string",
+      "description": "Whisper model used (e.g., whisper-large-v3)"
+    },
+    "language": {
+      "type": "string",
+      "description": "Language code used for transcription"
+    },
+    "total_duration_sec": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total audio duration in seconds"
+    },
+    "total_frames": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total frame count at project FPS"
+    },
+    "fps": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Project frames per second"
+    },
+    "word_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of transcribed words"
+    },
+    "segments": {
+      "type": "array",
+      "description": "Sentence-level segments with nested word-level timestamps",
+      "items": {
+        "type": "object",
+        "required": ["segment_id", "text", "start_sec", "end_sec", "start_frame", "end_frame", "words"],
+        "properties": {
+          "segment_id": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-based segment index"
+          },
+          "text": {
+            "type": "string",
+            "description": "Full text of this segment"
+          },
+          "start_sec": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Segment start time in seconds"
+          },
+          "end_sec": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Segment end time in seconds"
+          },
+          "start_frame": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Segment start frame number"
+          },
+          "end_frame": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Segment end frame number"
+          },
+          "words": {
+            "type": "array",
+            "description": "Word-level timestamps within this segment",
+            "items": {
+              "type": "object",
+              "required": ["word", "start_sec", "end_sec", "start_frame", "end_frame", "confidence"],
+              "properties": {
+                "word": {
+                  "type": "string",
+                  "description": "Transcribed word text"
+                },
+                "start_sec": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Word start time in seconds"
+                },
+                "end_sec": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "Word end time in seconds"
+                },
+                "start_frame": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Word start frame number at project FPS"
+                },
+                "end_frame": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Word end frame number at project FPS"
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Whisper confidence score for this word"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

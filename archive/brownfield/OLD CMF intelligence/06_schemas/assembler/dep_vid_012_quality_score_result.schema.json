@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEP-VID-012 — T2I Quality Score Result",
+  "description": "Per-beat quality scores, verdicts, and batch summary from the T2I Quality Gate (FR-VID-04).",
+  "type": "object",
+  "required": ["gate_batch_id", "project_id", "threshold", "results", "batch_summary"],
+  "properties": {
+    "gate_batch_id": {
+      "type": "string",
+      "pattern": "^QG-T2I-",
+      "description": "Unique identifier for this quality gate batch run."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "CMF project identifier."
+    },
+    "threshold": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "The composite score threshold used for this batch."
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["beat_index", "keyframe_url", "scores", "verdict", "retry_count", "feedback"],
+        "properties": {
+          "beat_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Beat sequence number."
+          },
+          "keyframe_url": {
+            "type": "string",
+            "description": "URL or path to the scored keyframe image."
+          },
+          "scores": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["prompt_adherence", "composition_quality", "pssl_coherence", "artifact_detection", "composite"],
+                "properties": {
+                  "prompt_adherence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "composition_quality": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "pssl_coherence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "artifact_detection": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "composite": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+                }
+              },
+              { "type": "null" }
+            ],
+            "description": "Dimension scores and composite. Null if scoring failed."
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["APPROVED", "REGENERATE", "MANUAL_REVIEW", "QUALITY_GATE_UNAVAILABLE"],
+            "description": "Gate verdict for this keyframe."
+          },
+          "retry_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of regeneration attempts so far."
+          },
+          "feedback": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "description": "Regeneration guidance identifying the weakest dimension. Null for APPROVED."
+          }
+        }
+      }
+    },
+    "batch_summary": {
+      "type": "object",
+      "required": ["total_scored", "approved", "regenerate", "manual_review", "average_composite"],
+      "properties": {
+        "total_scored": { "type": "integer", "minimum": 0 },
+        "approved": { "type": "integer", "minimum": 0 },
+        "regenerate": { "type": "integer", "minimum": 0 },
+        "manual_review": { "type": "integer", "minimum": 0 },
+        "average_composite": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    }
+  }
+}

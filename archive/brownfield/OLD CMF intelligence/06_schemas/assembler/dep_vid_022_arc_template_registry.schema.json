@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DEP-VID-022",
+  "title": "Arc Template Registry",
+  "description": "FR-VID-08 §3 TD1 — Maps CMF narrative arc types to Remotion composition IDs and template file paths. Each arc type has a dedicated Remotion composition encoding pacing rhythms, transition patterns, and emotional trajectories.",
+  "type": "object",
+  "required": ["registry_id", "templates"],
+  "properties": {
+    "registry_id": {
+      "type": "string",
+      "description": "Unique registry identifier."
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["arc_type", "composition_id", "template_path", "supported_arc_stages", "default_transitions"],
+        "properties": {
+          "arc_type": {
+            "type": "string",
+            "description": "CMF narrative arc type identifier.",
+            "examples": ["Witness", "Breakthrough", "Call-to-Adventure"]
+          },
+          "composition_id": {
+            "type": "string",
+            "description": "Remotion composition ID used for rendering.",
+            "pattern": "^cmf-[a-z-]+$",
+            "examples": ["cmf-witness", "cmf-breakthrough", "cmf-call-to-adventure"]
+          },
+          "template_path": {
+            "type": "string",
+            "description": "Relative path to the Remotion composition file.",
+            "examples": ["packages/remotion-compositions/src/templates/cmf-witness.tsx"]
+          },
+          "supported_arc_stages": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Arc stages this template handles (e.g., hook, build, climax, resolution)."
+          },
+          "default_transitions": {
+            "type": "object",
+            "description": "Default transition type per arc stage pair.",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "duration_frames": { "type": "integer", "minimum": 0 }
+              }
+            }
+          },
+          "ken_burns_enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether this template supports Ken Burns fallback for static images."
+          }
+        }
+      }
+    },
+    "version": {
+      "type": "string",
+      "default": "1.0"
+    }
+  }
+}

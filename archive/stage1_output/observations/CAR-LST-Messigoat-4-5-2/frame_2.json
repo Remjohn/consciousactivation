@@ -1,0 +1,102 @@
+{
+  "observations": [
+    {
+      "object_type": "badge",
+      "zone_observation": "upper_left",
+      "bbox_normalized": {
+        "x": 0.02,
+        "y": 0.02,
+        "width": 0.1,
+        "height": 0.05
+      },
+      "text_or_visual_description": "Goal logo badge top left",
+      "confidence": 0.97,
+      "source_frame": 2
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "upper_panel",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 0.5
+      },
+      "text_or_visual_description": "Jürgen Klopp wearing glasses looking serious in studio interview with subtitle 'I only have one selfie on my smartphone.'",
+      "confidence": 0.99,
+      "source_frame": 2
+    },
+    {
+      "object_type": "image_region",
+      "zone_observation": "lower_panel",
+      "bbox_normalized": {
+        "x": 0.0,
+        "y": 0.5,
+        "width": 1.0,
+        "height": 0.5
+      },
+      "text_or_visual_description": "Jürgen Klopp laughing in studio interview with subtitle 'Cristiano was in the room as well.'",
+      "confidence": 0.99,
+      "source_frame": 2
+    },
+    {
+      "object_type": "text_block",
+      "zone_observation": "subtitles",
+      "bbox_normalized": {
+        "x": 0.2,
+        "y": 0.42,
+        "width": 0.6,
+        "height": 0.55
+      },
+      "text_or_visual_description": "Interview subtitles: 'I only have one selfie on my smartphone.' / 'Cristiano was in the room as well.'",
+      "confidence": 0.99,
+      "source_frame": 2
+    }
+  ],
+  "entries": [
+    {
+      "slide_index": 2,
+      "slide_role": "closing",
+      "taxonomy_state": "CANONICAL",
+      "container_zones": [
+        "upper_left",
+        "upper_panel",
+        "lower_panel",
+        "subtitles"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "badge",
+          "zone": "upper_left",
+          "dominant": false,
+          "notes": "Goal logo"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "upper_panel",
+          "dominant": true,
+          "notes": "Klopp interview top panel"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "lower_panel",
+          "dominant": true,
+          "notes": "Klopp laughing bottom panel"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "subtitles",
+          "dominant": true,
+          "notes": "Interview subtitles"
+        }
+      ],
+      "reading_order": "top_interview_panel, bottom_interview_panel, subtitles",
+      "anchor_elements": [
+        {
+          "label": "klopp_ronaldo_selfie_anecdote"
+        }
+      ],
+      "layout_fingerprint": "two_panel_interview_quote_card"
+    }
+  ]
+}

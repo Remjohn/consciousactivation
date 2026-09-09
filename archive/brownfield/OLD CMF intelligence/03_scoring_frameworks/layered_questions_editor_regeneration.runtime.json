@@ -1,0 +1,162 @@
+{
+  "asset_id": "LQRT-EDITOR-REGEN-v1",
+  "version": "1.0.0",
+  "compile_target": "EDITOR_REGENERATION",
+  "entrypoint": "layered_questions_eval",
+  "inputs": [
+    {
+      "name": "manifest_patch_request",
+      "required": true,
+      "description": "Requested beat-level mutation or regeneration change produced by the editor or project copilot."
+    },
+    {
+      "name": "beat_context",
+      "required": true,
+      "description": "Current beat, neighboring beats, arc role, approved state, and active fingerprint data."
+    },
+    {
+      "name": "revision_note",
+      "required": true,
+      "description": "The specific operator intent explaining what should change and why."
+    }
+  ],
+  "derived_features": [
+    {
+      "feature_id": "intent_specificity",
+      "method": "map_revision_to_change_dimensions",
+      "description": "Measures whether the regeneration note resolves to specific change dimensions instead of vague aesthetic drift."
+    },
+    {
+      "feature_id": "dominant_detection_mode",
+      "method": "classify_target_emotional_role",
+      "description": "Classifies whether the requested change strengthens tension, vulnerability, or recognition for the target beat."
+    },
+    {
+      "feature_id": "mutation_compression_score",
+      "method": "score_patch_scope_density",
+      "description": "Measures whether the requested patch stays inside a coherent mutation scope rather than creating broad undefined changes."
+    },
+    {
+      "feature_id": "off_target_drift_count",
+      "method": "count_non_target_mutations",
+      "description": "Counts unintended differences outside the target beat or approved mutation window."
+    }
+  ],
+  "detection_modes": [
+    {
+      "mode": "TENSION",
+      "activation_rule": "Activate when the regeneration exists to restore surprise, contrast, or turn energy that the current beat lacks.",
+      "minimum_confidence": 0.60,
+      "output_fields": ["target_contrast_axis", "prediction_break"]
+    },
+    {
+      "mode": "VULNERABILITY",
+      "activation_rule": "Activate when the regeneration exists to recover intimacy, warmth, softness, or emotional cost signaling.",
+      "minimum_confidence": 0.60,
+      "output_fields": ["intimacy_axis", "warmth_adjustment"]
+    },
+    {
+      "mode": "RECOGNITION",
+      "activation_rule": "Activate when the regeneration exists to replace generic imagery with more specific, culturally accurate, or lived detail.",
+      "minimum_confidence": 0.60,
+      "output_fields": ["specificity_gap", "real_world_anchor"]
+    }
+  ],
+  "laws": [
+    {
+      "law_id": "LAW_1",
+      "name": "Saturation Before Generation",
+      "purpose": "Block vague regeneration requests that are not grounded in a specific failure or revision note.",
+      "runtime_stage": "pre-regeneration",
+      "checks": [
+        {
+          "check_id": "L1-REVISION-NOTE",
+          "kind": "coverage",
+          "field": "revision_note",
+          "operator": "non_empty",
+          "value": true,
+          "failure_code": "LQ_REGEN_NOTE_MISSING",
+          "severity": "FAIL",
+          "repair_hint": "Name the exact dimension that should change before regeneration is accepted."
+        }
+      ]
+    },
+    {
+      "law_id": "LAW_2",
+      "name": "Three-Mode Emotional Detection",
+      "purpose": "Require the regeneration to preserve or strengthen the intended emotional role of the target beat.",
+      "runtime_stage": "pre-regeneration",
+      "checks": [
+        {
+          "check_id": "L2-MODE-CLASSIFIED",
+          "kind": "classification",
+          "field": "dominant_detection_mode.confidence",
+          "operator": ">=",
+          "value": 0.60,
+          "failure_code": "LQ_REGEN_MODE_AMBIGUOUS",
+          "severity": "FAIL",
+          "repair_hint": "Map the revision note to the beat's real emotional function before regenerating."
+        }
+      ]
+    },
+    {
+      "law_id": "LAW_3",
+      "name": "Compression, Not Elimination",
+      "purpose": "Ensure the patch resolves to a small controlled mutation set instead of broad manifest drift.",
+      "runtime_stage": "pre-regeneration",
+      "checks": [
+        {
+          "check_id": "L3-MUTATION-SCOPE",
+          "kind": "threshold",
+          "field": "mutation_compression_score",
+          "operator": ">=",
+          "value": 0.75,
+          "failure_code": "LQ_REGEN_SCOPE_TOO_BROAD",
+          "severity": "FAIL",
+          "repair_hint": "Reduce the patch to the target beat and the minimum dependent fields required for continuity."
+        }
+      ]
+    },
+    {
+      "law_id": "LAW_4",
+      "name": "Unpredictability Gate",
+      "purpose": "Allow novelty inside the target beat while forbidding random drift outside the approved mutation scope.",
+      "runtime_stage": "pre-regeneration",
+      "checks": [
+        {
+          "check_id": "L4-OFF-TARGET-DRIFT",
+          "kind": "scope",
+          "field": "off_target_drift_count",
+          "operator": "==",
+          "value": 0,
+          "failure_code": "LQ_REGEN_OFF_TARGET_DRIFT",
+          "severity": "FAIL",
+          "repair_hint": "Preserve all non-target beats and approved neighbors; novelty belongs only in the requested beat."
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "pass_score": 0.82,
+    "warn_score": 0.70,
+    "weights": {
+      "LAW_1": 0.25,
+      "LAW_2": 0.20,
+      "LAW_3": 0.30,
+      "LAW_4": 0.25
+    }
+  },
+  "output_contract": {
+    "result_schema": "DEP-VID-034",
+    "decision_field": "decision",
+    "required_fields": [
+      "layered_questions.score",
+      "layered_questions.dominant_mode",
+      "required_actions"
+    ]
+  },
+  "failure_policy": {
+    "on_warn": "REVISE",
+    "on_fail": "BLOCK"
+  }
+}
