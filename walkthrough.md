@@ -398,3 +398,45 @@ pytest -q tests/asset_intelligence tests/production_program tests/cae/test_asset
 **Targeted result:** `23 passed in 0.64s (100% pass rate)`.
 
 Additional handoff syntax verification passed for all M061 implementation modules.
+
+---
+
+# CAE-M062 Walkthrough — Cinematic Corpus Ingestion & Scene Organization
+
+**Status:** Verified and committed
+**Date:** 2026-09-10
+**Invariant:** `INV-CINEMA-CORPUS-001`
+**Result:** 32 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Governed cinematic corpus contracts and ingestion engine | `services/asset-intelligence/src/cae_asset_intelligence/corpus.py` |
+| Derived scene/index/receipt storage boundary | `services/asset-intelligence/src/cae_asset_intelligence/corpus_store.py` |
+| Asset-intelligence corpus public exports | `services/asset-intelligence/src/cae_asset_intelligence/__init__.py` |
+| M062 corpus integration/unit tests | `tests/asset_intelligence/test_cinematic_corpus_m062.py` |
+
+The corpus layer remains a derived projection over the canonical `AssetAnnotation` doctrine. It validates authorization, workspace/source identity, SHA-256 bytes, stable scene ranges, rights evidence, deterministic IDs, immutable receipts, and exact source/time verification without scraping or copying source media.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M062 | INV-CINEMA-CORPUS-001 | `tests/asset_intelligence/test_cinematic_corpus_m062.py` | 11 | PASS (11/11) |
+| Existing scoped regression | Asset Intelligence + Production Program | `tests/asset_intelligence` + `tests/production_program` | 21 | PASS (21/21) |
+| **M062 verification** | | exact scoped regression command | **32** | **PASS (32/32, 100%)** |
+
+### Verification command
+
+```bash
+PYTHONPATH=services/asset-intelligence/src:services/production-program/src pytest -q tests/asset_intelligence tests/production_program
+```
+
+**Targeted result:** `32 passed in 0.67s (100% pass rate)`.
+
+Additional syntax verification passed with:
+
+```bash
+python -m compileall -q services/asset-intelligence/src tests/asset_intelligence/test_cinematic_corpus_m062.py
+```

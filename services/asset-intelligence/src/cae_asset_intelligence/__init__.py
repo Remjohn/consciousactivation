@@ -73,3 +73,39 @@ __all__ += [
     "ProductionAssetDemand",
     "compile_production_asset_demand",
 ]
+
+from .corpus import (
+    AuthorizationError,
+    CorpusIngestionError,
+    CorpusIntegrityError,
+    CorpusState,
+    CinematicCorpusEngine,
+    IngestReceipt,
+    MediaAuthorization,
+    SceneBoundaryError,
+    SceneIndex,
+    SceneProposal,
+    SceneRecord,
+    TranscriptCue,
+    stable_media_id,
+    stable_scene_id,
+)
+from .corpus_store import SceneCorpusStore
+
+__all__ += [
+    "AuthorizationError",
+    "CorpusIngestionError",
+    "CorpusIntegrityError",
+    "CorpusState",
+    "CinematicCorpusEngine",
+    "IngestReceipt",
+    "MediaAuthorization",
+    "SceneBoundaryError",
+    "SceneIndex",
+    "SceneProposal",
+    "SceneRecord",
+    "TranscriptCue",
+    "SceneCorpusStore",
+    "stable_media_id",
+    "stable_scene_id",
+]
