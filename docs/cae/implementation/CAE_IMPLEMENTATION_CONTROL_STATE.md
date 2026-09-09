@@ -1,10 +1,10 @@
 # CAE Implementation Control State
 
-**Control status:** `CA_GST_UI_01_ACCEPTED_ACTIVE`
-**Authority:** CAE Governance & Specification Bridge Bundle v3; CA-GST-UI-01 Mandate; SPEC-GST-UI-001 (as amended by DEC-GST-001 v2); CA-CAN-01B_GUEST; CA-CAN-01B_MEDIA_ASSET; TS-APP-API-004 §5; Operator Directives
+**Control status:** `CAE-M0058_PENDING_OPERATOR_DECISION`
+**Authority:** CAE Governance & Specification Bridge Bundle v3; CAE-M0058 Mandate; CA-GST-UI-01 historical record; SPEC-GST-UI-001 (as amended by DEC-GST-001 v2); CA-CAN-01B_GUEST; CA-CAN-01B_MEDIA_ASSET; TS-APP-API-004 §5; Operator Directives
 **Created:** 2026-08-23
-**Updated:** 2026-08-27 (Mandate CA-GST-UI-01: Guest Ingestion & Asset Library UI Implemented & Verified; 100% Tests Green; Awaiting Operator Section 7 Acceptance Gate)
-**Scope:** Historical lineage WP-00 through CA-ACCEPT-10, CA-UPTL-01 (Upstream Intelligence Completion), CA-TWC-01 (Tenant & Workspace Core), CA-SPEC-02 (PRD Reconciliation & App-Completion Specifications), CA-TWC-UI-01 (Workspace & Membership Management UI), and active mandate CA-GST-UI-01 (Guest Ingestion & Asset Library UI). Implemented full guest profile registration with automatic active workspace injection from `WorkspaceContext` (`FR-APP-004`), interactive source URL manager with live syntax validation and context class assignment (`FR-APP-005`), tiered asset upload dropzone enforcing per-class limits (Docs 50MB, Compressed Audio 500MB, WAV 1GB, Video 4GB, Captions 10MB) with presigned direct upload orchestration (`DEC-GST-001 v2`), client-side SHA-256 calculation via Web Crypto API, operator authority scope attestation modal (`FR-APP-006`), and read-back research package inspector rendering verified assets grouped by context class with doctrinal citations. Integrated `BrandVoicePicker` into `BriefPanel` and first-class caption tracks. Bound exclusively to `/api/interviews/compose/research`; zero direct database access; zero unauthorized backend mutations.
+**Updated:** 2026-09-09 (Mandate CAE-M0058: Operational Brownfield Reconciliation & Product Run Baseline; executable ledger generated; awaiting operator decision)
+**Scope:** Historical lineage WP-00 through CA-ACCEPT-10, CA-UPTL-01 (Upstream Intelligence Completion), CA-TWC-01 (Tenant & Workspace Core), CA-SPEC-02 (PRD Reconciliation & App-Completion Specifications), CA-TWC-UI-01 (Workspace & Membership Management UI), CA-GST-UI-01 (historical Guest Ingestion & Asset Library UI), and active mandate CAE-M0058 (Operational Brownfield Reconciliation & Product Run Baseline). Implemented full guest profile registration with automatic active workspace injection from `WorkspaceContext` (`FR-APP-004`), interactive source URL manager with live syntax validation and context class assignment (`FR-APP-005`), tiered asset upload dropzone enforcing per-class limits (Docs 50MB, Compressed Audio 500MB, WAV 1GB, Video 4GB, Captions 10MB) with presigned direct upload orchestration (`DEC-GST-001 v2`), client-side SHA-256 calculation via Web Crypto API, operator authority scope attestation modal (`FR-APP-006`), and read-back research package inspector rendering verified assets grouped by context class with doctrinal citations. Integrated `BrandVoicePicker` into `BriefPanel` and first-class caption tracks. Bound exclusively to `/api/interviews/compose/research`; zero direct database access; zero unauthorized backend mutations.
 
 ## Required control fields
 
@@ -26,6 +26,54 @@ blocked_questions: See "Blocked questions".
 evidence_collected: See "Evidence collected".
 verification_results: See "Verification results".
 risks: See "Risks".
+```
+
+## M0058 executable baseline control entry
+
+```yaml
+mandate_id: CAE-M0058
+mandate_title: Operational Brownfield Reconciliation & Product Run Baseline
+requirement_invariant: FR-OPS-BASELINE
+control_status: PENDING_OPERATOR_DECISION
+source_archive: codebase_clean.zip (no .git metadata present)
+source_git_commit_basis: c41b68394ba8d1435c3cbb62b08f38908bbd3737
+source_git_commit_provenance: >
+  Externally verified repository-main commit used as the baseline reference; it is not a cryptographic
+  provenance claim for the uploaded archive because the archive contains no .git metadata.
+verification_date: 2026-09-09
+environment_identity:
+  platform: Linux sandbox
+  python: 3.13.5
+  governed_recorded_python: 3.12.0
+  environment_fidelity: MISMATCH_RECORDED
+representative_product_path:
+  program: research_canonicalization_program
+  manifest: programs/research_canonicalization_program/program_manifest.yaml
+  declared_harness: RESEARCH_CANONICALIZATION_HARNESS_V1
+  verified_entry: ProgramOperatorRuntimeService.dispatch_chat_command('/run')
+  state_authority_observed: SqliteProgramStateStore
+  post_dispatch_lifecycle: RUNNING
+  post_dispatch_state: INITIAL
+  post_gate_lifecycle: AWAITING_APPROVAL
+  release_result: FAIL_CLOSED_BECAUSE_NOT_COMPLETED
+ledger_artifact: docs/cae/implementation/CAE_M0058_BROWNFIELD_BASELINE.md
+ledger_machine_artifact: docs/cae/implementation/CAE_M0058_BROWNFIELD_BASELINE.json
+reachable_call_path_summary:
+  working: 5
+  partial: 1
+  mocked: 1
+  unreachable: 1
+  conflicting: 3
+critical_findings:
+  - Harness declaration is not bound to an executable HarnessPackageLoader path by the representative Program dispatch.
+  - Manifest-declared PostgreSQL research connection differs from the observed local SQLite state authority.
+  - Existing M71 golden-run assertions expect version 2 where current operator.run_program returns version 1.
+  - M057 'live' external boundaries use test-owned local HTTP fixtures and do not prove production-provider/distribution reachability.
+permitted_action: >
+  Preserve the findings as brownfield baseline evidence. Do not repair or redesign the discovered conflicts under M0058.
+next_gate: OPERATOR_REVIEW
+next_permitted_work: M0059/M0060 only after explicit operator acceptance of M0058
+operator_decision_required: Do you accept M0058 and authorize M0059/M0060?
 ```
 
 ## Current execution record
@@ -305,6 +353,7 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 5. **Canonical ownership decision:** approve the WP-01 role boundaries and nominate the authority that resolves primitive/SDA/SFL overlap before WP-04 registry migration.
 6. **Foundation-provisioning decision:** approve WP-02a to create a disposable Supabase/PostgreSQL + private object-storage environment, apply the reviewed DDL draft, and produce structural/environment-fidelity evidence before importing data or redirecting writes.
 7. **WP-09 promotion decision:** promote the bounded source bridge and authorize WP-10 regression/promotion/operator acceptance, without conflating the staging copy with repository-wide PostgreSQL/Supabase authority.
+8. **M0058 baseline decision:** accept or reject the executable brownfield baseline and, only on acceptance, authorize M0059/M0060. Exact decision prompt: `Do you accept M0058 and authorize M0059/M0060?`
 
 ## Blocked questions
 
@@ -322,6 +371,9 @@ WP-02 specifies that raw media/artifact bytes remain in Supabase Storage or an S
 - Campaign transition model: `api/domain/campaign.py` and `api/services/campaign_repository.py`.
 - Builder PostgreSQL target ADR: `services/builder/docs/architecture/adr/ADR-003-AUTHORITATIVE-STATE-AND-ARTIFACT-STORAGE.md`.
 - Current implementation audit: `docs/PRD/CURRENT.md`.
+- CAE-M0058 executable brownfield verifier: `packages/ca_runtime/src/ca_runtime/brownfield_baseline.py`.
+- CAE-M0058 machine-readable and reviewer-facing baseline: `docs/cae/implementation/CAE_M0058_BROWNFIELD_BASELINE.json` and `.md`.
+- CAE-M0058 mandate-scoped verification tests: `tests/cae/test_m0058_brownfield_baseline.py`.
 - Inherited SDA/SFL ZIP inventory and reference checks.
 - Canonical-object/ontology role and collision comparison: `docs/cae/implementation/CAE_OBJECT_ONTOLOGY_RECONCILIATION.md`.
 - PostgreSQL/Supabase state model, first-slice transition contracts, and source disposition plan: `docs/cae/implementation/CAE_POSTGRES_STATE_MODEL_RECONCILIATION.md`.

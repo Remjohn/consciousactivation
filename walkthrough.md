@@ -232,3 +232,50 @@ pytest -q \
 ```
 
 **Unified result:** `51 passed in 26.04s (100% pass rate)`.
+
+---
+
+# CAE-M0058 Walkthrough — Operational Brownfield Reconciliation & Product Run Baseline
+
+**Status:** Verified baseline; operator decision required
+**Date:** 2026-09-09
+**Invariant:** `FR-OPS-BASELINE`
+**Evidence digest:** `8b51d861da4a9f4322db4fcf910c1a3433bdf3cacf645846fc61c1973d1edb21`
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Brownfield verifier | `packages/ca_runtime/src/ca_runtime/brownfield_baseline.py` |
+| M0058 tests | `tests/cae/test_m0058_brownfield_baseline.py` |
+| Human-readable ledger | `docs/cae/implementation/CAE_M0058_BROWNFIELD_BASELINE.md` |
+| Machine-readable ledger | `docs/cae/implementation/CAE_M0058_BROWNFIELD_BASELINE.json` |
+| Control state | `docs/cae/implementation/CAE_IMPLEMENTATION_CONTROL_STATE.md` |
+
+The ledger CLI was wired and executed with the repository’s complete `packages/*/src` and `services/*/src` import paths. The control state records `CAE-M0058_PENDING_OPERATOR_DECISION`; no brownfield conflict was repaired or reinterpreted.
+
+## Acceptance test matrix
+
+| Test set | Tests | Result |
+|---|:---:|---:|
+| `tests/cae/test_m0058_brownfield_baseline.py` | 10 | PASS |
+| `tests/e2e/test_live_e2e_proof_harness.py` | 3 | PASS |
+| `tests/cae/test_harness_loader_boundary.py` | 8 | PASS |
+| **M0058 acceptance set** | **21** | **PASS (21/21, 100%)** |
+
+### Acceptance command
+
+```bash
+python -m pytest -q \
+  tests/cae/test_m0058_brownfield_baseline.py \
+  tests/e2e/test_live_e2e_proof_harness.py \
+  tests/cae/test_harness_loader_boundary.py
+```
+
+**Acceptance result:** `21 passed in 50.08s`.
+
+### Documented M71 reconciliation
+
+The required adjacent reconciliation command produced `8 passed, 2 failed`. Both failures are the known unchanged assertion that `operator_service.run_program()` returns version 2; the current runtime returns version 1. This is retained as blocker `B-M0058-RUNTIME-001` and was not weakened or repaired under M0058.
+
+The baseline also records the representative path reaching durable SQLite `RUNNING`, persisted `AWAITING_APPROVAL`, trace projection, and fail-closed `/ship` refusal, while classifying the remaining harness, storage-authority, mocked-boundary, and environment-fidelity conflicts for operator review.
