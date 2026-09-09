@@ -314,3 +314,42 @@ pytest -q tests/mandates/test_cae_m059_control_surface.py
 ```
 
 **Targeted result:** `6 passed in 13.07s (100% pass rate)`.
+
+---
+
+# CAE-M060 Walkthrough — Product E2E Fixture & Runtime Test Harness
+
+**Status:** Verified and committed
+**Date:** 2026-09-10
+**Invariant:** `INV-PROOF-REAL-001`
+**Result:** 5 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Product E2E fixture and runtime proof harness | `tests/e2e/test_product_e2e_fixture.py` |
+| Harness developer/CI instructions | `tests/e2e/README.md` |
+
+No production code, schema migration, application setup, or existing E2E test was modified. The harness uses the real `ProgramRegistry`, `ProgramOperatorRuntimeService`, `UniversalProgramStateRuntime`, canonical research state machine, and durable SQLite state store with only import-time compatibility shims for unavailable optional packages.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M060 | INV-PROOF-REAL-001 | `tests/e2e/test_product_e2e_fixture.py` | 5 | PASS (5/5) |
+| **M060 verification** | | exact handoff suite | **5** | **PASS (5/5, 100%)** |
+
+### Required pytest command
+
+```bash
+python -m pytest -q tests/e2e/test_product_e2e_fixture.py
+```
+
+**Targeted result:** `5 passed in 13.87s (100% pass rate)`.
+
+### Direct harness verification
+
+- Deterministic repeat: `PASS`, two clean runs, stable semantic checkpoint signature, distinct run receipt identities.
+- Negative fixture: `EXPECTED_FAILURE`, `ProgramTransitionBlockedError`, missing `false_merge_verified`, zero aggregates after failed preflight.
+- Clean reset: `CLEAN`, controlled failure namespace reset with failed evidence preservation verified.
