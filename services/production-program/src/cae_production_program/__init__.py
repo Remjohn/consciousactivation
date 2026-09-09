@@ -5,6 +5,7 @@ The Production Semantic Program and Compiler package for CAE.
 """
 
 from .domain import (
+    AssetDemandSpec,
     SceneRole,
     SFLModulationProfile,
     VisualAudioSpecs,
@@ -23,6 +24,7 @@ from .compiler import ProductionProgramCompiler
 from .verifier import ProductionProgramVerifier
 
 __all__ = [
+    "AssetDemandSpec",
     "SceneRole",
     "SFLModulationProfile",
     "VisualAudioSpecs",

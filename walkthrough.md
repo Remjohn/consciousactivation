@@ -353,3 +353,48 @@ python -m pytest -q tests/e2e/test_product_e2e_fixture.py
 - Deterministic repeat: `PASS`, two clean runs, stable semantic checkpoint signature, distinct run receipt identities.
 - Negative fixture: `EXPECTED_FAILURE`, `ProgramTransitionBlockedError`, missing `false_merge_verified`, zero aggregates after failed preflight.
 - Clean reset: `CLEAN`, controlled failure namespace reset with failed evidence preservation verified.
+
+---
+
+# CAE-M061 Walkthrough — Production Asset Demand / Resolution Contract
+
+**Status:** Verified and committed
+**Date:** 2026-09-10
+**Invariant:** `INV-ASSET-DEMAND-001`
+**Result:** 23 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Typed semantic asset demand model | `services/production-program/src/cae_production_program/domain.py` |
+| Program demand compiler validation | `services/production-program/src/cae_production_program/compiler.py` |
+| Production-program public export | `services/production-program/src/cae_production_program/__init__.py` |
+| Provider-neutral demand/resolution contract | `services/asset-intelligence/src/cae_asset_intelligence/demand_contract.py` |
+| Asset-intelligence public exports | `services/asset-intelligence/src/cae_asset_intelligence/__init__.py` |
+| Runtime lifecycle validator | `packages/ca_runtime/src/ca_runtime/asset_demand_resolution.py` |
+| Runtime public exports | `packages/ca_runtime/src/ca_runtime/__init__.py` |
+| Program demand emission tests | `tests/production_program/test_asset_demand_emission.py` |
+| Asset demand resolution tests | `tests/asset_intelligence/test_asset_demand_resolution_contract.py` |
+| Runtime lifecycle tests | `tests/cae/test_asset_demand_resolution_runtime.py` |
+
+The implementation preserves semantic authority in the Production Semantic Program. Asset resolution validates declared media, role, duration, rights, provenance, and workspace constraints without inferring or re-deciding meaning; runtime validation owns lifecycle transitions only.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M061 | INV-ASSET-DEMAND-001 | `tests/asset_intelligence` | 14 | PASS (14/14) |
+| CAE-M061 | INV-ASSET-DEMAND-001 | `tests/production_program` | 6 | PASS (6/6) |
+| CAE-M061 | INV-ASSET-DEMAND-001 | `tests/cae/test_asset_demand_resolution_runtime.py` | 3 | PASS (3/3) |
+| **M061 verification** | | exact handoff suite | **23** | **PASS (23/23, 100%)** |
+
+### Verification command
+
+```bash
+pytest -q tests/asset_intelligence tests/production_program tests/cae/test_asset_demand_resolution_runtime.py
+```
+
+**Targeted result:** `23 passed in 0.64s (100% pass rate)`.
+
+Additional handoff syntax verification passed for all M061 implementation modules.

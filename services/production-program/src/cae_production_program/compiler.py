@@ -10,6 +10,7 @@ import hashlib
 from typing import Any, Dict, List, Optional, Tuple
 
 from .domain import (
+    AssetDemandSpec,
     CompositionHandoffReceipt,
     SceneRole,
     SemanticProgram,
@@ -68,6 +69,31 @@ class ProductionProgramCompiler:
 
             # 2. Asset approval verification
             scene_assets = s.get("asset_inserts", [])
+            asset_demands = []
+            for demand in s.get("asset_demands", []):
+                try:
+                    typed_demand = (
+                        demand
+                        if isinstance(demand, AssetDemandSpec)
+                        else AssetDemandSpec(**demand)
+                    )
+                except ValueError as exc:
+                    raise TimingDiscontinuityError(
+                        f"Asset demand in scene {idx} has invalid duration constraints: {exc}"
+                    ) from exc
+                if not typed_demand.duration_is_valid:
+                    raise TimingDiscontinuityError(
+                        f"Asset demand '{typed_demand.demand_key}' has invalid duration constraints."
+                    )
+                if typed_demand.evidence_ref != s["segment_id"]:
+                    raise EvidenceQuoteMismatchError(
+                        f"Asset demand '{typed_demand.demand_key}' evidence ref must match scene segment_id."
+                    )
+                if typed_demand.evidence_sha256 != text_sha256:
+                    raise EvidenceQuoteMismatchError(
+                        f"Asset demand '{typed_demand.demand_key}' evidence hash must match scene text hash."
+                    )
+                asset_demands.append(typed_demand)
             for asset in scene_assets:
                 aid = asset.get("asset_id")
                 if aid not in approved_asset_ids:
@@ -87,6 +113,7 @@ class ProductionProgramCompiler:
                 end_time=end_t,
                 duration=duration,
                 asset_inserts=scene_assets,
+                asset_demands=asset_demands,
                 sfl_profile=s.get("sfl_profile", SFLModulationProfile()),
             )
             compiled_scenes.append(scene_spec)
@@ -98,6 +125,7 @@ class ProductionProgramCompiler:
 
         program = SemanticProgram(
             candidate_id=candidate_id,
+            program_version="1.0.0",
             workspace_id=workspace_id,
             storyboard_id=storyboard_id,
             title=title,
@@ -126,4 +154,3 @@ class ProductionProgramCompiler:
         )
 
         return program, receipt
-

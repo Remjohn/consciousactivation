@@ -41,3 +41,35 @@ __all__ = [
     "AssetAnnotator",
     "AssetIntelligenceVerifier",
 ]
+
+from .demand_contract import (
+    AssetDemandResolutionContract,
+    AssetDemandResolver,
+    AssetDemandValidationError,
+    AssetDurationConstraint,
+    AssetRef,
+    AssetResolutionError,
+    AssetResolutionOutcome,
+    AssetResolutionState,
+    AssetRightsConstraint,
+    AssetSemanticObligation,
+    PhysicalMediaRequirement,
+    ProductionAssetDemand,
+    compile_production_asset_demand,
+)
+
+__all__ += [
+    "AssetDemandResolutionContract",
+    "AssetDemandResolver",
+    "AssetDemandValidationError",
+    "AssetDurationConstraint",
+    "AssetRef",
+    "AssetResolutionError",
+    "AssetResolutionOutcome",
+    "AssetResolutionState",
+    "AssetRightsConstraint",
+    "AssetSemanticObligation",
+    "PhysicalMediaRequirement",
+    "ProductionAssetDemand",
+    "compile_production_asset_demand",
+]
