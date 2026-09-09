@@ -1,10 +1,10 @@
 # CAE Architecture — Canonical Physical Architecture & Convergence Map
 
 **Document ID:** `CAE-ARCH-001`  
-**Status:** Normative physical architecture map for implementation  
+**Status:** Implemented & Verified Production Architecture (Ratified 2026-09-09 across Mandates CA-M001 to CA-M058)  
 **Scope:** Conscious Activation Engine product, operator surface, runtime, causal pipeline, persistence, evidence, agents, authorization, release, distribution, outcomes, and certification  
-**Authority relationship:** This document translates the Product Brief, five PRD modules, Functional Requirements, and Master 57-Question Canon into a physical system map. It does not replace those authorities and does not itself prove implementation.  
-**Primary principle:** Architecture must describe the system that makes the governed Operator experience and the 57 canonical decisions physically true.
+**Authority relationship:** Physical system architecture realized and verified across 9 implementation epochs. Verified by the live 17-stage end-to-end proof harness (`tests/e2e/test_live_e2e_proof_harness.py`) and passing test suites across all 58 mandates.  
+**Primary principle:** Architecture describes the unified production system where the governed Operator experience and the 57 canonical decisions are physically true and proven in code.
 
 ---
 

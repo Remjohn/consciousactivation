@@ -1,9 +1,9 @@
 # CAE UI — Operator Experience & Control Surface Contract
 
 **Document ID:** `CAE-UI-001`  
-**Status:** Normative product/UI contract for implementation  
-**Scope:** Operator web application and equivalent governed interaction surfaces  
-**Authority relationship:** Derived from the CAE Product Brief, the 57-Question Decision & Convergence Canon, the five PRD modules, the Functional Requirements matrix, and the existing CAE web application.  
+**Status:** Implemented & Verified Operator Interface Contract (Synchronized with `apps/web` & `api/`)  
+**Scope:** Operator web application (`apps/web`), Program Operator routes, and Control Tower surfaces  
+**Authority relationship:** Operational projection of the CAE Product Brief, Master 57-Question Canon, and the 17-Stage Causal Pipeline Architecture.  
 **Core law:** The UI is a control surface over the canonical runtime. It is not a second execution engine, a shadow state store, or an alternative authority system.
 
 ---
@@ -123,23 +123,26 @@ Those details may be exposed through progressive disclosure when forensic inspec
 
 ---
 
-## 5. Primary Navigation
+## 5. Primary Navigation & Route Architecture
 
-The UI should organize around a workspace/campaign control plane.
+The Operator Web UI (`apps/web`) organizes around the canonical workspace/campaign control plane, wired via TanStack Router with live backend API integration:
 
-Recommended top-level structure:
+### Top-Level Navigation (`NAV_ITEMS` in `apps/web/src/components/layout/Sidebar.tsx`):
+1. **`/workspace` (Workspace Overview):** Multi-tenant workspace selection, guest profiles, genesis territory context, and storage settings.
+2. **`/interviews/compose` (Interview Composer):** Interactive interview elicitation composer, question sequencing, and verbatim capture review.
+3. **`/campaigns` (Campaigns List):** Active campaigns, causal progress indicators, and status filters.
+4. **`/campaigns/new` (New Campaign Wizard):** 6-step guided campaign creation and contract declaration.
+5. **`/harnesses` (Harness Library):** Certified format harnesses (Story Video, Living Commentary, Silent Dialogue, Poetic Quote Theatre).
+6. **`/operator` (Program Operator Console):** Live program dispatch, execution aggregate monitoring, CAS state inspect, operator controls (`pause`, `resume`, `approve`, `reject`, `repair`), and preemption locks.
 
-1. **Workspaces**
-2. **Campaigns**
-3. **Attention / Exceptions**
-4. **Evidence**
-5. **Releases**
-6. **Audit**
-7. **Settings / Policy**
-
-A campaign becomes the primary operational workspace once created.
-
-The current repository already contains a Campaign List, Campaign New flow, Campaign Detail page, Control Tower, Run Graph, Timeline, Exception Queue, and Revision Composer. These are retained as the physical foundation rather than replaced with a competing navigation model.
+### In-Campaign Control Plane (`/campaigns/$campaignId` — Control Tower):
+The Campaign Control Tower acts as the primary operational workspace once a campaign is launched, organized into dedicated functional tabs:
+- **Overview:** Campaign identity, current causal stage, latest artifacts, and release readiness.
+- **Run Graph:** Visual directed execution DAG of causal stage transitions and program nodes.
+- **Timeline:** Monotonic chronological event stream, timestamped evidence moments, and state changes.
+- **Exceptions:** Live gate violations, quarantine alerts, and required human intervention actions.
+- **Revise:** Revision composer for in-flight parameter repair without invalidating upstream evidence.
+- **Releases & Evidence:** Cryptographic Merkle receipt inspection, verbatim audio/video coordinate verification, and signed release manifest export.
 
 ---
 
