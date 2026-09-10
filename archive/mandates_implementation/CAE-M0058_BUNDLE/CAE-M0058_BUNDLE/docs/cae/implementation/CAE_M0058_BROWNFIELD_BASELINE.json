@@ -1,0 +1,726 @@
+{
+  "archive_has_git_metadata": false,
+  "blockers": [
+    {
+      "authority": "Operator/environment owner; rerun in the governed Python 3.12 environment before production claims.",
+      "class": "ENVIRONMENT_FIDELITY_ERROR",
+      "finding": "Sandbox is Python 3.13.5 while the checked-in historical control state records Python 3.12.0.",
+      "id": "B-M0058-ENV-001"
+    },
+    {
+      "authority": "Correct runtime/test authority requires a separate repair decision; M0058 records but does not modify it.",
+      "class": "STATE_ERROR",
+      "finding": "Existing M71 golden-run tests expect operator.run_program to return version 2, but the current runtime returns version 1 in this sandbox.",
+      "id": "B-M0058-RUNTIME-001"
+    },
+    {
+      "authority": "Program/Harness integration owner; do not invent a new adapter under M0058.",
+      "class": "RELATION_ERROR",
+      "finding": "research_canonicalization_program declares RESEARCH_CANONICALIZATION_HARNESS_V1, but the representative operator path does not bind/execute that harness.",
+      "id": "B-M0058-HARNESS-001"
+    },
+    {
+      "authority": "Change/promotion authority/operator gate.",
+      "class": "AUTHORITY_ERROR",
+      "finding": "The representative Program manifest declares a PostgreSQL research connection while the verified local state path uses SQLite; authority must remain explicitly separated rather than inferred from the connection field.",
+      "id": "B-M0058-AUTH-001"
+    },
+    {
+      "authority": "M0058 verifier; require EXECUTABLE evidence for reachability.",
+      "class": "EVIDENCE_ERROR",
+      "finding": "A green M057 proof or M71 benchmark count alone cannot prove a full product campaign; the representative run must reach the intended runtime and state boundary.",
+      "id": "B-M0058-PROOF-001"
+    }
+  ],
+  "environment": {
+    "cwd": "/mnt/data/cae_repo_norm",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "pyproject_requires_python": ">=3.12",
+    "python_executable": "/opt/pyvenv/bin/python",
+    "python_version": "3.13.5"
+  },
+  "environment_fidelity_requirement": "The verifier's SQLite path is executable in this sandbox, but production-readiness claims require the governed repository environment, including the recorded Python 3.12 toolchain and all optional runtime dependencies. PostgreSQL, live provider, external distribution, and native media execution are outside this proof.",
+  "false_proof_countercase": "All selected tests could be green while only dispatching an aggregate and never executing the intended five-transition research lifecycle. The existing M71 benchmark counts a successful command dispatch as a successful run, then uses max(1, transition_count) for phases/receipts. M0058 defeats that false proof by requiring an observed aggregate, durable state, gate suspension, trace projection, and release refusal.",
+  "invariant": "FR-OPS-BASELINE",
+  "mandate_id": "CAE-M0058",
+  "mandate_title": "Operational Brownfield Reconciliation & Product Run Baseline",
+  "operator_validation_required": true,
+  "paths": [
+    {
+      "collision": "",
+      "evidence_class": "EXECUTABLE",
+      "limitation": "",
+      "observed": "The existing operator command dispatcher accepted the representative Program and returned an aggregate ID.",
+      "path_id": "P01",
+      "reachable_today": true,
+      "segment": "Product operator entry",
+      "source": "ProgramOperatorRuntimeService.dispatch_chat_command(/run)",
+      "status": "WORKING",
+      "target": "ProgramOperatorRuntimeService.run_program",
+      "verifier": "run_minimal_product_probe"
+    },
+    {
+      "collision": "",
+      "evidence_class": "REGISTRY_SOURCE",
+      "limitation": "",
+      "observed": "Manifest/package validation succeeded; pinned manifest SHA-256 1068733381da230e\u2026.",
+      "path_id": "P02",
+      "reachable_today": true,
+      "segment": "Program package resolution",
+      "source": "ProgramRegistry.inspect_and_validate_package",
+      "status": "WORKING",
+      "target": "research_canonicalization_program",
+      "verifier": "inventory_programs + run_minimal_product_probe"
+    },
+    {
+      "collision": "The repository has an independently tested HarnessPackageLoader, but its fixture path is not the representative Program dispatch path.",
+      "evidence_class": "REGISTRY_SOURCE",
+      "limitation": "",
+      "observed": "No separate executable binding/package for the exact declared harness was found, and ProgramOperatorRuntimeService.run_program does not invoke HarnessPackageLoader.",
+      "path_id": "P03",
+      "reachable_today": false,
+      "segment": "Harness dispatch",
+      "source": "manifest.harness=RESEARCH_CANONICALIZATION_HARNESS_V1",
+      "status": "UNREACHABLE",
+      "target": "HarnessPackageLoader / executable harness binding",
+      "verifier": "inventory_programs"
+    },
+    {
+      "collision": "",
+      "evidence_class": "EXECUTABLE",
+      "limitation": "",
+      "observed": "A durable aggregate, lease record, workflow-dispatch record, and gate-suspension transition were persisted and re-read from SQLite.",
+      "path_id": "P04",
+      "reachable_today": true,
+      "segment": "Runtime state authority",
+      "source": "ProgramOperatorRuntimeService \u2192 UniversalProgramStateRuntime",
+      "status": "WORKING",
+      "target": "SqliteProgramStateStore",
+      "verifier": "run_minimal_product_probe"
+    },
+    {
+      "collision": "Source-of-meaning/declared connection metadata and runtime authority are not the same authority axis; the mismatch is recorded, not repaired.",
+      "evidence_class": "REGISTRY_SOURCE",
+      "limitation": "",
+      "observed": "The manifest declares postgresql_research_slice while the executable operator path tested here uses SqliteProgramStateStore.",
+      "path_id": "P05",
+      "reachable_today": false,
+      "segment": "Declared storage connection",
+      "source": "research_canonicalization_program.program_manifest.yaml connections",
+      "status": "CONFLICTING",
+      "target": "PostgreSQL research connection",
+      "verifier": "inventory_programs + control-state reconciliation"
+    },
+    {
+      "collision": "",
+      "evidence_class": "EXECUTABLE",
+      "limitation": "",
+      "observed": "The declared canonical_knowledge_commit_gate was evaluated, persisted, and moved the aggregate into AWAITING_APPROVAL with a receipt.",
+      "path_id": "P06",
+      "reachable_today": true,
+      "segment": "Operator gate",
+      "source": "UniversalProgramStateRuntime.evaluate_gate_milestone",
+      "status": "WORKING",
+      "target": "AWAITING_APPROVAL + GateSuspensionSnapshot",
+      "verifier": "run_minimal_product_probe"
+    },
+    {
+      "collision": "",
+      "evidence_class": "EXECUTABLE",
+      "limitation": "",
+      "observed": "The trace projection returned the persisted state, allowable transitions, and a blocker explaining the gate suspension.",
+      "path_id": "P07",
+      "reachable_today": true,
+      "segment": "Evaluation / trace",
+      "source": "ProgramOperatorRuntimeService.project_execution_trace",
+      "status": "WORKING",
+      "target": "ExecutionTraceProjection",
+      "verifier": "run_minimal_product_probe"
+    },
+    {
+      "collision": "",
+      "evidence_class": "EXECUTABLE",
+      "limitation": "",
+      "observed": "The release command path is callable and fails closed after a non-completed state; the representative run does not reach COMPLETED.",
+      "path_id": "P08",
+      "reachable_today": true,
+      "segment": "Release / ship path",
+      "source": "ProgramOperatorRuntimeService.dispatch_chat_command(/ship)",
+      "status": "PARTIAL",
+      "target": "completion-gated ship refusal",
+      "verifier": "run_minimal_product_probe"
+    },
+    {
+      "collision": "The test suite is a historical expectation, not the executable source of current runtime behavior.",
+      "evidence_class": "TEST",
+      "limitation": "",
+      "observed": "Current sandbox observation returns version 1 after operator.run_program, causing existing M71 assertions to fail before downstream transitions.",
+      "path_id": "P09",
+      "reachable_today": true,
+      "segment": "M71 golden-run expectation",
+      "source": "tests/cae/test_m71_real_domain_program_golden_run_benchmark.py",
+      "status": "CONFLICTING",
+      "target": "assert agg.version == 2 after run_program",
+      "verifier": "targeted pytest run"
+    },
+    {
+      "collision": "A documentation claim of a full 17-stage product boundary is not equivalent to reachability through the representative Program.",
+      "evidence_class": "DOCUMENT",
+      "limitation": "",
+      "observed": "Current representative runtime state machine contains five declared research transitions; the M057 proof harness enumerates a 17-stage broader proof narrative.",
+      "path_id": "P10",
+      "reachable_today": false,
+      "segment": "17-stage product claim",
+      "source": "docs/PRD/CURRENT.md",
+      "status": "CONFLICTING",
+      "target": "research_canonicalization_program",
+      "verifier": "brownfield inspection"
+    },
+    {
+      "collision": "The same harness name 'live' is test-local; the external service boundary remains unverified.",
+      "evidence_class": "TEST",
+      "limitation": "",
+      "observed": "The M057 live-proof test passes against test-owned local HTTP servers; that proves fixture reachability, not production-provider or production-distribution reachability.",
+      "path_id": "P11",
+      "reachable_today": true,
+      "segment": "M057 provider/distribution boundary",
+      "source": "tests/e2e/test_live_e2e_proof_harness.py local HTTP fixtures",
+      "status": "MOCKED",
+      "target": "external inference/distribution services",
+      "verifier": "tests/e2e/test_live_e2e_proof_harness.py"
+    }
+  ],
+  "probe": {
+    "aggregate_id": "prog-state:4ff32508-9b18-4a3c-b864-bea530afa2ba:research_canonicalization_program:run_ea5ec90c5e8d4344",
+    "db_path": "/tmp/cae_m0058_cogv8s3z/m0058.sqlite3",
+    "dispatch_persistence": {
+      "lease": {
+        "acquired_at": "2026-09-09T20:12:15.703824Z",
+        "aggregate_id": "prog-state:4ff32508-9b18-4a3c-b864-bea530afa2ba:research_canonicalization_program:run_ea5ec90c5e8d4344",
+        "enqueued_at": "2026-09-09T20:12:15.703078Z",
+        "holder_id": "m0058-probe-operator",
+        "lease_id": "lease_681cc0a2a7ae1235abead6dc",
+        "lease_version": 1,
+        "status": "LEASE_ACQUIRED",
+        "updated_at": "2026-09-09T20:12:15.703824Z"
+      },
+      "lease_present": true,
+      "transition_count_after_dispatch": 0,
+      "workflow_dispatch": {
+        "actor_id": "m0058-probe-operator",
+        "aggregate_id": "prog-state:4ff32508-9b18-4a3c-b864-bea530afa2ba:research_canonicalization_program:run_ea5ec90c5e8d4344",
+        "context_state_hash": "9133ef69cadfc530dc9acf5ec19382c054cc258fabdd146eaeadc103cca5224b",
+        "enqueued_at": "2026-09-09T20:12:15.703824Z",
+        "lease_id": "lease_681cc0a2a7ae1235abead6dc",
+        "payload": {
+          "aggregate_id": "prog-state:4ff32508-9b18-4a3c-b864-bea530afa2ba:research_canonicalization_program:run_ea5ec90c5e8d4344",
+          "context_claims": [
+            "false_merge_verified",
+            "sources_verified",
+            "workspace_active"
+          ],
+          "context_state_hash": "9133ef69cadfc530dc9acf5ec19382c054cc258fabdd146eaeadc103cca5224b",
+          "program_id": "research_canonicalization_program",
+          "program_version": "1.0.0"
+        },
+        "status": "ENQUEUED",
+        "trigger_operation": "cae.program.dispatch@1.0.0"
+      },
+      "workflow_dispatch_present": true
+    },
+    "gate": {
+      "audit_digest": "20a9b3f9825abad3a314cf9191111a8653f1351380bbcd89b05fe20478884c75",
+      "current_state": "INITIAL",
+      "gate_id": "canonical_knowledge_commit_gate",
+      "lifecycle": "AWAITING_APPROVAL",
+      "receipt_id": "rcpt_gate_0f9e60a31a961060f3e34a94",
+      "state_version": 2,
+      "suspension_present": true
+    },
+    "persistence_recheck": {
+      "aggregate_present": true,
+      "same_state_hash": true,
+      "transition_count": 1
+    },
+    "release": {
+      "blocked_after_gate": true,
+      "message": "Cannot ship program in state 'INITIAL' (lifecycle: AWAITING_APPROVAL). Must be COMPLETED.",
+      "success": false
+    },
+    "run": {
+      "current_state": "INITIAL",
+      "last_receipt_id": "rcpt_dispatch_d21bfe2f0f0299ca02fcf46d",
+      "lifecycle": "RUNNING",
+      "message": "Program 'research_canonicalization_program' started successfully. Aggregate: prog-state:4ff32508-9b18-4a3c-b864-bea530afa2ba:research_canonicalization_program:run_ea5ec90c5e8d4344",
+      "state_version": 1,
+      "success": true
+    },
+    "trace": {
+      "allowable_transitions": [
+        "attach_sources"
+      ],
+      "blockers": [
+        "Program reached HUMAN_GATE 'canonical_knowledge_commit_gate'. Awaiting COMMANDER approval; downstream execution is blocked."
+      ],
+      "current_state": "INITIAL",
+      "trace_node_count": 1,
+      "version": 2
+    },
+    "workspace_id": "4ff32508-9b18-4a3c-b864-bea530afa2ba"
+  },
+  "program_inventory": [
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgres_state_store"
+      ],
+      "declared_evals": [
+        "cognitive_island_integrity_eval",
+        "lineage_traceability_eval"
+      ],
+      "declared_operator_gates": [
+        "audience_context_activation_gate"
+      ],
+      "harness": "AUDIENCE_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/audience_context_program/program_manifest.yaml",
+      "manifest_sha256": "168afa7066eb45dcc83a3a6f8a8841fd4310cdc9c9bd9d7a2d5fd1157d86ca25",
+      "package_sha256": "e7dfca85554a72cee5e81308336b817d03e4f3121d6e609db49943ab19e3139f",
+      "program_id": "audience_context_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "AUDIENCE_CONTEXT_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "supabase_postgres"
+      ],
+      "declared_evals": [
+        "collision_novelty_eval",
+        "heritage_cmf_eval",
+        "diversity_signature_eval"
+      ],
+      "declared_operator_gates": [
+        "hypothesis_approval_gate"
+      ],
+      "harness": "COLLISION_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/collision_discovery_program/program_manifest.yaml",
+      "manifest_sha256": "3cd079b729770f0b2576522e3b4c45c0b62803caad17d1fc3c1847c1644d9341",
+      "package_sha256": "de0a1ebe00aab623bd48c074b912ef74f4ef85e5cd1589fdbec5f6c9daadf288",
+      "program_id": "collision_discovery_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "COLLISION_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [],
+      "declared_evals": [
+        "grounded_lineage_eval",
+        "anti_synthetic_proof_eval"
+      ],
+      "declared_operator_gates": [
+        "editorial_production_selection_gate",
+        "candidate_lock_gate",
+        "downstream_eligibility_gate"
+      ],
+      "harness": "EDITORIAL_DISCOVERY_HARNESS_V1",
+      "limitation": "Program manifest is valid but no canonical runtime state machine is registered. Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/editorial_discovery_program/program_manifest.yaml",
+      "manifest_sha256": "08330c9de26703640166948d0452b65c42f228269dd0b6d060b7f47a7dafd18a",
+      "package_sha256": "200ef2c755023f66ae29efa7305efc279d946d6bd5cb306ec6ff8ba2a668bd1e",
+      "program_id": "editorial_discovery_program",
+      "runtime_state_machine_registered": false,
+      "state_machine": "EDITORIAL_DISCOVERY_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [],
+      "declared_evals": [
+        "narrative_coherence_eval"
+      ],
+      "declared_operator_gates": [
+        "storyboard_editorial_approval"
+      ],
+      "harness": "EDITORIAL_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/editorial_storyboard_program/program_manifest.yaml",
+      "manifest_sha256": "50afb497748d53af2c4bdb11d475919ae9c24b9446c0118b3f265fe913ce9fe5",
+      "package_sha256": "543c59967536fd8c98f9595edaca67c53e87384fe6698263c20daa6f351d9d61",
+      "program_id": "editorial_storyboard_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "STORYBOARD_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "air_brand_repository"
+      ],
+      "declared_evals": [
+        "anti_centroid_distinctiveness_eval",
+        "lineage_integrity_eval"
+      ],
+      "declared_operator_gates": [
+        "territory_ratification_gate"
+      ],
+      "harness": "GUEST_GENESIS_HARNESS_V1",
+      "limitation": "Program manifest is valid but no canonical runtime state machine is registered. Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/guest_genesis_program/program_manifest.yaml",
+      "manifest_sha256": "ee3327120bbd485e07818338f0b331aee56b54c62c81987b0612841d0965cea4",
+      "package_sha256": "0efe6af2d38abe8357d18787b240f2f6af3d3eb93339820e989bf5339cc781b7",
+      "program_id": "guest_genesis_semantic_territory_program",
+      "runtime_state_machine_registered": false,
+      "state_machine": "GUEST_GENESIS_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "media_storage",
+        "composer_repository"
+      ],
+      "declared_evals": [
+        "elicitation_quality_eval",
+        "non_scripted_prompt_eval",
+        "matrix_pressure_path_eval",
+        "anti_fabrication_eval",
+        "six_link_lineage_eval"
+      ],
+      "declared_operator_gates": [
+        "guest_consent_gate",
+        "brief_operator_authorization_gate",
+        "evidence_authentication_gate"
+      ],
+      "harness": "INTERVIEW_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/interview_semantic_program/program_manifest.yaml",
+      "manifest_sha256": "7c65b8ec567f5535fdd8161fcc439130ed90ccf90dbdbbf8adc3dcc5f01a2755",
+      "package_sha256": "1280ac1dcb020c9672320ddc1ecb6ce4204559225bddd261eead5969a8395594",
+      "program_id": "interview_semantic_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "INTERVIEW_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "supabase_postgres"
+      ],
+      "declared_evals": [
+        "cluster_cohesion_eval",
+        "signal_novelty_eval"
+      ],
+      "declared_operator_gates": [
+        "projection_commitment_gate"
+      ],
+      "harness": "KNOWLEDGE_CLUSTER_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/knowledge_cluster_signal_program/program_manifest.yaml",
+      "manifest_sha256": "9f4425d76c0c7258a8ffac5bbc11cbb83a1a081439af7c7a26f520ea9a39dc57",
+      "package_sha256": "fbf1c77ad215a500d0410584c3cf20766c3e8c84bfb3d2b5ddfba78784a47e4a",
+      "program_id": "knowledge_cluster_signal_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "KNOWLEDGE_CLUSTER_SIGNAL_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgresql_supabase_knowledge_store"
+      ],
+      "declared_evals": [
+        "provenance_survival_eval",
+        "idempotent_rebuild_eval",
+        "multi_tenant_isolation_eval"
+      ],
+      "declared_operator_gates": [
+        "database_projection_commit_gate",
+        "rebuild_projection_authorization_gate"
+      ],
+      "harness": "KNOWLEDGE_COMPILER_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/knowledge_compiler_program/program_manifest.yaml",
+      "manifest_sha256": "0ffd44bcd7ed0bf5fe8d47f301824f29b270167a050b81b34107e13540acf40f",
+      "package_sha256": "02ffd21de19f0ecf4cfd3dd48a1ac4f174049dc94f9c0d39f643560833d0548d",
+      "program_id": "knowledge_compiler_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "KNOWLEDGE_COMPILER_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [],
+      "declared_evals": [],
+      "declared_operator_gates": [
+        "operator_preparation_approval"
+      ],
+      "harness": "PREPARATION_GRAPH_HARNESS_V1",
+      "limitation": "Program manifest is valid but no canonical runtime state machine is registered. Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/preparation_graph_program/program_manifest.yaml",
+      "manifest_sha256": "9b144e57e4cf4d05a4e58d01a12bfb5f750b70c409c4f31c6058f9ae3b0815b9",
+      "package_sha256": "bc51e75d323469bc33c6596c0459b95d2f4068b8e6c5b7ef2989aa14cf9c789e",
+      "program_id": "preparation_graph_program",
+      "runtime_state_machine_registered": false,
+      "state_machine": "PREPARATION_GRAPH_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "production_sqlite_repository",
+        "distribution_channel_dispatcher",
+        "outcome_telemetry_store"
+      ],
+      "declared_evals": [],
+      "declared_operator_gates": [],
+      "harness": "RELEASE_SHIP_OUTCOME_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/release_ship_outcome_program/program_manifest.yaml",
+      "manifest_sha256": "f5471709a6b99c96f93336582af9be20d535e572f14417b8c02fb922e7842342",
+      "package_sha256": "39a9580736e5d34425467dbdf8a086a116643bd2c78af29ca09f9168a2b867c1",
+      "program_id": "release_ship_outcome_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "RELEASE_SHIP_OUTCOME_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgresql_research_slice"
+      ],
+      "declared_evals": [
+        "false_merge_rejection_eval",
+        "source_lineage_integrity_eval",
+        "okf_schema_conformance_eval"
+      ],
+      "declared_operator_gates": [
+        "contradiction_adjudication_gate",
+        "canonical_knowledge_commit_gate"
+      ],
+      "harness": "RESEARCH_CANONICALIZATION_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/research_canonicalization_program/program_manifest.yaml",
+      "manifest_sha256": "1068733381da230ebce18029a582d02d87dc374e815c47572eedcfc9fe7dfb37",
+      "package_sha256": "a05772dd9afa2933b3477c0942891b260db0c7af60c8b3b13c94ade89bce9f6b",
+      "program_id": "research_canonicalization_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "RESEARCH_CANONICALIZATION_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgres_state_store"
+      ],
+      "declared_evals": [
+        "speaker_authenticity_eval",
+        "sfl_register_eval"
+      ],
+      "declared_operator_gates": [
+        "final_script_operator_approval_gate"
+      ],
+      "harness": "SCRIPT_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/script_program/program_manifest.yaml",
+      "manifest_sha256": "01310828a4afb8ac2eed73dd3d32d40093887c1258316a6b3218ab604646380f",
+      "package_sha256": "238ebe22667d1e9d976d4315fc9bf27fbffc327b4854b263544bfcd52e7a0937",
+      "program_id": "script_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "SCRIPT_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "vae_sqlite_repository",
+        "vae_content_addressed_store"
+      ],
+      "declared_evals": [
+        "source_fidelity_eval",
+        "negative_space_eval",
+        "wrong_reading_lock_eval",
+        "dual_axis_semantic_eval"
+      ],
+      "declared_operator_gates": [
+        "delegation_acknowledgement_gate"
+      ],
+      "harness": "VAE_DELEGATION_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/vae_delegation_program/program_manifest.yaml",
+      "manifest_sha256": "9de44007bafeb8b5e636f8fa606cc1abed1cca3e25bf558b8bff7e57fc49da77",
+      "package_sha256": "f83b91081c22f5f46812d515a6b6cd445a71d95706a4f760e56781118c817709",
+      "program_id": "vae_delegation_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "VAE_DELEGATION_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgresql_media_slice"
+      ],
+      "declared_evals": [
+        "source_lineage_integrity_eval",
+        "wrong_reading_lock_eval",
+        "dual_axis_qa_eval"
+      ],
+      "declared_operator_gates": [
+        "video_release_authorization_gate"
+      ],
+      "harness": "VIDEO_EDIT_PRODUCTION_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/video_edit_program/program_manifest.yaml",
+      "manifest_sha256": "a0d353cf22b736d372987be1990a7db093068b9e3b7f610d8ee66fa261301e7d",
+      "package_sha256": "18f7807fe060cf81fa702d0d8bcba0a4128deee74139f6e26431ee4446e9cd15",
+      "program_id": "video_edit_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "VIDEO_EDIT_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "WORKING",
+      "connections": [
+        "postgresql_visual_slice"
+      ],
+      "declared_evals": [
+        "source_lineage_integrity_eval",
+        "wrong_reading_lock_eval",
+        "dual_axis_qa_eval"
+      ],
+      "declared_operator_gates": [
+        "derivative_release_authorization_gate"
+      ],
+      "harness": "VISUAL_DERIVATIVE_PRODUCTION_HARNESS_V1",
+      "limitation": "",
+      "manifest_path": "programs/visual_derivative_production_program/program_manifest.yaml",
+      "manifest_sha256": "c8a080bc82c861fb7406913a7c146e42b9cab45eea032bc77f9f93c2d0b10f47",
+      "package_sha256": "8e5a1d32ff5647931126070c39457f1212f94ef2441c644158c6bd4697cc3f18",
+      "program_id": "visual_derivative_production_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "VISUAL_DERIVATIVE_PRODUCTION_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgresql_visual_slice"
+      ],
+      "declared_evals": [
+        "source_lineage_integrity_eval",
+        "wrong_reading_lock_eval",
+        "somatic_resonance_eval"
+      ],
+      "declared_operator_gates": [
+        "visual_package_approval_gate"
+      ],
+      "harness": "VISUAL_PROMPT_ANNOTATION_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/visual_prompt_annotation_program/program_manifest.yaml",
+      "manifest_sha256": "ecafe68334b8cc3e1a29516a3e70783f70cc751c5129b16b58411e1c08777152",
+      "package_sha256": "a27bf012bb42cc219ff408ed9e0005e836e101872177a680b8b9ca455a8f3f4b",
+      "program_id": "visual_prompt_annotation_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "VISUAL_PROMPT_ANNOTATION_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    },
+    {
+      "classification": "PARTIAL",
+      "connections": [
+        "postgresql_tenancy_slice"
+      ],
+      "declared_evals": [
+        "workspace_isolation_eval",
+        "lineage_integrity_eval"
+      ],
+      "declared_operator_gates": [
+        "workspace_activation_gate"
+      ],
+      "harness": "WORKSPACE_GUEST_HARNESS_V1",
+      "limitation": "Declared harness identifier has no separate executable binding/package occurrence.",
+      "manifest_path": "programs/workspace_guest_program/program_manifest.yaml",
+      "manifest_sha256": "66bd519493ea5a64d7ad6127ad85d37e688d8038274aabc983a6a636d295088a",
+      "package_sha256": "00cb7d1de9c6bc659e691f7ae419071f96a84c4ba2edf14ae1529c6cf15a32a3",
+      "program_id": "workspace_guest_operating_context_program",
+      "runtime_state_machine_registered": true,
+      "state_machine": "WORKSPACE_GUEST_STATE_MACHINE_V1",
+      "status": "ACTIVE",
+      "version": "1.0.0"
+    }
+  ],
+  "repository_root": "/mnt/data/cae_repo_norm",
+  "representative_harness": "RESEARCH_CANONICALIZATION_HARNESS_V1",
+  "representative_program": "research_canonicalization_program",
+  "source_git_commit": "c41b68394ba8d1435c3cbb62b08f38908bbd3737",
+  "source_git_commit_basis": "Explicit externally verified repository-main commit supplied for this archive baseline; the uploaded archive has no .git metadata, so this is not a cryptographic attestation of archive provenance.",
+  "stateful_behaviors": [
+    {
+      "actor": "m0058-probe-operator / COMMANDER",
+      "behavior": "Operator-mediated Program dispatch",
+      "error_route": "Dispatch/lease errors leave the aggregate in the durable pre-run path; no synthetic RUNNING state is manufactured.",
+      "operation": "dispatch_chat_command('/run research_canonicalization_program') \u2192 run_program \u2192 register_program_dispatch \u2192 acquire_execution_lease_and_trigger",
+      "postconditions": [
+        "aggregate persisted",
+        "lease record present",
+        "workflow dispatch record present"
+      ],
+      "preconditions": [
+        "workspace_active",
+        "sources_verified",
+        "false_merge_verified"
+      ],
+      "receipt": "rcpt_dispatch_d21bfe2f0f0299ca02fcf46d",
+      "recovery_path": "Use existing operator control paths (inspect, pause/resume, repair) according to the aggregate lifecycle; no M0058 repair is introduced.",
+      "source_state": "ABSENT",
+      "target_state": "INITIAL",
+      "validators": [
+        "ProgramRegistry preflight",
+        "canonical Program State Machine lookup",
+        "lease CAS"
+      ]
+    },
+    {
+      "actor": "m0058-gate-evaluator / COMMANDER",
+      "behavior": "Human gate suspension",
+      "error_route": "Undeclared gate or non-RUNNING lifecycle raises ProgramTransitionBlockedError.",
+      "operation": "evaluate_gate_milestone('canonical_knowledge_commit_gate')",
+      "postconditions": [
+        "AWAITING_APPROVAL lifecycle",
+        "GateSuspensionSnapshot persisted",
+        "gate receipt persisted"
+      ],
+      "preconditions": [
+        "gate is declared by Program manifest",
+        "aggregate lifecycle is RUNNING"
+      ],
+      "receipt": "rcpt_gate_0f9e60a31a961060f3e34a94",
+      "recovery_path": "Existing operator approve/reject route; downstream transitions remain fail-closed while awaiting approval.",
+      "source_state": "INITIAL",
+      "target_state": "INITIAL",
+      "validators": [
+        "declared-gate lookup",
+        "RUNNING lifecycle check",
+        "durable CAS/state write"
+      ]
+    }
+  ]
+}
