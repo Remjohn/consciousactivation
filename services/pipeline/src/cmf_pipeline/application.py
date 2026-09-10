@@ -13,7 +13,14 @@ from .candidates import CandidateSearchService
 from .intake import AtomicHarnessDefinitionIntake, HarnessDefinitionProfileRegistry, HarnessGraphReconciler, HarnessPackageVerifier
 from .workflow import RuntimeDependencyGraph, RuntimeInvalidationPlanner, RuntimeWorkflowCompiler, WorkflowRunService
 from .workflow.infrastructure import PipelineRepository
-from .media import SourceMediaService, TemporalEvidenceMomentService, VideoEditProgramService, WordBoundaryEdlService
+from .media import (
+    OpenChatCutRuntimeAdapter,
+    OpenChatCutRuntimeConfig,
+    SourceMediaService,
+    TemporalEvidenceMomentService,
+    VideoEditProgramService,
+    WordBoundaryEdlService,
+)
 from .composition import CompositionIRService
 from .evaluation import EvaluationService, BoundedRepairService
 from .delegation import VisualDelegationService
@@ -45,6 +52,7 @@ class PipelineApplication:
         self.source_media = SourceMediaService(self.repository)
         self.evidence_moments = TemporalEvidenceMomentService(self.repository)
         self.video_programs = VideoEditProgramService(self.repository)
+        self.openchatcut = OpenChatCutRuntimeAdapter(self.repository, OpenChatCutRuntimeConfig.from_environment())
         self.edls = WordBoundaryEdlService(self.repository)
         self.compositions = CompositionIRService(self.repository)
         self.evaluations = EvaluationService(self.repository)

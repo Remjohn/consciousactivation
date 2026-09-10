@@ -5,6 +5,7 @@ from .ffmpeg_adapter import FFmpegSourceLedRenderer
 from .bindings import RemotionBindingCompiler, HyperFramesBindingCompiler
 from .evaluation import RenderedVideoEvaluator
 from .evidence import TemporalEvidenceMomentService
+from .openchatcut import OpenChatCutRuntimeAdapter, OpenChatCutRuntimeConfig, OpenChatCutRuntimeError
 
 __all__ = [
     "SOURCE_MEDIA_AUTHORITY",
@@ -17,4 +18,7 @@ __all__ = [
     "HyperFramesBindingCompiler",
     "RenderedVideoEvaluator",
     "TemporalEvidenceMomentService",
+    "OpenChatCutRuntimeAdapter",
+    "OpenChatCutRuntimeConfig",
+    "OpenChatCutRuntimeError",
 ]

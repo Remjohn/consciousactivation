@@ -527,3 +527,42 @@ PYTHONPATH=services/production-program/src:services/asset-intelligence/src:packa
 **Focused result:** `14 passed in 0.38s (100% pass rate)`.
 
 Additional Python byte-compilation passed for all M064 implementation and test modules.
+
+---
+
+# CAE-M065 Walkthrough — Native OpenChatCut Runtime & Timeline Handoff
+
+**Status:** Automated suite verified; live native-runtime acceptance blocked by unavailable OpenChatCut process
+**Date:** 2026-09-10
+**Invariant:** `INV-VIDEO-RUNTIME-001`
+**Automated result:** 6 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| CAE-to-OpenChatCut Streamable HTTP MCP adapter | `services/pipeline/src/cmf_pipeline/media/openchatcut.py` |
+| Pipeline media public exports | `services/pipeline/src/cmf_pipeline/media/__init__.py` |
+| `PipelineApplication.openchatcut` wiring | `services/pipeline/src/cmf_pipeline/application.py` |
+| M065 runtime and timeline tests | `tests/phase6/test_m065_openchatcut_runtime.py` |
+
+The adapter keeps the canonical CAE Video Edit Program authoritative, verifies source bytes against the sovereign digest before import, maps output/source ranges to native frames, creates native multi-track lanes, and fails closed on unavailable runtime, invalid protocol responses, timeline mismatches, or source-digest mismatches. No migration was required.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M065 | INV-VIDEO-RUNTIME-001 | `tests/phase6/test_m065_openchatcut_runtime.py` | 6 | PASS (6/6) |
+| **M065 automated verification** | | exact handoff command | **6** | **PASS (6/6, 100%)** |
+
+### Verification command
+
+```bash
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/phase6/test_m065_openchatcut_runtime.py
+```
+
+**Automated result:** `6 passed in 5.31s (100% pass rate)`.
+
+### Live native-runtime boundary
+
+The live acceptance receipt (`EXECUTED`, `NATIVE_TIMELINE_VERIFIED`, `openchatcut`, `applied`) was not produced because OpenChatCut was not running at `localhost:5199` in this environment. This remains an explicit environment-fidelity blocker from the handoff, not a test failure or fabricated acceptance claim.
