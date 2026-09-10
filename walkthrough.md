@@ -566,3 +566,61 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/phase6/test_m065_open
 ### Live native-runtime boundary
 
 The live acceptance receipt (`EXECUTED`, `NATIVE_TIMELINE_VERIFIED`, `openchatcut`, `applied`) was not produced because OpenChatCut was not running at `localhost:5199` in this environment. This remains an explicit environment-fidelity blocker from the handoff, not a test failure or fabricated acceptance claim.
+
+---
+
+# CAE-M066 Walkthrough — Human Resolution Control Surface
+
+**Status:** Focused backend and frontend suites verified; repository-wide web typecheck remains blocked by pre-existing unrelated errors
+**Date:** 2026-09-10
+**Invariant:** `INV-HUMAN-RESOLUTION-001`
+**Focused result:** 20 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Human resolution service, CAS persistence, bounded native edit validation, and immutable episode recording | `api/services/human_resolution.py` |
+| Native revision compile/execute and human-resolution routes | `api/routers/revisions.py` |
+| Campaign control-tower and canonical timeline projection routes | `api/routers/campaigns.py` |
+| Human-resolution request and response schemas | `api/schemas/supervision.py` |
+| Campaign control-tower and native-edit API client contracts | `apps/web/src/api/campaigns.ts` |
+| Revision and native-edit mutation hooks | `apps/web/src/hooks/useRevision.ts` |
+| Campaign detail control-tower integration | `apps/web/src/pages/CampaignDetail.tsx` |
+| Control-tower action registry compatibility fallback | `apps/web/src/lib/actionRegistry.ts` |
+| Native timeline editing surface | `apps/web/src/components/control-tower/Timeline.tsx` |
+| Action registry regression tests | `apps/web/src/lib/__tests__/actionRegistry.test.ts` |
+| Timeline editor tests | `apps/web/src/components/control-tower/__tests__/Timeline.test.tsx` |
+| Human-resolution backend tests | `tests/cae/test_m066_human_resolution.py` |
+
+The implementation keeps canonical campaign state authoritative, requires explicit operator identity and expected state version, validates bounded native edits against the current timeline, persists successful changes through CAS, and records an immutable `HumanResolutionEpisode`. Invalid or stale edits fail closed; release remains a separate action. The Windows test fixture uses pytest's `tmp_path` so the prescribed SQLite persistence test remains portable without changing its assertions.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M066 | INV-HUMAN-RESOLUTION-001 | `tests/cae/test_m066_human_resolution.py` | 6 | PASS (6/6) |
+| CAE-M066 | INV-HUMAN-RESOLUTION-001 | `apps/web/src/components/control-tower/__tests__/Timeline.test.tsx` | 5 | PASS (5/5) |
+| CAE-M066 | INV-HUMAN-RESOLUTION-001 | `apps/web/src/lib/__tests__/actionRegistry.test.ts` | 9 | PASS (9/9) |
+| **M066 focused verification** | | exact handoff suites | **20** | **PASS (20/20, 100%)** |
+
+### Verification commands
+
+```bash
+pytest -q tests/cae/test_m066_human_resolution.py --disable-warnings
+```
+
+**Backend result:** `6 passed in 0.73s (100% pass rate)`.
+
+```bash
+cd apps/web
+npm test -- --run src/components/control-tower/__tests__/Timeline.test.tsx src/lib/__tests__/actionRegistry.test.ts
+```
+
+**Frontend result:** `2 test files passed; 14 tests passed (100% pass rate)`.
+
+```bash
+npm run typecheck
+```
+
+The M066-local type errors were corrected. The command remains non-green because the existing web baseline reports unrelated errors in tenancy, campaign list/new, legacy control-tower components, workspace UI, and other test files; those files were not changed for M066.

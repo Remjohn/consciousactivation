@@ -2,7 +2,7 @@
 // Handles revision compile and execute mutations
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { compileRevision, executeRevision } from "../api/campaigns";
+import { compileRevision, executeRevision, compileNativeEdit, executeNativeEdit, type DirectNativeEditInput } from "../api/campaigns";
 import type { NaturalLanguageRevisionInput, ActorInput } from "../api/campaigns";
 
 // Mock operator actor - in production this would come from auth context
@@ -36,4 +36,18 @@ export function useRevisionExecute(campaignId: string) {
       console.error("[useRevisionExecute] Failed to execute revision:", error);
     },
   });
+}
+
+export function useNativeEdit(campaignId: string) {
+  const queryClient = useQueryClient();
+  const compile = useMutation({
+    mutationFn: (input: DirectNativeEditInput) => compileNativeEdit(campaignId, input),
+  });
+  const execute = useMutation({
+    mutationFn: (programId: string) => executeNativeEdit(programId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["campaign", campaignId] });
+    },
+  });
+  return { compile, execute };
 }

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -67,7 +67,7 @@ class ExceptionReviewPackageModel(BaseModel):
 class TimelineProjectionModel(BaseModel):
     projection_id: str
     video_edit_program_ref: RefModel
-    state: Literal["READ_ONLY_CANONICAL_PROGRAM_PROJECTION"]
+    state: Literal["READ_ONLY_CANONICAL_PROGRAM_PROJECTION", "NATIVE_EDITABLE_CANONICAL_PROGRAM"]
     width: int
     height: int
     fps_numerator: int
@@ -83,6 +83,7 @@ class TimelineTrackProjectionModel(BaseModel):
     role: str
     z_index: int
     item_ids: list[str]
+    items: list["TimelineItemProjectionModel"] = Field(default_factory=list)
 
 
 class TimelineItemProjectionModel(BaseModel):
@@ -147,11 +148,8 @@ class DirectManipulationInput(BaseModel):
     run_ref: RefModel
     target_ref: RefModel
     target_node_id: str
-    manipulation_type: Literal[
-        "MOVE_BBOX", "RESIZE_BBOX", "TRIM_SEGMENT", "REORDER_ITEM",
-        "EDIT_TEXT", "SET_PARAMETER", "SELECT_CANDIDATE",
-    ]
-    arguments: dict[str, str | int | bool]
+    manipulation_type: Literal["MOVE_BBOX", "RESIZE_BBOX", "TRIM_SEGMENT", "REORDER_ITEM", "EDIT_TEXT", "SET_PARAMETER", "SELECT_CANDIDATE", "SUBSTITUTE_ASSET", "ADJUST_TIMING"]
+    arguments: dict[str, Any]
     current_state_ref: RefModel
     operator_actor: ActorRefModel
     expected_state_version: int = Field(ge=1)
@@ -179,7 +177,7 @@ class ChangeOperationModel(BaseModel):
     target_layer: str
     tool_id: str
     tool_version: str
-    arguments: dict[str, str | int | bool]
+    arguments: dict[str, Any]
     preconditions: list[str]
     expected_effect: str
 
@@ -206,6 +204,10 @@ class ChangeRequestProgramModel(BaseModel):
 
 class ExecuteRevisionResponse(BaseModel):
     program: ChangeRequestProgramModel
+    campaign: dict[str, Any] | None = None
+    rerun: dict[str, Any] | None = None
+    episode: dict[str, Any] | None = None
+    receipt: dict[str, Any] | None = None
 
 
 class ResolveExceptionInput(BaseModel):

@@ -142,7 +142,7 @@ export function CampaignDetail({ campaignId }: { campaignId: string }) {
             />
           )}
           {activeTab === "timeline" && (
-            <Timeline campaignId={campaignId} timeline={tower.timeline ?? null} />
+            <Timeline campaignId={campaignId} timeline={tower.timeline ?? null} stateVersion={tower.campaign?.version ?? 1} />
           )}
           {activeTab === "exceptions" && (
             <ExceptionQueue

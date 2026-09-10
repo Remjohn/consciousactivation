@@ -38,6 +38,7 @@ from api.services.campaign_repository import (
 from api.services.campaign_projection import (
     CampaignNotFound as StudioCampaignNotFound,
     load_campaign,
+    state_object_id,
 )
 from api.services.studio_bridge import StudioBridge, StudioBridgeError, StudioBridgeCrash
 from conscious_activations_interview_expression.errors import NotFoundError as InterviewNotFoundError
@@ -444,6 +445,43 @@ def cancel_campaign(
 # ---------------------------------------------------------------------------
 
 
+def _timeline_projection_from_state(campaign_id: str, state: dict[str, Any]):
+    from api.schemas.supervision import TimelineProjectionModel
+    from api.services.human_resolution import _timeline_from_state
+    timeline = _timeline_from_state(state)
+    tracks = []
+    flat_items = []
+    for raw_track in timeline.get("tracks", []):
+        items = list(raw_track.get("items", []))
+        tracks.append({
+            "track_id": raw_track.get("track_id", "track:unknown"),
+            "track_type": raw_track.get("track_type", "VIDEO"),
+            "role": raw_track.get("role", "PRIMARY"),
+            "z_index": int(raw_track.get("z_index", 0)),
+            "item_ids": [str(item.get("item_id")) for item in items],
+            "items": items,
+        })
+        flat_items.extend(items)
+    if not flat_items:
+        flat_items = [dict(item) for item in timeline.get("items", [])]
+    return TimelineProjectionModel(
+        projection_id=f"timeline:{campaign_id}:{state["version"]}",
+        video_edit_program_ref={
+            "object_id": state_object_id(campaign_id),
+            "version": f"{state["version"]}.0.0",
+            "sha256": canonical_sha256(timeline),
+        },
+        state="NATIVE_EDITABLE_CANONICAL_PROGRAM",
+        width=int(timeline.get("width", 1920)),
+        height=int(timeline.get("height", 1080)),
+        fps_numerator=int(timeline.get("fps_numerator", 30)),
+        fps_denominator=int(timeline.get("fps_denominator", 1)),
+        duration_frames=int(timeline.get("duration_frames", 0)),
+        tracks=tracks,
+        items=flat_items,
+    )
+
+
 @router.get("/{campaign_id}/tower")
 def get_control_tower(
     campaign_id: str,
@@ -530,7 +568,14 @@ def get_control_tower(
         logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
 
-    return ControlTowerProjectionModel.model_validate(result)
+    projected = ControlTowerProjectionModel.model_validate(result)
+    timeline_state = campaign_state.get("video_edit_program")
+    if timeline_state is not None:
+        native_timeline = _timeline_projection_from_state(campaign_id, campaign_state)
+        projected.timeline = native_timeline
+    if "DIRECT_MANIPULATION" not in projected.available_actions:
+        projected.available_actions.append("DIRECT_MANIPULATION")
+    return projected
 
 
 @router.get("/{campaign_id}/timeline")
@@ -539,22 +584,48 @@ def get_timeline(
     pipeline: PipelineApplication = Depends(get_pipeline),
     bridge: StudioBridge = Depends(get_studio_bridge),
 ):
-    """Return the timeline projection for a campaign."""
+    """Return the canonical, natively editable timeline projection."""
     from api.schemas.supervision import TimelineProjectionModel
+    from api.services.human_resolution import _timeline_from_state
 
-    # Verify the campaign exists; 404 otherwise.
     try:
-        load_campaign(pipeline, campaign_id)
+        campaign = load_campaign(pipeline, campaign_id)
     except StudioCampaignNotFound as exc:
         raise _error(404, "CAMPAIGN_NOT_FOUND", str(exc)) from exc
 
+    state = campaign["state"]
+    timeline = _timeline_from_state(state)
+    timeline_ref = {
+        "object_id": state_object_id(campaign_id),
+        "version": f"{state["version"]}.0.0",
+        "sha256": canonical_sha256(timeline),
+    }
+    tracks = []
+    flat_items = []
+    for track in timeline.get("tracks", []):
+        items = list(track.get("items", []))
+        tracks.append({
+            "track_id": track.get("track_id", "track:unknown"),
+            "track_type": track.get("track_type", "VIDEO"),
+            "role": track.get("role", "PRIMARY"),
+            "z_index": int(track.get("z_index", 0)),
+            "item_ids": [str(item.get("item_id")) for item in items],
+            "items": items,
+        })
+        flat_items.extend(items)
+    if not flat_items:
+        flat_items = [dict(item) for item in timeline.get("items", [])]
     return TimelineProjectionModel(
-        projection_id="timeline:" + campaign_id + ":placeholder",
-        video_edit_program_ref={"object_id": "", "version": "", "sha256": "0" * 64},
-        state="READ_ONLY_CANONICAL_PROGRAM_PROJECTION",
-        width=1920, height=1080,
-        fps_numerator=30000, fps_denominator=1001,
-        duration_frames=0, tracks=[], items=[],
+        projection_id=f"timeline:{campaign_id}:{state["version"]}",
+        video_edit_program_ref=timeline_ref,
+        state="NATIVE_EDITABLE_CANONICAL_PROGRAM",
+        width=int(timeline.get("width", 1920)),
+        height=int(timeline.get("height", 1080)),
+        fps_numerator=int(timeline.get("fps_numerator", 30)),
+        fps_denominator=int(timeline.get("fps_denominator", 1)),
+        duration_frames=int(timeline.get("duration_frames", 0)),
+        tracks=tracks,
+        items=flat_items,
     )
 
 

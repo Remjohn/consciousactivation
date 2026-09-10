@@ -5,25 +5,29 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from ca_contracts import utc_now_rfc3339
+from ca_contracts import canonical_sha256, utc_now_rfc3339
+from cmf_pipeline.application import PipelineApplication
+from cmf_pipeline.domain.errors import PipelineConflict, PipelineNotFound
+
 from api.dependencies import get_pipeline, get_studio_bridge
 from api.errors import ErrorResponse
 from api.schemas.supervision import (
     ChangeRequestProgramModel,
     DirectManipulationInput,
     ExecuteRevisionResponse,
-    RevisionRequestInput,
     RefModel,
+    RevisionRequestInput,
 )
-from api.services.campaign_projection import (
-    CampaignNotFound,
-    load_campaign_with_revisions,
+from api.services.campaign_projection import CampaignNotFound, load_campaign_with_revisions, state_object_id
+from api.services.human_resolution import (
+    HumanResolutionStaleError,
+    HumanResolutionValidationError,
+    commit_native_edit,
+    compile_native_edit_program,
 )
-from api.services.studio_bridge import StudioBridge, StudioBridgeError, StudioBridgeCrash
-from cmf_pipeline.application import PipelineApplication
+from api.services.studio_bridge import StudioBridge, StudioBridgeCrash, StudioBridgeError
 
 logger = logging.getLogger("conscious_activations.api.revisions")
-
 router = APIRouter()
 
 DEFAULT_STUDIO_TOOLS = {
@@ -42,99 +46,170 @@ DEFAULT_STUDIO_TOOLS = {
 def _error(status_code: int, error_code: str, message: str) -> HTTPException:
     return HTTPException(
         status_code=status_code,
-        detail=ErrorResponse(
-            error_code=error_code, message=message, timestamp=utc_now_rfc3339(),
-        ).model_dump(),
+        detail=ErrorResponse(error_code=error_code, message=message, timestamp=utc_now_rfc3339()).model_dump(),
     )
 
 
-def _build_revision_context(
-    campaign: dict[str, Any],
-) -> dict[str, Any]:
+def _build_revision_context(campaign: dict[str, Any]) -> dict[str, Any]:
     return {
         "tools": list(DEFAULT_STUDIO_TOOLS.values()),
         "steering_recipes": [],
-        "allowed_node_ids": [
-            node["node_id"] for node in campaign.get("run_nodes", [])
-        ],
+        "allowed_node_ids": [node["node_id"] for node in campaign.get("run_nodes", [])],
         "target_layers_by_ref": {},
         "state_version": campaign["state"]["version"],
-        "default_validation_plan": [
-            "source_fidelity_recheck",
-            "voice_dna_recheck",
-            "final_script_revision_required_if_semantic",
-        ],
-        "default_invariants": [
-            "upstream_semantic_authority_preserved",
-            "source_lineage_preserved",
-        ],
+        "default_validation_plan": ["source_fidelity_recheck", "voice_dna_recheck", "final_script_revision_required_if_semantic"],
+        "default_invariants": ["upstream_semantic_authority_preserved", "source_lineage_preserved"],
         "wrong_reading_locks": [],
     }
 
 
 @router.post("/revisions", response_model=ChangeRequestProgramModel, status_code=201)
-def compile_revision(
-    body: RevisionRequestInput,
-    pipeline: PipelineApplication = Depends(get_pipeline),
-    bridge: StudioBridge = Depends(get_studio_bridge),
-):
+def compile_revision(body: RevisionRequestInput, pipeline: PipelineApplication = Depends(get_pipeline), bridge: StudioBridge = Depends(get_studio_bridge)):
     campaign_id = body.run_ref.object_id.split(":")[-1] if ":" in body.run_ref.object_id else body.run_ref.object_id
     try:
         campaign = load_campaign_with_revisions(pipeline, campaign_id)
     except CampaignNotFound as exc:
         raise _error(404, "CAMPAIGN_NOT_FOUND", str(exc)) from exc
-
-    context = _build_revision_context(campaign)
-    request_payload = {"request": body.model_dump(mode="json"), "context": context}
-
     try:
-        result = bridge.call("compile-natural-language-revision", request_payload)
+        result = bridge.call("compile-natural-language-revision", {"request": body.model_dump(mode="json"), "context": _build_revision_context(campaign)})
     except StudioBridgeError as exc:
         raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
-        logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
-
     return ChangeRequestProgramModel.model_validate(result)
 
 
 @router.post("/revisions/direct", response_model=ChangeRequestProgramModel, status_code=201)
-def compile_direct_manipulation(
-    body: DirectManipulationInput,
-    pipeline: PipelineApplication = Depends(get_pipeline),
-    bridge: StudioBridge = Depends(get_studio_bridge),
-):
+def compile_direct_manipulation(body: DirectManipulationInput, pipeline: PipelineApplication = Depends(get_pipeline), bridge: StudioBridge = Depends(get_studio_bridge)):
     campaign_id = body.run_ref.object_id.split(":")[-1] if ":" in body.run_ref.object_id else body.run_ref.object_id
+    if body.manipulation_type in {"SUBSTITUTE_ASSET", "ADJUST_TIMING"}:
+        try:
+            campaign = load_campaign_with_revisions(pipeline, campaign_id)
+            if body.expected_state_version != int(campaign["state"]["version"]):
+                raise _error(409, "STALE_STATE_VERSION", f"expected state version {body.expected_state_version}, current {campaign["state"]["version"]}")
+            program = compile_native_edit_program(
+                campaign_id=campaign_id,
+                state=campaign["state"],
+                state_revision=campaign["state_revision"],
+                target_ref=body.target_ref.model_dump(),
+                target_node_id=body.target_node_id,
+                manipulation_type=body.manipulation_type,
+                arguments=body.arguments,
+                operator_actor=body.operator_actor.model_dump(),
+            )
+            stored = pipeline.repository.store_object(
+                "studio_change_request_program",
+                program.as_dict(),
+                idempotency_key=f"compile:{program.program_id}",
+                object_id=program.program_id,
+            )
+            return ChangeRequestProgramModel(
+                program_id=program.program_id,
+                compilation_status="COMPILED",
+                request_ref=body.target_ref,
+                interpretation=f"Bounded native edit: {body.manipulation_type} on {body.target_node_id}",
+                target_layer_or_nodes=[body.target_node_id],
+                exact_operations=[{
+                    "operation_id": f"operation:{canonical_sha256(program.as_dict())[:24]}",
+                    "target_ref": body.target_ref.model_dump(),
+                    "target_node_id": body.target_node_id,
+                    "target_layer": "VIDEO_EDIT_PROGRAM",
+                    "tool_id": f"studio.native_edit.{body.manipulation_type.lower()}",
+                    "tool_version": "1.0.0",
+                    "arguments": body.arguments,
+                    "preconditions": ["state_version_matches", "timeline_item_editable", "bounds_valid"],
+                    "expected_effect": "persist bounded native edit and HumanResolutionEpisode",
+                }],
+                declared_invariants=["INV-HUMAN-RESOLUTION-001", "no_ui_only_state", "no_release_bypass"],
+                required_transformations=["persist canonical timeline revision", "record before_after_diff"],
+                creative_degrees_of_freedom=[],
+                invalidated_downstream_nodes=[],
+                validation_plan=["cas", "bounds", "before_after_diff", "persisted_state_reopen"],
+                preview_required=True,
+                confidence_micros=1_000_000,
+                escalation=None,
+                source_kind="DIRECT_MANIPULATION",
+                expected_state_version=body.expected_state_version,
+                program_sha256=stored["object"]["canonical_sha256"],
+            )
+        except CampaignNotFound as exc:
+            raise _error(404, "CAMPAIGN_NOT_FOUND", str(exc)) from exc
+        except HumanResolutionValidationError as exc:
+            raise _error(422, exc.code, str(exc)) from exc
+        except PipelineConflict as exc:
+            raise _error(409, "CONFLICT", str(exc)) from exc
+
     try:
         campaign = load_campaign_with_revisions(pipeline, campaign_id)
     except CampaignNotFound as exc:
         raise _error(404, "CAMPAIGN_NOT_FOUND", str(exc)) from exc
-
-    context = _build_revision_context(campaign)
-    request_payload = {"delta": body.model_dump(mode="json"), "context": context}
-
     try:
-        result = bridge.call("compile-direct-manipulation", request_payload)
+        result = bridge.call("compile-direct-manipulation", {"delta": body.model_dump(mode="json"), "context": _build_revision_context(campaign)})
     except StudioBridgeError as exc:
         raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
-        logger.error("Studio bridge crash: %s", exc)
         raise _error(500, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
-
     return ChangeRequestProgramModel.model_validate(result)
 
 
 @router.post("/revisions/{program_id}/execute", response_model=ExecuteRevisionResponse)
-def execute_revision(
-    program_id: str,
-    pipeline: PipelineApplication = Depends(get_pipeline),
-    bridge: StudioBridge = Depends(get_studio_bridge),
-):
+def execute_revision(program_id: str, pipeline: PipelineApplication = Depends(get_pipeline), bridge: StudioBridge = Depends(get_studio_bridge)):
+    try:
+        stored = pipeline.repository.get_object(program_id)
+    except PipelineNotFound:
+        raise _error(404, "REVISION_NOT_FOUND", program_id)
+    program = stored["payload"]
+    if program.get("manipulation_type") in {"SUBSTITUTE_ASSET", "ADJUST_TIMING"} and program.get("campaign_id"):
+        try:
+            result = commit_native_edit(
+                pipeline=pipeline,
+                campaign_id=str(program["campaign_id"]),
+                program=program,
+                idempotency_key=f"execute:{program_id}",
+                expected_state_version=int(program["expected_state_version"]),
+            )
+        except HumanResolutionStaleError as exc:
+            raise _error(409, "STALE_STATE_VERSION", str(exc)) from exc
+        except HumanResolutionValidationError as exc:
+            raise _error(422, exc.code, str(exc)) from exc
+        except PipelineConflict as exc:
+            raise _error(409, "CONFLICT", str(exc)) from exc
+        response_program = ChangeRequestProgramModel.model_validate({
+            "program_id": program_id,
+            "compilation_status": "COMPILED",
+            "request_ref": program["target_ref"],
+            "interpretation": f"Executed bounded native edit {program['manipulation_type']}",
+            "target_layer_or_nodes": [program["target_node_id"]],
+            "exact_operations": [{
+                "operation_id": f"operation:{canonical_sha256(program)[:24]}",
+                "target_ref": program["target_ref"],
+                "target_node_id": program["target_node_id"],
+                "target_layer": "VIDEO_EDIT_PROGRAM",
+                "tool_id": f"studio.native_edit.{str(program['manipulation_type']).lower()}",
+                "tool_version": "1.0.0",
+                "arguments": program["arguments"],
+                "preconditions": ["state_version_matches", "timeline_item_editable", "bounds_valid"],
+                "expected_effect": "persist bounded native edit and HumanResolutionEpisode",
+            }],
+            "declared_invariants": ["INV-HUMAN-RESOLUTION-001", "no_ui_only_state", "no_release_bypass"],
+            "required_transformations": ["persist canonical timeline revision", "record before_after_diff"],
+            "creative_degrees_of_freedom": [],
+            "invalidated_downstream_nodes": [],
+            "validation_plan": ["cas", "bounds", "before_after_diff", "persisted_state_reopen"],
+            "preview_required": True,
+            "confidence_micros": 1_000_000,
+            "escalation": None,
+            "source_kind": "DIRECT_MANIPULATION",
+            "expected_state_version": int(program["expected_state_version"]),
+            "program_sha256": stored["canonical_sha256"],
+        })
+        return ExecuteRevisionResponse(program=response_program, campaign=result["campaign"], rerun={"required": True, "status": "QA_REQUIRED"}, episode=result["episode"], receipt=result["receipt"])
+
     return ExecuteRevisionResponse(
         program=ChangeRequestProgramModel(
             program_id=program_id,
             compilation_status="COMPILED",
-            request_ref=RefModel(object_id="", version="", sha256=""),
+            request_ref=RefModel(object_id="", version="", sha256="0" * 64),
             interpretation="Execution acknowledged",
             target_layer_or_nodes=[],
             exact_operations=[],
@@ -148,6 +223,6 @@ def execute_revision(
             escalation=None,
             source_kind="NATURAL_LANGUAGE",
             expected_state_version=0,
-            program_sha256="",
-        ),
+            program_sha256=stored["canonical_sha256"],
+        )
     )

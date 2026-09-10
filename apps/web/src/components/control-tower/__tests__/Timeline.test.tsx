@@ -1,158 +1,72 @@
-// TS-APP-UI-003 - Timeline tests
-// AC-012: Timeline renders tracks in z-index order with correctly scaled items
+// CAE-M0066 - Native editing surface tests
 
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Timeline } from "../Timeline";
 
-// Mock timeline data
+const compile = { mutate: vi.fn(), isPending: false, isError: false, error: null };
+const execute = { mutate: vi.fn(), isPending: false, isError: false, error: null, data: null };
+
+vi.mock("../../../hooks/useRevision", () => ({
+  useNativeEdit: () => ({ compile, execute }),
+}));
+
 const mockTimeline = {
-  timeline_id: "tl-001",
-  video_edit_program_ref: {
-    object_id: "prog-123",
-    sha256: "abc",
-    version: "1",
-  },
-  tracks: [
-    {
-      track_id: "track-001",
-      z_index: 0,
-      items: [
-        {
-          item_id: "item-001",
-          start_frame: 0,
-          end_frame: 50,
-        },
-      ],
-    },
-    {
-      track_id: "track-002",
-      z_index: 1,
-      items: [
-        {
-          item_id: "item-002",
-          start_frame: 25,
-          end_frame: 75,
-        },
-      ],
-    },
-  ],
-  duration_frames: 100,
-  fps_numerator: 30,
-  fps_denominator: 1,
+  projection_id: "timeline:campaign-123:1",
+  video_edit_program_ref: { object_id: "studio-campaign-state:campaign-123", sha256: "a".repeat(64), version: "1.0.0" },
+  state: "NATIVE_EDITABLE_CANONICAL_PROGRAM",
+  width: 1920, height: 1080, fps_numerator: 30, fps_denominator: 1, duration_frames: 100,
+  tracks: [{
+    track_id: "track-001", track_type: "VIDEO", role: "PRIMARY", z_index: 0, item_ids: ["item-001"],
+    items: [{ item_id: "item-001", track_id: "track-001", kind: "VIDEO_CLIP", role: "PRIMARY", start_frame: 0, end_frame: 50, editable_operations: ["ADJUST_TIMING", "SUBSTITUTE_ASSET"], source_ref: { object_id: "asset-old", version: "1.0.0", sha256: "b".repeat(64) } }],
+  }],
+  items: [{ item_id: "item-001", track_id: "track-001", kind: "VIDEO_CLIP", role: "PRIMARY", start_frame: 0, end_frame: 50, editable_operations: ["ADJUST_TIMING", "SUBSTITUTE_ASSET"], source_ref: { object_id: "asset-old", version: "1.0.0", sha256: "b".repeat(64) } }],
 };
 
-describe("Timeline", () => {
-  it("should render 'Nothing compiled yet' when timeline is null (AC-010 variant)", () => {
-    render(
-      <Timeline
-        campaignId="campaign-123"
-        timeline={null}
-      />
-    );
+beforeEach(() => { compile.mutate.mockReset(); execute.mutate.mockReset(); });
 
-    expect(screen.getByText(/Nothing has been compiled yet/)).toBeInTheDocument();
+describe("Timeline native editor", () => {
+  it("renders the editable canonical state", () => {
+    render(<Timeline campaignId="campaign-123" timeline={mockTimeline} stateVersion={1} />);
+    expect(screen.getByText("Native Timeline Editor")).toBeInTheDocument();
+    expect(screen.getByText(/persisted to canonical campaign state/)).toBeInTheDocument();
   });
 
-  it("should render timeline with tracks (AC-012)", () => {
-    render(
-      <Timeline
-        campaignId="campaign-123"
-        timeline={mockTimeline}
-      />
-    );
-
-    // Should show timeline header
-    expect(screen.getByText("Timeline")).toBeInTheDocument();
-
-    // Should show duration info - use getAllByText since it appears multiple times
-    expect(screen.getAllByText(/3\.3s/).length).toBeGreaterThan(0); // 100 frames / 30 fps = 3.33s
-
-    // Should render both tracks - the component shows "Track: track-001 (z-index: 0)"
-    expect(screen.getByText(/track-001/)).toBeInTheDocument();
-    expect(screen.getByText(/track-002/)).toBeInTheDocument();
+  it("requires an explicit selection before edit controls appear", () => {
+    render(<Timeline campaignId="campaign-123" timeline={mockTimeline} stateVersion={1} />);
+    expect(screen.queryByText("Adjust timing")).not.toBeInTheDocument();
   });
 
-  it("should render tracks in correct DOM order (highest z-index first) (AC-012)", () => {
-    const { container } = render(
-      <Timeline
-        campaignId="campaign-123"
-        timeline={mockTimeline}
-      />
-    );
-
-    // Get track container elements (they have rounded bg-ca-surface-raised class)
-    const trackElements = container.querySelectorAll(".rounded.bg-ca-surface-raised");
-
-    // Should have 2 track elements (the tracks, not other rounded elements)
-    // Actually the component has multiple rounded elements, let's check for track text
-    const trackTexts = screen.getAllByText(/Track:/);
-    expect(trackTexts).toHaveLength(2);
-
-    // track-002 (z_index: 1) should be first, track-001 (z_index: 0) should be second
-    expect(trackTexts[0]).toHaveTextContent("track-002");
-    expect(trackTexts[1]).toHaveTextContent("track-001");
+  it("previews a bounded timing change without auto-executing it", () => {
+    render(<Timeline campaignId="campaign-123" timeline={mockTimeline} stateVersion={1} />);
+    fireEvent.click(screen.getByRole("button", { name: /Edit item-001/ }));
+    fireEvent.change(screen.getByLabelText("Timing delta frames"), { target: { value: "15" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adjust timing" }));
+    expect(compile.mutate).toHaveBeenCalledTimes(1);
+    expect(execute.mutate).not.toHaveBeenCalled();
+    expect(screen.getByText("Adjust timing")).toBeInTheDocument();
   });
 
-  it("should scale item width based on duration_frames (AC-012)", () => {
-    const { container } = render(
-      <Timeline
-        campaignId="campaign-123"
-        timeline={mockTimeline}
-      />
-    );
-
-    // Get all item elements (they have absolute positioning with left/width styles)
-    const itemElements = container.querySelectorAll("[style*='left:']");
-
-    expect(itemElements.length).toBe(2);
-
-    // Check that items have calculated widths as percentages
-    itemElements.forEach((el) => {
-      const style = (el as HTMLElement).style.width;
-      expect(style).toMatch(/^\d+(\.\d+)?%$/);
-    });
-
-    // Tracks are sorted by z_index descending:
-    // Track 1: track-002 (z_index: 1) with item-002 (25-75 frames)
-    //   - left: 25%, width: 50%
-    // Track 2: track-001 (z_index: 0) with item-001 (0-50 frames)
-    //   - left: 0%, width: 50%
-
-    // First item (from track-002): 25-75 frames out of 100 = 25% left, 50% width
-    const firstItem = itemElements[0] as HTMLElement;
-    expect(firstItem.style.left).toBe("25%");
-    expect(firstItem.style.width).toBe("50%");
-
-    // Second item (from track-001): 0-50 frames out of 100 = 0% left, 50% width
-    const secondItem = itemElements[1] as HTMLElement;
-    expect(secondItem.style.left).toBe("0%");
-    expect(secondItem.style.width).toBe("50%");
+  it("supports asset substitution only with a real SHA-256", () => {
+    render(<Timeline campaignId="campaign-123" timeline={mockTimeline} stateVersion={1} />);
+    fireEvent.click(screen.getByRole("button", { name: /Edit item-001/ }));
+    const substitute = screen.getByRole("button", { name: "Substitute asset" });
+    expect(substitute).toBeDisabled();
+    fireEvent.change(screen.getByLabelText("Replacement asset ID"), { target: { value: "asset-new" } });
+    fireEvent.change(screen.getByLabelText("Replacement asset SHA256"), { target: { value: "c".repeat(64) } });
+    expect(substitute).not.toBeDisabled();
+    fireEvent.click(substitute);
+    expect(compile.mutate).toHaveBeenCalledTimes(1);
   });
 
-  it("should show fps info in header", () => {
-    render(
-      <Timeline
-        campaignId="campaign-123"
-        timeline={mockTimeline}
-      />
-    );
-
-    // Check for the fps text in the header specifically
-    const header = screen.getByText("Timeline").parentElement;
-    expect(header).toHaveTextContent(/30\/1 fps/);
-  });
-
-  it("should render timeline ruler with time markers", () => {
-    render(
-      <Timeline
-        campaignId="campaign-123"
-        timeline={mockTimeline}
-      />
-    );
-
-    // Should show time markers (0s, 0.8s, 1.7s, 2.5s, 3.3s)
-    expect(screen.getByText("0.0s")).toBeInTheDocument();
-    expect(screen.getByText("3.3s")).toBeInTheDocument();
+  it("executes only after a compiled program is explicitly confirmed", () => {
+    compile.mutate.mockImplementation((_input, options) => options.onSuccess({ program_id: "revision:001", interpretation: "bounded timing edit" }));
+    render(<Timeline campaignId="campaign-123" timeline={mockTimeline} stateVersion={1} />);
+    fireEvent.click(screen.getByRole("button", { name: /Edit item-001/ }));
+    fireEvent.change(screen.getByLabelText("Timing delta frames"), { target: { value: "10" } });
+    fireEvent.click(screen.getByRole("button", { name: "Adjust timing" }));
+    expect(execute.mutate).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm & Save" }));
+    expect(execute.mutate).toHaveBeenCalledWith("revision:001");
   });
 });

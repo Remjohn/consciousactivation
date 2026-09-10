@@ -27,8 +27,9 @@ describe("actionRegistry", () => {
     expect(ACTION_REGISTRY.EXPORT_AUDIT.implemented).toBe(false);
   });
 
-  it("should mark DIRECT_MANIPULATION as not implemented", () => {
-    expect(ACTION_REGISTRY.DIRECT_MANIPULATION.implemented).toBe(false);
+  it("should mark DIRECT_MANIPULATION as implemented", () => {
+    expect(ACTION_REGISTRY.DIRECT_MANIPULATION.implemented).toBe(true);
+    expect(ACTION_REGISTRY.DIRECT_MANIPULATION.onSelect).toBeDefined();
   });
 
   it("should mark REQUEST_SHIP_DECISION as not implemented", () => {

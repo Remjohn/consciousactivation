@@ -31,7 +31,7 @@ export const ACTION_REGISTRY: Record<AvailableAction, ActionEntry> = {
   EXPORT_AUDIT:             { label: "Export audit",       glyph: "xpt",  implemented: false }, // needs SHIPPED — Out of scope, Section 2
   OPEN_TIMELINE:            { label: "Open timeline",      glyph: "tl",   implemented: true,  onSelect: (ctx) => ctx.setTab("timeline") },
   REQUEST_REVISION:         { label: "Request revision",   glyph: "rev",  implemented: true,  onSelect: (ctx) => ctx.setTab("revise") },
-  DIRECT_MANIPULATION:      { label: "Direct edit",        glyph: "dme",  implemented: false }, // Out of scope, Section 2
+  DIRECT_MANIPULATION:      { label: "Direct edit",        glyph: "dme",  implemented: true, onSelect: (ctx) => ctx.setTab("timeline") },
   COMPARE_ARTIFACTS:        { label: "Compare artifacts",  glyph: "cmp",  implemented: true,  onSelect: (ctx) => ctx.setTab("overview") },
   RESOLVE_EXCEPTION:        { label: "Resolve exception",  glyph: "exc",  implemented: true,  onSelect: (ctx) => ctx.setTab("exceptions") },
   REQUEST_SHIP_DECISION:    { label: "Request ship",       glyph: "shp",  implemented: false }, // Out of scope, Section 2
