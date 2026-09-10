@@ -1521,5 +1521,21 @@ from .storyboard_session import (
     TransformationRecipe,
     VisualAssetReference,
 )
+from .storyboard_programs import (
+    BaseStoryboardProgram,
+    CarouselStoryboardProgram,
+    PresentationStoryboardProgram,
+    STORYBOARD_PROGRAM_TYPES,
+    StoryboardExpression,
+    StoryboardFormat,
+    StoryboardProgramAuthorityError,
+    StoryboardProgramCanonicalizationError,
+    StoryboardProgramContract,
+    StoryboardProgramError,
+    StoryboardProgramValidationError,
+    SuperVisualStoryboardProgram,
+    VideoStoryboardProgram,
+    get_storyboard_program,
+)
 
 __version__ = "0.1.0.dev1"

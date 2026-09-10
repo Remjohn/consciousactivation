@@ -975,3 +975,43 @@ blocked. The regression does not establish native external runtime reachability
 or replace the operator’s perceptual, rights, and final creative decisions.
 See `docs/cae/specs/M0079/M0079_EVIDENCE_RECEIPT.json` for evidence classes,
 authority inputs, limitations, and exact commands.
+
+---
+
+# CAE-M0080 Walkthrough — Format-Specific Storyboard Program Contracts
+
+**Status:** Implemented; 100% regression verified; operator review remains required
+**Date:** 2026-09-11
+**Boundary:** Format grammar and constraints over the existing M0079 storyboard revision; no parallel semantic authority
+
+## Exact mappings applied
+
+| Contract | Destination | Governing projection |
+|---|---|---|
+| `VideoStoryboardProgram` | `packages/ca_runtime/src/ca_runtime/storyboard_programs.py` | Temporal scenes with ordered, non-overlapping shots |
+| `CarouselStoryboardProgram` | `packages/ca_runtime/src/ca_runtime/storyboard_programs.py` | Contiguous scene-to-slide progression with grounded elements |
+| `SuperVisualStoryboardProgram` | `packages/ca_runtime/src/ca_runtime/storyboard_programs.py` | Integer basis-point spatial geometry inside safe canvas bounds |
+| `PresentationStoryboardProgram` | `packages/ca_runtime/src/ca_runtime/storyboard_programs.py` | Contiguous slides with positive unique build steps |
+| Shared public exports | `packages/ca_runtime/src/ca_runtime/__init__.py` | One common `StoryboardExpression` contract |
+| Dependency/fixture repair | `packages/ca_runtime/src/ca_runtime/visual_derivative_production_program.py` | Restored existing tenant-context authority import |
+| Contract tests | `tests/cae/test_m0080_storyboard_program_contracts.py` | Happy path, contrastive grounding, malformed/unsafe/unsupported cases |
+| Evidence and handoff | `docs/cae/specs/M0080/` | Exact commands, results, limitations, and operator gate |
+
+Each compiler requires an existing `EditorialStoryboard` identity and source
+evidence lineage through the M0079 `StoryboardRevision`. Format programs only
+project composition grammar; they do not create semantic meaning, retrieve
+assets, approve rights, or execute external runtimes.
+
+## Verification matrix
+
+| Suite | Command | Result |
+|---|---|---:|
+| M0080 focused contracts | `pytest -q tests/cae/test_m0080_storyboard_program_contracts.py` | **PASS (4/4)** |
+| M0080 mandated baseline | `pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/cae/test_visual_derivative_production_program.py tests/cae/test_ca_m005_format_archetype_gate.py` | **PASS (35/35)** |
+| Complete M0074–M0080 regression | See `docs/cae/specs/M0080/M0080_EVIDENCE_RECEIPT.json` | **PASS (71/71, 100%)** |
+
+The original stop bundle was created from an older snapshot. In this checkout,
+Git metadata and `psycopg 3.3.4` are available. The requested
+`CAE-M0080_BUNDLE` and `COMPONENT_CONTRACT.yaml` were not present; the supplied
+canonical mandate and campaign Authority Pack were used, and that limitation is
+recorded explicitly in the evidence receipt.

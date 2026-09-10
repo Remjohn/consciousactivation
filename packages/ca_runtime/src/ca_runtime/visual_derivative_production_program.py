@@ -27,6 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from ca_contracts import bytes_sha256, canonical_json_text, canonical_sha256, utc_now_rfc3339
 from ca_runtime.pi_adapter import AuthorityLane, AuthorityLaneMismatchError
+from ca_runtime.tenancy import require_current_tenant_context
 from ca_runtime.program_state_runtime import (
     ProgramAuthorityLaneViolationError,
     ProgramStateAggregate,
