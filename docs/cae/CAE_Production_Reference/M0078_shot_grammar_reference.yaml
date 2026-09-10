@@ -1,0 +1,249 @@
+schema_id: cae.m0078.shot-grammar-assistant-reference
+schema_version: 1.0.0
+status: REFERENCE_ONLY
+mandate: M0078
+purpose: Bounded source-attributed vocabulary for shot/camera/timing, scene/shot/asset fields, and assistant/canvas refinement
+  interaction.
+authority_boundary:
+  semantic_authority: CAE
+  execution_authority: deterministic_cae_code
+  operator_authority: promotion_rejection_repair_strategic_exception
+  external_sources: behavioral_reference_only
+  model_role: proposal_only
+  prompt_as_authority: false
+  external_runtime_is_downstream: true
+  reference_registry_is_not_a_semantic_program: true
+evidence_first_order:
+- RETRIEVE
+- TRANSFORM
+- COMPOSE
+- GENERATE
+source_attribution:
+- source_id: seedance2_openchatcut_adapter
+  evidence_class: REGISTRY_SOURCE
+  repository: https://github.com/0xsline/OpenChatCut
+  source_ref: uploaded-brownfield-copy
+  source_commit: UNVERIFIED_FROM_ARCHIVE
+  license: AGPL-3.0-or-later
+  exact_path: engines/video/openchatcut/upstream/src/agent/skills/video-gen/references/seedance2.md
+  local_source_verified: true
+  observed_scope: Seedance2 capability/mode/shot/timing/camera vocabulary as wired through the OpenChatCut adapter.
+- source_id: toonflow_app
+  evidence_class: REGISTRY_SOURCE
+  repository: https://github.com/HBAI-Ltd/Toonflow-app
+  source_ref: master
+  source_commit: 640861b (full SHA unavailable in evidence environment)
+  license: Apache-2.0 plus HBAI-Ltd supplemental commercial terms
+  exact_paths:
+  - data/modelPrompt/video/universalMulti-parameterMode.md
+  - data/modelPrompt/video/universalFirstAndLastFrameMode.md
+  - data/modelPrompt/video/wan2.6Single-imageFirstFrameMode.md
+  - src/routes/assetsGenerate/generateAssets.ts
+  observed_scope: Explicit scene/shot/asset fields and model-facing video description mapping.
+- source_id: waoowaoo
+  evidence_class: REGISTRY_SOURCE
+  repository: https://github.com/waooAI/waoowaoo
+  source_ref: main
+  source_commit: 6cbbe22cc6492159e0f649d507e4e21a9aec3074
+  license: CC BY-NC-SA 4.0
+  exact_paths:
+  - src/features/project-workspace/ProjectWorkspace.tsx
+  - src/features/project-workspace/workspace-assistant-focus.ts
+  - src/features/project-workspace/canvas/lifecycle/workspace-canvas-lifecycle.ts
+  - src/features/project-workspace/canvas/lifecycle/resource-lifecycle.ts
+  observed_scope: Explicit assistant/canvas handoff identity, turn/resource targeting, and revision-oriented refinement behavior.
+canonical_gae_mapping:
+- reference_field: scene_id
+  definition: Stable scene key for the reference vocabulary.
+  cae_canonical: services/production-program/src/cae_production_program/domain.py:SemanticSceneSpec.scene_index + segment_id
+  source_ids:
+  - toonflow_app
+  - seedance2_openchatcut_adapter
+  authority: CAE
+- reference_field: shot_id
+  definition: Stable ordered shot key within a scene; reference-only grouping, not a new runtime object.
+  cae_canonical: docs/cae/CAE_Production_Reference/M0078_shot_grammar_reference.yaml
+  source_ids:
+  - seedance2_openchatcut_adapter
+  - toonflow_app
+  authority: CAE_REFERENCE
+- reference_field: start_seconds
+  definition: Shot start time in seconds.
+  cae_canonical: services/production-program/src/cae_production_program/domain.py:SemanticSceneSpec.start_time
+  source_ids:
+  - seedance2_openchatcut_adapter
+  authority: CAE
+- reference_field: end_seconds
+  definition: Shot end time in seconds; must be greater than start.
+  cae_canonical: services/production-program/src/cae_production_program/domain.py:SemanticSceneSpec.end_time
+  source_ids:
+  - seedance2_openchatcut_adapter
+  authority: CAE
+- reference_field: duration_seconds
+  definition: Shot duration; for segmented prompts, sum of shot windows must equal parent duration.
+  cae_canonical: services/production-program/src/cae_production_program/domain.py:SemanticSceneSpec.duration
+  source_ids:
+  - seedance2_openchatcut_adapter
+  - toonflow_app
+  authority: CAE
+- reference_field: scene
+  definition: Location/environment description or scene asset reference.
+  cae_canonical: packages/ca_runtime/src/ca_runtime/visual_prompt_annotation_program.py:VisualRequirement.subject/recognition_target
+    + AssetAnnotationItem
+  source_ids:
+  - toonflow_app
+  - seedance2_openchatcut_adapter
+  authority: CAE
+- reference_field: asset_refs
+  definition: Typed source asset references used by a shot; preserve source lineage and evidence hashes upstream.
+  cae_canonical: packages/ca_runtime/src/ca_runtime/visual_prompt_annotation_program.py:AssetAnnotationItem.asset_id/source_sha256
+  source_ids:
+  - toonflow_app
+  - seedance2_openchatcut_adapter
+  authority: CAE
+- reference_field: shot_size
+  definition: 'Shot scale vocabulary: extreme-wide, wide, medium, close-up, extreme-close-up.'
+  cae_canonical: VisualPromptSpec.framing_style
+  source_ids:
+  - seedance2_openchatcut_adapter
+  - toonflow_app
+  authority: CAE_REFERENCE
+- reference_field: camera_angle
+  definition: Eye-level, low, high, over-the-shoulder, top-down.
+  cae_canonical: VisualPromptSpec.metadata
+  source_ids:
+  - seedance2_openchatcut_adapter
+  authority: CAE_REFERENCE
+- reference_field: camera_move
+  definition: One primary camera move per shot segment; canonical vocabulary includes push-in, pull-out, pan, tilt, track/dolly,
+    orbit, handheld.
+  cae_canonical: VisualPromptSpec.metadata + TransformationRecipe/keyframes downstream
+  source_ids:
+  - seedance2_openchatcut_adapter
+  - toonflow_app
+  authority: CAE_REFERENCE
+- reference_field: lens_fx
+  definition: Optional optical/effect vocabulary such as shallow depth of field, slow motion, time-lapse, Hitchcock zoom.
+  cae_canonical: VisualPromptSpec.metadata
+  source_ids:
+  - seedance2_openchatcut_adapter
+  authority: CAE_REFERENCE
+- reference_field: visual_action
+  definition: What the subject does/motion to express; provider-facing phrasing remains downstream.
+  cae_canonical: VisualRequirement.somatic_effect + recognition_target
+  source_ids:
+  - seedance2_openchatcut_adapter
+  - toonflow_app
+  authority: CAE
+- reference_field: emotion
+  definition: Explicit affective state or performance cue.
+  cae_canonical: VisualRequirement.viewer_state_before/viewer_state_after + somatic_effect
+  source_ids:
+  - toonflow_app
+  authority: CAE
+- reference_field: dialogue
+  definition: Dialogue/OS/VO text with preserved type and language.
+  cae_canonical: SemanticSceneSpec.spoken_text
+  source_ids:
+  - toonflow_app
+  authority: CAE
+- reference_field: audio_intent
+  definition: Music, ambience, or sound-effects intent; not a provider execution parameter.
+  cae_canonical: SemanticProgram.visual_audio_specs
+  source_ids:
+  - toonflow_app
+  - seedance2_openchatcut_adapter
+  authority: CAE
+- reference_field: continuity
+  definition: Continuity anchors such as approved prior shot references and source clip identity; rejected candidates remain
+    traceable.
+  cae_canonical: ContentCandidateRecord.predecessor_candidate_id/operator_decision_ref + AssetAnnotationItem.source_sha256
+  source_ids:
+  - seedance2_openchatcut_adapter
+  - waoowaoo
+  authority: CAE
+- reference_field: assistant_action
+  definition: 'Explicit assistant action envelope: discuss/refine/create revision against an identified resource set.'
+  cae_canonical: EditorialDiscoveryProgramCoordinator + existing candidate/storyboard/program records
+  source_ids:
+  - waoowaoo
+  authority: CAE
+- reference_field: assistant_target_ids
+  definition: Explicit target resource identifiers from an assistant turn; selection alone must not retarget a turn.
+  cae_canonical: operator-visible selection/candidate/storyboard lineage
+  source_ids:
+  - waoowaoo
+  authority: CAE
+- reference_field: base_revision
+  definition: Explicit revision/candidate predecessor for refinement.
+  cae_canonical: ContentCandidateRecord.version + predecessor_candidate_id
+  source_ids:
+  - waoowaoo
+  authority: CAE
+- reference_field: operator_decision
+  definition: Promotion/rejection/repair decision remains operator-owned and receipt-backed.
+  cae_canonical: ContentCandidateRecord.operator_decision_ref + gate/receipt infrastructure
+  source_ids:
+  - waoowaoo
+  authority: CAE
+source_behavior_adopted:
+  seedance2:
+  - Use a bounded shot vocabulary with explicit shot size, angle, move, and timing windows.
+  - Use time-segmented shot descriptions when a clip contains multiple intentional beats.
+  - Treat @ references as typed asset references with explicit role descriptions.
+  - Keep one primary camera move per time slice.
+  - Do not mutate a source clip when edit/extend is represented; model a new candidate lineage downstream.
+  toonflow:
+  - Keep scene, related asset names/IDs, duration, shot size, camera, action, emotion, lighting, dialogue, audio, and asset
+    linkage explicit.
+  - Preserve typed asset role distinctions instead of inferring asset type from ordinal position.
+  - Treat timing as a first-class field and retain dialogue modality/language.
+  waoowaoo:
+  - Assistant discussion/refinement is an explicit interaction, not an implicit consequence of canvas selection.
+  - Keep assistant turn identity, source message identity, and explicit target resource IDs.
+  - Refinement creates a new revision while retaining the prior result for lineage/evaluation.
+excluded_behavior:
+- Provider-specific API parameter names, provider authentication, queueing, URLs, upload implementations, or external runtime
+  calls.
+- Kling-only fields or provider-specific mode flags.
+- Prompt text as semantic authority.
+- A new semantic program, storyboard authority, retrieval system, VAE state model, or Design System.
+- Canvas selection as an implicit approval or state transition.
+- Automatic promotion of model-generated candidates.
+- Copying or vendoring external source code.
+- Any visual claim that would require native external-runtime reachability or perceptual operator inspection.
+state_transition_contract:
+  actor: assistant|model|operator|deterministic_cae
+  preconditions:
+  - canonical CAE object exists
+  - source/evidence refs are present where required
+  - requested transition is authorized for the current lane/state
+  - assistant actions name explicit target resource IDs
+  validator: deterministic_cae
+  postconditions:
+  - no semantic authority moved outside CAE
+  - revision/candidate lineage remains intact
+  - operator decisions remain explicit
+  - receipt/evidence reference exists for governed transitions
+  error_route: reject with reason and preserve prior state/candidate
+  recovery_path: repair or create a new revision/candidate; never silently mutate the prior approved object
+test_vectors:
+  success:
+    shot_id: scene-01-shot-02
+    start_seconds: 2
+    end_seconds: 5
+    duration_seconds: 3
+    shot_size: close-up
+    camera_move: push-in
+    asset_refs:
+    - asset-char-01
+    - asset-prop-02
+    assistant_target_ids:
+    - asset-char-01
+  good_looking_but_wrong:
+    shot_id: scene-01-shot-03
+    start_seconds: 5
+    end_seconds: 9
+    duration_seconds: 3
+    camera_move: orbit
+    reason_invalid: window duration and declared duration disagree

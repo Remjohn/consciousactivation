@@ -1,0 +1,109 @@
+{
+  "mandate_id": "M0075",
+  "evidence_class": "TEST",
+  "status": "BLOCKED_OPERATOR_REVIEW_REQUIRED",
+  "scope_result": "REFERENCE_ONLY_NO_RUNTIME_CHANGE",
+  "snapshot": {
+    "uploaded_path": "/mnt/data/codebase_clean(4).zip",
+    "zip_sha256": "398ecae629683468f8eb2b31acbcc21670803164eab73a3b1e277a71e3530cc2",
+    "git_metadata_present": false,
+    "historical_m72_commit_sha": "8fb3733cc6a750560532f87f98af2fe24c229528"
+  },
+  "authority_findings": [
+    {
+      "path": "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "status": "MISSING_AT_EXACT_REQUESTED_PATH",
+      "counterpart": "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "evidence_class": "DOCUMENT"
+    },
+    {
+      "path": "governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+      "status": "MISSING_AT_EXACT_REQUESTED_PATH",
+      "counterpart": "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+      "evidence_class": "DOCUMENT"
+    },
+    {
+      "path": "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "status": "MISSING",
+      "evidence_class": "OPERATOR_DECISION_REQUIRED"
+    },
+    {
+      "path": ".git/",
+      "status": "MISSING",
+      "evidence_class": "TEST"
+    }
+  ],
+  "upstream_fidelity": {
+    "repository": "https://github.com/Forget-C/Jellyfish",
+    "source_ref": "main",
+    "license": "Apache-2.0",
+    "observed_tip_abbrev": "a967819",
+    "exact_source_commit_sha": null,
+    "exact_source_commit_status": "UNAVAILABLE",
+    "exact_paths_inspected": [
+      "backend/app/services/studio/shot_preparation_state.py",
+      "backend/app/services/studio/shot_extracted_candidates.py",
+      "backend/app/services/studio/shot_assets.py",
+      "backend/app/models/studio_shots.py",
+      "backend/app/services/studio/shots.py"
+    ],
+    "runtime_launched": false,
+    "code_copied": false
+  },
+  "commands": [
+    {
+      "command": "test -f AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "return_code": 1,
+      "observed_result": "missing"
+    },
+    {
+      "command": "test -d .git",
+      "return_code": 1,
+      "observed_result": "missing"
+    },
+    {
+      "command": "python docs/cae/CAE_Visual_Production_Storyboard_Extraction_M0075_v1/validate_m0075_extraction.py",
+      "return_code": 0,
+      "observed_result": "M0075 reference extraction validation: PASS"
+    },
+    {
+      "command": "pytest -q tests/cae/test_m0075_jellyfish_extraction_reference.py",
+      "return_code": 0,
+      "observed_result": "5 passed in 0.18s"
+    },
+    {
+      "command": "pytest -q tests/cae/test_m0075_jellyfish_extraction_reference.py tests/cae/test_m009_preparation_graph.py -k 'genesis_save_revision or second_save_creates_new_revision or stale_write or historical or active_binding or m0075'",
+      "return_code": 2,
+      "observed_result": "pre-existing dependency collection failure: ModuleNotFoundError: No module named 'psycopg' while importing ca_runtime.database; no M009 test body executed"
+    }
+  ],
+  "proof_boundary": {
+    "proves": [
+      "The surgical mapping is structurally self-consistent.",
+      "The mapping binds revision/version behavior to the existing PreparationGraph authority.",
+      "The good-looking-but-wrong preview case remains blocked from semantic promotion.",
+      "No upstream code was copied into the supplied CAE tree."
+    ],
+    "does_not_prove": [
+      "A production WYSIWYG UI exists.",
+      "An external Jellyfish runtime is reachable from CAE.",
+      "The exact current Jellyfish main commit SHA.",
+      "The exact CAE source commit SHA of the supplied snapshot.",
+      "Perceptual creative quality or final operator acceptance.",
+      "Existing M009 runtime regression behavior was not executed in this environment because test collection requires psycopg, which is unavailable."
+    ]
+  },
+  "limitations": [
+    "The mandated Authority Pack build plan is missing.",
+    "The uploaded repository has no .git metadata.",
+    "Exact upstream 40-character commit SHA could not be verified.",
+    "No native external runtime was launched.",
+    "No visual preview was produced; operator perceptual inspection is therefore not satisfied by this bundle."
+  ],
+  "operator_decision_required": true,
+  "decision_options": [
+    "APPROVE",
+    "APPROVE-WITH-LIMITATIONS",
+    "REJECT"
+  ]
+}

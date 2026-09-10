@@ -1,0 +1,99 @@
+{
+  "artifact_sha256": {
+    "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/DRAMACLAW_UPSTREAM_TO_CAE_MAPPING.md": "e7b7ce1847423dbc153853d49ca7b2ae2dfdea1b9a67ddf234a6f7fcd5266b51",
+    "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/README.md": "8cea7c232cf3e6504de3be475e864727d600d021b6d27c3c1ed81cffe7b1af30",
+    "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/exploratory_canvas_reference.py": "db610b13a3a514eea9c1dbd8ca9a63773376f2ee25ef3120e75b01b6cda4adb1",
+    "tests/cae/test_m0076_exploratory_canvas_reference.py": "5c908a9164903fc92486b0813b9f91c4e208cd20cd01d7bf085a12f6f85bc8c7"
+  },
+  "authority_resolution": {
+    "literal_missing_paths": [
+      "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md"
+    ],
+    "resolved_equivalents": [
+      "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    ],
+    "unresolved": "The dated 2026-09-10 Authority Pack build-plan has no equivalent in the supplied snapshot."
+  },
+  "changed_new_paths": [
+    "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/README.md",
+    "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/DRAMACLAW_UPSTREAM_TO_CAE_MAPPING.md",
+    "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/exploratory_canvas_reference.py",
+    "tests/cae/test_m0076_exploratory_canvas_reference.py"
+  ],
+  "commands": [
+    {
+      "class": "TEST",
+      "command": "pytest -q tests/cae/test_m0076_exploratory_canvas_reference.py",
+      "observed_result": "5 passed in 0.04s"
+    },
+    {
+      "class": "DOCUMENT",
+      "command": "find . -maxdepth 2 -type d -name .git -print",
+      "observed_result": "no output; supplied snapshot contains no .git metadata"
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "command": "find . -type f ( -iname '*REPOSITORY_TO_PRODUCT_BUILD_PLAN*' -o -path '*/AUTHORITY_PACK/*2026-09-10*' ) -print",
+      "observed_result": "no output; dated Authority Pack build-plan artifact not present"
+    }
+  ],
+  "decision_options": [
+    "APPROVE",
+    "APPROVE-WITH-LIMITATIONS",
+    "REJECT"
+  ],
+  "evidence_classes": [
+    "EXECUTABLE",
+    "DOCUMENT",
+    "TEST",
+    "REGISTRY_SOURCE",
+    "HYPOTHESIS",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "generated_at_utc": "2026-09-10T15:22:30.700366+00:00",
+  "implementation_claims": [
+    {
+      "claim": "reversible exploration revision grammar",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "immutable node history and restore-as-new-entry",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "operator-approved agent commands with stale/lock validation",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "promotion is request-only and preserves provenance/canonical references",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "DramaClaw behavior was used as behavioral reference, not CAE authority",
+      "class": "HYPOTHESIS"
+    }
+  ],
+  "limitations": [
+    "No DramaClaw runtime was executed; external runtime reachability is not proven.",
+    "No visual preview/perceptual acceptance was performed.",
+    "No canonical CAE storyboard/state was mutated.",
+    "Interactive-story branching on feat/canvas-fmv was excluded because current upstream documentation marks it in development.",
+    "Exact CAE Git commit SHA cannot be captured because the supplied snapshot has no .git metadata.",
+    "Exact full DramaClaw upstream SHA could not be established from the available web evidence surface; only c62b409 was exposed."
+  ],
+  "mandate_id": "M0076",
+  "operator_decision_required": true,
+  "recommended_decision": "APPROVE-WITH-LIMITATIONS",
+  "status": "EXECUTED_WITH_OPERATOR_REVIEW_REQUIRED",
+  "upstream": {
+    "full_commit_sha": "UNAVAILABLE_FROM_WEB_EVIDENCE_SURFACE",
+    "license": "Elastic License 2.0",
+    "ref": "main",
+    "repository": "https://github.com/dramaclaw/dramaclaw",
+    "source_code_imported": false,
+    "web_visible_commit": "c62b409"
+  }
+}

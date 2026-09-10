@@ -775,3 +775,160 @@ M0073 is intentionally control-plane-only. It freezes the external adoption boun
 | External adoption completion | Exact upstream SHA for every record | BLOCKED; no SHA invented |
 
 The registry remains `BLOCKED_OPERATOR_REVIEW_REQUIRED`. The supplied evidence preserves the missing Authority Pack, unresolved exact upstream commit SHAs, and the operator decision gate; these limitations are evidence, not acceptance failures.
+
+---
+
+# CAE-M0074 Walkthrough — Wind Comic Surgical Storyboard Production Extraction
+
+**Status:** Reference adapter verified; operator review remains required
+**Date:** 2026-09-10
+**Boundary:** Wind Comic storyboard mechanics only; CAE remains semantic, persistence, receipt, promotion, and runtime authority
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Isolated storyboard reference package | `engines/storyboard/__init__.py`, `engines/storyboard/references/__init__.py`, `engines/storyboard/references/wind_comic/` |
+| Wind Comic source mapping and evidence | `engines/storyboard/references/wind_comic/SOURCE_MAPPING.md`, `docs/cae/evidence/M0074/` |
+| Focused extraction tests | `tests/storyboard_reference/` |
+
+The adapter is dependency-free and proposal/validation oriented. It covers pull-sheet round trips, timing audits, visual-anchor lineage, style/scene consistency, feedback append semantics, stale-baseline rejection, and authorization checks without persisting canonical CAE state or invoking providers.
+
+## Verification
+
+| Mandate | Suite | Result |
+|---|---|---:|
+| CAE-M0074 | `pytest -q tests/storyboard_reference/test_m0074_wind_comic_extraction.py` | PASS (10/10) |
+| **M0074** | Focused verification | **PASS (10/10, 100%)** |
+
+Pinned upstream reference: Wind Comic commit `15b94078eece85496892d74933fa8193105dc96f`, MIT. No upstream source was copied.
+
+---
+
+# CAE-M0075 Walkthrough — Jellyfish Surgical Storyboard Workspace Extraction
+
+**Status:** Reference contract verified; operator review remains required
+**Date:** 2026-09-10
+**Boundary:** Jellyfish readiness, candidate review, reusable context, inspection, and revision patterns mapped onto existing CAE authorities
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Jellyfish extraction documentation, mapping, source index, validator, and evidence | `docs/cae/CAE_Visual_Production_Storyboard_Extraction_M0075_v1/` |
+| Focused extraction tests | `tests/cae/test_m0075_jellyfish_extraction_reference.py` |
+
+No parallel storyboard/session/asset authority, provider wiring, UI authority, migration, or external runtime was introduced. Existing `EditorialStoryboardRecord`, `EditorialDecisionReceiptRecord`, `ContentCandidateRecord`, and `PreparationGraphStore` remain authoritative.
+
+## Verification
+
+| Mandate | Suite | Result |
+|---|---|---:|
+| CAE-M0075 | `python docs/cae/CAE_Visual_Production_Storyboard_Extraction_M0075_v1/validate_m0075_extraction.py` | PASS |
+| CAE-M0075 | `pytest -q tests/cae/test_m0075_jellyfish_extraction_reference.py` | PASS (5/5) |
+| **M0075** | Focused verification | **PASS (5/5, 100%)** |
+
+Jellyfish is recorded as Apache-2.0 reference material. Exact upstream tip SHA and the dated Authority Pack remain unresolved; no upstream source was copied.
+
+---
+
+# CAE-M0076 Walkthrough — DramaClaw Exploratory Canvas Reference
+
+**Status:** Isolated reference component verified; operator review remains required
+**Date:** 2026-09-10
+**Boundary:** Reversible exploration, approved agent commands, immutable node history, grouping/locking, branches, and promotion requests only
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| DramaClaw mapping, bounded in-memory reference, README, and evidence | `docs/cae/CAE_Visual_Production_Exploration_M0076_v1/` |
+| Focused extraction tests | `tests/cae/test_m0076_exploratory_canvas_reference.py` |
+
+The component cannot persist or mutate canonical CAE state. Agent operations are proposals, locked nodes reject mutation, stale revisions fail closed, and promotion requires canonical references, provenance, and an operator receipt. DramaClaw’s Elastic License 2.0 boundary is preserved; no source was copied.
+
+## Verification
+
+| Mandate | Suite | Result |
+|---|---|---:|
+| CAE-M0076 | `pytest -q tests/cae/test_m0076_exploratory_canvas_reference.py` | PASS (5/5) |
+| **M0076** | Focused verification | **PASS (5/5, 100%)** |
+
+The external runtime, browser approval UI, model execution, and perceptual quality remain unclaimed.
+
+---
+
+# CAE-M0077 Walkthrough — ArcReel Production Review and Regeneration Extraction
+
+**Status:** Isolated review adapter verified; operator review remains required
+**Date:** 2026-09-10
+**Boundary:** Staged review, approve/edit/regenerate distinction, targeted regeneration, operator progression, and evidence checks only
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| ArcReel review adapter | `programs/visual_derivative_production_program/reference/arc_reel_review_adapter.py` |
+| Reference package export | `programs/visual_derivative_production_program/reference/__init__.py` |
+| Mapping and evidence | `docs/cae/CAE_ArcReel_Production_Review_Extraction_M0077_v1/` |
+| Focused extraction tests | `tests/cae/test_m0077_arc_reel_review_extraction.py` |
+
+The adapter maps interaction patterns into existing CAE storyboard, production-program, revision, provenance, and release authorities. It does not invoke external tools, manage generation workers, create a second state store, or promote automatically. ArcReel’s AGPL-3.0 boundary is preserved; no upstream source was copied.
+
+## Verification
+
+| Mandate | Suite | Result |
+|---|---|---:|
+| CAE-M0077 | `python -m py_compile .../arc_reel_review_adapter.py .../test_m0077_arc_reel_review_extraction.py` | PASS |
+| CAE-M0077 | `pytest -p no:asyncio -q tests/cae/test_m0077_arc_reel_review_extraction.py` | PASS (9/9) |
+| **M0077** | Focused verification | **PASS (9/9, 100%)** |
+
+Frozen upstream reference: ArcReel `v0.29.0`, commit `6ddedc775e7fe5f398b10081ab741985f7dceda7`.
+
+---
+
+# CAE-M0078 Walkthrough — Shot Grammar and Assistant Extraction Reference
+
+**Status:** Reference vocabulary and tests verified; operator review remains required
+**Date:** 2026-09-10
+**Boundary:** Shot language, storyboard schema, assistant/canvas targeting, and motion-planning vocabulary only
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Shot grammar reference vocabulary | `docs/cae/CAE_Production_Reference/M0078_shot_grammar_reference.yaml` |
+| Shot grammar and assistant boundary documentation | `docs/cae/CAE_Production_Reference/M0078_SHOT_GRAMMAR_AND_ASSISTANT_REFERENCE.md` |
+| Evidence receipt | `docs/cae/CAE_Production_Reference/M0078_EVIDENCE_RECEIPT.json` |
+| Focused extraction tests | `tests/cae/test_m0078_shot_grammar_reference.py` |
+
+The reference maps shot/timing/camera language to existing CAE semantic scenes, asset demand/annotation, visual requirements, prompt metadata, candidate/storyboard lineage, and operator receipts. It does not create runtime state, provider execution, geometry authority, automatic camera execution, or implicit canvas-to-assistant mutation.
+
+## Verification
+
+| Mandate | Suite | Result |
+|---|---|---:|
+| CAE-M0078 | `python -m pytest -q tests/cae/test_m0078_shot_grammar_reference.py` | PASS (7/7) |
+| CAE-M0078 | YAML parse of `M0078_shot_grammar_reference.yaml` | PASS |
+| **M0078** | Focused verification | **PASS (7/7, 100%)** |
+
+The reference records OpenChatCut/Seedance2, Toonflow, and WaooWaoo source boundaries and licenses without copying source code or claiming native runtime reachability.
+
+---
+
+# Epoch M0074–M0078 Unified Regression
+
+| Mandate | Tests | Result |
+|---|---:|---:|
+| CAE-M0074 | 10 | PASS |
+| CAE-M0075 | 5 | PASS |
+| CAE-M0076 | 5 | PASS |
+| CAE-M0077 | 9 | PASS |
+| CAE-M0078 | 7 | PASS |
+| **Unified extraction regression** | **36** | **PASS (36/36, 100%)** |
+
+```bash
+pytest -q tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/cae/test_m0075_jellyfish_extraction_reference.py tests/cae/test_m0076_exploratory_canvas_reference.py tests/cae/test_m0077_arc_reel_review_extraction.py tests/cae/test_m0078_shot_grammar_reference.py
+```
+
+All five bundles were integrated as isolated, authority-preserving reference components. No `COMPONENT_CONTRACT.yaml` was supplied in the delivered bundle directories; the respective handoffs, README/mapping documents, evidence receipts, and existing constitutional/CAE authority files were used as the controlling integration contracts.
