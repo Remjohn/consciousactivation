@@ -55,7 +55,8 @@ perceptual approval remain unclaimed.
 
 ## Exact commit SHA
 
-Recorded by the final Git commit for this implementation.
+Implementation commit: `9d22849cc8b2d7457e0e979a83e249ff4a50213a`.
+The evidence-receipt SHA update is a follow-up documentation commit.
 
 ## Operator decision requested
 
