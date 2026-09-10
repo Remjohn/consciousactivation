@@ -64,7 +64,8 @@ are in `M0080_EVIDENCE_RECEIPT.json`.
 
 ## Exact commit SHA
 
-Recorded by the implementation commit and finalized in the evidence update.
+Implementation commit: `f7f8863d0fa52f5decf91284ece29e810a61f998`.
+The evidence SHA update is a follow-up documentation commit.
 
 ## Operator decision requested
 
