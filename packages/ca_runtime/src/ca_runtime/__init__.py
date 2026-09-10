@@ -1500,4 +1500,26 @@ from .composition_asset_handoff import (
     verify_runtime_asset_handoff,
 )
 
+from .storyboard_session import (
+    FeedbackDecision,
+    MotionPlan,
+    OperatorVisualFeedback,
+    StoryboardAuthorityError,
+    StoryboardCompileReceipt,
+    StoryboardDomainError,
+    StoryboardElement,
+    StoryboardRevision,
+    StoryboardRevisionNotFoundError,
+    StoryboardRevisionValidationError,
+    StoryboardScene,
+    StoryboardSession,
+    StoryboardSessionStatus,
+    StoryboardSessionStore,
+    StoryboardShot,
+    StoryboardValidationReport,
+    TransformationIntent,
+    TransformationRecipe,
+    VisualAssetReference,
+)
+
 __version__ = "0.1.0.dev1"

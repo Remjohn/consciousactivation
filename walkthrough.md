@@ -932,3 +932,46 @@ pytest -q tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/c
 ```
 
 All five bundles were integrated as isolated, authority-preserving reference components. No `COMPONENT_CONTRACT.yaml` was supplied in the delivered bundle directories; the respective handoffs, README/mapping documents, evidence receipts, and existing constitutional/CAE authority files were used as the controlling integration contracts.
+
+---
+
+# CAE-M0079 Walkthrough — Canonical Storyboard Session and Revision Domain
+
+**Status:** Implemented; focused regression verified; operator review remains required
+**Date:** 2026-09-10
+**Boundary:** Editable storyboard production workspace around existing `EditorialStoryboardRecord`; no competing semantic, asset, or runtime authority
+
+## Exact mappings applied
+
+| M0079 concept | Repository authority / destination |
+|---|---|
+| `StoryboardSession` | `packages/ca_runtime/src/ca_runtime/storyboard_session.py`, linked to `EditorialStoryboardRecord` |
+| `StoryboardRevision` | Existing `PreparationGraphStore` / `GraphRevisionRecord` immutable revision path |
+| `StoryboardScene`, `StoryboardShot`, `StoryboardElement` | Typed, evidence-lineaged revision payload |
+| `VisualAssetReference` | Evidence-linked reference; no asset store or rights authority introduced |
+| `TransformationIntent → TransformationRecipe → MotionPlan` | Typed downstream expression chain with deterministic linkage checks |
+| `OperatorVisualFeedback` | Immutable `storyboard_operator_feedback` rows |
+| Validation / compile receipts | Immutable `storyboard_validation_report` and `storyboard_compile_receipt` rows |
+| Focused tests | `tests/cae/test_m0079_storyboard_session_revision.py` |
+| Evidence and handoff | `docs/cae/specs/M0079/` |
+
+The session cannot be created without a workspace-scoped existing
+`EditorialStoryboard`. Revisions cannot be saved without source evidence,
+evidence-grounded asset references, a correctly attached transformation chain,
+and the current base revision. Compilation requires a passing validation report
+and immutable operator `GOOD` feedback.
+
+## Verification matrix
+
+| Suite | Command | Result |
+|---|---|---:|
+| M0079 focused | `pytest -q tests/cae/test_m0079_storyboard_session_revision.py` | **PASS (3/3)** |
+| Existing M39 authority | `pytest -q tests/phase4/test_m39_storyboard_semantic_compile.py` | **PASS (10/10)** |
+| Unified M0079 storyboard/visual regression | `pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/cae/test_m0075_jellyfish_extraction_reference.py tests/cae/test_m0078_shot_grammar_reference.py tests/cae/test_vae_delegation_visual_asset_runtime.py` | **PASS (46/46, 100%)** |
+| Complete M0074–M0079 storyboard/visual regression | Same command plus `tests/cae/test_m0076_exploratory_canvas_reference.py` | **PASS (51/51, 100%)** |
+
+The contrastive test proves a visually plausible but ungrounded asset is
+blocked. The regression does not establish native external runtime reachability
+or replace the operator’s perceptual, rights, and final creative decisions.
+See `docs/cae/specs/M0079/M0079_EVIDENCE_RECEIPT.json` for evidence classes,
+authority inputs, limitations, and exact commands.
