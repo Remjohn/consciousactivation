@@ -440,3 +440,45 @@ Additional syntax verification passed with:
 ```bash
 python -m compileall -q services/asset-intelligence/src tests/asset_intelligence/test_cinematic_corpus_m062.py
 ```
+
+---
+
+# CAE-M063 Walkthrough — Natural-Language Semantic Cinematic Retrieval
+
+**Status:** Verified and committed
+**Date:** 2026-09-10
+**Invariant:** `INV-RETRIEVAL-001`
+**Result:** 34 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Governed semantic retrieval boundary | `services/asset-intelligence/src/cae_asset_intelligence/retrieval.py` |
+| Asset-intelligence retrieval public exports | `services/asset-intelligence/src/cae_asset_intelligence/__init__.py` |
+| M063 retrieval test suite | `tests/asset_intelligence/test_cinematic_retrieval_m063.py` |
+| Retrieval evaluation evidence | `services/asset-intelligence/M063_RETRIEVAL_EVALUATION.md` |
+
+Retrieval applies hard workspace, candidate, role, semantic-role, rights, and index-integrity filters before hybrid lexical/semantic ranking. It records explicit model identity, timestamps, source/version/hash provenance, explanations, and immutable receipts; low-confidence and stale-index paths fail closed without returning candidates.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M063 | INV-RETRIEVAL-001 | `tests/asset_intelligence/test_cinematic_retrieval_m063.py` | 11 | PASS (11/11) |
+| Existing scoped regression | Asset Intelligence suite | `tests/asset_intelligence` | 23 | PASS (23/23) |
+| **M063 verification** | | exact handoff command | **34** | **PASS (34/34, 100%)** |
+
+### Verification command
+
+```bash
+PYTHONPATH=services/asset-intelligence/src pytest -q -p no:asyncio tests/asset_intelligence
+```
+
+**Targeted result:** `34 passed in 0.68s (100% pass rate)`.
+
+Additional syntax verification passed with:
+
+```bash
+python -m compileall -q services/asset-intelligence/src tests/asset_intelligence/test_cinematic_retrieval_m063.py
+```

@@ -109,3 +109,27 @@ __all__ += [
     "stable_media_id",
     "stable_scene_id",
 ]
+
+from .retrieval import (
+    DeterministicSemanticEncoder,
+    EmbeddingModel,
+    RetrievalCandidate,
+    RetrievalError,
+    RetrievalQuery,
+    RetrievalReceipt,
+    RetrievalState,
+    RightsPolicy,
+    SemanticCinematicRetriever,
+)
+
+__all__ += [
+    "DeterministicSemanticEncoder",
+    "EmbeddingModel",
+    "RetrievalCandidate",
+    "RetrievalError",
+    "RetrievalQuery",
+    "RetrievalReceipt",
+    "RetrievalState",
+    "RightsPolicy",
+    "SemanticCinematicRetriever",
+]
