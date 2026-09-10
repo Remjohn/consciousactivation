@@ -1,0 +1,84 @@
+{
+  "mandate": "M0080",
+  "status": "BLOCKED_OPERATOR_REVIEW_REQUIRED",
+  "execution_date": "2026-09-10",
+  "input_snapshot": {
+    "archive": "/mnt/data/codebase_clean(5).zip",
+    "sha256": "755aa85bed2e41a608e908de88d027c52f419bf3ad2829bcab9a4b0e0eeac2a2",
+    "git_metadata_present": false,
+    "current_commit_sha": null
+  },
+  "authority_inputs": {
+    "missing_exact_paths": [
+      "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md"
+    ],
+    "available_constitutional_equivalent": [
+      "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    ],
+    "substitution_authorized": false
+  },
+  "brownfield_authority": {
+    "storyboard_semantic": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py::EditorialStoryboardRecord",
+    "storyboard_revision": "packages/ca_runtime/src/ca_runtime/preparation_graph_store.py::GraphRevisionRecord",
+    "editable_storyboard_projection": "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+    "editorial_storyboard_program": "programs/editorial_storyboard_program/",
+    "video_downstream_program": "programs/video_edit_program/",
+    "visual_derivative_downstream_program": "programs/visual_derivative_production_program/"
+  },
+  "implementation": {
+    "requested_programs": [
+      "VideoStoryboardProgram",
+      "CarouselStoryboardProgram",
+      "SuperVisualStoryboardProgram",
+      "PresentationStoryboardProgram"
+    ],
+    "implemented": false,
+    "reason": "Required M0080 Authority Pack is absent; mandate stop condition forbids deriving format-specific composition grammar from lower-order or inferred sources."
+  },
+  "verification": [
+    {
+      "evidence_class": "DOCUMENT",
+      "command": "test -f <each required authority path>",
+      "observed_result": "Six exact mandatory paths are missing; current PRD, mandate protocol, M0058/M0068, M65-M72, and media-intelligence sources exist."
+    },
+    {
+      "evidence_class": "EXECUTABLE",
+      "command": "rg canonical storyboard symbols in packages/ca_runtime/src/ca_runtime",
+      "observed_result": "EditorialStoryboardRecord, GraphRevisionRecord, PreparationGraphStore, and M0079 StoryboardSession layer were found."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/cae/test_visual_derivative_production_program.py tests/cae/test_ca_m005_format_archetype_gate.py",
+      "observed_result": "Collection failed: ModuleNotFoundError: No module named 'psycopg'.",
+      "proves": "Environment is not currently able to execute the focused baseline suite; no pass claim is made."
+    },
+    {
+      "evidence_class": "OPERATOR_DECISION_REQUIRED",
+      "command": "git rev-parse HEAD",
+      "observed_result": "fatal: not a git repository",
+      "proves": "Current exact repository commit SHA cannot be independently established from the attachment."
+    }
+  ],
+  "limitations": [
+    "No M0080 production implementation was created.",
+    "Format-specific composition grammar remains unresolved pending the missing Authority Pack.",
+    "The supplied archive has no .git metadata.",
+    "The focused Python suite cannot collect because psycopg is unavailable.",
+    "No visual preview or native external runtime reachability was claimed."
+  ],
+  "operator_decision_requested": [
+    "APPROVE",
+    "APPROVE-WITH-LIMITATIONS",
+    "REJECT"
+  ],
+  "historical_reference_only": {
+    "m0079_commit_sha_recorded_in_repository_docs": "9d22849cc8b2d7457e0e979a83e249ff4a50213a",
+    "note": "Not asserted as the current M0080 snapshot commit."
+  }
+}

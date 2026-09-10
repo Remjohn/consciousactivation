@@ -1,0 +1,104 @@
+{
+  "mandate": "M0077",
+  "status": "IMPLEMENTED_OPERATOR_REVIEW_REQUIRED",
+  "evidence": [
+    {
+      "class": "DOCUMENT",
+      "source_path": "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "observation": "Relocated required constitution found in supplied snapshot; constitution remains semantic/runtime authority and external repositories are behavior references only."
+    },
+    {
+      "class": "DOCUMENT",
+      "source_path": "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+      "observation": "Relocated required precedence contract found; external material cannot override constitutional precedence."
+    },
+    {
+      "class": "DOCUMENT",
+      "source_path": "docs/PRD/CURRENT.md",
+      "observation": "M72 production truth and shared-artifact coordination are current repository constraints."
+    },
+    {
+      "class": "SCHEMA",
+      "source_path": "programs/editorial_storyboard_program/program_manifest.yaml",
+      "observation": "Canonical storyboard program declares STORYBOARD_STATE_MACHINE_V1, storyboard_editorial_approval, and storyboard generation receipt."
+    },
+    {
+      "class": "SCHEMA",
+      "source_path": "programs/visual_derivative_production_program/program_manifest.yaml",
+      "observation": "Canonical visual derivative production declares COMMANDER/HUNTER/ANALYST/COMPOSER lanes, release gate, and repair path."
+    },
+    {
+      "class": "EXECUTABLE",
+      "source_path": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+      "observation": "Canonical storyboard and visual-derivative state machines already exist; adapter does not create a competing state model."
+    },
+    {
+      "class": "EXECUTABLE",
+      "source_path": "packages/ca_runtime/src/ca_runtime/editorial_discovery_program.py",
+      "observation": "Existing operator_request_regeneration enforces COMMANDER lane, synthetic-proof checks, predecessor lineage, and decision receipts."
+    },
+    {
+      "class": "SCHEMA",
+      "source_path": "api/schemas/supervision.py",
+      "observation": "TimelineProjectionModel, revision request inputs and change-request contracts already provide the canonical canvas/revision boundary."
+    },
+    {
+      "class": "TEST",
+      "source_path": "tests/cae/test_m0077_arc_reel_review_extraction.py",
+      "command": "pytest -p no:asyncio -q tests/cae/test_m0077_arc_reel_review_extraction.py",
+      "result": "9 passed"
+    },
+    {
+      "class": "TEST",
+      "source_path": "programs/visual_derivative_production_program/reference/arc_reel_review_adapter.py",
+      "command": "python -m py_compile programs/visual_derivative_production_program/reference/arc_reel_review_adapter.py tests/cae/test_m0077_arc_reel_review_extraction.py",
+      "result": "passed"
+    },
+    {
+      "class": "REGISTRY_SOURCE",
+      "source_path": "https://github.com/ArcReel/ArcReel/releases/tag/v0.29.0",
+      "source_commit": "6ddedc775e7fe5f398b10081ab741985f7dceda7",
+      "license": "AGPL-3.0",
+      "exact_source_files": [
+        "agent_runtime_profile/.claude/skills/generate-storyboard/SKILL.md",
+        "agent_runtime_profile/.claude/skills/generate-video/SKILL.md",
+        "LICENSE"
+      ],
+      "adopted_behavior": [
+        "explicit review checkpoint",
+        "distinct local edit vs regeneration interaction",
+        "explicit targeted regeneration",
+        "separate production task/result stages"
+      ],
+      "excluded_behavior": [
+        "provider/model routing",
+        "external generation workers",
+        "external workflow state authority",
+        "ArcReel project schema",
+        "ArcReel tool invocation protocol"
+      ]
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "source_path": "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "observation": "Exact required build-plan path is absent from supplied snapshot; no renamed equivalent was found during bounded audit."
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "source_path": ".git",
+      "observation": "Supplied archive contains no .git directory, so an exact CAE commit SHA cannot be honestly established for this worktree."
+    },
+    {
+      "class": "TEST",
+      "source_path": "tests/cae/test_m72_final_production_gate_current_sync.py",
+      "command": "pytest -p no:asyncio -q tests/cae/test_m0077_arc_reel_review_extraction.py tests/cae/test_m72_final_production_gate_current_sync.py",
+      "result": "M0077 focused tests passed (9 passed); M72 collection blocked by missing Python dependency: ModuleNotFoundError: No module named psycopg. This is environment-fidelity evidence, not a product failure."
+    },
+    {
+      "class": "REGISTRY_SOURCE",
+      "source_path": "https://github.com/ArcReel/ArcReel/tree/6ddedc775e7fe5f398b10081ab741985f7dceda7",
+      "source_commit": "6ddedc775e7fe5f398b10081ab741985f7dceda7",
+      "observation": "Frozen v0.29.0 tree confirms agent_runtime_profile, .claude, frontend, server and skills surfaces. Repository README at this commit states each stage may be reviewed, adjusted or regenerated in the workbench; no CAE authority was delegated to these surfaces."
+    }
+  ]
+}

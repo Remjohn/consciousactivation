@@ -1,0 +1,93 @@
+{
+  "mandate": "M0079",
+  "status": "BLOCKED_OPERATOR_DECISION_REQUIRED",
+  "evidence_classification": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "MIGRATION",
+    "REGISTRY_SOURCE",
+    "DOCUMENT",
+    "TEST",
+    "HYPOTHESIS",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "repository": {
+    "archive_path": "/mnt/data/codebase_clean(2).zip",
+    "archive_sha256": "f74b5bc4575e80346f6d0a12b39c3cbf15978edf170bc8a273a0e367435568ed",
+    "git_metadata_present": false,
+    "exact_commit_sha": null,
+    "commit_sha_status": "UNAVAILABLE_FROM_ARCHIVE"
+  },
+  "mandatory_inputs": {
+    "missing": [
+      "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md",
+      "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md"
+    ],
+    "equivalent_non_authority_sources_found": [
+      "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    ],
+    "use_of_equivalents": "inspection_only; not treated as a substitute for the required dated Authority Pack"
+  },
+  "brownfield_findings": [
+    {
+      "class": "SCHEMA",
+      "path": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py",
+      "symbol": "EditorialStoryboardRecord",
+      "finding": "Existing canonical EditorialStoryboard persistence boundary exists; no replacement authority should be introduced."
+    },
+    {
+      "class": "SCHEMA",
+      "path": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py",
+      "symbols": ["SemanticProgramRecord", "CompositionHandoffRecord", "EditorialDecisionReceiptRecord"],
+      "finding": "Existing lineage/compile/receipt records exist and are the nearest integration points."
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Production_Reference/M0078_SHOT_GRAMMAR_AND_ASSISTANT_REFERENCE.md",
+      "finding": "M0078 explicitly preserves EditorialStoryboard as canonical and retains the TransformationIntent chain as a downstream expression boundary."
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Visual_Production_Exploration_M0076_v1/DRAMACLAW_UPSTREAM_TO_CAE_MAPPING.md",
+      "finding": "M0076 records the same canonical EditorialStoryboard and receipt reuse points and states the supplied snapshot has no .git metadata."
+    }
+  ],
+  "tests": [
+    {
+      "class": "TEST",
+      "command": "python -m pytest -q tests/storyboard_reference/test_m0074_wind_comic_extraction.py",
+      "observed_result": "10 passed in 0.07s",
+      "proves": "Existing storyboard reference extraction tests execute successfully in the supplied environment.",
+      "does_not_prove": "M0079 implementation correctness, authority-pack alignment, persistence migration, or runtime reachability."
+    },
+    {
+      "class": "TEST",
+      "command": "python -m pytest -q tests/phase4/test_m39_storyboard_semantic_compile.py tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/cae/test_vae_delegation_visual_asset_runtime.py",
+      "observed_result": "collection interrupted: ModuleNotFoundError: No module named 'psycopg'",
+      "proves": "The supplied environment lacks a dependency required for two of the selected tests.",
+      "does_not_prove": "Failure of the underlying storyboard or VAE logic."
+    }
+  ],
+  "blockers": [
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "reason": "The exact dated Authority Pack files mandated as pre-edit inputs are absent from the supplied archive. Implementing against substitute documents would violate the mandate's authority-input requirement."
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "reason": "The archive contains no .git metadata; an exact CAE commit SHA and collision ownership cannot be established honestly."
+    }
+  ],
+  "implementation": {
+    "runtime_code_changed": false,
+    "tests_added": false,
+    "migrations_added": false,
+    "external_sources_extracted": false,
+    "reason": "Mandate stopped before implementation because required authority inputs and exact repository commit identity are unavailable."
+  }
+}

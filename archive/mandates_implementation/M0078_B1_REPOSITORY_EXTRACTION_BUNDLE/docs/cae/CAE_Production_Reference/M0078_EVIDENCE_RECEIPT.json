@@ -1,0 +1,132 @@
+{
+  "mandate": "M0078",
+  "status": "COMPLETE_WITH_OPERATOR_DECISION_REQUIRED",
+  "execution_date": "2026-09-10",
+  "evidence_classes": [
+    "DOCUMENT",
+    "SCHEMA",
+    "REGISTRY_SOURCE",
+    "TEST",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "brownfield_source_archive": {
+    "path": "codebase_clean(5).zip",
+    "sha256": "398ecae629683468f8eb2b31acbcc21670803164eab73a3b1e277a71e3530cc2",
+    "git_metadata_present": false
+  },
+  "repository_git_identity": {
+    "exact_commit_sha": null,
+    "command": "git rev-parse HEAD",
+    "observed_result": "fatal: not a git repository (or any of the parent directories): .git",
+    "operator_required": true
+  },
+  "changed_paths": [
+    "docs/cae/CAE_Production_Reference/M0078_shot_grammar_reference.yaml",
+    "docs/cae/CAE_Production_Reference/M0078_SHOT_GRAMMAR_AND_ASSISTANT_REFERENCE.md",
+    "tests/cae/test_m0078_shot_grammar_reference.py",
+    "AGENT_HANDOFF.md",
+    "docs/cae/CAE_Production_Reference/M0078_EVIDENCE_RECEIPT.json"
+  ],
+  "source_records": [
+    {
+      "source_id": "seedance2_openchatcut_adapter",
+      "evidence_class": "REGISTRY_SOURCE",
+      "repository": "https://github.com/0xsline/OpenChatCut",
+      "source_ref": "uploaded-brownfield-copy",
+      "source_commit": "UNVERIFIED_FROM_ARCHIVE",
+      "license": "AGPL-3.0-or-later",
+      "exact_path": "engines/video/openchatcut/upstream/src/agent/skills/video-gen/references/seedance2.md",
+      "local_source_verified": true,
+      "observed_scope": "Seedance2 capability/mode/shot/timing/camera vocabulary as wired through the OpenChatCut adapter."
+    },
+    {
+      "source_id": "toonflow_app",
+      "evidence_class": "REGISTRY_SOURCE",
+      "repository": "https://github.com/HBAI-Ltd/Toonflow-app",
+      "source_ref": "master",
+      "source_commit": "640861b (full SHA unavailable in evidence environment)",
+      "license": "Apache-2.0 plus HBAI-Ltd supplemental commercial terms",
+      "exact_paths": [
+        "data/modelPrompt/video/universalMulti-parameterMode.md",
+        "data/modelPrompt/video/universalFirstAndLastFrameMode.md",
+        "data/modelPrompt/video/wan2.6Single-imageFirstFrameMode.md",
+        "src/routes/assetsGenerate/generateAssets.ts"
+      ],
+      "observed_scope": "Explicit scene/shot/asset fields and model-facing video description mapping."
+    },
+    {
+      "source_id": "waoowaoo",
+      "evidence_class": "REGISTRY_SOURCE",
+      "repository": "https://github.com/waooAI/waoowaoo",
+      "source_ref": "main",
+      "source_commit": "6cbbe22cc6492159e0f649d507e4e21a9aec3074",
+      "license": "CC BY-NC-SA 4.0",
+      "exact_paths": [
+        "src/features/project-workspace/ProjectWorkspace.tsx",
+        "src/features/project-workspace/workspace-assistant-focus.ts",
+        "src/features/project-workspace/canvas/lifecycle/workspace-canvas-lifecycle.ts",
+        "src/features/project-workspace/canvas/lifecycle/resource-lifecycle.ts"
+      ],
+      "observed_scope": "Explicit assistant/canvas handoff identity, turn/resource targeting, and revision-oriented refinement behavior."
+    }
+  ],
+  "commands": [
+    {
+      "command": "/opt/pyvenv/bin/python -m pytest -q tests/cae/test_m0078_shot_grammar_reference.py",
+      "result": "PASS",
+      "observed": "7 passed in 0.15s",
+      "note": "Python startup emitted an artifact_tool spreadsheet warmup RemoteError to stderr; pytest exit code remained 0 and all seven focused tests passed."
+    },
+    {
+      "command": "git rev-parse HEAD",
+      "result": "BLOCKED",
+      "observed": "fatal: not a git repository (or any of the parent directories): .git"
+    }
+  ],
+  "verification_claims": [
+    {
+      "evidence_class": "TEST",
+      "property": "valid shot timing reconciles",
+      "result": "PASS"
+    },
+    {
+      "evidence_class": "TEST",
+      "property": "good-looking-but-wrong shot with duration mismatch is rejected by invariant",
+      "result": "PASS"
+    },
+    {
+      "evidence_class": "TEST",
+      "property": "external sources are not semantic authority",
+      "result": "PASS"
+    },
+    {
+      "evidence_class": "TEST",
+      "property": "malformed source path is rejected",
+      "result": "PASS"
+    },
+    {
+      "evidence_class": "TEST",
+      "property": "reference registry round-trips deterministically",
+      "result": "PASS"
+    },
+    {
+      "evidence_class": "TEST",
+      "property": "assistant targeting requires explicit interaction/targets",
+      "result": "PASS"
+    }
+  ],
+  "limitations": [
+    "The uploaded CAE archive contains no .git metadata, so the exact CAE commit SHA cannot be established honestly.",
+    "The OpenChatCut/Seedance2 source file is exact in the archive, but its upstream commit SHA is not preserved in the archive; recorded as UNVERIFIED_FROM_ARCHIVE.",
+    "Toonflow master was observed at commit 640861b; the available GitHub evidence view did not expose the full 40-character SHA.",
+    "No native Seedance2, Toonflow, or WaooWaoo runtime execution was performed; this bundle is reference/schema evidence, not runtime-reachability evidence.",
+    "No visual preview was generated or operator-inspected; perceptual/creative acceptance remains outside automated test proof.",
+    "No external source code was copied or vendored."
+  ],
+  "artifact_sha256": {
+    "docs/cae/CAE_Production_Reference/M0078_shot_grammar_reference.yaml": "ec8167a2b58a5ecd304f8b126226d1cec94ad7f836423efe6df6d8f28f838111",
+    "docs/cae/CAE_Production_Reference/M0078_SHOT_GRAMMAR_AND_ASSISTANT_REFERENCE.md": "e48e6e43d6bc2f8b383f0adc5c7fd609ad2ceef506483b407619815069438cd8",
+    "tests/cae/test_m0078_shot_grammar_reference.py": "2808e8b586add4143a042b25546617450a8cddd3c94a963feb5451f3a5ec2415",
+    "AGENT_HANDOFF.md": "68e99e5a93013373051ae59b20c80096fb6951499bd4dc2abe65f6ffe35af60a"
+  }
+}

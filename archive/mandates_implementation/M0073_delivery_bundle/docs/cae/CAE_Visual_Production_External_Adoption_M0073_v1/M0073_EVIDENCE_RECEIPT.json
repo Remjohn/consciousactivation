@@ -1,0 +1,78 @@
+{
+  "mandate_id": "M0073",
+  "evidence_class": "TEST",
+  "status": "BLOCKED_OPERATOR_REVIEW_REQUIRED",
+  "snapshot_sha256": "1bed9ffdf2b78fa27e6303349c21a5e5626bae9d4a4ff670ad34a188bf1c0bc9",
+  "commands": [
+    {
+      "command": "test -f AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "return_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "test -d .git",
+      "return_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "/opt/pyvenv/bin/python /mnt/data/m0073_repo/governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py --self-test",
+      "return_code": 0,
+      "stdout": "M0073 registry self-test: PASS",
+      "stderr": "Spreadsheet runtime warmup failed during python startup\nTraceback (most recent call last):\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py\", line 26, in warm_spreadsheet_runtime_on_startup\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 785, in warm_spreadsheet_runtime\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 720, in _warm_feature_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 704, in _warm_collaboration_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/generated/interface/models.py\", line 32317, in hydrate_crdt_from_proto\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/remote.py\", line 749, in __call__\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/client.py\", line 150, in call\nartifact_tool.rpc.client.RemoteError: hydrateCrdtFromProto requires an empty collaborative document."
+    },
+    {
+      "command": "/opt/pyvenv/bin/python /mnt/data/m0073_repo/governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py",
+      "return_code": 0,
+      "stdout": "M0073 registry structural validation: PASS",
+      "stderr": "Spreadsheet runtime warmup failed during python startup\nTraceback (most recent call last):\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py\", line 26, in warm_spreadsheet_runtime_on_startup\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 785, in warm_spreadsheet_runtime\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 720, in _warm_feature_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 704, in _warm_collaboration_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/generated/interface/models.py\", line 32317, in hydrate_crdt_from_proto\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/remote.py\", line 749, in __call__\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/client.py\", line 150, in call\nartifact_tool.rpc.client.RemoteError: hydrateCrdtFromProto requires an empty collaborative document."
+    }
+  ],
+  "artifact_sha256": {
+    "docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/M0073_EXTERNAL_REPOSITORY_ADOPTION_REGISTRY.json": "e502302bebb69c24cbe89090ba742ba44c21b4a0fe73aed7c90d345ea7dd4a6b",
+    "docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/README.md": "c4e97bf510791b185ade22ddf978b2de57fed686c0c0e0e282306a0610264606",
+    "governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py": "02bdc7d913886b2db31959a46e53b7b1aee16ff992010c220cb54ea84a6d3a34",
+    "governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/M0073_CONTROL_STATE.yaml": "fd4fc20f70272028947188e45ffca4be2913829d962bd4a68e42af193f2ebab7",
+    "docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/AGENT_HANDOFF.md": "5dfc09b715a468086b3550ddadcce21a353780b6ba5e06bcbf76b001534c2269"
+  },
+  "authority_gaps": [
+    {
+      "path": "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "state": "MISSING",
+      "evidence": "test -f returned 1"
+    },
+    {
+      "path": ".git/",
+      "state": "MISSING",
+      "evidence": "test -d returned 1"
+    }
+  ],
+  "external_source_fidelity": {
+    "current_web_evidence_observed": true,
+    "exact_commit_sha_verified": false,
+    "native_external_runtime_reachability_tested": false,
+    "note": "External repositories were inspected read-only through current web source pages; repository network cloning was unavailable in the execution environment."
+  },
+  "negative_coverage": "Validator self-test mutates a populated row to remove excluded_behavior; validation must fail. Completion mode also fails when any exact source SHA remains unresolved.",
+  "limitations": [
+    "The supplied Authority Pack build plan is absent, so the campaign's canonical external adoption intent cannot be cross-checked against its source.",
+    "The uploaded repository is a source snapshot without .git metadata, so this mandate cannot truthfully emit the exact CAE commit SHA.",
+    "Most upstream current commit SHAs were not retrievable; records are explicitly blocked rather than invented.",
+    "No external runtime was launched; no native reachability claim is made."
+  ],
+  "final_verification_commands": [
+    {
+      "command": "/opt/pyvenv/bin/python /mnt/data/m0073_repo/governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py --self-test",
+      "return_code": 0,
+      "stdout": "M0073 registry self-test: PASS",
+      "stderr": "Spreadsheet runtime warmup failed during python startup\nTraceback (most recent call last):\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py\", line 26, in warm_spreadsheet_runtime_on_startup\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 785, in warm_spreadsheet_runtime\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 720, in _warm_feature_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 704, in _warm_collaboration_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/generated/interface/models.py\", line 32317, in hydrate_crdt_from_proto\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/remote.py\", line 749, in __call__\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/client.py\", line 150, in call\nartifact_tool.rpc.client.RemoteError: hydrateCrdtFromProto requires an empty collaborative document."
+    },
+    {
+      "command": "/opt/pyvenv/bin/python /mnt/data/m0073_repo/governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py",
+      "return_code": 0,
+      "stdout": "M0073 registry structural validation: PASS",
+      "stderr": "Spreadsheet runtime warmup failed during python startup\nTraceback (most recent call last):\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py\", line 26, in warm_spreadsheet_runtime_on_startup\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 785, in warm_spreadsheet_runtime\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 720, in _warm_feature_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py\", line 704, in _warm_collaboration_flows\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/generated/interface/models.py\", line 32317, in hydrate_crdt_from_proto\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/remote.py\", line 749, in __call__\n  File \"/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/client.py\", line 150, in call\nartifact_tool.rpc.client.RemoteError: hydrateCrdtFromProto requires an empty collaborative document."
+    }
+  ]
+}
