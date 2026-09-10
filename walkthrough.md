@@ -569,6 +569,63 @@ The live acceptance receipt (`EXECUTED`, `NATIVE_TIMELINE_VERIFIED`, `openchatcu
 
 ---
 
+# CAE-M067 Walkthrough — Real Campaign Vertical Slice and Product Operability Proof
+
+**Status:** Automated contract and adversarial suites verified; live product proof blocked by unavailable native runtime and real inputs
+**Date:** 2026-09-10
+**Invariant:** `INV-PRODUCT-REAL-001`
+**Automated result:** 34 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Real/adversarial campaign execution harness | `tests/e2e/m067_real_campaign_harness.py` |
+| M067 contract and invariant tests | `tests/e2e/test_m067_real_campaign.py` |
+| M067 operator execution instructions | `tests/e2e/README_M067.md` |
+| Durable completion and control record | `docs/cae/state/CAE_M067_COMPLETION_RECORD.md` |
+| Machine-readable E2E evidence report | `docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json` |
+| Hash-addressed artifact manifest | `docs/cae/evidence/M067/CAE_M067_ARTIFACT_MANIFEST.json` |
+| Native-runtime receipt status | `docs/cae/evidence/M067/CAE_M067_RUNTIME_RECEIPTS.json` |
+| Operator decision gate | `docs/cae/evidence/M067/CAE_M067_OPERATOR_DECISION_RECORD.json` |
+| Residual gap ledger | `docs/cae/evidence/M067/CAE_M067_RESIDUAL_GAP_LEDGER.json` |
+
+The harness composes the governed M0064 lineage and M0065 native-runtime boundaries. It records hash-addressed append-only evidence, rejects false source/scene proofs, requires native OpenChatCut reachability and real upstream inputs for live acceptance, and preserves blocked-run evidence without mock substitution.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M067 | INV-PRODUCT-REAL-001 | `tests/e2e/test_m067_real_campaign.py` | 8 | PASS (8/8) |
+| Existing scoped regression | M064 asset lineage | `tests/production_program/test_m0064_asset_selection_binding_lineage.py` | 14 | PASS (14/14) |
+| Existing scoped regression | M065 native runtime | `tests/phase6/test_m065_openchatcut_runtime.py` | 6 | PASS (6/6) |
+| Existing scoped regression | M066 human resolution | `tests/cae/test_m066_human_resolution.py` | 6 | PASS (6/6) |
+| **M067 verification** | | exact handoff regression | **34** | **PASS (34/34, 100%)** |
+
+### Verification commands
+
+```bash
+python -m pytest -q tests/e2e/test_m067_real_campaign.py tests/production_program/test_m0064_asset_selection_binding_lineage.py tests/phase6/test_m065_openchatcut_runtime.py tests/cae/test_m066_human_resolution.py
+```
+
+**Regression result:** `34 passed in 18.14s (100% pass rate)`.
+
+```bash
+python tests/e2e/m067_real_campaign_harness.py preflight --artifact-root .cae-m067-artifacts
+```
+
+Preflight correctly returned a blocked result because `http://localhost:5199/api/external-mcp/mcp` was unreachable and no real source-media input was supplied. The fail-closed exit was preserved; it was not converted to PASS.
+
+```bash
+python tests/e2e/m067_real_campaign_harness.py adversarial --artifact-root .cae-m067-artifacts
+```
+
+**Adversarial result:** `ADVERSARIAL_PASS`; wrong source digest and wrong-scene binding countercases were rejected, with hash-addressed evidence recorded.
+
+The decisive `live` proof was not attempted because the required native runtime, real source media, governed video program, operator evidence, and release evidence were unavailable. The operator decision remains `BLOCK` pending those real-boundary inputs.
+
+---
+
 # CAE-M066 Walkthrough — Human Resolution Control Surface
 
 **Status:** Focused backend and frontend suites verified; repository-wide web typecheck remains blocked by pre-existing unrelated errors
