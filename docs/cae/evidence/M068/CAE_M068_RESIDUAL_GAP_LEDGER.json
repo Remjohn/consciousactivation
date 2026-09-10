@@ -1,0 +1,151 @@
+{
+  "mandate_id": "CAE-M068",
+  "invariant": "INV-CERT-REAL-001",
+  "execution_date": "2026-09-10",
+  "status": "BLOCKED",
+  "open_gaps": [
+    {
+      "gap_id": "GAP-M068-001",
+      "status": "OPEN",
+      "severity": "CRITICAL",
+      "boundary": "native_openchatcut",
+      "source_gap_id": "GAP-M067-001",
+      "reason": "Configured native OpenChatCut endpoint http://localhost:5199/api/external-mcp/mcp refused connection during M0067 live preflight/campaign.",
+      "closure": "Run the identical M0067 live harness against a reachable native OpenChatCut endpoint and capture a native EXECUTED receipt plus timeline verification.",
+      "authority": "Runtime operator / release owner",
+      "evidence_refs": [
+        "docs/cae/evidence/M067/CAE_M067_RUNTIME_RECEIPTS.json",
+        "docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-002",
+      "status": "OPEN",
+      "severity": "CRITICAL",
+      "boundary": "real_asset_retrieval",
+      "source_gap_id": "GAP-M067-002",
+      "reason": "No governed real source-media artifact or production retrieval receipt is present in the uploaded archive.",
+      "closure": "Provide the governed real source media and retrieval receipt with exact SHA-256, provenance and rights lineage, then rerun the real campaign.",
+      "authority": "Asset/retrieval operator",
+      "evidence_refs": [
+        "docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json",
+        "docs/cae/evidence/M067/CAE_M067_RESIDUAL_GAP_LEDGER.json"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-003",
+      "status": "OPEN",
+      "severity": "CRITICAL",
+      "boundary": "operator_intervention",
+      "source_gap_id": "GAP-M067-003",
+      "reason": "No persisted live HumanResolution native-edit evidence exists for the real campaign.",
+      "closure": "Execute the bounded native edit, persist before/after HumanResolution lineage, exercise refresh/reopen and CAS failure, and preserve receipts.",
+      "authority": "Operator",
+      "evidence_refs": [
+        "docs/cae/evidence/M067/CAE_M067_RESIDUAL_GAP_LEDGER.json",
+        "tests/cae/test_m066_human_resolution.py"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-004",
+      "status": "OPEN",
+      "severity": "CRITICAL",
+      "boundary": "qa_release",
+      "source_gap_id": "GAP-M067-004",
+      "reason": "No live final QA result and backend-authoritative release authorization evidence is present.",
+      "closure": "Execute final QA and release authorization against the real campaign state; preserve the release manifest, authorization actor, preconditions, postconditions and receipt.",
+      "authority": "QA/release authority",
+      "evidence_refs": [
+        "docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json",
+        "docs/cae/evidence/M067/CAE_M067_OPERATOR_DECISION_RECORD.json"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-005",
+      "status": "OPEN",
+      "severity": "HIGH",
+      "boundary": "commit_identity",
+      "source_gap_id": "GAP-M067-005",
+      "reason": "Uploaded archive contains no .git metadata.",
+      "closure": "Perform the certification in a Git worktree and record the exact repository commit SHA in the operator-gate record.",
+      "authority": "Execution operator / repository owner",
+      "evidence_refs": [
+        "docs/cae/state/CAE_M067_COMPLETION_RECORD.md"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-006",
+      "status": "OPEN",
+      "severity": "HIGH",
+      "boundary": "m059_execution_evidence",
+      "reason": "M0059 control-surface test collection is blocked in this sandbox by missing psycopg dependency.",
+      "closure": "Re-run tests/mandates/test_cae_m059_control_surface.py in a dependency-complete environment and preserve the unmodified command output.",
+      "authority": "Execution environment owner",
+      "evidence_refs": [
+        "tests/mandates/test_cae_m059_control_surface.py"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-007",
+      "status": "OPEN",
+      "severity": "MEDIUM",
+      "boundary": "m058_baseline_receipt",
+      "reason": "No dedicated immutable M0058 baseline evidence manifest or completion record is present in the supplied archive.",
+      "closure": "Recover or rerun the governed M0058 baseline receipt in the original repository worktree; do not infer closure from downstream tests.",
+      "authority": "Campaign evidence owner",
+      "evidence_refs": [
+        "docs/cae/Architecture.md",
+        "docs/cae/PROMPT_REFERENCE_BLOCKS.md"
+      ]
+    },
+    {
+      "gap_id": "GAP-M068-008",
+      "status": "OPEN",
+      "severity": "MEDIUM",
+      "boundary": "m061_contract_receipt",
+      "reason": "No dedicated immutable M0061 execution manifest or test log is present in the supplied archive.",
+      "closure": "Recover or rerun M0061 contract verification and capture the exact evidence manifest tied to the governed source version.",
+      "authority": "Campaign evidence owner",
+      "evidence_refs": [
+        "docs/cae/PROMPT_REFERENCE_BLOCKS.md",
+        "services/asset-intelligence",
+        "packages/ca_runtime/src/ca_runtime"
+      ]
+    }
+  ],
+  "closed_controls": [
+    {
+      "control": "adversarial wrong source SHA rejection",
+      "evidence": "M0067 focused test/evidence",
+      "status": "CLOSED"
+    },
+    {
+      "control": "adversarial wrong-scene selection rejection",
+      "evidence": "M0067 focused test/evidence",
+      "status": "CLOSED"
+    },
+    {
+      "control": "mock substitution prohibition",
+      "evidence": "M0067 harness policy and tests",
+      "status": "CLOSED"
+    },
+    {
+      "control": "append-only evidence hashing",
+      "evidence": "M0067 evidence manifest",
+      "status": "CLOSED"
+    },
+    {
+      "control": "fail-closed real campaign preconditions",
+      "evidence": "M0067 live-blocked receipt",
+      "status": "CLOSED"
+    }
+  ],
+  "next_campaign_frontier": {
+    "frontier_id": "NEXT-FRONTIER-REAL-RUNTIME-CLOSURE",
+    "proposed_campaign": "Live Runtime and Release-Evidence Closure",
+    "scope": "Close GAP-M068-001 through GAP-M068-005 first; rerun M0059, M0058 and M0061 evidence recovery in the same Git worktree only as evidence repair, without changing acceptance criteria.",
+    "entry_gate": "Native OpenChatCut reachable; governed real source media available; operator and QA/release evidence actors available; exact Git commit known.",
+    "exit_gate": "M0067 real campaign reaches RELEASE_READY with native EXECUTED receipt, persisted operator intervention, QA/release authorization, and exact commit SHA.",
+    "prohibition": "Do not begin this next campaign under M0068; it is only the proposed frontier."
+  }
+}

@@ -681,3 +681,55 @@ npm run typecheck
 ```
 
 The M066-local type errors were corrected. The command remains non-green because the existing web baseline reports unrelated errors in tenancy, campaign list/new, legacy control-tower components, workspace UI, and other test files; those files were not changed for M066.
+
+---
+
+# CAE-M068 Walkthrough — Production Readiness and Residual-Gap Certification
+
+**Status:** Certification artifacts and preserved regression suites verified; production readiness remains fail-closed and blocked pending real-runtime evidence
+**Date:** 2026-09-10
+**Invariant:** `INV-CERT-REAL-001`
+**Automated result:** 75 passed, 0 failed (100% pass rate across M068 certification and preserved upstream proof)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Production readiness certification report | `docs/cae/evidence/M068/CAE_M068_PRODUCTION_READINESS_CERTIFICATION_REPORT.md` |
+| Ten-criterion readiness matrix | `docs/cae/evidence/M068/CAE_M068_READINESS_MATRIX.json` |
+| Residual-gap ledger and next-campaign frontier | `docs/cae/evidence/M068/CAE_M068_RESIDUAL_GAP_LEDGER.json` |
+| Content-addressed evidence manifest | `docs/cae/evidence/M068/CAE_M068_EVIDENCE_MANIFEST.json` |
+| Verification command and environment log | `docs/cae/evidence/M068/CAE_M068_VERIFICATION_TEST_LOG.md` |
+| M068 completion and operator-gate record | `docs/cae/state/CAE_M068_COMPLETION_RECORD.md` |
+| Production-readiness certification tests | `tests/cae/test_m068_production_readiness_certification.py` |
+
+M068 adds no application or database changes. The certification remains fail-closed: upstream evidence is classified explicitly as `VERIFIED`, `PARTIAL`, or `BLOCKED`, residual gaps remain visible, and the next real-runtime campaign is not started automatically.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M068 | INV-CERT-REAL-001 | `tests/cae/test_m068_production_readiness_certification.py` | 11 | PASS (11/11) |
+| Preserved upstream proof | M062–M067 scoped regression | handoff upstream proof command | 64 | PASS (64/64) |
+| **M068 automated verification** | | certification + preserved upstream proof | **75** | **PASS (75/75, 100%)** |
+
+### Verification commands
+
+```bash
+python -m pytest -q tests/cae/test_m068_production_readiness_certification.py
+```
+
+**Certification result:** `11 passed in 0.63s (100% pass rate)`.
+
+```bash
+python -m pytest -q tests/e2e/test_product_e2e_fixture.py tests/e2e/test_live_e2e_proof_harness.py tests/asset_intelligence/test_cinematic_corpus_m062.py tests/asset_intelligence/test_cinematic_retrieval_m063.py tests/production_program/test_m0064_asset_selection_binding_lineage.py tests/phase6/test_m065_openchatcut_runtime.py tests/cae/test_m066_human_resolution.py tests/e2e/test_m067_real_campaign.py
+```
+
+**Preserved upstream result:** `64 passed in 70.10s (100% pass rate)`.
+
+```bash
+python tests/e2e/m067_real_campaign_harness.py preflight --artifact-root .cae-m067-artifacts/preflight
+python tests/e2e/m067_real_campaign_harness.py live --artifact-root .cae-m067-artifacts/live
+```
+
+Both live-boundary commands correctly recorded blocked evidence because the native OpenChatCut endpoint at `localhost:5199` was unreachable and no real source-media input was supplied. No mock runtime or synthetic success receipt was used. The operator decision remains `BLOCK` until the required real-runtime, provenance, human-resolution, and release evidence is supplied.
