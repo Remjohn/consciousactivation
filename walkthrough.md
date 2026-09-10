@@ -733,3 +733,45 @@ python tests/e2e/m067_real_campaign_harness.py live --artifact-root .cae-m067-ar
 ```
 
 Both live-boundary commands correctly recorded blocked evidence because the native OpenChatCut endpoint at `localhost:5199` was unreachable and no real source-media input was supplied. No mock runtime or synthetic success receipt was used. The operator decision remains `BLOCK` until the required real-runtime, provenance, human-resolution, and release evidence is supplied.
+
+---
+
+# CAE-M0073 Walkthrough — Visual Production External Repository Adoption Registry
+
+**Status:** Registry and negative validation verified; adoption remains blocked pending authority-pack and exact upstream-reference review
+**Date:** 2026-09-10
+**Invariant:** External adoption boundary is fail-closed; no upstream source is granted CAE authority
+**Automated result:** 2 validator checks passed, 0 failed
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| External repository adoption registry for 16 named sources | `docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/M0073_EXTERNAL_REPOSITORY_ADOPTION_REGISTRY.json` |
+| Registry boundary and operator instructions | `docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/README.md` |
+| M0073 evidence receipt | `docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/M0073_EVIDENCE_RECEIPT.json` |
+| M0073 handoff record | `docs/cae/CAE_Visual_Production_External_Adoption_M0073_v1/AGENT_HANDOFF.md` |
+| M0073 control state | `governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/M0073_CONTROL_STATE.yaml` |
+| Structural/negative/completion-gate validator | `governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py` |
+
+M0073 is intentionally control-plane-only. It freezes the external adoption boundary for Wind Comic, Jellyfish, DramaClaw, ArcReel, Seedance2 Storyboard Generator, WaooWaoo, Toonflow, OpenChatCut, Open Carrusel, Slidev, reveal.js, Rough Notation, Pretext, Skia, Meta SAM3, and sam3.cpp. No CAE application source was modified, no upstream code was copied or merged, and no external runtime was launched. The previously cloned OpenChatCut checkout remains outside this M0073 commit and is not treated as an authority by the registry.
+
+## Authority files reviewed
+
+| Authority | Result |
+|---|---|
+| `governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md` | Present and reviewed |
+| `governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml` | Present and reviewed; binding precedence contract |
+| `docs/PRD/CURRENT.md` | Present and reviewed |
+| `AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md` | Missing; preserved as an explicit blocker |
+
+## Verification matrix
+
+| Check | Command | Result |
+|---|---|---|
+| Structural registry validation | `python governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py` | PASS |
+| Negative and completion-gate self-test | `python governance/program-control/03_EXTERNAL_REPOSITORY_ADOPTION/M0073/validate_m0073_registry.py --self-test` | PASS |
+| Evidence JSON parsing | Python JSON parse of the supplied M0073 evidence/registry files | PASS |
+| External adoption completion | Exact upstream SHA for every record | BLOCKED; no SHA invented |
+
+The registry remains `BLOCKED_OPERATOR_REVIEW_REQUIRED`. The supplied evidence preserves the missing Authority Pack, unresolved exact upstream commit SHAs, and the operator decision gate; these limitations are evidence, not acceptance failures.
