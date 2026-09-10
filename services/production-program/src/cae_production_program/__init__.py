@@ -21,6 +21,20 @@ from .errors import (
     TimingDiscontinuityError,
 )
 from .compiler import ProductionProgramCompiler
+from .composition_asset_pack import (
+    AssetBindingError,
+    AssetBindingInvalidatedError,
+    AssetLineageValidationError,
+    CompositionAssetBinding,
+    CompositionAssetPack,
+    ExplicitSelectionReceipt,
+    apply_composition_asset_pack,
+    bind_selected_retrieval_candidates,
+    build_selection_receipt,
+    candidate_identity_snapshot,
+    invalidate_composition_asset_pack,
+    validate_composition_asset_pack,
+)
 from .verifier import ProductionProgramVerifier
 
 __all__ = [
@@ -37,5 +51,17 @@ __all__ = [
     "StoryArcGeometryMutationError",
     "TimingDiscontinuityError",
     "ProductionProgramCompiler",
+    "AssetBindingError",
+    "AssetBindingInvalidatedError",
+    "AssetLineageValidationError",
+    "CompositionAssetBinding",
+    "CompositionAssetPack",
+    "ExplicitSelectionReceipt",
+    "apply_composition_asset_pack",
+    "bind_selected_retrieval_candidates",
+    "build_selection_receipt",
+    "candidate_identity_snapshot",
+    "invalidate_composition_asset_pack",
+    "validate_composition_asset_pack",
     "ProductionProgramVerifier",
 ]

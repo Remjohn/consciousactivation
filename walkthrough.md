@@ -482,3 +482,48 @@ Additional syntax verification passed with:
 ```bash
 python -m compileall -q services/asset-intelligence/src tests/asset_intelligence/test_cinematic_retrieval_m063.py
 ```
+
+---
+
+# CAE-M064 Walkthrough — Asset Selection, Production Binding & Lineage Handoff
+
+**Status:** Verified and committed
+**Date:** 2026-09-10
+**Invariant:** `INV-ASSET-LINEAGE-001`
+**Result:** 59 passed, 0 failed (100% pass rate)
+
+## Exact bundle mappings applied
+
+| Artifact | Destination |
+|---|---|
+| Typed selection-to-production binding pack and lineage DAG | `services/production-program/src/cae_production_program/composition_asset_pack.py` |
+| Production-program public binding exports | `services/production-program/src/cae_production_program/__init__.py` |
+| Runtime handoff resolver and receipt verifier | `packages/ca_runtime/src/ca_runtime/composition_asset_handoff.py` |
+| Runtime public handoff exports | `packages/ca_runtime/src/ca_runtime/__init__.py` |
+| M064 lineage and false-proof tests | `tests/production_program/test_m0064_asset_selection_binding_lineage.py` |
+
+The boundary preserves explicit selected asset identity, source interval/version/hash, semantic and insert roles, rights, provenance, selection authority, upstream receipts, program reference, deterministic lineage root, and runtime handoff digest. No downstream asset re-selection or substitution is performed.
+
+## Test matrix
+
+| Mandate | Invariant | Focused test suite | Tests | Result |
+|---|---|---|:---:|:---:|
+| CAE-M064 | INV-ASSET-LINEAGE-001 | `tests/production_program/test_m0064_asset_selection_binding_lineage.py` | 14 | PASS (14/14) |
+| Existing scoped regression | Production Program + Asset Intelligence + runtime lifecycle | handoff scoped command | 45 | PASS (45/45) |
+| **M064 verification** | | exact handoff command | **59** | **PASS (59/59, 100%)** |
+
+### Verification commands
+
+```bash
+PYTHONPATH=services/production-program/src:services/asset-intelligence/src:packages/ca_runtime/src pytest -q tests/production_program tests/asset_intelligence tests/cae/test_asset_demand_resolution_runtime.py
+```
+
+**Scoped result:** `59 passed in 0.94s (100% pass rate)`.
+
+```bash
+PYTHONPATH=services/production-program/src:services/asset-intelligence/src:packages/ca_runtime/src pytest -q tests/production_program/test_m0064_asset_selection_binding_lineage.py
+```
+
+**Focused result:** `14 passed in 0.38s (100% pass rate)`.
+
+Additional Python byte-compilation passed for all M064 implementation and test modules.

@@ -1492,4 +1492,12 @@ from .asset_demand_resolution import (
     validate_asset_demand_transition,
 )
 
+from .composition_asset_handoff import (
+    RuntimeAssetInput,
+    RuntimeAssetHandoff,
+    RuntimeAssetLineageError,
+    resolve_runtime_asset_inputs,
+    verify_runtime_asset_handoff,
+)
+
 __version__ = "0.1.0.dev1"
