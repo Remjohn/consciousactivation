@@ -1,0 +1,60 @@
+{
+  "mandate": "CAE-M0085",
+  "title": "Evidence-First Visual Asset Studio",
+  "status": "IMPLEMENTED",
+  "implementation_commit": "a2f49047",
+  "tests": [
+    {
+      "class": "TEST",
+      "command": "pytest -q tests/api/test_visual_studio_pure.py tests/api/test_studio_bridge.py tests/phase1/test_studio.py",
+      "passed": 8,
+      "failed": 0,
+      "pass_rate": "100%"
+    },
+    {
+      "class": "TEST",
+      "command": "node --test services/studio/tests/*.test.mjs",
+      "passed": 20,
+      "failed": 0,
+      "pass_rate": "100%"
+    },
+    {
+      "class": "EXECUTABLE",
+      "command": "node_modules/.bin/tsc.cmd -p services/studio/tsconfig.json --pretty false",
+      "result": "PASS"
+    },
+    {
+      "class": "SCHEMA",
+      "command": "byte comparison of services/studio/src/generated/contracts.ts against the pinned release contract",
+      "result": "contracts-byte-identical"
+    },
+    {
+      "class": "TEST",
+      "command": "python -m py_compile api/main.py api/routers/visual_studio.py api/services/studio_bridge.py api/services/visual_studio_contracts.py",
+      "result": "python-api-syntax-ok"
+    },
+    {
+      "class": "EXECUTABLE",
+      "command": "node services/studio/dist/index.js health --json",
+      "result": "development_authorized=true; production_authorized=false; certified=false"
+    }
+  ],
+  "authority_boundary": "Visual Asset Studio is an operator projection and proposal surface over existing governed VAE/Composition, VideoEditProgram, campaign state, repository objects, and Studio RPC paths. It cannot mutate semantic authority, bypass source lineage, self-promote, or ship.",
+  "integration_repairs": [
+    "Preserved the tracked Phase 07 Studio implementation instead of overwriting it with the older bundle snapshot.",
+    "Added legacy ref/actor compatibility at the Studio validation boundary for the supplied M0085 bridge fixture without changing canonical release contracts.",
+    "Added the Visual Asset Studio action to the existing Control Tower projection.",
+    "Added missing transform mutation wiring and type imports in the Studio UI."
+  ],
+  "source_limitation": "The literal CAE-M0085_BUNDLE path and COMPONENT_CONTRACT.yaml were absent; M0085_delivery and the canonical repository authority hierarchy were used.",
+  "known_limitations": [
+    "The full apps/web typecheck remains blocked by pre-existing repository errors outside the M0085 surface; M0085-specific errors were resolved.",
+    "No real campaign media artifact was available for browser playback proof.",
+    "Source quality and geometry remain NOT_OBSERVED; semantic correctness remains OPERATOR_REVIEW_REQUIRED.",
+    "No external media runtime reachability or native render fidelity is claimed."
+  ],
+  "operator_decision": {
+    "required": true,
+    "allowed": ["APPROVE", "APPROVE-WITH-LIMITATIONS", "REJECT"]
+  }
+}

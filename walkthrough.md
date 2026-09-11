@@ -1045,3 +1045,40 @@ recorded explicitly in the evidence receipt.
 The negative and contrastive cases cover sequence violations, invalid harness/scene bindings, unsupported source quality, missing or duplicate evidence, unsupported profiles, unauthorized/stale/mismatched recipes, low-quality motion suppression, undeclared intensities, quality-band violations, and deterministic adaptation. The requested literal CAE-M0081 through CAE-M0084 bundle paths and `COMPONENT_CONTRACT.yaml` files were absent; the delivered reconciled bundles, canonical mandates, existing CAE authority files, and campaign Authority Pack were used. This is recorded in each mandate evidence receipt.
 
 Implementation commit: `582fbb75288042d6b85ca856c4109c63e47665b4`.
+
+---
+
+# CAE-M0085 Walkthrough — Evidence-First Visual Asset Studio
+
+**Status:** Implemented; required focused and Studio regression suites verified at 100%\
+**Date:** 2026-09-11\
+**Boundary:** Operator-facing projection and proposal surface over existing governed VAE/Composition, campaign, VideoEditProgram, repository-object, and Studio RPC authorities
+
+## Exact integration matrix
+
+| Concern | Destination | Authority preserved |
+|---|---|---|
+| Visual Studio API projection | `api/routers/visual_studio.py` | Existing campaign repository and canonical timeline projection |
+| Bridge fail-closed behavior | `api/services/studio_bridge.py` | Existing Studio RPC entrypoint |
+| Source/evidence/candidate/canvas/layer view | `apps/web/src/components/visual-studio/VisualAssetStudio.tsx` | Read-only canonical projection; no mock preview |
+| Transform and Visual Chat proposals | `apps/web/src/api/visualStudio.ts` plus existing Studio RPC | Typed operator proposals; no direct canonical mutation |
+| Operator feedback | `studio_visual_feedback` repository objects | Immutable content-addressed feedback against current revision |
+| Existing Studio surface | Campaign Detail Visual Studio tab | Existing Control Tower/Timeline navigation |
+| Executable handoff | `services/studio/dist/` | Built from the preserved Phase 07 Studio source |
+
+## Verification matrix
+
+| Suite | Command | Result |
+|---|---|---:|
+| M0085 focused/API and phase-1 Studio tests | `pytest -q tests/api/test_visual_studio_pure.py tests/api/test_studio_bridge.py tests/phase1/test_studio.py` | **PASS (8/8, 100%)** |
+| Existing Studio regression | `node --test services/studio/tests/*.test.mjs` | **PASS (20/20, 100%)** |
+| Studio build | `node_modules/.bin/tsc.cmd -p services/studio/tsconfig.json --pretty false` | **PASS** |
+| Generated release contract identity | Byte comparison against pinned release contract | **PASS** |
+| Python API syntax | `python -m py_compile api/main.py api/routers/visual_studio.py api/services/studio_bridge.py api/services/visual_studio_contracts.py` | **PASS** |
+| Studio health | `node services/studio/dist/index.js health --json` | **PASS; development only** |
+
+The focused negative cases cover non-operator actors, missing RPC entrypoints, malformed JSON, timeouts, and bridge crash behavior. The Studio keeps preview unavailable when no canonical media artifact exists and labels semantic correctness as operator review rather than inventing proof.
+
+The requested literal CAE-M0085_BUNDLE and COMPONENT_CONTRACT.yaml were absent; the delivered M0085_delivery bundle and current CAE authority hierarchy were used. The older bundle snapshot was merged additively so existing Phase 07 Studio behavior was not overwritten. The full web typecheck remains blocked by unrelated pre-existing repository errors and is not claimed as M0085 evidence.
+
+Implementation commit: `a2f49047`.
