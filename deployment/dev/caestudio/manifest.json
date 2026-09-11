@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0",
+  "name": "cae-studio-dev",
+  "public_host": "127.0.0.1",
+  "public_port": 3000,
+  "control_host": "127.0.0.1",
+  "control_port": 3100,
+  "nginx_binary": "nginx",
+  "runtimes": [
+    {
+      "id": "cae-api",
+      "display_name": "CAE API",
+      "enabled_default": true,
+      "required": true,
+      "capabilities": [
+        "cae_api",
+        "canonical_state_access"
+      ],
+      "route_prefix": "/api",
+      "command": [
+        "python",
+        "-m",
+        "uvicorn",
+        "api.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
+      ],
+      "cwd": "${CAE_STUDIO_REPO_ROOT}",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "${CAE_STUDIO_REPO_ROOT}"
+      },
+      "health": {
+        "kind": "http",
+        "url": "http://127.0.0.1:8000/api/health",
+        "expected_status": 200,
+        "timeout_seconds": 2.0
+      },
+      "authority_boundary": "cae_authority"
+    },
+    {
+      "id": "cae-ui",
+      "display_name": "CAE Studio UI",
+      "enabled_default": true,
+      "required": true,
+      "capabilities": [
+        "studio_operator_surface",
+        "visual_asset_studio_surface"
+      ],
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "dev",
+        "--",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5173"
+      ],
+      "cwd": "${CAE_STUDIO_REPO_ROOT}",
+      "health": {
+        "kind": "http",
+        "url": "http://127.0.0.1:5173/",
+        "expected_status": 200,
+        "timeout_seconds": 2.0
+      },
+      "authority_boundary": "cae_operator_surface"
+    },
+    {
+      "id": "openchatcut",
+      "display_name": "OpenChatCut",
+      "enabled_default": false,
+      "enabled_env": "CAE_OPENCHATCUT_ENABLED",
+      "required": false,
+      "capabilities": [
+        "native_video_editing",
+        "timeline_execution"
+      ],
+      "route_prefix": "/runtime/openchatcut",
+      "command_env": "CAE_OPENCHATCUT_COMMAND",
+      "target_url_env": "CAE_OPENCHATCUT_UI_URL",
+      "health": {
+        "kind": "mcp_initialize",
+        "url": "http://localhost:5199/api/external-mcp/mcp",
+        "bearer_token_env": "CAE_OPENCHATCUT_MCP_TOKEN",
+        "timeout_seconds": 5.0
+      },
+      "authority_boundary": "downstream_runtime_only",
+      "notes": [
+        "Native OpenChatCut behavior is consumed through CAE's existing MCP adapter.",
+        "MCP health is a reachability/protocol probe, not semantic validation."
+      ]
+    },
+    {
+      "id": "presentation",
+      "display_name": "Presentation Runtime",
+      "enabled_default": false,
+      "enabled_env": "CAE_PRESENTATION_ENABLED",
+      "required": false,
+      "capabilities": [
+        "presentation_runtime",
+        "slide_rendering"
+      ],
+      "route_prefix": "/runtime/presentation",
+      "command_env": "CAE_PRESENTATION_COMMAND",
+      "target_url_env": "CAE_PRESENTATION_URL",
+      "health": {
+        "kind": "http",
+        "url_env": "CAE_PRESENTATION_HEALTH_URL",
+        "expected_status": 200,
+        "timeout_seconds": 3.0
+      },
+      "authority_boundary": "downstream_runtime_only",
+      "notes": [
+        "Presentation renderer remains downstream of CAE storyboard/semantic authority."
+      ]
+    },
+    {
+      "id": "supervisual",
+      "display_name": "SuperVisual",
+      "enabled_default": false,
+      "enabled_env": "CAE_SUPERVISUAL_ENABLED",
+      "required": false,
+      "capabilities": [
+        "supervisual_compilation",
+        "bounded_visual_editing"
+      ],
+      "route_prefix": "/runtime/supervisual",
+      "command_env": "CAE_SUPERVISUAL_COMMAND",
+      "target_url_env": "CAE_SUPERVISUAL_URL",
+      "health": {
+        "kind": "http",
+        "url_env": "CAE_SUPERVISUAL_HEALTH_URL",
+        "expected_status": 200,
+        "timeout_seconds": 3.0
+      },
+      "authority_boundary": "downstream_runtime_only"
+    },
+    {
+      "id": "sam3",
+      "display_name": "SAM3",
+      "enabled_default": false,
+      "enabled_env": "CAE_SAM3_ENABLED",
+      "required": false,
+      "capabilities": [
+        "subject_tracking",
+        "segmentation_geometry"
+      ],
+      "route_prefix": "/runtime/sam3",
+      "command_env": "CAE_SAM3_COMMAND",
+      "target_url_env": "CAE_SAM3_URL",
+      "health": {
+        "kind": "http",
+        "url_env": "CAE_SAM3_HEALTH_URL",
+        "expected_status": 200,
+        "timeout_seconds": 5.0
+      },
+      "authority_boundary": "downstream_runtime_only",
+      "notes": [
+        "SAM3 output is bounded to geometry/tracking support; it does not own semantic identity."
+      ]
+    }
+  ]
+}

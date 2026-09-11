@@ -1254,3 +1254,36 @@ M0093 does not claim native Slidev, reveal.js, or Open Carrusel execution becaus
 Neither supplied bundle contained a literal COMPONENT_CONTRACT.yaml. M0093_DELIVERY_MANIFEST.json plus the M0093 handoff, and the M0094 handoff plus upstream mapping, controlled integration. No semantic authority moved into an external runtime.
 
 Implementation commit: recorded after verification.
+
+---
+
+# CAE-M0095 Walkthrough — Final Puzzle / Unified Studio Assembly
+
+Status: Integrated; affected contract/regression suites verified at 100%; nginx native validation limited by active environment
+Date: 2026-09-11
+Boundary: Development/runtime process orchestration and single-origin gateway over existing CAE API/UI and downstream runtime adapters
+
+## Assembly and authority result
+
+M0095 adds one bounded orchestrator under `deployment/dev/caestudio/`. It launches and observes existing CAE API/UI plus optional OpenChatCut, Presentation, SuperVisual, and SAM3 processes, exposes loopback control documents, and renders the single-origin nginx topology. It does not create semantic, storyboard, evidence, Design System, VAE, operator-state, or promotion authority.
+
+The dependency graph and collision audit are recorded in `docs/cae/specs/M0095/M0095_ASSEMBLY_GRAPH.md`. All eight M0095 destinations were new; no existing M0085–M0094 files were overwritten or modified.
+
+## Verification matrix
+
+| Suite | Result |
+|---|---:|
+| M0095 focused orchestrator suite | PASS (9/9, 100%) |
+| Selected affected M0083–M0095 Python regression | PASS (153/153, 100%) |
+| M0066 human-resolution suite | PASS (6/6, 100%; isolated pytest process) |
+| Candidate-preview API suite | PASS (3/3, 100%; isolated pytest process) |
+| Existing Studio/UI regression | PASS (20/20, 100%) |
+| M0095 Python compilation | PASS |
+| Optional-runtime fail-closed configuration probe | PASS; missing OpenChatCut UI URL rejected |
+| Native nginx syntax validation | BLOCKED; nginx is not installed/on PATH in active Windows environment |
+
+The single-process broad run exposed a test-only `sys.modules` shim from M0066 that contaminated later API imports; acceptance was preserved by rerunning the affected suites in isolated pytest processes. No tests or production assertions were weakened. Native external runtime reachability and visual/perceptual acceptance remain operator-owned.
+
+Neither a literal `COMPONENT_CONTRACT.yaml` nor a separate authority-manifest file was supplied in the M0095 bundle. The M0095 `manifest.json`, AGENT_HANDOFF.md, mandate, and proven M0079–M0094 authority paths controlled the final assembly.
+
+Implementation commit: recorded after verification.

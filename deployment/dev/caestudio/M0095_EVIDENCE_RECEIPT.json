@@ -1,0 +1,77 @@
+{
+  "mandate_id": "M0095",
+  "campaign": "E1 RUNTIME INTEGRATION",
+  "status": "VERIFIED_WITH_NGINX_ENVIRONMENT_LIMITATION",
+  "repository_commit_sha": "recorded after verification commit",
+  "implementation_paths": [
+    "deployment/dev/caestudio/.gitignore",
+    "deployment/dev/caestudio/README.md",
+    "deployment/dev/caestudio/__init__.py",
+    "deployment/dev/caestudio/manifest.json",
+    "deployment/dev/caestudio/orchestrator.py",
+    "deployment/dev/caestudio/AGENT_HANDOFF.md",
+    "deployment/dev/caestudio/M0095_EVIDENCE_RECEIPT.json",
+    "tests/cae/test_m0095_runtime_orchestrator.py"
+  ],
+  "component_contract_present_in_bundle": false,
+  "authority_manifest_present_in_bundle": false,
+  "dependency_graph": "docs/cae/specs/M0095/M0095_ASSEMBLY_GRAPH.md",
+  "authority_boundary": "M0095 owns process lifecycle, loopback control, health observation, capability registration, gateway rendering, isolated logs/process groups, and downstream runtime routing only. Existing CAE semantic, evidence, storyboard, Design System, operator state, and promotion authorities remain canonical.",
+  "collision_audit": {
+    "exact_destination_collisions": 0,
+    "existing_files_overwritten": 0,
+    "authority_conflicts": 0,
+    "shared_files_modified": 0
+  },
+  "tests": [
+    {
+      "command": "python -m py_compile deployment/dev/caestudio/orchestrator.py tests/cae/test_m0095_runtime_orchestrator.py",
+      "result": "PASS"
+    },
+    {
+      "command": "python -m pytest -q tests/cae/test_m0095_runtime_orchestrator.py",
+      "result": "PASS (9/9)"
+    },
+    {
+      "command": "python -m pytest -q selected affected M0083-M0095 suites excluding test-only M0066 sys.modules shim",
+      "result": "PASS (153/153)"
+    },
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/cae/test_m066_human_resolution.py",
+      "result": "PASS (6/6; isolated process)"
+    },
+    {
+      "command": "python -m pytest -q tests/api/test_candidate_preview.py",
+      "result": "PASS (3/3; isolated process)"
+    },
+    {
+      "command": "node --test services/studio/tests/*.test.mjs",
+      "result": "PASS (20/20)"
+    },
+    {
+      "command": "python deployment/dev/caestudio/orchestrator.py validate",
+      "result": "BLOCKED: nginx executable unavailable on active Windows environment"
+    },
+    {
+      "command": "CAE_OPENCHATCUT_ENABLED=true python deployment/dev/caestudio/orchestrator.py validate",
+      "result": "PASS fail-closed behavior: ConfigurationError for missing CAE_OPENCHATCUT_UI_URL"
+    }
+  ],
+  "environment": {
+    "python": "3.12 active runtime",
+    "nginx": "not installed / not on PATH",
+    "node_studio_regression": "available",
+    "optional_native_runtimes": "not enabled"
+  },
+  "limitations": [
+    "Native nginx syntax validation cannot run until nginx is installed or supplied through CAE_STUDIO_NGINX_BIN.",
+    "Native external runtime reachability and visual/perceptual acceptance remain operator-owned.",
+    "A broad single-process pytest invocation is contaminated by a test-local M0066 sys.modules shim; isolated process execution preserves all acceptance assertions and proves the affected suites."
+  ],
+  "operator_decision_required": true,
+  "operator_decision_options": [
+    "APPROVE",
+    "APPROVE-WITH-LIMITATIONS",
+    "REJECT"
+  ]
+}
