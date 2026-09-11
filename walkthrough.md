@@ -1183,7 +1183,7 @@ Boundary: Operator-controlled tracking and bounded visual composition projection
 
 The supplied M0090 and M0091 bundle locations were reconciled to the delivered archive bundles. Neither supplied bundle contained a literal COMPONENT_CONTRACT.yaml, so the AGENT_HANDOFF.md files, upstream mappings, existing CAE authority hierarchy, and targeted acceptance tests controlled integration. No native SAM3 runtime capability is claimed. The incomplete trailing M in the request was not executed.
 
-Implementation commit: recorded after verification.
+Implementation commit: dd0dab5a.
 
 ---
 
