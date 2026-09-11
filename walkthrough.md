@@ -1115,4 +1115,4 @@ M0086 provides phrase and semantic/cinematic research candidates without creatin
 
 The focused negative/contrastive coverage includes stale semantic indexes, rejected or unplayable research candidates, rights exclusion, missing source lineage, non-operator Visual Chat actors, canonical digest/state mismatch, source replacement without candidates, evidence-preserving proposals, immutable replay, invalid feedback regions, unauthorized feedback, and good-looking-but-wrong visual judgments. The M0088 and M0089 handoff materials did not supply a `COMPONENT_CONTRACT.yaml`; the delivered handoffs, existing CAE authority hierarchy, and current active code were used as the controlling integration inputs. The installed FastAPI environment required the missing `annotated-doc` dependency; it was installed into the active Python 3.12 site-packages so the existing API regression could collect.
 
-Implementation commit: recorded below after verification.
+Implementation commit: `98286971`.
