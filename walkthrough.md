@@ -1015,3 +1015,33 @@ Git metadata and `psycopg 3.3.4` are available. The requested
 `CAE-M0080_BUNDLE` and `COMPONENT_CONTRACT.yaml` were not present; the supplied
 canonical mandate and campaign Authority Pack were used, and that limitation is
 recorded explicitly in the evidence receipt.
+
+---
+
+# CAE-M0081–M0084 Walkthrough — Narrative, Expression, Transformation, and Source Quality
+
+**Status:** Implemented; unified regression verified at 100%\
+**Date:** 2026-09-11\
+**Boundary:** Bounded projections over the existing M0079 storyboard and M0080 program authorities; no competing semantic, asset, rendering, or operator authority
+
+## Exact integration matrix
+
+| Mandate | Contract | Active destination | Focused result |
+|---|---|---|---:|
+| CAE-M0081 | Narrative Editing Grammar | `packages/ca_runtime/src/ca_runtime/narrative_editing_grammar.py` and storyboard binding | PASS (14/14) |
+| CAE-M0082 | Editorial Expression Calculus | `packages/ca_runtime/src/ca_runtime/editorial_expression_calculus.py` | PASS (8/8) |
+| CAE-M0083 | TransformationIntent / TransformationRecipe compiler | `packages/ca_runtime/src/ca_runtime/transformation_recipe.py` and existing storyboard models | PASS (11/11) |
+| CAE-M0084 | SourceQualityProfile and adaptive transformation bounds | existing `storyboard_session.py` quality gate | PASS (9/9) |
+
+## Unified regression matrix
+
+| Scope | Command / suite | Result |
+|---|---|---:|
+| M0081–M0084 focused suites | `pytest -q tests/cae/test_m0081_narrative_editing_grammar_registry.py tests/cae/test_m0081_narrative_editing_grammar.py tests/cae/test_m0082_editorial_expression_calculus.py tests/cae/test_m0083_transformation_intent_recipe.py tests/cae/test_m0084_source_quality_profile.py` | **PASS (42/42, 100%)** |
+| Existing M0079/M0080 integration baseline | `pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/cae/test_visual_derivative_production_program.py tests/cae/test_ca_m005_format_archetype_gate.py` | **PASS (35/35, 100%)** |
+| Epoch M0081–M0084 unified regression | Both suites above combined | **PASS (77/77, 100%)** |
+| M0081 storyboard probe | `python docs/cae/specs/M0081/validate_m0081_storyboard_binding.py` | **PASS** |
+
+The negative and contrastive cases cover sequence violations, invalid harness/scene bindings, unsupported source quality, missing or duplicate evidence, unsupported profiles, unauthorized/stale/mismatched recipes, low-quality motion suppression, undeclared intensities, quality-band violations, and deterministic adaptation. The requested literal CAE-M0081 through CAE-M0084 bundle paths and `COMPONENT_CONTRACT.yaml` files were absent; the delivered reconciled bundles, canonical mandates, existing CAE authority files, and campaign Authority Pack were used. This is recorded in each mandate evidence receipt.
+
+Implementation commit: `582fbb75288042d6b85ca856c4109c63e47665b4`.
