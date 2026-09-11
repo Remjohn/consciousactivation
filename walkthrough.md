@@ -1150,4 +1150,4 @@ Automatic acceptance is deterministic and fail-closed. Human ACCEPT/REJECT is op
 
 The requested literal bundle supplied `AGENT_HANDOFF.md` and a unified patch but no `COMPONENT_CONTRACT.yaml`; the handoff, patch, current CAE authority hierarchy, and existing retrieval/native-edit contracts controlled integration. See `docs/cae/specs/M0087/M0087_EVIDENCE_RECEIPT.md`.
 
-Implementation commit: recorded after verification.
+Implementation commit: `b34a16a4`.
