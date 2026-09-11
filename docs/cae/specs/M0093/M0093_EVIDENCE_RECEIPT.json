@@ -1,0 +1,37 @@
+{
+  "mandate_id": "M0093",
+  "status": "VERIFIED_AUTOMATED_CONTRACTS_WITH_RUNTIME_LIMITATION",
+  "repository_commit_sha": "recorded after verification commit",
+  "component_contract_present_in_bundle": false,
+  "runtime_manifest_present_in_bundle": false,
+  "implementation_paths": [
+    "adapters/storyboard_runtime.py",
+    "engines/carousel/runtime_adapter.py",
+    "engines/presentation/runtime_adapter.py",
+    "tests/cae/test_m0093_storyboard_runtime_adapters.py"
+  ],
+  "authority_boundary": "M0079 StoryboardRevision plus M0080 CarouselStoryboardProgram/PresentationStoryboardProgram remain canonical; Slidev, reveal.js, and Open Carrusel are downstream projections.",
+  "tests": [
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/cae/test_m0093_storyboard_runtime_adapters.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_m0079_storyboard_session_revision.py",
+      "result": "PASS (13/13)"
+    },
+    {
+      "command": "python -m py_compile adapters/storyboard_runtime.py engines/carousel/__init__.py engines/carousel/runtime_adapter.py engines/presentation/__init__.py engines/presentation/runtime_adapter.py tests/cae/test_m0093_storyboard_runtime_adapters.py",
+      "result": "PASS"
+    },
+    {
+      "command": "node --test services/studio/tests/*.test.mjs",
+      "result": "PASS (20/20)"
+    }
+  ],
+  "runtime_evidence": {
+    "slidev": "native_reachability_proven=false; Slidev not installed in the checkout",
+    "revealjs": "native_reachability_proven=false; reveal.js runtime not installed in the checkout",
+    "open_carrusel": "native_reachability_proven=false; Open Carrusel runtime not installed in the checkout"
+  },
+  "warnings": [
+    "No literal COMPONENT_CONTRACT.yaml or declared runtime manifest was supplied in the M0093 bundle; M0093_DELIVERY_MANIFEST.json and AGENT_HANDOFF.md controlled the integration.",
+    "Perceptual acceptance and native preview/export remain operator/runtime responsibilities."
+  ]
+}

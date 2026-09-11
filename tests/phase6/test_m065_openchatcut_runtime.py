@@ -118,7 +118,7 @@ class _FakeMcp:
             {"name": name}
             for name in (
                 "create_project", "target_project", "begin_edit_session", "review_edit_session",
-                "read_timeline", "edit_track", "edit_item", "import_asset",
+                "read_timeline", "edit_track", "edit_item", "import_asset", "discard_edit_session",
             )
         ]
         self.project_id = "project:test"
@@ -127,6 +127,7 @@ class _FakeMcp:
         self.items = []
         self.assets = {}
         self.applied = False
+        self.discarded = False
 
     def initialize(self):
         return {"protocolVersion": "2025-06-18", "serverInfo": self.server_info}
@@ -177,6 +178,9 @@ class _FakeMcp:
         if name == "review_edit_session":
             self.applied = True
             return {"status": "applied"}
+        if name == "discard_edit_session":
+            self.discarded = True
+            return {"status": "discarded"}
         raise AssertionError(f"unexpected tool {name}")
 
 
@@ -244,6 +248,129 @@ def test_full_handoff_preserves_native_tracks_media_cuts_and_roles(repository, m
     assert receipt["payload"]["timeline_authority"] == "CANONICAL_VIDEO_EDIT_PROGRAM"
     assert receipt["payload"]["imported_media_sha256"][SOURCE_REF["object_id"]] == hashlib.sha256(source.read_bytes()).hexdigest()
     assert fake.applied is True
+
+
+
+
+def test_runtime_inspection_reads_native_state_and_discards_session(repository, monkeypatch):
+    program_id = _store_program(repository)
+    fake = _FakeMcp()
+    fake.tracks = [
+        {"id": "track-0", "alias": "V1", "trackType": "video"},
+        {"id": "track-1", "alias": "A1", "trackType": "audio"},
+    ]
+    fake.items = [
+        {"id": "item:1", "track": "track-0", "startFrame": 0, "durationInFrames": 30, "srcInFrame": 30, "sourceDurationInFrames": 30, "sourceAssetId": "asset:1"},
+        {"id": "item:2", "track": "track-1", "startFrame": 0, "durationInFrames": 30, "sourceAssetId": "asset:2"},
+    ]
+    monkeypatch.setattr(openchatcut, "_McpStreamableHttpClient", lambda config: fake)
+    adapter = OpenChatCutRuntimeAdapter(repository, OpenChatCutRuntimeConfig())
+    report = adapter.inspect_runtime(
+        program_id,
+        project_id="project:test",
+        track_map={"video-main": "track-0", "audio-main": "track-1"},
+        asset_map={SOURCE_REF["object_id"]: "asset:1", "audio-artifact:test": "asset:2"},
+    )
+    assert report["status"] == "IN_SYNC"
+    assert report["edit_session_disposition"] == "DISCARDED_AFTER_READ"
+    assert fake.discarded is True
+
+
+def test_runtime_inspection_requires_discard_capability(repository, monkeypatch):
+    program_id = _store_program(repository)
+    class NoDiscard(_FakeMcp):
+        def list_tools(self):
+            return [tool for tool in self.tools if tool["name"] != "discard_edit_session"]
+    monkeypatch.setattr(openchatcut, "_McpStreamableHttpClient", lambda config: NoDiscard())
+    adapter = OpenChatCutRuntimeAdapter(repository, OpenChatCutRuntimeConfig())
+    with pytest.raises(openchatcut.OpenChatCutRuntimeError, match="discard_edit_session"):
+        adapter.inspect_runtime(
+            program_id, project_id="project:test",
+            track_map={"video-main": "track-0", "audio-main": "track-1"},
+            asset_map={SOURCE_REF["object_id"]: "asset:1", "audio-artifact:test": "asset:2"},
+        )
+
+def test_native_inspection_reports_in_sync_and_is_deterministically_replayable(repository):
+    program = _program_payload()
+    timeline = {
+        "fps": 30,
+        "tracks": [
+            {"id": "track-0", "alias": "V1", "trackType": "video"},
+            {"id": "track-1", "alias": "A1", "trackType": "audio"},
+        ],
+        "items": [
+            {"id": "item:1", "track": "track-0", "startFrame": 0, "durationInFrames": 30, "srcInFrame": 30, "sourceDurationInFrames": 30, "sourceAssetId": "asset:1"},
+            {"id": "item:2", "track": "track-1", "startFrame": 0, "durationInFrames": 30, "sourceAssetId": "asset:2"},
+        ],
+    }
+    adapter = OpenChatCutRuntimeAdapter(repository)
+    maps = ({"video-main": "track-0", "audio-main": "track-1"}, {SOURCE_REF["object_id"]: "asset:1", "audio-artifact:test": "asset:2"})
+    first = adapter.inspect_native_timeline(timeline, program, *maps)
+    second = adapter.inspect_native_timeline(timeline, program, *maps)
+    assert first["status"] == "IN_SYNC"
+    assert first["source_media_sha256"] == program["source_media_sha256"]
+    assert first == second
+
+
+def test_native_inspection_catches_good_looking_wrong_asset_even_when_timing_matches(repository):
+    program = _program_payload()
+    timeline = {
+        "fps": 30,
+        "tracks": [{"id": "track-0", "alias": "V1", "trackType": "video"}, {"id": "track-1", "alias": "A1", "trackType": "audio"}],
+        "items": [
+            {"id": "item:1", "track": "track-0", "startFrame": 0, "durationInFrames": 30, "srcInFrame": 30, "sourceDurationInFrames": 30, "sourceAssetId": "asset:wrong-but-plausible"},
+            {"id": "item:2", "track": "track-1", "startFrame": 0, "durationInFrames": 30, "sourceAssetId": "asset:2"},
+        ],
+    }
+    inspection = OpenChatCutRuntimeAdapter.inspect_native_timeline(
+        timeline, program,
+        {"video-main": "track-0", "audio-main": "track-1"},
+        {SOURCE_REF["object_id"]: "asset:1", "audio-artifact:test": "asset:2"},
+    )
+    assert inspection["status"] == "DIVERGED"
+    assert any(d["type"] == "ASSET_DIVERGENCE" for d in inspection["differences"])
+    assert inspection["reconciliation_candidates"] == []
+
+
+def test_native_inspection_exposes_only_operator_gated_timing_update(repository):
+    program = _program_payload()
+    timeline = {
+        "fps": 30,
+        "tracks": [{"id": "track-0", "alias": "V1", "trackType": "video"}, {"id": "track-1", "alias": "A1", "trackType": "audio"}],
+        "items": [
+            {"id": "item:1", "track": "track-0", "startFrame": 0, "durationInFrames": 45, "srcInFrame": 30, "sourceDurationInFrames": 30, "sourceAssetId": "asset:1"},
+            {"id": "item:2", "track": "track-1", "startFrame": 0, "durationInFrames": 30, "sourceAssetId": "asset:2"},
+        ],
+    }
+    inspection = OpenChatCutRuntimeAdapter.inspect_native_timeline(
+        timeline, program,
+        {"video-main": "track-0", "audio-main": "track-1"},
+        {SOURCE_REF["object_id"]: "asset:1", "audio-artifact:test": "asset:2"},
+    )
+    request = OpenChatCutRuntimeAdapter.build_human_resolution_request(inspection)
+    assert request["manipulation_type"] == "ADJUST_TIMING"
+    assert request["arguments"]["delta_frames"] == 15
+    assert request["operator_required"] is True
+    assert request["direct_runtime_write"] is False
+
+
+def test_native_inspection_rejects_topology_divergence(repository):
+    program = _program_payload()
+    timeline = {
+        "fps": 30,
+        "tracks": [{"id": "track-0", "alias": "V1", "trackType": "video"}, {"id": "track-1", "alias": "A1", "trackType": "audio"}],
+        "items": [{"id": "item:1", "track": "track-0", "startFrame": 0, "durationInFrames": 30, "srcInFrame": 30, "sourceDurationInFrames": 30, "sourceAssetId": "asset:1"}],
+    }
+    inspection = OpenChatCutRuntimeAdapter.inspect_native_timeline(
+        timeline, program,
+        {"video-main": "track-0", "audio-main": "track-1"},
+        {SOURCE_REF["object_id"]: "asset:1", "audio-artifact:test": "asset:2"},
+    )
+    assert inspection["status"] == "DIVERGED"
+    assert any(d["type"] == "TOPOLOGY_DIVERGENCE" for d in inspection["differences"])
+    assert all(d.get("reconciliation") != "ADJUST_TIMING_VIA_CAE_HUMAN_RESOLUTION" for d in inspection["differences"])
+
+
 
 
 def test_handoff_blocks_when_runtime_is_unreachable(repository, monkeypatch):

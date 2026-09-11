@@ -25,6 +25,7 @@ OPENCHATCUT_PROTOCOL_VERSION = "2025-06-18"
 OPENCHATCUT_CLIENT_NAME = "conscious-activation-engine"
 OPENCHATCUT_CLIENT_VERSION = "0.1.0"
 OPENCHATCUT_INVARIANT = "INV-VIDEO-RUNTIME-001"
+OPENCHATCUT_BIDIRECTIONAL_INVARIANT = "INV-VIDEO-RUNTIME-002"
 OPENCHATCUT_STATE_BOUND = "BOUND"
 OPENCHATCUT_STATE_ADAPT = "ADAPT"
 OPENCHATCUT_STATE_READY = "NATIVE_TIMELINE_READY"
@@ -46,6 +47,10 @@ class OpenChatCutTimelineVerificationError(OpenChatCutRuntimeError):
 
 class OpenChatCutUnavailableError(OpenChatCutRuntimeError):
     """The real OpenChatCut runtime is not reachable from the current environment."""
+
+
+class OpenChatCutTimelineInspectionError(OpenChatCutRuntimeError):
+    """The native timeline cannot be safely reconciled with the CAE program."""
 
 
 @dataclass(frozen=True)
@@ -668,6 +673,324 @@ class OpenChatCutRuntimeAdapter:
             "native_item_count": len(native_items),
             "verified_elements": verified,
             "timeline_fidelity": "NATIVE_TIMELINE_VERIFIED",
+        }
+
+    @staticmethod
+    def _native_item_sort_key(item: Mapping[str, Any]) -> tuple[int, str]:
+        return (
+            int(item.get("startFrame", item.get("fromFrame", -1))),
+            str(item.get("id", "")),
+        )
+
+    @staticmethod
+    def inspect_native_timeline(
+        timeline: Mapping[str, Any],
+        program: Mapping[str, Any],
+        track_map: Mapping[str, str],
+        asset_map: Mapping[str, str],
+    ) -> dict[str, Any]:
+        """Compare native OpenChatCut state to CAE without mutating either side.
+
+        Matching is deterministic by CAE track order plus native item start/id order.
+        Topology changes, moves, substitutions, or ambiguous identity are never auto-
+        reconciled; timing-only changes can be handed to the existing CAE human-
+        resolution path after operator review.
+        """
+        native_items = OpenChatCutRuntimeAdapter._native_items(timeline)
+        fps_num = int(program["canvas"]["fps_numerator"])
+        fps_den = int(program["canvas"]["fps_denominator"])
+        native_tracks = [
+            dict(track) for track in timeline.get("tracks", [])
+            if isinstance(track, Mapping)
+        ]
+        native_track_ids = {
+            str(track.get("id") or track.get("alias") or ""): track
+            for track in native_tracks
+        }
+        diffs: list[dict[str, Any]] = []
+        candidates: list[dict[str, Any]] = []
+        matched_items: list[dict[str, Any]] = []
+        expected_total = 0
+
+        for track in program["tracks"]:
+            track_id = str(track["track_id"])
+            native_track = str(track_map.get(track_id, ""))
+            if not native_track or native_track not in native_track_ids:
+                diffs.append({
+                    "type": "TRACK_MISSING",
+                    "track_id": track_id,
+                    "native_track": native_track,
+                    "severity": "BLOCKING",
+                })
+                continue
+            actual = sorted(
+                [
+                    item for item in native_items
+                    if str(item.get("track") or item.get("trackId") or "") == native_track
+                ],
+                key=OpenChatCutRuntimeAdapter._native_item_sort_key,
+            )
+            expected = list(track["elements"])
+            expected_total += len(expected)
+            if len(actual) != len(expected):
+                diffs.append({
+                    "type": "TOPOLOGY_DIVERGENCE",
+                    "track_id": track_id,
+                    "expected_item_count": len(expected),
+                    "native_item_count": len(actual),
+                    "severity": "BLOCKING",
+                    "reconciliation": "OPERATOR_REQUIRED",
+                })
+                continue
+            for ordinal, (element, item) in enumerate(zip(expected, actual)):
+                output_start, output_duration = _frame_count_from_ms(
+                    int(element["output_start_ms"]),
+                    int(element["output_end_ms"]),
+                    fps_num, fps_den,
+                    field=f"{element['element_id']}.output",
+                )
+                actual_start = int(item.get("startFrame", item.get("fromFrame", -1)))
+                actual_duration = int(item.get("durationInFrames", -1))
+                expected_asset_id = None
+                if element["kind"] != "TEXT":
+                    key = OpenChatCutRuntimeAdapter._asset_key(element)
+                    if not key or key not in asset_map:
+                        diffs.append({
+                            "type": "CAE_ASSET_IDENTITY_MISSING",
+                            "element_id": element["element_id"],
+                            "severity": "BLOCKING",
+                        })
+                        continue
+                    expected_asset_id = asset_map[key]
+                actual_asset_id = item.get("sourceAssetId", item.get("assetId"))
+                timing_changed = actual_start != output_start or actual_duration != output_duration
+                asset_changed = expected_asset_id is not None and actual_asset_id != expected_asset_id
+                source_changed = False
+                source_expected_start = None
+                source_expected_duration = None
+                if element["kind"] == "SOURCE_SEGMENT":
+                    source_expected_start, source_expected_duration = _frame_count_from_ms(
+                        int(element["source_start_ms"]),
+                        int(element["source_end_ms"]),
+                        fps_num, fps_den,
+                        field=f"{element['element_id']}.source",
+                    )
+                    actual_source_start = int(item.get("srcInFrame", item.get("sourceStartFrame", -1)))
+                    actual_source_duration = int(item.get("sourceDurationInFrames", -1))
+                    source_changed = (
+                        actual_source_start != source_expected_start
+                        or actual_source_duration not in {-1, source_expected_duration}
+                    )
+                text_changed = False
+                text_unverifiable = False
+                if element["kind"] == "TEXT" and "text" in element:
+                    native_text = item.get("text")
+                    if native_text is None and isinstance(item.get("props"), Mapping):
+                        native_text = item["props"].get("text")
+                    if native_text is None:
+                        text_unverifiable = True
+                    else:
+                        text_changed = str(native_text) != str(element["text"])
+                entry = {
+                    "element_id": element["element_id"],
+                    "ordinal": ordinal,
+                    "native_item_id": str(item.get("id", "")),
+                    "native_track": native_track,
+                    "expected_start_frame": output_start,
+                    "actual_start_frame": actual_start,
+                    "expected_duration_frames": output_duration,
+                    "actual_duration_frames": actual_duration,
+                    "expected_source_asset_id": expected_asset_id,
+                    "actual_source_asset_id": actual_asset_id,
+                    "source_changed": source_changed,
+                    "text_changed": text_changed,
+                    "text_unverifiable": text_unverifiable,
+                }
+                matched_items.append(entry)
+                if asset_changed:
+                    diffs.append({
+                        "type": "ASSET_DIVERGENCE",
+                        "element_id": element["element_id"],
+                        "native_item_id": entry["native_item_id"],
+                        "expected_source_asset_id": expected_asset_id,
+                        "actual_source_asset_id": actual_asset_id,
+                        "severity": "BLOCKING",
+                        "reconciliation": "SUBSTITUTE_ASSET_REQUIRES_HUMAN_RESOLUTION",
+                    })
+                elif source_changed:
+                    diffs.append({
+                        "type": "SOURCE_WINDOW_DIVERGENCE",
+                        "element_id": element["element_id"],
+                        "native_item_id": entry["native_item_id"],
+                        "expected_source_start_frame": source_expected_start,
+                        "actual_source_start_frame": int(item.get("srcInFrame", item.get("sourceStartFrame", -1))),
+                        "expected_source_duration_frames": source_expected_duration,
+                        "actual_source_duration_frames": int(item.get("sourceDurationInFrames", -1)),
+                        "severity": "BLOCKING",
+                        "reconciliation": "HUMAN_RESOLUTION_REQUIRED",
+                    })
+                if text_unverifiable:
+                    diffs.append({
+                        "type": "TEXT_UNVERIFIABLE",
+                        "element_id": element["element_id"],
+                        "severity": "BLOCKING",
+                        "reconciliation": "OPERATOR_REQUIRED",
+                    })
+                elif text_changed:
+                    diffs.append({
+                        "type": "TEXT_DIVERGENCE",
+                        "element_id": element["element_id"],
+                        "severity": "BLOCKING",
+                        "reconciliation": "HUMAN_RESOLUTION_REQUIRED",
+                    })
+                if timing_changed:
+                    if actual_start != output_start:
+                        diffs.append({
+                            "type": "MOVE_DIVERGENCE",
+                            "element_id": element["element_id"],
+                            "native_item_id": entry["native_item_id"],
+                            "expected_start_frame": output_start,
+                            "actual_start_frame": actual_start,
+                            "severity": "BLOCKING",
+                            "reconciliation": "HUMAN_RESOLUTION_REQUIRED",
+                        })
+                    elif actual_duration <= 0:
+                        diffs.append({
+                            "type": "INVALID_DURATION",
+                            "element_id": element["element_id"],
+                            "actual_duration_frames": actual_duration,
+                            "severity": "BLOCKING",
+                            "reconciliation": "REJECT",
+                        })
+                    else:
+                        delta_frames = actual_duration - output_duration
+                        if abs(delta_frames) <= 300:
+                            candidates.append({
+                                "target_node_id": element["element_id"],
+                                "manipulation_type": "ADJUST_TIMING",
+                                "arguments": {
+                                    "delta_frames": delta_frames,
+                                    "source_start_delta_ms": 0,
+                                    "source_end_delta_ms": 0,
+                                },
+                                "native_item_id": entry["native_item_id"],
+                                "requires_operator_approval": True,
+                            })
+                            diffs.append({
+                                "type": "TIMING_DIVERGENCE",
+                                "element_id": element["element_id"],
+                                "native_item_id": entry["native_item_id"],
+                                "delta_frames": delta_frames,
+                                "severity": "REVIEW",
+                                "reconciliation": "ADJUST_TIMING_VIA_CAE_HUMAN_RESOLUTION",
+                            })
+                        else:
+                            diffs.append({
+                                "type": "TIMING_OUT_OF_BOUNDS",
+                                "element_id": element["element_id"],
+                                "native_item_id": entry["native_item_id"],
+                                "delta_frames": delta_frames,
+                                "severity": "BLOCKING",
+                                "reconciliation": "REJECT",
+                            })
+
+        if len(native_items) != expected_total:
+            global_native_count = len(native_items)
+            if not any(d.get("type") == "TOPOLOGY_DIVERGENCE" for d in diffs):
+                diffs.append({
+                    "type": "GLOBAL_ITEM_COUNT_DIVERGENCE",
+                    "expected_item_count": expected_total,
+                    "native_item_count": global_native_count,
+                    "severity": "BLOCKING",
+                    "reconciliation": "OPERATOR_REQUIRED",
+                })
+
+        status = "IN_SYNC" if not diffs else "DIVERGED"
+        safe_updates = [d for d in diffs if d.get("reconciliation") == "ADJUST_TIMING_VIA_CAE_HUMAN_RESOLUTION"]
+        blocked = [d for d in diffs if d.get("severity") == "BLOCKING"]
+        return {
+            "invariant": OPENCHATCUT_BIDIRECTIONAL_INVARIANT,
+            "status": status,
+            "safe_update_boundary": "CAE_HUMAN_RESOLUTION_ONLY",
+            "auto_apply": False,
+            "native_fps": timeline.get("fps"),
+            "program_timeline_authority": program.get("timeline_authority"),
+            "program_sha256": canonical_sha256(program),
+            "source_media_sha256": program.get("source_media_sha256"),
+            "native_timeline_sha256": canonical_sha256(timeline),
+            "native_item_count": len(native_items),
+            "expected_item_count": expected_total,
+            "matched_items": matched_items,
+            "differences": diffs,
+            "reconciliation_candidates": candidates,
+            "blocking_difference_count": len(blocked),
+            "timing_review_count": len(safe_updates),
+            "source_hash_contact": "CAE_SOURCE_MEDIA_SHA256_ONLY",
+        }
+
+    def inspect_runtime(
+        self,
+        program_id: str,
+        *,
+        project_id: str,
+        track_map: Mapping[str, str],
+        asset_map: Mapping[str, str],
+    ) -> dict[str, Any]:
+        """Read native runtime state in a discarded edit session and classify divergence."""
+        program_obj = self.repository.get_object(program_id)
+        program = program_obj["payload"]
+        self._validate_program(program)
+        client = _McpStreamableHttpClient(self.config)
+        try:
+            client.initialize()
+            tools = self._tool_names(client.list_tools())
+            self._require_tools(tools, {"target_project", "begin_edit_session", "read_timeline", "discard_edit_session"})
+            client.call_tool("target_project", {"projectId": project_id})
+            begun = client.call_tool(
+                "begin_edit_session",
+                {"editorProjectId": project_id, "approvalMode": "manual"},
+            )
+            edit_session_id = _extract_id(begun, ("editSessionId", "id"))
+            if not edit_session_id:
+                raise OpenChatCutProtocolError("OpenChatCut begin_edit_session returned no editSessionId")
+            timeline = self._read_timeline(client, project_id, edit_session_id)
+            report = self.inspect_native_timeline(timeline, program, track_map, asset_map)
+            report["runtime_identity"] = {
+                "server_name": str(client.server_info.get("name", "")) if client.server_info else "",
+                "server_version": str(client.server_info.get("version", "")) if client.server_info else "",
+                "endpoint_transport": "streamable_http_mcp",
+            }
+            client.call_tool("discard_edit_session", {"editorProjectId": project_id, "editSessionId": edit_session_id})
+            report["edit_session_disposition"] = "DISCARDED_AFTER_READ"
+            return report
+        except OpenChatCutRuntimeError:
+            raise
+        except Exception as exc:
+            raise OpenChatCutTimelineInspectionError(str(exc)) from exc
+
+    @staticmethod
+    def build_human_resolution_request(inspection: Mapping[str, Any], candidate_index: int = 0) -> dict[str, Any]:
+        candidates = inspection.get("reconciliation_candidates")
+        if not isinstance(candidates, list) or not candidates:
+            raise OpenChatCutTimelineInspectionError("no safe native timing reconciliation candidate exists")
+        try:
+            candidate = candidates[candidate_index]
+        except (IndexError, TypeError) as exc:
+            raise OpenChatCutTimelineInspectionError("requested reconciliation candidate does not exist") from exc
+        if candidate.get("manipulation_type") != "ADJUST_TIMING" or candidate.get("requires_operator_approval") is not True:
+            raise OpenChatCutTimelineInspectionError("native update boundary only permits approved ADJUST_TIMING requests")
+        return {
+            "target_node_id": candidate["target_node_id"],
+            "manipulation_type": "ADJUST_TIMING",
+            "arguments": dict(candidate["arguments"]),
+            "source": {
+                "inspection_invariant": inspection.get("invariant"),
+                "native_timeline_sha256": inspection.get("native_timeline_sha256"),
+                "program_sha256": inspection.get("program_sha256"),
+            },
+            "operator_required": True,
+            "apply_via": "api.services.human_resolution.compile_native_edit_program -> commit_native_edit",
+            "direct_runtime_write": False,
         }
 
     def handoff(

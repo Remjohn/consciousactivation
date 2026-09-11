@@ -1,0 +1,52 @@
+{
+  "mandate_id": "M0094",
+  "status": "VERIFIED_ADAPTER_WITH_NATIVE_RUNTIME_LIMITATION",
+  "repository_commit_sha": "recorded after verification commit",
+  "component_contract_present_in_bundle": false,
+  "runtime_manifest_present_in_bundle": false,
+  "implementation_paths": [
+    "services/pipeline/src/cmf_pipeline/media/openchatcut.py",
+    "tests/phase6/test_m065_openchatcut_runtime.py",
+    "engines/video/openchatcut/UPSTREAM_TO_CAE_MAPPING.md",
+    "engines/video/openchatcut/AGENT_HANDOFF.md",
+    "services/pipeline/evidence/M0094_IMPLEMENTATION_RECEIPT.json"
+  ],
+  "authority_boundary": "CAE VideoEditProgram/VideoStoryboardProgram and human-resolution CAS paths remain canonical; OpenChatCut is a downstream runtime observation and execution surface.",
+  "capabilities": [
+    "deterministic native timeline inspection",
+    "topology, timing, source-window, asset and text divergence classification",
+    "source/media hash preservation through CAE program identity",
+    "discarded manual edit-session inspection",
+    "operator-gated ADJUST_TIMING reconciliation request with direct_runtime_write=false"
+  ],
+  "tests": [
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/phase6/test_m065_openchatcut_runtime.py tests/cae/test_m066_human_resolution.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_m0092_final_hit_storyboard_validation.py",
+      "result": "PASS (33/33)"
+    },
+    {
+      "command": "python -m py_compile services/pipeline/src/cmf_pipeline/media/openchatcut.py tests/phase6/test_m065_openchatcut_runtime.py",
+      "result": "PASS"
+    },
+    {
+      "command": "node --test services/studio/tests/*.test.mjs",
+      "result": "PASS (20/20)"
+    }
+  ],
+  "runtime_probe": {
+    "endpoint": "http://localhost:5199/api/external-mcp/mcp",
+    "result": "UNREACHABLE in active environment; request timed out after 3 seconds",
+    "native_timeline_operation": "contract-proven through deterministic fake MCP integration tests; live native operation not claimed"
+  },
+  "source_media_hash_evidence": "Integration tests verify CAE source_media_sha256 preservation and reject wrong native source identity; native OpenChatCut does not report a sovereign CAE source hash.",
+  "upstream": {
+    "repository": "https://github.com/0xsline/OpenChatCut",
+    "version": "0.2.14",
+    "license": "AGPL-3.0-or-later",
+    "exact_commit": "unavailable from supplied vendored source metadata"
+  },
+  "warnings": [
+    "No literal COMPONENT_CONTRACT.yaml or standalone OpenChatCut runtime manifest was supplied in the M0094 bundle; AGENT_HANDOFF.md and UPSTREAM_TO_CAE_MAPPING.md controlled the integration.",
+    "Live native runtime reachability and perceptual UI acceptance remain operator/runtime responsibilities."
+  ]
+}

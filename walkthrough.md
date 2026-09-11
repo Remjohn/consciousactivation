@@ -1220,3 +1220,37 @@ M0092 rejects motion that is unsupported by semantic purpose, narrative grammar,
 The supplied M0092 bundle did not contain a literal COMPONENT_CONTRACT.yaml; the AGENT_HANDOFF.md, declared authority sources, existing CAE implementations, and targeted tests controlled integration. No new semantic, retrieval, Design System, VAE, database, or runtime authority was introduced.
 
 Implementation commit: recorded after verification.
+
+---
+
+# CAE-M0093 and CAE-M0094 Walkthrough — Runtime Adapters and Execution Boundaries
+
+Status: Implemented; contract/integration suites verified at 100%; live native runtime limitations recorded
+Date: 2026-09-11
+Boundary: Downstream Slidev/reveal.js/Open Carrusel/OpenChatCut adapter projections over canonical CAE storyboard and video-program authorities
+
+## Exact integration matrix
+
+| Mandate | Active destination | Authority preserved |
+|---|---|---|
+| M0093 governed handoff | adapters/storyboard_runtime.py | Revalidates M0079 approval/compile lineage and the full M0080 canonical expression before projection |
+| M0093 Carousel runtime | engines/carousel/runtime_adapter.py | Emits bounded Open Carrusel-compatible in-memory payload; no external runtime state mutation |
+| M0093 Presentation runtimes | engines/presentation/runtime_adapter.py | Emits deterministic Slidev slides.md and reveal.js index.html; runtime syntax remains downstream |
+| M0094 OpenChatCut inspection | services/pipeline/src/cmf_pipeline/media/openchatcut.py | Native state is observation-only; timing updates route through operator-gated CAE human resolution |
+| M0094 evidence/mapping | engines/video/openchatcut/ and services/pipeline/evidence/ | Source/media hash sovereignty remains CAE-owned; upstream licensing and limitations are explicit |
+
+## Verification matrix
+
+| Suite | Result |
+|---|---:|
+| M0093 focused runtime adapters plus M0079/M0080 baseline | PASS (13/13, 100%) |
+| M0094 OpenChatCut integration plus M0066/M0080/M0092 | PASS (33/33, 100%) |
+| M0093/M0094 Python source compilation | PASS |
+| Existing Studio/UI regression | PASS (20/20, 100%) |
+| Live OpenChatCut MCP reachability probe | UNREACHABLE at localhost:5199; not claimed as native runtime proof |
+
+M0093 does not claim native Slidev, reveal.js, or Open Carrusel execution because those runtimes are not installed in the active checkout. M0094 contract tests prove native timeline operation through deterministic MCP integration fixtures, including source/media hash preservation, wrong-asset rejection, discarded inspection sessions, topology divergence, and operator-gated timing reconciliation; the live OpenChatCut endpoint was unavailable.
+
+Neither supplied bundle contained a literal COMPONENT_CONTRACT.yaml. M0093_DELIVERY_MANIFEST.json plus the M0093 handoff, and the M0094 handoff plus upstream mapping, controlled integration. No semantic authority moved into an external runtime.
+
+Implementation commit: recorded after verification.
