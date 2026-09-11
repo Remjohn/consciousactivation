@@ -1253,7 +1253,7 @@ M0093 does not claim native Slidev, reveal.js, or Open Carrusel execution becaus
 
 Neither supplied bundle contained a literal COMPONENT_CONTRACT.yaml. M0093_DELIVERY_MANIFEST.json plus the M0093 handoff, and the M0094 handoff plus upstream mapping, controlled integration. No semantic authority moved into an external runtime.
 
-Implementation commit: recorded after verification.
+Implementation commit: 4de2155d.
 
 ---
 
