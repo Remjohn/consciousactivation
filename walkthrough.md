@@ -1287,3 +1287,31 @@ The single-process broad run exposed a test-only `sys.modules` shim from M0066 t
 Neither a literal `COMPONENT_CONTRACT.yaml` nor a separate authority-manifest file was supplied in the M0095 bundle. The M0095 `manifest.json`, AGENT_HANDOFF.md, mandate, and proven M0079–M0094 authority paths controlled the final assembly.
 
 Implementation commit: recorded after verification.
+
+---
+
+# CAE-M0096 Walkthrough — Partner-Ready Evidence-First Visual Production Vertical Slice
+
+Status: Integrated certification audit; partner-ready certification blocked by live source/runtime gates
+Date: 2026-09-11
+Boundary: `tests/e2e/`, `docs/cae/evidence/M0096/`, and `docs/cae/certification/M0096/`; no production authority or runtime was duplicated
+
+## Assembly and authority result
+
+M0096 reuses the canonical M0079 Storyboard session/revision, M0080 format programs, M0083 TransformationIntent/Recipe, M0085 Visual Asset Studio, M0086–M0089 asset/research/candidate/feedback surfaces, M0090 SAM3 tracking contract, M0091 SuperVisual composition, M0092 Final-Hit/MotionPlan validation, M0093/M0094 runtime adapters, and M0095 one-tab Studio orchestrator. The evidence-first order remains `RETRIEVE → TRANSFORM → COMPOSE → GENERATE`; external runtimes remain downstream and operator approval remains explicit.
+
+## Verification matrix
+
+| Suite / gate | Result |
+|---|---:|
+| M0096 focused certification audit | PASS (5/5, 100%) |
+| M0096 + affected M0079/M0080/M0083–M0095/API/asset/runtime selection | PASS (158/158, 100%) |
+| M0066 human-resolution isolation suite | PASS (6/6, 100%) |
+| M067/live-proof contract suites | PASS (11/11, 100%) |
+| Existing Studio UI regression | PASS (20/20, 100%) |
+| M0096 and M067 Python compilation | PASS |
+| Native live campaign | BLOCKED fail-closed: no governed source media and OpenChatCut endpoint unavailable |
+
+The live harness produced and preserved the append-only M067 ledger and manifest under `docs/cae/evidence/M0096/`. Git provenance is present and captured. No mock runtime, synthetic media, or test shim was used. Because native runtime and real source evidence are unavailable, operator correction, native render, QA/release, and partner-ready approval were not claimed. The exact active M0096 evidence and operator decision remain in `docs/cae/certification/M0096/`.
+
+Implementation/evidence commit: recorded after final verification.
