@@ -133,3 +133,41 @@ __all__ += [
     "RightsPolicy",
     "SemanticCinematicRetriever",
 ]
+
+from .research_session import (
+    AssetPromotionRequest,
+    AssetResearchCandidate,
+    AssetResearchError,
+    AssetResearchMode,
+    AssetResearchRequest,
+    AssetResearchSession,
+    AssetResearchSessionFactory,
+    AssetResearchSessionState,
+    CandidateSelectionError,
+    CandidateSelectionReceipt,
+    PlayPhraseTemporalAdapter,
+    PlayablePreviewRef,
+    RangeMode,
+    ResearchSourceRef,
+    SourceTimeRange,
+    TranscriptExcerpt,
+)
+
+__all__ += [
+    "AssetPromotionRequest",
+    "AssetResearchCandidate",
+    "AssetResearchError",
+    "AssetResearchMode",
+    "AssetResearchRequest",
+    "AssetResearchSession",
+    "AssetResearchSessionFactory",
+    "AssetResearchSessionState",
+    "CandidateSelectionError",
+    "CandidateSelectionReceipt",
+    "PlayPhraseTemporalAdapter",
+    "PlayablePreviewRef",
+    "RangeMode",
+    "ResearchSourceRef",
+    "SourceTimeRange",
+    "TranscriptExcerpt",
+]

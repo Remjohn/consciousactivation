@@ -13,6 +13,7 @@ from api.errors import ErrorResponse
 from api.services.campaign_projection import CampaignNotFound, load_campaign, state_object_id
 from api.services.studio_bridge import StudioBridge, StudioBridgeCrash, StudioBridgeError
 from api.services.visual_studio_contracts import assert_operator, build_visual_validation
+from api.services.visual_chat import VisualChatRequest, compile_visual_chat, VisualChatValidationError
 
 router = APIRouter()
 
@@ -42,6 +43,16 @@ class TransformProposalInput(BaseModel):
     arguments: dict[str, str | int | bool] = Field(default_factory=dict)
     operator_actor: dict[str, str]
     expected_state_version: int = Field(ge=1)
+
+class VisualChatInput(BaseModel):
+    natural_language_request: str = Field(min_length=1, max_length=2000)
+    target_ref: dict[str, str]
+    target_node_id: str = Field(min_length=1)
+    operator_actor: dict[str, str]
+    expected_state_version: int = Field(ge=1)
+    action: str | None = None
+    candidate_refs: list[dict[str, str]] = Field(default_factory=list)
+    canonical_revision_ref: dict[str, str] | None = None
 
 
 def _error(status_code: int, code: str, message: str) -> HTTPException:
@@ -175,3 +186,55 @@ def compile_transform_proposal(campaign_id: str, body: TransformProposalInput, p
         raise _error(422, exc.code, str(exc)) from exc
     except StudioBridgeCrash as exc:
         raise _error(502, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
+
+
+@router.post("/campaigns/{campaign_id}/chat/proposals")
+def compile_chat_proposal(campaign_id: str, body: VisualChatInput, pipeline: Any = Depends(get_pipeline)):
+    """Compile an immutable typed proposal; canonical state is never mutated."""
+    assert_operator(body.operator_actor)
+    campaign = _campaign(pipeline, campaign_id)
+    state = campaign["state"]
+    current_version = int(state.get("version", 0))
+    if body.expected_state_version != current_version:
+        raise _error(409, "STALE_STATE_VERSION", f"expected state version {body.expected_state_version}, current {state.get('version')}")
+    current_ref = {
+        "object_id": state_object_id(campaign_id),
+        "version": str(state.get("version", 1)),
+        "sha256": canonical_sha256(state),
+    }
+    try:
+        request = VisualChatRequest(
+            natural_language_request=body.natural_language_request,
+            target_ref=body.target_ref,
+            target_node_id=body.target_node_id,
+            operator_actor=body.operator_actor,
+            expected_state_version=body.expected_state_version,
+            action=body.action,
+            candidate_refs=tuple(body.candidate_refs),
+            canonical_revision_ref=body.canonical_revision_ref,
+        )
+        proposal = compile_visual_chat(
+            request,
+            canonical_revision_ref=current_ref,
+            current_state_version=current_version,
+        )
+    except (ValueError, VisualChatValidationError) as exc:
+        raise _error(422, "VISUAL_CHAT_PROPOSAL_BLOCKED", str(exc)) from exc
+    stored = pipeline.repository.store_object(
+        "visual_chat_proposal",
+        proposal.model_dump(mode="json"),
+        idempotency_key=proposal.proposal_id,
+        object_id=proposal.proposal_id,
+        semantic_version=proposal.proposal_version,
+        lifecycle_state=proposal.status.value,
+        now=utc_now_rfc3339(),
+    )
+    return {
+        "proposal": proposal.model_dump(mode="json"),
+        "proposal_ref": {
+            "object_id": stored["object"]["object_id"],
+            "version": str(stored["object"]["revision"]),
+            "sha256": stored["object"]["canonical_sha256"],
+        },
+        "idempotent_replay": bool(stored.get("idempotent_replay")),
+    }

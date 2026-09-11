@@ -1,0 +1,189 @@
+{
+  "mandate": "M0089",
+  "title": "Operator Visual Feedback and Teaching Loop",
+  "status": "IMPLEMENTED_WITH_LIMITATIONS_OPERATOR_REVIEW_REQUIRED",
+  "decision_requested": "APPROVE-WITH-LIMITATIONS",
+  "evidence_classes": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "TEST",
+    "DOCUMENT",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "objective": {
+    "feedback_decisions": [
+      "GOOD",
+      "NEEDS_EDIT",
+      "REJECT"
+    ],
+    "optional_fields": [
+      "reason",
+      "note",
+      "region",
+      "affected_scene_ref",
+      "affected_element_ref",
+      "element_revision_ref"
+    ],
+    "lineage_fields": [
+      "storyboard_revision_ref",
+      "asset_source_ref",
+      "harness_ref",
+      "design_system_ref",
+      "operator_actor"
+    ],
+    "evaluation_projection": true,
+    "contrastive_examples": 2,
+    "production_rules_mutated": false
+  },
+  "authority_sources": [
+    {
+      "class": "DOCUMENT",
+      "path": "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/PRD/CURRENT.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/cae_mandate_bundle/01_CA_MANDATE_AUTHORING_PROTOCOL.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Operational_Product_Campaign_M0058_M0068_v1/README.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Operational_Product_Campaign_M0058_M0068_v1/18_BROWNFIELD_REFERENCE.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Production_Convergence_M65_M72_v1/README.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Production_Convergence_M65_M72_v1/07_PRODUCTION_OPERATOR_GATES/M72_final_production_gate_current_sync.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/cae/CAE_Product_Brief/10_Media_Intelligence_Asset_Intelligence_Evidence_Retrieval.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "packages/ca_runtime/src/ca_runtime/storyboard_session.py"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "services/pipeline/src/cmf_pipeline/workflow/infrastructure/repository.py"
+    },
+    {
+      "class": "DOCUMENT",
+      "path": "api/routers/visual_studio.py"
+    }
+  ],
+  "changed_paths": [
+    "services/pipeline/src/cmf_pipeline/evaluation/visual_feedback.py",
+    "services/pipeline/src/cmf_pipeline/evaluation/__init__.py",
+    "services/pipeline/contracts/schemas/visual_operator_feedback.schema.json",
+    "services/pipeline/contracts/schemas/visual_feedback_evaluation_dataset.schema.json",
+    "services/pipeline/evaluation/M0089_CONTRASTIVE_EXAMPLES.json",
+    "services/pipeline/evaluation/AGENT_HANDOFF.md",
+    "services/pipeline/evaluation/M0089_EVIDENCE_RECEIPT.json",
+    "tests/pipeline/test_m0089_visual_feedback.py"
+  ],
+  "commands": [
+    {
+      "class": "TEST",
+      "command": "python -m pytest -p no:asyncio tests/pipeline/test_m0089_visual_feedback.py",
+      "result": "PASS \u2014 8 passed"
+    },
+    {
+      "class": "TEST",
+      "command": "PYTHONPYCACHEPREFIX=/tmp/m0089_pyc python -m compileall -q services/pipeline/src/cmf_pipeline/evaluation/visual_feedback.py tests/pipeline/test_m0089_visual_feedback.py",
+      "result": "PASS \u2014 exit 0"
+    },
+    {
+      "class": "SCHEMA",
+      "command": "python - <<'PY'\nfrom pathlib import Path\nimport json\nfor rel in ['services/pipeline/contracts/schemas/visual_operator_feedback.schema.json','services/pipeline/contracts/schemas/visual_feedback_evaluation_dataset.schema.json','services/pipeline/evaluation/M0089_CONTRASTIVE_EXAMPLES.json']:\n    json.loads(Path(rel).read_text(encoding='utf-8'))\nprint('JSON_PARSE_OK')\nPY",
+      "result": "PASS \u2014 JSON_PARSE_OK"
+    },
+    {
+      "class": "TEST",
+      "command": "pytest -p no:asyncio tests/cae/test_m0079_storyboard_session_revision.py",
+      "result": "BLOCKED \u2014 ModuleNotFoundError: No module named 'psycopg' during collection"
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "command": "git rev-parse HEAD",
+      "result": "BLOCKED \u2014 fatal: not a git repository (or any of the parent directories): .git"
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "command": "find . -maxdepth 2 -type d -name .git -print",
+      "result": "BLOCKED \u2014 no .git directory present"
+    }
+  ],
+  "implementation_notes": {
+    "canonical_object_type": "studio_visual_feedback",
+    "persistence_authority": "services/pipeline/src/cmf_pipeline/workflow/infrastructure/repository.py",
+    "evaluation_only": true,
+    "legacy_payload_compatibility": true,
+    "database_migration": false,
+    "external_upstream_adoption": false,
+    "api_ui_changes": false
+  },
+  "external_sources": {
+    "status": "NOT_APPLICABLE",
+    "reason": "No external repository behavior was adopted; implementation reused current CAE repository code."
+  },
+  "file_sha256": {
+    "services/pipeline/src/cmf_pipeline/evaluation/visual_feedback.py": "dd95567ceb798847851bca00f7ad62e2ee90f450a7b6fb7fe1246e69a6f0bfa6",
+    "services/pipeline/src/cmf_pipeline/evaluation/__init__.py": "0e5420e3bd631e08e6db5a8516a076515697586f0793170f2bf5db22c3009759",
+    "services/pipeline/contracts/schemas/visual_operator_feedback.schema.json": "f8283448fd5fe2ec925660e44b6881f5ca08063662ce9ba78f4111ebcfe31f50",
+    "services/pipeline/contracts/schemas/visual_feedback_evaluation_dataset.schema.json": "760bdc7440ad127de6eb0a39bffd3498d39288593b14e68bda1d3b18cd595789",
+    "services/pipeline/evaluation/M0089_CONTRASTIVE_EXAMPLES.json": "26afbd32f9cd26283dcae7bc2c4602e1e9ffde7a6d5107c4f6def5f893fe1f80",
+    "tests/pipeline/test_m0089_visual_feedback.py": "e5ad25193155d1bb874f69a23b412cda09116909e075cb69a3cdfbb3f96f20cf"
+  },
+  "limitations": [
+    "Supplied archive contains no Git metadata; exact source/pre-change commit SHA cannot be established without operator-provided repository provenance.",
+    "API/UI expanded-field integration is outside the allowed M0089 boundary.",
+    "No real visual preview or perceptual operator acceptance was performed.",
+    "Normal monorepo import path could not run because psycopg is unavailable in the supplied environment and package installation could not reach the index; focused tests use real SQLite persistence with a test-local import/resource shim."
+  ],
+  "operator_acceptance": {
+    "agent_promotes": false,
+    "human_preview_inspection_required": true,
+    "source_lineage_verification_required": true,
+    "decision_options": [
+      "APPROVE",
+      "APPROVE-WITH-LIMITATIONS",
+      "REJECT"
+    ]
+  },
+  "commit_sha": null,
+  "input_artifact": {
+    "uploaded_path": "/mnt/data/codebase_clean(7).zip",
+    "sha256": "715288749bb4bb5fdcd493b7c48ba8cadc39b642d41e7bd763c680d2df27c8ee",
+    "git_metadata_present": false
+  }
+}

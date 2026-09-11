@@ -1082,3 +1082,37 @@ The focused negative cases cover non-operator actors, missing RPC entrypoints, m
 The requested literal CAE-M0085_BUNDLE and COMPONENT_CONTRACT.yaml were absent; the delivered M0085_delivery bundle and current CAE authority hierarchy were used. The older bundle snapshot was merged additively so existing Phase 07 Studio behavior was not overwritten. The full web typecheck remains blocked by unrelated pre-existing repository errors and is not claimed as M0085 evidence.
 
 Implementation commit: `a2f49047`.
+
+---
+
+# CAE-M0086, M0088, and M0089 Walkthrough — Evidence-First Research, Visual Chat, and Operator Feedback
+
+**Status:** Implemented; focused and combined regression verified at 100%\
+**Date:** 2026-09-11\
+**Boundary:** Downstream operator projections over existing Asset Intelligence, canonical Visual Asset Studio revision state, and immutable pipeline object/evaluation authorities
+
+## Exact integration matrix
+
+| Mandate | Active destination | Authority preserved |
+|---|---|---|
+| CAE-M0086 Asset Research Session | `services/asset-intelligence/src/cae_asset_intelligence/research_session.py` | Existing `SemanticCinematicRetriever`, governed `SceneRecord` transcript/provenance, rights policy, and retrieval receipts |
+| M0088 Visual Chat | `api/services/visual_chat.py`, `api/routers/visual_studio.py`, `apps/web/src/api/visualStudio.ts`, `apps/web/src/components/visual-studio/VisualAssetStudio.tsx` | Canonical revision digest/state version, human operator authorization, proposal-only state boundary |
+| M0089 Operator Visual Feedback | `services/pipeline/src/cmf_pipeline/evaluation/visual_feedback.py` and schemas | Existing `studio_visual_feedback` object stream and repository edge persistence; storyboard revision/element/source lineage is explicit |
+
+M0086 provides phrase and semantic/cinematic research candidates without creating a second retrieval authority or mutating canonical storyboard/VAE state. M0088 classifies a closed set of typed proposal actions, holds source replacement without governed candidates, and emits three composition alternatives as proposals only. M0089 stores immutable GOOD / NEEDS_EDIT / REJECT records and projects them for evaluation with `production_rule_effect: NONE`; feedback cannot silently rewrite production rules.
+
+## Verification matrix
+
+| Suite | Command | Result |
+|---|---|---:|
+| M0086 focused plus M0063 retrieval regression | `python -m pytest -q tests/asset_intelligence/test_asset_research_session_m0086.py tests/asset_intelligence/test_cinematic_retrieval_m063.py` | **PASS (21/21, 100%)** |
+| M0088 focused Visual Chat contract | `python -m pytest -q tests/api/test_visual_chat.py` | **PASS (10/10, 100%)** |
+| M0089 focused feedback/evaluation contract | `python -m pytest -p no:asyncio -q tests/pipeline/test_m0089_visual_feedback.py` | **PASS (8/8, 100%)** |
+| M0085 + M0086 + M0088 + M0089 combined regression | `python -m pytest -q tests/api/test_visual_chat.py tests/asset_intelligence/test_asset_research_session_m0086.py tests/asset_intelligence/test_cinematic_retrieval_m063.py tests/pipeline/test_m0089_visual_feedback.py tests/api/test_visual_studio_pure.py tests/api/test_studio_bridge.py tests/phase1/test_studio.py` | **PASS (47/47, 100%)** |
+| Studio regression | `node --test services/studio/tests/*.test.mjs` | **PASS (20/20, 100%)** |
+| Python syntax and JSON contract parsing | `python -m py_compile ...`; `json.loads` over M0089 schemas/contrastive/evidence artifacts | **PASS** |
+| Full web typecheck | `node_modules/.bin/tsc.cmd -p apps/web/tsconfig.json --noEmit` | **BLOCKED by pre-existing unrelated repository errors; no new Visual Asset Studio errors observed** |
+
+The focused negative/contrastive coverage includes stale semantic indexes, rejected or unplayable research candidates, rights exclusion, missing source lineage, non-operator Visual Chat actors, canonical digest/state mismatch, source replacement without candidates, evidence-preserving proposals, immutable replay, invalid feedback regions, unauthorized feedback, and good-looking-but-wrong visual judgments. The M0088 and M0089 handoff materials did not supply a `COMPONENT_CONTRACT.yaml`; the delivered handoffs, existing CAE authority hierarchy, and current active code were used as the controlling integration inputs. The installed FastAPI environment required the missing `annotated-doc` dependency; it was installed into the active Python 3.12 site-packages so the existing API regression could collect.
+
+Implementation commit: recorded below after verification.

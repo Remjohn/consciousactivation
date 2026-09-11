@@ -1,0 +1,84 @@
+{
+  "$id": "https://conscious.activations/contracts/visual/visual_operator_feedback.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "studio_visual_feedback",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "feedback_id": {"type": "string", "minLength": 1},
+    "feedback_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"},
+    "workspace_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "campaign_ref": {"$ref": "#/$defs/ref"},
+    "storyboard_revision_ref": {"$ref": "#/$defs/ref"},
+    "element_revision_ref": {"anyOf": [{"$ref": "#/$defs/ref"}, {"type": "null"}]},
+    "affected_scene_ref": {"anyOf": [{"$ref": "#/$defs/ref"}, {"type": "null"}]},
+    "affected_element_ref": {"anyOf": [{"$ref": "#/$defs/ref"}, {"type": "null"}]},
+    "asset_source_ref": {"anyOf": [{"$ref": "#/$defs/ref"}, {"type": "null"}]},
+    "harness_ref": {"$ref": "#/$defs/ref"},
+    "design_system_ref": {"$ref": "#/$defs/ref"},
+    "decision": {"enum": ["GOOD", "NEEDS_EDIT", "REJECT"]},
+    "reason": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {"enum": ["SOURCE_MISMATCH", "WRONG_READING", "COMPOSITION", "TRANSFORMATION", "SOURCE_QUALITY", "OTHER"]},
+            "detail": {"type": ["string", "null"], "maxLength": 2000}
+          },
+          "required": ["code"]
+        },
+        {"type": "null"}
+      ]
+    },
+    "note": {"type": ["string", "null"], "maxLength": 4000},
+    "region": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "coordinate_space": {"const": "NORMALIZED_BPS"},
+            "x_bps": {"type": "integer", "minimum": 0, "maximum": 10000},
+            "y_bps": {"type": "integer", "minimum": 0, "maximum": 10000},
+            "width_bps": {"type": "integer", "minimum": 1, "maximum": 10000},
+            "height_bps": {"type": "integer", "minimum": 1, "maximum": 10000}
+          },
+          "required": ["coordinate_space", "x_bps", "y_bps", "width_bps", "height_bps"]
+        },
+        {"type": "null"}
+      ]
+    },
+    "operator_actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {"type": "string", "minLength": 1},
+        "actor_type": {"const": "human"},
+        "product_id": {"type": "string", "minLength": 1},
+        "workflow_role": {"const": "operator"}
+      },
+      "required": ["actor_id", "actor_type", "product_id", "workflow_role"]
+    },
+    "created_at": {"type": "string", "minLength": 1},
+    "feedback_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "required": [
+    "feedback_id", "feedback_version", "workspace_id", "session_id", "campaign_ref",
+    "storyboard_revision_ref", "harness_ref", "design_system_ref", "decision",
+    "operator_actor", "created_at", "feedback_sha256"
+  ],
+  "$defs": {
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "required": ["object_id", "version", "sha256"]
+    }
+  }
+}

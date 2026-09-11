@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { compileVisualProposal, compileVisualTransformProposal, getVisualStudio, recordVisualFeedback, type VisualFeedbackDecision, type VisualTransformType } from "../../api/visualStudio";
+import { compileVisualChatProposal, compileVisualTransformProposal, getVisualStudio, recordVisualFeedback, type VisualChatAction, type VisualFeedbackDecision, type VisualTransformType } from "../../api/visualStudio";
 
 const OPERATOR = { actor_id: "operator-web-001", actor_type: "human" as const, product_id: "conscious-activations-web", workflow_role: "operator" as const };
 
@@ -19,6 +19,7 @@ export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
   const [chatInput, setChatInput] = useState("");
   const [proposal, setProposal] = useState<any>(null);
+  const [chatAction, setChatAction] = useState<VisualChatAction | undefined>(undefined);
   const [transformType, setTransformType] = useState<VisualTransformType>("MOVE_BBOX");
   const [transformAmount, setTransformAmount] = useState("5");
   const feedback = useMutation({
@@ -44,7 +45,7 @@ export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
       if (!p) throw new Error("Visual Studio projection is unavailable.");
       const layer = (p?.composition?.layers ?? []).find((item: any) => item.layer_id === (selectedLayerId ?? p?.selected_layer?.layer_id));
       if (!layer) throw new Error("Select a canonical composition layer before proposing a visual edit.");
-      return compileVisualProposal(campaignId, { target_ref: layer.source_ref ?? p.source.source_ref, target_node_id: layer.layer_id, natural_language_request: text, operator_actor: OPERATOR, expected_state_version: p.revision.state_version });
+      return compileVisualChatProposal(campaignId, { target_ref: layer.source_ref ?? p.source.source_ref, target_node_id: layer.layer_id, natural_language_request: text, action: chatAction, candidate_refs: [], operator_actor: OPERATOR, expected_state_version: p.revision.state_version, canonical_revision_ref: p.revision.revision_ref });
     },
     onSuccess: setProposal,
   });
@@ -118,8 +119,8 @@ export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
       <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Visual chat">
         <div className="mb-3 flex items-center justify-between"><h3 className="font-medium">Visual Chat</h3><Badge>Typed proposals only</Badge></div>
         <textarea value={chatInput} onChange={(e) => setChatInput(e.target.value)} rows={3} className="w-full rounded-lg border border-ca-border bg-black/20 p-3 text-sm outline-none focus:border-ca-gold-500" placeholder="Ask for a bounded visual change; Chat does not mutate canonical state directly." />
-        <div className="mt-3 flex flex-wrap gap-2"><button className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!chatInput.trim() || !selected || propose.isPending} onClick={() => propose.mutate(chatInput)}>Propose</button><button className="rounded border border-ca-border px-3 py-2 text-xs" onClick={() => setChatInput("Regenerate the selected layer from its linked source evidence")}>REGENERATE</button><button className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!proposal} onClick={() => setProposal(null)}>Clear</button></div>
-        {proposal && <div className="mt-4 rounded-lg border border-ca-gold-500/30 bg-ca-gold-500/5 p-3"><div className="flex items-center justify-between"><span className="text-xs font-medium">Compiled proposal</span><Badge tone={proposal.compilation_status === "COMPILED" ? "good" : "warn"}>{proposal.compilation_status}</Badge></div><p className="mt-2 text-sm">{proposal.interpretation}</p><div className="mt-3 space-y-2 text-xs text-ca-text-secondary">{(proposal.exact_operations ?? []).map((op: any) => <div key={op.operation_id}>{op.tool_id} · {op.expected_effect}</div>)}</div>{proposal.compilation_status === "COMPILED" && <div className="mt-3"><button className="rounded bg-ca-gold-500 px-3 py-2 text-xs font-medium text-black" onClick={() => setChatInput("Confirm compiled proposal for operator review")}>COMPILE</button></div>}</div>}
+        <div className="mt-3 flex flex-wrap gap-2"><button className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!chatInput.trim() || !selected || propose.isPending} onClick={() => propose.mutate(chatInput)}>Propose</button>{(["FIND_ALTERNATIVES", "REPLACE_SOURCE", "REGENERATE_BBOX_PROMPT", "COMPOSITION_ALTERNATIVES", "REDUCE_INTENSITY", "MOVE_EMPHASIS"] as VisualChatAction[]).map((action) => <button key={action} className={`rounded border px-3 py-2 text-[10px] ${chatAction === action ? "border-ca-gold-500 text-ca-gold-500" : "border-ca-border"}`} onClick={() => { setChatAction(action); setChatInput(action.replaceAll("_", " ")); }}>{action}</button>)}<button className="rounded border border-ca-border px-3 py-2 text-xs" onClick={() => { setChatAction("REGENERATE_TRANSFORMATION"); setChatInput("Regenerate the transformation proposal"); }}>REGENERATE</button><button className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!proposal} onClick={() => setProposal(null)}>Clear</button></div>
+        {proposal && <div className="mt-4 rounded-lg border border-ca-gold-500/30 bg-ca-gold-500/5 p-3"><div className="flex items-center justify-between"><span className="text-xs font-medium">Typed proposal · {proposal.proposal?.action ?? proposal.action ?? "VISUAL"}</span><Badge tone={(proposal.proposal?.status ?? proposal.status) === "PROPOSED" ? "good" : "warn"}>{proposal.proposal?.status ?? proposal.status ?? proposal.compilation_status}</Badge></div><p className="mt-2 text-sm">{proposal.proposal?.interpretation ?? proposal.interpretation}</p><div className="mt-3 space-y-2 text-xs text-ca-text-secondary">{(proposal.proposal?.exact_operations ?? proposal.exact_operations ?? []).map((op: any) => <div key={op.operation_id}>{op.operation_type ?? op.tool_id} · {op.expected_effect}</div>)}</div><div className="mt-3 text-[10px] uppercase tracking-wider text-ca-text-secondary">Proposal only · operator authorization required · canonical state unchanged</div></div>}
         {propose.isError && <div className="mt-3 text-xs text-ca-danger">{propose.error instanceof Error ? propose.error.message : "Proposal compilation failed."}</div>}
       </section>
       <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Operator feedback">
