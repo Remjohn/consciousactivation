@@ -1,0 +1,168 @@
+{
+  "allowed_operator_decisions": [
+    "APPROVE",
+    "APPROVE-WITH-LIMITATIONS",
+    "REJECT"
+  ],
+  "artifacts": {
+    "docs/cae/certification/M0096/AGENT_HANDOFF.md": "6a5a6c3cf40875cb6e780a9e14bc1f9d66c9b832fbe5e00f1dd79f25c126b233",
+    "docs/cae/certification/M0096/M0096_PARTNER_READY_CERTIFICATION.md": "bac7b02cb1f31c17c1406e7524c0a7d1fbeed7c2c407f3a448f9ed93ab64dec1",
+    "docs/cae/evidence/M0096/M0096_COMMAND_LOG.txt": "8802f512bb7b853b7100ac5b80585702fd8227a675dab66a3b44add0eb854601",
+    "docs/cae/evidence/M0096/M0096_M067_LIVE_BLOCKER_EVIDENCE.json": "d1d68f71979e6e23b14774c497e317df40a289358e30ed42d8e105232618959f",
+    "docs/cae/evidence/M0096/M0096_M067_LIVE_BLOCKER_EVIDENCE.jsonl": "734bf818d2c1a185006e06baa36dccc1204937e5a2f46502f455b912c5f3796d",
+    "docs/cae/evidence/M0096/M0096_UPSTREAM_TO_CAE_MAPPING.md": "7e217b581b2a5d938e591161c1a290d1ef7bf692d1c439151a44c69e6d2bad97",
+    "tests/e2e/test_m0096_partner_ready_vertical_slice.py": "4c8605c10601d8c6cc123c546a8d73cb47f65ecd77af0342e8a6258ca98b333c"
+  },
+  "authority_pack_resolution": {
+    "classification": "MIGRATION",
+    "current_canonical_root": "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10",
+    "files": {
+      "00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md": "b07ff8dc67eba2b82076ef89a9b74a3619fb4efe5ffa109a1b3e67841ab127bb",
+      "01_CAE_Product_Update_Visual_Asset_Editor.md": "6e1ab58aaaec5280f78eae7d66fc7a7c3663cc412bdee35875ae3f9546535aff",
+      "02_CAE_PRD_Update_Visual_Asset_Studio.md": "69059388802a80ecffcd145744ca7dae8654862a373cf60a26337f7663326645",
+      "03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md": "d10e8e3a9c51bd7a53922c99924b780e9471f4639dee2284cdb9badfd2a10c03"
+    },
+    "requested_root": "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10"
+  },
+  "authority_resolution": {
+    "classification": "MIGRATION",
+    "current_canonical": "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "note": "Literal missing path was not recreated to avoid competing authority.",
+    "precedence_contract_sha256": "4a0c4bc14e2dbad668b0159541dbc1e088fa732dcd6901c347a8468341887a12",
+    "requested_literal": "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "sha256": "21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b"
+  },
+  "blockers": [
+    {
+      "class": "EXECUTABLE",
+      "id": "M0096-B1",
+      "reason": "Native OpenChatCut MCP endpoint is unreachable; no mock fallback permitted.",
+      "severity": "CRITICAL"
+    },
+    {
+      "class": "EXECUTABLE",
+      "id": "M0096-B2",
+      "reason": "No real governed source media artifact is available; only synthetic/corrupt MP4 fixtures are present.",
+      "severity": "CRITICAL"
+    },
+    {
+      "class": "EXECUTABLE",
+      "id": "M0096-B3",
+      "reason": "Supplied archive contains no .git metadata; exact current CAE commit SHA is unavailable.",
+      "severity": "HIGH"
+    },
+    {
+      "class": "EXECUTABLE",
+      "id": "M0096-B4",
+      "reason": "Dependency-complete canonical Python product test execution is unavailable in this environment (`psycopg`, then `cmf_builder` under a temporary non-committed diagnostic shim).",
+      "severity": "HIGH"
+    },
+    {
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "id": "M0096-B5",
+      "reason": "No real preview exists, so perceptual/semantic/rights/source-lineage approval cannot be performed.",
+      "severity": "HIGH"
+    }
+  ],
+  "campaign_batch": "E2 CERTIFICATION",
+  "canonical_reuse": {
+    "false_proof_countertest": "tests/cae/test_m0079_storyboard_session_revision.py::test_good_looking_but_ungrounded_asset_is_blocked",
+    "real_campaign_harness": "tests/e2e/m067_real_campaign_harness.py",
+    "storyboard": "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+    "storyboard_programs": "packages/ca_runtime/src/ca_runtime/storyboard_programs.py",
+    "transformation_recipe": "packages/ca_runtime/src/ca_runtime/transformation_recipe.py",
+    "visual_asset_studio_contracts": "api/services/visual_studio_contracts.py",
+    "visual_asset_studio_router": "api/routers/visual_studio.py"
+  },
+  "evidence_classes": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "MIGRATION",
+    "REGISTRY_SOURCE",
+    "DOCUMENT",
+    "TEST",
+    "HYPOTHESIS",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "execution_date": "2026-09-11",
+  "external_source": {
+    "license": "AGPL-3.0-or-later",
+    "local_revision_claim": "NOT ESTABLISHED \u2014 supplied archive has no .git metadata.",
+    "mapping": "docs/cae/evidence/M0096/M0096_UPSTREAM_TO_CAE_MAPPING.md",
+    "observed_current_main_commit_2026_09_11": "607e0fcc2b755a92a659deb54305ba8164930ae3",
+    "package_version": "0.2.14",
+    "repository": "https://github.com/0xsline/OpenChatCut"
+  },
+  "limitations": [
+    "No synthetic/mock artifact is counted as production evidence.",
+    "No self-promotion to partner-ready.",
+    "SAM3 path not live-proven and therefore not claimed."
+  ],
+  "live_runtime": {
+    "endpoint": "http://localhost:5199/api/external-mcp/mcp",
+    "endpoint_reachable": false,
+    "live_command": "python tests/e2e/m067_real_campaign_harness.py live --artifact-root /tmp/m0096-live",
+    "native_render_receipt_present": false,
+    "operator_intervention_reached": false,
+    "preflight_command": "python tests/e2e/m067_real_campaign_harness.py preflight --artifact-root /tmp/m0096-preflight",
+    "qa_release_reached": false,
+    "result": "BLOCKED",
+    "run_id": "m067-real-blocked-42e2331e68aa",
+    "source_media_present": false
+  },
+  "mandate_id": "M0096",
+  "manifest_sha256": "f9ee9798979d49fa2a3025ddc6a0bb0abd97b826ed5eca23d60fac9e527432c3",
+  "manifest_version": "1.0.0",
+  "operator_decision_required": true,
+  "partner_ready": false,
+  "production_readiness": "NOT-READY",
+  "source_archive": {
+    "git_commit_sha": null,
+    "git_metadata_present": false,
+    "path": "/mnt/data/codebase_clean.zip",
+    "sha256": "ac7212df149488353130ee0e6c275d1c4fb35da52826d005dbe4924789f6beee"
+  },
+  "status": "BLOCKED",
+  "title": "Partner-Ready Evidence-First Visual Production Vertical Slice and Certification",
+  "verification": [
+    {
+      "class": "TEST",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -p no:cacheprovider tests/e2e/test_m0096_partner_ready_vertical_slice.py",
+      "result": "5 passed in 0.05s"
+    },
+    {
+      "class": "EXECUTABLE",
+      "command": "python -m py_compile tests/e2e/test_m0096_partner_ready_vertical_slice.py",
+      "result": "PASS"
+    },
+    {
+      "class": "TEST",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -p no:cacheprovider tests/phase6/test_m065_openchatcut_runtime.py",
+      "limitation": "contract/adapter tests only",
+      "result": "6 passed in 0.11s"
+    },
+    {
+      "class": "TEST",
+      "command": "python -m pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_m0083_transformation_intent_recipe.py",
+      "error": "ModuleNotFoundError: No module named psycopg",
+      "result": "BLOCKED AT COLLECTION"
+    },
+    {
+      "class": "EXECUTABLE",
+      "command": "python tests/e2e/m067_real_campaign_harness.py live --artifact-root /tmp/m0096-live",
+      "result": "BLOCKED; exit code 2",
+      "run_id": "m067-real-blocked-42e2331e68aa"
+    },
+    {
+      "class": "EXECUTABLE",
+      "command": "python tests/e2e/m067_real_campaign_harness.py preflight --artifact-root /tmp/m0096-preflight",
+      "result": "BLOCKED; exit code 2"
+    },
+    {
+      "class": "EXECUTABLE",
+      "command": "PIP_DISABLE_PIP_VERSION_CHECK=1 python -m pip install 'psycopg[binary]>=3.2,<4' --no-input",
+      "error": "Temporary failure in name resolution",
+      "result": "FAIL; exit code 1"
+    }
+  ]
+}
