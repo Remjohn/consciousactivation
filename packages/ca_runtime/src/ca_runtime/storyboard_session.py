@@ -15,10 +15,15 @@ import sqlite3
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 from uuid import uuid4
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, root_validator, validator
 
 from ca_contracts import CanonicalizationError, canonical_sha256, utc_now_rfc3339
 from ca_runtime.editorial_discovery_store import EditorialDiscoveryStore
+from ca_runtime.narrative_editing_grammar import (
+    NarrativeEditingGrammarRegistry,
+    NarrativeGrammarBinding,
+    NarrativeGrammarBindingError,
+)
 from ca_runtime.preparation_graph_store import (
     GraphRevisionRecord,
     PreparationGraphStore,
@@ -59,6 +64,106 @@ class StoryboardSessionStatus(str):
     BLOCKED = "BLOCKED"
 
 
+class SourceQualityProfile(BaseModel):
+    """Measured source-condition profile used to bound transformations."""
+
+    profile_id: str
+    source_ref: str
+    width_px: int
+    height_px: int
+    frame_rate_milli_fps: int
+    crop_count: int = 0
+    crop_retention_bps: int = 10000
+    compression_loss_bps: int = 0
+    sharpness_bps: int = 10000
+    prior_degradation_bps: int = 0
+    evidence_refs: List[str] = Field(..., min_length=1)
+
+    @field_validator("width_px", "height_px")
+    @classmethod
+    def positive_dimensions(cls, value: int) -> int:
+        if value <= 0:
+            raise ValueError("source dimensions must be positive")
+        return value
+
+    @field_validator("frame_rate_milli_fps")
+    @classmethod
+    def positive_frame_rate(cls, value: int) -> int:
+        if value <= 0:
+            raise ValueError("frame_rate_milli_fps must be positive")
+        return value
+
+    @field_validator("crop_count")
+    @classmethod
+    def non_negative_crop_count(cls, value: int) -> int:
+        if value < 0:
+            raise ValueError("crop_count must be non-negative")
+        return value
+
+    @field_validator("crop_retention_bps", "compression_loss_bps", "sharpness_bps", "prior_degradation_bps")
+    @classmethod
+    def bounded_quality_measurement(cls, value: int) -> int:
+        if not 0 <= value <= 10000:
+            raise ValueError("quality measurements must be between 0 and 10000 bps")
+        return value
+
+    @property
+    def resolution_bps(self) -> int:
+        minimum_dimension = min(self.width_px, self.height_px)
+        if minimum_dimension >= 2160:
+            return 10000
+        if minimum_dimension >= 1080:
+            return 8000
+        if minimum_dimension >= 720:
+            return 5500
+        if minimum_dimension >= 480:
+            return 3500
+        return 2000
+
+    @property
+    def frame_rate_quality_bps(self) -> int:
+        if self.frame_rate_milli_fps >= 30000:
+            return 10000
+        if self.frame_rate_milli_fps >= 24000:
+            return 8500
+        if self.frame_rate_milli_fps >= 20000:
+            return 6500
+        if self.frame_rate_milli_fps >= 15000:
+            return 4500
+        return 2500
+
+    @property
+    def quality_score_bps(self) -> int:
+        score = (
+            self.resolution_bps * 30
+            + self.crop_retention_bps * 15
+            + (10000 - self.compression_loss_bps) * 20
+            + self.sharpness_bps * 20
+            + self.frame_rate_quality_bps * 10
+            + (10000 - self.prior_degradation_bps) * 5
+        ) // 100
+        return max(0, min(10000, score))
+
+    @property
+    def quality_level(self) -> str:
+        if self.quality_score_bps >= 8000:
+            return "HIGH"
+        if self.quality_score_bps >= 6500:
+            return "MEDIUM"
+        if self.quality_score_bps >= 4500:
+            return "LOW"
+        return "DEGRADED"
+
+    @property
+    def presentation_strategies(self) -> List[str]:
+        return {
+            "HIGH": ["STANDARD", "SUBTLE_REFRAME", "SUBTLE_COLOR"],
+            "MEDIUM": ["STANDARD", "REDUCED_SCALE", "SELECTIVE_FRAMING"],
+            "LOW": ["REDUCED_SCALE", "INSET", "CONTEXTUAL", "GRAYSCALE"],
+            "DEGRADED": ["CONTAINERIZED", "INSET", "CONTEXTUAL", "GRAYSCALE"],
+        }[self.quality_level]
+
+
 class VisualAssetReference(BaseModel):
     """A governed reference to an asset; it is not an asset authority."""
 
@@ -69,40 +174,228 @@ class VisualAssetReference(BaseModel):
     evidence_refs: List[str] = Field(default_factory=list)
     rights_status: str = "UNVERIFIED"
     source_quality: str = "UNKNOWN"
+    source_quality_profile: Optional[SourceQualityProfile] = None
     approved: bool = False
 
 
+TRANSFORMATION_INTENTS = frozenset({
+    "WITHHOLD", "REVEAL", "FOCUS", "CONTRAST", "PROVE",
+    "EXPLAIN", "CONNECT", "ESCALATE", "INTERRUPT", "RESOLVE",
+})
+TRANSFORMATION_MODES = frozenset({
+    "AUTO", "EXTRACT_REGION", "REFRAME", "COMPARE", "ANNOTATE", "INSET",
+    "PROTECT", "HOLD", "RETURN", "CUT",
+})
+TRANSFORMATION_MOTIONS = frozenset({"STATIC", "SUBTLE_ZOOM", "SUBTLE_PAN", "RETURN"})
+TRANSFORMATION_SOURCE_QUALITIES = frozenset({"HIGH", "MEDIUM", "LOW", "DEGRADED", "UNKNOWN"})
+TRANSFORMATION_SOURCE_ROLES = frozenset({"A_ROLL", "B_ROLL", "E_ROLL", "DOCUMENT", "PATTERN_INTERRUPT"})
+
+
 class TransformationIntent(BaseModel):
-    """Why a source is transformed, distinct from how it is rendered."""
+    """Typed reason for changing a source, distinct from executable detail."""
 
     intent_id: str
     source_element_id: str
+    intent: str
     semantic_target: str
-    mode: str
+    mode: str = "AUTO"
     emphasis: str = "BALANCED"
     motion: str = "STATIC"
     constraints: Dict[str, Any] = Field(default_factory=dict)
 
-    @validator("mode")
-    def mode_is_bounded(cls, value: str) -> str:
+    @root_validator(pre=True)
+    def normalize_legacy_shape(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        payload = dict(values or {})
+        legacy_mode = str(payload.get("mode", "")).upper()
+        if "intent" not in payload and legacy_mode in TRANSFORMATION_INTENTS:
+            payload["intent"] = legacy_mode
+            payload["mode"] = "AUTO"
+        if "source_element_id" not in payload and payload.get("source"):
+            payload["source_element_id"] = payload["source"]
+        return payload
+
+    @validator("intent")
+    def intent_is_bounded(cls, value: str) -> str:
         normalized = value.upper()
-        allowed = {
-            "WITHHOLD", "REVEAL", "FOCUS", "CONTRAST", "PROVE",
-            "EXPLAIN", "CONNECT", "ESCALATE", "INTERRUPT", "RESOLVE",
-        }
-        if normalized not in allowed:
+        if normalized not in TRANSFORMATION_INTENTS:
             raise ValueError(f"unsupported transformation intent: {value}")
         return normalized
 
+    @validator("mode")
+    def mode_is_bounded(cls, value: str) -> str:
+        normalized = value.upper()
+        if normalized not in TRANSFORMATION_MODES:
+            raise ValueError(f"unsupported transformation mode: {value}")
+        return normalized
+
+    @validator("motion")
+    def motion_is_bounded(cls, value: str) -> str:
+        normalized = value.upper()
+        if normalized not in TRANSFORMATION_MOTIONS:
+            raise ValueError(f"unsupported transformation motion: {value}")
+        return normalized
+
+    @validator("emphasis")
+    def emphasis_is_present(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("transformation emphasis must be non-empty")
+        return normalized
+
+    @validator("semantic_target", "source_element_id")
+    def required_reference_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("transformation source and semantic target are required")
+        return value
+
+    @property
+    def source(self) -> str:
+        return self.source_element_id
+
+    def compile(self, *, authorized_recipe_ids: Optional[Sequence[str]] = None,
+                expected_registry_version: Optional[str] = None) -> "TransformationRecipe":
+        from ca_runtime.transformation_recipe import TransformationRecipeCompiler
+        return TransformationRecipeCompiler().compile(
+            self, authorized_recipe_ids=authorized_recipe_ids,
+            expected_registry_version=expected_registry_version,
+        )
+
 
 class TransformationRecipe(BaseModel):
-    """Bounded primitive projection of a ``TransformationIntent``."""
+    """Governed primitive/keyframe projection of a ``TransformationIntent``."""
 
     recipe_id: str
     intent_id: str
     primitives: List[Dict[str, Any]] = Field(default_factory=list)
     keyframes: List[Dict[str, Any]] = Field(default_factory=list)
     constraints: Dict[str, Any] = Field(default_factory=dict)
+    template_id: Optional[str] = None
+    registry_version: str = "LEGACY"
+    motion_template: str = "STATIC_HOLD"
+    governed: bool = False
+    recipe_sha256: Optional[str] = None
+
+
+class TransformationValidationResult(BaseModel):
+    allowed: bool
+    source_quality_level: str
+    max_scale_delta_bps: int
+    max_reframe_bps: int
+    max_motion_amplitude_bps: int
+    allowed_color_treatments: List[str]
+    recommended_presentation_strategies: List[str]
+    violations: List[str] = Field(default_factory=list)
+
+
+_TRANSFORMATION_QUALITY_LIMITS = {
+    "HIGH": {"scale": 1200, "reframe": 1200, "motion": 1200, "color": ["NONE", "CONTROLLED", "SUBTLE_LUT"]},
+    "MEDIUM": {"scale": 800, "reframe": 800, "motion": 700, "color": ["NONE", "CONTROLLED"]},
+    "LOW": {"scale": 400, "reframe": 400, "motion": 300, "color": ["NONE", "GRAYSCALE", "CONTROLLED"]},
+    "DEGRADED": {"scale": 150, "reframe": 200, "motion": 0, "color": ["NONE", "GRAYSCALE"]},
+}
+
+
+def _declared_transform_intensity(recipe: TransformationRecipe) -> Dict[str, Any]:
+    scales: List[int] = []
+    reframes: List[int] = []
+    motions: List[int] = []
+    colors: List[str] = []
+    undeclared: List[str] = []
+    for primitive in recipe.primitives:
+        op = str(primitive.get("op", "")).upper()
+        if op in {"ZOOM", "SCALE"} and "scale_delta_bps" not in primitive and "amount_bps" not in primitive:
+            undeclared.append(f"{op} must declare amount_bps or scale_delta_bps")
+        if op == "REFRAME" and "reframe_bps" not in primitive:
+            undeclared.append("REFRAME must declare reframe_bps")
+        if op == "MOTION" and "motion_amplitude_bps" not in primitive:
+            undeclared.append("MOTION must declare motion_amplitude_bps")
+        if "scale_delta_bps" in primitive:
+            scales.append(abs(int(primitive["scale_delta_bps"])))
+        if op in {"ZOOM", "SCALE"} and "amount_bps" in primitive:
+            scales.append(abs(int(primitive["amount_bps"])))
+        if "reframe_bps" in primitive:
+            reframes.append(abs(int(primitive["reframe_bps"])))
+        if "motion_amplitude_bps" in primitive:
+            motions.append(abs(int(primitive["motion_amplitude_bps"])))
+        if op in {"COLOR", "LUT", "COLOR_TREATMENT"}:
+            colors.append(str(primitive.get("treatment", "CONTROLLED")).upper())
+    for keyframe in recipe.keyframes:
+        if "scale_delta_bps" in keyframe:
+            scales.append(abs(int(keyframe["scale_delta_bps"])))
+        if "motion_amplitude_bps" in keyframe:
+            motions.append(abs(int(keyframe["motion_amplitude_bps"])))
+    return {
+        "scale_delta_bps": max(scales, default=0),
+        "reframe_bps": max(reframes, default=0),
+        "motion_amplitude_bps": max(motions, default=0),
+        "color_treatments": colors or ["NONE"],
+        "undeclared_intensity": undeclared,
+    }
+
+
+def validate_transformation_for_source_quality(
+    profile: SourceQualityProfile, recipe: TransformationRecipe
+) -> TransformationValidationResult:
+    limits = _TRANSFORMATION_QUALITY_LIMITS[profile.quality_level]
+    declared = _declared_transform_intensity(recipe)
+    violations = list(declared["undeclared_intensity"])
+    if declared["scale_delta_bps"] > limits["scale"]:
+        violations.append(f"scale_delta_bps={declared['scale_delta_bps']} exceeds {limits['scale']} for {profile.quality_level}")
+    if declared["reframe_bps"] > limits["reframe"]:
+        violations.append(f"reframe_bps={declared['reframe_bps']} exceeds {limits['reframe']} for {profile.quality_level}")
+    if declared["motion_amplitude_bps"] > limits["motion"]:
+        violations.append(f"motion_amplitude_bps={declared['motion_amplitude_bps']} exceeds {limits['motion']} for {profile.quality_level}")
+    for treatment in declared["color_treatments"]:
+        if treatment not in limits["color"]:
+            violations.append(f"color treatment '{treatment}' is not allowed for {profile.quality_level}")
+    return TransformationValidationResult(
+        allowed=not violations,
+        source_quality_level=profile.quality_level,
+        max_scale_delta_bps=limits["scale"],
+        max_reframe_bps=limits["reframe"],
+        max_motion_amplitude_bps=limits["motion"],
+        allowed_color_treatments=list(limits["color"]),
+        recommended_presentation_strategies=profile.presentation_strategies,
+        violations=violations,
+    )
+
+
+def adapt_transformation_recipe_for_source_quality(
+    profile: SourceQualityProfile, recipe: TransformationRecipe
+) -> TransformationRecipe:
+    limits = _TRANSFORMATION_QUALITY_LIMITS[profile.quality_level]
+    primitives: List[Dict[str, Any]] = []
+    for primitive in recipe.primitives:
+        copy = dict(primitive)
+        if "scale_delta_bps" in copy:
+            copy["scale_delta_bps"] = min(abs(int(copy["scale_delta_bps"])), limits["scale"])
+        if str(copy.get("op", "")).upper() in {"ZOOM", "SCALE"} and "amount_bps" in copy:
+            copy["amount_bps"] = min(abs(int(copy["amount_bps"])), limits["scale"])
+        if "reframe_bps" in copy:
+            copy["reframe_bps"] = min(abs(int(copy["reframe_bps"])), limits["reframe"])
+        if "motion_amplitude_bps" in copy:
+            copy["motion_amplitude_bps"] = min(abs(int(copy["motion_amplitude_bps"])), limits["motion"])
+        if str(copy.get("op", "")).upper() in {"COLOR", "LUT", "COLOR_TREATMENT"}:
+            treatment = str(copy.get("treatment", "CONTROLLED")).upper()
+            if treatment not in limits["color"]:
+                copy["treatment"] = limits["color"][0]
+        primitives.append(copy)
+    keyframes: List[Dict[str, Any]] = []
+    for keyframe in recipe.keyframes:
+        copy = dict(keyframe)
+        if "scale_delta_bps" in copy:
+            copy["scale_delta_bps"] = min(abs(int(copy["scale_delta_bps"])), limits["scale"])
+        if "motion_amplitude_bps" in copy:
+            copy["motion_amplitude_bps"] = min(abs(int(copy["motion_amplitude_bps"])), limits["motion"])
+        keyframes.append(copy)
+    constraints = dict(recipe.constraints)
+    constraints.update({
+        "source_quality_level": profile.quality_level,
+        "source_quality_profile_id": profile.profile_id,
+        "source_quality_evidence_refs": list(profile.evidence_refs),
+        "presentation_strategy": profile.presentation_strategies[0],
+    })
+    return recipe.model_copy(update={"primitives": primitives, "keyframes": keyframes, "constraints": constraints})
 
 
 class MotionPlan(BaseModel):
@@ -153,6 +446,7 @@ class StoryboardScene(BaseModel):
     scene_order: int
     semantic_purpose: str
     source_evidence_refs: List[str] = Field(default_factory=list)
+    narrative_grammar: Optional[NarrativeGrammarBinding] = None
     shots: List[StoryboardShot] = Field(default_factory=list)
 
     @validator("scene_order")
@@ -545,6 +839,16 @@ class StoryboardSessionStore:
                             raise StoryboardRevisionValidationError(
                                 f"asset '{asset.asset_id}' references evidence outside revision lineage"
                             )
+                        if asset.source_quality_profile is not None:
+                            profile = asset.source_quality_profile
+                            if profile.source_ref != asset.asset_id:
+                                raise StoryboardRevisionValidationError(
+                                    f"asset '{asset.asset_id}' quality profile is bound to another source"
+                                )
+                            if not set(profile.evidence_refs).issubset(evidence_refs):
+                                raise StoryboardRevisionValidationError(
+                                    f"asset '{asset.asset_id}' quality profile references evidence outside revision lineage"
+                                )
                     intent = element.transformation_intent
                     recipe = element.transformation_recipe
                     if recipe is not None and (intent is None or recipe.intent_id != intent.intent_id):
@@ -555,6 +859,39 @@ class StoryboardSessionStore:
                         raise StoryboardRevisionValidationError(
                             f"transformation intent for '{element.element_id}' points at another element"
                         )
+                    if recipe is not None:
+                        for asset in element.asset_references:
+                            profile = asset.source_quality_profile
+                            if profile is None:
+                                continue
+                            quality_result = validate_transformation_for_source_quality(profile, recipe)
+                            if not quality_result.allowed:
+                                raise StoryboardRevisionValidationError(
+                                    f"element '{element.element_id}' transformation exceeds source-quality limits: "
+                                    + "; ".join(quality_result.violations)
+                                )
+
+        grammar_bindings = [
+            scene.narrative_grammar for scene in scenes if scene.narrative_grammar is not None
+        ]
+        if grammar_bindings:
+            if not session.harness_id:
+                raise StoryboardRevisionValidationError(
+                    "narrative grammar bindings require a canonical session harness_id"
+                )
+            try:
+                report = NarrativeEditingGrammarRegistry.validate_sequence(
+                    grammar_bindings,
+                    expected_harness_id=session.harness_id,
+                    expected_scene_ids=(scene.scene_id for scene in scenes),
+                )
+            except NarrativeGrammarBindingError as exc:
+                raise StoryboardRevisionValidationError(str(exc)) from exc
+            if not report.passed:
+                raise StoryboardRevisionValidationError(
+                    "narrative editing grammar validation failed: "
+                    + "; ".join(report.errors)
+                )
 
     def save_revision(
         self,
@@ -618,6 +955,50 @@ class StoryboardSessionStore:
             "scene_shot_timing": "PASS",
             "transformation_chain": "PASS",
         }
+        grammar_bindings = [
+            scene.narrative_grammar for scene in revision.scenes
+            if scene.narrative_grammar is not None
+        ]
+        if grammar_bindings:
+            report = NarrativeEditingGrammarRegistry.validate_sequence(
+                grammar_bindings,
+                expected_harness_id=revision.harness_id,
+                expected_scene_ids=(scene.scene_id for scene in revision.scenes),
+            )
+            checks["narrative_editing_grammar"] = "PASS" if report.passed else "FAIL"
+            if not report.passed:
+                report_payload = {
+                    "workspace_id": workspace_id,
+                    "session_id": session_id,
+                    "revision_id": revision_id,
+                    "passed": False,
+                    "checks": checks,
+                    "errors": list(report.errors),
+                    "warnings": [],
+                }
+                report_model = StoryboardValidationReport(
+                    report_id=f"validation_{revision_id}",
+                    report_sha256=canonical_sha256(report_payload),
+                    **report_payload,
+                )
+                with self.conn:
+                    self.conn.execute(
+                        """
+                        INSERT INTO storyboard_validation_report
+                        (workspace_id, report_id, session_id, revision_id, passed,
+                         checks_json, errors_json, warnings_json, report_sha256, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(workspace_id, revision_id) DO NOTHING
+                        """,
+                        (
+                            report_model.workspace_id, report_model.report_id, report_model.session_id,
+                            report_model.revision_id, 0,
+                            json.dumps(report_model.checks, sort_keys=True),
+                            json.dumps(report_model.errors, sort_keys=True),
+                            "[]", report_model.report_sha256, report_model.created_at,
+                        ),
+                    )
+                return report_model
         report_payload = {
             "workspace_id": workspace_id,
             "session_id": session_id,
@@ -794,6 +1175,7 @@ class StoryboardSessionStore:
 __all__ = [
     "FeedbackDecision",
     "MotionPlan",
+    "NarrativeGrammarBinding",
     "OperatorVisualFeedback",
     "StoryboardAuthorityError",
     "StoryboardCompileReceipt",
@@ -808,7 +1190,11 @@ __all__ = [
     "StoryboardSessionStore",
     "StoryboardShot",
     "StoryboardValidationReport",
+    "SourceQualityProfile",
     "TransformationIntent",
     "TransformationRecipe",
+    "TransformationValidationResult",
+    "adapt_transformation_recipe_for_source_quality",
+    "validate_transformation_for_source_quality",
     "VisualAssetReference",
 ]

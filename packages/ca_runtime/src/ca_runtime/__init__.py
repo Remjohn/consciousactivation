@@ -1500,6 +1500,30 @@ from .composition_asset_handoff import (
     verify_runtime_asset_handoff,
 )
 
+from .narrative_editing_grammar import (
+    NarrativeEditingGrammarEntry,
+    NarrativeEditingGrammarRegistry,
+    NarrativeGrammarBinding,
+    NarrativeGrammarBindingError,
+    NarrativeGrammarError,
+    NarrativeGrammarMode,
+    NarrativeGrammarSequenceError,
+    NarrativeGrammarUnknownModeError,
+    NarrativeGrammarValidationReport,
+    NarrativeSceneContext,
+    narrative_grammar_registry_payload,
+)
+
+from .editorial_expression_calculus import (
+    EditorialExpression,
+    EditorialExpressionBounds,
+    EditorialExpressionProfile,
+    EditorialExpressionProfileError,
+    NarrativeEditingGrammar,
+    compile_editorial_expression,
+    get_editorial_expression_profile,
+)
+
 from .storyboard_session import (
     FeedbackDecision,
     MotionPlan,
@@ -1517,9 +1541,27 @@ from .storyboard_session import (
     StoryboardSessionStore,
     StoryboardShot,
     StoryboardValidationReport,
+    SourceQualityProfile,
     TransformationIntent,
     TransformationRecipe,
+    TransformationValidationResult,
+    adapt_transformation_recipe_for_source_quality,
+    validate_transformation_for_source_quality,
     VisualAssetReference,
+)
+from .transformation_recipe import (
+    TRANSFORMATION_RECIPE_REGISTRY_VERSION,
+    SourceQualityRequiredError,
+    StaleTransformationRecipeRegistryError,
+    TransformationAuthorizationError,
+    TransformationCompilationError,
+    TransformationConstraintError,
+    TransformationModeMismatchError,
+    TransformationRecipeCompiler,
+    TransformationRecipeNotFoundError,
+    TransformationRecipeRegistry,
+    TransformationRecipeTemplate,
+    compile_transformation_intent,
 )
 from .storyboard_programs import (
     BaseStoryboardProgram,
