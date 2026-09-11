@@ -154,3 +154,4 @@ from api.routers import release_ship; app.include_router(release_ship.router, pr
 # CAE (CA-M002 / FR-CONV-001): Dual-Context Convergence Gate router
 from api.routers import convergence; app.include_router(convergence.router, prefix="/api/convergence", tags=["convergence"])  # noqa: E702
 from api.routers import visual_studio; app.include_router(visual_studio.router, prefix="/api/visual-studio", tags=["visual-studio"])  # noqa: E702
+from api.routers import candidate_preview; app.include_router(candidate_preview.router, prefix="/api/visual-studio", tags=["candidate-preview"])  # noqa: E702

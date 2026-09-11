@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { compileVisualChatProposal, compileVisualTransformProposal, getVisualStudio, recordVisualFeedback, type VisualChatAction, type VisualFeedbackDecision, type VisualTransformType } from "../../api/visualStudio";
+import { CandidatePreviewPanel } from "./CandidatePreviewPanel";
 
 const OPERATOR = { actor_id: "operator-web-001", actor_type: "human" as const, product_id: "conscious-activations-web", workflow_role: "operator" as const };
 
@@ -73,6 +74,7 @@ export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
   if (query.isError || !query.data) return <div className="rounded-xl border border-ca-danger/40 bg-ca-danger/10 p-6 text-sm text-ca-danger">Visual Asset Studio could not establish a canonical projection. No replacement or generated preview is shown.</div>;
   const p = query.data!;
   const preview = p.preview?.artifact_ref;
+  const candidateSessionId = new URLSearchParams(window.location.search).get("candidateSessionId") ?? "";
   const timeline = p.composition?.timeline;
   const canvasW = timeline?.width ?? 1920; const canvasH = timeline?.height ?? 1080;
 
@@ -81,6 +83,8 @@ export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
       <div><div className="text-xs uppercase tracking-[0.22em] text-ca-gold-500">Evidence-First Visual Asset Studio</div><h2 className="mt-1 text-xl font-semibold">Inspect → transform → compose → validate</h2></div>
       <div className="flex gap-2"><Badge tone="good">Canonical state</Badge><Badge tone={p.preview?.available ? "good" : "warn"}>{p.preview?.available ? "Artifact preview" : "Preview unavailable"}</Badge></div>
     </div>
+
+    <CandidatePreviewPanel initialSessionId={candidateSessionId} />
 
     <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
       <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Source and evidence">

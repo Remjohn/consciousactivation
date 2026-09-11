@@ -1116,3 +1116,38 @@ M0086 provides phrase and semantic/cinematic research candidates without creatin
 The focused negative/contrastive coverage includes stale semantic indexes, rejected or unplayable research candidates, rights exclusion, missing source lineage, non-operator Visual Chat actors, canonical digest/state mismatch, source replacement without candidates, evidence-preserving proposals, immutable replay, invalid feedback regions, unauthorized feedback, and good-looking-but-wrong visual judgments. The M0088 and M0089 handoff materials did not supply a `COMPONENT_CONTRACT.yaml`; the delivered handoffs, existing CAE authority hierarchy, and current active code were used as the controlling integration inputs. The installed FastAPI environment required the missing `annotated-doc` dependency; it was installed into the active Python 3.12 site-packages so the existing API regression could collect.
 
 Implementation commit: `98286971`.
+
+---
+
+# CAE-M0087 Walkthrough — Playable Candidate Preview and Governed Promotion
+
+**Status:** Implemented; focused and combined regression verified at 100%\
+**Date:** 2026-09-11\
+**Boundary:** Candidate-preview projection over M0086 Asset Intelligence and the existing canonical Visual Asset Studio/native `SUBSTITUTE_ASSET` path
+
+## Exact integration matrix
+
+| Concern | Active destination | Authority preserved |
+|---|---|---|
+| Candidate portfolio/session state machine | `services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py` | Existing governed retrieval candidates, rights, source provenance, and temporal ranges |
+| Preview/navigation/decision API | `api/routers/candidate_preview.py` and `api/main.py` | Pipeline repository object revisions and optimistic session versioning |
+| Playable preview and swipe/keyboard UI | `apps/web/src/components/visual-studio/CandidatePreviewPanel.tsx` embedded in the existing Visual Asset Studio | Real preview URI only; no mock media or second storyboard/VAE authority |
+| Canonical promotion | Existing `compile_native_edit_program` / `commit_native_edit` with `SUBSTITUTE_ASSET` | Operator-gated canonical campaign/VAE path |
+| Test-path integration repair | `pyproject.toml` | Local asset-intelligence package is exposed through the existing pytest path |
+
+Automatic acceptance is deterministic and fail-closed. Human ACCEPT/REJECT is operator-authorized, rejection requires rationale, and immutable decision receipts retain candidate snapshots, rights, provenance, source range, target, and revision lineage. Rejected candidates cannot be accepted again in the same session without search-again.
+
+## Verification matrix
+
+| Suite | Command | Result |
+|---|---|---:|
+| M0087 focused + M0063/M0064/M0085 baseline | `python -m pytest -q tests/asset_intelligence/test_m0087_candidate_preview.py tests/api/test_visual_studio_pure.py tests/asset_intelligence/test_cinematic_retrieval_m063.py tests/production_program/test_m0064_asset_selection_binding_lineage.py` | **PASS (35/35, 100%)** |
+| M0087 API integration | `python -m pytest -q tests/api/test_candidate_preview.py` | **PASS (3/3, 100%)** |
+| Combined M0085–M0087 and M0089 regression | `python -m pytest -q tests/api/test_candidate_preview.py tests/api/test_visual_chat.py tests/asset_intelligence/test_m0087_candidate_preview.py tests/asset_intelligence/test_asset_research_session_m0086.py tests/asset_intelligence/test_cinematic_retrieval_m063.py tests/pipeline/test_m0089_visual_feedback.py tests/api/test_visual_studio_pure.py tests/api/test_studio_bridge.py tests/phase1/test_studio.py tests/production_program/test_m0064_asset_selection_binding_lineage.py` | **PASS (72/72, 100%)** |
+| Studio regression | `node --test services/studio/tests/*.test.mjs` | **PASS (20/20, 100%)** |
+| Python compile and diff hygiene | `python -m py_compile ...`; `python -m compileall -q ...`; `git diff --check` | **PASS** |
+| Full web typecheck | `node_modules/.bin/tsc.cmd -p apps/web/tsconfig.json --noEmit` | **BLOCKED by unrelated pre-existing repository errors; no new M0087-specific errors observed** |
+
+The requested literal bundle supplied `AGENT_HANDOFF.md` and a unified patch but no `COMPONENT_CONTRACT.yaml`; the handoff, patch, current CAE authority hierarchy, and existing retrieval/native-edit contracts controlled integration. See `docs/cae/specs/M0087/M0087_EVIDENCE_RECEIPT.md`.
+
+Implementation commit: recorded after verification.

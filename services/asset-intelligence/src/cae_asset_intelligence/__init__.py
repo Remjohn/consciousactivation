@@ -171,3 +171,39 @@ __all__ += [
     "SourceTimeRange",
     "TranscriptExcerpt",
 ]
+
+from .candidate_preview import (
+    AcceptancePolicyRegistry,
+    AutoAcceptanceBlockedError,
+    CandidateDecision,
+    CandidateDecisionReceipt,
+    CandidatePortfolio,
+    CandidatePreviewCard,
+    CandidatePreviewError,
+    CandidatePreviewSession,
+    CandidateSelectionError,
+    CandidateSourceRef,
+    CandidateStaleVersionError,
+    NavigationDirection,
+    build_portfolio,
+    decide_session,
+    navigate_session,
+)
+
+__all__ += [
+    "AcceptancePolicyRegistry",
+    "AutoAcceptanceBlockedError",
+    "CandidateDecision",
+    "CandidateDecisionReceipt",
+    "CandidatePortfolio",
+    "CandidatePreviewCard",
+    "CandidatePreviewError",
+    "CandidatePreviewSession",
+    "CandidateSelectionError",
+    "CandidateSourceRef",
+    "CandidateStaleVersionError",
+    "NavigationDirection",
+    "build_portfolio",
+    "decide_session",
+    "navigate_session",
+]
