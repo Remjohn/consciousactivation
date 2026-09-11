@@ -10,6 +10,7 @@ import { RunGraph } from "../components/control-tower/RunGraph";
 import { Timeline } from "../components/control-tower/Timeline";
 import { ExceptionQueue } from "../components/control-tower/ExceptionQueue";
 import { RevisionComposer } from "../components/control-tower/RevisionComposer";
+import { VisualAssetStudio } from "../components/visual-studio/VisualAssetStudio";
 import { useControlTower } from "../hooks/useControlTower";
 import { usePipelineStatus } from "../hooks/usePipelineStatus";
 import { useRevisionCompose, useRevisionExecute } from "../hooks/useRevision";
@@ -17,12 +18,13 @@ import { useExceptionResolve } from "../hooks/useExceptions";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ActionContext } from "../lib/actionRegistry";
 
-type TabId = "overview" | "run-graph" | "timeline" | "exceptions" | "revise";
+type TabId = "overview" | "run-graph" | "timeline" | "visual-studio" | "exceptions" | "revise";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "run-graph", label: "Run Graph" },
   { id: "timeline", label: "Timeline" },
+  { id: "visual-studio", label: "Visual Studio" },
   { id: "exceptions", label: "Exceptions" },
   { id: "revise", label: "Revise" },
 ];
@@ -144,6 +146,7 @@ export function CampaignDetail({ campaignId }: { campaignId: string }) {
           {activeTab === "timeline" && (
             <Timeline campaignId={campaignId} timeline={tower.timeline ?? null} stateVersion={tower.campaign?.version ?? 1} />
           )}
+          {activeTab === "visual-studio" && <VisualAssetStudio campaignId={campaignId} />}
           {activeTab === "exceptions" && (
             <ExceptionQueue
               campaignId={campaignId}

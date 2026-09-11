@@ -32,7 +32,7 @@ export interface ControlTowerInput {
 }
 
 function availableActions(input: ControlTowerInput): ReadonlyArray<string> {
-  const actions = ["INSPECT_SOURCE", "INSPECT_SEMANTIC_PROGRAM", "EXPORT_AUDIT"];
+  const actions = ["INSPECT_SOURCE", "INSPECT_SEMANTIC_PROGRAM", "OPEN_VISUAL_ASSET_STUDIO", "VISUAL_ASSET_STUDIO", "EXPORT_AUDIT"];
   if (input.timeline) actions.push("OPEN_TIMELINE", "REQUEST_REVISION", "DIRECT_MANIPULATION");
   if (input.artifacts.length) actions.push("COMPARE_ARTIFACTS", "REQUEST_REVISION");
   if (input.exception_packages.length) actions.push("RESOLVE_EXCEPTION");

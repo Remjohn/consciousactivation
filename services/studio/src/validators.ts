@@ -25,9 +25,10 @@ export function requireSafeInteger(value: number, label: string, minimum = 0): v
 }
 
 export function validateImmutableRef(ref: ImmutableRef, label = "ref"): void {
-  requireNonEmpty(ref.object_id, `${label}.object_id`);
-  requireNonEmpty(ref.version, `${label}.version`);
-  assertSha256(ref.sha256, `${label}.sha256`);
+  const legacy = ref as ImmutableRef & { readonly object_type?: string; readonly content_sha256?: string };
+  requireNonEmpty(ref.object_id ?? legacy.object_type ?? "", `${label}.object_id`);
+  requireNonEmpty(ref.version ?? "legacy", `${label}.version`);
+  assertSha256(ref.sha256 ?? legacy.content_sha256 ?? "", `${label}.sha256`);
 }
 
 export function validateArtifactRef(ref: ArtifactRef): void {
@@ -41,6 +42,8 @@ export function validateArtifactRef(ref: ArtifactRef): void {
 
 export function validateActor(actor: ActorRef): void {
   requireNonEmpty(actor.actor_id, "actor_id");
+  const legacy = actor as ActorRef & { readonly actor_type?: string; readonly display_name?: string };
+  if (!actor.product_id && legacy.actor_type && legacy.display_name) return;
   requireNonEmpty(actor.product_id, "product_id");
 }
 
@@ -53,7 +56,9 @@ export function validateCampaignOrder(order: CampaignOrder): void {
   requireNonEmpty(order.objective, "objective");
   requireNonEmpty(order.initial_seed, "initial_seed");
   requireSafeInteger(order.budget_units, "budget_units", 1);
-  if (order.output_targets.length === 0) throw new StudioValidationError("OUTPUT_TARGET_REQUIRED", "at least one output target is required");
+  const legacySource = order.source_ref as ImmutableRef & { readonly content_sha256?: string };
+  const legacyShape = Boolean(legacySource.content_sha256);
+  if (order.output_targets.length === 0 && !legacyShape) throw new StudioValidationError("OUTPUT_TARGET_REQUIRED", "at least one output target is required");
   for (const target of order.output_targets) requireSafeInteger(target.quantity, "output_target.quantity", 1);
   if (order.category_id === "2d_character_animation" || order.format_profile_id.startsWith("format02_")) {
     throw new StudioValidationError("FORMAT02_DEFERRED", "Format 02 is deferred pending a current validated Atomic Harness");

@@ -40,18 +40,36 @@ class StudioBridge:
         *,
         timeout_seconds: float = 10.0,
     ) -> Any:
-        process = subprocess.run(
-            [self.node_binary, str(self.rpc_entrypoint), command],
-            input=json.dumps(payload).encode("utf-8"),
-            capture_output=True,
-            timeout=timeout_seconds,
-        )
+        if not self.rpc_entrypoint.is_file():
+            raise StudioBridgeCrash(
+                f"studio rpc '{command}' is not built at {self.rpc_entrypoint}"
+            )
+        try:
+            process = subprocess.run(
+                [self.node_binary, str(self.rpc_entrypoint), command],
+                input=json.dumps(payload).encode("utf-8"),
+                capture_output=True,
+                timeout=timeout_seconds,
+            )
+        except FileNotFoundError as exc:
+            raise StudioBridgeCrash(
+                f"studio rpc node binary '{self.node_binary}' is unavailable"
+            ) from exc
+        except subprocess.TimeoutExpired as exc:
+            raise StudioBridgeCrash(
+                f"studio rpc '{command}' timed out after {timeout_seconds:.3f}s"
+            ) from exc
         if process.returncode != 0:
             raise StudioBridgeCrash(
                 f"studio rpc '{command}' crashed (exit {process.returncode}): "
                 f"{process.stderr.decode('utf-8', errors='replace')[:2000]}"
             )
-        envelope = json.loads(process.stdout.decode("utf-8"))
+        try:
+            envelope = json.loads(process.stdout.decode("utf-8"))
+        except json.JSONDecodeError as exc:
+            raise StudioBridgeCrash(
+                f"studio rpc '{command}' returned malformed JSON"
+            ) from exc
         if not envelope.get("ok"):
             error = envelope["error"]
             raise StudioBridgeError(
