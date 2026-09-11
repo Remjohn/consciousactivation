@@ -1,0 +1,36 @@
+schema_version: conscious-activations-per-spec-audit-report/v1
+issued_on: '2026-07-23'
+spec_id: TS-AIR-020
+audit_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04_AUDIT_FACTORY/per-spec/TS-AIR-020
+target_spec:
+  path: 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/docs/tech-specs/TS-AIR-020.md
+  sha256: b7c7a94f5a79b6db82cf2ba9ccbe7e59364882b50c849d4c30439bd53fff5584
+  bytes: 13259
+  quality_state: WRITTEN_PENDING_AUDIT
+  authority_state: CANDIDATE_NOT_CURRENT
+audit_method: INDEPENDENT_CHILD_AUDIT_REQUIRED_BUT_UNAVAILABLE
+auditor_independence:
+  required: true
+  satisfied: false
+  reason: Independent child auditor capacity unavailable after usage-limit failure. Controller may not substitute for independent
+    audit, especially for controller-recovery-written specs.
+six_lenses_executed: false
+drift_blacklist_executed: false
+spec_bytes_modified: false
+outcome: AUDIT_BLOCKED
+findings:
+- id: TS-AIR-020-AUDIT-BLOCKED-001
+  severity: CRITICAL
+  lens: AUDITOR_INDEPENDENCE_GATE
+  location: Prompt 04 Required gate and independence requirements
+  finding: Independent per-spec audit could not be performed.
+  evidence: A probe independent auditor for TS-AHP-001 returned the account usage-limit error before producing audit artifacts.
+  required_action: Rerun Prompt 04 when independent auditor capacity is available; do not revise specs or advance Prompt 05/06
+    from this blocked audit package.
+  architect_decision_required: false
+  affected_upstream_downstream_specs: []
+  blocks_build: true
+gate_errors: []
+missing_files_read: []
+build_candidate: false
+next_lifecycle_action: RERUN_PROMPT_04_WITH_AVAILABLE_INDEPENDENT_AUDITORS

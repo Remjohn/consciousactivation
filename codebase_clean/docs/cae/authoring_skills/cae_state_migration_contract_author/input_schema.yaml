@@ -1,0 +1,66 @@
+type: object
+required:
+  - contract_id
+  - aggregate_name
+  - legacy_authority_source
+  - target_postgres_schema
+  - planned_stages
+  - data_disposition_plan
+  - execution_action_permitted
+properties:
+  contract_id:
+    type: string
+    pattern: "^MC-CAE-[A-Z]+-[0-9]{3}$"
+  aggregate_name:
+    type: string
+  legacy_authority_source:
+    type: object
+    required:
+      - store_type
+      - write_boundary
+    properties:
+      store_type:
+        type: string
+      write_boundary:
+        type: string
+  target_postgres_schema:
+    type: object
+    required:
+      - table_name
+      - rls_boundary_column
+    properties:
+      table_name:
+        type: string
+      rls_boundary_column:
+        type: string
+  planned_stages:
+    type: array
+    items:
+      type: string
+      enum:
+        - "LEGACY_ONLY"
+        - "DUAL_VERIFY"
+        - "POSTGRES_AUTHORITATIVE"
+        - "LEGACY_READ_ONLY"
+        - "RETIRED"
+  data_disposition_plan:
+    type: array
+    items:
+      type: object
+      required:
+        - entity_name
+        - disposition
+      properties:
+        entity_name:
+          type: string
+        disposition:
+          type: string
+          enum:
+            - "MIGRATE"
+            - "READ_THROUGH"
+            - "RETAIN_OUT_OF_SCOPE"
+            - "DISCARD_WITH_RECORD"
+            - "QUARANTINE"
+  execution_action_permitted:
+    type: boolean
+    description: "Must be false during contract authoring (no runtime data movement permitted)"

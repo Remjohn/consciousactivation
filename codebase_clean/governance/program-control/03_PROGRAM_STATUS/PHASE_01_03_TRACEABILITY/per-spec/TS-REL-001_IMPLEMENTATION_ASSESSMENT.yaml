@@ -1,0 +1,31 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-REL-001
+spec_path: CMF_PROGRAM_CONTROL/01_PRODUCT_AUTHORITIES/v2.1-candidates/specs/TS-REL-001.md
+spec_sha256: 0acf352384fe54f5126f483035812851968d49a2dcb4254f8b8ab863b04a2568
+phase: PHASE_01_03
+relationship: GOVERNANCE_GUARD_ONLY
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 14
+  direct_aggregate_test_evidence: 4
+  implementation_without_direct_ac_test: 0
+  unimplemented_or_nonbehavior: 10
+implementation_paths:
+- tests/phase1/test_boundaries.py
+- tests/phase3/test_intake_and_bindings.py
+- tests/phase3/test_authority_and_batch.py
+- tests/phase3/test_schemas_cli_boundaries.py
+test_evidence:
+- tests/phase1/test_boundaries.py::BoundaryTests::test_no_format02_or_vae_stage5_implementation
+- tests/phase3/test_intake_and_bindings.py::IntakeBindingTests::test_format02_is_rejected
+- tests/phase3/test_authority_and_batch.py::AuthorityBatchTests::test_batch_rejects_format02
+- tests/phase3/test_schemas_cli_boundaries.py::SchemaCliBoundaryTests::test_no_format02_or_vae_stage5_activation
+open_gap_ids:
+- GAP-FORMAT02-FUTURE-ACTIVATION-GATE
+- GAP-HISTORICAL-FAMILY-VALIDATION
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

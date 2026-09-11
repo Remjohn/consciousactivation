@@ -1,0 +1,72 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Repair Contract
+description: ''
+type: object
+additionalProperties: false
+required:
+- repair_id
+- candidate_ref
+- evaluation_ref
+- quality_round
+- failure
+- preserve
+- permitted_changes
+- prohibited_changes
+- invalidated_nodes
+- success_evidence
+properties:
+  repair_id:
+    type: string
+    pattern: ^REPAIR-
+  candidate_ref: &id001
+    type: string
+    minLength: 1
+  evaluation_ref: *id001
+  quality_round:
+    type: integer
+    minimum: 1
+    maximum: 3
+  failure:
+    type: object
+    required:
+    - code
+    - severity
+    - responsible_layer
+    properties:
+      code: &id002
+        type: string
+      severity: *id002
+      responsible_layer: *id002
+      evidence_bbox:
+        type: array
+        minItems: 4
+        maxItems: 4
+        items:
+          type: number
+          minimum: 0
+          maximum: 1
+      explanation: *id002
+  preserve:
+    type: array
+    minItems: 1
+    items: *id002
+  permitted_changes:
+    type: array
+    minItems: 1
+    items: *id002
+  prohibited_changes:
+    type: array
+    items: *id002
+  invalidated_nodes:
+    type: array
+    minItems: 1
+    items: *id002
+  reusable_outputs:
+    type: array
+    items: *id002
+  success_evidence:
+    type: array
+    minItems: 1
+    items: *id002
+  binding_deltas:
+    type: object

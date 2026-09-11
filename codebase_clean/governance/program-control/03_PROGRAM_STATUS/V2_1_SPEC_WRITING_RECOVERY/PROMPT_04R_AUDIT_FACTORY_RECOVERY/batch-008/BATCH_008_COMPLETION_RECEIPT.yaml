@@ -1,0 +1,60 @@
+schema_version: ca-audit-batch-completion-receipt/v1
+receipt_id: CA-P04R-BATCH-008-COMPLETE-2026-07-23
+batch_number: 8
+issued_on: "2026-07-23"
+batch_state: COMPLETED
+factory_state_after_batch: AUDIT_FACTORY_RUNNING
+
+specs_in_batch:
+  - spec_id: TS-AIR-011
+    outcome: AUDIT_PASS
+    quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+    blocking_findings: 0
+    warnings: 0
+    notes: 3
+    note_highlights:
+      - "F11 PRD owner-label conflict for FR-065 correctly disclosed and resolved via frozen ledger"
+      - "ArchetypeEvidenceResult.derivative_route_authorized hardcoded false — correct critical invariant"
+      - "Coalition/Signature/EdgeProduct require accepted AIR-005 interfaces — build-phase concern"
+
+  - spec_id: TS-INT-005
+    outcome: AUDIT_PASS
+    quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+    blocking_findings: 0
+    warnings: 0
+    notes: 3
+    note_highlights:
+      - "Multi-consumer inventory design (one inventory to multiple packages) build-phase concern"
+      - "TARGET_TRIAL_GUEST_PACK_COUNTS correctly not canonicalized"
+      - "SRC-AM-002 deferred with non-blocking gap notice"
+
+  - spec_id: TS-AIR-015
+    outcome: AUDIT_PASS
+    quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+    blocking_findings: 0
+    warnings: 0
+    notes: 3
+    note_highlights:
+      - "TS-AIR-005/006/007 upstream drafts not yet audited — labeled draft correctly"
+      - "tool_grants least-privilege enforcement is security-critical build requirement"
+      - "AnimationScene.what_is_what_could_be_phase encodes PRM-PRS-015 at schema level — must be non-nullable at implementation"
+
+batch_summary:
+  total_specs: 3
+  audit_pass: 3
+  revision_required: 0
+  architect_decision_required: 0
+  audit_blocked: 0
+  total_blocking_findings: 0
+  total_warnings: 0
+  total_notes: 9
+
+cumulative_total_audited: 24
+cumulative_audit_pass: 24
+cumulative_blocking_findings: 0
+
+next_batch: 9
+next_batch_specs:
+  - TS-AIR-016
+  - TS-AHP-003
+  - TS-AIR-017

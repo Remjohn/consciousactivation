@@ -1,0 +1,184 @@
+experience_primitive_id: "EXP-SOC-005"
+canonical_name: "Collaborative Role Architecture"
+aliases:
+  - "Interdependent Roles"
+  - "The Ecosystem Matrix"
+  - "Asymmetric Participation"
+
+experience_family: "social_referral"
+mechanic_role: "system"
+moment_role: "onboarding_pathway"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Gamify_How_Gamification_Motivates_People_Brian_Burke.md"
+    primitive_name_in_audit: "Collaborative Role Architecture"
+    mcda_score: 182
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Gamify_How_Gamification_Motivates_People_Brian_Burke.md"
+
+book_reference:
+  title: "Gamify"
+  author: "Brian Burke"
+  chapters:
+    - "Chapter 4: Player Motivation"
+    - "Chapter 6: Designing a Gamified Solution"
+  key_pages: "85-98, 145-160"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Gamify How Gamification Motivates People - Brian Burke.md"
+
+summary: >
+  Collaborative Role Architecture recognizes that not every user wants to or
+  is ready to perform the highest-friction core action (e.g., speaking on camera).
+  A healthy social economy requires distinct, interdependent roles. In CCP, we
+  explicitly design 'Asymmetric Participation' pathways: a user can enter as a
+  Jury Member (voting), an Accountability Partner (witnessing), or a Coach
+  (speaking). These roles rely on each other, creating a rich ecosystem that
+  lowers the barrier to entry while maintaining high engagement.
+
+core_move: >
+  Create multiple, distinct participation roles within the ecosystem that
+  require lower friction to enter but still directly impact the outcomes
+  of the high-friction users.
+
+why_it_works: >
+  Brian Burke emphasizes "Shared-Goal Design"—gamification works best when
+  different players contribute to a shared outcome using different skills. If
+  the only way to use CCP is to record a 3-minute flawless voice note, 90% of
+  prospects will bounce due to friction. By allowing users to join as 'Jury
+  Members' who judge debates, we offer a low-friction, highly social entry point.
+  They participate, feel the energy of the arena, cast Social Treasures (votes),
+  and slowly acclimate to the environment until they are ready to step up and
+  become a Speaker themselves.
+
+examples:
+  - context: "BOOK: Gamify - Crowdsourcing roles"
+    application: >
+      In Foldit (the protein-folding game), some players are spatial solvers,
+      others are team organizers, and others write scripts to automate solutions.
+      The game succeeds because it accommodates multiple distinct roles that
+      need each other.
+    effect: >
+      Massive community growth because players aren't forced into a single, rigid behavior profile.
+
+  - context: "CCP: The Audience Jury Mode"
+    application: >
+      A prospect receives a debate link from a friend. They don't want to speak yet.
+      The system assigns them the role of 'Juror.' They listen to both sides and vote.
+      Their vote directly alters the debate outcome.
+    effect: >
+      The prospect is successfully onboarded into the Telegram ecosystem with near-zero friction.
+
+  - context: "CCP: The Accountability Supervisor"
+    application: >
+      A Law28 participant invites their real-world business partner to be their
+      'Supervisor.' The Supervisor doesn't do the speaking drills; their role is
+      to receive the participant's daily score and press a 'Validate' button.
+    effect: >
+      The participant gets accountability, and the Supervisor gets exposed to the CCP system.
+
+  - context: "CCP: Role Escalation (The Staircase)"
+    application: >
+      After acting as a Juror on 5 different debates, the system triggers a prompt:
+      'You have good judgment. A new topic just dropped. Step into the arena and
+      record your own take.'
+    effect: >
+      Converts a low-friction user into a high-value core user by leveraging their existing investment.
+
+  - context: "CCP: Coach OS Operator Role"
+    application: >
+      At the $99/mo tier, the coach shifts from 'Participant' to 'Operator.' They
+      now assign topics to their own community and act as the ultimate judge.
+    effect: >
+      Provides a clear endgame role transition that justifies premium pricing.
+
+anti_examples:
+  - description: >
+      Forcing every user who clicks a shared link to immediately grant microphone
+      access and record a voice note before they can see the content.
+    why_it_fails: >
+      A monolithic, zero-flexibility role architecture. The friction is too high for
+      a cold referral. The user bounces, killing the viral loop and destroying the
+      Silent Referral mechanics.
+
+experience_stage_fit:
+  entry: 1.0
+  activation: 0.9
+  recording: 0.3
+  scoring: 0.5
+  social_spread: 1.0
+  recovery: 0.4
+  retention: 0.8
+  conversion: 0.9
+
+surface_fit:
+  telegram_message: 0.9
+  mini_app: 1.0
+  score_card: 0.5
+  share_asset: 0.9
+  voice_prompt: 0.2
+  push_nudge: 0.6
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.4
+  clarity: 0.7
+  safety: 1.0
+  status: 0.6
+  belonging: 0.9
+  curiosity: 0.9
+  replay_desire: 0.6
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.8
+  challenge_progression: 0.5
+  silent_referral: 1.0
+  coach_os_deployment: 0.9
+  premium_trust_architecture: 0.7
+  onboarding_activation: 1.0
+  social_economy: 1.0
+  content_extraction: 0.3
+
+activation_conditions:
+  - "User clicks a shared Silent Referral link"
+  - "User exhibits hesitation or bounces from the core recording flow"
+
+suppression_conditions:
+  - "User has already identified themselves as an active, high-tier Speaker"
+
+misuse_modes:
+  - "Making the spectator roles too passive, where their votes don't actually change the system outcomes."
+  - "Trapping users in the spectator role and never offering them the pathway to escalate into a Speaker."
+
+synergizes_with:
+  - "EXP-SOC-001" # Social Treasures (The Jury holds the treasure the Speaker needs)
+  - "EXP-TRG-003" # Kairos (Timing the prompt to escalate their role)
+
+conflicts_with:
+  - "EXP-PRG-001" # Friction & Flow (Must balance the friction of escalation carefully)
+
+implementation_targets:
+  frontend_components:
+    - "JuryOnboardingUI — a specialized, low-friction entry screen focused purely on listening and voting"
+    - "RoleEscalationPrompt — the specific UI card asking a Juror to become a Speaker"
+  backend_rules:
+    - "role_engine: enforce permission matrices where Jurors can vote but not launch debates, Operators can launch but not vote on their own, etc."
+  telemetry_events:
+    - "jury_role_assumed"
+    - "role_escalation_accepted"
+    - "asymmetric_participation_logged"
+  experiments:
+    - "A/B test: Escalating a Juror to a Speaker after 3 votes vs after 1 vote on the winning side"
+
+experience_metrics:
+  entry_rate: 1.0
+  react_rate: 0.4
+  completion_rate: 0.8
+  share_rate: 0.9
+  comeback_rate: 0.7
+  day7_retention: 0.8
+  upgrade_signal: 0.8
+
+crosswalk_id: "XW-SOC-ROLES"
+crosswalk_note: >
+  This completely redefines onboarding for cold traffic. It is the safety
+  net that catches users who are too intimidated to speak on Day 1.

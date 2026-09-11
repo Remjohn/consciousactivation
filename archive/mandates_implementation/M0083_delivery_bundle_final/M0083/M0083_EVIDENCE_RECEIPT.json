@@ -1,0 +1,159 @@
+{
+  "mandate": "M0083",
+  "status": "IMPLEMENTED_FOCUSED_TESTS_PASS_OPERATOR_REVIEW_REQUIRED",
+  "objective": "Implement TransformationIntent and TransformationRecipe as the projection layer between grammar/calculus and primitive operations/keyframes.",
+  "evidence_classification": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "REGISTRY_SOURCE",
+    "DOCUMENT",
+    "TEST",
+    "HYPOTHESIS",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "snapshot": {
+    "uploaded_archive_sha256": "7f962c86b13171cc25bec698d6974d412981cef502e858717b5069e50f1810d8",
+    "git_metadata_present": false,
+    "commit_sha": null
+  },
+  "authority_inputs": {
+    "dated_authority_pack_root": "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/",
+    "required_files": [
+      "00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "01_CAE_Product_Update_Visual_Asset_Editor.md",
+      "02_CAE_PRD_Update_Visual_Asset_Studio.md",
+      "03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md"
+    ],
+    "source_commit": "de202244eb5b8e436685bf4e9ed02f93b6f5faa4",
+    "source_repository": "https://github.com/Remjohn/consciousactivation",
+    "source_license": "Repository-local CAE authority documents; no external code adopted; external license check not applicable."
+  },
+  "brownfield": {
+    "canonical_chain": "Editorial Intent \u2192 Narrative Editing Grammar \u2192 Editorial Expression Calculus \u2192 TransformationIntent \u2192 TransformationRecipe \u2192 primitives/keyframes",
+    "reused_paths": [
+      "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+      "packages/ca_runtime/src/ca_runtime/__init__.py",
+      "tests/cae/test_m0079_storyboard_session_revision.py",
+      "docs/cae/CAE_Production_Reference/M0078_SHOT_GRAMMAR_AND_ASSISTANT_REFERENCE.md",
+      "docs/cae/CAE_Production_Reference/M0078_shot_grammar_reference.yaml",
+      "services/pipeline/contracts/schemas/transformation_contract.schema.json"
+    ],
+    "identified_gap": "Existing M0079 TransformationIntent/TransformationRecipe payloads had no deterministic governed recipe compiler or compact primitive/keyframe registry in the active storyboard path.",
+    "collision_found": false
+  },
+  "implementation": {
+    "registry_version": "M0083-1",
+    "declared_intents": [
+      "WITHHOLD",
+      "REVEAL",
+      "FOCUS",
+      "CONTRAST",
+      "PROVE",
+      "EXPLAIN",
+      "CONNECT",
+      "ESCALATE",
+      "INTERRUPT",
+      "RESOLVE"
+    ],
+    "recipe_templates": [
+      "REVEAL_TARGET_V1",
+      "FOCUS_TARGET_V1",
+      "CONTRAST_SOURCES_V1",
+      "EXPLAIN_TARGET_V1",
+      "CONNECT_CONTEXT_V1",
+      "WITHHOLD_REGION_V1",
+      "INTERRUPT_CUT_V1",
+      "RESOLVE_RETURN_V1"
+    ],
+    "approved_primitives": [
+      "EXTRACT_REGION",
+      "REFRAME",
+      "HIGHLIGHT",
+      "SIDE_BY_SIDE",
+      "ANNOTATE",
+      "INSET",
+      "CONNECTOR",
+      "MASK_REGION",
+      "CUT",
+      "RETURN",
+      "HOLD"
+    ],
+    "source_quality_reduction": true,
+    "authorization_gate": true,
+    "stale_registry_gate": true,
+    "deterministic_recipe_digest": true
+  },
+  "changed_paths": [
+    "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "packages/ca_runtime/src/ca_runtime/transformation_recipe.py",
+    "tests/cae/test_m0083_transformation_intent_recipe.py",
+    "docs/cae/specs/M0083/TRANSFORMATION_INTENT_RECIPE_SPEC.md",
+    "docs/cae/specs/M0083/AGENT_HANDOFF.md",
+    "docs/cae/specs/M0083/M0083_EVIDENCE_RECEIPT.json"
+  ],
+  "production_code_changed": true,
+  "test_code_changed": true,
+  "external_sources": {
+    "adopted_behavior": false,
+    "source_commit": null,
+    "license": null,
+    "note": "Authority documents were inspected as CAE campaign inputs. No external repository implementation was imported."
+  },
+  "verification": [
+    {
+      "evidence_class": "TEST",
+      "command": "python scratch/run_single_test.py tests/cae/test_m0083_transformation_intent_recipe.py",
+      "observed_result": "PASS \u2014 11 passed",
+      "proves": "The bounded M0083 test suite passes normal compilation, registry coverage, replay, contrastive mode rejection, authorization/staleness, source-quality gating/reduction, scale clamping, and malformed constraints."
+    },
+    {
+      "evidence_class": "EXECUTABLE",
+      "command": "python -m py_compile packages/ca_runtime/src/ca_runtime/storyboard_session.py packages/ca_runtime/src/ca_runtime/transformation_recipe.py tests/cae/test_m0083_transformation_intent_recipe.py",
+      "observed_result": "PASS",
+      "proves": "Changed Python source and focused tests are syntactically valid."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q -p no:asyncio tests/cae/test_m0083_transformation_intent_recipe.py",
+      "observed_result": "PASS \u2014 11 passed, 10 Pydantic deprecation warnings",
+      "proves": "Direct focused pytest execution independently reproduces the passing M0083 result."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "python scratch/run_single_test.py tests/cae/test_m0079_storyboard_session_revision.py",
+      "observed_result": "ERROR during collection \u2014 ModuleNotFoundError: No module named 'psycopg'",
+      "proves": "The supplied environment cannot currently collect the existing M0079 suite; it does not establish an M0083 regression result."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "python -m json.tool docs/cae/specs/M0083/M0083_EVIDENCE_RECEIPT.json >/dev/null",
+      "observed_result": "PASS",
+      "proves": "The evidence receipt itself is valid JSON."
+    }
+  ],
+  "contrastive_case": {
+    "evidence_class": "HYPOTHESIS",
+    "case": "FOCUS intent with COMPARE mode",
+    "result": "Rejected before recipe output because COMPARE is only registered for CONTRAST.",
+    "purpose": "Demonstrates that a visually plausible recipe is not sufficient when the declared semantic intent and mode disagree."
+  },
+  "limitations": [
+    "Exact implementation Git commit SHA is unavailable because the supplied snapshot has no .git metadata.",
+    "Existing M0079 focused suite is not collectible in the supplied environment because psycopg is missing.",
+    "No external runtime reachability, native rendering fidelity, or perceptual visual acceptance is claimed.",
+    "SUBTLE_PAN is bounded as a token but exact geometry is downstream of this mandate.",
+    "max_motion_amplitude_bps is validated and carried forward; this mandate does not create a second motion-calculus authority.",
+    "No operator approval/promotion occurred."
+  ],
+  "operator_decision_requested": "APPROVE-WITH-LIMITATIONS",
+  "file_hashes_sha256": {
+    "packages/ca_runtime/src/ca_runtime/storyboard_session.py": "bf25ec32691b5942c356533ac453421d90ea65597915ced0e58c5dc2fc3fda60",
+    "packages/ca_runtime/src/ca_runtime/__init__.py": "84b599919ec0e19408129fccaa9bc616ecb659acd14db113397ee5c05c95594c",
+    "packages/ca_runtime/src/ca_runtime/transformation_recipe.py": "980e38635eb853a5efcbe93caeb443f12cc5ccc34a777fdcd5e1420c9ad498e8",
+    "tests/cae/test_m0083_transformation_intent_recipe.py": "4d035108eac6f7a4f133149bf6929eb2a98006a1f70d11a76cba01bcf5f5b44a",
+    "docs/cae/specs/M0083/TRANSFORMATION_INTENT_RECIPE_SPEC.md": "61c01d86c0bd59e0e4e16a7a000f92e07dbf3406fcf61892d72d5832c1349fa1",
+    "docs/cae/specs/M0083/AGENT_HANDOFF.md": "c585c3b10fdd812da811afa433e227904750dbae7fe55b50b32d78a3306b6902",
+    "docs/cae/specs/M0083/M0083_EVIDENCE_RECEIPT.json": "1b32d1d83d0f3795c023a39212b68dfa29c88f396bec9391f7e546e1edf3ad7e"
+  }
+}

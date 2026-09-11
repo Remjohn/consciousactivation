@@ -1,0 +1,72 @@
+program:
+  id: "research_canonicalization_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Transforms raw research sources into curated OKF-compatible canonical knowledge nodes with source evidence preservation, false-merge rejection, and operator adjudication."
+  operator_entrypoint: "run_research_canonicalization_session"
+  inputs:
+    - "research_source_records"
+  preconditions:
+    - "workspace_active"
+    - "sources_verified"
+    - "false_merge_verified"
+  outputs:
+    - "canonical_knowledge_nodes"
+    - "okf_knowledge_bundle"
+  artifacts:
+    - "okf_knowledge_bundle"
+    - "canonicalization_receipt"
+  harness: "RESEARCH_CANONICALIZATION_HARNESS_V1"
+  state_machine: "RESEARCH_CANONICALIZATION_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "ResearchCommanderAgent"
+    - "KnowledgeCandidateHunterAgent"
+    - "RelationshipCanonicalizationAnalystAgent"
+    - "OKFBundleComposerAgent"
+  subagents: []
+  skills:
+    - name: "knowledge_candidate_extractor"
+      path: "skills/knowledge_candidate_extractor/SKILL.md"
+      version: "1.0.0"
+    - name: "canonical_relationship_classifier"
+      path: "skills/canonical_relationship_classifier/SKILL.md"
+      version: "1.0.0"
+    - name: "okf_bundle_projector"
+      path: "skills/okf_bundle_projector/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.research.attach_sources@1.0.0"
+    - "cae.research.extract_candidates@1.0.0"
+    - "cae.research.canonicalize@1.0.0"
+    - "cae.research.project_okf@1.0.0"
+    - "cae.research.commit_knowledge@1.0.0"
+    - "cae.research.adjudicate@1.0.0"
+    - "cae.research.retract@1.0.0"
+    - "cae.research.repair@1.0.0"
+  tools:
+    - "source_provenance_verifier"
+    - "semantic_similarity_analyzer"
+    - "okf_markdown_renderer"
+  connections:
+    - "postgresql_research_slice"
+  hooks:
+    - "pre_source_attachment_hook"
+    - "post_canonicalization_validation_hook"
+    - "post_okf_projection_receipt"
+  extensions: []
+  evals:
+    - "false_merge_rejection_eval"
+    - "source_lineage_integrity_eval"
+    - "okf_schema_conformance_eval"
+  operator_gates:
+    - "contradiction_adjudication_gate"
+    - "canonical_knowledge_commit_gate"
+  recovery:
+    - "repair_canonicalization"
+  receipts:
+    - "cae.receipt.research.canonicalization@1.0.0"

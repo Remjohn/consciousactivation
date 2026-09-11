@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Level Investigation Trace Schema",
+  "type": "object",
+  "required": [
+    "trace_id",
+    "inquiry",
+    "initial_level",
+    "descent_steps",
+    "terminal_level",
+    "stop_condition_met",
+    "ascent_conclusion"
+  ],
+  "properties": {
+    "trace_id": { "type": "string" },
+    "inquiry": { "type": "string" },
+    "initial_level": { "type": "string" },
+    "descent_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_number", "from_level", "to_level", "agent", "inspection_target", "observed_evidence"],
+        "properties": {
+          "step_number": { "type": "integer" },
+          "from_level": { "type": "string" },
+          "to_level": { "type": "string" },
+          "agent": { "type": "string" },
+          "inspection_target": { "type": "string" },
+          "observed_evidence": { "type": "string" }
+        }
+      }
+    },
+    "terminal_level": { "type": "string" },
+    "stop_condition_met": { "type": "string" },
+    "ascent_conclusion": { "type": "string" }
+  }
+}

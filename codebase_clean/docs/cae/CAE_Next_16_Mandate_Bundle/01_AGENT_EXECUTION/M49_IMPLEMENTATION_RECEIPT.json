@@ -1,0 +1,61 @@
+{
+  "receipt_id": "cae.mandate.receipt.m49@1.0.0",
+  "mandate_id": "CAE-M49",
+  "title": "Canonical Agent Constitution + Registry",
+  "phase": "PHASE 5 — AGENT EXECUTION FOUNDATION",
+  "parallel_group": "P5-A",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T05:45:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/agent_registry.py",
+    "packages/ca_runtime/src/ca_runtime/program_registry.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "agents/research_commander_agent/agent_manifest.yaml",
+    "agents/knowledge_candidate_hunter_agent/agent_manifest.yaml",
+    "agents/relationship_canonicalization_analyst_agent/agent_manifest.yaml",
+    "agents/okf_bundle_composer_agent/agent_manifest.yaml",
+    "agents/collision_hunter_agent/agent_manifest.yaml",
+    "agents/collision_analyst_agent/agent_manifest.yaml",
+    "agents/collision_composer_agent/agent_manifest.yaml",
+    "agents/collision_commander_agent/agent_manifest.yaml"
+  ],
+  "test_paths": [
+    "tests/cae/test_m49_canonical_agent_registry.py",
+    "tests/cae/test_agent_team_runtime.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_discoverable_without_program": "VERIFIED (8 canonical agent packages discovered and loaded from agents/ without Program wrapper)",
+    "gate_2_deterministic_repeat_resolution": "VERIFIED (repeated resolution produces identical content_sha256 and dictionary representation)",
+    "gate_3_program_manifest_reference_binding": "VERIFIED (ProgramManifest resolves and validates agent bindings by SemVer reference and authority lane)",
+    "gate_4_standalone_session_binding": "VERIFIED (create_standalone_agent_session binds registered Agent directly with workspace scoping)",
+    "gate_5_invalid_lifecycle_authority_fail_closed": "VERIFIED (DRAFT, QUARANTINED, and unknown versions fail closed; lane mismatches raise AgentLaneMismatchError)"
+  },
+  "false_proof_defenses": {
+    "identity_collision_attack": "BLOCKED (registering diverging definition with same agent_id/version raises AgentIdentityCollisionError)",
+    "lane_capability_escalation_attack": "BLOCKED (Hunter lane holding mutation access or workspace provision raises AgentCapabilityViolationError)",
+    "inline_unregistered_agent_attack": "BLOCKED (program referencing phantom agent raises AgentNotFoundError)",
+    "prohibited_skill_nesting_attack": "BLOCKED (agent referencing skill with nested/recursive markers raises AgentManifestValidationError)"
+  },
+  "concrete_trace_demonstrated": {
+    "agent": "ResearchCommanderAgent@1.0.0",
+    "compiled_context_sha256": "VERIFIED",
+    "model_policy": {
+      "preferred_model": "gemini-2.5-pro",
+      "temperature_bps": 1000,
+      "token_budget": 128000,
+      "timeout_seconds": 60
+    },
+    "typed_output_contract": "research_canonicalization_receipt",
+    "gate": "operator_gate_authorizer (PASSED)",
+    "receipt": "cae.agent.invocation_receipt@1.0.0"
+  },
+  "test_evidence": {
+    "suite_m49_and_team": "21/21 passed in 3.74s",
+    "suite_capsule_and_program_regression": "32/32 passed in 6.12s"
+  },
+  "limitations": [
+    "Package compilation drift detection and component hash manifests will be formalized in Mandate M50",
+    "Hierarchical portable CAE.md ancestry resolution across workspaces will be formalized in Mandate M51"
+  ]
+}

@@ -1,0 +1,1086 @@
+diff --git a/services/asset-intelligence/M0086_EVIDENCE_RECEIPT.md b/services/asset-intelligence/M0086_EVIDENCE_RECEIPT.md
+new file mode 100644
+index 0000000..b8ca8fa
+--- /dev/null
++++ b/services/asset-intelligence/M0086_EVIDENCE_RECEIPT.md
+@@ -0,0 +1,56 @@
++# M0086 — Evidence Receipt
++
++## Mandate
++`M0086 — Asset Research Session and PlayPhrase-Like Temporal Retrieval`
++
++## Evidence classes
++- `DOCUMENT`: mandatory CAE constitutional, PRD, M65–M72, Asset Intelligence, and Visual Production authority materials were inspected in the uploaded repository. The constitution and M72 require reuse of canonical authorities; the Media Intelligence brief defines Evidence Retrieval as search → locate → resolve → contextualize → verify → promote; the Visual Asset Editor update defines Asset Research Session as retrieval → candidates → preview → inspect → accept/reject → promote.
++- `REGISTRY_SOURCE`: current CAE upstream files and external PlayPhrase source inspected at pinned references recorded in `M0086_UPSTREAM_REFERENCE.md`.
++- `EXECUTABLE`: M0086 source module and package exports compile and execute against current Asset Intelligence objects.
++- `TEST`: focused M0086 plus M063 retrieval regression suite passed.
++- `OPERATOR_DECISION_REQUIRED`: actual media playback, perceptual relevance, source-quality assessment, legal resolution for review-required rights, and promotion into canonical Storyboard/VAE state remain operator/integration responsibilities.
++
++## Commands and observed results
++
++1. Python syntax:
++```text
++python -m py_compile services/asset-intelligence/src/cae_asset_intelligence/research_session.py services/asset-intelligence/src/cae_asset_intelligence/__init__.py
++```
++Observed: `PASS`.
++
++2. Focused M0086 + existing retrieval regression:
++```text
++python -m pytest tests/asset_intelligence/test_asset_research_session_m0086.py tests/asset_intelligence/test_cinematic_retrieval_m063.py -q
++```
++Observed: `21 passed in 0.20s`.
++
++3. Diff hygiene:
++```text
++git diff --check
++```
++Observed: `PASS` before final commit.
++
++4. Import smoke:
++```text
++python -c "import sys; sys.path.insert(0, 'services/asset-intelligence/src'); from cae_asset_intelligence import AssetResearchSession, PlayPhraseTemporalAdapter; print('import-ok')"
++```
++Observed: `import-ok`.
++
++## Proof coverage
++- Happy path: exact transcript phrase → timestamped candidate → playable preview reference.
++- Context proof: surrounding transcript/range is preserved without erasing the exact phrase match range.
++- Good-looking-but-wrong counterexample: semantically close pressure scene is excluded by the requested `WORLD_BUILDING` insert-role constraint.
++- Rights negative: `UNKNOWN_UNLICENSED` phrase hit is excluded.
++- Stale negative: semantic request with mismatched expected index hash is `BLOCKED` with no candidates.
++- Preview negative: missing media URI prevents selection.
++- Immutability: selection and promotion are projections; canonical asset state is not mutated.
++- Rejection: rejected candidates are preserved and cannot later be selected from that session.
++- Deterministic replay: repeated identical requests produce identical session/candidate/selection identifiers.
++- Authority separation: phrase adapter searches only governed `SceneRecord.transcript` data and does not rank, promote, or mutate canonical state.
++
++## Non-claims
++- No native browser/MPV playback was proven.
++- No real external media source was used for evidence.
++- No production Storyboard/VAE promotion was performed.
++- No deterministic automatic acceptance policy was introduced; all selection in this slice is explicit operator selection.
++- The archive baseline had no usable Git history; the implementation commit below is a local evidence commit derived from an immutable archive-baseline commit.
+diff --git a/services/asset-intelligence/M0086_UPSTREAM_REFERENCE.md b/services/asset-intelligence/M0086_UPSTREAM_REFERENCE.md
+new file mode 100644
+index 0000000..32d2728
+--- /dev/null
++++ b/services/asset-intelligence/M0086_UPSTREAM_REFERENCE.md
+@@ -0,0 +1,57 @@
++# M0086 — Upstream/reference extraction record
++
++## Status
++`REGISTRY_SOURCE` / `DOCUMENT` — behavior reference only; no upstream code copied.
++
++## CAE upstream reference
++Repository: `https://github.com/Remjohn/consciousactivation`
++Reference commit: `1238dda04cc89e16ed7ac96ac79417c7c321f8a8`
++Exact inspected paths:
++- `services/asset-intelligence/src/cae_asset_intelligence/retrieval.py`
++- `services/asset-intelligence/src/cae_asset_intelligence/corpus.py`
++- `services/asset-intelligence/src/cae_asset_intelligence/domain.py`
++
++Adopted behavior:
++- `SemanticCinematicRetriever` remains the canonical CAE semantic/cinematic retrieval authority.
++- `SceneRecord` / `TranscriptCue` remain the governed source/time/provenance objects.
++- `RightsPolicy` remains the retrieval rights filter.
++- `RetrievalReceipt` remains the authoritative retrieval receipt; `AssetResearchSession` is a downstream operator projection.
++
++Excluded:
++- No second semantic index.
++- No replacement for `AuthorityFirstRetrievalService`.
++- No mutation of `SceneRecord`, `AssetAnnotation`, or canonical Storyboard/VAE state.
++- No provider-specific or external playback runtime was installed.
++
++## External behavioral reference: PlayPhrase
++Repository: `https://github.com/kelciour/playphrase`
++Reference branch: `master`
++Reference commit used for source inspection: `129a948f02d124a2a8269a71685fce5ad2703f49`
++Exact inspected path:
++- `playphrase.py`
++
++License status: **not established**. The public repository is archived and its visible root file list did not expose a `LICENSE` file; M0086 therefore copies no code and makes no license compatibility claim.
++
++Adopted behavior:
++- Search transcript/subtitle text for a requested phrase.
++- Resolve the match to a source time interval.
++- Keep a surrounding temporal context window.
++- Present multiple clips as rapidly inspectable candidates.
++
++Excluded:
++- Shelling to `grep`/`ripgrep`.
++- Direct `mpv` process/pipe control.
++- Direct `ffmpeg` fragment export.
++- External media-directory discovery and sidecar subtitle generation.
++- Randomization, CLI behavior, or provider-specific assumptions.
++
++CAE mapping:
++
++| PlayPhrase behavior | CAE M0086 | Authority outcome |
++|---|---|---|
++| Phrase text search | `PlayPhraseTemporalAdapter.find` | Adapter only; `SceneRecord.transcript` is source |
++| Timestamp match | `match_range` / `selected_range` | CAE `SourceTimeRange` |
++| Clip padding/context | `context_range` | Bounded by governed scene interval |
++| Playable media | `PlayablePreviewRef` | URI resolver only; no playback authority |
++| Next/previous candidate inspection | ordered `session.candidates` | Presentation concern; no new authority |
++| Player/export runtime | excluded | Downstream integration responsibility |
+diff --git a/services/asset-intelligence/src/cae_asset_intelligence/__init__.py b/services/asset-intelligence/src/cae_asset_intelligence/__init__.py
+index be110ea..4d24004 100644
+--- a/services/asset-intelligence/src/cae_asset_intelligence/__init__.py
++++ b/services/asset-intelligence/src/cae_asset_intelligence/__init__.py
+@@ -133,3 +133,41 @@ __all__ += [
+     "RightsPolicy",
+     "SemanticCinematicRetriever",
+ ]
++
++from .research_session import (
++    AssetPromotionRequest,
++    AssetResearchCandidate,
++    AssetResearchError,
++    AssetResearchMode,
++    AssetResearchRequest,
++    AssetResearchSession,
++    AssetResearchSessionFactory,
++    AssetResearchSessionState,
++    CandidateSelectionError,
++    CandidateSelectionReceipt,
++    PlayPhraseTemporalAdapter,
++    PlayablePreviewRef,
++    RangeMode,
++    ResearchSourceRef,
++    SourceTimeRange,
++    TranscriptExcerpt,
++)
++
++__all__ += [
++    "AssetPromotionRequest",
++    "AssetResearchCandidate",
++    "AssetResearchError",
++    "AssetResearchMode",
++    "AssetResearchRequest",
++    "AssetResearchSession",
++    "AssetResearchSessionFactory",
++    "AssetResearchSessionState",
++    "CandidateSelectionError",
++    "CandidateSelectionReceipt",
++    "PlayPhraseTemporalAdapter",
++    "PlayablePreviewRef",
++    "RangeMode",
++    "ResearchSourceRef",
++    "SourceTimeRange",
++    "TranscriptExcerpt",
++]
+diff --git a/services/asset-intelligence/src/cae_asset_intelligence/research_session.py b/services/asset-intelligence/src/cae_asset_intelligence/research_session.py
+new file mode 100644
+index 0000000..d415af8
+--- /dev/null
++++ b/services/asset-intelligence/src/cae_asset_intelligence/research_session.py
+@@ -0,0 +1,623 @@
++"""Operator projection for governed asset research and PlayPhrase-like temporal discovery.
++
++M0086 keeps retrieval authority inside the existing CAE Asset Intelligence corpus and
++SemanticCinematicRetriever.  The temporal adapter below only locates transcript cues
++and creates playable references; it never promotes or mutates canonical asset state.
++"""
++
++from __future__ import annotations
++
++import hashlib
++import json
++import re
++from dataclasses import dataclass
++from datetime import datetime, timezone
++from enum import Enum
++from typing import Callable, Iterable, Mapping, Sequence
++
++from pydantic import BaseModel, ConfigDict, Field, model_validator
++
++from .corpus import SceneRecord, TranscriptCue
++from .domain import EditorialInsertRole, RightsStatus
++from .retrieval import RetrievalQuery, RetrievalState, RightsPolicy, SemanticCinematicRetriever
++
++MANDATE_ID = "M0086"
++RESEARCH_SESSION_SCHEMA_VERSION = "1.0.0"
++
++
++class AssetResearchMode(str, Enum):
++    PHRASE = "PHRASE"
++    SEMANTIC_CINEMATIC = "SEMANTIC_CINEMATIC"
++
++
++class AssetResearchSessionState(str, Enum):
++    CANDIDATES = "CANDIDATES"
++    ABSTAIN = "ABSTAIN"
++    BLOCKED = "BLOCKED"
++    SELECTED = "SELECTED"
++    PROMOTION_REQUESTED = "PROMOTION_REQUESTED"
++
++
++class RangeMode(str, Enum):
++    MATCH = "MATCH"
++    CONTEXT = "CONTEXT"
++
++
++class AssetResearchError(Exception):
++    """Base M0086 research-session error."""
++
++
++class CandidateSelectionError(AssetResearchError):
++    """Raised when a candidate cannot be selected or promoted."""
++
++
++class AssetResearchRequest(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    workspace_id: str = Field(..., min_length=1)
++    query: str = Field(..., min_length=3)
++    mode: AssetResearchMode = AssetResearchMode.SEMANTIC_CINEMATIC
++    candidate_id: str | None = None
++    insert_roles: tuple[EditorialInsertRole, ...] = ()
++    semantic_roles: tuple[str, ...] = ()
++    rights_policy: RightsPolicy = RightsPolicy.CLEARED_ONLY
++    top_k: int = Field(default=8, ge=1, le=50)
++    min_confidence: float = Field(default=0.58, ge=0.0, le=1.0)
++    expected_index_sha256: str | None = Field(default=None, min_length=64, max_length=64)
++    context_before_seconds: float = Field(default=2.0, ge=0.0, le=30.0)
++    context_after_seconds: float = Field(default=3.0, ge=0.0, le=30.0)
++    range_mode: RangeMode = RangeMode.CONTEXT
++
++    @model_validator(mode="after")
++    def validate_query(self) -> "AssetResearchRequest":
++        if not self.query.strip():
++            raise ValueError("query must contain searchable text")
++        return self
++
++
++class SourceTimeRange(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    start_time: float = Field(..., ge=0.0)
++    end_time: float = Field(..., gt=0.0)
++
++    @model_validator(mode="after")
++    def validate_range(self) -> "SourceTimeRange":
++        if self.end_time <= self.start_time:
++            raise ValueError("end_time must be greater than start_time")
++        return self
++
++
++class TranscriptExcerpt(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    start_time: float = Field(..., ge=0.0)
++    end_time: float = Field(..., gt=0.0)
++    text: str = Field(..., min_length=1)
++    speaker: str | None = None
++
++
++class PlayablePreviewRef(BaseModel):
++    """A browser/player-ready temporal reference; it is not evidence of playback."""
++
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    uri: str | None = None
++    range: SourceTimeRange
++    mime_type: str | None = None
++    playable: bool = False
++    preview_kind: str = "SOURCE_TEMPORAL_RANGE"
++
++    @model_validator(mode="after")
++    def validate_playability(self) -> "PlayablePreviewRef":
++        if self.playable and not self.uri:
++            raise ValueError("playable preview requires a source URI")
++        return self
++
++
++class ResearchSourceRef(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    media_id: str
++    scene_id: str
++    source_version: str
++    source_sha256: str = Field(..., min_length=64, max_length=64)
++
++
++class AssetResearchCandidate(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    research_candidate_id: str
++    source: ResearchSourceRef
++    asset_id: str
++    workspace_id: str
++    candidate_id: str
++    start_time: float = Field(..., ge=0.0)
++    end_time: float = Field(..., gt=0.0)
++    match_range: SourceTimeRange | None = None
++    context_range: SourceTimeRange
++    selected_range: SourceTimeRange
++    transcript: tuple[TranscriptExcerpt, ...] = ()
++    contextual_explanation: str = Field(..., min_length=15)
++    semantic_role: str
++    insert_role: EditorialInsertRole
++    rights_status: RightsStatus
++    confidence: float = Field(..., ge=0.0, le=1.0)
++    lexical_score: float = Field(default=0.0, ge=0.0, le=1.0)
++    semantic_score: float = Field(default=0.0, ge=-1.0, le=1.0)
++    retrieval_mode: AssetResearchMode
++    match_basis: tuple[str, ...] = ()
++    preview: PlayablePreviewRef
++    provenance: Mapping[str, str] = Field(default_factory=dict)
++
++
++class CandidateSelectionReceipt(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    schema_version: str = RESEARCH_SESSION_SCHEMA_VERSION
++    receipt_id: str
++    mandate_id: str = MANDATE_ID
++    request_ref: str
++    candidate_set_ref: str
++    selected_candidate: str
++    rejected_candidates: tuple[str, ...] = ()
++    operator_ref: str | None = None
++    auto_selection_policy: str | None = None
++    source_ref: ResearchSourceRef
++    source_hash: str
++    source_range: SourceTimeRange
++    rights_state: RightsStatus
++    storyboard_element_ref: str | None = None
++    revision_ref: str | None = None
++    actor: str
++    state: AssetResearchSessionState = AssetResearchSessionState.SELECTED
++    preconditions: Mapping[str, str] = Field(default_factory=dict)
++    validators: Mapping[str, str] = Field(default_factory=dict)
++    postconditions: Mapping[str, str] = Field(default_factory=dict)
++    recovery_path: str = Field(..., min_length=1)
++    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
++
++
++class AssetPromotionRequest(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    schema_version: str = RESEARCH_SESSION_SCHEMA_VERSION
++    promotion_request_id: str
++    mandate_id: str = MANDATE_ID
++    request_ref: str
++    candidate_set_ref: str
++    selected_candidate: str
++    source_ref: ResearchSourceRef
++    source_range: SourceTimeRange
++    rights_state: RightsStatus
++    storyboard_element_ref: str
++    revision_ref: str
++    operator_ref: str
++    selection_receipt_ref: str
++    state: AssetResearchSessionState = AssetResearchSessionState.PROMOTION_REQUESTED
++
++
++class AssetResearchSession(BaseModel):
++    model_config = ConfigDict(frozen=True, extra="forbid")
++
++    schema_version: str = RESEARCH_SESSION_SCHEMA_VERSION
++    session_id: str
++    request: AssetResearchRequest
++    request_ref: str
++    candidate_set_ref: str
++    state: AssetResearchSessionState
++    candidates: tuple[AssetResearchCandidate, ...] = ()
++    rejected_candidate_ids: tuple[str, ...] = ()
++    selected_candidate_id: str | None = None
++    transition_receipt_ids: tuple[str, ...] = ()
++    actor: str
++
++    def reject(self, candidate_id: str, *, actor: str, reason: str) -> tuple["AssetResearchSession", str]:
++        candidate = self._candidate(candidate_id)
++        if candidate_id in self.rejected_candidate_ids:
++            return self, self._transition_receipt_id("REJECT", candidate_id, reason)
++        next_rejected = tuple(sorted((*self.rejected_candidate_ids, candidate_id)))
++        receipt_id = self._transition_receipt_id("REJECT", candidate_id, reason)
++        next_state = AssetResearchSessionState.ABSTAIN if len(next_rejected) == len(self.candidates) else self.state
++        updated = self.model_copy(
++            update={
++                "rejected_candidate_ids": next_rejected,
++                "state": next_state,
++                "transition_receipt_ids": (*self.transition_receipt_ids, receipt_id),
++                "actor": actor,
++            }
++        )
++        return updated, receipt_id
++
++    def select(self, candidate_id: str, *, actor: str, operator_ref: str | None = None) -> tuple["AssetResearchSession", CandidateSelectionReceipt]:
++        candidate = self._candidate(candidate_id)
++        if candidate_id in self.rejected_candidate_ids:
++            raise CandidateSelectionError(f"candidate '{candidate_id}' was rejected and cannot be selected")
++        if not candidate.preview.uri:
++            raise CandidateSelectionError("selected candidate has no browser/player source URI")
++        if candidate.rights_status == RightsStatus.UNKNOWN_UNLICENSED:
++            raise CandidateSelectionError("selected candidate has unresolved rights")
++        rejected = tuple(sorted(set(self.rejected_candidate_ids)))
++        receipt_id = self._selection_receipt_id(candidate_id, operator_ref)
++        receipt = CandidateSelectionReceipt(
++            receipt_id=receipt_id,
++            request_ref=self.request_ref,
++            candidate_set_ref=self.candidate_set_ref,
++            selected_candidate=candidate_id,
++            rejected_candidates=tuple(sorted(set(self.rejected_candidate_ids))),
++            operator_ref=operator_ref,
++            source_ref=candidate.source,
++            source_hash=candidate.source.source_sha256,
++            source_range=candidate.selected_range,
++            rights_state=candidate.rights_status,
++            actor=actor,
++            preconditions={
++                "candidate_present": "PASS",
++                "candidate_not_rejected": "PASS",
++                "preview_uri": "PASS",
++            },
++            validators={
++                "workspace": "PASS",
++                "rights": "PASS",
++                "provenance": "PASS",
++                "temporal_range": "PASS",
++            },
++            postconditions={
++                "selected_candidate": candidate_id,
++                "rejected_candidates_preserved": "PASS",
++                "canonical_asset_mutation": "NOT_PERFORMED",
++            },
++            recovery_path="Selection is a projection only. To change the selection, issue a new immutable selection request; canonical Storyboard/VAE state is unchanged here.",
++        )
++        updated = self.model_copy(
++            update={
++                "state": AssetResearchSessionState.SELECTED,
++                "selected_candidate_id": candidate_id,
++                "rejected_candidate_ids": rejected,
++                "transition_receipt_ids": (*self.transition_receipt_ids, receipt_id),
++                "actor": actor,
++            }
++        )
++        return updated, receipt
++
++    def request_promotion(
++        self,
++        candidate_id: str,
++        *,
++        actor: str,
++        operator_ref: str,
++        storyboard_element_ref: str,
++        revision_ref: str,
++        selection_receipt_ref: str,
++    ) -> AssetPromotionRequest:
++        candidate = self._candidate(candidate_id)
++        if self.selected_candidate_id != candidate_id or self.state != AssetResearchSessionState.SELECTED:
++            raise CandidateSelectionError("promotion requires an explicitly selected candidate")
++        if not operator_ref.strip():
++            raise CandidateSelectionError("operator_ref is required for promotion request")
++        promotion_id = "PROMO-" + _digest(
++            {
++                "request_ref": self.request_ref,
++                "candidate_set_ref": self.candidate_set_ref,
++                "candidate_id": candidate_id,
++                "storyboard_element_ref": storyboard_element_ref,
++                "revision_ref": revision_ref,
++                "selection_receipt_ref": selection_receipt_ref,
++            }
++        )[:24]
++        return AssetPromotionRequest(
++            promotion_request_id=promotion_id,
++            request_ref=self.request_ref,
++            candidate_set_ref=self.candidate_set_ref,
++            selected_candidate=candidate_id,
++            source_ref=candidate.source,
++            source_range=candidate.selected_range,
++            rights_state=candidate.rights_status,
++            storyboard_element_ref=storyboard_element_ref,
++            revision_ref=revision_ref,
++            operator_ref=operator_ref,
++            selection_receipt_ref=selection_receipt_ref,
++        )
++
++    def _candidate(self, candidate_id: str) -> AssetResearchCandidate:
++        candidate = next((item for item in self.candidates if item.research_candidate_id == candidate_id), None)
++        if candidate is None:
++            raise CandidateSelectionError(f"unknown research candidate '{candidate_id}'")
++        return candidate
++
++    def _transition_receipt_id(self, action: str, candidate_id: str, reason: str) -> str:
++        return "RSTR-" + _digest(
++            {"session_id": self.session_id, "action": action, "candidate_id": candidate_id, "reason": reason}
++        )[:24]
++
++    def _selection_receipt_id(self, candidate_id: str, operator_ref: str | None) -> str:
++        return "RSEL-" + _digest(
++            {"session_id": self.session_id, "candidate_id": candidate_id, "operator_ref": operator_ref}
++        )[:24]
++
++
++@dataclass(frozen=True, slots=True)
++class _PhraseMatch:
++    record: SceneRecord
++    cue: TranscriptCue
++    terms: tuple[str, ...]
++
++
++class PlayPhraseTemporalAdapter:
++    """Deterministic phrase-to-range adapter over governed SceneRecord transcripts.
++
++    It deliberately does not own eligibility, semantic authority, or promotion. Its
++    output is normalized into AssetResearchCandidate by AssetResearchSessionFactory.
++    """
++
++    def find(
++        self,
++        phrase: str,
++        records: Iterable[SceneRecord],
++        *,
++        workspace_id: str,
++        candidate_id: str | None,
++        rights_policy: RightsPolicy,
++        context_before_seconds: float,
++        context_after_seconds: float,
++        range_mode: RangeMode,
++    ) -> tuple[_PhraseMatch, ...]:
++        normalized = _normalize_phrase(phrase)
++        if len(normalized) < 3:
++            return ()
++        terms = tuple(sorted(_tokenize(normalized)))
++        matches: list[_PhraseMatch] = []
++        for record in records:
++            if record.workspace_id != workspace_id:
++                continue
++            if candidate_id and record.annotation.candidate_id != candidate_id:
++                continue
++            if record.annotation.rights.status == RightsStatus.UNKNOWN_UNLICENSED:
++                continue
++            if rights_policy == RightsPolicy.CLEARED_ONLY and record.annotation.rights.status != RightsStatus.CLEARED:
++                continue
++            if rights_policy == RightsPolicy.CLEARED_OR_LEGAL_REVIEW and record.annotation.rights.status not in {
++                RightsStatus.CLEARED,
++                RightsStatus.FAIR_USE_LEGAL_REVIEW_REQUIRED,
++            }:
++                continue
++            for cue in record.transcript:
++                if normalized in _normalize_phrase(cue.text):
++                    matches.append(_PhraseMatch(record, cue, terms))
++        matches.sort(key=lambda item: (item.cue.start_time, item.record.scene_id))
++        return tuple(matches)
++
++
++class AssetResearchSessionFactory:
++    """Compile a bounded operator session from existing Asset Intelligence retrieval."""
++
++    def __init__(
++        self,
++        *,
++        semantic_retriever: SemanticCinematicRetriever | None = None,
++        temporal_adapter: PlayPhraseTemporalAdapter | None = None,
++        source_uri_resolver: Callable[[SceneRecord], str | None] | None = None,
++        preview_mime_resolver: Callable[[SceneRecord], str | None] | None = None,
++        actor: str = "execution-agent",
++    ):
++        self.semantic_retriever = semantic_retriever or SemanticCinematicRetriever(actor=actor)
++        self.temporal_adapter = temporal_adapter or PlayPhraseTemporalAdapter()
++        self.source_uri_resolver = source_uri_resolver
++        self.preview_mime_resolver = preview_mime_resolver
++        self.actor = actor
++
++    def open(
++        self,
++        request: AssetResearchRequest,
++        records: Iterable[SceneRecord],
++        *,
++        index_sha256: str | None = None,
++        indexed_receipt=None,
++    ) -> AssetResearchSession:
++        records = tuple(records)
++        request_ref = "RRQ-" + _digest(request.model_dump(mode="json"))[:24]
++        if request.mode == AssetResearchMode.PHRASE:
++            if index_sha256 is not None and request.expected_index_sha256 and request.expected_index_sha256 != index_sha256:
++                return self._session(request, request_ref, AssetResearchSessionState.BLOCKED, (), error_actor=self.actor)
++            matches = self.temporal_adapter.find(
++                request.query,
++                records,
++                workspace_id=request.workspace_id,
++                candidate_id=request.candidate_id,
++                rights_policy=request.rights_policy,
++                context_before_seconds=request.context_before_seconds,
++                context_after_seconds=request.context_after_seconds,
++                range_mode=request.range_mode,
++            )
++            candidates = tuple(self._from_phrase_match(match, request) for match in matches[: request.top_k])
++            state = AssetResearchSessionState.CANDIDATES if candidates else AssetResearchSessionState.ABSTAIN
++            return self._session(request, request_ref, state, candidates)
++
++        if index_sha256 is None:
++            return self._session(request, request_ref, AssetResearchSessionState.BLOCKED, ())
++        retrieval_query = RetrievalQuery(
++            workspace_id=request.workspace_id,
++            query=request.query,
++            candidate_id=request.candidate_id,
++            insert_roles=request.insert_roles,
++            semantic_roles=request.semantic_roles,
++            rights_policy=request.rights_policy,
++            top_k=request.top_k,
++            min_confidence=request.min_confidence,
++            expected_index_sha256=request.expected_index_sha256,
++        )
++        retrieved, receipt = self.semantic_retriever.retrieve(
++            retrieval_query,
++            records,
++            index_sha256=index_sha256,
++            indexed_receipt=indexed_receipt,
++        )
++        if receipt.state == RetrievalState.BLOCKED:
++            return self._session(request, request_ref, AssetResearchSessionState.BLOCKED, ())
++        if not retrieved:
++            return self._session(request, request_ref, AssetResearchSessionState.ABSTAIN, ())
++        candidates = tuple(self._from_semantic_candidate(candidate, records, request) for candidate in retrieved)
++        return self._session(request, request_ref, AssetResearchSessionState.CANDIDATES, candidates)
++
++    def _session(
++        self,
++        request: AssetResearchRequest,
++        request_ref: str,
++        state: AssetResearchSessionState,
++        candidates: tuple[AssetResearchCandidate, ...],
++        *,
++        error_actor: str | None = None,
++    ) -> AssetResearchSession:
++        candidate_set_ref = "RSET-" + _digest(
++            {
++                "request_ref": request_ref,
++                "candidate_ids": [candidate.research_candidate_id for candidate in candidates],
++            }
++        )[:24]
++        session_id = "ASES-" + _digest(
++            {
++                "request_ref": request_ref,
++                "candidate_set_ref": candidate_set_ref,
++                "state": state.value,
++            }
++        )[:24]
++        return AssetResearchSession(
++            session_id=session_id,
++            request=request,
++            request_ref=request_ref,
++            candidate_set_ref=candidate_set_ref,
++            state=state,
++            candidates=candidates,
++            actor=error_actor or self.actor,
++        )
++
++    def _from_phrase_match(self, match: _PhraseMatch, request: AssetResearchRequest) -> AssetResearchCandidate:
++        context = _context_range(match.record, match.cue.start_time, match.cue.end_time, request)
++        selected = context if request.range_mode == RangeMode.CONTEXT else SourceTimeRange(start_time=match.cue.start_time, end_time=match.cue.end_time)
++        return AssetResearchCandidate(
++            research_candidate_id=_research_candidate_id(request, match.record, match.cue.start_time, match.cue.end_time),
++            source=ResearchSourceRef(
++                media_id=match.record.media_id,
++                scene_id=match.record.scene_id,
++                source_version=match.record.source_version,
++                source_sha256=match.record.source_sha256,
++            ),
++            asset_id=match.record.annotation.asset_id,
++            workspace_id=match.record.workspace_id,
++            candidate_id=match.record.annotation.candidate_id,
++            start_time=selected.start_time,
++            end_time=selected.end_time,
++            match_range=SourceTimeRange(start_time=match.cue.start_time, end_time=match.cue.end_time),
++            context_range=context,
++            selected_range=selected,
++            transcript=_transcript_window(match.record.transcript, context),
++            contextual_explanation=(
++                f"Exact transcript phrase match in {match.record.semantic_role}; "
++                f"the temporal adapter resolved {match.cue.start_time:.3f}s–{match.cue.end_time:.3f}s."
++            ),
++            semantic_role=match.record.semantic_role,
++            insert_role=match.record.insert_role,
++            rights_status=match.record.annotation.rights.status,
++            confidence=1.0,
++            lexical_score=1.0,
++            semantic_score=1.0,
++            retrieval_mode=AssetResearchMode.PHRASE,
++            match_basis=("EXACT_TRANSCRIPT_PHRASE", *match.terms),
++            preview=self._preview(match.record, selected),
++            provenance=_provenance(match.record, MANDATE_ID),
++        )
++
++    def _from_semantic_candidate(self, candidate, records: Sequence[SceneRecord], request: AssetResearchRequest) -> AssetResearchCandidate:
++        record = next(item for item in records if item.scene_id == candidate.scene_id)
++        context = SourceTimeRange(start_time=record.start_time, end_time=record.end_time)
++        selected = context
++        transcript = _transcript_window(record.transcript, context)
++        return AssetResearchCandidate(
++            research_candidate_id=_research_candidate_id(request, record, record.start_time, record.end_time),
++            source=ResearchSourceRef(
++                media_id=record.media_id,
++                scene_id=record.scene_id,
++                source_version=record.source_version,
++                source_sha256=record.source_sha256,
++            ),
++            asset_id=candidate.asset_id,
++            workspace_id=record.workspace_id,
++            candidate_id=record.annotation.candidate_id,
++            start_time=selected.start_time,
++            end_time=selected.end_time,
++            match_range=None,
++            context_range=context,
++            selected_range=selected,
++            transcript=transcript,
++            contextual_explanation=candidate.contextual_explanation,
++            semantic_role=candidate.semantic_role,
++            insert_role=candidate.insert_role,
++            rights_status=candidate.rights_status,
++            confidence=candidate.confidence,
++            lexical_score=candidate.lexical_score,
++            semantic_score=candidate.semantic_score,
++            retrieval_mode=AssetResearchMode.SEMANTIC_CINEMATIC,
++            match_basis=candidate.match_terms or ("SEMANTIC_CINEMATIC",),
++            preview=self._preview(record, selected),
++            provenance=candidate.provenance,
++        )
++
++    def _preview(self, record: SceneRecord, selected: SourceTimeRange) -> PlayablePreviewRef:
++        uri = self.source_uri_resolver(record) if self.source_uri_resolver else None
++        mime_type = self.preview_mime_resolver(record) if self.preview_mime_resolver else None
++        return PlayablePreviewRef(
++            uri=uri,
++            range=selected,
++            mime_type=mime_type,
++            playable=bool(uri),
++        )
++
++
++def _research_candidate_id(request: AssetResearchRequest, record: SceneRecord, start: float, end: float) -> str:
++    return "RCND-" + _digest(
++        {
++            "request": request.model_dump(mode="json"),
++            "scene_id": record.scene_id,
++            "start": start,
++            "end": end,
++        }
++    )[:24]
++
++
++def _context_range(record: SceneRecord, start: float, end: float, request: AssetResearchRequest) -> SourceTimeRange:
++    bounded_start = max(record.start_time, start - request.context_before_seconds)
++    bounded_end = min(record.end_time, end + request.context_after_seconds)
++    return SourceTimeRange(start_time=bounded_start, end_time=bounded_end)
++
++
++def _transcript_window(cues: Sequence[TranscriptCue], window: SourceTimeRange) -> tuple[TranscriptExcerpt, ...]:
++    selected = [
++        TranscriptExcerpt(start_time=cue.start_time, end_time=cue.end_time, text=cue.text, speaker=cue.speaker)
++        for cue in cues
++        if cue.end_time > window.start_time and cue.start_time < window.end_time
++    ]
++    return tuple(selected)
++
++
++def _provenance(record: SceneRecord, mandate_id: str) -> dict[str, str]:
++    return {
++        "scene_id": record.scene_id,
++        "media_id": record.media_id,
++        "source_version": record.source_version,
++        "source_sha256": record.source_sha256,
++        "candidate_id": record.annotation.candidate_id,
++        "mandate_id": mandate_id,
++    }
++
++
++def _normalize_phrase(value: str) -> str:
++    return " ".join(re.findall(r"[a-z0-9]+(?:['’-][a-z0-9]+)?", value.lower()))
++
++
++def _tokenize(value: str) -> set[str]:
++    return set(re.findall(r"[a-z0-9]+", _normalize_phrase(value)))
++
++
++def _digest(payload: object) -> str:
++    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")
++    return hashlib.sha256(encoded).hexdigest()
+diff --git a/tests/asset_intelligence/test_asset_research_session_m0086.py b/tests/asset_intelligence/test_asset_research_session_m0086.py
+new file mode 100644
+index 0000000..4b5c5fe
+--- /dev/null
++++ b/tests/asset_intelligence/test_asset_research_session_m0086.py
+@@ -0,0 +1,280 @@
++import hashlib
++import sys
++from pathlib import Path
++
++import pytest
++
++ROOT = Path(__file__).parents[2]
++sys.path.insert(0, str(ROOT / "services" / "asset-intelligence" / "src"))
++
++from cae_asset_intelligence.corpus import (  # noqa: E402
++    CinematicCorpusEngine,
++    CorpusState,
++    MediaAuthorization,
++    SceneProposal,
++    TranscriptCue,
++)
++from cae_asset_intelligence.domain import EditorialInsertRole, RightsMetadata, RightsStatus, SourceType  # noqa: E402
++from cae_asset_intelligence.research_session import (  # noqa: E402
++    AssetResearchMode,
++    AssetResearchRequest,
++    AssetResearchSessionFactory,
++    AssetResearchSessionState,
++    CandidateSelectionError,
++    RangeMode,
++)
++from cae_asset_intelligence.retrieval import RightsPolicy  # noqa: E402
++
++
++def _corpus():
++    media = b"m0086 governed media fixture"
++    sha = hashlib.sha256(media).hexdigest()
++    auth = MediaAuthorization(
++        authorization_id="AUTH-M0086",
++        workspace_id="WS-M0086",
++        source_sha256=sha,
++        source_version="v1",
++        approved=True,
++        authority_ref="operator-approval:M0086-fixture",
++    )
++    rights = RightsMetadata(status=RightsStatus.CLEARED, license_id="LIC-M0086")
++    scenes = [
++        SceneProposal(
++            start_time=0,
++            end_time=5,
++            contextual_caption="Dawn location establishment precedes the speaker's decisive operational choice.",
++            semantic_role="SETTING_ESTABLISHMENT",
++            insert_role=EditorialInsertRole.WORLD_BUILDING,
++            source_type=SourceType.ARCHIVAL,
++            transcript=(
++                TranscriptCue(start_time=0.5, end_time=1.5, text="We opened before sunrise.", speaker="A"),
++                TranscriptCue(start_time=1.6, end_time=2.5, text="The place was already awake.", speaker="A"),
++            ),
++        ),
++        SceneProposal(
++            start_time=5,
++            end_time=10,
++            contextual_caption="A control-room reaction shows operational pressure after an important failed decision.",
++            semantic_role="DECISION_PRESSURE",
++            insert_role=EditorialInsertRole.EMOTIONAL_AMPLIFICATION,
++            source_type=SourceType.MOVIE,
++            transcript=(
++                TranscriptCue(start_time=6.0, end_time=7.0, text="We opened the console at midnight.", speaker="B"),
++            ),
++        ),
++    ]
++    records, ingest_receipt = CinematicCorpusEngine().ingest(
++        workspace_id="WS-M0086",
++        candidate_id="CND-M0086",
++        source_version="v1",
++        source_bytes=media,
++        media_duration=10.0,
++        authorization=auth,
++        rights=rights,
++        scenes=scenes,
++    )
++    index_sha = hashlib.sha256(b"governed-index-m0086-v1").hexdigest()
++    indexed_receipt = ingest_receipt.model_copy(
++        update={
++            "state": CorpusState.INDEXED,
++            "receipt_id": "RCPT-M0086-INDEXED",
++            "scene_ids": tuple(r.scene_id for r in records),
++        }
++    )
++    return records, index_sha, indexed_receipt
++
++
++def _factory(uri=True):
++    def resolve(record):
++        return f"https://media.test/{record.media_id}.mp4" if uri else None
++
++    return AssetResearchSessionFactory(
++        source_uri_resolver=resolve,
++        preview_mime_resolver=lambda record: "video/mp4",
++        actor="operator-test",
++    )
++
++
++def test_phrase_session_resolves_exact_temporal_match_and_playable_preview():
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="opened before sunrise",
++        mode=AssetResearchMode.PHRASE,
++        context_before_seconds=1.0,
++        context_after_seconds=2.0,
++        range_mode=RangeMode.MATCH,
++    )
++    session = _factory().open(request, records)
++
++    assert session.state == AssetResearchSessionState.CANDIDATES
++    assert len(session.candidates) == 1
++    candidate = session.candidates[0]
++    assert candidate.match_range.start_time == 0.5
++    assert candidate.match_range.end_time == 1.5
++    assert candidate.selected_range.start_time == 0.5
++    assert candidate.selected_range.end_time == 1.5
++    assert candidate.preview.playable is True
++    assert candidate.preview.uri.endswith(".mp4")
++    assert candidate.source.source_sha256 == records[0].source_sha256
++    assert candidate.rights_status == RightsStatus.CLEARED
++    assert "EXACT_TRANSCRIPT_PHRASE" in candidate.match_basis
++
++
++def test_phrase_session_returns_context_and_transcript_window_without_losing_match_range():
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="opened before sunrise",
++        mode=AssetResearchMode.PHRASE,
++        context_before_seconds=0.2,
++        context_after_seconds=1.0,
++        range_mode=RangeMode.CONTEXT,
++    )
++    session = _factory().open(request, records)
++    candidate = session.candidates[0]
++
++    assert candidate.match_range is not None
++    assert candidate.context_range.start_time == 0.3
++    assert candidate.context_range.end_time == 2.5
++    assert [cue.text for cue in candidate.transcript] == [
++        "We opened before sunrise.",
++        "The place was already awake.",
++    ]
++    assert candidate.selected_range == candidate.context_range
++
++
++def test_semantic_session_reuses_governed_retriever_and_role_constraints_block_good_looking_wrong_candidate():
++    records, index_sha, receipt = _corpus()
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="place before the operational choice",
++        mode=AssetResearchMode.SEMANTIC_CINEMATIC,
++        insert_roles=(EditorialInsertRole.WORLD_BUILDING,),
++        min_confidence=0.01,
++        expected_index_sha256=index_sha,
++    )
++    session = _factory().open(request, records, index_sha256=index_sha, indexed_receipt=receipt)
++
++    assert session.state == AssetResearchSessionState.CANDIDATES
++    assert session.candidates
++    assert all(candidate.insert_role == EditorialInsertRole.WORLD_BUILDING for candidate in session.candidates)
++    assert records[1].scene_id not in {candidate.source.scene_id for candidate in session.candidates}
++    assert session.candidates[0].retrieval_mode == AssetResearchMode.SEMANTIC_CINEMATIC
++
++
++def test_stale_semantic_index_fails_closed_without_candidates():
++    records, index_sha, receipt = _corpus()
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="operational pressure",
++        mode=AssetResearchMode.SEMANTIC_CINEMATIC,
++        expected_index_sha256="b" * 64,
++        min_confidence=0.01,
++    )
++    session = _factory().open(request, records, index_sha256=index_sha, indexed_receipt=receipt)
++    assert session.state == AssetResearchSessionState.BLOCKED
++    assert session.candidates == ()
++
++
++def test_unlicensed_candidates_are_not_returned_even_when_phrase_matches():
++    records, _, _ = _corpus()
++    restricted = records[0].model_copy(
++        update={
++            "annotation": records[0].annotation.model_copy(
++                update={"rights": RightsMetadata(status=RightsStatus.UNKNOWN_UNLICENSED)}
++            )
++        }
++    )
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="opened before sunrise",
++        mode=AssetResearchMode.PHRASE,
++        rights_policy=RightsPolicy.CLEARED_ONLY,
++    )
++    session = _factory().open(request, [restricted, records[1]])
++    assert session.state == AssetResearchSessionState.ABSTAIN
++    assert session.candidates == ()
++
++
++def test_selection_and_promotion_are_immutable_operator_projections():
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(workspace_id="WS-M0086", query="opened before sunrise", mode=AssetResearchMode.PHRASE)
++    session = _factory().open(request, records)
++    candidate_id = session.candidates[0].research_candidate_id
++
++    selected, selection_receipt = session.select(candidate_id, actor="operator", operator_ref="OP-M0086")
++    promotion = selected.request_promotion(
++        candidate_id,
++        actor="operator",
++        operator_ref="OP-M0086",
++        storyboard_element_ref="STORY-1-ELEMENT-1",
++        revision_ref="REV-1",
++        selection_receipt_ref=selection_receipt.receipt_id,
++    )
++
++    assert session.selected_candidate_id is None
++    assert selected.selected_candidate_id == candidate_id
++    assert selection_receipt.selected_candidate == candidate_id
++    assert selection_receipt.source_hash == selected.candidates[0].source.source_sha256
++    assert selection_receipt.postconditions["canonical_asset_mutation"] == "NOT_PERFORMED"
++    assert promotion.selected_candidate == candidate_id
++    assert promotion.storyboard_element_ref == "STORY-1-ELEMENT-1"
++
++
++def test_missing_playable_preview_cannot_be_selected_or_promoted():
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(workspace_id="WS-M0086", query="opened before sunrise", mode=AssetResearchMode.PHRASE)
++    session = _factory(uri=False).open(request, records)
++    candidate_id = session.candidates[0].research_candidate_id
++
++    with pytest.raises(CandidateSelectionError, match="source URI"):
++        session.select(candidate_id, actor="operator", operator_ref="OP-M0086")
++
++
++def test_rejected_candidates_are_preserved_and_cannot_be_selected_later():
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(workspace_id="WS-M0086", query="opened before sunrise", mode=AssetResearchMode.PHRASE)
++    session = _factory().open(request, records)
++    candidate_id = session.candidates[0].research_candidate_id
++
++    rejected, receipt_id = session.reject(candidate_id, actor="operator", reason="narratively wrong")
++    assert rejected.rejected_candidate_ids == (candidate_id,)
++    assert receipt_id in rejected.transition_receipt_ids
++    with pytest.raises(CandidateSelectionError, match="rejected"):
++        rejected.select(candidate_id, actor="operator", operator_ref="OP-M0086")
++
++
++def test_session_and_selection_receipts_are_deterministic_for_identical_inputs():
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="opened before sunrise",
++        mode=AssetResearchMode.PHRASE,
++        range_mode=RangeMode.MATCH,
++    )
++    first = _factory().open(request, records)
++    second = _factory().open(request, records)
++    assert first.session_id == second.session_id
++    assert first.request_ref == second.request_ref
++    assert first.candidate_set_ref == second.candidate_set_ref
++    assert [c.research_candidate_id for c in first.candidates] == [c.research_candidate_id for c in second.candidates]
++
++    first_selected, first_receipt = first.select(first.candidates[0].research_candidate_id, actor="operator", operator_ref="OP-M0086")
++    second_selected, second_receipt = second.select(second.candidates[0].research_candidate_id, actor="operator", operator_ref="OP-M0086")
++    assert first_selected.model_dump(mode="json") == second_selected.model_dump(mode="json")
++    assert first_receipt.receipt_id == second_receipt.receipt_id
++
++
++def test_phrase_adapter_is_not_an_independent_semantic_authority():
++    # Phrase mode only exposes exact transcript evidence attached to governed SceneRecords;
++    # an unrelated caption with similar semantics must not create a phrase hit.
++    records, _, _ = _corpus()
++    request = AssetResearchRequest(
++        workspace_id="WS-M0086",
++        query="dawn location operational choice",
++        mode=AssetResearchMode.PHRASE,
++    )
++    session = _factory().open(request, records)
++    assert session.state == AssetResearchSessionState.ABSTAIN
++    assert session.candidates == ()

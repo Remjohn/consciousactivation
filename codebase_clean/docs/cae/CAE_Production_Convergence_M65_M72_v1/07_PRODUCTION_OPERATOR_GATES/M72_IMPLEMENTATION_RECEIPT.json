@@ -1,0 +1,53 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M72",
+  "mandate_title": "Final Production Gate + CURRENT Synchronization",
+  "phase": "PHASE_07_PRODUCTION_OPERATOR_GATES",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T11:38:00Z",
+  "head_commit_sha": "8fb3733cc6a750560532f87f98af2fe24c229528",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+    "packages/ca_runtime/src/ca_runtime/agent_registry.py",
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py",
+    "packages/ca_runtime/src/ca_runtime/program_registry.py",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py",
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py",
+    "packages/ca_runtime/src/ca_runtime/sdlf_factory.py",
+    "services/pipeline/src/cmf_pipeline/application.py",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/07_PRODUCTION_OPERATOR_GATES/M72_final_production_gate_current_sync.md"
+  ],
+  "source_symbols_changed": [
+    "tests/cae/test_m72_final_production_gate_current_sync.py"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m72_final_production_gate_current_sync.py"
+  ],
+  "verification_summary": {
+    "m72_tests_passed": 7,
+    "total_bundle_tests_passed": 208,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "production_readiness_disposition": "READY",
+    "evaluations_passed": 12,
+    "evaluations_blocked": 0,
+    "evaluations_failed": 0,
+    "adversarial_vectors_defeated": 6,
+    "verifications_proved": [
+      "Gate 1: Full Factory Certification evaluation over real SDLF and Domain Program benchmarks yields READY disposition (12/12 criteria PASSED)",
+      "Gate 2: Representative Domain Program (research_canonicalization_program) golden run produces complete cryptographic evidence manifest",
+      "Gate 3: SQLite state persistence, process restart, replay parity, and backup/restore verification",
+      "Gate 4: Multi-tenant isolation and authority lane boundaries strictly enforced fail-closed",
+      "Gate 5: Fail-closed production execution mode integrity (ProductionExecutionModeViolationError)",
+      "Gate 6: Factory floor snapshot and observability parity",
+      "Gate 7 (Countertest): Demonstrates that missing evidence or manufactured readiness fails closed"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}

@@ -1,0 +1,55 @@
+version: 1
+program: CAE Current-State Reconciliation & PRD Synchronization
+mandates:
+  - id: CA-CSR-01
+    objective: evidence_base
+    acceptance:
+      - exact repository revision recorded
+      - current working-tree state recorded
+      - authority/status surfaces inventoried
+      - material implementation claims have evidence class and source
+      - recent mandate execution records inspected
+      - limitations recorded
+    forbidden:
+      - PRD edits
+      - runtime changes
+      - architecture redesign
+  - id: CA-CSR-02
+    objective: current_state_reconciled
+    acceptance:
+      - every high-materiality subsystem has one explicit status
+      - definition/runtime/change authority are separated
+      - mandate execution status is separated into documented/code/test/runtime/operator states
+      - contradictions are preserved and routed
+      - possible overlap is not deleted by assumption
+      - ledger is reproducible from evidence
+    forbidden:
+      - PRD edits
+      - source-code changes
+      - migration changes
+      - canonical ontology changes
+  - id: CA-CSR-03
+    objective: prd_synchronized
+    acceptance:
+      - only docs/PRD/CURRENT.md and completion evidence changed
+      - every material change traces to CA-CSR-02
+      - verification dates are current for checked sections
+      - historical overrides/superseded guidance preserved
+      - open defects/decisions preserved
+      - no unsupported implementation claim introduced
+    forbidden:
+      - runtime changes
+      - schema changes
+      - architecture changes
+  - id: CA-CSR-04
+    objective: frozen_current_state
+    acceptance:
+      - independent verification performed
+      - PRD and ledger agree on all sampled high-materiality claims
+      - underlying repository evidence sampled directly
+      - no unsupported completion claim survives
+      - next runtime-convergence items are proposals only
+    forbidden:
+      - PRD edits
+      - runtime implementation
+      - scope expansion

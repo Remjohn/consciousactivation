@@ -1,0 +1,247 @@
+# Object Constitution: EvidenceSpan
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-REL-003"
+canonical_name: "EvidenceSpan"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Relation"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-003, COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:51, CA-STATE-01:71, MC-CAE-MED-001, TS-CAE-TEN-001:3.5"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REL-003"
+    canonical_name: "EvidenceSpan"
+    common_aliases: ["Anchor Span", "Evidence Offset Link", "Temporal Offset Span"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Relation"
+    class_matrix_id: 2
+    class_rationale: "EvidenceSpan binds an EvidenceItem to a specific physical coordinate range (temporal or textual) inside a MediaAsset or InterviewTurn."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Maintains operational coordinates anchoring qualitative evidence to real media bytes and transcription turns."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Reality Anchoring & Provenance Verification"
+    primary_purpose: "Provides verifiable, reproducible spatial/temporal bounds for evidence claims against source recordings."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational coordinate relation"
+    differentia: "Distinguished from EvidenceItem (the claim itself) and MediaAsset (the whole file) by representing the precise mathematical interval (start/end) linking them."
+    function: "Enables playback, verification, and audit of evidence by pinpointing exact start and end offsets."
+    boundary: "Must not have start_offset > end_offset; cannot link to assets in a different workspace; cannot be modified once linked."
+    normative_definition: >
+      EvidenceSpan is an immutable operational relation that anchors an EvidenceItem to a precise segment of a MediaAsset
+      or an InterviewTurn. It records start and end coordinates (milliseconds, sample frames, or character indices)
+      to enable byte-level reality verification.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable coordinate binding between EvidenceItem and target MediaAsset/InterviewTurn."
+      - "A verifiable temporal (ms) or textual (char) interval."
+      - "A child relation scoped by workspace_id."
+    what_it_is_not:
+      - "An EvidenceItem (EvidenceItem is the high-level semantic claim)."
+      - "A MediaAsset (MediaAsset is the underlying media container)."
+      - "An AssessmentEvidenceLink (AssessmentEvidenceLink links assessments to evidence items, not coordinates)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "EvidenceItem (CA-EVI-002)"
+        distinction: "EvidenceItem is the semantic evidence atom; EvidenceSpan is the mechanical coordinate interval locating it in the media."
+      - neighbor: "AssessmentEvidenceLink (CA-REL-006)"
+        distinction: "AssessmentEvidenceLink binds qualitative assessments to evidence items; EvidenceSpan binds evidence items to raw media offsets."
+      - neighbor: "InterviewTurn (CA-EVT-003)"
+        distinction: "InterviewTurn is a full dialogue utterance; EvidenceSpan may highlight a sub-phrase within that turn."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Evidence Extraction & Ingestion"
+    tier: "Evidence Coordinate Relation"
+    specialization: "Millisecond & Character Offset Span"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["COMMITTED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "span_id"
+        type: "UUID"
+        description: "Globally unique identifier for the span."
+      - name: "evidence_id"
+        type: "UUID"
+        description: "Parent EvidenceItem identifier."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "target_asset_id"
+        type: "UUID"
+        description: "Referenced MediaAsset identifier."
+      - name: "target_turn_id"
+        type: "UUID"
+        description: "Optional referenced InterviewTurn identifier."
+      - name: "start_offset_ms"
+        type: "INTEGER"
+        description: "Start time offset in milliseconds."
+      - name: "end_offset_ms"
+        type: "INTEGER"
+        description: "End time offset in milliseconds."
+      - name: "char_start"
+        type: "INTEGER"
+        description: "Optional character start offset in transcript."
+      - name: "char_end"
+        type: "INTEGER"
+        description: "Optional character end offset in transcript."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when span was created."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+      - parent_object: "EvidenceItem"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "EvidenceSpan is strictly immutable upon creation; it has no state transitions."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "evidence.span.attached"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Evidence Ingestion Engine via capture_evidence command"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-SPN-001: start_offset_ms MUST be less than or equal to end_offset_ms."
+      - "INV-SPN-002: If char_start and char_end are present, char_start MUST be <= char_end."
+      - "INV-SPN-003: EvidenceSpan MUST belong to the same workspace_id as its parent EvidenceItem."
+      - "INV-SPN-004: EvidenceSpan is immutable; updates and in-place deletions are prohibited."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:51, CA-STATE-01:71, MC-CAE-MED-001, TS-CAE-TEN-001:3.5"
+    runtime_representation: "cae.evidence_span (PostgreSQL relational)"
+    promotion_authority: "Workspace Evidence Ingestion Service"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "attach_evidence_span"
+        parameters: ["evidence_id", "target_asset_id", "start_offset_ms", "end_offset_ms", "target_turn_id", "char_start", "char_end"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT update or shift span offsets after creation."
+      - "MUST NOT link to a MediaAsset residing in a different tenant workspace."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify span_id, evidence_id, workspace_id, target_asset_id are valid UUIDv4."
+      - "Verify start_offset_ms and end_offset_ms are non-negative integers."
+    semantic_validators:
+      - "Verify target MediaAsset exists and duration is >= end_offset_ms."
+      - "Verify parent EvidenceItem exists in same workspace."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_SPAN_INVALID_RANGE"
+        http_status: 400
+        description: "start_offset_ms is greater than end_offset_ms."
+      - code: "ERR_SPAN_ASSET_OUT_OF_BOUNDS"
+        http_status: 422
+        description: "end_offset_ms exceeds target MediaAsset total duration."
+      - code: "ERR_SPAN_CROSS_TENANT_VIOLATION"
+        http_status: 403
+        description: "Target asset belongs to different workspace."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.evidence_span"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Media Playback & Inspection UI"
+      - "AIR Psychological Feature Extractor"
+      - "Audit & Compliance Verification Pipeline"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Where exactly in the recording does this evidence quote or behavior appear?"
+      - "What are the millisecond timestamps for audio playback verification?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-SPN-001"
+        description: "3.5-second temporal span anchoring a quote to audio recording."
+        attributes:
+          span_id: "990e8400-e29b-41d4-a716-446655440001"
+          evidence_id: "770e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          target_asset_id: "aa0e8400-e29b-41d4-a716-446655440001"
+          start_offset_ms: 15400
+          end_offset_ms: 18900
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-SPN-001"
+        description: "Near-miss: An evidence span created with inverted millisecond timestamps (start_offset_ms: 20000, end_offset_ms: 15000) under the assumption that the UI will sort them."
+        rejection_reason: "Violates INV-SPN-001; spans must strictly satisfy start_offset_ms <= end_offset_ms at creation."
+      - id: "NEG-SPN-002"
+        description: "Near-miss: Attempting to link an EvidenceItem in Workspace A to a MediaAsset in Workspace B via an EvidenceSpan."
+        rejection_reason: "Violates INV-SPN-003; cross-workspace span links violate multi-tenant isolation."
+      - id: "NEG-SPN-003"
+        description: "Generic violation: Attempting to delete an EvidenceSpan via direct SQL DELETE."
+        rejection_reason: "Violates INV-SPN-004; spans are immutable historical anchors."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for EvidenceSpan coordinate relation with 26 dimensions."

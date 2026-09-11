@@ -1,0 +1,30 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AIR-004
+spec_path: 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/docs/tech-specs/TS-AIR-004.md
+spec_sha256: c30b656d288f4e781564f2cdf9a39acab79c14e6cdace02d88df14869f9edf58
+phase: PHASE_02
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 14
+  direct_aggregate_test_evidence: 3
+  implementation_without_direct_ac_test: 11
+  unimplemented_or_nonbehavior: 0
+implementation_paths:
+- 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/cmf_activative_intelligence/repositories/registry_repository.py
+- 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/cmf_activative_intelligence/services/primitive_service.py
+- 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/cmf_activative_intelligence/domain.py
+test_evidence:
+- tests/phase2/test_air_core.py::AirRegistryTests::test_exact_inventory_counts_and_duplicate_preservation
+- tests/phase2/test_air_core.py::AirRegistryTests::test_duplicate_id_requires_source_hash
+- tests/phase2/test_air_core.py::AirSemanticFlowTests::test_end_to_end_semantic_core
+open_gap_ids:
+- GAP-PRIMITIVE-RELATION-GRAPH
+- GAP-PRIMITIVE-STAGE-COVERAGE
+- GAP-EVAL-INDEPENDENT
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

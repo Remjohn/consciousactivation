@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_state": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "category_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "contradicts_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "evidence_quality_micros": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "evidence_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "expression_moment_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "failed_alternative": {
+      "type": "boolean"
+    },
+    "format_profile_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "lifecycle_state": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "object_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "permitted_action_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "reaction_receipt_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "relationship_edges": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "relation_type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "target_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "relation_type",
+          "target_id"
+        ],
+        "title": "RelationshipEdge",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "role_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "source_kind": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "summary": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "supersedes_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "projection_id",
+    "object_ref",
+    "source_kind",
+    "authority_state",
+    "lifecycle_state",
+    "title",
+    "summary",
+    "category_ids",
+    "format_profile_ids",
+    "role_ids",
+    "tags",
+    "relationship_edges",
+    "evidence_refs",
+    "reaction_receipt_refs",
+    "expression_moment_refs",
+    "contradicts_ids",
+    "supersedes_ids",
+    "failed_alternative",
+    "evidence_quality_micros",
+    "permitted_action_ids",
+    "content_sha256"
+  ],
+  "title": "KnowledgeProjection",
+  "type": "object"
+}

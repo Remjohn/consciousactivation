@@ -1,0 +1,25 @@
+M0090 — SAM3 Visual Tracking Session
+
+Implementation commit SHA: 3da928a0c7e79aca4a84995400aad55147865b60
+Final evidence/handoff commit SHA: 1015280950937b805d9e4b4b743ea1a31ad04c64
+Upstream SAM3 source commit: 660a5e9e1b8b4c02c0ad97229b88a09a6e4ff5b7
+Upstream license: SAM License (LICENSE)
+
+Changed/new repository paths:
+- engines/intelligence/vision/sam3/AGENT_HANDOFF.md
+- engines/intelligence/vision/sam3/UPSTREAM_MAPPING.md
+- engines/intelligence/vision/sam3/adapter.py
+- engines/intelligence/vision/sam3/evidence/M0090_IMPLEMENTATION_RECEIPT.json
+- packages/ca_runtime/src/ca_runtime/tracking_session.py
+- tests/cae/test_m0090_sam3_tracking_session.py
+
+Verification:
+- python -m py_compile packages/ca_runtime/src/ca_runtime/tracking_session.py engines/intelligence/vision/sam3/adapter.py tests/cae/test_m0090_sam3_tracking_session.py
+- PYTHONPATH=packages/ca_runtime/src:. python -m pytest -p no:asyncio tests/cae/test_m0090_sam3_tracking_session.py -q  => 10 passed
+- python scratch/run_single_test.py tests/cae/test_m0090_sam3_tracking_session.py  => 10 passed
+
+Limitations requiring operator review:
+- Native SAM3 CUDA/checkpoint reachability not proven in supplied environment.
+- Browser/API surface not wired because api/ is outside M0090 boundary.
+- Direct SuperVisual adapter not added; accepted normalized Storyboard/BBOX geometry is the governed downstream composition handoff.
+- Perceptual target correctness and semantic speaker identity remain operator decisions.

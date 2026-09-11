@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Method States Schema",
+  "type": "object",
+  "required": ["version", "states", "transitions", "initial_state", "terminal_state"],
+  "properties": {
+    "version": { "type": "string" },
+    "initial_state": { "type": "string" },
+    "terminal_state": { "type": "string" },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["state_id", "phase", "description", "required_artifacts", "active_agents"],
+        "properties": {
+          "state_id": { "type": "string" },
+          "phase": { "type": "string" },
+          "description": { "type": "string" },
+          "required_artifacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "active_agents": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from_state", "to_state", "gate", "condition"],
+        "properties": {
+          "from_state": { "type": "string" },
+          "to_state": { "type": "string" },
+          "gate": { "type": "string" },
+          "condition": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,147 @@
+schema_version: ca-audit-report/v1
+audit_id: AUDIT-TS-INT-005-BATCH008
+spec_id: TS-INT-005
+spec_title: "Expression Ingredient Inventory and Asset Package Spec"
+product: Interview Expression
+audit_date: "2026-07-23"
+auditor: controller-session-direct-audit-user-authorized
+audit_outcome: AUDIT_PASS
+audit_outcome_note: >
+  No blocking findings. All 6 lenses applied. Upstream draft TS-INT-004 passed Batch 7.
+  SRC-AM-002 deferred correctly with non-blocking gap notice.
+  Eligible for TECHNICALLY_ACCEPTED_PENDING_RATIFICATION. NOT ACCEPTED_FOR_BUILD.
+
+lens_results:
+
+  lens_1_fr_story_outcome_coverage:
+    result: PASS
+    findings: []
+    notes: >
+      FR-132 and ST-02.04 fully covered by 18 ACs in Section 9.
+      ST-02.04 requirements (exact source-backed ingredient, reconstruction of inputs,
+      decisions, state transitions, handoff, selective recovery) all addressed.
+      Fixed TARGET_TRIAL_GUEST_PACK_COUNTS correctly not canonicalized.
+      SRC-AM-002 deferred as non-blocking with explicit gap notice.
+
+  lens_2_authority_ownership_sovereignty:
+    result: PASS
+    findings: []
+    notes: >
+      authority_state CANDIDATE_NOT_CURRENT and build_authority false correctly declared.
+      TS-INT-004 (e6147fc8) DRAFT_DEPENDENCY_NOT_ACCEPTED, passed Batch 7 audit.
+      IE owns ExpressionIngredientInventoryVersion, AssetPackageSpecVersion, package
+      review/approval decisions, completeness results, gaps, exclusions, handoff receipts,
+      correction/supersession lifecycle.
+      AIR exclusively owns semantic compilation — SemanticOpportunityRef is explicitly
+      NON_AUTHORITATIVE_CANDIDATE with CONSUME_REFERENCE or REQUEST_AIR_COMPILATION action.
+      Builder, Pipeline, VAE, Studio, Delegation ownership boundaries explicit per 3.1.
+      Proposal/approval segregation: Hunters, extractors, routers, model compilers may propose
+      but SHALL NOT self-approve. Approval = source accuracy + downstream eligibility;
+      NOT = AIR/Builder/Pipeline/VAE/production acceptance.
+
+  lens_3_contract_lifecycle_completeness:
+    result: PASS
+    findings: []
+    notes: >
+      Complete data models: EvidencePointer (12 evidence_kind variants, rational time,
+      typed source bindings, portability-safe), ExpressionIngredientCandidate,
+      ExpressionIngredientVersion (approved/rejected/superseded/revoked/invalidated lifecycle),
+      12 IngredientKind values with per-kind mandatory evidence requirements (6.4),
+      SemanticOpportunityRef (authority_state enum, owner, governed_object_ref, downstream_action),
+      ExpressionEvidenceGraph (13 RelationKind values, cycle detection, conflict preservation),
+      ExpressionIngredientInventoryVersion, AssetPackageRequest, PackageSlot, PackageGap
+      (6 gap_kind values), PackageCompletenessResult (7 ApplicabilityDecision values),
+      AssetPackageSpecVersion, AssetPackageManifest, 8 required receipts.
+      Required commands (10+), events (10+), atomic unit of work, idempotency, concurrency,
+      replay, cancellation.
+      Inventory and package correctly modeled as distinct (3.2).
+
+  lens_4_activative_primitive_archetype_source_fidelity:
+    result: PASS
+    findings: []
+    notes: >
+      SRC-INT-001 (c9014d28) and SRC-INT-002 (58e92fee) both REQUIRED_UNIQUE_EVIDENCE.
+      SRC-INT-003 is byte-identical content with SRC-INT-002, correctly retained as provenance alias.
+      Semantic opportunities are explicitly NON_AUTHORITATIVE_CANDIDATE — IE cannot create
+      approved Primitive, archetype coalition, role-tension, Matrix, Edge Product, Final Script,
+      Activation Transfer, Visual Semantic Pack, Visual Narrative Program, or Feature Contract.
+      Package approval does not change SemanticOpportunityRef authority_state.
+      Per-kind ingredient evidence requirements (6.4) are specific and correct:
+      EXACT_QUOTE requires exact words, speaker, source time, transcript revision, Moment boundary;
+      KEYFRAME requires shot/index version, frame/time, source artifact, crop/transform.
+      NOT_APPLICABLE evidence rules in 3.7 are comprehensive.
+
+  lens_5_brownfield_cross_spec_consistency:
+    result: PASS
+    findings: []
+    notes: >
+      10 brownfield sources with explicit dispositions. Studio predecessor concepts correctly
+      ADAPT (ingredient/relation vocabulary, gap behavior, approval-before-handoff) vs REPLACE
+      (keyword coverage, sequence assignment, random UUID, mutable in-place replacement, in-memory
+      repository). TARGET_TRIAL_GUEST_PACK_COUNTS correctly declared historical, not canonical.
+      TS-INT-004 interface consumed consistently with Batch 7 audit findings.
+      6 impact classes for dependency edges enable selective invalidation (not cascade all).
+
+  lens_6_build_readiness_testability:
+    result: PASS
+    findings: []
+    notes: >
+      10 components with responsibility and forbidden-responsibility columns.
+      Inventory and package state machines explicit.
+      18 ACs, all falsifiable. Test paths in Section 10.
+      Restriction inheritance: package/consumer may add stricter restrictions but never weaken.
+      Evidence-bearing NOT_APPLICABLE with 6-field requirement.
+
+blocking_findings: []
+warning_findings: []
+note_findings:
+  - finding_id: NOTE-INT-005-001
+    severity: NOTE
+    lens: lens_3_contract_lifecycle_completeness
+    location: "Section 3.2, Inventory and package distinction"
+    finding: >
+      The design correctly separates inventory (complete governed set) from package
+      (consumer-targeted projection). Auditor notes that the permitted consumer overlap
+      (one inventory supporting multiple package specs for different consumers) is correctly
+      stated and will require careful implementation to avoid stale cross-consumer references.
+      Build-phase concern.
+    required_action: "Record as informational."
+    architect_decision_required: false
+    blocks_build: false
+
+  - finding_id: NOTE-INT-005-002
+    severity: NOTE
+    lens: lens_1_fr_story_outcome_coverage
+    location: "Section 4.4, TARGET_TRIAL_GUEST_PACK_COUNTS"
+    finding: >
+      The explicit decision not to canonicalize TARGET_TRIAL_GUEST_PACK_COUNTS is correct
+      and necessary to avoid forcing a source gap into a fabricated material. Auditor notes
+      this requires that future commercial product definitions do not re-introduce fixed counts
+      through back-channel profile inheritance without explicit governance.
+    required_action: "Record as informational for future commercial product governance."
+    architect_decision_required: false
+    blocks_build: false
+
+  - finding_id: NOTE-INT-005-003
+    severity: NOTE
+    lens: lens_4_activative_primitive_archetype_source_fidelity
+    location: "Section 1.5, SRC-AM-002 DEFERRED_REFERENCE"
+    finding: >
+      SRC-AM-002 deferred (named production-activation archive unavailable). Non-blocking.
+      SOURCE_GAP_NOTICE.yaml referenced. No claim attributed to it. Correctly handled.
+    required_action: "Record as informational."
+    architect_decision_required: false
+    blocks_build: false
+
+summary:
+  total_findings: 3
+  critical: 0
+  warning: 0
+  note: 3
+  blocks_build: false
+  outcome: AUDIT_PASS
+
+post_audit_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+post_audit_authority_state: CANDIDATE_NOT_CURRENT
+build_authority: false
+max_claim_ceiling: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION

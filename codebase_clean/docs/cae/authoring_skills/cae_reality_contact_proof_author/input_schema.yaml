@@ -1,0 +1,62 @@
+type: object
+required:
+  - suite_id
+  - target_package_id
+  - tested_claims
+  - declared_fidelity
+  - countertests
+  - explicit_non_claims
+properties:
+  suite_id:
+    type: string
+    pattern: "^EVAL-CAE-[A-Z0-9_-]+$"
+  target_package_id:
+    type: string
+  tested_claims:
+    type: array
+    items:
+      type: object
+      required:
+        - claim_id
+        - statement
+        - claim_type
+      properties:
+        claim_id:
+          type: string
+        statement:
+          type: string
+        claim_type:
+          type: string
+          enum:
+            - "STRUCTURAL_PERSISTENCE"
+            - "SECURITY_ISOLATION"
+            - "OPERATION_IDEMPOTENCY"
+            - "RECEIPT_LINEAGE"
+            - "ERROR_HANDLING"
+            - "HUMAN_TASTE_CLAIM_PROHIBITED"
+  declared_fidelity:
+    type: string
+    enum:
+      - "E1_STATIC"
+      - "E2_REPOSITORY_FIXTURE"
+      - "E3_STAGING_PERSISTENCE"
+      - "E4_PRODUCTION_RUNTIME"
+  countertests:
+    type: array
+    items:
+      type: object
+      required:
+        - countertest_id
+        - adversary_mode
+        - expected_rejection
+      properties:
+        countertest_id:
+          type: string
+        adversary_mode:
+          type: string
+        expected_rejection:
+          type: string
+  explicit_non_claims:
+    type: array
+    items:
+      type: string

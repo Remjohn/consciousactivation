@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Method Certification Package Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "method_name",
+    "method_version",
+    "certification_status",
+    "certification_date",
+    "mandate_certifications",
+    "operating_level_coverage",
+    "end_to_end_verification_summary",
+    "residual_gaps_acknowledged",
+    "final_certification_verdict"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "method_name": { "type": "string" },
+    "method_version": { "type": "string" },
+    "certification_status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "CERTIFIED_AWAITING_OPERATOR_RATIFICATION", "RATIFIED", "SUPERSEDED"]
+    },
+    "certification_date": { "type": "string" },
+    "mandate_certifications": {
+      "type": "array",
+      "minItems": 12,
+      "items": {
+        "type": "object",
+        "required": ["mandate_id", "title", "operating_levels", "status", "test_count_passed"],
+        "properties": {
+          "mandate_id": { "type": "string", "pattern": "^M[0-9]{2}$" },
+          "title": { "type": "string" },
+          "operating_levels": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string" },
+          "test_count_passed": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "operating_level_coverage": {
+      "type": "array",
+      "minItems": 13,
+      "items": {
+        "type": "object",
+        "required": ["level_index", "level_name", "primary_agent", "verified_artifacts"],
+        "properties": {
+          "level_index": { "type": "string" },
+          "level_name": { "type": "string" },
+          "primary_agent": { "type": "string" },
+          "verified_artifacts": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "end_to_end_verification_summary": {
+      "type": "object",
+      "required": ["slice_name", "trace_verified", "steps_executed", "physical_code_touched"],
+      "properties": {
+        "slice_name": { "type": "string" },
+        "trace_verified": { "type": "boolean" },
+        "steps_executed": { "type": "integer", "minimum": 4 },
+        "physical_code_touched": { "type": "array", "minItems": 3, "items": { "type": "string" } }
+      }
+    },
+    "residual_gaps_acknowledged": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "final_certification_verdict": {
+      "type": "string",
+      "enum": ["METHOD_CERTIFIED_FOR_OPERATOR_RATIFICATION", "CERTIFICATION_WITHHELD"]
+    }
+  }
+}

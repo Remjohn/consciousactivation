@@ -1,0 +1,126 @@
+schema_version: conscious-activations-convergence-remediation/v1
+remediation_date: "2026-07-15"
+source_audit: CONVERGENCE_VERDICT.yaml
+source_audit_release: 1.1.0-rc.3
+source_audit_verdict: FAIL
+current_release: 1.1.0-rc.4
+scope: bounded_remediation_without_full_audit_rerun
+summary:
+  prior_failed_dimensions: 11
+  remediated_pending_fresh_audit: 11
+  unresolved_by_remediation: 0
+  fresh_audit_executed: false
+  formal_verdict_changed: false
+  implementation_or_production_authority_granted: false
+failures:
+  - dimension_id: D12
+    failure: one_exact_compatibility_manifest_artifact_identity
+    prior_finding: CRF-304
+    owning_repository: 03_DELEGATION_PROTOCOL
+    corrective_artifact:
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/compatibility/manifest.json
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+    validation_evidence: both consumers pin compatibility/manifest.json at sha256:51667cd6c346c6794c2b648d0369b6961fc9519fd2d5e52ac03589a2a24d32cd
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D13
+    failure: active_or_governing_prior_release_references
+    prior_findings: [CRF-301, CRF-302, CRF-303]
+    owning_repositories: [CMF_PROGRAM_CONTROL, 01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR]
+    corrective_artifact:
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_REPO_DEPENDENCY_MAP.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/DELEGATION_CONTRACT_PIN.yaml
+    validation_evidence: RC1_RC2_RC3_are_non_active_and_explicitly_classified_as_historical_rejection_records
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D32
+    failure: portable_shared_derivative_lock_inheritance_enforcement
+    prior_finding: CRF-308
+    owning_repository: 03_DELEGATION_PROTOCOL
+    corrective_artifact:
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/contracts/schemas/derivative-lock-inheritance.schema.json
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/WRONG_READING_LOCK_INHERITANCE.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/DERIVATIVE_LOCK_INHERITANCE_MAPPING.yaml
+    validation_evidence: RC4 clean-layout validators 83_of_83; protocol tests 35_of_35; Builder mapping checks pass; VAE integration tests 14_of_14
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D42
+    failure: one_exact_Format02_profile_identifier
+    prior_finding: CRF-306
+    owning_repository: 01_ATOMIC_HARNESS_BUILDER
+    corrective_artifact:
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/FORMAT02_PROFILE_ALIAS_REGISTRY.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/CATEGORY_PROFILE_COMPATIBILITY.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/DELEGATION_RC4_COMPATIBILITY.yaml
+    validation_evidence: canonical_id_format02_minimal_coach_theatre_with_governed_read_only_historical_aliases
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D44
+    failure: Format02_certification_truth
+    prior_finding: CRF-307
+    owning_repository: 01_ATOMIC_HARNESS_BUILDER
+    corrective_artifact:
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/FORMAT02_PROFILE_ALIAS_REGISTRY.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/CATEGORY_PROFILE_COMPATIBILITY.yaml
+      - 02_VISUAL_ASSET_EDITOR/docs/implementation/FORMAT02_RELEASE_PLAN.md
+    validation_evidence: strongest_state_contract_compatible; benchmarked_false; limited_and_full_production_certification_false
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D54
+    failure: semantic_compatibility_mode_negotiation_EVALUATE
+    prior_finding: CRF-305
+    owning_repository: 02_VISUAL_ASSET_EDITOR
+    corrective_artifact:
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/DELEGATION_RC4_COMPATIBILITY.yaml
+      - 02_VISUAL_ASSET_EDITOR/validation/tests/test_delegation_rc4_integration.py
+    validation_evidence: required_EVALUATE_domains_declared; unsupported_profiles_rejected; capability_does_not_confer_certification
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D58
+    failure: historical_release_references_not_confined_or_classified
+    prior_findings: [CRF-301, CRF-302, CRF-303]
+    owning_repositories: [CMF_PROGRAM_CONTROL, 01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR]
+    corrective_artifact:
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/STATUS_TRUTH_RECONCILIATION.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/docs/planning/BUILDER_RC4_DEPENDENCY_SUPERSESSION_ADDENDUM.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/DELEGATION_RC2_COMPATIBILITY.yaml
+    validation_evidence: prior_release_mentions_in_current_control_surfaces_are_explicit_historical_or_migration_rejection_evidence
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D60
+    failure: Builder_current_status_truth
+    prior_finding: CRF-309
+    owning_repository: 01_ATOMIC_HARNESS_BUILDER
+    corrective_artifact:
+      - 01_ATOMIC_HARNESS_BUILDER/PROGRAM_STATUS_EXPORT.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/CURRENT_PROJECT_STATUS.md
+    validation_evidence: Step_3_complete; Step_4_not_started; implementation_readiness_false; RC4_mapping_validation_pass
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D61
+    failure: VAE_current_status_truth
+    prior_finding: CRF-310
+    owning_repository: 02_VISUAL_ASSET_EDITOR
+    corrective_artifact:
+      - 02_VISUAL_ASSET_EDITOR/PROGRAM_STATUS_EXPORT.yaml
+      - 02_VISUAL_ASSET_EDITOR/CURRENT_PROJECT_STATUS.md
+      - 02_VISUAL_ASSET_EDITOR/validation/DELEGATION_RC4_CONSUMER_VALIDATION_2026-07-15.md
+    validation_evidence: RC4_adopted; evaluator_specified_not_certified; Stage_5_not_started; readiness_blockers_open
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D62
+    failure: Delegation_current_status_truth
+    prior_finding: CRF-311
+    owning_repository: 03_DELEGATION_PROTOCOL
+    corrective_artifact:
+      - 03_DELEGATION_PROTOCOL/PROGRAM_STATUS_EXPORT.yaml
+      - CMF_PROGRAM_CONTROL/02_CROSS_REPO_CONTRACTS/delegation-contracts/CURRENT_BASELINE_STATUS.yaml
+    validation_evidence: RC4_local_validation_PASS_118_tests; feature_development_frozen; signing_and_publication_pending; production_authorization_false
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+  - dimension_id: D63
+    failure: Program_Control_registry_truth
+    prior_finding: CRF-312
+    owning_repository: CMF_PROGRAM_CONTROL
+    corrective_artifact:
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/REPOSITORY_STAGE_REGISTRY.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_REPO_DEPENDENCY_MAP.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/HUMAN_DECISION_QUEUE.yaml
+    validation_evidence: one_current_RC4_release_and_truthful_Builder_VAE_Delegation_stage_states
+    final_status: REMEDIATED_PENDING_FRESH_AUDIT
+gate:
+  prerequisites_for_fresh_read_only_audit: satisfied
+  fresh_audit_required_to_change_formal_verdict: true
+  remaining_operational_readiness_matters_are_not_convergence_remediation_failures: true

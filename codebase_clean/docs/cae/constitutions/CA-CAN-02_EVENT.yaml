@@ -1,0 +1,235 @@
+# Object Constitution: Event
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-EVT-002"
+canonical_name: "Event"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Event"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:59, CA-STATE-01:77, 15_CAE_POSTGRES_STATE_MODEL.md"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-EVT-002"
+    canonical_name: "Event"
+    common_aliases: ["Domain Event", "System Event", "Event Sourcing Record"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Event"
+    class_matrix_id: 5
+    class_rationale: "Event represents an immutable factual occurrence emitted by a domain service during transactional execution, serving as the substrate for asynchronous event-driven reactions."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Stores operational domain events emitted within tenant workspaces for downstream projection and notification."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Event Distribution & Asynchronous Integration"
+    primary_purpose: "Enables event-driven architecture, read-model projections, and inter-service notifications across the Conscious Activation Engine."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational domain broadcast event"
+    differentia: "Distinguished from InterviewTurn (conversational speech turn) and StateTransition (specific aggregate version journal) by representing a general-purpose domain milestone published to the system event bus."
+    function: "Stores event_type, workspace_id, aggregate_id, command_id, event_payload, and timestamp."
+    boundary: "Must not be mutated once written; events cannot cross tenant workspaces without explicit operator bridge; must be append-only."
+    normative_definition: >
+      Event is an immutable operational record of a significant domain occurrence emitted by a CAE service in response
+      to a Command or state change. It drives asynchronous event handlers, notifications, and analytics projections.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable domain event record in `cae.event`."
+      - "The broadcast payload consumed by asynchronous subscribers and projections."
+      - "A workspace-scoped event attributing the emitting aggregate and command."
+    what_it_is_not:
+      - "An InterviewTurn (InterviewTurn is dialogue text/audio data within an interview session; Event is a system architecture milestone)."
+      - "A Command (Command is the imperative request; Event is the resulting broadcast fact)."
+      - "A StateAggregate (StateAggregate is mutable current state; Event is an immutable historical message)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "InterviewTurn (CA-EVT-003)"
+        distinction: "InterviewTurn records conversational dialogue between humans/agents; Event records system-level domain milestones (e.g., 'media.verified', 'evidence.captured')."
+      - neighbor: "StateTransition (CA-EVT-004)"
+        distinction: "StateTransition is the specific atomic aggregate version increment journal; Event is the domain broadcast for external consumers."
+      - neighbor: "Receipt (CA-REC-001)"
+        distinction: "Receipt proves command completion to the caller; Event notifies the broader system of side effects."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Event Distribution & Messaging"
+    tier: "Domain Event Infrastructure"
+    specialization: "Asynchronous Domain Event Record"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["EMITTED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "event_id"
+        type: "UUID"
+        description: "Globally unique identifier for the event."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "event_type"
+        type: "STRING"
+        description: "Dot-notated domain event type (e.g., 'media.asset.verified', 'evidence.captured')."
+      - name: "aggregate_id"
+        type: "UUID"
+        description: "Identifier of the source domain aggregate."
+      - name: "command_id"
+        type: "UUID"
+        description: "Triggering Command identifier."
+      - name: "payload"
+        type: "JSONB"
+        description: "Structured event payload."
+      - name: "emitted_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when event was published."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "Event is strictly immutable upon emission; it undergoes no state transitions."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "domain.event.emitted"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Domain service or Transactional Operation Adapter during command execution"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-EVT-001: Event records in `cae.event` are strictly append-only."
+      - "INV-EVT-002: Every Event MUST be associated with a valid workspace_id and aggregate_id."
+      - "INV-EVT-003: event_type MUST follow standard dot-notation naming conventions."
+      - "INV-EVT-004: Event payloads MUST NOT contain unencrypted tenant secrets or unconsented PII."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:59, CA-STATE-01:77, 15_CAE_POSTGRES_STATE_MODEL.md"
+    runtime_representation: "cae.event (PostgreSQL relational, append-only)"
+    promotion_authority: "Domain Event Publisher & Message Broker"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "publish_domain_event"
+        parameters: ["workspace_id", "event_type", "aggregate_id", "command_id", "payload"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT update or delete committed events from `cae.event`."
+      - "MUST NOT publish events across workspaces without an authorized tenant bridge."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify event_id, workspace_id, aggregate_id, command_id are valid UUIDv4."
+      - "Verify event_type is a valid dot-notated string."
+    semantic_validators:
+      - "Verify emitting aggregate exists in the specified workspace."
+      - "Verify payload matches event_type schema definition."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_EVENT_INVALID_TYPE"
+        http_status: 400
+        description: "Unknown or unregistered event_type."
+      - code: "ERR_EVENT_MUTATION_PROHIBITED"
+        http_status: 403
+        description: "Attempted modification of immutable domain event."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.event"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage (Append-only)"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Event Bus Dispatcher"
+      - "Analytics & Read Model Projection Workers"
+      - "Notification Service"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What business events have occurred in this workspace?"
+      - "Which event notified downstream consumers of this evidence capture?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-EVT-001"
+        description: "Domain event emitted upon successful media asset verification."
+        attributes:
+          event_id: "140e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          event_type: "media.asset.verified"
+          aggregate_id: "aa0e8400-e29b-41d4-a716-446655440001"
+          command_id: "120e8400-e29b-41d4-a716-446655440001"
+          payload:
+            asset_id: "aa0e8400-e29b-41d4-a716-446655440001"
+            byte_size: 1548200
+            sha256: "338872f2e564d78c3397984ecfb3454b8d7122cf2cb9ab8f8faef1c6da47af46"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-EVT-001"
+        description: "Near-miss: Emitting an Event where payload contains an unverified, speculative model claim and setting event_type: 'evidence.verified.absolute_truth'."
+        rejection_reason: "Violates semantic purity and epistemic boundaries; events must reflect verified system facts, not exaggerated claims."
+      - id: "NEG-EVT-002"
+        description: "Near-miss: Attempting to store conversational interview dialogue lines as generic `cae.event` records instead of `InterviewTurn` entities."
+        rejection_reason: "Violates class and domain separation (COL-MAP-004); interview transcript dialogue belongs in `cae.interview_turn`, not system event bus."
+      - id: "NEG-EVT-003"
+        description: "Generic violation: Updating payload of an existing event in cae.event via SQL UPDATE."
+        rejection_reason: "Violates INV-EVT-001; events are strictly immutable."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for Event domain broadcast with 26 dimensions."

@@ -1,0 +1,49 @@
+schema_version: conscious-activations-spec-workflow-reconciliation/v1
+status: INITIALIZED_QUEUE_FROZEN_READY_FOR_PROMPT_03
+stages:
+- stage: WRITE
+  skill: CA_TECH_SPEC_WRITE_SKILL
+  input_state:
+  - QUEUED_FOR_WRITE
+  output_state: WRITTEN_PENDING_AUDIT
+  actor_separation: writer_identity_recorded
+- stage: INDEPENDENT_AUDIT
+  skill: CA_TECH_SPEC_AUDIT_SKILL
+  output_state: REVISION_REQUIRED_OR_ARCHITECT_DECISION_REQUIRED_OR_READY_FOR_REAUDIT
+  actor_separation: auditor_not_writer
+- stage: REVISE
+  skill: CA_TECH_SPEC_REVISE_SKILL
+  output_state: REVISED_PENDING_REAUDIT
+  actor_separation: revision_only_from_findings
+- stage: INDEPENDENT_REAUDIT
+  skill: CA_TECH_SPEC_REAUDIT_ACCEPT_SKILL
+  output_state: ACCEPTED_FOR_BUILD_WITH_HASH_OR_FURTHER_BLOCKER
+  actor_separation: reauditor_not_reviser
+- stage: ONE_SPEC_BUILD
+  skill: CA_TECH_SPEC_BUILD_SKILL
+  output_state: BUILT_OR_BLOCKED
+  actor_separation: build_never_revises_spec
+  authorized_now: false
+receipt_required_for_every_transition: true
+accepted_hashes_locked: 0
+development_capsules_created: 0
+contract_release_bytes_created: 0
+vae_stage5_started: false
+format02_source_reconciliation:
+  migration_audit_recommendation: historical predecessor recommendation for a Format 02 compatibility slice
+  exact_source_crosswalk_entry: SRC-LEG-032 migration evidence only
+  higher_current_candidate_rule: Format 02 deferred pending current Atomic Harness and independent validation
+  active_prompt03_format02_writer: false
+  TS_REL_001_role: governance of deferral and historical evidence isolation only
+  reference_slice_selected: imported interview through format07_direct_coaching_a_roll, SuperVisual, and animation package
+  result: PASS_NO_ACTIVE_FORMAT02
+source_disposition_law:
+  ledger: SOURCE_DISPOSITION_LEDGER.yaml
+  gap_registry: SOURCE_GAP_NOTICE.yaml
+  blocking_classes:
+  - REQUIRED_AUTHORITY
+  - REQUIRED_CURRENT_IMPLEMENTATION
+  - REQUIRED_UNIQUE_EVIDENCE
+  optional_or_deferred_missing_blocks: false
+  unresolved_required_source_paths: 0
+  SRC_EXT_001: DEFERRED_REFERENCE_NON_BLOCKING_NO_ATTRIBUTED_CLAIMS

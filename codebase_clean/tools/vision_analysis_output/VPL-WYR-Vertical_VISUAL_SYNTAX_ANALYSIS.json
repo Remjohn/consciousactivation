@@ -1,0 +1,125 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "VPL-WYR-Vertical",
+  "source_zip": "VPL-WYR-Vertical.zip",
+  "source_zip_sha256": "504f1edefd948bdfc9c742400778dc00e24f1daae977091a908b8ffd06645b04",
+  "vision_model_used": "google/gemini-2.5-flash",
+  "base_url": "https://openrouter.ai/api/v1",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 1,
+    "unique_layout_count": 1,
+    "duplicate_slides_collapsed": 0,
+    "unique_slide_roles": [
+      {
+        "slide_role": "comparison_beat",
+        "first_slide_index": 1,
+        "layout_fingerprint": "header_text + comparison_pair_image + two_column_text_block + footer_badge",
+        "container_zones": [
+          "header_zone",
+          "hero_zone",
+          "footer_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "large, bold, white text with yellow highlight on 'DAD'"
+          },
+          {
+            "primitive_type": "comparison_pair",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "two male figures with 'VS' overlay, each with a text badge"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "text badge 'THE BUSY DAD' on left figure"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "text badge 'THE BALANCED DAD' on right figure"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "footer_zone",
+            "dominant": false,
+            "notes": "two-column list of attributes, left column yellow text, right column white text"
+          },
+          {
+            "primitive_type": "badge",
+            "zone": "footer_zone",
+            "dominant": false,
+            "notes": "circular 'WJ' logo"
+          }
+        ],
+        "reading_order": "top-to-bottom: header, then left-to-right for the comparison image and its labels, then left-to-right for the two-column text, then the footer badge.",
+        "anchor_elements": [
+          "badge"
+        ]
+      }
+    ]
+  },
+  "all_slide_analyses": [
+    {
+      "slide_index": 1,
+      "layout_fingerprint": "header_text + comparison_pair_image + two_column_text_block + footer_badge",
+      "container_zones": [
+        "header_zone",
+        "hero_zone",
+        "footer_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "large, bold, white text with yellow highlight on 'DAD'"
+        },
+        {
+          "primitive_type": "comparison_pair",
+          "zone": "hero_zone",
+          "dominant": true,
+          "notes": "two male figures with 'VS' overlay, each with a text badge"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": false,
+          "notes": "text badge 'THE BUSY DAD' on left figure"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": false,
+          "notes": "text badge 'THE BALANCED DAD' on right figure"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "footer_zone",
+          "dominant": false,
+          "notes": "two-column list of attributes, left column yellow text, right column white text"
+        },
+        {
+          "primitive_type": "badge",
+          "zone": "footer_zone",
+          "dominant": false,
+          "notes": "circular 'WJ' logo"
+        }
+      ],
+      "reading_order": "top-to-bottom: header, then left-to-right for the comparison image and its labels, then left-to-right for the two-column text, then the footer badge.",
+      "anchor_elements": [
+        "badge"
+      ],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "comparison_beat",
+      "source_filename": "WILLIAM's POLLS.png"
+    }
+  ],
+  "stage_2_instructions": "Feed this file together with the harness drill markdown files (ONE_HARNESS_BUILD_PROMPT.md, DRILL_ME_FORMAT.md, HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md) to the manifest authoring model (GLM 5.2 or equivalent non-vision model). The authoring model must produce manifest.json using ONLY deduplication_summary.unique_slide_roles as its visual syntax source — it must NOT re-derive layout from raw images."
+}

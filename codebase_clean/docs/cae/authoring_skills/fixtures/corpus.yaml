@@ -1,0 +1,116 @@
+# CAE Authoring Controls — Shared Deceptive Fixture Corpus
+# Mandate: Phase 03 / CA-AUTH-01 Section 6
+
+fixtures:
+  - id: "FIX-01-UNCLASSIFIED-WORKSPACE"
+    description: "Unclassified Workspace candidate missing explicit primary class and authority axes."
+    target_skill: "cae_scope_authority_mapper"
+    input:
+      candidate_object_name: "Workspace_Ambiguous"
+      proposed_plane: "OPERATIONAL_PLANE"
+      proposed_scope_class: "WORKSPACE_SCOPED"
+      candidate_primary_class: ""
+      definition_source_ref: ""
+      target_runtime_ref: "cae.workspace"
+      promotion_authority_role: ""
+      proposed_parent_chain: []
+    expected_verdict: "BLOCKED"
+    expected_status_code: "FAIL_PENDING_DECISION"
+
+  - id: "FIX-02-FALSE-GUEST-AS-TENANT"
+    description: "False Guest-as-tenant candidate asserting global tenancy and cross-workspace access."
+    target_skill: "cae_scope_authority_mapper"
+    input:
+      candidate_object_name: "Guest_GlobalTenancy"
+      proposed_plane: "OPERATIONAL_PLANE"
+      proposed_scope_class: "GLOBAL_CANONICAL"
+      candidate_primary_class: "Entity"
+      definition_source_ref: "Legacy Global User Spec"
+      target_runtime_ref: "cae.global_user"
+      promotion_authority_role: "Global Admin"
+      proposed_parent_chain: []
+    expected_verdict: "CONTRACT_CONFLICT"
+    expected_status_code: "FAIL_CONTRACT_CONFLICT"
+
+  - id: "FIX-03-POLICY-GRANT-CONFLATION"
+    description: "Policy/Grant conflation combining canonical policy rules with operational login grants."
+    target_skill: "cae_constitution_collision_reviewer"
+    input:
+      candidate_canonical_id: "CA-CONFL-001"
+      candidate_object_name: "UnifiedOperatorAccess"
+      declared_primary_class: "Entity"
+      declared_plane: "OPERATIONAL_PLANE"
+      declared_scope_class: "OPERATOR_AUDIT"
+      candidate_constitution_text: "Combines platform-wide operator authorization rules with transient JWT session grants."
+    expected_verdict: "SPLIT_REQUIRED"
+    expected_status_code: "SPLIT_REQUIRED"
+
+  - id: "FIX-04-HARNESSTEMPLATE-RUN-CONFLATION"
+    description: "HarnessTemplate/Run conflation merging immutable YAML runbook template with mutable execution state."
+    target_skill: "cae_constitution_collision_reviewer"
+    input:
+      candidate_canonical_id: "CA-CONFL-002"
+      candidate_object_name: "MonolithicHarness"
+      declared_primary_class: "Entity"
+      declared_plane: "OPERATIONAL_PLANE"
+      declared_scope_class: "ENGAGEMENT_SCOPED"
+      candidate_constitution_text: "Stores immutable step definitions and mutable step execution status in a single database row."
+    expected_verdict: "SPLIT_REQUIRED"
+    expected_status_code: "SPLIT_REQUIRED"
+
+  - id: "FIX-05-MEDIAASSET-EVIDENCE-BYTES-CONFLATION"
+    description: "MediaAsset/evidence bytes conflation storing raw binary audio chunks inside PostgreSQL row."
+    target_skill: "cae_constitution_collision_reviewer"
+    input:
+      candidate_canonical_id: "CA-CONFL-003"
+      candidate_object_name: "InlinedMediaAsset"
+      declared_primary_class: "Entity"
+      declared_plane: "OPERATIONAL_PLANE"
+      declared_scope_class: "WORKSPACE_SCOPED"
+      candidate_constitution_text: "Stores binary byte stream directly in BYTEA column instead of private object storage."
+    expected_verdict: "SPLIT_REQUIRED"
+    expected_status_code: "SPLIT_REQUIRED"
+
+  - id: "FIX-06-REGISTRY-SOURCE-VS-PROJECTION-MISMATCH"
+    description: "Claiming PostgreSQL table is canonical definition source for inherited SDA/SFL registry."
+    target_skill: "cae_scope_authority_mapper"
+    input:
+      candidate_object_name: "SDA_Registry_ProjectionClaim"
+      proposed_plane: "CANONICAL_PLANE"
+      proposed_scope_class: "GLOBAL_CANONICAL"
+      candidate_primary_class: "Canonical Ontology"
+      definition_source_ref: "PostgreSQL table cae.registry_item"
+      target_runtime_ref: "cae.registry_item"
+      promotion_authority_role: "Database Admin"
+      proposed_parent_chain: []
+    expected_verdict: "CONTRACT_CONFLICT"
+    expected_status_code: "FAIL_CONTRACT_CONFLICT"
+
+  - id: "FIX-07-REQUIREMENT-WITH-NO-TRANSITION"
+    description: "Stateful requirement that fails to specify any state transitions or operations."
+    target_skill: "cae_requirement_traceability_author"
+    input:
+      requirement_id: "FR-CAE-BAD-001"
+      title: "Stateful Entity Update Without Transition"
+      source_constitution_id: "CA-ENT-001"
+      collision_review_receipt_id: "RCP-REV-001"
+      functional_slice: "State Management"
+      operations_and_transitions: []
+      verification_fidelity: "E1_STATIC"
+      false_proof_countertests: []
+    expected_verdict: "REJECTED_INCOMPLETE_TRACEABILITY"
+    expected_status_code: "FAIL_INCOMPLETE_TRACEABILITY"
+
+  - id: "FIX-08-MIGRATION-CONTRACT-AUTHORIZING-BACKFILL"
+    description: "Migration contract attempting to authorize and execute live database backfill."
+    target_skill: "cae_state_migration_contract_author"
+    input:
+      contract_id: "MC-CAE-BAD-001"
+      aggregate_name: "InterviewSession"
+      legacy_authority_source: { store_type: "SQLite", write_boundary: "interview" }
+      target_postgres_schema: { table_name: "cae.interview_session", rls_boundary_column: "workspace_id" }
+      planned_stages: ["LEGACY_ONLY", "POSTGRES_AUTHORITATIVE"]
+      data_disposition_plan: []
+      execution_action_permitted: true
+    expected_verdict: "PROHIBITED_ACTION_MIGRATION_EXECUTION_FORBIDDEN"
+    expected_status_code: "FAIL_EXECUTION_ATTEMPT_DETECTED"

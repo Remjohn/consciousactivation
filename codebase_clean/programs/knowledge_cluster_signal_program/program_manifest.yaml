@@ -1,0 +1,73 @@
+program:
+  id: "knowledge_cluster_signal_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Synthesizes canonical knowledge into semantic clusters, detects temporal research signals, and projects context against guest identity DNA and audience cognitive tensions."
+  operator_entrypoint: "run_knowledge_cluster_signal"
+  inputs:
+    - "knowledge_corpus"
+    - "guest_dna"
+    - "audience_tensions"
+  preconditions:
+    - "workspace_active"
+  outputs:
+    - "knowledge_clusters"
+    - "research_signals"
+    - "context_projections"
+  artifacts:
+    - "cluster_signal_projections"
+  harness: "KNOWLEDGE_CLUSTER_HARNESS_V1"
+  state_machine: "KNOWLEDGE_CLUSTER_SIGNAL_STATE_MACHINE_V1"
+  lanes:
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+    - "COMMANDER"
+  agents:
+    - "KnowledgeClusterFormationAgent"
+    - "ResearchSignalDetectionAgent"
+    - "ContextOpportunityProjectionAgent"
+    - "ProgramGovernanceCommanderAgent"
+  subagents: []
+  skills:
+    - name: "knowledge_clusterer"
+      path: "skills/knowledge_clusterer/SKILL.md"
+      version: "1.0.0"
+    - name: "research_signal_detector"
+      path: "skills/research_signal_detector/SKILL.md"
+      version: "1.0.0"
+    - name: "context_opportunity_projector"
+      path: "skills/context_opportunity_projector/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.research.form_clusters@1.0.0"
+    - "cae.research.detect_signals@1.0.0"
+    - "cae.research.project_context@1.0.0"
+    - "cae.research.rebuild_context_projections@1.0.0"
+    - "cae.research.commit_context_projections@1.0.0"
+    - "cae.research.repair_signals@1.0.0"
+    - "cae.research.quarantine_program@1.0.0"
+  tools:
+    - "vector_search"
+    - "relational_query"
+  connections:
+    - "supabase_postgres"
+  hooks:
+    - "anti_tamper_check"
+    - "provenance_check"
+  extensions: []
+  evals:
+    - "cluster_cohesion_eval"
+    - "signal_novelty_eval"
+  operator_gates:
+    - "projection_commitment_gate"
+  recovery:
+    - "repair_signals"
+    - "quarantine_program"
+  receipts:
+    - "knowledge_cluster_receipt"
+  dependencies:
+    - program_id: "research_source_program"
+      version_requirement: ">=1.0.0"
+    - program_id: "knowledge_compiler_program"
+      version_requirement: ">=1.0.0"

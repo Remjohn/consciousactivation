@@ -1,0 +1,70 @@
+{
+  "mandate": "M0082",
+  "status": "IMPLEMENTED_OPERATOR_REVIEW_REQUIRED",
+  "evidence_classification": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "DOCUMENT",
+    "TEST",
+    "HYPOTHESIS",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "authority_inputs": {
+    "required_paths_missing": [
+      "docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md"
+    ],
+    "constitutional_equivalents_reviewed": [
+      "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    ],
+    "brownfield_refs_reviewed": [
+      "docs/cae/CAE_Production_Reference/M0078_SHOT_GRAMMAR_AND_ASSISTANT_REFERENCE.md",
+      "docs/cae/CAE_Production_Reference/M0078_shot_grammar_reference.yaml",
+      "docs/cae/specs/M0079/AGENT_HANDOFF.md",
+      "docs/cae/specs/M0080/AGENT_HANDOFF.md",
+      "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+      "packages/ca_runtime/src/ca_runtime/storyboard_programs.py"
+    ],
+    "remote_authority_pack_paths": [
+      "https://github.com/Remjohn/consciousactivation/blob/main/docs/AUTHORITY_PACK/AUTHORITY_PACK_MANIFEST.md",
+      "https://github.com/Remjohn/consciousactivation/blob/main/docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+      "https://github.com/Remjohn/consciousactivation/blob/main/docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md",
+      "https://github.com/Remjohn/consciousactivation/blob/main/docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md",
+      "https://github.com/Remjohn/consciousactivation/blob/main/docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md"
+    ]
+  },
+  "implementation": {
+    "runtime": "packages/ca_runtime/src/ca_runtime/editorial_expression_calculus.py",
+    "exports": "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests": "tests/cae/test_m0082_editorial_expression_calculus.py",
+    "spec": "docs/cae/specs/M0082/M0082_EDITORIAL_EXPRESSION_CALCULUS.md",
+    "handoff": "docs/cae/specs/M0082/AGENT_HANDOFF.md",
+    "scope": "pure deterministic calculator; no persistence/state/runtime mutation"
+  },
+  "verification": [
+    {
+      "evidence_class": "TEST",
+      "command": "PYTHONPATH=packages/ca_contracts/src pytest -p no:asyncio -q tests/cae/test_m0082_editorial_expression_calculus.py",
+      "observed_result": "8 passed in 0.17s",
+      "proves": "Happy path, deterministic replay, format/scene profile selection, source-quality/evidence rejection, unsupported profile rejection, a contrastive grammar change, and all 24 declared format/scene profile bounds."
+    }
+  ],
+  "environment_limitations": [
+    "Normal ca_runtime package import was blocked by absent pre-existing dependencies psycopg and cmf_builder in the sandbox.",
+    "The uploaded archive has no .git metadata; original archive commit SHA is not recoverable from the archive.",
+    "Native external visual runtime reachability was not attempted or claimed.",
+    "Perceptual/semantic visual correctness and operator approval remain open.",
+    "The Authority Pack was verified directly in the live GitHub main branch; its files are external to the supplied archive snapshot."
+  ],
+  "external_sources": {
+    "adopted": false,
+    "copied": false,
+    "runtime_invoked": false,
+    "registry_source_used": "Historical M0078 CAE reference only; no external code or provider behavior copied."
+  },
+  "operator_decision_requested": "APPROVE | APPROVE-WITH-LIMITATIONS | REJECT",
+  "implementation_commit_sha": "963d0c7ac7267d552f8c542c724c850722a66119",
+  "archive_sha256": "7f962c86b13171cc25bec698d6974d412981cef502e858717b5069e50f1810d8",
+  "snapshot_baseline_commit_sha": "48ef25d9583e7a7c7436a25666e2d0daf528b100",
+  "prior_implementation_commit_sha": "c568978c8936e77daf7416a1df2361283fd108c7"
+}

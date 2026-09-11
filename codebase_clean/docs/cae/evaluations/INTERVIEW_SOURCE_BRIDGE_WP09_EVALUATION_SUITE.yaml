@@ -1,0 +1,99 @@
+suite_id: cae.interview_source_bridge.wp09
+suite_version: 1.0.0
+subject: CAE-BRIDGE-001 read-only Interview Expression source bridge
+scope: >
+  One existing Interview Expression source-package path into the isolated CAE
+  staging slice. No existing service write authority, API route, or production
+  state authority is changed.
+environment:
+  required: E2_REPOSITORY_INTEGRATED
+  actual: E2_REPOSITORY_INTEGRATED_WITH_E3_STAGING_TARGET
+  identity: Interview Expression SQLite repository fixture, matching local-media layout, private Supabase Storage, and staging PostgreSQL
+  persistence: force-rolled-back CAE fixture; disposable Interview SQLite/media fixture; temporary Storage object deleted
+tests:
+  - test_id: WP09-INT-001
+    claim_id: CAE-BRIDGE-001.verified-interview-source-registration
+    class: INTEGRATION
+    subject: InterviewExpressionSourceBridge.bridge_source_package
+    preconditions: [legacy_source_package_admitted, local_media_present, CAE_workspace_project_and_bridge_actor_present]
+    fixture_source: real InterviewExpressionApplication source admission in disposable SQLite
+    required_environment_fidelity: E2_REPOSITORY_INTEGRATED
+    actual_environment_fidelity: E2_REPOSITORY_INTEGRATED_WITH_E3_STAGING_TARGET
+    execution_path: InterviewExpressionApplication.source_packages.admit -> InterviewExpressionSourceBridge -> FirstSliceSemanticOperations.register_verified_interview_source
+    assertions: [legacy_package_hash_preserved, local_byte_hash_matches_admitted_asset, copied_storage_object_registered_as_verified, bridge_receipt_contains_upstream_ref]
+    expected_failure_mode: missing or inconsistent legacy package/media provenance
+    reward_hacking_scenario: create a CAE VERIFIED asset using only claimed metadata rather than bytes and immutable legacy package identity
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP09-RH-001
+    claim_id: CAE-BRIDGE-001.verified-interview-source-registration
+    class: REWARD_HACK
+    subject: legacy package integrity check
+    preconditions: [legacy_source_package_admitted]
+    fixture_source: canonical package payload with a changed field and unchanged source hash
+    required_environment_fidelity: E2_REPOSITORY_INTEGRATED
+    actual_environment_fidelity: E2_REPOSITORY_INTEGRATED_WITH_E3_STAGING_TARGET
+    execution_path: InterviewExpressionSourceBridge._validate_legacy_source
+    assertions: [tampered_package_rejected, no_CAE_transition]
+    expected_failure_mode: payload hash mismatch
+    reward_hacking_scenario: retain a valid package reference while altering its claimed workspace/project content
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP09-RH-002
+    claim_id: CAE-BRIDGE-001.verified-interview-source-registration
+    class: REWARD_HACK
+    subject: local media verification
+    preconditions: [legacy_source_package_admitted, source_file_present]
+    fixture_source: local media bytes modified after legacy admission
+    required_environment_fidelity: E2_REPOSITORY_INTEGRATED
+    actual_environment_fidelity: E2_REPOSITORY_INTEGRATED_WITH_E3_STAGING_TARGET
+    execution_path: InterviewExpressionSourceBridge.bridge_source_package
+    assertions: [local_media_tamper_rejected, no_CAE_transition]
+    expected_failure_mode: SHA-256 or byte-count disagreement
+    reward_hacking_scenario: use the logical URI and earlier admitted hash while bytes at the source changed
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP09-STATE-001
+    claim_id: CAE-BRIDGE-001.verified-interview-source-registration
+    class: STATE
+    subject: bridge idempotency and source transition
+    preconditions: [valid_legacy_source, verified_storage_copy]
+    fixture_source: repeated bridge request with same immutable legacy source and idempotency key
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: FirstSliceSemanticOperations.register_verified_interview_source
+    assertions: [same_receipt_replayed, source_aggregate_is_verified_at_version_1, one_bridge_command_and_receipt]
+    expected_failure_mode: duplicate write or drifted replay
+    reward_hacking_scenario: create multiple verified CAE sources from one legacy source by replaying a request
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP09-INT-002
+    claim_id: CAE-BRIDGE-001.evidence-capture-compatibility
+    class: INTEGRATION
+    subject: registered CAE source package
+    preconditions: [bridge_registration_accepted]
+    fixture_source: result of WP09-INT-001
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: FirstSliceSemanticOperations.capture_evidence
+    assertions: [typed_capture_accepted, source_is_verified, bridge_and_capture_have_receipts]
+    expected_failure_mode: source unavailable to the next authorized operation
+    reward_hacking_scenario: set a verified state that cannot actually satisfy the existing capture operation
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+known_limitations:
+  - The legacy source is a disposable repository fixture, not an operator's live source package.
+  - The bridge reads the existing local-media layout directly; no existing API route invokes it.
+  - Copying a source proves byte/provenance continuity, not human truth, semantic quality, derivative eligibility, or publication authority.
+  - Existing Interview Expression SQLite remains its own current runtime authority until a later cutover package is approved and proven.
+promotion_status: IMPLEMENTED_PENDING_VERIFICATION

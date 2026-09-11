@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Research Source Schema",
+  "type": "object",
+  "required": [
+    "source_id",
+    "path_or_url",
+    "title",
+    "source_class",
+    "lineage",
+    "relevance",
+    "authority",
+    "operating_level",
+    "status"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^SRC-[0-9]{3}$"
+    },
+    "path_or_url": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "source_class": {
+      "type": "string",
+      "enum": [
+        "CANONICAL_SPEC",
+        "EDITORIAL_MATRIX",
+        "BROWNFIELD_MAP",
+        "CONSTITUTION",
+        "PROGRAM_MANIFEST",
+        "RUNTIME_CODE",
+        "HISTORICAL_ARCHIVE",
+        "INTEL_LINEAGE",
+        "TRANSCRIPT",
+        "REFERENCE_METHOD"
+      ]
+    },
+    "lineage": {
+      "type": "string",
+      "enum": [
+        "CAE_CANON",
+        "CCP_LINEAGE",
+        "CMF_LINEAGE",
+        "CCF_LINEAGE",
+        "ATOMIC_HARNESS",
+        "VISUAL_SYNTAX",
+        "BMAD_UPSTREAM",
+        "EXTERNAL_METHOD"
+      ]
+    },
+    "contributor": {
+      "type": "string"
+    },
+    "relevance": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "authority": {
+      "type": "string",
+      "enum": [
+        "OPERATOR_DECISION",
+        "CURRENT",
+        "HISTORICAL",
+        "TRANSCRIPT",
+        "REFERENCE"
+      ]
+    },
+    "operating_level": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "KNOWN",
+        "INHERITED",
+        "VERIFIED",
+        "PROPOSED",
+        "INFERRED",
+        "MISSING",
+        "CONTRADICTED",
+        "DEPRECATED"
+      ]
+    },
+    "why_it_matters": {
+      "type": "string"
+    },
+    "read_for": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "influenced_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

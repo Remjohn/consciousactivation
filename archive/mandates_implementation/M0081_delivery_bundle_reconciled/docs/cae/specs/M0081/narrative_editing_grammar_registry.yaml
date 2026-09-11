@@ -1,0 +1,220 @@
+grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+version: 1.0.0
+authority_boundary: Narrative Editing Grammar constrains sequence and relational meaning.
+  It does not contain effect recipes, geometry, provider parameters, generation commands,
+  or semantic-authority replacement.
+entries:
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: WITHHOLD
+  purpose: Delay a decisive relation so a later beat can reorganize the viewer's expectation.
+  relational_pattern: establish_context_without_decisive_resolution -> later_reframe
+  allowed_scene_contexts:
+  - OPENING
+  - ORIENTATION
+  - SETUP
+  - TENSION
+  - BRIDGE
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes:
+  - REVEAL
+  - RESOLVE
+  min_relation_targets: 0
+  min_evidence_refs: 0
+  false_proof_conditions:
+  - A scene that simply omits information but has no later reframe is not a valid
+    WITHHOLD.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: REVEAL
+  purpose: Expose a previously constrained or incomplete relation so meaning changes
+    through recognition.
+  relational_pattern: prior_withheld_state -> explicit_recognition
+  allowed_scene_contexts:
+  - TURN
+  - EVIDENCE
+  - RESOLUTION
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes:
+  - WITHHOLD
+  requires_later_modes: []
+  min_relation_targets: 0
+  min_evidence_refs: 1
+  false_proof_conditions:
+  - A visually striking reveal with no prior withheld question is not a valid REVEAL.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: FOCUS
+  purpose: Narrow attention from a broader state to one meaning-bearing detail.
+  relational_pattern: broad_context -> discriminating_detail
+  allowed_scene_contexts:
+  - OPENING
+  - ORIENTATION
+  - SETUP
+  - EVIDENCE
+  - TURN
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes: []
+  min_relation_targets: 0
+  min_evidence_refs: 1
+  false_proof_conditions:
+  - A tighter crop or stronger emphasis without a changed meaning target is not a
+    valid FOCUS.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: CONTRAST
+  purpose: Place materially different evidence states in relation so the difference
+    itself carries meaning.
+  relational_pattern: state_A <> state_B -> recognition_of_difference
+  allowed_scene_contexts:
+  - TENSION
+  - CONTRAST
+  - TURN
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes: []
+  min_relation_targets: 1
+  min_evidence_refs: 1
+  false_proof_conditions:
+  - Two adjacent but semantically equivalent shots are not a valid CONTRAST.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: PROVE
+  purpose: Connect a claim or proposition to source-grounded evidence that can bear
+    the claim.
+  relational_pattern: claim -> evidence_bearing_instance
+  allowed_scene_contexts:
+  - EVIDENCE
+  - TURN
+  - RESOLUTION
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes: []
+  min_relation_targets: 0
+  min_evidence_refs: 1
+  false_proof_conditions:
+  - An impressive-looking illustrative asset without source evidence is not a valid
+    PROVE.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: EXPLAIN
+  purpose: Make a causal or mechanistic relation legible without inventing upstream
+    meaning.
+  relational_pattern: observed_state -> causal_mechanism
+  allowed_scene_contexts:
+  - ORIENTATION
+  - SETUP
+  - EVIDENCE
+  - TURN
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes: []
+  min_relation_targets: 0
+  min_evidence_refs: 1
+  false_proof_conditions:
+  - A sequence that adds plausible narration but has no evidence for the claimed mechanism
+    is not a valid EXPLAIN.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: CONNECT
+  purpose: Link separated evidence or scenes through an explicit shared meaning relation.
+  relational_pattern: current_state <-> related_state
+  allowed_scene_contexts:
+  - BRIDGE
+  - TENSION
+  - TURN
+  - AFTERMATH
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes: []
+  min_relation_targets: 1
+  min_evidence_refs: 0
+  false_proof_conditions:
+  - A repeated motif with no declared semantic relation is not a valid CONNECT.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: ESCALATE
+  purpose: Increase the consequence, tension, or irreversibility carried by the active
+    narrative relation.
+  relational_pattern: current_stakes < next_stakes
+  allowed_scene_contexts:
+  - TENSION
+  - TURN
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes:
+  - WITHHOLD
+  - CONTRAST
+  - EXPLAIN
+  - PROVE
+  requires_later_modes: []
+  min_relation_targets: 0
+  min_evidence_refs: 0
+  false_proof_conditions:
+  - More motion, scale, or density without higher narrative stakes is not a valid
+    ESCALATE.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: INTERRUPT
+  purpose: Break the established attention path with a meaningful alternate carrier
+    or perspective.
+  relational_pattern: established_pattern -> meaningful_break -> return_or_reframe
+  allowed_scene_contexts:
+  - INTERRUPT
+  - TURN
+  - BRIDGE
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes: []
+  requires_later_modes: []
+  min_relation_targets: 1
+  min_evidence_refs: 0
+  false_proof_conditions:
+  - A pattern break that creates attention but no narrative reorientation is not a
+    valid INTERRUPT.
+- grammar_id: CAE_NARRATIVE_EDITING_GRAMMAR
+  version: 1.0.0
+  mode: RESOLVE
+  purpose: Close an active uncertainty, tension, or prediction gap with a meaningful
+    outcome.
+  relational_pattern: open_relation -> clarified_or_closed_relation
+  allowed_scene_contexts:
+  - TURN
+  - RESOLUTION
+  - AFTERMATH
+  required_meaning_fields:
+  - activative_meaning
+  - editorial_intent
+  requires_prior_modes:
+  - WITHHOLD
+  - REVEAL
+  - CONTRAST
+  - PROVE
+  - EXPLAIN
+  - ESCALATE
+  - INTERRUPT
+  - CONNECT
+  requires_later_modes: []
+  min_relation_targets: 0
+  min_evidence_refs: 1
+  false_proof_conditions:
+  - Ending a sequence with a visual stop or title card without closing the active
+    meaning is not a valid RESOLVE.

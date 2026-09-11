@@ -1,0 +1,7 @@
+--- a/api/main.py
++++ b/api/main.py
+@@ -105,3 +105,4 @@
+ 
+ app.include_router(health.router, prefix="/api")
++app.include_router(__import__("api.routers.air", fromlist=["router"]).router, prefix="/api/air", tags=["air"])
+ # Wave 2 routers registered here as each spec is implemented:

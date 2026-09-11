@@ -1,0 +1,38 @@
+type: object
+required:
+  - receipt_id
+  - skill_id
+  - skill_version
+  - authored_requirement_id
+  - source_constitution_id
+  - execution_timestamp_utc
+  - validator_result
+  - transitions_verified_count
+  - countertests_count
+properties:
+  receipt_id:
+    type: string
+    pattern: "^RCP-TRC-[0-9a-f]{8}$"
+  skill_id:
+    type: string
+    const: "cae_requirement_traceability_author"
+  skill_version:
+    type: string
+  authored_requirement_id:
+    type: string
+  source_constitution_id:
+    type: string
+  execution_timestamp_utc:
+    type: string
+  validator_result:
+    type: string
+    enum:
+      - "PASS_TRACEABILITY_VALIDATED"
+      - "FAIL_ORPHAN_REQUIREMENT"
+      - "FAIL_INCOMPLETE_TRACEABILITY"
+  transitions_verified_count:
+    type: integer
+    minimum: 0
+  countertests_count:
+    type: integer
+    minimum: 0

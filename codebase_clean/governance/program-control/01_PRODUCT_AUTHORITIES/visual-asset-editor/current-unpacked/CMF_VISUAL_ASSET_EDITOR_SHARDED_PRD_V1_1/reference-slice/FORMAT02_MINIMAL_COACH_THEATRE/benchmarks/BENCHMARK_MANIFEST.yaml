@@ -1,0 +1,114 @@
+benchmark_id: VAE-R1-FORMAT02-BENCHMARK
+version: 0.2.0-draft
+status: architecture_seed
+target:
+  category: 2d_character_animation
+  format_profile: format02_minimal_coach_theatre
+  asset_family: human_character_assets
+required_case_families:
+- id: B01
+  name: Representative demands
+  minimum_cases: 12
+  examples:
+  - skeptical reaction
+  - guide explanation
+  - recognition
+  - proof gesture
+  - paired character continuity
+- id: B02
+  name: Behavior goldens
+  minimum_cases: 8
+  examples:
+  - correct identity
+  - correct gaze
+  - correct negative space
+  - composition-ready cutout
+- id: B03
+  name: Known failures
+  minimum_cases: 12
+  examples:
+  - identity drift
+  - contempt instead of skepticism
+  - centered front gaze
+  - hand artifact
+  - text collision
+  - missing attachment point
+- id: B04
+  name: Adversarial demands
+  minimum_cases: 8
+  examples:
+  - contradictory BBOX
+  - prompt injection in notes
+  - unsupported lip sync
+  - budget bypass
+- id: B05
+  name: Mutation tests
+  minimum_cases: 12
+  examples:
+  - gaze reversal
+  - pose change
+  - budget program change
+  - LoRA strength change
+  - workflow version change
+- id: B06
+  name: Repair cases
+  minimum_cases: 10
+  examples:
+  - local deterministic correction
+  - pose conditioning repair
+  - workflow fallback
+  - three-round stop
+- id: B07
+  name: Recurrence contexts
+  minimum_cases: 12
+  examples:
+  - beneficial identity continuity
+  - productive pose variation
+  - redundant reaction
+  - fatiguing same geometry
+  - contradictory reuse
+- id: B08
+  name: Infrastructure recovery
+  minimum_cases: 8
+  examples:
+  - container crash
+  - GPU loss
+  - cache corruption
+  - missing custom node
+  - cloud failover
+- id: B09
+  name: Evaluator calibration
+  minimum_cases: 30
+  examples:
+  - accepted
+  - rejected
+  - borderline
+  - false-positive traps
+  - false-negative traps
+- id: B10
+  name: Compatibility and rollback
+  minimum_cases: 8
+  examples:
+  - old demand version
+  - new optional fields
+  - runtime rollback
+  - workflow rollback
+hard_gates:
+- semantic_non_mutation
+- activative_fidelity
+- composition_effectiveness
+- identity_continuity
+- technical_validity
+- repair_precision
+- evaluator_failure_recall
+- reproducibility
+- runtime_recovery
+release_proof:
+- local_or_self_hosted_gpu_profile
+- cloud_gpu_profile
+- asynchronous_submission_and_events
+- at_least_one_quality_repair
+- immutable_asset_promotion
+- downstream_remotion_composition_consumption
+- one_governed_capability_development_cycle
+protected_release_set_required: true

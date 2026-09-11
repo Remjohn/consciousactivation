@@ -1,0 +1,27 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AHP-005
+spec_path: 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-AHP-005.md
+spec_sha256: e82cd9d256e5882c3891d70bad3e0fe660610202fd6ffcd5fb350950676d3e6f
+phase: PHASE_03
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 6
+  direct_aggregate_test_evidence: 0
+  implementation_without_direct_ac_test: 0
+  unimplemented_or_nonbehavior: 6
+implementation_paths:
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/dependency/graph.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/dependency/invalidation.py
+test_evidence:
+- tests/phase3/test_invalidation_candidates_assurance.py::InvalidationCandidateAssuranceTests::test_descendant_only_invalidation_and_rerun
+- tests/phase3/test_invalidation_candidates_assurance.py::InvalidationCandidateAssuranceTests::test_preserved_descendant_is_rejected
+open_gap_ids:
+- GAP-SPEC-AC-NOT-BEHAVIORAL
+- GAP-FULL-DEPENDENCY-TYPE-COVERAGE
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

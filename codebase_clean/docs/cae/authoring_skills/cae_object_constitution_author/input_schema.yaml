@@ -1,0 +1,55 @@
+type: object
+required:
+  - canonical_id
+  - object_name
+  - validated_scope_mapping
+  - primary_artifact_class
+  - class_grammar_file
+  - dimension_inputs
+properties:
+  canonical_id:
+    type: string
+    pattern: "^CA-[A-Z]+-[0-9]{3}$"
+  object_name:
+    type: string
+  validated_scope_mapping:
+    type: object
+    required:
+      - plane
+      - scope_class
+      - legal_parent_chain
+    properties:
+      plane:
+        type: string
+      scope_class:
+        type: string
+      legal_parent_chain:
+        type: array
+        items:
+          type: string
+  primary_artifact_class:
+    type: string
+    enum:
+      - "Entity"
+      - "Value Object"
+      - "Relation"
+      - "State"
+      - "Event"
+      - "Immutable Evidence"
+      - "Canonical Ontology"
+      - "Structural Grammar"
+      - "Operator / Primitive"
+      - "Policy / Contract"
+      - "Derived Semantic Artifact"
+      - "Execution Packet"
+      - "Adversarial Evaluation Asset"
+      - "Receipt / Evaluation Record"
+      - "Crosswalk / Mapping Object"
+      - "Longitudinal Memory Record"
+      - "Intermediate Representation"
+      - "Experience / Perceptual Function"
+  class_grammar_file:
+    type: string
+  dimension_inputs:
+    type: object
+    description: "Inputs for the 26 dimensions"

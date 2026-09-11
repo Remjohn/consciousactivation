@@ -1,0 +1,205 @@
+{
+  "mandate_id": "CAE-M068",
+  "mandate_title": "Production Readiness and Residual-Gap Certification",
+  "invariant": "INV-CERT-REAL-001",
+  "execution_date": "2026-09-10",
+  "source_version": {
+    "source_type": "uploaded_repository_archive",
+    "archive_name": "codebase_clean(2).zip",
+    "archive_sha256": "ed8dab3cf191a356469fbf749dfa53ef6c6b216123df880e1eab30ee6c50f252",
+    "git_metadata_present": false,
+    "git_commit_sha": null
+  },
+  "certification_state": "BLOCKED",
+  "criteria_count": 10,
+  "summary_counts": {
+    "VERIFIED": 4,
+    "PARTIAL": 5,
+    "BLOCKED": 1,
+    "NOT IN SCOPE": 0
+  },
+  "criteria": [
+    {
+      "criterion_id": "CRIT-M058",
+      "mandate_id": "CAE-M058",
+      "invariant": "FR-OPS-BASELINE",
+      "criterion": "Establish a verified post-M057 product-operability baseline and prove reachable existing Program, Harness, runtime, state, operator and test paths.",
+      "status": "PARTIAL",
+      "evidence_class": [
+        "DOCUMENT",
+        "TEST"
+      ],
+      "evidence_refs": [
+        "docs/cae/Architecture.md",
+        "docs/cae/PROMPT_REFERENCE_BLOCKS.md",
+        "tests/e2e/test_product_e2e_fixture.py",
+        "tests/e2e/test_live_e2e_proof_harness.py"
+      ],
+      "result": "Brownfield architecture and E2E fixture paths are present and executable, but no dedicated M0058 evidence record is preserved in the supplied archive and no full live operational baseline was demonstrated.",
+      "limitation": "Baseline evidence is indirect/documentary rather than a dedicated immutable M0058 execution receipt."
+    },
+    {
+      "criterion_id": "CRIT-M059",
+      "mandate_id": "CAE-M059",
+      "invariant": "FR-OPS-CONTROL",
+      "criterion": "Make campaign/program runtime operable from an explicit product control surface without bypassing authority or state-machine semantics.",
+      "status": "PARTIAL",
+      "evidence_class": [
+        "TEST",
+        "SCHEMA"
+      ],
+      "evidence_refs": [
+        "tests/mandates/test_cae_m059_control_surface.py",
+        "api/routers/campaigns.py",
+        "api/routers/programs.py",
+        "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py"
+      ],
+      "result": "The governed control-surface test and implementation are present, but test collection fails in this sandbox because psycopg is unavailable; no clean executed proof is available for this criterion.",
+      "limitation": "Environment dependency failure prevents execution-level certification of the M0059 control surface."
+    },
+    {
+      "criterion_id": "CRIT-M060",
+      "mandate_id": "CAE-M060",
+      "invariant": "INV-PROOF-REAL-001",
+      "criterion": "Provide a real, repeatable fixture workspace and test harness with clean deterministic setup, seed data, checkpoints and evidence capture, rejecting mock-only testing.",
+      "status": "VERIFIED",
+      "evidence_class": [
+        "TEST",
+        "EXECUTABLE"
+      ],
+      "evidence_refs": [
+        "tests/e2e/test_product_e2e_fixture.py",
+        "tests/e2e/test_live_e2e_proof_harness.py"
+      ],
+      "result": "The dedicated fixture/proof-harness suite executed cleanly: 8 passed.",
+      "limitation": "This verifies the harness controls and fixture behavior, not live external runtime availability."
+    },
+    {
+      "criterion_id": "CRIT-M061",
+      "mandate_id": "CAE-M061",
+      "invariant": "INV-ASSET-DEMAND-001",
+      "criterion": "Establish an executable typed contract from semantic/production Programs to asset resolution, including duration, role, semantic obligation and rights.",
+      "status": "PARTIAL",
+      "evidence_class": [
+        "SCHEMA",
+        "DOCUMENT",
+        "TEST"
+      ],
+      "evidence_refs": [
+        "services/asset-intelligence",
+        "packages/ca_runtime/src/ca_runtime",
+        "docs/cae/PROMPT_REFERENCE_BLOCKS.md"
+      ],
+      "result": "The campaign scope and downstream asset-binding path exist in the repository, and M0064 tests exercise typed production binding, but the supplied archive has no dedicated M0061 certification receipt.",
+      "limitation": "No immutable M0061 execution manifest or dedicated test log is available for this archive."
+    },
+    {
+      "criterion_id": "CRIT-M062",
+      "mandate_id": "CAE-M062",
+      "invariant": "INV-CINEMA-CORPUS-001",
+      "criterion": "Ingest authorized cinematic/archival/owned media into a governed, timestamped, searchable scene corpus with stable boundaries, captions, insert roles and ingest receipts.",
+      "status": "VERIFIED",
+      "evidence_class": [
+        "TEST",
+        "EXECUTABLE"
+      ],
+      "evidence_refs": [
+        "tests/asset_intelligence/test_cinematic_corpus_m062.py"
+      ],
+      "result": "The dedicated M0062 corpus suite executed successfully as part of the focused campaign proof run.",
+      "limitation": "The certification confirms repository behavior covered by tests; it does not establish authorization of any external production corpus absent supplied real-media evidence."
+    },
+    {
+      "criterion_id": "CRIT-M063",
+      "mandate_id": "CAE-M063",
+      "invariant": "INV-RETRIEVAL-001",
+      "criterion": "Implement natural-language retrieval over the governed scene corpus with ranked candidates, timestamps, explanations, semantic roles, rights verification and fail-closed abstention.",
+      "status": "VERIFIED",
+      "evidence_class": [
+        "TEST",
+        "EXECUTABLE"
+      ],
+      "evidence_refs": [
+        "tests/asset_intelligence/test_cinematic_retrieval_m063.py",
+        "services/asset-intelligence/M063_RETRIEVAL_EVALUATION.md"
+      ],
+      "result": "The dedicated M0063 retrieval suite executed successfully as part of the focused campaign proof run.",
+      "limitation": "No real external production media retrieval receipt is present in the archive."
+    },
+    {
+      "criterion_id": "CRIT-M064",
+      "mandate_id": "CAE-M064",
+      "invariant": "INV-ASSET-LINEAGE-001",
+      "criterion": "Bind selected retrieval candidates into CompositionAssetPack while preserving exact identity, intervals, rights and provenance through executable runtime inputs with tamper-evident lineage.",
+      "status": "VERIFIED",
+      "evidence_class": [
+        "TEST",
+        "EXECUTABLE"
+      ],
+      "evidence_refs": [
+        "tests/production_program/test_m0064_asset_selection_binding_lineage.py",
+        "docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json",
+        "docs/cae/evidence/M067/CAE_M067_RESIDUAL_GAP_LEDGER.json"
+      ],
+      "result": "M0064 focused tests passed within the 56-test integrated focused proof run; M0067 adversarial evidence explicitly proves wrong-source-hash and wrong-scene rejections.",
+      "limitation": "Verified lineage controls do not prove a live external retrieval source."
+    },
+    {
+      "criterion_id": "CRIT-M065",
+      "mandate_id": "CAE-M065",
+      "invariant": "INV-VIDEO-RUNTIME-001",
+      "criterion": "Execute the existing video Program against a real OpenChatCut runtime and native timeline, preserving asset identity, source cut ranges and semantic roles with CAE authoritative.",
+      "status": "PARTIAL",
+      "evidence_class": [
+        "TEST",
+        "EXECUTABLE"
+      ],
+      "evidence_refs": [
+        "tests/phase6/test_m065_openchatcut_runtime.py",
+        "docs/cae/evidence/M067/CAE_M067_RUNTIME_RECEIPTS.json",
+        "docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json"
+      ],
+      "result": "Focused adapter tests pass, but M0067 probed the configured native endpoint and received ConnectionRefusedError; no native EXECUTED receipt was issued.",
+      "limitation": "Real runtime execution is not demonstrated in this environment."
+    },
+    {
+      "criterion_id": "CRIT-M066",
+      "mandate_id": "CAE-M066",
+      "invariant": "INV-HUMAN-RESOLUTION-001",
+      "criterion": "Make native editing operator-operable within bounds and persist interventions as immutable HumanResolutionEpisode lineage with CAS safety and before/after evidence.",
+      "status": "PARTIAL",
+      "evidence_class": [
+        "TEST",
+        "EXECUTABLE"
+      ],
+      "evidence_refs": [
+        "tests/cae/test_m066_human_resolution.py",
+        "docs/cae/evidence/M067/CAE_M067_RESIDUAL_GAP_LEDGER.json",
+        "docs/cae/state/CAE_M067_COMPLETION_RECORD.md"
+      ],
+      "result": "Focused M0066 contract tests pass, but the M0067 live evidence record states that no live campaign/operator execution evidence is available.",
+      "limitation": "Native edit propagation, refresh/reopen persistence and CAS behavior are not certified against a live campaign."
+    },
+    {
+      "criterion_id": "CRIT-M067",
+      "mandate_id": "CAE-M067",
+      "invariant": "INV-PRODUCT-REAL-001",
+      "criterion": "Execute one clean real campaign and one adversarial campaign end-to-end from semantic intent through retrieval, Program execution, native runtime, operator intervention and release evidence.",
+      "status": "BLOCKED",
+      "evidence_class": [
+        "EXECUTABLE",
+        "TEST",
+        "OPERATOR_DECISION_REQUIRED"
+      ],
+      "evidence_refs": [
+        "docs/cae/state/CAE_M067_COMPLETION_RECORD.md",
+        "docs/cae/evidence/M067/CAE_M067_E2E_REPORT.json",
+        "docs/cae/evidence/M067/CAE_M067_OPERATOR_DECISION_RECORD.json",
+        "docs/cae/evidence/M067/CAE_M067_RUNTIME_RECEIPTS.json",
+        "docs/cae/evidence/M067/CAE_M067_RESIDUAL_GAP_LEDGER.json"
+      ],
+      "result": "Adversarial false-proof controls pass, but the real campaign is BLOCKED: native OpenChatCut is unreachable, real source media is absent, operator evidence is absent, QA/release evidence is absent, and exact Git commit metadata is absent.",
+      "limitation": "Cross-boundary production operability cannot be certified from component-level green tests."
+    }
+  ]
+}

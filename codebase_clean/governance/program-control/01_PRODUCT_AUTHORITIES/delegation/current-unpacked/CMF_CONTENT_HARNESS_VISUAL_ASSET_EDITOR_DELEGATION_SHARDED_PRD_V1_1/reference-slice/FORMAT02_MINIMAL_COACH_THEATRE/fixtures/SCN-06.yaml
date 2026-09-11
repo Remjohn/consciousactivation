@@ -1,0 +1,17 @@
+scenario_id: SCN-06
+title: Safe cancellation
+purpose: Proves checkpointing, evidence retention and stale-promotion blocking.
+contracts:
+- type: cancellation-request
+  example_ref: ../../../contracts/examples/cancellation-request.example.yaml
+- type: cancellation-receipt
+  example_ref: ../../../contracts/examples/cancellation-receipt.example.yaml
+expected_shared_states:
+- IN_PROGRESS
+- CANCELLATION_REQUESTED
+- CANCELLED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

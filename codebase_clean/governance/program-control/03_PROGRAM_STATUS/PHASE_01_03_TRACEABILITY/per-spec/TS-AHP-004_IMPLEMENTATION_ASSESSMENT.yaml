@@ -1,0 +1,32 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AHP-004
+spec_path: 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-AHP-004.md
+spec_sha256: 771cbdcdc33a6ed7fe175a037740a89181e7c51baa6591ec35c68a9791a24d08
+phase: PHASE_03
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 18
+  direct_aggregate_test_evidence: 9
+  implementation_without_direct_ac_test: 9
+  unimplemented_or_nonbehavior: 0
+implementation_paths:
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/application/compiler.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/application/scheduler.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/application/handoff_validator.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/workflow/application/run_service.py
+test_evidence:
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_deterministic_scheduler_checkpoint_and_replay
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_idempotency_conflict_and_replay
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_cancel_quarantines_late_running_result
+- tests/phase3/test_workflow_runtime.py::WorkflowRuntimeTests::test_pause_resume_guards_dispatch
+open_gap_ids:
+- GAP-HUMAN-EXTERNAL-NODE-EXECUTION
+- GAP-ROLE-SEMANTIC-CONTEXT-CONFORMANCE
+- GAP-MIGRATION-FAULT-INJECTION
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

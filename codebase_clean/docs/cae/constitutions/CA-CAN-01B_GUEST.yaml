@@ -1,0 +1,275 @@
+# Object Constitution: Guest
+# Phase 05 / CA-CAN-01B Guest & Evidence Constitutions
+
+id: "CA-ENT-003"
+canonical_name: "Guest"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Entity"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "GUEST_SCOPED"
+collision_register_ref: "COL-MAP-005"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-ENT-003"
+    canonical_name: "Guest"
+    common_aliases: ["Participant", "Interview Subject", "Local Guest Identity", "Actor (Guest Kind)"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Entity"
+    class_matrix_id: 1
+    class_rationale: "Guest has continuous operational identity within a single Workspace, persists across multiple interview sessions and engagements, and maintains an append-only interaction and consent history."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Serves as an operational participant entity anchored to a customer Workspace; does not exist on the Global Canonical Plane."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Participant Identity & Local Relationship Scoping"
+    primary_purpose: "Provides a stable, workspace-local identity anchor for participant interview turns, audio/video evidence, consent declarations, and longitudinal engagement history without creating a global cross-tenant person directory."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Workspace-local participant identity entity"
+    differentia: "Distinguished from global Person (which is strictly prohibited), WorkspaceMembership (internal customer staff), Engagement (campaign container), and dynamic GuestState (transient observation condition) by maintaining durable participant continuity strictly within one client tenant boundary."
+    function: "Anchors participant evidence, interview sessions, consent declarations, and longitudinal observations within a single client Workspace."
+    boundary: "Must not be treated as a global person directory; cannot be merged across workspaces by name, email, embedding, or audio likeness; does not grant administrative workspace permissions."
+    normative_definition: >
+      Guest is a Workspace-local operational Entity representing a persistent participant identity within a bounded client context.
+      It serves as the durable subject anchor for interview sessions, evidence spans, and consent records. A Guest may participate
+      in multiple Engagements strictly within the same Workspace, but cannot span multiple Workspaces or be automatically merged
+      with other records based on matching demographic, contact, or biometric similarity.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "A persistent participant identity known strictly within one specific Workspace."
+      - "The subject anchor for local interview sessions, turns, and evidence items."
+      - "A consent-holding entity for engagement data processing within that Workspace."
+    what_it_is_not:
+      - "A global Person or cross-tenant identity directory."
+      - "A tenant or workspace isolation boundary."
+      - "A WorkspaceMembership (does not hold operational staff access or authentication tokens)."
+      - "A dynamic psychological or experiential state (dynamic conditions belong to GuestState)."
+      - "An interview transcript or derived AIR semantic assessment."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "WorkspaceMembership (CA-REL-001)"
+        distinction: "WorkspaceMembership represents internal tenant staff/operators; Guest represents external interview participants/subjects."
+      - neighbor: "Engagement (CA-ENT-004)"
+        distinction: "Engagement is a campaign/project grouping; Guest is the participant entity who may take part in one or more Engagements within the Workspace."
+      - neighbor: "GuestState (Phase 6 Dynamic State Object)"
+        distinction: "Guest represents durable identity continuity; GuestState represents transient, temporally bounded experiential/psychological conditions."
+      - neighbor: "GuestIdentityLink (CA-MAP-001)"
+        distinction: "Guest is a discrete local entity; GuestIdentityLink is an exceptional, dual-consented mapping relation linking two local Guests."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Participant Domain & Identity Management"
+    tier: "Workspace-Local Operational Entity"
+    specialization: "Standard Participant Guest"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["REGISTERED", "ACTIVE", "CONSENT_WITHDRAWN", "ANONYMIZED", "ARCHIVED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "guest_id"
+        type: "UUID"
+        description: "Primary unique identifier for the guest entity."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key anchoring the guest strictly to its parent Workspace."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when guest was registered in the workspace."
+    mutable_attributes:
+      - name: "external_identifier"
+        type: "STRING"
+        description: "Optional client-supplied external pseudonym or reference code."
+      - name: "status"
+        type: "STRING"
+        description: "Lifecycle status (REGISTERED, ACTIVE, CONSENT_WITHDRAWN, ANONYMIZED, ARCHIVED)."
+      - name: "consent_status"
+        type: "JSONB"
+        description: "Granular consent declarations (recording consent, analysis consent, retention window)."
+      - name: "profile_metadata"
+        type: "JSONB"
+        description: "Client-managed demographic or contextual metadata local to the workspace."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last modification."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace"]
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "InterviewSession"
+        cardinality: "1:N"
+      - child_object: "EvidenceItem"
+        cardinality: "1:N"
+      - child_object: "GuestIdentityLink"
+        cardinality: "0:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "REGISTERED"
+    terminal_states: ["ANONYMIZED", "ARCHIVED"]
+    states: ["REGISTERED", "ACTIVE", "CONSENT_WITHDRAWN", "ANONYMIZED", "ARCHIVED"]
+    transitions:
+      - from: "REGISTERED"
+        to: "ACTIVE"
+        operation: "activate_guest_session"
+      - from: "ACTIVE"
+        to: "CONSENT_WITHDRAWN"
+        operation: "withdraw_guest_consent"
+      - from: "CONSENT_WITHDRAWN"
+        to: "ANONYMIZED"
+        operation: "anonymize_guest_data"
+      - from: "ACTIVE"
+        to: "ARCHIVED"
+        operation: "archive_guest"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "guest.registered"
+      - event_name: "guest.activated"
+      - event_name: "guest.consent_withdrawn"
+      - event_name: "guest.anonymized"
+      - event_name: "guest.archived"
+    subscribed_events:
+      - event_name: "workspace.purged"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Interview Expression participant onboarding / Workspace API registration"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-GST-001: Every Guest MUST belong to exactly one Workspace (workspace_id)."
+      - "INV-GST-002: Guest records from distinct Workspaces MUST NEVER be automatically linked, merged, or shared based on name, email, phone, likeness, transcript text, or vector embeddings."
+      - "INV-GST-003: A Guest may participate in multiple Engagements within the SAME Workspace; all sessions inherit the workspace_id and guest_id."
+      - "INV-GST-004: Guest identity continuity is independent of transient psychological observations (GuestState), raw media bytes, or derived AIR assessments."
+      - "INV-GST-005: Withdrawing consent or anonymizing a Guest MUST redact personal identifiers in profile_metadata while preserving cryptographic hash lineage of historical execution receipts."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Multi-Tenant Plan §3.2, §3.3; Phase 0 Object Constitution Protocol; CA-MAP-01 Scope & Authority Matrix"
+    runtime_representation: "cae.guest (or cae.actor with kind='GUEST' scoped by workspace_id)"
+    promotion_authority: "Workspace Engagement Lead / Workspace Administrator via typed semantic operations"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "register_guest"
+        parameters: ["workspace_id", "external_identifier", "consent_status", "profile_metadata"]
+      - name: "update_guest_profile"
+        parameters: ["guest_id", "profile_metadata"]
+      - name: "withdraw_guest_consent"
+        parameters: ["guest_id", "reason"]
+      - name: "anonymize_guest_data"
+        parameters: ["guest_id", "anonymization_receipt"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT execute automated cross-workspace deduplication or merges of Guest records."
+      - "MUST NOT query Guest records across workspace boundaries without an active OperatorAccessGrant and explicit GuestIdentityLink."
+      - "MUST NOT synthesize a global Person record by collapsing local Guest records."
+      - "MUST NOT treat embedding vector distance as legal identity authorization."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify guest_id and workspace_id are valid UUIDv4 strings."
+      - "Verify consent_status contains explicit recording and processing consent flags."
+    semantic_validators:
+      - "Ensure workspace_id matches current tenant RLS context."
+      - "Enforce that external_identifier uniqueness is scoped strictly to (workspace_id, external_identifier)."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_GUEST_NOT_FOUND"
+        http_status: 404
+        description: "Target guest record does not exist in this workspace."
+      - code: "ERR_GUEST_CONSENT_REVOKED"
+        http_status: 403
+        description: "Operation rejected because guest processing consent has been withdrawn."
+      - code: "ERR_GUEST_CROSS_WORKSPACE_MERGE_PROHIBITED"
+        http_status: 400
+        description: "Attempted cross-workspace identity merge is strictly prohibited."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.guest"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "storage://cae-media/<workspace_id>/guests/<guest_id>/"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Interview Expression Service"
+      - "AIR Semantic Assessment Pipeline"
+      - "Participant Consent & Compliance Monitor"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Who is the participant known in this specific Workspace?"
+      - "What interview sessions and evidence items are associated with this participant within this Workspace?"
+      - "What consent boundaries govern data processing for this participant?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-GST-001"
+        description: "Participant in an enterprise consumer research engagement."
+        attributes:
+          guest_id: "33333333-3333-3333-3333-333333333333"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          external_identifier: "CUST-REF-90210"
+          status: "ACTIVE"
+          consent_status:
+            audio_recording: true
+            semantic_analysis: true
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-GST-001"
+        description: "Automatically merging Guest A (Workspace 1) and Guest B (Workspace 2) because both have email 'jane.doe@example.com'."
+        rejection_reason: "Violates INV-GST-002 and COL-MAP-005; Guest is strictly Workspace-local; implicit merging across tenants is a catastrophic breach."
+      - id: "NEG-GST-002"
+        description: "Treating high cosine similarity between facial embeddings or voice embeddings as proof of identical Guest identity."
+        rejection_reason: "Violates Section 5; biometric similarity is observational evidence, never automatic authorization or identity proof."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01B)"
+        summary: "Initial draft constitution establishing Guest as workspace-local participant entity."

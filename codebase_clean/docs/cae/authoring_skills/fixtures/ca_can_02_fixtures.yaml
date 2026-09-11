@@ -1,0 +1,359 @@
+# CAE CA-CAN-02 Hard-Negative Fixture Corpus
+# Phase 24 / CA-CAN-02 Constitution Set Completion — Sub-workstream C3
+# Mandate §C3: Rigorous Deceptive Near-Misses & Hard Negatives
+
+fixtures:
+  # ---------------------------------------------------------------------------
+  # 1. InterviewSession Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-INT-001"
+    target_constitution: "CA-CAN-02_INTERVIEW_SESSION.yaml"
+    category: "NEAR_MISS"
+    description: "Multi-guest interview session passing array of guest_ids without multi-party governance."
+    input:
+      session_id: "550e8400-e29b-41d4-a716-446655440001"
+      workspace_id: "11111111-1111-1111-1111-111111111111"
+      project_id: "22222222-2222-2222-2222-222222222222"
+      guest_ids: ["33333333-3333-3333-3333-333333333333", "44444444-4444-4444-4444-444444444444"]
+      status: "ACTIVE"
+    expected_rejection_code: "ERR_MULTI_GUEST_PROHIBITED"
+    rejection_rationale: "Violates INV-INT-001; InterviewSession is strictly 1:1 with Guest."
+
+  - id: "FIX-CAN02-INT-002"
+    target_constitution: "CA-CAN-02_INTERVIEW_SESSION.yaml"
+    category: "NEAR_MISS"
+    description: "Recording conversational turns against a session in PLANNED state before start_interview_session."
+    input:
+      session_id: "550e8400-e29b-41d4-a716-446655440001"
+      session_status: "PLANNED"
+      operation: "record_turn"
+    expected_rejection_code: "ERR_SESSION_NOT_ACTIVE"
+    rejection_rationale: "Violates INV-INT-002; turns cannot be recorded before session activation."
+
+  # ---------------------------------------------------------------------------
+  # 2. InterviewTurn Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-TRN-001"
+    target_constitution: "CA-CAN-02_INTERVIEW_TURN.yaml"
+    category: "NEAR_MISS"
+    description: "In-place UPDATE of utterance_text for post-hoc transcription model cleanup."
+    input:
+      turn_id: "660e8400-e29b-41d4-a716-446655440001"
+      updated_utterance_text: "Cleaned up transcription text."
+      operation: "UPDATE"
+    expected_rejection_code: "ERR_TURN_MUTATION_PROHIBITED"
+    rejection_rationale: "Violates INV-TRN-003; turns are strictly immutable once recorded."
+
+  - id: "FIX-CAN02-TRN-002"
+    target_constitution: "CA-CAN-02_INTERVIEW_TURN.yaml"
+    category: "NEAR_MISS"
+    description: "Emitting an InterviewTurn into global cae.event bus as a state-aggregate domain event."
+    input:
+      event_id: "660e8400-e29b-41d4-a716-446655440001"
+      target_table: "cae.event"
+      payload_type: "dialogue_utterance"
+    expected_rejection_code: "ERR_DOMAIN_EVENT_MISCLASSIFICATION"
+    rejection_rationale: "Violates COL-MAP-004; dialogue turns belong in cae.interview_turn, not system event bus."
+
+  # ---------------------------------------------------------------------------
+  # 3. EvidenceItem Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-EVI-001"
+    target_constitution: "CA-CAN-02_EVIDENCE_ITEM.yaml"
+    category: "NEAR_MISS"
+    description: "In-place mutation of content_payload to fix punctuation while preserving evidence_id."
+    input:
+      evidence_id: "770e8400-e29b-41d4-a716-446655440001"
+      modified_payload: { quote: "Fixed punctuation quote." }
+      operation: "UPDATE"
+    expected_rejection_code: "ERR_EVIDENCE_MUTATION_PROHIBITED"
+    rejection_rationale: "Violates INV-EVI-001; evidence payloads are cryptographically immutable."
+
+  - id: "FIX-CAN02-EVI-002"
+    target_constitution: "CA-CAN-02_EVIDENCE_ITEM.yaml"
+    category: "NEAR_MISS"
+    description: "Creating EvidenceItem with empty spans list under promise of asynchronous span attachment."
+    input:
+      evidence_id: "770e8400-e29b-41d4-a716-446655440001"
+      spans: []
+    expected_rejection_code: "ERR_UNANCHORED_EVIDENCE"
+    rejection_rationale: "Violates INV-EVI-002; unanchored evidence cannot be created."
+
+  # ---------------------------------------------------------------------------
+  # 4. EvidenceSpan Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-SPN-001"
+    target_constitution: "CA-CAN-02_EVIDENCE_SPAN.yaml"
+    category: "NEAR_MISS"
+    description: "Inverted millisecond offsets (start: 20000, end: 15000) assuming UI will sort them."
+    input:
+      start_offset_ms: 20000
+      end_offset_ms: 15000
+    expected_rejection_code: "ERR_SPAN_INVALID_RANGE"
+    rejection_rationale: "Violates INV-SPN-001; start_offset_ms must be <= end_offset_ms."
+
+  - id: "FIX-CAN02-SPN-002"
+    target_constitution: "CA-CAN-02_EVIDENCE_SPAN.yaml"
+    category: "NEAR_MISS"
+    description: "Cross-workspace span linking evidence in Workspace A to media asset in Workspace B."
+    input:
+      evidence_workspace_id: "11111111-1111-1111-1111-111111111111"
+      asset_workspace_id: "22222222-2222-2222-2222-222222222222"
+    expected_rejection_code: "ERR_SPAN_CROSS_TENANT_VIOLATION"
+    rejection_rationale: "Violates INV-SPN-003; cross-workspace span links violate tenant isolation."
+
+  # ---------------------------------------------------------------------------
+  # 5. EvidenceAuthentication Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-AUT-001"
+    target_constitution: "CA-CAN-02_EVIDENCE_AUTHENTICATION.yaml"
+    category: "NEAR_MISS"
+    description: "Capturing agent self-attesting evidence as AUTHENTICATED using its own model actor ID."
+    input:
+      evidence_capturer_id: "agent:extractor:v1"
+      evaluator_actor_id: "agent:extractor:v1"
+      verdict: "AUTHENTICATED"
+    expected_rejection_code: "ERR_AUTH_SELF_ATTESTATION_PROHIBITED"
+    rejection_rationale: "Violates INV-AUT-001 (Anti-Self-Attestation doctrine)."
+
+  - id: "FIX-CAN02-AUT-002"
+    target_constitution: "CA-CAN-02_EVIDENCE_AUTHENTICATION.yaml"
+    category: "NEAR_MISS"
+    description: "Authentication record submitted with empty string rationale."
+    input:
+      verdict: "AUTHENTICATED"
+      rationale: ""
+    expected_rejection_code: "ERR_AUTH_EMPTY_RATIONALE"
+    rejection_rationale: "Violates INV-AUT-003; rationale must provide qualitative justification."
+
+  # ---------------------------------------------------------------------------
+  # 6. SemanticAssessment Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-DSA-001"
+    target_constitution: "CA-CAN-02_SEMANTIC_ASSESSMENT.yaml"
+    category: "NEAR_MISS"
+    description: "Synthetic model setting epistemic_status to ESTABLISHED based on 0.99 internal confidence."
+    input:
+      model_identity: "openai/gpt-oss-120b"
+      confidence: 0.99
+      epistemic_status: "ESTABLISHED"
+    expected_rejection_code: "ERR_ASSESSMENT_INVALID_EPISTEMIC_PROMOTION"
+    rejection_rationale: "Violates INV-DSA-002; automated systems cannot self-promote to ESTABLISHED."
+
+  - id: "FIX-CAN02-DSA-002"
+    target_constitution: "CA-CAN-02_SEMANTIC_ASSESSMENT.yaml"
+    category: "NEAR_MISS"
+    description: "Activating SemanticAssessment with zero supporting AssessmentEvidenceLinks."
+    input:
+      assessment_id: "dd0e8400-e29b-41d4-a716-446655440001"
+      status: "ACTIVE"
+      linked_evidence_count: 0
+    expected_rejection_code: "ERR_ASSESSMENT_UNGROUNDED"
+    rejection_rationale: "Violates INV-DSA-001; assessments must be grounded in evidence."
+
+  # ---------------------------------------------------------------------------
+  # 7. AssessmentEvidenceLink Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-AEL-001"
+    target_constitution: "CA-CAN-02_ASSESSMENT_EVIDENCE_LINK.yaml"
+    category: "NEAR_MISS"
+    description: "Linking assessment in Workspace 1 to evidence in Workspace 2."
+    input:
+      assessment_workspace_id: "11111111-1111-1111-1111-111111111111"
+      evidence_workspace_id: "22222222-2222-2222-2222-222222222222"
+    expected_rejection_code: "ERR_LINK_CROSS_TENANT_VIOLATION"
+    rejection_rationale: "Violates INV-AEL-002; cross-workspace evidence links are strictly forbidden."
+
+  - id: "FIX-CAN02-AEL-002"
+    target_constitution: "CA-CAN-02_ASSESSMENT_EVIDENCE_LINK.yaml"
+    category: "NEAR_MISS"
+    description: "Passing out-of-bounds relevance score of 1.5 claiming strong evidential weight."
+    input:
+      relevance_score: 1.5
+    expected_rejection_code: "ERR_LINK_INVALID_SCORE"
+    rejection_rationale: "Violates INV-AEL-003; score must be between 0.0 and 1.0."
+
+  # ---------------------------------------------------------------------------
+  # 8. StateAggregate Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-STA-001"
+    target_constitution: "CA-CAN-02_STATE_AGGREGATE.yaml"
+    category: "NEAR_MISS"
+    description: "Optimistic lock conflict: applying transition with expected_version: 1 when DB is at version 2."
+    input:
+      current_aggregate_version: 2
+      expected_version: 1
+    expected_rejection_code: "ERR_OPTIMISTIC_LOCK_CONFLICT"
+    rejection_rationale: "Violates INV-STA-002; expected_version mismatch must abort transaction."
+
+  - id: "FIX-CAN02-STA-002"
+    target_constitution: "CA-CAN-02_STATE_AGGREGATE.yaml"
+    category: "NEAR_MISS"
+    description: "Jumping version sequence by +2 (version 1 -> 3) to reserve a sequence slot."
+    input:
+      from_version: 1
+      to_version: 3
+    expected_rejection_code: "ERR_NON_SEQUENTIAL_VERSION"
+    rejection_rationale: "Violates INV-STA-001; version increments must be strictly +1."
+
+  # ---------------------------------------------------------------------------
+  # 9. StateTransitionContract Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-STC-001"
+    target_constitution: "CA-CAN-02_STATE_TRANSITION_CONTRACT.yaml"
+    category: "NEAR_MISS"
+    description: "Declaring outbound transition on absorbing terminal state DELETED."
+    input:
+      terminal_states: ["DELETED"]
+      transitions:
+        - from: "DELETED"
+          to: "REGISTERED"
+          operation: "restore"
+    expected_rejection_code: "ERR_TERMINAL_STATE_OUTBOUND_TRANSITION"
+    rejection_rationale: "Violates INV-STC-003; terminal states must have zero outbound transitions."
+
+  - id: "FIX-CAN02-STC-002"
+    target_constitution: "CA-CAN-02_STATE_TRANSITION_CONTRACT.yaml"
+    category: "NEAR_MISS"
+    description: "Declaring operational workspace_id parameter inside a Global Canonical Plane contract YAML."
+    input:
+      contract_id: "STC-TEST-001"
+      workspace_id: "11111111-1111-1111-1111-111111111111"
+    expected_rejection_code: "ERR_CANONICAL_PLANE_TENANT_POLLUTION"
+    rejection_rationale: "Violates Canonical Plane purity; contracts cannot contain tenant IDs."
+
+  # ---------------------------------------------------------------------------
+  # 10. StateTransition Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-STR-001"
+    target_constitution: "CA-CAN-02_STATE_TRANSITION.yaml"
+    category: "NEAR_MISS"
+    description: "Recording state transition with command_id: NULL claiming automatic system timer."
+    input:
+      command_id: null
+    expected_rejection_code: "ERR_MISSING_COMMAND_CAUSALITY"
+    rejection_rationale: "Violates causality; all transitions must be attributed to a valid Command."
+
+  - id: "FIX-CAN02-STR-002"
+    target_constitution: "CA-CAN-02_STATE_TRANSITION.yaml"
+    category: "NEAR_MISS"
+    description: "Inserting transition record with from_version: 1 and to_version: 3."
+    input:
+      from_version: 1
+      to_version: 3
+    expected_rejection_code: "ERR_TRANSITION_VERSION_NON_SEQUENTIAL"
+    rejection_rationale: "Violates INV-STR-001; to_version must equal from_version + 1."
+
+  # ---------------------------------------------------------------------------
+  # 11. Command Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-CMD-001"
+    target_constitution: "CA-CAN-02_COMMAND.yaml"
+    category: "NEAR_MISS"
+    description: "Submitting duplicate idempotency key with modified payload parameters."
+    input:
+      idempotency_key: "idem-2026-08-26-001"
+      payload_modified: true
+    expected_rejection_code: "ERR_COMMAND_IDEMPOTENCY_CONFLICT"
+    rejection_rationale: "Violates INV-CMD-001; idempotency keys are bound to identical payloads."
+
+  - id: "FIX-CAN02-CMD-002"
+    target_constitution: "CA-CAN-02_COMMAND.yaml"
+    category: "NEAR_MISS"
+    description: "Submitting command with actor_id: NULL claiming anonymous execution."
+    input:
+      actor_id: null
+    expected_rejection_code: "ERR_UNATTRIBUTED_COMMAND"
+    rejection_rationale: "Violates INV-CMD-004; all commands must have verifiable actor attribution."
+
+  # ---------------------------------------------------------------------------
+  # 12. Event Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-EVT-001"
+    target_constitution: "CA-CAN-02_EVENT.yaml"
+    category: "NEAR_MISS"
+    description: "Publishing unverified model claim as event_type 'evidence.verified.absolute_truth'."
+    input:
+      event_type: "evidence.verified.absolute_truth"
+      payload: { claim: "Unverified model hallucination" }
+    expected_rejection_code: "ERR_EVENT_EPISTEMIC_VIOLATION"
+    rejection_rationale: "Violates epistemic boundaries; events must reflect verified facts."
+
+  - id: "FIX-CAN02-EVT-002"
+    target_constitution: "CA-CAN-02_EVENT.yaml"
+    category: "NEAR_MISS"
+    description: "Storing conversational interview dialogue in cae.event table instead of cae.interview_turn."
+    input:
+      target_table: "cae.event"
+      dialogue_turn: "Hello, how are you today?"
+    expected_rejection_code: "ERR_CONVERSATIONAL_EVENT_MISROUTING"
+    rejection_rationale: "Violates COL-MAP-004; dialogue turns belong in cae.interview_turn."
+
+  # ---------------------------------------------------------------------------
+  # 13. SDARegistry Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-SDA-001"
+    target_constitution: "CA-CAN-02_SDA_REGISTRY.yaml"
+    category: "NEAR_MISS"
+    description: "Resolver rejecting SDA records as versionless defect items because inline YAML lacks version field."
+    input:
+      yaml_has_inline_version: false
+      manifest_version: "1.0"
+    expected_rejection_code: "ERR_MANIFEST_INHERITANCE_IGNORED"
+    rejection_rationale: "Violates INV-SDA-001; records inherit manifest version 1.0 per operator ratification."
+
+  - id: "FIX-CAN02-SDA-002"
+    target_constitution: "CA-CAN-02_SDA_REGISTRY.yaml"
+    category: "NEAR_MISS"
+    description: "Attempting to inject a tenant custom dimension directly into canonical sda.zip."
+    input:
+      target_archive: "sda.zip"
+      tenant_dimension: "tenant_custom_dim_001"
+    expected_rejection_code: "ERR_CANONICAL_REGISTRY_TENANT_LEAK"
+    rejection_rationale: "Violates INV-SDA-003; canonical registries cannot contain tenant data."
+
+  # ---------------------------------------------------------------------------
+  # 14. SFLRegistry Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-SFL-001"
+    target_constitution: "CA-CAN-02_SFL_REGISTRY.yaml"
+    category: "NEAR_MISS"
+    description: "Silent fallback: resolving missing SFL-FAM-005 to SFL-FAM-001 to prevent runtime error."
+    input:
+      requested_family: "SFL-FAM-005"
+      fallback_to: "SFL-FAM-001"
+    expected_rejection_code: "ERR_SILENT_QUARANTINE_BYPASS"
+    rejection_rationale: "Violates INV-SFL-001/002; absent families must raise RegistryItemQuarantinedError."
+
+  - id: "FIX-CAN02-SFL-002"
+    target_constitution: "CA-CAN-02_SFL_REGISTRY.yaml"
+    category: "NEAR_MISS"
+    description: "Resolver dynamically inventing a synthetic SFL-FAM-005 object in memory."
+    input:
+      invented_family: "SFL-FAM-005"
+      action: "DYNAMIC_INVENTION"
+    expected_rejection_code: "ERR_HEURISTIC_FAMILY_INVENTION"
+    rejection_rationale: "Violates INV-SFL-004; inventing families heuristically is strictly prohibited."
+
+  # ---------------------------------------------------------------------------
+  # 15. PrimitiveRegistry Fixtures
+  # ---------------------------------------------------------------------------
+  - id: "FIX-CAN02-PRM-001"
+    target_constitution: "CA-CAN-02_PRIMITIVE_REGISTRY.yaml"
+    category: "NEAR_MISS"
+    description: "Silent last-write-wins overwrite of line 194 EXP-TRG-001 by line 231 during CSV parsing."
+    input:
+      action: "LAST_WRITE_WINS_OVERWRITE"
+      colliding_id: "EXP-TRG-001"
+    expected_rejection_code: "ERR_DUPLICATE_OVERWRITE_PROHIBITED"
+    rejection_rationale: "Violates INV-PRM-001; disambiguation must be explicit via Route A EXP-TRG-010."
+
+  - id: "FIX-CAN02-PRM-002"
+    target_constitution: "CA-CAN-02_PRIMITIVE_REGISTRY.yaml"
+    category: "NEAR_MISS"
+    description: "Injecting tenant custom primitive into global PRIMITIVE_INVENTORY.csv without governance."
+    input:
+      target_file: "PRIMITIVE_INVENTORY.csv"
+      tenant_primitive: "EXP-CUST-001"
+    expected_rejection_code: "ERR_CANONICAL_INVENTORY_POLLUTION"
+    rejection_rationale: "Violates Global Canonical Plane boundary; inventory is platform doctrine."

@@ -1,0 +1,19 @@
+scenario_id: SCN-04
+title: Budget escalation and approval
+purpose: Proves split budget authority and immutable extension.
+contracts:
+- type: budget-authorization
+  example_ref: ../../../contracts/examples/budget-authorization.example.yaml
+- type: budget-escalation-request
+  example_ref: ../../../contracts/examples/budget-escalation-request.example.yaml
+- type: budget-escalation-response
+  example_ref: ../../../contracts/examples/budget-escalation-response.example.yaml
+expected_shared_states:
+- IN_PROGRESS
+- COST_APPROVAL_REQUIRED
+- IN_PROGRESS
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

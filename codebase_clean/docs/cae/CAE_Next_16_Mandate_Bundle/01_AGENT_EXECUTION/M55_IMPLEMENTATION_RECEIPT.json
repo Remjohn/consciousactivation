@@ -1,0 +1,52 @@
+{
+  "receipt_id": "cae.mandate.receipt.m55@1.0.0",
+  "mandate_id": "CAE-M55",
+  "title": "Bounded Repair + Same-Session Retry",
+  "phase": "PHASE 6 — AGENT / PROGRAM EXECUTION CONVERGENCE",
+  "parallel_group": "P6-B",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T06:34:20+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "statem_contract_ref": "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/bounded_repair.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m55_bounded_repair_same_session_retry.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m55_bounded_repair_same_session_retry.py",
+    "tests/cae/test_m54_typed_agent_result_explicit_gate_engine.py",
+    "tests/cae/test_m53_program_agent_phase_binding_compiler.py",
+    "tests/cae/test_m52_canonical_agent_invocation_contract.py",
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_retry_count_is_bounded": "VERIFIED (Exceeding max_retries halts execution and raises RepairBudgetExhaustedError)",
+    "gate_2_same_session_context_identity_preserved": "VERIFIED (session_id, run_id, state_id, agent_id, and input_context_sha256 are strictly preserved across in-session attempts)",
+    "gate_3_non_retryable_failures_fail_immediately": "VERIFIED (Constitutional/Authority Lane/Security violations immediately raise NonRetryableFailureError without consuming retry budget)",
+    "gate_4_every_repair_is_observable": "VERIFIED (Every repair attempt records an immutable RepairAttemptRecord with SHA-256 hash and failure diagnostics)",
+    "gate_5_exhaustion_enters_explicit_failure_state": "VERIFIED (Budget exhaustion transitions terminal_state to FAILED_EXHAUSTED per StateM checked transfer semantics)"
+  },
+  "false_proof_defenses": {
+    "defense_1_feed_same_failed_output_forever": "BLOCKED (Engine strictly halts after max_retries and transitions to FAILED_EXHAUSTED)",
+    "defense_2_alter_output_contract_between_attempts": "BLOCKED (Altering contract ID during retry raises RepairContractDriftError)",
+    "defense_3_retry_constitutional_violation": "BLOCKED (Authority Lane violations halt immediately with NonRetryableFailureError)",
+    "defense_4_reset_attempt_count": "BLOCKED (Monotonic attempt counter prevents resetting attempt counts)"
+  },
+  "concrete_trace_demonstrated": {
+    "pipeline_path": "Attempt 1 Failure (Ungrounded Evidence) -> Corrective Feedback -> Attempt 2 In-Session Retry -> Gate Pass -> TypedAgentResult",
+    "agent_id": "RelationshipCanonicalizationAnalystAgent",
+    "session_state": "REPAIR_SUCCEEDED",
+    "repair_records_generated": 1,
+    "gate_status": "PASSED"
+  },
+  "test_evidence": {
+    "suite_phase5_and_6": "80/80 passed in 3.14s",
+    "suite_regression": "32/32 passed in 5.55s"
+  },
+  "limitations": [
+    "Standalone Agent Session Runtime execution boundary will be formalized in Mandate M56"
+  ]
+}

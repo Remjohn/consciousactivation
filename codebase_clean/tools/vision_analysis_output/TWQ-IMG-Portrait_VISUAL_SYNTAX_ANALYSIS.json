@@ -1,0 +1,65 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "TWQ-IMG-Portrait",
+  "source_zip": "TWQ-IMG-Portrait.zip",
+  "source_zip_sha256": "8aad52e810493e6b9759b8dd49ba058548456893cc8de24054ea5baae103ec7a",
+  "vision_model_used": "antigravity-multimodal-analyst",
+  "base_url": "local-antigravity-vision",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 7,
+    "unique_layout_count": 2,
+    "duplicate_slides_collapsed": 5,
+    "unique_slide_roles": [
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 1,
+        "layout_fingerprint": "header_badge + hero_image_region + overlay_caption_plate_text + comparison_pair_portraits",
+        "container_zones": [
+          "header_zone",
+          "hero_zone",
+          "overlay_zone",
+          "footer_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "badge",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "Creator avatar / brand mark anchor in top corner"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "Authentic subject portrait in primary visual field"
+          },
+          {
+            "primitive_type": "caption_plate",
+            "zone": "overlay_zone",
+            "dominant": false,
+            "notes": "Solid color plate behind text for high legibility"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "overlay_zone",
+            "dominant": true,
+            "notes": "Primary quote text in bold high-contrast typography"
+          },
+          {
+            "primitive_type": "comparison_pair",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "Dual subject portrait arrangement when co-citing speakers"
+          }
+        ],
+        "reading_order": "Top badge -> Primary subject portrait -> Quote caption plate -> Secondary subject portrait",
+        "anchor_elements": [
+          "badge",
+          "caption_plate"
+        ]
+      }
+    ]
+  },
+  "stage_2_instructions": "Feed this file to GLM 5.2 to produce manifest.json"
+}

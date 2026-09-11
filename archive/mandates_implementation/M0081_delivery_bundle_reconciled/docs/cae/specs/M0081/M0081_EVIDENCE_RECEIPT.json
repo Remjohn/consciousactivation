@@ -1,0 +1,175 @@
+{
+  "mandate": "M0081",
+  "status": "IMPLEMENTED_OPERATOR_REVIEW_REQUIRED",
+  "evidence_classification": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "DOCUMENT",
+    "TEST",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "authority_inputs": {
+    "literal_required_root_paths_present": false,
+    "constitutional_equivalents_reviewed": {
+      "constitution": "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "precedence": "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    },
+    "authority_pack_2026_09_10_present": true,
+    "current_prd": "docs/PRD/CURRENT.md",
+    "mandate_protocol": "docs/cae/cae_mandate_bundle/01_CA_MANDATE_AUTHORING_PROTOCOL.md",
+    "brownfield_reference": "docs/cae/CAE_Operational_Product_Campaign_M0058_M0068_v1/18_BROWNFIELD_REFERENCE.md",
+    "m65_m72_readme": "docs/cae/CAE_Production_Convergence_M65_M72_v1/README.md",
+    "m72_gate": "docs/cae/CAE_Production_Convergence_M65_M72_v1/07_PRODUCTION_OPERATOR_GATES/M72_final_production_gate_current_sync.md",
+    "media_evidence_reference": "docs/cae/CAE_Product_Brief/10_Media_Intelligence_Asset_Intelligence_Evidence_Retrieval.md",
+    "limitations": [
+      "The literal constitutional paths named by M0081 are relocated in the supplied brownfield snapshot; current-v1.1 equivalents were inspected.",
+      "Exact current CAE Git commit SHA remains unavailable because the uploaded repository snapshot contains no .git metadata."
+    ],
+    "authority_pack_2026_09_10_source": {
+      "artifact": "/mnt/data/AUTHORITY_PACK.zip",
+      "manifest": "AUTHORITY_PACK/AUTHORITY_PACK_MANIFEST.md",
+      "sha256_by_file": {
+        "AUTHORITY_PACK/AUTHORITY_PACK_MANIFEST.md": "e1213b55e6b4ed98e10bfe46a4efafa4caf3e53d31a20a5e1aa9888ae91665f1",
+        "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md": "b07ff8dc67eba2b82076ef89a9b74a3619fb4efe5ffa109a1b3e67841ab127bb",
+        "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md": "6e1ab58aaaec5280f78eae7d66fc7a7c3663cc412bdee35875ae3f9546535aff",
+        "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md": "69059388802a80ecffcd145744ca7dae8654862a373cf60a26337f7663326645",
+        "AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md": "d10e8e3a9c51bd7a53922c99924b780e9471f4639dee2284cdb9badfd2a10c03"
+      },
+      "verification": "Supplied frozen campaign inputs were directly inspected; repository need not contain them per manifest."
+    }
+  },
+  "brownfield_findings": [
+    {
+      "claim_class": "SCHEMA",
+      "fact": "EditorialStoryboardRecord is the existing semantic storyboard authority.",
+      "source_path": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py",
+      "symbol": "EditorialStoryboardRecord"
+    },
+    {
+      "claim_class": "SCHEMA",
+      "fact": "StoryboardRevision is the immutable editable storyboard snapshot backed by GraphRevisionRecord.",
+      "source_path": "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+      "symbol": "StoryboardRevision / StoryboardSessionStore.save_revision"
+    },
+    {
+      "claim_class": "EXECUTABLE",
+      "fact": "TransformationIntent already exposes the ten required grammar modes.",
+      "source_path": "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+      "symbol": "TransformationIntent.mode"
+    },
+    {
+      "claim_class": "EXECUTABLE",
+      "fact": "M0080 format programs consume the shared StoryboardRevision; no second semantic authority was introduced.",
+      "source_path": "packages/ca_runtime/src/ca_runtime/storyboard_programs.py",
+      "symbol": "BaseStoryboardProgram.compile"
+    }
+  ],
+  "implementation": {
+    "registry": "packages/ca_runtime/src/ca_runtime/narrative_editing_grammar.py",
+    "canonical_registry_reference": "docs/cae/specs/M0081/narrative_editing_grammar_registry.yaml",
+    "scene_binding": "packages/ca_runtime/src/ca_runtime/storyboard_session.py::StoryboardScene.narrative_grammar",
+    "exports": "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "focused_tests": [
+      "tests/cae/test_m0081_narrative_editing_grammar_registry.py",
+      "tests/cae/test_m0081_narrative_editing_grammar.py"
+    ],
+    "validation_probe": "docs/cae/specs/M0081/validate_m0081_storyboard_binding.py",
+    "delivery_artifacts": {
+      "handoff": "docs/cae/specs/M0081/AGENT_HANDOFF.md",
+      "evidence_receipt": "docs/cae/specs/M0081/M0081_EVIDENCE_RECEIPT.json",
+      "handoff_sha256": "01ddf88bb09a0b54cda3d96f2a348d17d167019c598a6c5c93e14b2764c6026a",
+      "authority_receipt": "docs/cae/specs/M0081/M0081_AUTHORITY_PACK_RECEIPT.json"
+    },
+    "authority_receipt": "docs/cae/specs/M0081/M0081_AUTHORITY_PACK_RECEIPT.json"
+  },
+  "grammar": {
+    "grammar_id": "CAE_NARRATIVE_EDITING_GRAMMAR",
+    "version": "1.0.0",
+    "modes": [
+      "WITHHOLD",
+      "REVEAL",
+      "FOCUS",
+      "CONTRAST",
+      "PROVE",
+      "EXPLAIN",
+      "CONNECT",
+      "ESCALATE",
+      "INTERRUPT",
+      "RESOLVE"
+    ],
+    "boundary": "Relational/sequence vocabulary only; no effects, geometry, provider parameters, generation commands, or semantic-authority replacement."
+  },
+  "evidence": [
+    {
+      "evidence_class": "TEST",
+      "command": "cd /mnt/data/m0081_merged && PYTHONPATH=packages/ca_contracts/src:packages/ca_runtime/src pytest -q -p no:asyncio tests/cae/test_m0081_narrative_editing_grammar_registry.py",
+      "observed_result": "7 passed in 0.12s",
+      "proves": "Changed Python modules and test files are syntactically compilable."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "cd /mnt/data/m0081_merged && PYTHONPATH=packages/ca_contracts/src:packages/ca_runtime/src pytest -q -p no:asyncio tests/cae/test_m0081_narrative_editing_grammar_registry.py",
+      "observed_result": "7 passed in 0.12s",
+      "proves": "Required vocabulary, no-effect-catalog boundary, deterministic replay hash, false-proof rejection, harness/context/meaning gates, and registry YAML alignment."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "cd /mnt/data/m0081_merged && PYTHONPATH=packages/ca_contracts/src python docs/cae/specs/M0081/validate_m0081_storyboard_binding.py",
+      "observed_result": "M0081 storyboard binding probe: PASS; narrative_editing_grammar=PASS; revision persisted and revalidated through SQLite.",
+      "proves": "The actual M0081 registry/validator integrates with the actual M0079 storyboard_session/editorial_discovery/preparation_graph modules and rejects no valid grammar in the tested happy path."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "cd /mnt/data/m0081_merged && pytest -q -p no:asyncio tests/cae/test_m0078_shot_grammar_reference.py tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_ca_m005_format_archetype_gate.py",
+      "observed_result": "collection blocked: 1 target test module executed; 3 target test modules fail collection because psycopg is missing.",
+      "proves": "No full baseline claim can be made from the supplied environment."
+    },
+    {
+      "evidence_class": "HYPOTHESIS",
+      "command": "python -m pip install 'psycopg[binary]' -q",
+      "observed_result": "failed because package index/network DNS was unavailable; no dependency installed.",
+      "proves": "The environment-fidelity limitation could not be repaired without altering repository scope or substituting mocks."
+    },
+    {
+      "evidence_class": "DOCUMENT",
+      "command": "python: inspect /mnt/data/AUTHORITY_PACK.zip and SHA-256 each supplied Markdown authority input",
+      "observed_result": "AUTHORITY_PACK_MANIFEST.md plus all four dated 2026-09-10 authority inputs were present and directly inspected.",
+      "proves": "The campaign authority pack required by M0081 is available as a frozen supplied input and confirms the narrative-grammar hierarchy, FR-VAE-006 grammar-profile requirement, evidence-first order, Storyboard canonical boundary, and operator governance."
+    }
+  ],
+  "state_contract": {
+    "actor": "authorized editor/operator using existing StoryboardSessionStore path",
+    "preconditions": "Existing EditorialStoryboardRecord, current revision base, non-empty canonical harness_id for grammar-bound scenes, upstream activative meaning and editorial intent supplied as binding inputs.",
+    "validator": "NarrativeEditingGrammarRegistry plus existing StoryboardSessionStore and PreparationGraphStore validation",
+    "postconditions": "Immutable StoryboardRevision containing scene-local NarrativeGrammarBinding; later validation report includes narrative_editing_grammar=PASS.",
+    "receipt": "Existing StoryboardValidationReport / StoryboardCompileReceipt paths; M0081 does not invent a new state authority.",
+    "error_route": "StoryboardRevisionValidationError on save; existing stale-base route remains StaleBaseRevisionError.",
+    "recovery": "Repair binding inputs and create a new revision from the current base; preserve prior revision."
+  },
+  "external_sources": {
+    "adopted": false,
+    "reason": "M0081 did not name an external behavior source and the implementation reused active CAE M0078-M0080 objects/contracts."
+  },
+  "changed_paths": {
+    "packages/ca_runtime/src/ca_runtime/narrative_editing_grammar.py": "9e38e099b08a7c6f72abd90da8bd9a924310d53a3560828f6d7537c08c4211b5",
+    "packages/ca_runtime/src/ca_runtime/storyboard_session.py": "107050d3d9051c78f75d97d848692bf5ada27364b1bfcf3cf497dea2d32a3ba3",
+    "packages/ca_runtime/src/ca_runtime/__init__.py": "2f1a10fd862511a1623e7ff0ab6638b8c0f73084eab6de3d97c3d78d06966568",
+    "tests/cae/test_m0081_narrative_editing_grammar_registry.py": "85a6b3f7067220d9c46f5b1dff400c164b9f31bbdb5d3f657bc3c0049b9982f6",
+    "tests/cae/test_m0081_narrative_editing_grammar.py": "cb975b9266dfc46b02621e6ded37c541475d54f02aefc72aff695d1dc55c4f8a",
+    "docs/cae/specs/M0081/narrative_editing_grammar_registry.yaml": "ff9611845e79b9573dc0c3c8e23a32823fa33411c31342bb8926dcd913f530d9",
+    "docs/cae/specs/M0081/M0081_NARRATIVE_EDITING_GRAMMAR.md": "a5bef665353fd996b9aaa016ccf6517a848a0dcd00bb3dea75fb4365c7e0d1a1",
+    "docs/cae/specs/M0081/validate_m0081_storyboard_binding.py": "d20662aee1368926bf8859096e2617922596f0c327830ce8fef193f917e59eec",
+    "docs/cae/specs/M0081/AGENT_HANDOFF.md": "01ddf88bb09a0b54cda3d96f2a348d17d167019c598a6c5c93e14b2764c6026a",
+    "docs/cae/specs/M0081/M0081_EVIDENCE_RECEIPT.json": "1fed54a0839969c3ed41e723459ce496e4178ed6b98b1e4b3cb2a8b23ebad6f0",
+    "docs/cae/specs/M0081/M0081_AUTHORITY_PACK_RECEIPT.json": "455f3822d37631b345b3c6959c4e2040b7dac18dc5476117749b70ccbeb34311"
+  },
+  "limitations": [
+    "Exact current CAE Git commit SHA is unavailable because the uploaded archive contains no .git metadata.",
+    "The literal constitutional paths named by M0081 are relocated in the supplied brownfield snapshot; current-v1.1 equivalents were inspected.",
+    "The dated 2026-09-10 Visual Production Authority Pack was supplied separately and directly inspected; it is campaign authority input rather than a required repository file.",
+    "Full M0078-M0080/archetype baseline collection is blocked by missing psycopg in the supplied environment.",
+    "Perceptual quality, external runtime reachability, source-rights confirmation, and final creative acceptance remain operator decisions."
+  ],
+  "operator_decision_requested": "APPROVE-WITH-LIMITATIONS",
+  "exact_commit_sha": "UNAVAILABLE_IN_SUPPLIED_SNAPSHOT"
+}

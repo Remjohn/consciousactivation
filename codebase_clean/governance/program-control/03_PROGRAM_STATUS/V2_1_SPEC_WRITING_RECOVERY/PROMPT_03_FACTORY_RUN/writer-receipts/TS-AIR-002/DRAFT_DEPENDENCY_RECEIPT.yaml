@@ -1,0 +1,45 @@
+schema_version: conscious-activations-draft-dependency-receipt/v3.3
+receipt_id: CA-P03-DRAFT-DEPENDENCY-TS-AIR-002
+spec_id: TS-AIR-002
+writing_wave: 1
+status: DRAFT_DEPENDENCY_CONSUMED
+dispatch_lock:
+  path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_03_FACTORY_RUN/wave-receipts/WAVE_01_DISPATCH_LOCK.yaml
+  sha256: 2fa4102de472196fb05320e675ad6095316689e7c585bcba42f432f59ed98692
+  verification: PASS
+upstream_write_inputs:
+  - edge_id: SDE-003
+    primary_class: AUTHORITY_DEPENDENCY
+    spec_id: TS-AIR-001
+    path: 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/docs/tech-specs/TS-AIR-001.md
+    quality_state: WRITTEN_PENDING_AUDIT
+    sha256_expected: 622b32dc08259bc8148c60f5865359c6a76de37037103789ff1fda0f842c6cbc
+    sha256_observed: 622b32dc08259bc8148c60f5865359c6a76de37037103789ff1fda0f842c6cbc
+    bytes_observed: 31425
+    hash_verification: PASS
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    represented_as_accepted_authority: false
+    exact_interface_use:
+      - ImmutableRef
+      - AuthorityRef
+      - ActorRef
+      - EvidenceRef
+      - EpistemicAssertion
+      - SemanticObjectVersion
+      - command_receipt_and_blocker_patterns
+      - canonical_hash_and_lifecycle_semantics
+draft_dependencies_consumed:
+  - TS-AIR-001
+draft_dependency_label_required: true
+accepted_for_build_required_at_write: false
+upstream_acceptance_required_at_write: false
+downstream_revision_impact_sections:
+  - governing_decisions
+  - proposed_architecture_and_workflows
+  - data_models_contracts_schemas_and_apis
+  - failure_migration_rollback_recovery_observability
+  - acceptance_criteria
+  - testing_and_completion_evidence
+on_upstream_hash_change: REOPEN_ALL_LISTED_SECTIONS_AND_BLOCK_ADVANCEMENT
+result: PASS
+

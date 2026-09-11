@@ -1,0 +1,21 @@
+$ python -m pytest -p no:asyncio -q tests/cae/test_m0079_storyboard_session_revision.py
+
+==================================== ERRORS ====================================
+_____ ERROR collecting tests/cae/test_m0079_storyboard_session_revision.py _____
+ImportError while importing test module '/mnt/data/codebase_clean/tests/cae/test_m0079_storyboard_session_revision.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/cae/test_m0079_storyboard_session_revision.py:10: in <module>
+    from ca_runtime.editorial_discovery_store import (
+packages/ca_runtime/src/ca_runtime/__init__.py:1: in <module>
+    from .database import (
+packages/ca_runtime/src/ca_runtime/database.py:14: in <module>
+    import psycopg
+E   ModuleNotFoundError: No module named 'psycopg'
+=========================== short test summary info ============================
+ERROR tests/cae/test_m0079_storyboard_session_revision.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.10s

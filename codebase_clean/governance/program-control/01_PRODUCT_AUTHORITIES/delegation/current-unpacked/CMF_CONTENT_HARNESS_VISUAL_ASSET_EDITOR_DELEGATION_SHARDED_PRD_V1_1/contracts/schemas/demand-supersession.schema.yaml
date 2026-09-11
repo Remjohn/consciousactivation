@@ -1,0 +1,31 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Demand Supersession
+type: object
+additionalProperties: false
+required:
+- previous_demand
+- new_demand
+- changed_fields
+- unchanged_authority
+properties:
+  previous_demand:
+    type: string
+    minLength: 1
+  new_demand:
+    type: string
+    minLength: 1
+  changed_fields:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+      - path
+      - change_class
+  unchanged_authority:
+    type: array
+    items:
+      type: string
+      minLength: 1
+  change_summary:
+    type: string

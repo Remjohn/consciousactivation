@@ -1,0 +1,126 @@
+{
+  "mandate_id": "M0075",
+  "status": "BLOCKED_OPERATOR_REVIEW_REQUIRED",
+  "source": {
+    "name": "Jellyfish",
+    "url": "https://github.com/Forget-C/Jellyfish",
+    "source_ref": "main",
+    "observed_tip_abbrev": "a967819",
+    "source_commit_sha": null,
+    "exact_commit_verification": "UNAVAILABLE",
+    "license": "Apache-2.0",
+    "license_evidence_url": "https://raw.githubusercontent.com/Forget-C/Jellyfish/main/LICENSE"
+  },
+  "cae_authority": {
+    "storyboard": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py::EditorialStoryboardRecord",
+    "operator_receipt": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py::EditorialDecisionReceiptRecord",
+    "candidate_lineage": "packages/ca_runtime/src/ca_runtime/editorial_discovery_store.py::ContentCandidateRecord",
+    "revision_authority": "packages/ca_runtime/src/ca_runtime/preparation_graph_store.py::PreparationGraphStore",
+    "revision_record": "packages/ca_runtime/src/ca_runtime/preparation_graph_store.py::GraphRevisionRecord",
+    "stale_write_guard": "packages/ca_runtime/src/ca_runtime/preparation_graph_store.py::StaleBaseRevisionError"
+  },
+  "concept_mapping": {
+    "StoryboardSession": {
+      "cae_authority": ["EditorialStoryboardRecord", "PreparationGraphRecord"],
+      "meaning": "Operator-facing editing session over one canonical storyboard and one preparation graph. This is a mapping concept, not a new persistent CAE type."
+    },
+    "StoryboardRevision": {
+      "cae_authority": ["GraphRevisionRecord"],
+      "meaning": "Immutable revision snapshot of storyboard preparation parameters."
+    }
+  },
+  "adopted_behaviors": [
+    {
+      "id": "JF-01",
+      "upstream_path": "backend/app/services/studio/shot_preparation_state.py",
+      "symbols": ["build_shot_preparation_state", "link_existing_asset_for_preparation"],
+      "behavior": "Aggregate preparation readiness from shot basics, semantic defaults, action beats, asset/dialogue candidate state, and explicit ready status; permit linking an existing reusable asset during preparation.",
+      "cae_mapping": "Derived read model over EditorialStoryboardRecord + eligible evidence/assets + PreparationGraphRecord; asset links remain downstream of CAE authority.",
+      "state_change": "No Jellyfish state table is adopted; any CAE state change must route through existing operator/program authorities."
+    },
+    {
+      "id": "JF-02",
+      "upstream_path": "backend/app/services/studio/shot_extracted_candidates.py",
+      "symbols": ["replace_for_shot", "mark_linked", "mark_linked_by_name", "mark_pending_by_name", "mark_pending_by_linked_entity"],
+      "behavior": "Refresh extracted candidates while preserving already-linked selections, and support explicit linked/pending/ignored outcomes.",
+      "cae_mapping": "Use existing ContentCandidateRecord lineage plus EditorialDecisionReceiptRecord; rejected or superseded candidates remain inspectable."
+    },
+    {
+      "id": "JF-03",
+      "upstream_path": "backend/app/services/studio/shot_assets.py",
+      "symbols": ["create_project_asset_link", "list_shot_linked_assets"],
+      "behavior": "Resolve reusable character/scene/prop/costume assets, validate entity existence, synchronize linked state, and present deterministically sorted linked assets.",
+      "cae_mapping": "Reference/presentation behavior only; do not create a Jellyfish project-asset store. CAE asset/evidence authority controls eligibility, provenance, rights and promotion."
+    },
+    {
+      "id": "JF-04",
+      "upstream_path": "backend/app/models/studio_shots.py",
+      "symbols": ["Shot", "ShotCharacterLink", "ShotExtractedCandidate", "ShotFrameImage", "ShotDialogLine"],
+      "behavior": "Separate shot identity, linked character context, extracted candidates, frame references, and dialogue context.",
+      "cae_mapping": "Presentation decomposition only. CAE semantic truth remains in EditorialStoryboardRecord/SemanticProgram and evidence lineage; frame/media references are governed production inputs."
+    },
+    {
+      "id": "JF-05",
+      "upstream_path": "backend/app/services/studio/shots.py",
+      "symbols": ["_build_extraction_state"],
+      "behavior": "Expose explicit extraction lifecycle states instead of collapsing missing, empty, pending and resolved into one boolean.",
+      "cae_mapping": "Adopt as a derived inspection taxonomy. It does not authorize CAE promotion."
+    }
+  ],
+  "revision_and_operator_mapping": {
+    "edit": {
+      "operation": "draft edit",
+      "cae_target": "PreparationGraphStore",
+      "actor": "operator",
+      "preconditions": ["active storyboard mapping exists", "caller has current latest revision"],
+      "validator": "PreparationGraphStore.save_graph_revision validates base_revision_id",
+      "postcondition": "new immutable GraphRevisionRecord becomes latest",
+      "receipt": "existing operator receipt surface where a governed decision is made",
+      "error_route": "StaleBaseRevisionError",
+      "recovery": "reload latest revision and create a new revision from that base"
+    },
+    "candidate_review": {
+      "operation": "confirm/ignore candidate",
+      "actor": "operator",
+      "preconditions": ["candidate has source/evidence lineage", "eligibility checks pass before promotion"],
+      "validator": "existing CAE candidate/editorial authority",
+      "postcondition": "canonical candidate state changes only through existing CAE API/store paths",
+      "receipt": "EditorialDecisionReceiptRecord",
+      "error_route": "authority-lane or eligibility rejection",
+      "recovery": "retain rejected candidate and issue a new governed decision"
+    },
+    "visual_inspection": {
+      "operation": "inspect preview/frame/reference",
+      "actor": "operator",
+      "preconditions": ["source lineage is visible", "preview is labeled presentation evidence"],
+      "validator": "semantic/provenance validators remain independent",
+      "postcondition": "inspection may inform an operator decision but cannot by itself promote semantic correctness",
+      "receipt": "operator decision receipt when a decision is recorded",
+      "error_route": "OPERATOR_DECISION_REQUIRED",
+      "recovery": "repair, reject, or request another candidate/reference"
+    }
+  },
+  "anti_centroid": {
+    "good_looking_but_wrong": "A visually coherent shot preview uses an aesthetically matching generated frame that is not tied to the approved evidence/asset lineage. The preview looks correct but must remain ineligible because visual quality cannot manufacture source authority.",
+    "expected_result": "presentation is allowed for inspection; promotion remains blocked until provenance, semantic constraints and operator approval are satisfied."
+  },
+  "excluded_behavior": [
+    "Jellyfish database schema and project/task authority model",
+    "Jellyfish frontend UI state as a source of truth",
+    "provider/model configuration",
+    "generation runtime and task execution",
+    "external service invocation",
+    "parallel authoritative storyboard state model",
+    "new StoryboardSession/StoryboardRevision persistent objects"
+  ],
+  "evidence_classes": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "MIGRATION",
+    "REGISTRY_SOURCE",
+    "DOCUMENT",
+    "TEST",
+    "HYPOTHESIS",
+    "OPERATOR_DECISION_REQUIRED"
+  ]
+}

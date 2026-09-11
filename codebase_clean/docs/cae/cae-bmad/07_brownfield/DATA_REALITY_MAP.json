@@ -1,0 +1,80 @@
+{
+  "artifact_id": "CAE-ART-DRM-001",
+  "status": "APPROVED",
+  "generated_date": "2026-09-03T11:10:04.152269",
+  "total_entities": 4,
+  "entities": [
+    {
+      "entity_name": "ResearchSignal",
+      "storage_engine": "IN_MEMORY_CAS",
+      "model_file": "services/world-intelligence/src/cae_world_intelligence/domain.py",
+      "key_fields": [
+        "signal_id",
+        "source_url",
+        "content",
+        "relevance_score",
+        "timestamp"
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "entity_name": "ProgramStateAggregate",
+      "storage_engine": "IN_MEMORY_CAS",
+      "model_file": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+      "key_fields": [
+        "program_id",
+        "current_state",
+        "cas_version",
+        "state_history"
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "entity_name": "CompiledWorkflowStep",
+      "storage_engine": "FILESYSTEM_YAML",
+      "model_file": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py",
+      "key_fields": [
+        "step_id",
+        "agent_binding",
+        "input_schema",
+        "output_schema"
+      ],
+      "status": "ACTIVE"
+    },
+    {
+      "entity_name": "EvidenceReceipt",
+      "storage_engine": "FILESYSTEM_YAML",
+      "model_file": "docs/cae/constitutions/CA-CAN-01C_RECEIPT.yaml",
+      "key_fields": [
+        "receipt_id",
+        "source_hash",
+        "signature",
+        "verified_at"
+      ],
+      "status": "ACTIVE"
+    }
+  ],
+  "canonical_state_alignments": [
+    {
+      "constitution_ref": "CA-CAN-02_STATE_AGGREGATE.yaml",
+      "state_model": "ProgramStateAggregate",
+      "verified": true
+    },
+    {
+      "constitution_ref": "CA-CAN-01C_RECEIPT.yaml",
+      "state_model": "EvidenceReceipt",
+      "verified": true
+    },
+    {
+      "constitution_ref": "CA-CAN-01B_EVIDENCE_SOURCE.yaml",
+      "state_model": "ResearchSignal",
+      "verified": true
+    }
+  ],
+  "storage_engines": [
+    "IN_MEMORY_CAS",
+    "FILESYSTEM_YAML",
+    "SQLITE",
+    "POSTGRES"
+  ]
+}

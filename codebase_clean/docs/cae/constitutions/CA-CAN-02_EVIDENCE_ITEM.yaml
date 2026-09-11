@@ -1,0 +1,282 @@
+# Object Constitution: EvidenceItem
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-EVI-002"
+canonical_name: "EvidenceItem"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Immutable Evidence"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-003, COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:50, CA-STATE-01:71, MC-CAE-MED-001, TS-CAE-TEN-001:3.5"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-EVI-002"
+    canonical_name: "EvidenceItem"
+    common_aliases: ["Evidence Finding", "Extracted Evidence", "Evidentiary Atom"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Immutable Evidence"
+    class_matrix_id: 6
+    class_rationale: "EvidenceItem represents a discrete evidentiary claim extracted from an immutable source package, guarded by database triggers against in-place mutation."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Stores operational factual claims extracted from tenant media assets and interview sessions."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Evidence Ingestion & Reality Contact"
+    primary_purpose: "Serves as the immutable evidentiary unit upon which all downstream psychological semantic assessments and primitive activations are grounded."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational immutable evidentiary record"
+    differentia: "Distinguished from MediaAsset (the raw file) and SemanticAssessment (derived qualitative interpretation) by representing a discrete, factual observation anchored by cryptographic spans."
+    function: "Anchors psychological, behavioral, or biographical observations to specific byte/temporal ranges in source media."
+    boundary: "Must not be mutated after capture; must not be created without at least one valid EvidenceSpan; cannot link to unverified media assets."
+    normative_definition: >
+      EvidenceItem is an immutable operational record of an observed fact or expression extracted from verified media
+      or interview turns. It is protected by database triggers against in-place mutation and serves as the indispensable
+      ground truth substrate for all semantic inferences.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable evidentiary record extracted from a verified SourcePackage."
+      - "The anchor for one or more EvidenceSpan locations."
+      - "The required input substrate for SemanticAssessment and primitive activation."
+    what_it_is_not:
+      - "A MediaAsset (MediaAsset is the container for the binary audio/video file)."
+      - "A SemanticAssessment (SemanticAssessment is a derived model inference interpreting the evidence)."
+      - "An EvidenceAuthentication (Authentication is the independent evaluation decision on the evidence)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "EvidenceSource / SourcePackage (CA-REL-004)"
+        distinction: "SourcePackage is the ingestion envelope for the entire media recording; EvidenceItem is a specific observation extracted from that package."
+      - neighbor: "SemanticAssessment (CA-DSA-001)"
+        distinction: "EvidenceItem is the grounded observation; SemanticAssessment is the synthetic/analytical interpretation derived from it."
+      - neighbor: "EvidenceSpan (CA-REL-003)"
+        distinction: "EvidenceItem is the logical evidence claim; EvidenceSpan is the physical coordinate range locating that claim in the media."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Evidence Extraction & Ingestion"
+    tier: "Workspace-Scoped Evidence Object"
+    specialization: "Verbatim Dialogue & Behavioral Evidence"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["CAPTURED", "AUTHENTICATED", "REJECTED", "NEEDS_REPAIR", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "evidence_id"
+        type: "UUID"
+        description: "Globally unique identifier for the evidence item."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "source_package_id"
+        type: "UUID"
+        description: "Parent SourcePackage / EvidenceSource identifier."
+      - name: "evidence_type"
+        type: "STRING"
+        description: "Taxonomic type of evidence (VERBATIM_QUOTE, BEHAVIORAL_OBSERVATION, TONAL_CUE)."
+      - name: "content_payload"
+        type: "JSONB"
+        description: "Structured extraction payload containing observed text, timestamps, and acoustic metrics."
+      - name: "payload_sha256"
+        type: "STRING"
+        description: "Cryptographic SHA-256 digest of the content payload."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when evidence was captured."
+    mutable_attributes:
+      - name: "lifecycle_state"
+        type: "STRING"
+        description: "Current verification lifecycle (CAPTURED, AUTHENTICATED, REJECTED, etc.)."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last lifecycle state transition."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+      - parent_object: "EvidenceSource"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "EvidenceSpan"
+        cardinality: "1:N"
+      - child_object: "EvidenceAuthentication"
+        cardinality: "0:N"
+      - child_object: "AssessmentEvidenceLink"
+        cardinality: "0:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "CAPTURED"
+    terminal_states: ["AUTHENTICATED", "REJECTED", "SUPERSEDED"]
+    states: ["CAPTURED", "AUTHENTICATED", "REJECTED", "NEEDS_REPAIR", "SUPERSEDED"]
+    transitions:
+      - from: "CAPTURED"
+        to: "AUTHENTICATED"
+        operation: "authenticate_evidence"
+      - from: "CAPTURED"
+        to: "REJECTED"
+        operation: "reject_evidence"
+      - from: "CAPTURED"
+        to: "NEEDS_REPAIR"
+        operation: "request_evidence_repair"
+      - from: "NEEDS_REPAIR"
+        to: "AUTHENTICATED"
+        operation: "authenticate_evidence"
+      - from: "AUTHENTICATED"
+        to: "SUPERSEDED"
+        operation: "supersede_evidence"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "evidence.item.captured"
+      - event_name: "evidence.item.authenticated"
+      - event_name: "evidence.item.rejected"
+      - event_name: "evidence.item.superseded"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Evidence Extraction Service via capture_evidence command (STC-EVID-000)"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-EVI-001: The content_payload and payload_sha256 MUST NOT be updated after creation (guarded by reject_immutable_evidence_mutation trigger)."
+      - "INV-EVI-002: Every EvidenceItem MUST have at least one valid EvidenceSpan pointing to a verified MediaAsset or InterviewTurn."
+      - "INV-EVI-003: An EvidenceItem cannot transition to AUTHENTICATED without an attributable EvidenceAuthentication record."
+      - "INV-EVI-004: Evidence payload SHA-256 must match the SHA-256 hash computed over canonical JSON payload bytes."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:50, CA-STATE-01:71, MC-CAE-MED-001, TS-CAE-TEN-001:3.5"
+    runtime_representation: "cae.evidence_item (PostgreSQL relational with immutable trigger)"
+    promotion_authority: "Workspace Evidence Evaluator & Authenticator"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "capture_evidence"
+        parameters: ["workspace_id", "source_package_id", "evidence_type", "content_payload", "spans"]
+      - name: "authenticate_evidence"
+        parameters: ["evidence_id", "evaluator_id", "rationale"]
+      - name: "reject_evidence"
+        parameters: ["evidence_id", "evaluator_id", "rejection_reason"]
+      - name: "supersede_evidence"
+        parameters: ["evidence_id", "superseded_by_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT modify content_payload, source_package_id, or payload_sha256 in place."
+      - "MUST NOT delete an EvidenceItem that is referenced by active SemanticAssessments."
+      - "MUST NOT self-authenticate evidence through the capture agent without independent evaluation."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify evidence_id, workspace_id, source_package_id are valid UUIDv4."
+      - "Verify payload_sha256 is 64-character lowercase hex string."
+      - "Verify content_payload is non-empty JSON object."
+    semantic_validators:
+      - "Verify payload_sha256 matches sha256(canonical_json(content_payload))."
+      - "Verify referenced source package exists in target workspace."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_EVIDENCE_NOT_FOUND"
+        http_status: 404
+        description: "Evidence item does not exist."
+      - code: "ERR_EVIDENCE_MUTATION_PROHIBITED"
+        http_status: 403
+        description: "Attempted mutation of immutable evidence fields rejected by trigger."
+      - code: "ERR_EVIDENCE_HASH_MISMATCH"
+        http_status: 422
+        description: "Payload SHA-256 does not match canonical payload hash."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.evidence_item"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage (Trigger guarded)"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Evidence Authentication Gate"
+      - "AIR Semantic Assessment Engine"
+      - "Primitive Activation & Coalition Generator"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What exact factual observation was extracted from this interview recording?"
+      - "What is the cryptographic hash and verification state of this evidence?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-EVI-001"
+        description: "Captured verbatim quote evidence item with computed payload SHA-256."
+        attributes:
+          evidence_id: "770e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          source_package_id: "880e8400-e29b-41d4-a716-446655440001"
+          evidence_type: "VERBATIM_QUOTE"
+          content_payload:
+            quote: "I felt completely unsupported when the deadline moved."
+            speaker: "GUEST"
+          payload_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          lifecycle_state: "CAPTURED"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-EVI-001"
+        description: "Near-miss: Attempting to update content_payload in place to 'clean up grammar' while preserving the original evidence_id."
+        rejection_reason: "Violates INV-EVI-001; evidence payloads are cryptographically immutable. Grammar cleanups must be captured as a new evidence item with a SUPERSEDES relationship."
+      - id: "NEG-EVI-002"
+        description: "Near-miss: Creating an EvidenceItem with an empty spans list, claiming spans will be attached asynchronously later."
+        rejection_reason: "Violates INV-EVI-002; unanchored evidence cannot be created; spans must be committed atomically."
+      - id: "NEG-EVI-003"
+        description: "Generic violation: Updating evidence lifecycle state to AUTHENTICATED without an evaluator_id."
+        rejection_reason: "Violates INV-EVI-003; authentication requires attributable evaluator identity."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for EvidenceItem immutable evidence aggregate with 26 dimensions."

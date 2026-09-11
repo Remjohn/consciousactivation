@@ -1,0 +1,35 @@
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install packages in dependency order
+COPY packages/ca_contracts packages/ca_contracts
+COPY packages/ca_runtime packages/ca_runtime
+COPY packages/ca_delegation_rc4 packages/ca_delegation_rc4
+COPY packages/ca_release packages/ca_release
+COPY services/builder services/builder
+COPY services/air services/air
+COPY services/pipeline services/pipeline
+COPY services/interview services/interview
+COPY services/vae services/vae
+
+RUN pip install --no-cache-dir \
+    packages/ca_contracts \
+    packages/ca_runtime \
+    packages/ca_delegation_rc4 \
+    packages/ca_release \
+    services/builder \
+    services/air \
+    services/pipeline \
+    services/interview \
+    services/vae \
+    fastapi==0.115.0 \
+    uvicorn[standard]==0.30.0 \
+    python-multipart==0.0.9 \
+    pydantic==2.7.0
+
+COPY api api
+EXPOSE 8000
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

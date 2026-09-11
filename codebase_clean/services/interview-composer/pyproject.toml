@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conscious-activations-interview-composer"
+version = "0.1.0.dev1"
+description = "Development-only Guest Research Package and Activative Interview Brief runtime."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["ca-contracts==0.1.0.dev1", "ca-runtime==0.1.0.dev1"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["conscious_activations_interview_composer*"]
+
+[tool.setuptools.package-data]
+conscious_activations_interview_composer = ["migrations/*.sql", "py.typed"]

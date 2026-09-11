@@ -1,0 +1,53 @@
+name: "CAE-BMAD M08 Data, Module, and Code Forensics Workflow"
+workflow_id: "WF-M08-DATA-MODULE-FORENSICS"
+version: "0.3.0-rebuild"
+primary_agent: "cae-code-forensics-analyst"
+
+description: "Execution pipeline for Mandate M08: Rebuilding the Data, Module, and Code Forensics Systems across Levels 09 through 13."
+
+preconditions:
+  - "Mandates M01-M07 completed and passed"
+  - "Database models, package directories, and source files readable"
+
+steps:
+  - step_id: "01_AUDIT_DATA_MODELS"
+    name: "Audit Data Entities & Storage Models"
+    agent: "cae-data-analyst"
+    operating_level: "Level 09: DATABASE / TABLE"
+    action: "Map entity models and check alignment with canonical state aggregate constitutions."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/DATA_REALITY_MAP.json"
+      - "docs/cae-bmad/07_brownfield/DATA_REALITY_MAP.md"
+
+  - step_id: "02_MAP_MODULE_NAMESPACES"
+    name: "Map Module Namespaces & Import Graphs"
+    agent: "cae-module-analyst"
+    operating_level: "Level 10: MODULE / DIRECTORY"
+    action: "Trace package namespaces, public symbol exports, and circular dependencies."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/MODULE_MAP.json"
+      - "docs/cae-bmad/07_brownfield/MODULE_MAP.md"
+
+  - step_id: "03_EXTRACT_CODE_FORENSICS"
+    name: "Extract AST Class, Function & Line Proofs"
+    agent: "cae-code-forensics-analyst"
+    operating_level: "Level 11: FILE through Level 13: LINE / BLOCK"
+    action: "Parse Python ASTs, verify exact line number ranges, and extract verbatim code proofs."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/CODE_FORENSICS_REPORT.json"
+      - "docs/cae-bmad/07_brownfield/CODE_FORENSICS_REPORT.md"
+
+  - step_id: "04_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_data_module_forensics_system.py and test_m08_data_module_forensics.py, then assemble OPERATOR_GATE_M08.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M08.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Data Reality Map validates against schema (min 4 entities)"
+  - "Module Map validates against schema (min 4 modules)"
+  - "Code Forensics Report validates against schema (classes, functions, verbatim line proofs)"
+  - "100% positive and countertests pass"

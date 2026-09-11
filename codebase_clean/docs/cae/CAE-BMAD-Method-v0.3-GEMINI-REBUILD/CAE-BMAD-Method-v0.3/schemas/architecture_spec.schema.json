@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Architecture Specification Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "status",
+    "system_name",
+    "subsystems",
+    "interfaces",
+    "communication_protocols",
+    "brownfield_integration_strategy",
+    "security_and_governance"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "system_name": { "type": "string" },
+    "subsystems": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["subsystem_id", "name", "responsibility", "bound_services"],
+        "properties": {
+          "subsystem_id": { "type": "string" },
+          "name": { "type": "string" },
+          "responsibility": { "type": "string" },
+          "bound_services": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["interface_name", "type", "contract_schema"],
+        "properties": {
+          "interface_name": { "type": "string" },
+          "type": { "type": "string", "enum": ["REST_API", "GRPC", "EVENT_BUS", "INTERNAL_PYTHON_API"] },
+          "contract_schema": { "type": "string" }
+        }
+      }
+    },
+    "communication_protocols": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "brownfield_integration_strategy": { "type": "string", "minLength": 20 },
+    "security_and_governance": { "type": "string" }
+  }
+}

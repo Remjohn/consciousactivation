@@ -1,0 +1,86 @@
+{
+  "archive": {
+    "sha256": "39049c349f471e09d7ed7017a1fd962eaf97274831c9f712cd74d094465edce1",
+    "uploaded_path": "/mnt/data/codebase_clean(4).zip"
+  },
+  "cae_commit_sha": "UNAVAILABLE_NO_GIT_METADATA",
+  "changed_paths": [
+    "services/pipeline/src/cmf_pipeline/media/openchatcut.py",
+    "tests/phase6/test_m065_openchatcut_runtime.py",
+    "engines/video/openchatcut/UPSTREAM_TO_CAE_MAPPING.md",
+    "engines/video/openchatcut/AGENT_HANDOFF.md",
+    "services/pipeline/evidence/M0094_IMPLEMENTATION_RECEIPT.json",
+    "services/pipeline/evidence/M0094.patch"
+  ],
+  "claims": [
+    {
+      "claim": "OpenChatCut handoff remains bound through the existing CAE adapter and preserves CAE timeline authority.",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "Native inspection is read-only and disposes its manual edit session.",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "Deterministic replay and contrastive good-looking-but-wrong asset detection pass.",
+      "class": "TEST"
+    },
+    {
+      "claim": "Safe timing divergence is emitted as a CAE human-resolution request and is never directly written back to the runtime.",
+      "class": "EXECUTABLE"
+    },
+    {
+      "claim": "Real native runtime availability and exact M0094 Git commit are not established.",
+      "class": "OPERATOR_DECISION_REQUIRED"
+    }
+  ],
+  "evidence_classes": {
+    "contracts": "SCHEMA",
+    "documentation": "DOCUMENT",
+    "external_runtime": "OPERATOR_DECISION_REQUIRED",
+    "implementation": "EXECUTABLE",
+    "verification": "TEST"
+  },
+  "external_source": {
+    "exact_commit_sha": "UNAVAILABLE_FROM_ACCESSIBLE_METADATA",
+    "files": [
+      "server/external-agent/mcp.ts",
+      "src/agent/external-tool-shape.ts",
+      "src/agent/tools/schemas/core-tools.ts",
+      "src/agent/tools/timeline-item-projection.ts",
+      "src/agent/tools/schemas/edit-item-tools.ts"
+    ],
+    "license": "AGPL-3.0-or-later",
+    "observed_branch": "main",
+    "observed_version": "0.2.14",
+    "repository": "https://github.com/0xsline/OpenChatCut"
+  },
+  "file_sha256": {
+    "engines/video/openchatcut/AGENT_HANDOFF.md": "867490a6edb4ab945d279a18bce70d282be80e6afb50755fd6c939f175f39b67",
+    "engines/video/openchatcut/UPSTREAM_TO_CAE_MAPPING.md": "3ccbb974c2bd1f3dd856a8b692d1de90ec078ae6e08f4030ea0e377181ebbb71",
+    "services/pipeline/evidence/M0094.patch": "930645438d268b0d8edaf11457ded9c9a22b9ebaafbb2f5e50b5e8ab66cdb7a5",
+    "services/pipeline/src/cmf_pipeline/media/openchatcut.py": "6498889fd335350dcd5e4f24f4c017a510a64d31ac1bca2f331b2f9c2e0ce4c4",
+    "tests/phase6/test_m065_openchatcut_runtime.py": "61c3e143ebb0ec6d8abc5ad095a90ead53075554eca71ec49d6fa6b8adec3c28"
+  },
+  "generated_utc": "2026-09-11T08:11:20Z",
+  "historical_m72_sync_sha": "8fb3733cc6a750560532f87f98af2fe24c229528",
+  "limitations": [
+    "Uploaded archive has no .git metadata; exact current CAE commit SHA cannot be supplied honestly.",
+    "Real OpenChatCut endpoint at localhost:5199 was unreachable in this execution environment.",
+    "No production/native visual preview acceptance was observed.",
+    "Native read_timeline does not provide a CAE source-media SHA; the CAE source_media_sha256 remains sovereign.",
+    "External upstream exact immutable commit SHA/tag for observed 0.2.14 could not be independently established from accessible metadata."
+  ],
+  "mandate_id": "M0094",
+  "operator_decision": null,
+  "status": "OPERATOR_DECISION_REQUIRED",
+  "tests": {
+    "command": "python -m pytest -p no:asyncio -q tests/phase6/test_m065_openchatcut_runtime.py tests/cae/test_m066_human_resolution.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_m0092_final_hit_storyboard_validation.py",
+    "native_runtime_probe": {
+      "command": "curl -i --max-time 3 -sS http://localhost:5199/api/external-mcp/mcp",
+      "result": "exit 7: Failed to connect to localhost port 5199; Could not connect to server"
+    },
+    "result": "33 passed, 16 warnings",
+    "warnings": "Pre-existing Pydantic V1 validator deprecations in packages/ca_runtime/src/ca_runtime/storyboard_session.py"
+  }
+}

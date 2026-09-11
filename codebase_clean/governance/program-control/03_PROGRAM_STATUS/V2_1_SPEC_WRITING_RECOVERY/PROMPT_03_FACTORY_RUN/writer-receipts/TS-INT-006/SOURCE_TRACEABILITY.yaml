@@ -1,0 +1,76 @@
+schema_version: conscious-activations-spec-source-traceability/v1
+spec_id: TS-INT-006
+functional_requirements:
+- fr_id: AIR-FR-055
+  owner: Interview Expression
+  story_id: AIR-ST-10.01
+  behavior: capture reaction as a time-aligned multimodal evidence stream with explicit modality coverage and epistemic state
+  required_sources: [SRC-AI2-REACTION-001, SRC-INT-001]
+  spec_sections: [2, 3, 5, 6, 8, 9, 10]
+  acceptance_criterion_ids: [AC-01, AC-02, AC-13, AC-19]
+- fr_id: AIR-FR-056
+  owner: Interview Expression
+  story_id: AIR-ST-10.01
+  behavior: use one complete governed reaction-outcome vocabulary while keeping operational failure outside the outcome set
+  required_sources: [SRC-AI2-REACTION-001, SRC-INT-001]
+  spec_sections: [3, 5, 6, 8, 9, 10]
+  acceptance_criterion_ids: [AC-03, AC-04, AC-05]
+- fr_id: AIR-FR-057
+  owner: Interview Expression
+  story_id: AIR-ST-10.02
+  behavior: bind immutable Reaction Receipt evidence to the actual delivered call or historical source trigger without fabricated history
+  required_sources: [SRC-AI2-REACTION-001, SRC-INT-001]
+  spec_sections: [3, 5, 6, 8, 9, 10]
+  acceptance_criterion_ids: [AC-06, AC-07, AC-15, AC-16, AC-18]
+- fr_id: AIR-FR-058
+  owner: Interview Expression
+  story_id: AIR-ST-10.02
+  behavior: preserve AIR-owned planned refs and Interview-Expression-owned observed evidence in a typed planned-observed delta
+  required_sources: [SRC-AI2-REACTION-001, SRC-INT-001]
+  spec_sections: [3, 5, 6, 8, 9, 10]
+  acceptance_criterion_ids: [AC-08, AC-09, AC-20]
+- fr_id: AIR-FR-059
+  owner: Interview Expression
+  story_id: AIR-ST-10.03
+  behavior: require evaluator independence evidence sufficiency alternatives and maximum-supported-claim limits before receipt eligibility
+  required_sources: [SRC-AI2-REACTION-001, SRC-INT-001]
+  spec_sections: [3, 5, 6, 8, 9, 10]
+  acceptance_criterion_ids: [AC-10, AC-11, AC-12, AC-21]
+- fr_id: AIR-FR-060
+  owner: Interview Expression
+  story_id: AIR-ST-10.03
+  behavior: expose outcome and counteractivation evidence to AIR without transferring source-evidence ownership or manufacturing semantic meaning
+  required_sources: [SRC-AI2-REACTION-001, SRC-INT-001]
+  spec_sections: [3, 5, 6, 8, 9, 10]
+  acceptance_criterion_ids: [AC-14, AC-17, AC-20, AC-22]
+story_cbar:
+- story_id: AIR-ST-10.01
+  protected_law: Observation records concrete human evidence and epistemic state rather than a model diagnosis.
+  tempting_shortcut: Infer reaction outcome directly from fluent transcript language or one strong visual signal.
+  prohibited_failure: Missing capture is treated as activation null or inferred meaning is laundered as observation.
+  defenses: [typed observation and interpretation split, modality coverage, evidence windows, typed insufficiency]
+- story_id: AIR-ST-10.02
+  protected_law: A live Reaction Receipt binds the call actually delivered and preserves immutable source evidence.
+  tempting_shortcut: Bind an AIR proposal or overwrite corrected evidence in place.
+  prohibited_failure: Receipt lineage cannot reproduce the historical trigger observation outcome and correction history.
+  defenses: [delivered-call evidence, immutable successor versions, optimistic concurrency, atomic commit, replay]
+- story_id: AIR-ST-10.03
+  protected_law: Independent evaluation constrains the strongest supported claim and does not auto-approve an Expression Moment.
+  tempting_shortcut: Let the call proposer or receipt compiler self-evaluate or equate affect intensity with intended activation.
+  prohibited_failure: Downstream semantic compilation consumes a self-confirming or overclaimed receipt.
+  defenses: [evaluator role separation, alternatives, maximum claim, eligibility gate, immutable evaluation receipt]
+draft_dependencies:
+- {spec_id: TS-INT-007, label: DRAFT_DEPENDENCY_NOT_ACCEPTED, sha256: 98978c560ba216707fcc7d26305de1f2c42e9391f09db20aa4fc97a69fe08dbc}
+authority_boundaries:
+  interview_expression_owns_reaction_observations: true
+  interview_expression_owns_reaction_receipts: true
+  air_owns_planned_semantic_objects_and_downstream_compilation: true
+  air_may_consume_but_not_manufacture_observed_evidence: true
+  pipeline_executes_without_rebuilding_meaning: true
+  studio_projection_is_not_canonical_evidence_write: true
+  delegation_transport_is_not_meaning: true
+claim_ceiling:
+  quality_state: WRITTEN_PENDING_AUDIT
+  authority_state: CANDIDATE_NOT_CURRENT
+  build_authority: false
+  maximum_pre_ratification_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION

@@ -1,0 +1,237 @@
+# Object Constitution: AssessmentEvidenceLink
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-REL-006"
+canonical_name: "AssessmentEvidenceLink"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Relation"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:54, TS-CAE-TEN-001:3.5"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REL-006"
+    canonical_name: "AssessmentEvidenceLink"
+    common_aliases: ["Assessment Grounding Link", "Semantic Evidence Binding"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Relation"
+    class_matrix_id: 2
+    class_rationale: "AssessmentEvidenceLink creates a many-to-many causal relational binding between a SemanticAssessment and the underlying EvidenceItem records that support it."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Maintains operational relational integrity between derived assessments and empirical evidence within a tenant workspace."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Causal Grounding & Anti-Hallucination Governance"
+    primary_purpose: "Enforces that no qualitative assessment can exist ungrounded from empirical evidence, providing explicit causal lineage."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational causal grounding relation"
+    differentia: "Distinguished from EvidenceSpan (which links evidence to raw media timestamps) by linking derived high-level assessments to discrete EvidenceItems."
+    function: "Records the semantic contribution weight and reasoning note connecting an assessment to specific evidence."
+    boundary: "Assessment and EvidenceItem MUST belong to the same workspace; links cannot cross tenant boundaries; cannot be modified once created."
+    normative_definition: >
+      AssessmentEvidenceLink is an immutable operational relation establishing causal grounding between a SemanticAssessment
+      and a supporting EvidenceItem. It ensures every model inference or analyst interpretation is traceable to verified
+      empirical observations.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable causal binding between a SemanticAssessment and an EvidenceItem."
+      - "The relational mechanism that satisfies the groundedness invariant of SemanticAssessment."
+      - "A workspace-scoped relation protected by RLS."
+    what_it_is_not:
+      - "An EvidenceSpan (EvidenceSpan binds EvidenceItems to media timestamps)."
+      - "A ReceiptEvidenceLink (ReceiptEvidenceLink binds execution receipts to evidence)."
+      - "A SemanticAssessment (SemanticAssessment is the derived insight itself)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "EvidenceSpan (CA-REL-003)"
+        distinction: "EvidenceSpan connects EvidenceItem to MediaAsset offsets; AssessmentEvidenceLink connects SemanticAssessment to EvidenceItem."
+      - neighbor: "ReceiptEvidenceLink (CA-REL-005)"
+        distinction: "ReceiptEvidenceLink records mechanical execution receipts linked to evidence; AssessmentEvidenceLink records semantic interpretation grounding."
+      - neighbor: "GuestIdentityLink (CA-MAP-001)"
+        distinction: "GuestIdentityLink connects guest identities across workspaces; AssessmentEvidenceLink connects assessments to evidence within one workspace."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Semantic Grounding & Lineage"
+    tier: "Semantic Relation"
+    specialization: "Assessment Grounding Binding"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["BOUND"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "link_id"
+        type: "UUID"
+        description: "Globally unique identifier for the link."
+      - name: "assessment_id"
+        type: "UUID"
+        description: "Parent SemanticAssessment identifier."
+      - name: "evidence_id"
+        type: "UUID"
+        description: "Target supporting EvidenceItem identifier."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "relevance_score"
+        type: "FLOAT"
+        description: "Semantic relevance score (0.0 to 1.0) indicating evidential weight."
+      - name: "grounding_note"
+        type: "STRING"
+        description: "Qualitative explanation of how this evidence supports the assessment."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when link was created."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+      - parent_object: "SemanticAssessment"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "AssessmentEvidenceLink is strictly immutable upon creation; it undergoes no state transitions."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "assessment.evidence.linked"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "ModelReasoningEngine or Semantic Assessment Pipeline at assessment creation time"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-AEL-001: The tuple (assessment_id, evidence_id) MUST be unique."
+      - "INV-AEL-002: assessment_id and evidence_id MUST both belong to the same workspace_id."
+      - "INV-AEL-003: relevance_score MUST be a float between 0.0 and 1.0 inclusive."
+      - "INV-AEL-004: AssessmentEvidenceLink is immutable once persisted."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:54, TS-CAE-TEN-001:3.5; AIR Grounding Protocol"
+    runtime_representation: "cae.assessment_evidence_link (PostgreSQL relational)"
+    promotion_authority: "Workspace Assessment Engine & Analyst"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "link_assessment_evidence"
+        parameters: ["assessment_id", "evidence_id", "relevance_score", "grounding_note"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT link an assessment to an evidence item in a different workspace."
+      - "MUST NOT mutate relevance_score or grounding_note after commit."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify link_id, assessment_id, evidence_id, workspace_id are valid UUIDv4."
+      - "Verify relevance_score is between 0.0 and 1.0."
+    semantic_validators:
+      - "Verify referenced SemanticAssessment and EvidenceItem exist in target workspace."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_LINK_DUPLICATE_BINDING"
+        http_status: 409
+        description: "Evidence item is already linked to this assessment."
+      - code: "ERR_LINK_CROSS_TENANT_VIOLATION"
+        http_status: 403
+        description: "Assessment and evidence item reside in different workspaces."
+      - code: "ERR_LINK_INVALID_SCORE"
+        http_status: 400
+        description: "relevance_score must be between 0.0 and 1.0."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.assessment_evidence_link"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "AIR Grounding Verifier"
+      - "Audit & Explainability Dashboard"
+      - "Activation Program Synthesis Engine"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Which exact evidence items justify this psychological assessment?"
+      - "What is the evidential relevance score of this link?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-AEL-001"
+        description: "High-confidence link connecting role tension assessment to quote evidence."
+        attributes:
+          link_id: "ee0e8400-e29b-41d4-a716-446655440001"
+          assessment_id: "dd0e8400-e29b-41d4-a716-446655440001"
+          evidence_id: "770e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          relevance_score: 0.95
+          grounding_note: "Direct quote explicitly articulates the tension between speed and team consensus."
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-AEL-001"
+        description: "Near-miss: Attempting to link an assessment in Workspace 1 to an evidence item in Workspace 2 because the two tenants represent partner companies."
+        rejection_reason: "Violates INV-AEL-002; multi-tenant isolation strictly prohibits cross-workspace evidence links."
+      - id: "NEG-AEL-002"
+        description: "Near-miss: Passing a relevance_score of 1.5 claiming 'extraordinary evidential strength'."
+        rejection_reason: "Violates INV-AEL-003; relevance_score must be normalized between 0.0 and 1.0."
+      - id: "NEG-AEL-003"
+        description: "Generic violation: Attempting to update a grounding link's evidence_id via SQL UPDATE."
+        rejection_reason: "Violates INV-AEL-004; links are immutable historical bindings."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for AssessmentEvidenceLink causal relation with 26 dimensions."

@@ -1,0 +1,98 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Production Plan
+description: ''
+type: object
+additionalProperties: false
+required:
+- plan_id
+- version
+- demand_ref
+- objective
+- route
+- production_constraints
+- capability_requirements
+- stages
+- evaluation_policy
+- budget
+properties:
+  plan_id:
+    type: string
+    pattern: ^VPP-
+  version:
+    type: integer
+    minimum: 1
+  demand_ref:
+    type: string
+    minLength: 1
+  objective:
+    type: object
+    required:
+    - asset_family
+    - asset_role
+    - activative_function
+    properties:
+      asset_family: &id001
+        type: string
+      asset_role: *id001
+      activative_function: *id001
+  route:
+    type: object
+    required:
+    - strategy
+    - routes
+    properties:
+      strategy: *id001
+      routes:
+        type: array
+        minItems: 1
+        items: *id001
+  production_constraints:
+    type: object
+    required:
+    - preserve
+    - mutable
+    properties:
+      preserve:
+        type: array
+        items: *id001
+      mutable:
+        type: array
+        items: *id001
+  capability_requirements:
+    type: array
+    items: *id001
+  stages:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+      - node_id
+      - actor_type
+      - inputs
+      - outputs
+      - dependencies
+      properties:
+        node_id: *id001
+        actor_type: *id001
+        inputs:
+          type: array
+          items: *id001
+        outputs:
+          type: array
+          items: *id001
+        dependencies:
+          type: array
+          items: *id001
+        checkpoint:
+          type: boolean
+  evaluation_policy:
+    type: object
+  budget:
+    type: object
+  fallback_routes:
+    type: array
+    items:
+      type: object
+  provider_bindings:
+    type: object

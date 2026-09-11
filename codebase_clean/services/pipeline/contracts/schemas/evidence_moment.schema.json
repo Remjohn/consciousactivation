@@ -1,0 +1,233 @@
+{
+  "$id": "https://conscious.activations/contracts/phase6/evidence_moment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "evidence_moment",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "evidence_moment_id": {
+      "type": "string",
+      "pattern": "^evidence-moment:[0-9a-f]{64}$"
+    },
+    "evidence_moment_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"
+    },
+    "source_registration_ref": {
+      "$ref": "#/$defs/immutable_ref"
+    },
+    "source_media_ref": {
+      "$ref": "#/$defs/immutable_ref"
+    },
+    "source_media_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_authority": {
+      "const": "SOVEREIGN_SOURCE_MEDIA_BYTES"
+    },
+    "stream": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stream_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "codec_type": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "ordinal",
+        "stream_index",
+        "codec_type"
+      ]
+    },
+    "timebase": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numerator": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ]
+    },
+    "start_offset_us": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "end_offset_us": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "start_source_tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "end_source_tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "transcript_span": {
+      "oneOf": [
+        {
+          "const": "NOT_APPLICABLE"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "alignment_ref": {
+              "$ref": "#/$defs/immutable_ref"
+            },
+            "start_word_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "end_word_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "start_char": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end_char": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "alignment_ref",
+            "start_word_id",
+            "end_word_id",
+            "start_char",
+            "end_char"
+          ]
+        }
+      ]
+    },
+    "coordinate_unit": {
+      "const": "MICROSECOND"
+    },
+    "coordinate_contract": {
+      "const": "SOURCE_STREAM_NATIVE_TIMEBASE_EXACT_MICROSECOND"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_kind": {
+          "const": "SOVEREIGN_SOURCE_BYTES"
+        },
+        "source_media_ref": {
+          "$ref": "#/$defs/immutable_ref"
+        },
+        "source_media_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_registration_ref": {
+          "$ref": "#/$defs/immutable_ref"
+        }
+      },
+      "required": [
+        "source_kind",
+        "source_media_ref",
+        "source_media_sha256",
+        "source_registration_ref"
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "VERIFIED"
+        },
+        "source_integrity": {
+          "const": "VERIFIED"
+        },
+        "stream_timebase": {
+          "const": "VERIFIED"
+        },
+        "interval_order": {
+          "const": "VERIFIED"
+        },
+        "bounds": {
+          "const": "VERIFIED"
+        },
+        "microsecond_precision": {
+          "const": "VERIFIED"
+        }
+      },
+      "required": [
+        "status",
+        "source_integrity",
+        "stream_timebase",
+        "interval_order",
+        "bounds",
+        "microsecond_precision"
+      ]
+    }
+  },
+  "required": [
+    "evidence_moment_id",
+    "evidence_moment_version",
+    "source_registration_ref",
+    "source_media_ref",
+    "source_media_sha256",
+    "source_authority",
+    "stream",
+    "timebase",
+    "start_offset_us",
+    "end_offset_us",
+    "start_source_tick",
+    "end_source_tick",
+    "transcript_span",
+    "coordinate_unit",
+    "coordinate_contract",
+    "provenance",
+    "validation"
+  ],
+  "$defs": {
+    "immutable_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ]
+    }
+  }
+}

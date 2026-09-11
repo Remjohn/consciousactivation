@@ -1,0 +1,310 @@
+# Object Constitution: WorkflowPrimitive
+# Phase 07 / CA-CAN-04 Canonical Workflow Primitive Constitution
+# Governed by Mandate CAE-M57 (02_WORKFLOW_ENGINEERING/M57_workflow_primitive_constitution.md)
+
+id: "CA-WFP-001"
+canonical_name: "WorkflowPrimitive"
+status: "RATIFIED"
+version: "1.0.0"
+maturity: "production_certified"
+primary_artifact_class: "Canonical Control Flow Primitive"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-006"
+traceability_matrix_ref: "CA-MAP-01:60, 11_STATEM_ALIGNMENT_CONTRACT.md, M57_workflow_primitive_constitution.md"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-WFP-001"
+    canonical_name: "WorkflowPrimitive"
+    common_aliases: ["Control Flow Primitive", "Workflow Node Primitive", "Deterministic Workflow Step", "Execution Primitive"]
+    naming_standard: "SCREAMING_SNAKE_CASE vocabulary tokens, PascalCase entity specification"
+    version: "1.0.0"
+    maturity: "production_certified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Canonical Control Flow Primitive"
+    class_matrix_id: 11
+    class_rationale: "WorkflowPrimitive defines the deterministic vocabulary, execution laws, failure/termination rules, checked transfer semantics, and state invariants governing workflow execution across the Conscious Activation Engine."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Resides on the Canonical Plane as global system doctrine governing deterministic workflow orchestration; contains zero tenant data, runtime states, or private credentials."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Deterministic Control Flow & Orchestration Law"
+    primary_purpose: "Enforces the architectural doctrine that code owns deterministic control flow, Agents own bounded reasoning within steps, Skills remain passive, and State transitions follow checked transfer semantics."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical workflow control-flow primitive and execution contract"
+    differentia: "Distinguished from Agent (which performs bounded cognitive reasoning within a step) by specifying deterministic orchestration logic; distinguished from StateAggregate (which holds mutable runtime version state) by defining immutable orchestration semantics; distinguished from Program (which is the operator-addressable work unit) by providing the atomic control-flow building blocks."
+    function: "Specifies deterministic execution mechanics, branching conditions, host-enforced iteration bounds, concurrency isolation, and checked state transitions for workflow execution graphs."
+    boundary: "Must not permit models or agents to mutate control laws or loop bounds; must not bypass checked transfer semantics; must not permit unhandled side-effect conflicts in parallel execution."
+    normative_definition: >
+      WorkflowPrimitive is a Global Canonical Control Flow Specification that ratifies the formal vocabulary of deterministic
+      workflow primitives (SEQUENCE, CONDITION, SWITCH, LOOP, RETRY, PARALLEL, JOIN, TIMEOUT, WAIT, HUMAN_GATE, FAIL,
+      REPAIR, CANCEL, RESUME) and work-unit kinds (AGENT_CALL, CODE_FUNCTION). It enforces host-controlled orchestration,
+      bounded iterations, side-effect isolation, and checked state transfer semantics under the StateM Alignment Contract.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The immutable canonical specification of deterministic control-flow primitives."
+      - "The definition of valid execution mechanics, termination criteria, and error semantics for workflow graphs."
+      - "The contract for checked transfer semantics across state boundaries (edge check -> pre-checks -> out-hooks -> commit -> in-hooks)."
+      - "A governed framework ensuring models reason inside steps rather than defining the workflow engine."
+    what_it_is_not:
+      - "A prompt or cognitive reasoning model (that is `Agent`)."
+      - "A mutable per-run execution record or state container (that is `StateAggregate` or `ProgramStateAggregate`)."
+      - "A passive procedural skill document (that is `Skill`)."
+      - "An ad-hoc loop or unconstrained orchestration script."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Agent (CA-AGT-001)"
+        distinction: "Agent owns bounded cognitive reasoning within an AGENT_CALL work unit; WorkflowPrimitive defines the deterministic structure calling the Agent."
+      - neighbor: "StateTransitionContract (CA-POL-002)"
+        distinction: "StateTransitionContract defines atomic lifecycle state transitions for an aggregate; WorkflowPrimitive defines multi-step control flow and checked transfer ordering."
+      - neighbor: "Program (CA-PRG-001)"
+        distinction: "Program is the operator-addressable unit of work binding Agents and workflows to phases; WorkflowPrimitive provides the atomic control flow language."
+      - neighbor: "HarnessTemplate (CA-STR-001)"
+        distinction: "HarnessTemplate is a declarative blueprint compiling into an executable workflow IR; WorkflowPrimitive is the vocabulary of primitive nodes."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Workflow Engineering & Control Flow Foundation"
+    tier: "Global Canonical Orchestration Specification"
+    specialization: "Deterministic Workflow Control Primitive"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "versioned"
+    epistemic_status: "established"
+    authority_status: "constitutional"
+    lifecycle_phases: ["DRAFT", "PROPOSED", "RATIFIED", "DEPRECATED", "RETIRED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "primitive_id"
+        type: "STRING"
+        description: "Canonical primitive identifier (e.g., 'PRIM-SEQ-001', 'PRIM-LOOP-001')."
+      - name: "primitive_kind"
+        type: "STRING"
+        description: "Ratified primitive vocabulary token (SEQUENCE, CONDITION, SWITCH, LOOP, RETRY, PARALLEL, JOIN, TIMEOUT, WAIT, HUMAN_GATE, FAIL, REPAIR, CANCEL, RESUME)."
+      - name: "work_unit_kind"
+        type: "STRING"
+        description: "Work unit kind for execution steps (AGENT_CALL, CODE_FUNCTION, or NOT_APPLICABLE for pure control primitives)."
+      - name: "version"
+        type: "SEMVER"
+        description: "Semantic version string conforming to SemVer 2.0.0 (e.g., '1.0.0')."
+      - name: "execution_law"
+        type: "STRING"
+        description: "Normative deterministic execution rules governing this primitive."
+      - name: "failure_behavior"
+        type: "STRING"
+        description: "Explicit deterministic behavior on failure or error conditions."
+      - name: "state_retention_policy"
+        type: "STRING"
+        description: "Rule specifying whether source state, history, and receipts are preserved upon failure, repair, or retry."
+      - name: "checked_transfer_obligations"
+        type: "JSONB"
+        description: "Specification of ordered transition protocol (edge verification, pre-checks, out-hooks, commit, in-hooks, context refresh)."
+      - name: "content_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 digest of the canonical primitive specification."
+    mutable_attributes:
+      - name: "lifecycle_state"
+        type: "STRING"
+        description: "Governance lifecycle state (DRAFT, PROPOSED, RATIFIED, DEPRECATED, RETIRED)."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last lifecycle state update."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "WorkflowPrimitive (Global canonical specification)"
+    child_relations:
+      - child_object: "WorkflowStepContract"
+        cardinality: "1:N (Governs typed step boundaries)"
+      - child_object: "ProgramStateMachineDefinition"
+        cardinality: "1:N (Composes into executable state machines)"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "DRAFT"
+    terminal_states: ["RETIRED"]
+    states: ["DRAFT", "PROPOSED", "RATIFIED", "DEPRECATED", "RETIRED"]
+    transitions:
+      - from: "DRAFT"
+        to: "PROPOSED"
+        operation: "propose_primitive_specification"
+      - from: "PROPOSED"
+        to: "RATIFIED"
+        operation: "ratify_primitive_specification"
+      - from: "RATIFIED"
+        to: "DEPRECATED"
+        operation: "deprecate_primitive_specification"
+      - from: "DEPRECATED"
+        to: "RETIRED"
+        operation: "retire_primitive_specification"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "workflow.primitive.proposed"
+      - event_name: "workflow.primitive.ratified"
+      - event_name: "workflow.primitive.deprecated"
+      - event_name: "workflow.primitive.retired"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Architecture Governance Committee under Mandate CAE-M57."
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-WFP-001: Deterministic Control Flow Law: Code and host runtime own all control-flow decisions (branching, looping, retries, timeouts, joins). AI models and agents MUST NOT dynamically redefine orchestration logic."
+      - "INV-WFP-002: Bounded Iteration Law: Every LOOP primitive MUST declare a host-enforced finite bound (max_iterations > 0) and timeout. Agents are strictly prohibited from mutating loop bounds at runtime."
+      - "INV-WFP-003: Checked Transfer Law: State transitions follow the 6-stage protocol: (1) valid-edge verification, (2) blocking pre-transfer checks, (3) persistence/out-hooks, (4) edge guards, (5) target state commit, (6) target entry context refresh. Failure of any check MUST retain the source state."
+      - "INV-WFP-004: Side-Effect Isolation Law: Parallel branches MUST NOT execute conflicting mutating side effects. Concurrency is permitted only for side-effect classes NONE or READ_ONLY."
+      - "INV-WFP-005: Governed Human Gate Law: HUMAN_GATE primitives require explicit, verifiable Operator action in the COMMANDER lane. Agents are prohibited from self-approving human gates."
+      - "INV-WFP-006: State-Preserving Repair Law: REPAIR and RETRY primitives MUST retain the source state, record the failed obligation, preserve prior execution receipts, and operate within a bounded retry budget."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "Mandate CAE-M57, `docs/cae/CAE_Next_16_Mandate_Bundle/02_WORKFLOW_ENGINEERING/M57_workflow_primitive_constitution.md`"
+    runtime_representation: "packages/ca_runtime/src/ca_runtime/workflow_primitives.py"
+    promotion_authority: "CAE Architecture Governance Committee / Platform Architecture Lead"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "register_primitive"
+        parameters: ["primitive_id", "primitive_kind", "work_unit_kind", "version", "spec_body"]
+      - name: "validate_workflow_definition"
+        parameters: ["workflow_nodes", "edges", "transition_semantics"]
+      - name: "execute_checked_transfer"
+        parameters: ["source_state", "target_state", "pre_checks", "guards", "hooks"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT permit unbounded or infinite loops in workflow definitions."
+      - "MUST NOT allow runtime agents to increase loop iterations or disable retry budgets."
+      - "MUST NOT commit a state transition when a blocking pre-transfer check or hook fails."
+      - "MUST NOT execute concurrent parallel branches with conflicting mutable side-effects."
+      - "MUST NOT bypass operator authorization on HUMAN_GATE primitives."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify primitive_kind is one of the 14 ratified vocabulary tokens."
+      - "Verify work_unit_kind is one of AGENT_CALL, CODE_FUNCTION, or NOT_APPLICABLE."
+      - "Verify LoopBoundPolicy has max_iterations > 0."
+    semantic_validators:
+      - "Verify checked transfer semantics enforce source-state retention on failure."
+      - "Verify parallel branches have non-conflicting side-effect classes."
+      - "Verify conditions are resolvable by deterministic host predicates."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_UNBOUNDED_LOOP"
+        http_status: 400
+        description: "Workflow contains a LOOP primitive with missing, zero, or negative max_iterations."
+      - code: "ERR_AGENT_MUTATED_LOOP_BOUND"
+        http_status: 403
+        description: "Runtime agent attempted to mutate or override host-enforced loop bounds."
+      - code: "ERR_UNEVALUABLE_CONDITION"
+        http_status: 422
+        description: "Condition expression or predicate cannot be deterministically evaluated by host runtime."
+      - code: "ERR_PARALLEL_SIDE_EFFECT_CONFLICT"
+        http_status: 409
+        description: "Parallel branches contain conflicting non-read-only side-effect declarations."
+      - code: "ERR_INVALID_TRANSITION_EDGE"
+        http_status: 400
+        description: "Attempted transition edge is not declared in the state machine definition."
+      - code: "ERR_BLOCKING_PRE_TRANSFER_CHECK_FAILED"
+        http_status: 412
+        description: "Pre-transfer check failed; transition blocked and run retained in source state."
+      - code: "ERR_HUMAN_GATE_BYPASS"
+        http_status: 403
+        description: "Attempted to advance past a HUMAN_GATE without verified operator authorization."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.workflow_primitive_definition"
+    rls_boundary_column: "NONE (Global canonical plane specification)"
+    storage_boundary: "Git repository `docs/cae/constitutions/` + in-memory runtime schema cache"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "UniversalProgramStateRuntime & ProgramStateMachineDefinition"
+      - "RuntimeWorkflowCompiler & Scheduler"
+      - "ProgramOperatorRuntimeService"
+      - "BoundedRepairRuntimeEngine"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What are the deterministic execution laws and failure semantics for this workflow step?"
+      - "What exact checks, hooks, and persistence actions must succeed before state is committed?"
+      - "Are parallel branches safe to execute concurrently without data races or conflicting side effects?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-WFP-001"
+        description: "Bounded LOOP primitive executing an Analyst repair cycle up to 3 times."
+        attributes:
+          primitive_kind: "LOOP"
+          work_unit_kind: "AGENT_CALL"
+          loop_bound_policy:
+            max_iterations: 3
+            timeout_seconds: 300
+            allow_agent_override: false
+          failure_behavior: "ABORT_TO_REPAIR_OR_FAIL"
+          state_retention_policy: "PRESERVE_SOURCE_STATE"
+
+      - id: "EX-WFP-002"
+        description: "Checked transfer CONDITION branching between COMPOSITION and HUMAN_GATE."
+        attributes:
+          primitive_kind: "CONDITION"
+          work_unit_kind: "CODE_FUNCTION"
+          condition_expression: "eval_score >= 85"
+          then_step_id: "STEP_APPROVE_GATE"
+          else_step_id: "STEP_REPAIR_LOOP"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-WFP-001"
+        description: "A workflow LOOP configured with max_iterations = 0 or relying on an LLM prompt to decide when to stop without host bounds."
+        rejection_reason: "Violates INV-WFP-002; loops must have host-enforced positive finite bounds."
+      - id: "NEG-WFP-002"
+        description: "A state transition that advances current_state to TARGET before evaluating pre-transfer hooks, reverting on failure."
+        rejection_reason: "Violates INV-WFP-003 and Checked Transfer Law; pre-transfer checks must pass BEFORE committing target state."
+      - id: "NEG-WFP-003"
+        description: "A PARALLEL primitive spawning two branches that both execute MUTATION_OPERATION on the same aggregate."
+        rejection_reason: "Violates INV-WFP-004; concurrent branches must be strictly isolated to NONE or READ_ONLY side effects."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "1.0.0"
+        date: "2026-09-02"
+        author: "CAE Architecture Lead (Mandate M57)"
+        summary: "Initial ratified constitution establishing WorkflowPrimitive as a first-class Global Canonical Control Flow Specification."

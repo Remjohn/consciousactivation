@@ -1,0 +1,125 @@
+runbook_id: cae.evidence_to_air_first_slice
+version: 1.0.0
+purpose: >
+  Govern one bounded evidence-to-AIR assessment lifecycle through authoritative
+  PostgreSQL state and registered CAE semantic operations.
+authority_boundary:
+  durable_state: PostgreSQL/Supabase CAE tables and immutable events/receipts
+  procedural_doctrine: this versioned runbook and its companion Skill
+  prohibited_shadow_state: local runbook state, prompt memory, or Harness IR
+  legacy_service_authority: unchanged
+initial_state: RECON
+terminal_states: [COMPLETE, BLOCKED, REPAIR_REQUIRED, FAILED]
+states:
+  - state_id: RECON
+    context_requirements:
+      - workspace_id
+      - source_package_id
+      - media_asset_id
+      - capture_actor_id
+    allowed_operations: []
+    authorized_reads:
+      - source package to verified-media relation
+      - media lifecycle state
+      - workspace actor membership
+    before_transfer_checks:
+      - media asset lifecycle is VERIFIED
+      - source package belongs to workspace
+      - capture actor belongs to workspace
+    recovery_routes: [BLOCKED, REPAIR_REQUIRED]
+  - state_id: CAPTURE
+    context_requirements: [evidence_id, start_ms, end_ms, quoted_text, idempotency_key]
+    allowed_operations: [cae.evidence.capture@1.0.0]
+    transition_contract: STC-EVID-000@1.0.0
+    required_evidence: [verified_source_package, verified_media_asset, anchored_span]
+    receipt_requirement: semantic_operation_receipt
+    before_transfer_checks:
+      - evidence aggregate is CAPTURED at version 1
+      - capture receipt exists
+    recovery_routes: [REPAIR_REQUIRED, BLOCKED]
+  - state_id: AUTHENTICATE
+    context_requirements: [evaluator_actor_id, authentication_rationale, idempotency_key]
+    allowed_operations: [cae.evidence.authenticate@1.0.0]
+    transition_contract: STC-EVID-001@1.0.0
+    required_evidence: [captured_evidence, anchored_span, independent_evaluator]
+    receipt_requirement: semantic_operation_receipt
+    before_transfer_checks:
+      - evaluator differs from capture actor
+      - evidence aggregate is AUTHENTICATED at version 2
+      - authentication receipt exists
+    recovery_routes: [REPAIR_REQUIRED, BLOCKED]
+  - state_id: ASSESS
+    context_requirements:
+      - assessment_id
+      - assessment_kind
+      - validator_id
+      - validator_version
+      - assessment_payload
+    allowed_operations:
+      - cae.air.propose-assessment@1.0.0
+      - cae.air.validate-assessment@1.0.0
+    transition_contracts: [STC-AIR-000@1.0.0, STC-AIR-001@1.0.0]
+    required_evidence: [authenticated_evidence]
+    receipt_requirement: semantic_operation_receipt
+    before_transfer_checks:
+      - assessment aggregate is VALIDATED at version 2
+      - proposal and validation receipts exist
+      - no registry-derived semantic-direction claim has been made
+    recovery_routes: [REPAIR_REQUIRED, BLOCKED]
+  - state_id: OPERATOR_REVIEW
+    context_requirements: [operator_actor_id, operator_decision, idempotency_key]
+    allowed_operations: [cae.air.confirm-assessment@1.0.0]
+    transition_contract: STC-AIR-002@1.0.0
+    required_evidence: [validated_assessment, reviewed_evidence_set, named_operator_decision]
+    receipt_requirement: semantic_operation_receipt
+    before_transfer_checks:
+      - assessment aggregate is OPERATOR_CONFIRMED at version 3
+      - confirmation receipt exists
+    recovery_routes: [REPAIR_REQUIRED, BLOCKED]
+  - state_id: COMPLETE
+    context_requirements: [receipt_id]
+    allowed_operations: []
+    completion_condition: >
+      The confirmation receipt and current aggregate projection agree. COMPLETE
+      does not prove semantic correctness, taste, or real-world outcome.
+  - state_id: REPAIR_REQUIRED
+    context_requirements: [typed_error, related_receipt_or_command_id, repair_plan]
+    allowed_operations: []
+    recovery_routes: [RECON, CAPTURE, AUTHENTICATE, ASSESS, OPERATOR_REVIEW, BLOCKED]
+  - state_id: BLOCKED
+    context_requirements: [blocking_reason, missing_authority_or_evidence]
+    allowed_operations: []
+  - state_id: FAILED
+    context_requirements: [failure_classification, diagnostic_receipt_or_command_id]
+    allowed_operations: []
+transitions:
+  - source: RECON
+    target: CAPTURE
+    guard: verified source/package/actor checks pass
+    required_evidence: [verified_source_package, verified_media_asset]
+  - source: CAPTURE
+    target: AUTHENTICATE
+    guard: STC-EVID-000 receipt and projection agree
+    required_evidence: [captured_evidence]
+  - source: AUTHENTICATE
+    target: ASSESS
+    guard: STC-EVID-001 receipt and projection agree
+    required_evidence: [authenticated_evidence]
+  - source: ASSESS
+    target: OPERATOR_REVIEW
+    guard: STC-AIR-000 and STC-AIR-001 receipts and projections agree
+    required_evidence: [validated_assessment]
+  - source: OPERATOR_REVIEW
+    target: COMPLETE
+    guard: STC-AIR-002 receipt and projection agree
+    required_evidence: [named_operator_decision]
+dynamic_checks:
+  - dynamic checks can add evidence or diagnostic requirements only
+  - dynamic checks cannot weaken transition contracts or authorize raw SQL
+  - promotion of a dynamic check to reusable doctrine requires operator review and regression coverage
+fidelity_and_reward_hack_checks:
+  - receipt presence alone is not independent evidence
+  - capture actor cannot authenticate the same evidence
+  - stale expected version must create no event or receipt
+  - database payload mutation or hash mismatch must be rejected
+  - E3 staging proof is not E4 semantic/taste/outcome proof

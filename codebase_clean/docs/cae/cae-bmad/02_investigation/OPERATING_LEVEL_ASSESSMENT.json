@@ -1,0 +1,203 @@
+{
+  "artifact_id": "CAE-ART-OLA-001",
+  "status": "APPROVED",
+  "assessment_date": "2026-09-03T08:43:56.639933",
+  "levels_evaluated": [
+    {
+      "level_number": 1,
+      "level_name": "PRODUCT / INTENT",
+      "analyst_agent": "cae-product-reconstructor",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "docs/PRD/CURRENT.md",
+        "docs/cae/CAE_Research_Library_144.md"
+      ],
+      "summary": "Level 01 (PRODUCT / INTENT) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 2,
+      "level_name": "DOCUMENTATION",
+      "analyst_agent": "cae-documentation-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "docs/cae/specs/",
+        "docs/cae/tech_specs/"
+      ],
+      "summary": "Level 02 (DOCUMENTATION) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 3,
+      "level_name": "PLAN",
+      "analyst_agent": "cae-plan-analyst",
+      "fidelity_status": "KNOWN",
+      "evidence_paths": [
+        "docs/cae/state/"
+      ],
+      "summary": "Level 03 (PLAN) audited with 1 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 4,
+      "level_name": "AGENT",
+      "analyst_agent": "cae-agent-systems-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "agents/",
+        "docs/cae/constitutions/CA-CAN-03_AGENT.yaml"
+      ],
+      "summary": "Level 04 (AGENT) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 5,
+      "level_name": "AI WORKFLOW / FACTORY",
+      "analyst_agent": "cae-workflow-factory-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "programs/",
+        "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml"
+      ],
+      "summary": "Level 05 (AI WORKFLOW / FACTORY) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 6,
+      "level_name": "REPOSITORY",
+      "analyst_agent": "cae-repository-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "WORKSPACE_MANIFEST.json",
+        "FOLDER_MAP.md"
+      ],
+      "summary": "Level 06 (REPOSITORY) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 7,
+      "level_name": "APPLICATION",
+      "analyst_agent": "cae-application-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "services/builder/",
+        "services/delegation/",
+        "services/vae/",
+        "services/world-intelligence/"
+      ],
+      "summary": "Level 07 (APPLICATION) audited with 4 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 8,
+      "level_name": "SCRIPT / CLI",
+      "analyst_agent": "cae-cli-script-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "scripts/cae/",
+        "tools/"
+      ],
+      "summary": "Level 08 (SCRIPT / CLI) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 9,
+      "level_name": "DATABASE / TABLE",
+      "analyst_agent": "cae-data-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "docs/cae/constitutions/CA-CAN-02_STATE_AGGREGATE.yaml",
+        "docs/cae/constitutions/CA-CAN-01B_EVIDENCE_SOURCE.yaml"
+      ],
+      "summary": "Level 09 (DATABASE / TABLE) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 10,
+      "level_name": "MODULE / DIRECTORY",
+      "analyst_agent": "cae-module-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "packages/ca_runtime/",
+        "services/pipeline/"
+      ],
+      "summary": "Level 10 (MODULE / DIRECTORY) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 11,
+      "level_name": "FILE / TYPE / CLASS",
+      "analyst_agent": "cae-code-forensics-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+        "services/world-intelligence/src/cae_world_intelligence/domain.py"
+      ],
+      "summary": "Level 11 (FILE / TYPE / CLASS) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 12,
+      "level_name": "FUNCTION",
+      "analyst_agent": "cae-code-forensics-analyst",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "services/world-intelligence/src/cae_world_intelligence/verifier.py",
+        "packages/ca_runtime/src/ca_runtime/program_state_runtime.py"
+      ],
+      "summary": "Level 12 (FUNCTION) audited with 2 verified active filesystem touchpoints."
+    },
+    {
+      "level_number": 13,
+      "level_name": "LINE / BLOCK",
+      "analyst_agent": "cae-brownfield-auditor",
+      "fidelity_status": "VERIFIED",
+      "evidence_paths": [
+        "services/world-intelligence/src/cae_world_intelligence/normalization.py"
+      ],
+      "summary": "Level 13 (LINE / BLOCK) audited with 1 verified active filesystem touchpoints."
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "FIND-001",
+      "starting_level": "Level 02: DOCUMENTATION",
+      "terminal_level": "Level 11: FILE / TYPE / CLASS",
+      "claim": "World Intelligence 14-parameter ResearchSignal contract is documented and implemented.",
+      "evidence": "Verified in services/world-intelligence/src/cae_world_intelligence/domain.py and SPEC-RSRCH-001_WORLD_SIGNAL_INGESTION.md.",
+      "verdict": "CONFIRMED"
+    },
+    {
+      "finding_id": "FIND-002",
+      "starting_level": "Level 01: PRODUCT / INTENT",
+      "terminal_level": "Level 06: REPOSITORY",
+      "claim": "Brownfield legacy intelligence archive files are preserved without deletion.",
+      "evidence": "Verified 10 archive files present in 'Conscious Activation Engine Brownfield/intelligence archive files/'.",
+      "verdict": "CONFIRMED"
+    },
+    {
+      "finding_id": "FIND-003",
+      "starting_level": "Level 02: DOCUMENTATION",
+      "terminal_level": "Level 07: APPLICATION",
+      "claim": "Pipeline compiler and scheduler runtimes exist and enforce constitutional checks.",
+      "evidence": "Verified in services/pipeline/src/cmf_pipeline/workflow/application/compiler.py.",
+      "verdict": "CONFIRMED"
+    },
+    {
+      "finding_id": "FIND-004",
+      "starting_level": "Level 03: PLAN",
+      "terminal_level": "Level 07: APPLICATION",
+      "claim": "M01-M12 CAE-BMAD method rebuild operates as an active governance layer.",
+      "evidence": "Verified in gemini_execution/ and docs/cae/CAE-BMAD-Method-v0.3-GEMINI-REBUILD/.",
+      "verdict": "CONFIRMED"
+    }
+  ],
+  "drift_matrix": [
+    {
+      "component": "Research Corpus Catalog",
+      "documented_state": "144 baseline research sources in CAE_Research_Library_144.md",
+      "codebase_state": "Expanded to 216 governed sources in .caebmad/research/CAE_RESEARCH_LIBRARY.yaml",
+      "remediation": "Updated method configuration to enforce the complete 216-source target."
+    },
+    {
+      "component": "Agent Specification Fidelity",
+      "documented_state": "19 identical agent stub files",
+      "codebase_state": "Differentiated agent specifications with explicit contracts, boundary rules, and skill bindings",
+      "remediation": "Rebuilt agent specifications under M01 to ensure loadability and routing."
+    }
+  ],
+  "recommendations": [
+    "Advance to Mandate M04 (Product & Research Reconstruction Agents).",
+    "Maintain bidirectional traceability between PRD Functional Requirements and Level 11-13 code paths.",
+    "Execute automated drift audits before every milestone promotion."
+  ]
+}

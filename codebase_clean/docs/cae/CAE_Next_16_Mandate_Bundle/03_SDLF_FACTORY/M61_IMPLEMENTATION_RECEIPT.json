@@ -1,0 +1,77 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M61",
+  "mandate_title": "CAE Software Development Life Cycle Factory",
+  "phase": "PHASE_08_SDLF_FACTORY",
+  "parallel_group": "P8-A",
+  "timestamp_utc": "2026-09-02T06:00:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/03_SDLF_FACTORY/M61_cae_software_development_life_cycle_factory.md"
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/sdlf_factory.py",
+      "artifact_class": "CAE SDLF Factory Engine, Workflow IR & Step Contracts",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m61_cae_software_development_life_cycle_factory.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 7,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_real_repository_change_runs_e2e": {
+      "status": "PASSED",
+      "description": "Full 11-phase SDLF pipeline runs end-to-end and produces completed execution trace."
+    },
+    "gate_2_deterministic_quality_tests": {
+      "status": "PASSED",
+      "description": "QUALITY phase executes strictly deterministic test functions as code."
+    },
+    "gate_3_typed_agent_phase_outputs": {
+      "status": "PASSED",
+      "description": "Scout, Plan, Build, Review, and Document agent phases produce schema-conforming typed envelopes."
+    },
+    "gate_4_review_rejection_and_bounded_repair": {
+      "status": "PASSED",
+      "description": "Failing tests trigger Review rejection and route to bounded repair loop with state retention."
+    },
+    "gate_5_complete_sdlc_trace": {
+      "status": "PASSED",
+      "description": "Audit trace records all phase results, repair attempts, quality metrics, and operator decisions."
+    }
+  },
+  "false_proof_defenses": [
+    {
+      "vector": "quality_assertion_bypass_rejection",
+      "rule": "INV-SDLF-001",
+      "error_code": "ERR_SDLF_REPAIR_EXHAUSTED",
+      "verified": true
+    },
+    {
+      "vector": "sandbox_path_escape_rejection",
+      "rule": "INV-SDLF-002",
+      "error_code": "ERR_SDLF_SANDBOX_VIOLATION",
+      "verified": true
+    },
+    {
+      "vector": "unauthorized_ship_grant_suspension",
+      "rule": "INV-SDLF-003",
+      "error_code": "SUSPENDED_WAITING_OPERATOR",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m61_tests_passed": 7,
+    "combined_phase_5_6_7_8_tests_passed": 135,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

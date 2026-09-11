@@ -1,0 +1,1153 @@
+--- a/api/main.py
++++ b/api/main.py
+@@ -153,4 +153,5 @@
+ from api.routers import release_ship; app.include_router(release_ship.router, prefix="/api/release", tags=["release-ship"])  # noqa: E702
+ # CAE (CA-M002 / FR-CONV-001): Dual-Context Convergence Gate router
+ from api.routers import convergence; app.include_router(convergence.router, prefix="/api/convergence", tags=["convergence"])  # noqa: E702
+-from api.routers import visual_studio; app.include_router(visual_studio.router, prefix="/api/visual-studio", tags=["visual-studio"])  # noqa: E702
++from api.routers import visual_studio; app.include_router(visual_studio.router, prefix="/api/visual-studio", tags=["visual-studio"])
++from api.routers import candidate_preview; app.include_router(candidate_preview.router, prefix="/api/visual-studio", tags=["candidate-preview"])  # noqa: E702
+--- a/api/routers/candidate_preview.py
++++ b/api/routers/candidate_preview.py
+@@ -0,0 +1,276 @@
++from __future__ import annotations
++
++from typing import Any, Literal
++
++from fastapi import APIRouter, Depends, HTTPException
++from pydantic import BaseModel, Field
++
++from api.dependencies import get_pipeline
++from api.services.campaign_projection import CampaignNotFound, load_campaign_with_revisions, state_object_id
++from api.services.human_resolution import compile_native_edit_program, commit_native_edit
++from cae_asset_intelligence.candidate_preview import (
++    AutoAcceptanceBlockedError,
++    CandidateDecision,
++    CandidatePreviewCard,
++    CandidatePreviewSession,
++    CandidateSelectionError,
++    CandidateStaleVersionError,
++    NavigationDirection,
++    POLICY_ID,
++    build_portfolio,
++    decide_session,
++    navigate_session,
++)
++from ca_contracts import canonical_sha256, utc_now_rfc3339
++from cmf_pipeline.domain.errors import PipelineConflict, PipelineNotFound
++
++router = APIRouter()
++SESSION_TYPE = "visual_candidate_session"
++PORTFOLIO_TYPE = "visual_candidate_portfolio"
++RECEIPT_TYPE = "visual_candidate_decision_receipt"
++
++
++class CandidateSessionCreate(BaseModel):
++    workspace_id: str = Field(min_length=1)
++    request_ref: dict[str, str]
++    target_ref: dict[str, str]
++    target_node_id: str = Field(min_length=1)
++    candidates: list[CandidatePreviewCard] = Field(min_length=1)
++
++
++class NavigateInput(BaseModel):
++    direction: Literal["NEXT", "PREVIOUS"]
++    expected_version: int = Field(ge=1)
++
++
++class DecisionInput(BaseModel):
++    candidate_id: str = Field(min_length=1)
++    decision: Literal["ACCEPT", "REJECT", "AUTO_ACCEPT"]
++    expected_version: int = Field(ge=1)
++    operator_actor: dict[str, Any] | None = None
++    rationale: str | None = None
++
++
++class PromoteInput(BaseModel):
++    expected_version: int = Field(ge=1)
++    operator_actor: dict[str, Any]
++
++
++class SearchAgainInput(BaseModel):
++    expected_version: int = Field(ge=1)
++    request_ref: dict[str, str]
++    candidates: list[CandidatePreviewCard] = Field(min_length=1)
++
++
++def _error(code: str, message: str, status: int = 422) -> HTTPException:
++    return HTTPException(status_code=status, detail={"error_code": code, "message": message, "timestamp": utc_now_rfc3339()})
++
++
++def _load_session(pipeline: Any, session_id: str) -> tuple[dict, CandidatePreviewSession, dict, dict]:
++    try:
++        session_obj = pipeline.repository.get_object(f"visual-candidate-session:{session_id}")
++    except PipelineNotFound as exc:
++        raise _error("CANDIDATE_SESSION_NOT_FOUND", session_id, 404) from exc
++    session = CandidatePreviewSession(**session_obj["payload"])
++    try:
++        portfolio_obj = pipeline.repository.get_object(session.active_portfolio_ref["object_id"])
++    except PipelineNotFound as exc:
++        raise _error("CANDIDATE_PORTFOLIO_NOT_FOUND", session.active_portfolio_ref["object_id"], 500) from exc
++    portfolio = portfolio_obj["payload"]
++    campaign = load_campaign_with_revisions(pipeline, session.campaign_id)
++    return campaign, session, portfolio, session_obj
++
++
++def _persist_session(pipeline: Any, session: CandidatePreviewSession, *, expected_revision: int) -> dict:
++    return pipeline.repository.store_object(
++        SESSION_TYPE,
++        session.model_dump(mode="json"),
++        object_id=f"visual-candidate-session:{session.session_id}",
++        idempotency_key=f"visual-candidate-session:{session.session_id}:v{session.version}",
++        expected_revision=expected_revision,
++    )
++
++
++@router.post("/campaigns/{campaign_id}/candidate-sessions")
++def create_candidate_session(campaign_id: str, body: CandidateSessionCreate, pipeline: Any = Depends(get_pipeline)):
++    try:
++        campaign = load_campaign_with_revisions(pipeline, campaign_id)
++    except CampaignNotFound as exc:
++        raise _error("CAMPAIGN_NOT_FOUND", str(exc), 404) from exc
++    if body.workspace_id != str(campaign["order"].get("workspace_id", body.workspace_id)):
++        raise _error("WORKSPACE_MISMATCH", "candidate session workspace does not match campaign")
++    if not body.target_ref.get("object_id") or not body.target_ref.get("version") or not body.target_ref.get("sha256"):
++        raise _error("MALFORMED_TARGET_REF", "target_ref must include object_id, version and sha256")
++    session_seed = canonical_sha256({
++        "campaign_id": campaign_id,
++        "workspace_id": body.workspace_id,
++        "request_ref": body.request_ref,
++        "target_ref": body.target_ref,
++        "target_node_id": body.target_node_id,
++        "candidates": [candidate.model_dump(mode="json") for candidate in body.candidates],
++    })
++    session_id = f"CVS-{session_seed[:20]}"
++    portfolio = build_portfolio(session_id=session_id, request_ref=body.request_ref, candidates=body.candidates)
++    portfolio_obj = pipeline.repository.store_object(
++        PORTFOLIO_TYPE,
++        portfolio.model_dump(mode="json"),
++        object_id=portfolio.portfolio_id,
++        idempotency_key=f"{session_id}:portfolio:{portfolio.portfolio_sha256}",
++    )
++    first_id = portfolio.candidates[0].candidate_id
++    session = CandidatePreviewSession(
++        session_id=session_id,
++        campaign_id=campaign_id,
++        workspace_id=body.workspace_id,
++        target_ref=body.target_ref,
++        target_node_id=body.target_node_id,
++        request_ref=body.request_ref,
++        active_portfolio_ref={"object_id": portfolio.portfolio_id, "version": str(portfolio_obj["object"]["revision"]), "sha256": portfolio.portfolio_sha256},
++        current_index=0,
++        seen_candidate_ids=(first_id,),
++    )
++    session_obj = pipeline.repository.store_object(
++        SESSION_TYPE,
++        session.model_dump(mode="json"),
++        object_id=f"visual-candidate-session:{session_id}",
++        idempotency_key=f"{session_id}:session:v1",
++    )
++    return _projection(session, portfolio, session_obj["object"]["canonical_sha256"])
++
++
++@router.get("/candidate-sessions/{session_id}")
++def get_candidate_session(session_id: str, pipeline: Any = Depends(get_pipeline)):
++    _, session, portfolio_payload, session_obj = _load_session(pipeline, session_id)
++    from cae_asset_intelligence.candidate_preview import CandidatePortfolio
++    portfolio = CandidatePortfolio(**portfolio_payload)
++    return _projection(session, portfolio, session_obj["object"]["canonical_sha256"])
++
++
++@router.post("/candidate-sessions/{session_id}/navigate")
++def navigate_candidate_session(session_id: str, body: NavigateInput, pipeline: Any = Depends(get_pipeline)):
++    _, session, portfolio_payload, session_obj = _load_session(pipeline, session_id)
++    from cae_asset_intelligence.candidate_preview import CandidatePortfolio
++    portfolio = CandidatePortfolio(**portfolio_payload)
++    try:
++        next_session = navigate_session(session, portfolio, direction=NavigationDirection(body.direction), expected_version=body.expected_version)
++        stored = _persist_session(pipeline, next_session, expected_revision=session_obj["object"]["revision"])
++    except CandidateStaleVersionError as exc:
++        raise _error("STALE_CANDIDATE_SESSION", str(exc), 409) from exc
++    return _projection(next_session, portfolio, stored["object"]["canonical_sha256"])
++
++
++@router.post("/candidate-sessions/{session_id}/decisions")
++def decide_candidate(session_id: str, body: DecisionInput, pipeline: Any = Depends(get_pipeline)):
++    campaign, session, portfolio_payload, session_obj = _load_session(pipeline, session_id)
++    from cae_asset_intelligence.candidate_preview import CandidatePortfolio
++    portfolio = CandidatePortfolio(**portfolio_payload)
++    revision_ref = {"object_id": state_object_id(session.campaign_id), "version": str(campaign["state"]["version"]), "sha256": canonical_sha256(campaign["state"])}
++    try:
++        next_session, receipt, policy_report = decide_session(
++            session,
++            portfolio,
++            candidate_id=body.candidate_id,
++            decision=CandidateDecision(body.decision),
++            expected_version=body.expected_version,
++            operator_ref=body.operator_actor,
++            rationale=body.rationale,
++            revision_ref=revision_ref,
++        )
++        receipt_obj = pipeline.repository.store_object(
++            RECEIPT_TYPE,
++            receipt.model_dump(mode="json"),
++            object_id=receipt.receipt_id,
++            idempotency_key=receipt.receipt_id,
++        )
++        next_session = next_session.model_copy(update={"last_receipt_ref": {"object_id": receipt.receipt_id, "version": str(receipt_obj["object"]["revision"]), "sha256": receipt.receipt_sha256}})
++        stored = _persist_session(pipeline, next_session, expected_revision=session_obj["object"]["revision"])
++    except (CandidateStaleVersionError, PipelineConflict) as exc:
++        raise _error("STALE_CANDIDATE_SESSION", str(exc), 409) from exc
++    except AutoAcceptanceBlockedError as exc:
++        raise _error("AUTO_ACCEPT_BLOCKED", str(exc), 422) from exc
++    except CandidateSelectionError as exc:
++        raise _error("CANDIDATE_DECISION_REJECTED", str(exc), 422) from exc
++    return {**_projection(next_session, portfolio, stored["object"]["canonical_sha256"]), "decision_receipt": receipt.model_dump(mode="json"), "policy_report": policy_report}
++
++
++@router.post("/candidate-sessions/{session_id}/search-again")
++def search_again(session_id: str, body: SearchAgainInput, pipeline: Any = Depends(get_pipeline)):
++    _, session, _, session_obj = _load_session(pipeline, session_id)
++    if body.expected_version != session.version:
++        raise _error("STALE_CANDIDATE_SESSION", f"expected candidate session version {body.expected_version}, current {session.version}", 409)
++    portfolio = build_portfolio(session_id=session_id, request_ref=body.request_ref, candidates=body.candidates)
++    portfolio_obj = pipeline.repository.store_object(
++        PORTFOLIO_TYPE,
++        portfolio.model_dump(mode="json"),
++        object_id=portfolio.portfolio_id,
++        idempotency_key=f"{session_id}:portfolio:{portfolio.portfolio_sha256}",
++    )
++    next_session = session.model_copy(update={
++        "request_ref": body.request_ref,
++        "active_portfolio_ref": {"object_id": portfolio.portfolio_id, "version": str(portfolio_obj["object"]["revision"]), "sha256": portfolio.portfolio_sha256},
++        "current_index": 0,
++        "selected_candidate_id": None,
++        "status": "INSPECTING",
++        "version": session.version + 1,
++        "seen_candidate_ids": tuple(dict.fromkeys((*session.seen_candidate_ids, portfolio.candidates[0].candidate_id))),
++    })
++    stored = _persist_session(pipeline, next_session, expected_revision=session_obj["object"]["revision"])
++    return _projection(next_session, portfolio, stored["object"]["canonical_sha256"])
++
++
++@router.post("/candidate-sessions/{session_id}/promote")
++def promote_candidate(session_id: str, body: PromoteInput, pipeline: Any = Depends(get_pipeline)):
++    campaign, session, portfolio_payload, session_obj = _load_session(pipeline, session_id)
++    from cae_asset_intelligence.candidate_preview import CandidatePortfolio
++    portfolio = CandidatePortfolio(**portfolio_payload)
++    if body.expected_version != session.version:
++        raise _error("STALE_CANDIDATE_SESSION", f"expected candidate session version {body.expected_version}, current {session.version}", 409)
++    if body.operator_actor.get("actor_type") != "human" or body.operator_actor.get("workflow_role") != "operator":
++        raise _error("OPERATOR_AUTHORIZATION_REQUIRED", "promotion requires a human operator actor", 403)
++    if not session.selected_candidate_id:
++        raise _error("CANDIDATE_NOT_SELECTED", "accept a candidate before promotion")
++    selected = next((candidate for candidate in portfolio.candidates if candidate.candidate_id == session.selected_candidate_id), None)
++    if selected is None:
++        raise _error("SELECTED_CANDIDATE_MISSING", session.selected_candidate_id, 422)
++
++    # Promote through the existing canonical campaign/VAE timeline substitution path.
++    state = campaign["state"]
++    current_ref = selected.source_ref.model_dump(mode="json")
++    program = compile_native_edit_program(
++        campaign_id=session.campaign_id,
++        state=state,
++        state_revision=campaign["state_revision"],
++        target_ref=session.target_ref,
++        target_node_id=session.target_node_id,
++        manipulation_type="SUBSTITUTE_ASSET",
++        arguments={"source_ref": current_ref},
++        operator_actor=body.operator_actor,
++    )
++    result = commit_native_edit(
++        pipeline=pipeline,
++        campaign_id=session.campaign_id,
++        program=program.as_dict(),
++        idempotency_key=f"m0087:promote:{session.session_id}:{session.selected_candidate_id}:{body.expected_version}",
++        expected_state_version=state["version"],
++    )
++    new_campaign = result["campaign"]
++    promotion_ref = {"object_id": state_object_id(session.campaign_id), "version": str(new_campaign["version"]), "sha256": canonical_sha256(new_campaign)}
++    next_session = session.model_copy(update={
++        "status": "PROMOTED",
++        "version": session.version + 1,
++        "promotion_ref": promotion_ref,
++    })
++    stored = _persist_session(pipeline, next_session, expected_revision=session_obj["object"]["revision"])
++    return {"session": next_session.model_dump(mode="json"), "promotion_ref": promotion_ref, "campaign": new_campaign, "promotion_episode": result["episode"], "receipt": result["receipt"], "session_revision_sha256": stored["object"]["canonical_sha256"]}
++
++
++def _projection(session: CandidatePreviewSession, portfolio: Any, session_sha: str) -> dict[str, Any]:
++    current = portfolio.candidates[session.current_index]
++    return {
++        "session": session.model_dump(mode="json"),
++        "portfolio": portfolio.model_dump(mode="json"),
++        "current_candidate": current.model_dump(mode="json"),
++        "selection_state": {"selected_candidate_id": session.selected_candidate_id, "rejected_candidate_ids": list(session.rejected_candidate_ids)},
++        "provenance": {"session_ref": {"object_id": f"visual-candidate-session:{session.session_id}", "version": str(session.version), "sha256": session_sha}},
++        "controls": {"navigation": ["PREVIOUS", "NEXT"], "decisions": ["ACCEPT", "REJECT", "AUTO_ACCEPT"], "search_again": True, "promote": session.selected_candidate_id is not None},
++    }
+--- a/services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py
++++ b/services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py
+@@ -0,0 +1,331 @@
++"""M0087 — governed candidate preview and selection session.
++
++This module is a projection over already-authorized retrieval candidates. It does not
++retrieve media, infer semantic meaning, or own storyboard/VAE authority. It persists
++session revisions, immutable decision receipts, and enough candidate snapshots to
++reproduce why a candidate was accepted or rejected.
++"""
++
++from __future__ import annotations
++
++from enum import Enum
++from typing import Any, Mapping, Sequence
++
++from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
++
++from ca_contracts import canonical_sha256, utc_now_rfc3339
++
++MANDATE_ID = "M0087"
++POLICY_ID = "visual-candidate-auto-accept-v1"
++
++
++class CandidatePreviewError(ValueError):
++    """Base M0087 validation error."""
++
++
++class CandidateStaleVersionError(CandidatePreviewError):
++    """Candidate session version no longer matches the caller's snapshot."""
++
++
++class CandidateSelectionError(CandidatePreviewError):
++    """A candidate decision violates session state or candidate eligibility."""
++
++
++class AutoAcceptanceBlockedError(CandidateSelectionError):
++    """Automatic acceptance failed one or more deterministic gates."""
++
++
++class CandidateDecision(str, Enum):
++    ACCEPT = "ACCEPT"
++    REJECT = "REJECT"
++    AUTO_ACCEPT = "AUTO_ACCEPT"
++
++
++class NavigationDirection(str, Enum):
++    NEXT = "NEXT"
++    PREVIOUS = "PREVIOUS"
++
++
++class CandidateSourceRef(BaseModel):
++    model_config = ConfigDict(extra="forbid", frozen=True)
++
++    object_id: str = Field(min_length=1)
++    version: str = Field(min_length=1)
++    sha256: str = Field(min_length=64, max_length=64)
++
++
++class CandidatePreviewCard(BaseModel):
++    """A render-ready candidate snapshot supplied by the authoritative retriever."""
++
++    model_config = ConfigDict(extra="forbid", frozen=True)
++
++    candidate_id: str = Field(min_length=1)
++    media_type: str = Field(min_length=1)
++    preview_uri: str | None = None
++    transcript_context: str = ""
++    source_ref: CandidateSourceRef
++    source_range_ms: tuple[int, int]
++    duration_ms: int = Field(gt=0)
++    rights_state: str = Field(min_length=1)
++    confidence_bps: int = Field(ge=0, le=10000)
++    semantic_fit_bps: int = Field(ge=0, le=10000)
++    quality_bps: int = Field(ge=0, le=10000)
++    ranking: int = Field(ge=1)
++    eligible: bool
++    eligibility_reasons: tuple[str, ...] = ()
++    provenance: Mapping[str, str] = Field(default_factory=dict)
++    source_quality_state: str = "UNKNOWN"
++
++    @field_validator("source_range_ms")
++    @classmethod
++    def valid_range(cls, value: tuple[int, int]) -> tuple[int, int]:
++        start, end = value
++        if start < 0 or end <= start:
++            raise ValueError("source_range_ms must be a positive, ordered interval")
++        return value
++
++    @model_validator(mode="after")
++    def validate_provenance(self) -> "CandidatePreviewCard":
++        required = {"source_version", "source_sha256"}
++        missing = sorted(required - set(self.provenance))
++        if missing:
++            raise ValueError(f"candidate provenance missing required fields: {missing}")
++        if self.provenance.get("source_version") != self.source_ref.version:
++            raise ValueError("candidate provenance source_version does not match source_ref")
++        if self.provenance.get("source_sha256") != self.source_ref.sha256:
++            raise ValueError("candidate provenance source_sha256 does not match source_ref")
++        return self
++
++    @property
++    def auto_accept_gates(self) -> dict[str, str]:
++        return {
++            "eligibility": "PASS" if self.eligible else "FAIL",
++            "confidence": "PASS" if self.confidence_bps >= 9000 else "FAIL",
++            "semantic_fit": "PASS" if self.semantic_fit_bps >= 9000 else "FAIL",
++            "rights": "PASS" if self.rights_state == "CLEARED" else "FAIL",
++            "provenance": "PASS" if self._provenance_complete else "FAIL",
++            "quality": "PASS" if self.quality_bps >= 8000 else "FAIL",
++        }
++
++    @property
++    def _provenance_complete(self) -> bool:
++        return bool(
++            self.provenance.get("candidate_id") in {None, self.candidate_id}
++            and self.provenance.get("source_version") == self.source_ref.version
++            and self.provenance.get("source_sha256") == self.source_ref.sha256
++            and self.provenance.get("scene_id")
++        )
++
++
++class CandidatePortfolio(BaseModel):
++    model_config = ConfigDict(extra="forbid", frozen=True)
++
++    portfolio_id: str
++    request_ref: dict[str, str]
++    candidates: tuple[CandidatePreviewCard, ...]
++    portfolio_sha256: str
++    created_at: str = Field(default_factory=utc_now_rfc3339)
++
++
++class CandidateDecisionReceipt(BaseModel):
++    """Immutable receipt for one selection/rejection decision."""
++
++    model_config = ConfigDict(extra="forbid", frozen=True)
++
++    receipt_id: str
++    mandate_id: str = MANDATE_ID
++    session_id: str
++    request_ref: dict[str, str]
++    candidate_set_ref: dict[str, str]
++    selected_candidate: dict[str, Any]
++    rejected_candidates: tuple[dict[str, Any], ...] = ()
++    operator_ref: dict[str, Any] | None = None
++    auto_selection_policy: str | None = None
++    source_ref: dict[str, str]
++    source_hash: str
++    source_range: tuple[int, int]
++    rights_state: str
++    storyboard_element_ref: dict[str, str]
++    revision_ref: dict[str, str]
++    decision: CandidateDecision
++    rationale: str | None = None
++    receipt_sha256: str
++    created_at: str = Field(default_factory=utc_now_rfc3339)
++
++
++class CandidatePreviewSession(BaseModel):
++    """Current mutable projection of an append-only candidate session."""
++
++    model_config = ConfigDict(extra="forbid")
++
++    session_id: str
++    campaign_id: str
++    workspace_id: str
++    target_ref: dict[str, str]
++    target_node_id: str
++    request_ref: dict[str, str]
++    active_portfolio_ref: dict[str, str]
++    current_index: int = 0
++    selected_candidate_id: str | None = None
++    rejected_candidate_ids: tuple[str, ...] = ()
++    seen_candidate_ids: tuple[str, ...] = ()
++    status: str = "INSPECTING"
++    version: int = Field(default=1, ge=1)
++    promotion_ref: dict[str, str] | None = None
++    last_receipt_ref: dict[str, str] | None = None
++    auto_accept_policy: str = POLICY_ID
++
++
++class AcceptancePolicyRegistry:
++    """Registered deterministic acceptance policy used only for automatic decisions."""
++
++    @staticmethod
++    def evaluate(candidate: CandidatePreviewCard, *, policy_id: str = POLICY_ID) -> dict[str, str]:
++        if policy_id != POLICY_ID:
++            raise CandidateSelectionError(f"unknown automatic acceptance policy: {policy_id}")
++        gates = candidate.auto_accept_gates
++        failed = [key for key, result in gates.items() if result != "PASS"]
++        return {**gates, "decision": "PASS" if not failed else "BLOCKED", "failed_gates": ",".join(failed)}
++
++    @classmethod
++    def assert_accept(cls, candidate: CandidatePreviewCard, *, policy_id: str = POLICY_ID) -> dict[str, str]:
++        report = cls.evaluate(candidate, policy_id=policy_id)
++        if report["decision"] != "PASS":
++            raise AutoAcceptanceBlockedError(
++                f"automatic candidate acceptance blocked; failed_gates={report['failed_gates']}"
++            )
++        return report
++
++
++def build_portfolio(
++    *,
++    session_id: str,
++    request_ref: Mapping[str, str],
++    candidates: Sequence[CandidatePreviewCard],
++) -> CandidatePortfolio:
++    if not candidates:
++        raise CandidateSelectionError("candidate portfolio cannot be empty")
++    ids = [candidate.candidate_id for candidate in candidates]
++    if len(ids) != len(set(ids)):
++        raise CandidateSelectionError("candidate portfolio contains duplicate candidate IDs")
++    ranks = [candidate.ranking for candidate in candidates]
++    if len(ranks) != len(set(ranks)):
++        raise CandidateSelectionError("candidate portfolio contains duplicate rankings")
++    ordered = tuple(sorted(candidates, key=lambda item: (item.ranking, item.candidate_id)))
++    core = {
++        "portfolio_id": f"candidate-portfolio:{canonical_sha256({'session_id': session_id, 'request_ref': dict(request_ref), 'candidates': [c.model_dump(mode='json') for c in ordered]})[:24]}",
++        "request_ref": dict(request_ref),
++        "candidates": [candidate.model_dump(mode="json") for candidate in ordered],
++    }
++    return CandidatePortfolio(**core, portfolio_sha256=canonical_sha256(core))
++
++
++def navigate_session(
++    session: CandidatePreviewSession,
++    portfolio: CandidatePortfolio,
++    *,
++    direction: NavigationDirection,
++    expected_version: int,
++) -> CandidatePreviewSession:
++    _check_version(session, expected_version)
++    count = len(portfolio.candidates)
++    if count == 0:
++        raise CandidateSelectionError("candidate portfolio cannot be empty")
++    delta = 1 if direction == NavigationDirection.NEXT else -1
++    next_index = (session.current_index + delta) % count
++    current_id = portfolio.candidates[next_index].candidate_id
++    seen = list(session.seen_candidate_ids)
++    if current_id not in seen:
++        seen.append(current_id)
++    return session.model_copy(update={
++        "current_index": next_index,
++        "seen_candidate_ids": tuple(seen),
++        "version": session.version + 1,
++    })
++
++
++def decide_session(
++    session: CandidatePreviewSession,
++    portfolio: CandidatePortfolio,
++    *,
++    candidate_id: str,
++    decision: CandidateDecision,
++    expected_version: int,
++    operator_ref: Mapping[str, Any] | None = None,
++    rationale: str | None = None,
++    revision_ref: Mapping[str, str] | None = None,
++    policy_id: str = POLICY_ID,
++) -> tuple[CandidatePreviewSession, CandidateDecisionReceipt, dict[str, str]]:
++    _check_version(session, expected_version)
++    candidate = next((item for item in portfolio.candidates if item.candidate_id == candidate_id), None)
++    if candidate is None:
++        raise CandidateSelectionError(f"candidate '{candidate_id}' is not in the active portfolio")
++
++    if decision in {CandidateDecision.ACCEPT, CandidateDecision.AUTO_ACCEPT} and candidate_id in session.rejected_candidate_ids:
++        raise CandidateSelectionError(f"candidate '{candidate_id}' was already rejected in this session; search again is required before reconsideration")
++
++    policy_report = AcceptancePolicyRegistry.evaluate(candidate, policy_id=policy_id)
++    if decision == CandidateDecision.AUTO_ACCEPT:
++        policy_report = AcceptancePolicyRegistry.assert_accept(candidate, policy_id=policy_id)
++        receipt_operator = None
++        policy_ref = policy_id
++        effective_decision = CandidateDecision.AUTO_ACCEPT
++    else:
++        if not operator_ref or operator_ref.get("actor_type") != "human" or operator_ref.get("workflow_role") != "operator":
++            raise CandidateSelectionError("manual candidate decisions require a human operator actor")
++        if decision == CandidateDecision.REJECT and (not rationale or len(rationale.strip()) < 5):
++            raise CandidateSelectionError("candidate rejection requires a rationale of at least 5 characters")
++        receipt_operator = dict(operator_ref)
++        policy_ref = None
++        effective_decision = decision
++
++    rejected = list(session.rejected_candidate_ids)
++    if decision == CandidateDecision.REJECT and candidate_id not in rejected:
++        rejected.append(candidate_id)
++
++    new_status = "SELECTED" if decision in {CandidateDecision.ACCEPT, CandidateDecision.AUTO_ACCEPT} else session.status
++    seen = list(session.seen_candidate_ids)
++    if candidate_id not in seen:
++        seen.append(candidate_id)
++    next_session = session.model_copy(update={
++        "selected_candidate_id": candidate_id if decision in {CandidateDecision.ACCEPT, CandidateDecision.AUTO_ACCEPT} else session.selected_candidate_id,
++        "rejected_candidate_ids": tuple(rejected),
++        "seen_candidate_ids": tuple(seen),
++        "status": new_status,
++        "version": session.version + 1,
++    })
++    selected_payload = candidate.model_dump(mode="json")
++    rejected_payload = tuple(
++        item.model_dump(mode="json") for item in portfolio.candidates if item.candidate_id in set(rejected)
++    )
++    receipt_core = {
++        "mandate_id": MANDATE_ID,
++        "session_id": session.session_id,
++        "request_ref": dict(session.request_ref),
++        "candidate_set_ref": {"object_id": portfolio.portfolio_id, "version": "1.0.0", "sha256": portfolio.portfolio_sha256},
++        "selected_candidate": selected_payload,
++        "rejected_candidates": list(rejected_payload),
++        "operator_ref": receipt_operator,
++        "auto_selection_policy": policy_ref,
++        "source_ref": candidate.source_ref.model_dump(mode="json"),
++        "source_hash": candidate.source_ref.sha256,
++        "source_range": candidate.source_range_ms,
++        "rights_state": candidate.rights_state,
++        "storyboard_element_ref": dict(session.target_ref),
++        "revision_ref": dict(revision_ref or {"object_id": session.target_ref["object_id"], "version": str(expected_version), "sha256": session.target_ref.get("sha256", "")}),
++        "decision": effective_decision.value,
++        "rationale": rationale,
++    }
++    receipt = CandidateDecisionReceipt(
++        **receipt_core,
++        receipt_id=f"candidate-decision:{canonical_sha256(receipt_core)[:24]}",
++        receipt_sha256=canonical_sha256(receipt_core),
++    )
++    return next_session, receipt, policy_report
++
++
++def _check_version(session: CandidatePreviewSession, expected_version: int) -> None:
++    if expected_version != session.version:
++        raise CandidateStaleVersionError(
++            f"expected candidate session version {expected_version}, current {session.version}"
++        )
+--- a/services/asset-intelligence/src/cae_asset_intelligence/__init__.py
++++ b/services/asset-intelligence/src/cae_asset_intelligence/__init__.py
+@@ -133,3 +133,40 @@
+     "RightsPolicy",
+     "SemanticCinematicRetriever",
+ ]
++
++
++from .candidate_preview import (
++    AcceptancePolicyRegistry,
++    AutoAcceptanceBlockedError,
++    CandidateDecision,
++    CandidateDecisionReceipt,
++    CandidatePreviewCard,
++    CandidatePreviewError,
++    CandidatePreviewSession,
++    CandidatePortfolio,
++    CandidateSelectionError,
++    CandidateSourceRef,
++    CandidateStaleVersionError,
++    NavigationDirection,
++    build_portfolio,
++    decide_session,
++    navigate_session,
++)
++
++__all__ += [
++    "AcceptancePolicyRegistry",
++    "AutoAcceptanceBlockedError",
++    "CandidateDecision",
++    "CandidateDecisionReceipt",
++    "CandidatePreviewCard",
++    "CandidatePreviewError",
++    "CandidatePreviewSession",
++    "CandidatePortfolio",
++    "CandidateSelectionError",
++    "CandidateSourceRef",
++    "CandidateStaleVersionError",
++    "NavigationDirection",
++    "build_portfolio",
++    "decide_session",
++    "navigate_session",
++]
+--- a/apps/web/src/api/candidatePreview.ts
++++ b/apps/web/src/api/candidatePreview.ts
+@@ -0,0 +1,27 @@
++import { apiFetch } from "./http";
++
++export interface CandidatePreviewProjection { [key: string]: any; }
++
++export async function createCandidateSession(campaignId: string, input: any): Promise<CandidatePreviewProjection> {
++  return apiFetch<CandidatePreviewProjection>(`/api/visual-studio/campaigns/${campaignId}/candidate-sessions`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
++export async function getCandidateSession(sessionId: string): Promise<CandidatePreviewProjection> {
++  return apiFetch<CandidatePreviewProjection>(`/api/visual-studio/candidate-sessions/${sessionId}`);
++}
++export async function navigateCandidateSession(sessionId: string, input: { direction: "NEXT" | "PREVIOUS"; expected_version: number }): Promise<CandidatePreviewProjection> {
++  return apiFetch<CandidatePreviewProjection>(`/api/visual-studio/candidate-sessions/${sessionId}/navigate`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
++export async function decideCandidate(sessionId: string, input: { candidate_id: string; decision: "ACCEPT" | "REJECT" | "AUTO_ACCEPT"; expected_version: number; operator_actor?: any; rationale?: string }): Promise<CandidatePreviewProjection> {
++  return apiFetch<CandidatePreviewProjection>(`/api/visual-studio/candidate-sessions/${sessionId}/decisions`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
++export async function promoteCandidate(sessionId: string, input: { expected_version: number; operator_actor: any }): Promise<CandidatePreviewProjection> {
++  return apiFetch<CandidatePreviewProjection>(`/api/visual-studio/candidate-sessions/${sessionId}/promote`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
+--- a/apps/web/src/components/visual-studio/CandidatePreviewPanel.tsx
++++ b/apps/web/src/components/visual-studio/CandidatePreviewPanel.tsx
+@@ -0,0 +1,147 @@
++import { useEffect, useRef, useState } from "react";
++import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
++import {
++  decideCandidate,
++  getCandidateSession,
++  navigateCandidateSession,
++  promoteCandidate,
++  type CandidatePreviewProjection,
++} from "../../api/candidatePreview";
++
++const OPERATOR = {
++  actor_id: "operator-web-001",
++  actor_type: "human" as const,
++  product_id: "conscious-activations-web",
++  workflow_role: "operator" as const,
++};
++
++function MiniBadge({ children, good = false, warn = false }: { children: React.ReactNode; good?: boolean; warn?: boolean }) {
++  const tone = good ? "border-ca-state-ready text-ca-state-ready" : warn ? "border-ca-gold-500 text-ca-gold-500" : "border-ca-border text-ca-text-secondary";
++  return <span className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${tone}`}>{children}</span>;
++}
++
++function Meta({ label, value }: { label: string; value: React.ReactNode }) {
++  return <div><div className="text-[10px] uppercase tracking-wider text-ca-text-secondary">{label}</div><div className="mt-1 break-all text-xs text-ca-text-primary">{value}</div></div>;
++}
++
++export function CandidatePreviewPanel({ initialSessionId = "" }: { initialSessionId?: string }) {
++  const qc = useQueryClient();
++  const [sessionId, setSessionId] = useState(initialSessionId);
++  const [sessionDraft, setSessionDraft] = useState(initialSessionId);
++  const [rejectNote, setRejectNote] = useState("");
++  const touchStart = useRef<number | null>(null);
++
++  useEffect(() => setSessionId(initialSessionId), [initialSessionId]);
++
++  const query = useQuery({
++    queryKey: ["candidate-preview", sessionId],
++    queryFn: () => getCandidateSession(sessionId),
++    enabled: Boolean(sessionId),
++    retry: false,
++  });
++
++  const refresh = () => qc.invalidateQueries({ queryKey: ["candidate-preview", sessionId] });
++  const navigate = useMutation({
++    mutationFn: (direction: "NEXT" | "PREVIOUS") => {
++      const p = query.data?.session;
++      if (!p) throw new Error("Candidate session is unavailable.");
++      return navigateCandidateSession(sessionId, { direction, expected_version: p.version });
++    },
++    onSuccess: (data) => qc.setQueryData(["candidate-preview", sessionId], data),
++  });
++  const decide = useMutation({
++    mutationFn: (decision: "ACCEPT" | "AUTO_ACCEPT" | "REJECT") => {
++      const p = query.data?.session;
++      const candidate = query.data?.current_candidate;
++      if (!p || !candidate) throw new Error("Candidate session is unavailable.");
++      return decideCandidate(sessionId, {
++        candidate_id: candidate.candidate_id,
++        decision,
++        expected_version: p.version,
++        operator_actor: decision === "AUTO_ACCEPT" ? undefined : OPERATOR,
++        rationale: decision === "REJECT" ? rejectNote : undefined,
++      });
++    },
++    onSuccess: (data) => { setRejectNote(""); qc.setQueryData(["candidate-preview", sessionId], data); },
++  });
++  const promote = useMutation({
++    mutationFn: () => {
++      const p = query.data?.session;
++      if (!p) throw new Error("Candidate session is unavailable.");
++      return promoteCandidate(sessionId, { expected_version: p.version, operator_actor: OPERATOR });
++    },
++    onSuccess: refresh,
++  });
++
++  const p = query.data as CandidatePreviewProjection | undefined;
++  const current = p?.current_candidate;
++  const candidates = p?.portfolio?.candidates ?? [];
++
++  const handleTouchStart = (event: React.TouchEvent) => { touchStart.current = event.changedTouches[0]?.clientX ?? null; };
++  const handleTouchEnd = (event: React.TouchEvent) => {
++    if (touchStart.current == null) return;
++    const end = event.changedTouches[0]?.clientX ?? touchStart.current;
++    const delta = end - touchStart.current;
++    touchStart.current = null;
++    if (Math.abs(delta) < 48) return;
++    navigate.mutate(delta < 0 ? "NEXT" : "PREVIOUS");
++  };
++
++  return <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Candidate preview and selection">
++    <div className="flex flex-wrap items-center justify-between gap-3">
++      <div><div className="text-xs uppercase tracking-[0.22em] text-ca-gold-500">Asset Research</div><h3 className="mt-1 font-medium">Candidate preview & promotion</h3></div>
++      <div className="flex gap-2"><MiniBadge>{p?.session?.status ?? "NO SESSION"}</MiniBadge><MiniBadge warn>Retrieval-owned candidates</MiniBadge></div>
++    </div>
++
++    <div className="mt-4 flex flex-wrap gap-2">
++      <input value={sessionDraft} onChange={(e) => setSessionDraft(e.target.value)} onKeyDown={(e) => e.key === "Enter" && setSessionId(sessionDraft.trim())} placeholder="Candidate session ID" className="min-w-[260px] flex-1 rounded border border-ca-border bg-black/10 px-3 py-2 text-xs text-ca-text-primary" aria-label="Candidate session ID" />
++      <button onClick={() => setSessionId(sessionDraft.trim())} className="rounded border border-ca-border px-3 py-2 text-xs hover:border-ca-gold-500">Open session</button>
++    </div>
++
++    {!sessionId && <div className="mt-4 rounded-lg border border-dashed border-ca-border p-5 text-xs text-ca-text-secondary">No candidate session is attached to this campaign yet. The authoritative retrieval path must create and bind the candidate session; no mock candidates are synthesized here.</div>}
++    {sessionId && query.isLoading && <div className="mt-4 text-xs text-ca-text-secondary">Loading candidate session…</div>}
++    {sessionId && query.isError && <div className="mt-4 rounded-lg border border-ca-danger/40 bg-ca-danger/10 p-4 text-xs text-ca-danger">Candidate session could not be loaded. The preview remains fail-closed.</div>}
++
++    {current && p && <>
++      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
++        <div
++          className="overflow-hidden rounded-lg border border-ca-border bg-black/30"
++          onTouchStart={handleTouchStart}
++          onTouchEnd={handleTouchEnd}
++          tabIndex={0}
++          onKeyDown={(e) => { if (e.key === "ArrowLeft") navigate.mutate("PREVIOUS"); if (e.key === "ArrowRight") navigate.mutate("NEXT"); }}
++          aria-label="Playable candidate preview; swipe or use arrow keys to inspect adjacent candidates"
++        >
++          {current.preview_uri && String(current.media_type).startsWith("VIDEO") ? <video className="aspect-video w-full bg-black object-contain" controls preload="metadata" src={current.preview_uri} /> : <div className="aspect-video grid place-items-center p-6 text-center text-xs text-ca-text-secondary">No playable media URI was supplied by retrieval. No replacement preview is synthesized.</div>}
++          <div className="flex items-center justify-between border-t border-ca-border px-3 py-2 text-xs"><span>{current.candidate_id}</span><span>Candidate {p.session.current_index + 1} / {candidates.length}</span></div>
++        </div>
++
++        <div className="space-y-4">
++          <Meta label="Source" value={`${current.source_ref.object_id} · v${current.source_ref.version}`} />
++          <Meta label="Source SHA-256" value={current.source_ref.sha256} />
++          <Meta label="Interval" value={`${current.source_range_ms[0]}–${current.source_range_ms[1]} ms`} />
++          <Meta label="Rights" value={<MiniBadge good={current.rights_state === "CLEARED"}>{current.rights_state}</MiniBadge>} />
++          <Meta label="Confidence / fit / quality" value={`${current.confidence_bps} / ${current.semantic_fit_bps} / ${current.quality_bps} bps`} />
++          <Meta label="Eligibility" value={<MiniBadge good={current.eligible}>{current.eligible ? "eligible" : "blocked"}</MiniBadge>} />
++          <Meta label="Provenance" value={`${current.provenance.scene_id ?? "MISSING scene"} · ${current.provenance.source_version}`} />
++          <p className="rounded border border-ca-border bg-black/10 p-3 text-xs text-ca-text-secondary">{current.transcript_context || "No transcript context supplied."}</p>
++        </div>
++      </div>
++
++      <div className="mt-4 flex flex-wrap items-center gap-2">
++        <button disabled={navigate.isPending} onClick={() => navigate.mutate("PREVIOUS")} className="rounded border border-ca-border px-3 py-2 text-xs hover:border-ca-gold-500 disabled:opacity-40">← Previous</button>
++        <button disabled={navigate.isPending} onClick={() => navigate.mutate("NEXT")} className="rounded border border-ca-border px-3 py-2 text-xs hover:border-ca-gold-500 disabled:opacity-40">Next →</button>
++        <button disabled={decide.isPending} onClick={() => decide.mutate("ACCEPT")} className="rounded border border-ca-state-ready px-3 py-2 text-xs text-ca-state-ready disabled:opacity-40">Accept</button>
++        <button disabled={decide.isPending} onClick={() => decide.mutate("AUTO_ACCEPT")} className="rounded border border-ca-gold-500 px-3 py-2 text-xs text-ca-gold-500 disabled:opacity-40">Auto-accept (gated)</button>
++        <input value={rejectNote} onChange={(e) => setRejectNote(e.target.value)} placeholder="Rejection rationale" className="min-w-[210px] flex-1 rounded border border-ca-border bg-black/10 px-3 py-2 text-xs" aria-label="Rejection rationale" />
++        <button disabled={decide.isPending || rejectNote.trim().length < 5} onClick={() => decide.mutate("REJECT")} className="rounded border border-ca-danger px-3 py-2 text-xs text-ca-danger disabled:opacity-40">Reject</button>
++        <button disabled={!p.session.selected_candidate_id || promote.isPending} onClick={() => promote.mutate()} className="rounded bg-ca-gold-500 px-3 py-2 text-xs font-medium text-white disabled:opacity-40">Promote to canonical VAE/Storyboard state</button>
++      </div>
++
++      <div className="mt-3 flex items-center justify-between text-[10px] text-ca-text-secondary">
++        <span>Swipe left/right or use ←/→ · rejected candidates remain in session lineage · promotion is operator-gated</span>
++        <span>{p.session.last_receipt_ref ? `Receipt: ${p.session.last_receipt_ref.object_id}` : "No decision receipt yet"}</span>
++      </div>
++    </>}
++  </section>;
++}
+--- a/apps/web/src/components/visual-studio/VisualAssetStudio.tsx
++++ b/apps/web/src/components/visual-studio/VisualAssetStudio.tsx
+@@ -1,6 +1,7 @@
+ import { useMemo, useState } from "react";
+ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+ import { compileVisualProposal, compileVisualTransformProposal, getVisualStudio, recordVisualFeedback, type VisualFeedbackDecision, type VisualTransformType } from "../../api/visualStudio";
++import { CandidatePreviewPanel } from "./CandidatePreviewPanel";
+ 
+ const OPERATOR = { actor_id: "operator-web-001", actor_type: "human" as const, product_id: "conscious-activations-web", workflow_role: "operator" as const };
+ 
+@@ -72,6 +73,7 @@
+   if (query.isError || !query.data) return <div className="rounded-xl border border-ca-danger/40 bg-ca-danger/10 p-6 text-sm text-ca-danger">Visual Asset Studio could not establish a canonical projection. No replacement or generated preview is shown.</div>;
+   const p = query.data!;
+   const preview = p.preview?.artifact_ref;
++  const candidateSessionId = new URLSearchParams(window.location.search).get("candidateSessionId") ?? "";
+   const timeline = p.composition?.timeline;
+   const canvasW = timeline?.width ?? 1920; const canvasH = timeline?.height ?? 1080;
+ 
+@@ -80,6 +82,8 @@
+       <div><div className="text-xs uppercase tracking-[0.22em] text-ca-gold-500">Evidence-First Visual Asset Studio</div><h2 className="mt-1 text-xl font-semibold">Inspect → transform → compose → validate</h2></div>
+       <div className="flex gap-2"><Badge tone="good">Canonical state</Badge><Badge tone={p.preview?.available ? "good" : "warn"}>{p.preview?.available ? "Artifact preview" : "Preview unavailable"}</Badge></div>
+     </div>
++
++    <CandidatePreviewPanel initialSessionId={candidateSessionId} />
+ 
+     <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
+       <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Source and evidence">
+--- a/tests/asset_intelligence/test_m0087_candidate_preview.py
++++ b/tests/asset_intelligence/test_m0087_candidate_preview.py
+@@ -0,0 +1,134 @@
++from __future__ import annotations
++
++import json
++import sys
++from pathlib import Path
++
++import pytest
++
++ROOT = Path(__file__).parents[2]
++sys.path.insert(0, str(ROOT / "services" / "asset-intelligence" / "src"))
++
++from cae_asset_intelligence.candidate_preview import (  # noqa: E402
++    AcceptancePolicyRegistry,
++    AutoAcceptanceBlockedError,
++    CandidateDecision,
++    CandidatePreviewCard,
++    CandidatePreviewSession,
++    CandidateSelectionError,
++    CandidateSourceRef,
++    CandidateStaleVersionError,
++    NavigationDirection,
++    build_portfolio,
++    decide_session,
++    navigate_session,
++)
++
++
++def _candidate(cid: str, *, confidence=9300, fit=9300, quality=8500, rights="CLEARED", eligible=True, scene="SCN-1"):
++    return CandidatePreviewCard(
++        candidate_id=cid,
++        media_type="VIDEO_CLIP",
++        preview_uri=f"https://media.test/{cid}.mp4",
++        transcript_context="The source clip shows the operational turning point in context.",
++        source_ref=CandidateSourceRef(object_id=cid, version="v7", sha256="a" * 64),
++        source_range_ms=(1000, 5000),
++        duration_ms=4000,
++        rights_state=rights,
++        confidence_bps=confidence,
++        semantic_fit_bps=fit,
++        quality_bps=quality,
++        ranking=1 if cid.endswith("1") else 2,
++        eligible=eligible,
++        provenance={"candidate_id": cid, "scene_id": scene, "source_version": "v7", "source_sha256": "a" * 64},
++        source_quality_state="HIGH",
++    )
++
++
++def _session(portfolio):
++    return CandidatePreviewSession(
++        session_id="CVS-1",
++        campaign_id="camp-1",
++        workspace_id="ws-1",
++        target_ref={"object_id": "element-1", "version": "1", "sha256": "b" * 64},
++        target_node_id="clip-1",
++        request_ref={"object_id": "request-1", "version": "1", "sha256": "c" * 64},
++        active_portfolio_ref={"object_id": portfolio.portfolio_id, "version": "1", "sha256": portfolio.portfolio_sha256},
++        seen_candidate_ids=(portfolio.candidates[0].candidate_id,),
++    )
++
++
++def test_happy_path_navigation_accept_and_rejection_lineage():
++    p = build_portfolio(session_id="CVS-1", request_ref={"request_id": "r1"}, candidates=[_candidate("AST-1"), _candidate("AST-2")])
++    s = _session(p)
++    s2 = navigate_session(s, p, direction=NavigationDirection.NEXT, expected_version=1)
++    assert s2.current_index == 1
++    s3, receipt, policy = decide_session(s2, p, candidate_id="AST-2", decision=CandidateDecision.ACCEPT, expected_version=2, operator_ref={"actor_type": "human", "workflow_role": "operator", "actor_id": "op-1"})
++    assert s3.selected_candidate_id == "AST-2"
++    assert receipt.decision == CandidateDecision.ACCEPT
++    assert policy["decision"] == "PASS"
++
++
++def test_good_looking_but_wrong_candidate_is_blocked_by_deterministic_policy():
++    candidate = _candidate("AST-WRONG", fit=6500)
++    report = AcceptancePolicyRegistry.evaluate(candidate)
++    assert report["semantic_fit"] == "FAIL"
++    p = build_portfolio(session_id="CVS-2", request_ref={"request_id": "r2"}, candidates=[candidate])
++    with pytest.raises(AutoAcceptanceBlockedError, match="semantic_fit"):
++        decide_session(_session(p), p, candidate_id="AST-WRONG", decision=CandidateDecision.AUTO_ACCEPT, expected_version=1)
++
++
++def test_auto_accept_requires_rights_provenance_and_quality_gates():
++    candidate = _candidate("AST-3", rights="RESTRICTED", quality=9500)
++    report = AcceptancePolicyRegistry.evaluate(candidate)
++    assert report["rights"] == "FAIL"
++    assert report["decision"] == "BLOCKED"
++
++
++def test_manual_reject_requires_human_actor_and_rationale_and_preserves_lineage():
++    p = build_portfolio(session_id="CVS-3", request_ref={"request_id": "r3"}, candidates=[_candidate("AST-1"), _candidate("AST-2")])
++    s = _session(p)
++    with pytest.raises(CandidateSelectionError):
++        decide_session(s, p, candidate_id="AST-1", decision=CandidateDecision.REJECT, expected_version=1, operator_ref={"actor_type": "model"}, rationale="wrong")
++    s2, receipt, _ = decide_session(s, p, candidate_id="AST-1", decision=CandidateDecision.REJECT, expected_version=1, operator_ref={"actor_type": "human", "workflow_role": "operator", "actor_id": "op-1"}, rationale="Wrong reading despite visual quality.")
++    assert "AST-1" in s2.rejected_candidate_ids
++    assert any(item["candidate_id"] == "AST-1" for item in receipt.rejected_candidates)
++
++
++def test_stale_and_malformed_cases_fail_closed():
++    p = build_portfolio(session_id="CVS-4", request_ref={"request_id": "r4"}, candidates=[_candidate("AST-1")])
++    s = _session(p)
++    with pytest.raises(CandidateStaleVersionError):
++        navigate_session(s, p, direction=NavigationDirection.NEXT, expected_version=99)
++    with pytest.raises(CandidateSelectionError):
++        decide_session(s, p, candidate_id="MISSING", decision=CandidateDecision.ACCEPT, expected_version=1, operator_ref={"actor_type": "human", "workflow_role": "operator", "actor_id": "op"})
++
++
++def test_receipt_is_stable_for_same_inputs():
++    p = build_portfolio(session_id="CVS-5", request_ref={"request_id": "r5"}, candidates=[_candidate("AST-1")])
++    s = _session(p)
++    _, first, _ = decide_session(s, p, candidate_id="AST-1", decision=CandidateDecision.AUTO_ACCEPT, expected_version=1)
++    _, second, _ = decide_session(s, p, candidate_id="AST-1", decision=CandidateDecision.AUTO_ACCEPT, expected_version=1)
++    assert first.receipt_sha256 == second.receipt_sha256
++    assert first.receipt_id == second.receipt_id
++
++
++def test_rejected_candidate_cannot_be_reaccepted_without_search_again():
++    p = build_portfolio(session_id="CVS-7", request_ref={"request_id": "r7"}, candidates=[_candidate("AST-1")])
++    s = _session(p)
++    rejected, _, _ = decide_session(
++        s, p, candidate_id="AST-1", decision=CandidateDecision.REJECT, expected_version=1,
++        operator_ref={"actor_type": "human", "workflow_role": "operator", "actor_id": "op-1"},
++        rationale="Wrong semantic reading.",
++    )
++    with pytest.raises(CandidateSelectionError, match="already rejected"):
++        decide_session(
++            rejected, p, candidate_id="AST-1", decision=CandidateDecision.ACCEPT, expected_version=2,
++            operator_ref={"actor_type": "human", "workflow_role": "operator", "actor_id": "op-1"},
++        )
++
++
++def test_candidate_snapshot_is_canonical_json_safe():
++    p = build_portfolio(session_id="CVS-6", request_ref={"request_id": "r6"}, candidates=[_candidate("AST-1")])
++    json.dumps(p.model_dump(mode="json"), allow_nan=False)
++    assert len(p.portfolio_sha256) == 64
+--- a/tests/api/test_candidate_preview.py
++++ b/tests/api/test_candidate_preview.py
+@@ -0,0 +1,141 @@
++from __future__ import annotations
++
++from tests.api.fixtures.studio_campaign_fixtures import make_running_campaign
++
++import pytest
++from fastapi.testclient import TestClient
++
++
++@pytest.fixture()
++def client(api_app):
++    with TestClient(api_app) as test_client:
++        yield test_client
++
++
++OPERATOR = {
++    "actor_id": "operator:test",
++    "actor_type": "human",
++    "product_id": "conscious-activations-studio",
++    "workflow_role": "operator",
++}
++
++
++def _candidate(cid: str, rank: int, *, fit: int = 9500, rights: str = "CLEARED") -> dict:
++    return {
++        "candidate_id": cid,
++        "media_type": "VIDEO_CLIP",
++        "preview_uri": f"https://media.test/{cid}.mp4",
++        "transcript_context": "Operational turning point in context.",
++        "source_ref": {"object_id": f"asset:{cid}", "version": "7", "sha256": "a" * 64},
++        "source_range_ms": [1000, 5000],
++        "duration_ms": 4000,
++        "rights_state": rights,
++        "confidence_bps": 9500,
++        "semantic_fit_bps": fit,
++        "quality_bps": 9000,
++        "ranking": rank,
++        "eligible": True,
++        "eligibility_reasons": [],
++        "provenance": {"candidate_id": cid, "scene_id": "SCN-1", "source_version": "7", "source_sha256": "a" * 64},
++        "source_quality_state": "HIGH",
++    }
++
++
++def _campaign_with_timeline(pipeline, campaign_id: str):
++    state = make_running_campaign(pipeline, campaign_id, idempotency_key=campaign_id)
++    state["video_edit_program"] = {
++        "width": 1920,
++        "height": 1080,
++        "fps_numerator": 30,
++        "fps_denominator": 1,
++        "duration_frames": 300,
++        "items": [{
++            "item_id": "node-1",
++            "source_ref": {"object_id": "asset:old", "version": "1", "sha256": "b" * 64},
++            "start_frame": 0,
++            "end_frame": 120,
++            "editable_operations": ["SUBSTITUTE_ASSET"],
++        }],
++        "tracks": [],
++    }
++    from api.services.campaign_projection import save_campaign_state
++    return save_campaign_state(pipeline, campaign_id, state, idempotency_key=f"{campaign_id}:timeline", expected_revision=1)
++
++
++def test_candidate_preview_session_navigation_rejection_and_auto_accept(client, pipeline):
++    campaign_id = "m0087-api-flow"
++    _campaign_with_timeline(pipeline, campaign_id)
++    body = {
++        "workspace_id": "workspace:test",
++        "request_ref": {"object_id": "req:1", "version": "1", "sha256": "c" * 64},
++        "target_ref": {"object_id": "asset:old", "version": "1", "sha256": "b" * 64},
++        "target_node_id": "node-1",
++        "candidates": [_candidate("AST-1", 1), _candidate("AST-2", 2)],
++    }
++    created = client.post(f"/api/visual-studio/campaigns/{campaign_id}/candidate-sessions", json=body)
++    assert created.status_code == 200, created.text
++    session = created.json()["session"]
++    session_id = session["session_id"]
++    assert created.json()["current_candidate"]["candidate_id"] == "AST-1"
++
++    moved = client.post(f"/api/visual-studio/candidate-sessions/{session_id}/navigate", json={"direction": "NEXT", "expected_version": session["version"]})
++    assert moved.status_code == 200, moved.text
++    assert moved.json()["current_candidate"]["candidate_id"] == "AST-2"
++
++    accepted = client.post(f"/api/visual-studio/candidate-sessions/{session_id}/decisions", json={
++        "candidate_id": "AST-2", "decision": "AUTO_ACCEPT", "expected_version": moved.json()["session"]["version"]
++    })
++    assert accepted.status_code == 200, accepted.text
++    assert accepted.json()["decision_receipt"]["auto_selection_policy"] == "visual-candidate-auto-accept-v1"
++    assert accepted.json()["decision_receipt"]["revision_ref"]["object_id"] == f"studio-campaign-state:{campaign_id}"
++
++    promoted = client.post(f"/api/visual-studio/candidate-sessions/{session_id}/promote", json={
++        "expected_version": accepted.json()["session"]["version"], "operator_actor": OPERATOR
++    })
++    assert promoted.status_code == 200, promoted.text
++    assert promoted.json()["session"]["status"] == "PROMOTED"
++    assert promoted.json()["campaign"]["version"] == 3
++
++
++def test_candidate_preview_blocks_good_looking_wrong_auto_accept(client, pipeline):
++    campaign_id = "m0087-api-block"
++    _campaign_with_timeline(pipeline, campaign_id)
++    body = {
++        "workspace_id": "workspace:test",
++        "request_ref": {"object_id": "req:2", "version": "1", "sha256": "c" * 64},
++        "target_ref": {"object_id": "asset:old", "version": "1", "sha256": "b" * 64},
++        "target_node_id": "node-1",
++        "candidates": [_candidate("AST-WRONG", 1, fit=6200)],
++    }
++    created = client.post(f"/api/visual-studio/campaigns/{campaign_id}/candidate-sessions", json=body)
++    assert created.status_code == 200, created.text
++    session = created.json()["session"]
++    blocked = client.post(f"/api/visual-studio/candidate-sessions/{session['session_id']}/decisions", json={
++        "candidate_id": "AST-WRONG", "decision": "AUTO_ACCEPT", "expected_version": session["version"]
++    })
++    assert blocked.status_code == 422
++    assert blocked.json()["error_code"] == "AUTO_ACCEPT_BLOCKED"
++
++
++def test_candidate_preview_reject_requires_operator_and_preserves_lineage(client, pipeline):
++    campaign_id = "m0087-api-reject"
++    _campaign_with_timeline(pipeline, campaign_id)
++    body = {
++        "workspace_id": "workspace:test",
++        "request_ref": {"object_id": "req:3", "version": "1", "sha256": "c" * 64},
++        "target_ref": {"object_id": "asset:old", "version": "1", "sha256": "b" * 64},
++        "target_node_id": "node-1",
++        "candidates": [_candidate("AST-REJECT", 1)],
++    }
++    created = client.post(f"/api/visual-studio/campaigns/{campaign_id}/candidate-sessions", json=body)
++    session = created.json()["session"]
++    blocked = client.post(f"/api/visual-studio/candidate-sessions/{session['session_id']}/decisions", json={
++        "candidate_id": "AST-REJECT", "decision": "REJECT", "expected_version": session["version"], "operator_actor": {"actor_type": "model"}, "rationale": "wrong"
++    })
++    assert blocked.status_code == 422
++    rejected = client.post(f"/api/visual-studio/candidate-sessions/{session['session_id']}/decisions", json={
++        "candidate_id": "AST-REJECT", "decision": "REJECT", "expected_version": session["version"], "operator_actor": OPERATOR, "rationale": "Wrong semantic reading."
++    })
++    assert rejected.status_code == 200, rejected.text
++    assert "AST-REJECT" in rejected.json()["session"]["rejected_candidate_ids"]
++    assert rejected.json()["decision_receipt"]["rejected_candidates"][0]["candidate_id"] == "AST-REJECT"

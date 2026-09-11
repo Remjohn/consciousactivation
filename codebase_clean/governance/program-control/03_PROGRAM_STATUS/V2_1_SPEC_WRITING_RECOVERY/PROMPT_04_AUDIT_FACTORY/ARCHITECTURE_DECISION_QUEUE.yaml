@@ -1,0 +1,13 @@
+schema_version: conscious-activations-architecture-decision-queue/v1
+issued_on: '2026-07-23'
+result: NO_ARCHITECTURE_DECISIONS_CREATED_BECAUSE_AUDIT_BLOCKED
+decisions: []
+process_blockers:
+- blocker_id: P04-AUDIT-BLOCKER-001
+  type: INDEPENDENT_AUDITOR_RESOURCE_UNAVAILABLE
+  severity: BLOCKING
+  evidence: A probe independent auditor for TS-AHP-001 returned the account usage-limit error before producing audit artifacts.
+  effect: Prompt 04 cannot truthfully satisfy the independent per-spec audit requirement or the writer-cannot-audit-own-spec
+    rule.
+  required_action: Rerun Prompt 04 when independent auditor capacity is available; do not revise specs or advance Prompt 05/06
+    from this blocked audit package.

@@ -1,0 +1,30 @@
+type: object
+required:
+  - spec_id
+  - spec_title
+  - gates_audit_results
+  - all_applicable_gates_passed
+  - security_and_isolation_verified
+  - review_verdict
+properties:
+  spec_id:
+    type: string
+  spec_title:
+    type: string
+  gates_audit_results:
+    type: object
+    description: "Audit results for Gates A through I"
+  all_applicable_gates_passed:
+    type: boolean
+  security_and_isolation_verified:
+    type: boolean
+  defects_identified:
+    type: array
+    items:
+      type: string
+  review_verdict:
+    type: string
+    enum:
+      - "GATES_CLEARED_RECOMMENDED_FOR_OPERATOR_GATE"
+      - "FAILED_GATE_VIOLATION"
+      - "REJECTED_INCOMPLETE_SPEC"

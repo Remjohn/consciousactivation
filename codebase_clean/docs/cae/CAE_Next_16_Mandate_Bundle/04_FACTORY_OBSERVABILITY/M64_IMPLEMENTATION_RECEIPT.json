@@ -1,0 +1,116 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M64",
+  "mandate_title": "Factory Benchmark + Production Certification + CURRENT Synchronization",
+  "phase": "PHASE_09_FACTORY_OBSERVABILITY",
+  "parallel_group": "P8-GATE",
+  "timestamp_utc": "2026-09-02T06:45:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/04_FACTORY_OBSERVABILITY/M64_factory_benchmark_production_certification_current_synchronization.md"
+  ],
+  "bundle_summary": {
+    "bundle_title": "CAE Next 16 Mandate Bundle (M49–M64)",
+    "phases_completed": [
+      "Phase 5: Agent Object & Invocation (M49–M52)",
+      "Phase 6: Agent / Program Execution Convergence (M53–M56)",
+      "Phase 7: Workflow Engineering (M57–M60)",
+      "Phase 8: SDLF Factory (M61–M62)",
+      "Phase 9: Factory Observability & Production Certification (M63–M64)"
+    ],
+    "total_mandates_executed": 16,
+    "production_readiness_status": "READY"
+  },
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/factory_certification.py",
+      "artifact_class": "Factory Benchmark & Production Certification Engine",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m64_factory_benchmark_production_certification.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 6,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_repeated_benchmark_executions": {
+      "status": "PASSED",
+      "description": "Repeated runs of SDLF pipeline and Domain Program succeed with 100% pass rates (10000 bps)."
+    },
+    "gate_2_failure_classes_terminate_safely": {
+      "status": "PASSED",
+      "description": "Failure classes terminate safely without orphaned resources or silent recovery."
+    },
+    "gate_3_bounded_repair_monotonicity_and_exhaustion": {
+      "status": "PASSED",
+      "description": "Repairs are bounded, strictly monotonic, and fail closed upon exhaustion."
+    },
+    "gate_4_adversarial_failure_pack_defeated": {
+      "status": "PASSED",
+      "description": "All 6 adversarial failure pack vectors tested and defeated fail-closed."
+    },
+    "gate_5_run_reconstructibility_from_receipts": {
+      "status": "PASSED",
+      "description": "Historical runs reconstructible from canonical receipts alone with full fact parity."
+    },
+    "gate_6_statem_context_refresh_and_checked_transfer": {
+      "status": "PASSED",
+      "description": "State boundary context refreshed and hash-linked; uncommitted states render as pending."
+    },
+    "gate_7_production_certification_disposition": {
+      "status": "PASSED",
+      "description": "Deterministic evaluation emitting READY disposition backed by immutable report."
+    }
+  },
+  "adversarial_failure_pack": [
+    {
+      "vector_id": "ADV-001",
+      "name": "cross_tenant_trace_query",
+      "defeated": true,
+      "actual_error": "ERR_ENTITY_NOT_FOUND"
+    },
+    {
+      "vector_id": "ADV-002",
+      "name": "ui_driven_receipt_mutation",
+      "defeated": true,
+      "actual_error": "ERR_READ_ONLY_OBSERVABILITY_MUTATION"
+    },
+    {
+      "vector_id": "ADV-003",
+      "name": "unauthorized_ship_release",
+      "defeated": true,
+      "actual_error": "SDLF_SHIP_SUSPENDED_WAITING_OPERATOR"
+    },
+    {
+      "vector_id": "ADV-004",
+      "name": "sandbox_path_escape",
+      "defeated": true,
+      "actual_error": "ERR_SDLF_SANDBOX_VIOLATION"
+    },
+    {
+      "vector_id": "ADV-005",
+      "name": "concurrent_unisolated_mutation",
+      "defeated": true,
+      "actual_error": "ERR_CONCURRENT_MUTATION_CONFLICT"
+    },
+    {
+      "vector_id": "ADV-006",
+      "name": "agent_identity_collision",
+      "defeated": true,
+      "actual_error": "AGENT_IDENTITY_COLLISION"
+    }
+  ],
+  "test_metrics": {
+    "m64_tests_passed": 6,
+    "combined_bundle_tests_passed": 157,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

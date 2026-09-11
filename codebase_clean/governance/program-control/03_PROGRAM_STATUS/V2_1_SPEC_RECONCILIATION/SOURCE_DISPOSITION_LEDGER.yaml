@@ -1,0 +1,3302 @@
+schema_version: conscious-activations-source-disposition-ledger/v1
+ledger_id: CA-P02-SOURCE-DISPOSITION-2026-07-22
+updated_on: '2026-07-22'
+authority: Program Control
+created_before_source_completeness_validation: true
+classes:
+- REQUIRED_AUTHORITY
+- REQUIRED_CURRENT_IMPLEMENTATION
+- REQUIRED_UNIQUE_EVIDENCE
+- OPTIONAL_REFERENCE
+- DEFERRED_REFERENCE
+- SUPERSEDED
+governing_inputs:
+  crosswalk_member: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  crosswalk_sha256: c8c97f5d2003d070180a7061484609b2f9c8ef990efa116914f05b4e400e7820
+  updated_skills_archive: Specs_Builder_Library_CA_V2_1_1.zip
+  updated_skills_archive_sha256: e40a843d0748de78fce216fbb322437707a8eab0ca649e88bbfe7ab4bc99c69e
+  operator_source_decision: P02-SRC-001 confirmed by the 2026-07-22 Prompt 02 instruction
+coverage:
+  AIR_source_register_rows: 59
+  AHP_source_addition_rows: 32
+  exact_crosswalk_rows: 82
+  overlapping_source_ids_reconciled: 2
+  unique_named_source_ids: 171
+  classified_exactly_once: true
+  class_counts:
+    REQUIRED_AUTHORITY: 15
+    REQUIRED_CURRENT_IMPLEMENTATION: 8
+    REQUIRED_UNIQUE_EVIDENCE: 105
+    OPTIONAL_REFERENCE: 2
+    DEFERRED_REFERENCE: 29
+    SUPERSEDED: 12
+package_authority_inputs:
+- artifact: AIR Constitution V2.1
+  member: doctrine/00_ACTIVATIVE_INTELLIGENCE_LIFECYCLE_CONSTITUTION_V2_1.md
+  current_class: REQUIRED_AUTHORITY
+  bytes_available: true
+  sha256: abdb79fa6a59b4651332cd86cf51f796a4468110c917c126c62760e3f1d58a85
+- artifact: AIR PRD V2.1
+  member: prd/PRD_COMBINED.md
+  current_class: REQUIRED_AUTHORITY
+  bytes_available: true
+  sha256: f5c54bc408ed243c4c579f9693ecfd085c7b826053a5e3445d350d1317c7d184
+- artifact: AHP PRD V1.2
+  member: prd/PRD_COMBINED.md
+  current_class: REQUIRED_AUTHORITY
+  bytes_available: true
+  sha256: 387568731acfe57f022a2fadcd2acfc73baf1287b8a5a1e1d3ed78675ccb067d
+- artifact: AHP integration amendment
+  member: amendments/AHP_PRD_V1_3_ACTIVATIVE_INTELLIGENCE_INTEGRATION_AMENDMENT.md
+  current_class: REQUIRED_AUTHORITY
+  bytes_available: true
+  sha256: 125fc4a45eef3d1fe4c42f75d9ff1cf38bbbb9c6bf04c05c2a252a049ae404b6
+- artifact: Cross-product ownership ledger
+  member: amendments/CROSS_PRODUCT_OWNERSHIP_AND_HANDOFF_LEDGER.md
+  current_class: REQUIRED_AUTHORITY
+  bytes_available: true
+  sha256: 04bfd499ffff5f049b2da77aee2e67e400b1c3eabf4ab0f5b6b9ea79897600b6
+sources:
+- source_id: SRC-AHP-001
+  declared_path: sources/doctrine/AHP_PRD_V1_2_PRIMITIVE_ARCHETYPE_CENTERED.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: current_prd_candidate
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Required candidate authority or governed writing-profile input for specification reconciliation.
+  bytes_available: true
+  sha256: 387568731acfe57f022a2fadcd2acfc73baf1287b8a5a1e1d3ed78675ccb067d
+  affected_specs:
+  - TS-AIR-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F03-001
+  declared_path: sources/doctrine/AHP_F03_BOUNDED_ROLE_TAXONOMY.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 1d50940d7313b89331e872b63393276267e698cb5908254479e216a234f3ec77
+  affected_specs:
+  - TS-AHP-004
+  - TS-AHP-005
+  - TS-AHP-006
+  - TS-AIR-019
+  - TS-RET-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F09-001
+  declared_path: sources/doctrine/AHP_F09_COMPOSITION_IR.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 68db87fa583d639af2ebdc707e9f94e7bca50af9b981dca1dd9c2f6be8eef456
+  affected_specs:
+  - TS-AIR-017
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F15-001
+  declared_path: sources/doctrine/AHP_F15_VAE_DELEGATION_GNM.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: eb65e84b126369a3067464a0dc9bd7c0dec72ebd168111cdb7f1fdef69333f44
+  affected_specs:
+  - TS-AIR-017
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F16-001
+  declared_path: sources/doctrine/AHP_F16_EVALUATION_REPAIR.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 0a247a2025ef803df09e8bfc97b9456d73a64cf2f867598135b3c8ba03a668e2
+  affected_specs:
+  - TS-AHP-004
+  - TS-AHP-005
+  - TS-AHP-006
+  - TS-AIR-016
+  - TS-AIR-019
+  - TS-RET-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F23-001
+  declared_path: sources/doctrine/AHP_F23_BATCH_ARCHETYPE_ROUTING.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 94833575d71b8c04fb0bcab11ca02e99865502bbb7c8445d25a41c9c985d816d
+  affected_specs:
+  - TS-AIR-013
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F25-001
+  declared_path: sources/doctrine/AHP_F25_STATIC_ANIMATION_DERIVATIVES.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: dbab88c994da95fbead65abfba4984d0efa3cd8a2fb27598997bd9886c37d293
+  affected_specs:
+  - TS-AIR-015
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F26-001
+  declared_path: sources/doctrine/AHP_F26_HUMAN_RESOLUTION.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: f6ce81b7f5a8db6b7e6545299a2f526e344136b51cd4ac887b4300698110b54a
+  affected_specs:
+  - TS-AIR-018
+  - TS-CAS-003
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F28-001
+  declared_path: sources/doctrine/F28-psychological-role-archetype-coalition-and-final-script-authority.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 0a130c459707e309ae323f769b00d0f82f866b8bfddf6eb42546a5de4f78370c
+  affected_specs:
+  - TS-AIR-006
+  - TS-AIR-015
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F29-001
+  declared_path: sources/doctrine/F29-primitive-first-coalition-composition-and-evaluation.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 80be79e53616e28b0e86604f9e6f6d94ffd02308aa0618766ea912c62c9e03bc
+  affected_specs:
+  - TS-AIR-005
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-F30-001
+  declared_path: sources/doctrine/F30-brand-genesis-voice-visual-dna-distillation-and-anti-centroid-integrity.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 20765b8509550271f43590293cd3f95387c892c69240ae9d41c5dd1c32d9deb5
+  affected_specs:
+  - TS-AIR-007
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-MODEL-001
+  declared_path: sources/doctrine/AHP_F07_PROGRAMMED_MODELS.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 4de5f4f896832a1185bf8d71e19c28e042aaaedd6896f0c12dc9ba03dcdb0258
+  affected_specs:
+  - TS-AIR-020
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AHP-PORTFOLIO-001
+  declared_path: sources/doctrine/AHP_F08_CANDIDATE_SEARCH.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: feature_module
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 645bbd86cea223842661ecfa03ccd21f046a9470cecb98735e2da9f46ec15a11
+  affected_specs:
+  - TS-AIR-003
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-001
+  declared_path: sources/ai_v2_predecessor/00_ACTIVATIVE_INTELLIGENCE_LIFECYCLE_CONSTITUTION_V2.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: predecessor_constitution
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Preserved historical predecessor input superseded by the V2.1 candidate authority and current lifecycle Skills.
+  bytes_available: true
+  sha256: 619331517d748d71e3f0ee8750bd0d9e1a1bbf9f143ade5dd339caeb50d33c58
+  affected_specs:
+  - TS-AIR-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-AI2-002
+  declared_path: sources/ai_v2_predecessor/05_PRODUCT_REQUIREMENTS_V2.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: predecessor_prd
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Preserved historical predecessor input superseded by the V2.1 candidate authority and current lifecycle Skills.
+  bytes_available: true
+  sha256: 0b5de954d06920448a21be4b5c765eb82b39c4b23acd042d984caa7cd85b7996
+  affected_specs:
+  - TS-AIR-003
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-AI2-CAMPAIGN-001
+  declared_path: sources/ai_v2_predecessor/contracts/08_CAMPAIGN_ACTIVATION_PROGRAM.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 902d0a9aea819a16388bac2283b6e15a6414ae73dda32270f22f06ee942f866d
+  affected_specs:
+  - TS-AIR-013
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-CONTRACT-001
+  declared_path: sources/ai_v2_predecessor/contracts/02_INTERVIEW_ASSET_CONTRACT.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 815516bb5cdd63706c881edcba3ed349fd41ec37b164ec6422ead4a8a377c51d
+  affected_specs:
+  - TS-AIR-008
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-EXPRESSION-001
+  declared_path: sources/ai_v2_predecessor/contracts/04_EXPRESSION_MOMENT.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 049fdb1711f3aa0cddc3d85e48491c9e0aa8f2b878e0f3fbb25dbc1b6a755802
+  affected_specs:
+  - TS-AIR-011
+  - TS-INT-004
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-HRE-001
+  declared_path: sources/ai_v2_predecessor/contracts/09_HUMAN_RESOLUTION_EPISODE.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 8c8c5a3a5632827bfa9ab35b6f86fbc34b79ecb8e1f84dc13aedc1af5fce5e96
+  affected_specs:
+  - TS-AIR-018
+  - TS-CAS-003
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-LIVE-001
+  declared_path: sources/ai_v2_predecessor/07_LIFECYCLE_STATE_MACHINES.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: lifecycle
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 403f684a14160ac974cdfd0f45ca25645a5a0a38e07628d7096d80d87a5236cb
+  affected_specs:
+  - TS-AIR-009
+  - TS-INT-007
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-MODEL-001
+  declared_path: sources/ai_v2_predecessor/reference_implementation/models.py
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: reference_code
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: f392c940349c3c5f9586a359fd8497ce1b8368de1b6654357deb146a686efd97
+  affected_specs:
+  - TS-AIR-020
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-OBJECT-001
+  declared_path: sources/ai_v2_predecessor/06_CANONICAL_OBJECT_MODEL.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: object_model
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 18a6ffc82f8d980ee72ba05f99cff6eb8aea22aa0a2ed16f245cf2d51935872a
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-PLANNING-001
+  declared_path: sources/ai_v2_predecessor/EPICS_AND_VERTICAL_STORIES.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: predecessor_planning
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Preserved historical predecessor input superseded by the V2.1 candidate authority and current lifecycle Skills.
+  bytes_available: true
+  sha256: 5adb2fef2d61fc6ce745a6d3ac120479bf4766ded8e425a6b6c10aa7a96b02cc
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-AI2-REACTION-001
+  declared_path: sources/ai_v2_predecessor/contracts/03_REACTION_OBSERVATION_AND_RECEIPT.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 491d08c9ee2c89bfb79a53eaca625eaf5fd77048680b909698e5424e597349f3
+  affected_specs:
+  - TS-INT-006
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-REL-001
+  declared_path: sources/ai_v2_predecessor/schemas/relationship_activation_state.schema.json
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: schema
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 2829512d2e6aeb4bd695cd5c9f2382d76ac3b16c755c50ab8443fa2aaf7ecc1c
+  affected_specs:
+  - TS-AIR-014
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-REPAIR-001
+  declared_path: sources/ai_v2_predecessor/contracts/11_FAILURE_ATTRIBUTION_AND_REPAIR_PROGRAM.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: b25670847d79678eb0d269656afe38cd45d0a9244b47d5051dea931379ec2ae7
+  affected_specs:
+  - TS-AHP-004
+  - TS-AHP-005
+  - TS-AHP-006
+  - TS-AIR-019
+  - TS-RET-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-SKILL-001
+  declared_path: sources/ai_v2_predecessor/AI2_SKILL.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: predecessor_skill
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Preserved historical predecessor input superseded by the V2.1 candidate authority and current lifecycle Skills.
+  bytes_available: true
+  sha256: 9171917f61dc5735c66c53fe37404645e1ef8d9ce6fd0a53c3d20d1bd57df2b5
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-AI2-SOURCE-001
+  declared_path: sources/ai_v2_predecessor/contracts/05_CANONICAL_INTERVIEW_SOURCE_PACKAGE.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 568fd028786e3ad87b1e65f0ee0f49dcc45b2745261e8003f3b75104f5544bd1
+  affected_specs:
+  - TS-INT-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-SPEC-001
+  declared_path: sources/ai_v2_predecessor/TECH_SPEC_INVENTORY.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: predecessor_planning
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Preserved historical predecessor input superseded by the V2.1 candidate authority and current lifecycle Skills.
+  bytes_available: true
+  sha256: cc52771ff6720a39f0a43bbb3c608dc55ff598701f7bff26457f9a5af4ff4f04
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-AI2-TRANSFER-001
+  declared_path: sources/ai_v2_predecessor/contracts/07_ACTIVATION_TRANSFER_CONTRACT.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: contract
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 9a84914ced08453701b150f4d1f3720f8aef688870bc0016bd551a774a5e1580
+  affected_specs:
+  - TS-AIR-016
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AI2-VISUAL-001
+  declared_path: sources/ai_v2_predecessor/schemas/visual_narrative_program.schema.json
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: schema
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 1f1d9d5229156b2a9dfe0467f0879a1d057310825de1e0a774cac4f3188ffb46
+  affected_specs:
+  - TS-AIR-017
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AM-001
+  declared_path: CONSCIOUS_ACTIVATIONS_STUDIO_ARCHITECTURE_AMENDMENT_V2_1(2).zip
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: architecture_amendment
+  prior_disposition: AMENDMENT_INPUT
+  prior_authority: proposed_program_amendment
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Required registered Studio architecture amendment candidate for ownership and HumanResolution boundaries.
+  bytes_available: true
+  sha256: 9059fe3cad98c5d6ca0f9584f091ac503a5e5a9279a4a476821db816dc7603b8
+  affected_specs:
+  - TS-AHP-003
+  - TS-AHP-005
+  - TS-AIR-018
+  - TS-AIR-019
+  - TS-AIR-020
+  - TS-ANI-001
+  - TS-BATCH-001
+  - TS-CAS-001
+  - TS-CAS-002
+  - TS-CAS-003
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-CAS-006
+  - TS-INT-001
+  - TS-INT-004
+  - TS-REL-001
+  - TS-REL-002
+  - TS-VID-001
+  - TS-VID-006
+  historical_assignment_mentions:
+  - TS-AHP-003
+  - TS-AHP-005
+  - TS-ANI-001
+  - TS-BATCH-001
+  - TS-CAS-001
+  - TS-CAS-002
+  - TS-CAS-003
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-CAS-006
+  - TS-INT-001
+  - TS-INT-004
+  - TS-LEARN-001
+  - TS-LEARN-002
+  - TS-REL-001
+  - TS-REL-002
+  - TS-VID-001
+  - TS-VID-006
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-AM-002
+  declared_path: PA_AM_001_SEVEN_DAY_PARALLEL_PRODUCTION_ACTIVATION_V1_1(2).zip
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: production_activation_amendment
+  prior_disposition: AMENDMENT_INPUT
+  prior_authority: proposed_campaign_amendment
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Production-activation campaign material is deferred; this Prompt does not authorize implementation or Stage 5.
+  bytes_available: true
+  sha256: c522c93b0f980c71354ac7e22cd37b935d6273d409403c38629b42c92cd1bef2
+  affected_specs:
+  - TS-AHP-003
+  - TS-AHP-005
+  - TS-CAS-001
+  - TS-CAS-003
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-CAS-006
+  - TS-DEL-001
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-005
+  - TS-REL-002
+  - TS-VAE-BOUND-001
+  - TS-VID-001
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-AHP-003
+  - TS-AHP-005
+  - TS-CAS-001
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-CAS-006
+  - TS-DEL-001
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-005
+  - TS-LEARN-001
+  - TS-LEARN-002
+  - TS-REL-002
+  - TS-VAE-BOUND-001
+  - TS-VID-001
+  - TS-VID-002
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-ARCH-001
+  declared_path: sources/doctrine/CCP_ARCHETYPE_SYSTEM_MIGRATION_PROPOSITION.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: archetype_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 2d7aa11b72c83a95d9240784978e3b9af4944a3e037f18746f8b204bc3287188
+  affected_specs:
+  - TS-AIR-006
+  - TS-AIR-015
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-ARCH-002
+  declared_path: sources/cmf_archetype_prompt_snapshot
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: directory_snapshot
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 2dc58719949f1da027f20253baa74dd88b82ea20d39bc0aa63201c4ffeb8bcf6
+  affected_specs:
+  - TS-AIR-006
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-BRAND-001
+  declared_path: sources/doctrine/CCP_CMF_BRAND_GENESIS_AND_MICRO_SEMIOTIC_PIPELINE_V3.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: brand_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 61710fe56484b569ce28ddefadbb4c8047e9ae48cadf25291423cf4f200e3dcb
+  affected_specs:
+  - TS-AIR-002
+  - TS-AIR-007
+  - TS-AIR-015
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-BROWNFIELD-AUDIT-001
+  declared_path: sources/brownfield/CMF_STUDIO_PREDECESSOR_MIGRATION_AUDIT_V1.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: brownfield_audit
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 5912930b2abfb376aef67c140bb745845ede054b07ad6aa0e9bb77f9a06301d7
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CBAR-001
+  declared_path: sources/spec_methods/SKILL_CBAR_Epic_Story_Hardening.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: spec_method
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Superseded for this campaign by the updated CA V3.1 lifecycle Skills.
+  bytes_available: true
+  sha256: abc118f1124e2d28d10506d6b1c23075202e3b69c8f59d485ca5dd186207c115
+  affected_specs:
+  - TS-AIR-003
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-CCV-001
+  declared_path: sources/doctrine/CCV_COMBINATORIAL_CONTROLLED_VARIATION.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: variation_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 0869ff50e4bdaba3dc1854183100826d0de9568b9ed5558bf68b4590834a62c4
+  affected_specs:
+  - TS-AIR-002
+  - TS-AIR-007
+  - TS-AIR-013
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-001
+  declared_path: CMF_PROGRAM_CONTROL/00_CONSTITUTION/CONSTITUTIONAL_AUTHORITY.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: current_authority
+  prior_disposition: REFERENCE
+  prior_authority: program_control
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: f3c4da2a890a682b6f2882ef69949a2bca5d9fcc4923ec74edf0426754e3927b
+  affected_specs:
+  - TS-AHP-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-002
+  declared_path: CMF_PROGRAM_CONTROL/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: current_authority
+  prior_disposition: REFERENCE
+  prior_authority: highest_order
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 21c2286c700332ca81166a9e70e4ae7066f2695b383e7b8a73876c028549d70b
+  affected_specs:
+  - TS-AHP-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-003
+  declared_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/MASTER_STATUS.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: current_status
+  prior_disposition: REFERENCE
+  prior_authority: program_status
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Current status or repository evidence required for truthful scope and claim ceilings.
+  bytes_available: true
+  sha256: 71d7fdac3c9498c42133c95e141b31241b0fa613426417d9fd81b3d1d656f491
+  affected_specs:
+  - TS-AHP-001
+  - TS-REL-002
+  historical_assignment_mentions:
+  - TS-AHP-001
+  - TS-REL-002
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-004
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/domain/atomic_harness_definition.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: 8d4d174eb3c54f152a099053302dd631f686c27b070b7dde989c4901afd8e4c6
+  affected_specs:
+  - TS-AHP-002
+  - TS-AHP-003
+  - TS-CAS-006
+  historical_assignment_mentions:
+  - TS-AHP-002
+  - TS-AHP-003
+  - TS-CAS-006
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-005
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/domain/category_binding.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: 05cc1e52797b1d74488e6caa73f83b51df93dbabf39e50a8b4fd2de6f131eb4a
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-006
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/domain/format_profiles.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: 084f28c593cee4fc8df4947ea3678336c8aab4a1ee76ff68d12fa3a1759be8b0
+  affected_specs:
+  - TS-REL-001
+  historical_assignment_mentions:
+  - TS-REL-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-007
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/domain/category_runtime_rules.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: cef3bf6673bde2ec501c01099f0efee12b7ad47cb8379c68a58b074a13c35512
+  affected_specs:
+  - TS-AHP-003
+  - TS-AHP-004
+  - TS-CAR-001
+  - TS-SPV-001
+  - TS-VID-001
+  historical_assignment_mentions:
+  - TS-AHP-003
+  - TS-AHP-004
+  - TS-CAR-001
+  - TS-SPV-001
+  - TS-VID-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-008
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/domain/capability_ownership.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: 14ba709cf693c117560cb4f326b9a5708391475aabe1c2030ce69b20283ee36e
+  affected_specs:
+  - TS-AHP-002
+  - TS-AHP-004
+  - TS-PM-001
+  historical_assignment_mentions:
+  - TS-AHP-002
+  - TS-AHP-004
+  - TS-PM-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-009
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/skills/jit_capsule.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: 6546b1e879961be6336b7e519590f380afe2a16f30768587c1686b8d3c47ee4e
+  affected_specs:
+  - TS-RET-001
+  - TS-SKL-001
+  historical_assignment_mentions:
+  - TS-RET-001
+  - TS-SKL-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-010
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/src/cmf_builder/workflow/actor_explicit_contracts.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_contract
+  prior_disposition: REFERENCE
+  prior_authority: builder_implementation
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: 9dc8aaf8aa2085aff66adda56faf891fc260287e04e0ca0c35681934126e4399
+  affected_specs:
+  - TS-AHP-002
+  - TS-AHP-004
+  - TS-AHP-005
+  - TS-AHP-006
+  - TS-AHP-007
+  - TS-CAS-001
+  - TS-CAS-006
+  - TS-INT-001
+  historical_assignment_mentions:
+  - TS-AHP-002
+  - TS-AHP-004
+  - TS-AHP-005
+  - TS-AHP-006
+  - TS-AHP-007
+  - TS-CAS-001
+  - TS-CAS-006
+  - TS-INT-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-011
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/CURRENT_PROJECT_STATUS.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_status
+  prior_disposition: REFERENCE
+  prior_authority: builder_status
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Current status or repository evidence required for truthful scope and claim ceilings.
+  bytes_available: true
+  sha256: 7653473dfd9a38e5fb231938dad2cf0eab1b29412840c3c9cf16a726bfa352f0
+  affected_specs:
+  - TS-AHP-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-012
+  declared_path: 01_ATOMIC_HARNESS_BUILDER/docs/implementation/offline-development/SOURCE_BOUNDARY_REGISTRY.yaml
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: builder_boundary
+  prior_disposition: REFERENCE
+  prior_authority: builder_boundary
+  current_class: REQUIRED_CURRENT_IMPLEMENTATION
+  classification_reason: Current implementation or source-boundary evidence named by the writing queue.
+  bytes_available: true
+  sha256: dda53324daf387b971d3b582d124488fa5f0413cb3b6d2456f7c3bc175c32c2b
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-013
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/index.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 1ac3032b87adbe4f46bedca8dcdea6ccef364855ef316e14a9c0663d2bd103f8
+  affected_specs:
+  - TS-VAE-BOUND-001
+  historical_assignment_mentions:
+  - TS-VAE-BOUND-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-014
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F05-composition-intent-image-conditioned-geometry.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 10cf37d637aa85a9efa40ae236a801322025b3757825469c3923a9a8c96e49e6
+  affected_specs:
+  - TS-DEL-001
+  - TS-STA-001
+  - TS-VID-003
+  historical_assignment_mentions:
+  - TS-DEL-001
+  - TS-STA-001
+  - TS-VID-003
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-015
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F08-visual-capability-registry.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 142b5406e3af2318da5986ac4b4429975010a1464534d6048c13c55c4d99780f
+  affected_specs:
+  - TS-PM-001
+  - TS-VAE-BOUND-001
+  historical_assignment_mentions:
+  - TS-PM-001
+  - TS-VAE-BOUND-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-016
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F09-visual-production-plan-ir.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: db7ece2ec153f144dc55bf00fdcd96c7941f527839db90f9a4ced23536dba47a
+  affected_specs:
+  - TS-DEL-001
+  - TS-VAE-BOUND-001
+  historical_assignment_mentions:
+  - TS-DEL-001
+  - TS-VAE-BOUND-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-017
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F10-event-sourced-production-runtime.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 8430669cab92ccef3245a479c7830b290c3432dae931d08f161be19a1e32db72
+  affected_specs:
+  - TS-AHP-006
+  historical_assignment_mentions:
+  - TS-AHP-006
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-018
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F14-visual-evaluation-profiles.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 03bd9c1c918a4602e396095a5dd60e2b5221af0eca03bd213a588839f4db6dd8
+  affected_specs:
+  - TS-AHP-008
+  - TS-DEL-001
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  - TS-REL-002
+  - TS-VID-006
+  historical_assignment_mentions:
+  - TS-AHP-008
+  - TS-DEL-001
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  - TS-REL-002
+  - TS-VID-006
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-019
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F15-repair-invalidation-reruns.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 79b40d744ea93a35716224a4df6849ed33f58ecb2c63e86cc329b05def05effc
+  affected_specs:
+  - TS-CAS-002
+  - TS-DEL-001
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  - TS-REL-002
+  - TS-VID-006
+  historical_assignment_mentions:
+  - TS-CAS-002
+  - TS-DEL-001
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  - TS-REL-002
+  - TS-VID-006
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-020
+  declared_path: 02_VISUAL_ASSET_EDITOR/prd/05-features/F17-steering-intelligence-cmf-okf-retrieval.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_prd
+  prior_disposition: REFERENCE
+  prior_authority: vae_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 9acefd1eaa224cd9de3dd5d39fec7443dfd6edcbac32a1dfe97355e1b8230aa7
+  affected_specs:
+  - TS-AIR-005
+  - TS-AIR-018
+  - TS-AIR-019
+  - TS-AIR-020
+  - TS-BATCH-001
+  - TS-CAS-003
+  - TS-CAS-004
+  - TS-RET-001
+  - TS-SKL-001
+  historical_assignment_mentions:
+  - TS-BATCH-001
+  - TS-CAS-003
+  - TS-CAS-004
+  - TS-LEARN-001
+  - TS-LEARN-002
+  - TS-PRIM-001
+  - TS-RET-001
+  - TS-SKL-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-021
+  declared_path: 02_VISUAL_ASSET_EDITOR/CURRENT_PROJECT_STATUS.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: vae_status
+  prior_disposition: REFERENCE
+  prior_authority: vae_status
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Current status or repository evidence required for truthful scope and claim ceilings.
+  bytes_available: true
+  sha256: 383b31d94b3623cf7884d5b4d6297d860444b865cc92d3fc3ad2226dc461f95a
+  affected_specs:
+  - TS-REL-001
+  - TS-REL-002
+  historical_assignment_mentions:
+  - TS-REL-001
+  - TS-REL-002
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-CUR-022
+  declared_path: 03_DELEGATION_PROTOCOL/README.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: delegation
+  prior_disposition: REFERENCE
+  prior_authority: delegation_prd
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Current constitutional or product authority input.
+  bytes_available: true
+  sha256: 14b5a21b3dbdc65d07b2043ac7711625519ea192e0c88979d910c37ef28cb6b2
+  affected_specs:
+  - TS-BATCH-001
+  - TS-DEL-001
+  historical_assignment_mentions:
+  - TS-BATCH-001
+  - TS-DEL-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-001
+  declared_path: THE_CMF_STUDIO(2).zip::Matrix of Edging.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: doctrine_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 7ba1858cd9238a63f32d28e9cc8e7bbe306ba82ac5fa5af4a0346128aa3b6ebb
+  affected_specs:
+  - TS-AIR-005
+  - TS-AIR-006
+  - TS-AIR-007
+  - TS-AIR-016
+  historical_assignment_mentions:
+  - TS-ARC-001
+  - TS-BRAND-001
+  - TS-PRIM-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-002
+  declared_path: THE_CMF_STUDIO(2).zip::CCP Archetype System Migration Proposition.docx.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: archetype_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 2d7aa11b72c83a95d9240784978e3b9af4944a3e037f18746f8b204bc3287188
+  affected_specs:
+  - TS-AIR-006
+  - TS-AIR-007
+  - TS-AIR-015
+  - TS-AIR-016
+  historical_assignment_mentions:
+  - TS-ARC-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-003
+  declared_path: THE_CMF_STUDIO(2).zip::CCP_CMF_Brand_Genesis_and_Micro_Semiotic_Pipeline_V3.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: brand_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 61710fe56484b569ce28ddefadbb4c8047e9ae48cadf25291423cf4f200e3dcb
+  affected_specs:
+  - TS-AIR-007
+  - TS-AIR-016
+  historical_assignment_mentions:
+  - TS-ARC-001
+  - TS-BRAND-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-004
+  declared_path: THE_CMF_STUDIO(2).zip::CCP_Creative_Pipeline_Architecture_V2.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: creative_architecture_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 8b9175d8631eff50b7f6c959ad245b87f9b307577b51e6dd4d2f622fd44175e8
+  affected_specs:
+  - TS-AIR-007
+  - TS-AIR-015
+  - TS-AIR-016
+  historical_assignment_mentions:
+  - TS-BRAND-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-005
+  declared_path: THE_CMF_STUDIO(2).zip::docs/methodology/CCV_Combinatorial_Controlled_Variation.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: methodology_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 0869ff50e4bdaba3dc1854183100826d0de9568b9ed5558bf68b4590834a62c4
+  affected_specs:
+  - TS-AIR-005
+  - TS-AIR-006
+  - TS-AIR-007
+  historical_assignment_mentions:
+  - TS-ARC-001
+  - TS-BRAND-001
+  - TS-PRIM-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-006
+  declared_path: THE_CMF_STUDIO(2).zip::docs/methodology/RSCS_Recursive_Signal_Compression_Systems.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: methodology_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: bb8ebfcd5c519649b4363731cf11434ce600c71fb5e1d020abb59cbb51b8a330
+  affected_specs:
+  - TS-AIR-005
+  - TS-AIR-007
+  - TS-AIR-016
+  historical_assignment_mentions:
+  - TS-ARC-001
+  - TS-BRAND-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-007
+  declared_path: THE_CMF_STUDIO(2).zip::docs/registry-specs/Meaning_Primitive_Registry_Spec.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: primitive_registry_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 1851f4e8e07beb6e1886e91f45d8bb12cf38d6fc8af8f20e314788d6d47d7e5f
+  affected_specs:
+  - TS-AIR-004
+  - TS-AIR-005
+  - TS-AIR-007
+  historical_assignment_mentions:
+  - TS-BRAND-001
+  - TS-PRIM-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-008
+  declared_path: THE_CMF_STUDIO(2).zip::docs/registry-specs/Experience_Primitive_Registry_Spec.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: primitive_registry_source
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_to_reconcile
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 5cb5f1b568c84e41bbbf2ccbb18b938ccee5de1c6cab5cbee96343d88adaee72
+  affected_specs:
+  - TS-AIR-004
+  - TS-AIR-005
+  - TS-AIR-007
+  historical_assignment_mentions:
+  - TS-BRAND-001
+  - TS-PRIM-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCT-009
+  declared_path: THE_CMF_STUDIO(2).zip::src/ccp_studio/contracts/primitive_coalition.py
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: primitive_contract_source
+  prior_disposition: ADAPT
+  prior_authority: brownfield_contract_evidence
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 990735d588e03004cbee780cea7e3623361a7fa70991e898ff13f173618cbf08
+  affected_specs:
+  - TS-AIR-004
+  - TS-AIR-005
+  - TS-AIR-016
+  historical_assignment_mentions:
+  - TS-PRIM-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-DOCTRINE-001
+  declared_path: sources/spec_methods/CURRENT_WRITING_PROFILE_AHP_V1_2.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: writing_profile
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Required candidate authority or governed writing-profile input for specification reconciliation.
+  bytes_available: true
+  sha256: ba88c5572ae3f7571daac9991a0d325a20f491cb9c0ea7c3816deb3ff3d32956
+  affected_specs:
+  - TS-AIR-001
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-EPIC-METHOD-001
+  declared_path: sources/spec_methods/ERA3_Epic_and_Story_Writing_Protocol.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: spec_method
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Superseded for this campaign by the updated CA V3.1 lifecycle Skills.
+  bytes_available: true
+  sha256: deee4e2e753cf126382ce27e6ef43c0fc778322eda75ca042008655f6e344358
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-EXT-001
+  declared_path: file:///mnt/data/Agentic Prompt Enhancer for Image Generation and.pdf
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: The exact crosswalk class is reference_only. The operator explicitly confirmed DEFERRED_REFERENCE; no unique active requirement depends solely on the missing paper.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-AHP-007
+  - TS-AHP-008
+  - TS-PM-001
+  historical_assignment_mentions:
+  - TS-AHP-007
+  - TS-AHP-008
+  - TS-LEARN-001
+  - TS-PM-001
+  unique_requirement_dependency: false
+  decision_ref: P02-SRC-001_SOURCE_DISPOSITION_DECISION_CONFIRMED_2026-07-22
+  handling: RECORD_GAP_RETAIN_BACKLOG_PROHIBIT_ATTRIBUTED_CLAIMS_CONTINUE
+- source_id: SRC-EXT-002
+  declared_path: https://huggingface.co/openbmb/MiniCPM5-1B
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-PM-001
+  historical_assignment_mentions:
+  - TS-PM-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-003
+  declared_path: https://huggingface.co/Qwen/Qwen3.5-4B
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-PM-001
+  historical_assignment_mentions:
+  - TS-PM-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-004
+  declared_path: https://huggingface.co/Qwen/Qwen3.6-27B
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-PM-001
+  historical_assignment_mentions:
+  - TS-PM-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-005
+  declared_path: https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-AIR-019
+  - TS-RET-001
+  historical_assignment_mentions:
+  - TS-LEARN-001
+  - TS-RET-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-006
+  declared_path: https://github.com/cactus-compute/needle
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-PM-001
+  historical_assignment_mentions:
+  - TS-PM-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-007
+  declared_path: https://github.com/calesthio/OpenMontage
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-008
+  declared_path: https://github.com/chenglou/pretext
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-009
+  declared_path: https://roughnotation.com/
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-010
+  declared_path: https://github.com/facebookresearch/sam3
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-011
+  declared_path: https://github.com/egeorcun/lucida
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-012
+  declared_path: https://www.remotion.dev/
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-013
+  declared_path: https://hyperframes.video/docs
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-014
+  declared_path: https://www.ffmpeg.org/documentation.html
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-015
+  declared_path: https://api.skia.org/
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: external_primary_or_user_supplied
+  prior_disposition: REFERENCE
+  prior_authority: reference_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: Crosswalk authority is reference_only; exact bytes are not locally hash-locked and no unique active requirement depends solely on this source.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-016
+  declared_path: github://calesthio/OpenMontage
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE_ADOPTION_REVIEW
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 3355e890d6fc5710ba8903df0406d634ca74fed8
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-017
+  declared_path: github://browser-use/video-use
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: fa4b776d94cbc6ae500c1a8e2c1be9b2486a93d2
+  affected_specs:
+  - TS-CAS-002
+  - TS-INT-001
+  - TS-INT-002
+  - TS-INT-003
+  - TS-REL-002
+  - TS-VID-001
+  - TS-VID-002
+  - TS-VID-003
+  - TS-VID-004
+  - TS-VID-006
+  historical_assignment_mentions:
+  - TS-CAS-002
+  - TS-INT-001
+  - TS-INT-002
+  - TS-INT-003
+  - TS-REL-002
+  - TS-VID-001
+  - TS-VID-002
+  - TS-VID-003
+  - TS-VID-004
+  - TS-VID-006
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-018
+  declared_path: github://remotion-dev/remotion
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE_ADOPTION_REVIEW
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 90118b2449ade4dae0e982e63677c83e4d50deb9
+  affected_specs:
+  - TS-CAS-004
+  - TS-REL-001
+  - TS-VID-001
+  - TS-VID-002
+  - TS-VID-003
+  - TS-VID-004
+  historical_assignment_mentions:
+  - TS-CAS-004
+  - TS-REL-001
+  - TS-VID-001
+  - TS-VID-002
+  - TS-VID-003
+  - TS-VID-004
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-019
+  declared_path: github://heygen-com/hyperframes
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: a94b9cd123892d2911f4b9787b45f6e3f157f548
+  affected_specs:
+  - TS-ANI-001
+  - TS-CAS-004
+  - TS-REL-001
+  - TS-VID-001
+  - TS-VID-002
+  - TS-VID-003
+  - TS-VID-004
+  historical_assignment_mentions:
+  - TS-ANI-001
+  - TS-CAS-004
+  - TS-REL-001
+  - TS-VID-001
+  - TS-VID-002
+  - TS-VID-003
+  - TS-VID-004
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-020
+  declared_path: github://UVA-Computer-Vision-Lab/OmniShotCut
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: e994cba23347a110a8c647eb09153c9976674677
+  affected_specs:
+  - TS-INT-002
+  - TS-INT-003
+  - TS-VID-001
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-INT-002
+  - TS-INT-003
+  - TS-VID-001
+  - TS-VID-002
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-021
+  declared_path: github://openvideodev/video-editor
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE_ADOPTION_REVIEW
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 8dc132dee6c1594bb65bfa461be58c4faca723a4
+  affected_specs:
+  - TS-CAS-002
+  - TS-CAS-004
+  - TS-VID-003
+  historical_assignment_mentions:
+  - TS-CAS-002
+  - TS-CAS-004
+  - TS-VID-003
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-022
+  declared_path: github://lineCode/ai-video-editor
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE_ADOPTION_REVIEW
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 97d30f3729a4dcb92cf51eba45d90f3279b51eb9
+  affected_specs:
+  - TS-CAS-002
+  - TS-CAS-004
+  - TS-VID-003
+  historical_assignment_mentions:
+  - TS-CAS-002
+  - TS-CAS-004
+  - TS-VID-003
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-023
+  declared_path: github://SamurAIGPT/AI-Youtube-Shorts-Generator
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 7b97d3d1e0cfae0eaa8c4b76c251b9e2c801b410
+  affected_specs:
+  - TS-AHP-003
+  - TS-INT-001
+  - TS-INT-002
+  - TS-VID-001
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-AHP-003
+  - TS-INT-001
+  - TS-INT-002
+  - TS-VID-001
+  - TS-VID-002
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-024
+  declared_path: github://GVCLab/CutClaw
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 624a504ba79b9d118b444506d2af278f6f1dc30a
+  affected_specs:
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-VID-002
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-025
+  declared_path: github://MangoLion/stretchystudio
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: ef656d8f51c349f909ad25891dcfde30929b1c54
+  affected_specs:
+  - TS-ANI-001
+  - TS-REL-001
+  - TS-VID-004
+  historical_assignment_mentions:
+  - TS-ANI-001
+  - TS-REL-001
+  - TS-VID-004
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-026
+  declared_path: github://google/GNM
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: af3c7b65a67565e157d7b0827e800b51293f810d
+  affected_specs:
+  - TS-CAS-004
+  - TS-VAE-BOUND-001
+  historical_assignment_mentions:
+  - TS-CAS-004
+  - TS-VAE-BOUND-001
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-027
+  declared_path: github://GoogleCloudPlatform/knowledge-catalog/okf
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: 55d0a46cc988e99aa35cd027964d6278a4f93f35
+  affected_specs:
+  - TS-AIR-005
+  - TS-CAS-004
+  historical_assignment_mentions:
+  - TS-CAS-004
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-EXT-028
+  declared_path: hf://nvidia/Nemotron-3-Embed
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: external_reference
+  prior_disposition: REFERENCE_BENCHMARK
+  prior_authority: research_evidence_only
+  current_class: DEFERRED_REFERENCE
+  classification_reason: External research-only locator; no exact bytes are hash-locked and no unique active requirement depends solely on it.
+  bytes_available: false
+  sha256: null
+  affected_specs:
+  - TS-CAS-004
+  historical_assignment_mentions:
+  - TS-CAS-004
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: RETAIN_IN_RESEARCH_BACKLOG_NO_ATTRIBUTED_CLAIMS
+- source_id: SRC-GAP-ANALYSIS-001
+  declared_path: sources/brownfield/ACTIVATIVE_INTELLIGENCE_GAP_ANALYSIS.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: gap_analysis
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 83894499b8fd8ea0cf2cdbc8a3ab63b2ad5a3ced4c985697d04a680d2cb725c2
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-HARNESS-RESEARCH-001
+  declared_path: sources/research/Better_Harnesses_Smaller_Models.pdf
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: research
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: OPTIONAL_REFERENCE
+  classification_reason: Packaged research reference; not current authority and not sole requirement evidence.
+  bytes_available: true
+  sha256: 3fac74f3152a8ec2cd6d28e98a6e5cff323fea9c39e7328bdb38bfb0b3003b17
+  affected_specs:
+  - TS-AIR-020
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_IF_AVAILABLE_NO_AUTHORITY_INFERENCE
+- source_id: SRC-INT-001
+  declared_path: sources/doctrine/CCP_V9_INTERVIEW_FIRST_EXPRESSION_ENGINE.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: interview_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: c9014d284080b0d927fc496f292f6c58220790bdb63aff70a004d8a42c997007
+  affected_specs:
+  - TS-AHP-003
+  - TS-AHP-004
+  - TS-AIR-002
+  - TS-AIR-007
+  - TS-AIR-008
+  - TS-AIR-009
+  - TS-AIR-014
+  - TS-AIR-015
+  - TS-ANI-001
+  - TS-BATCH-001
+  - TS-CAR-001
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-DEL-001
+  - TS-INT-001
+  - TS-INT-002
+  - TS-INT-003
+  - TS-INT-004
+  - TS-INT-005
+  - TS-INT-006
+  - TS-INT-007
+  - TS-REL-002
+  - TS-SPV-001
+  - TS-VID-001
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-AHP-003
+  - TS-AHP-004
+  - TS-ANI-001
+  - TS-ARC-001
+  - TS-BATCH-001
+  - TS-CAR-001
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-DEL-001
+  - TS-INT-001
+  - TS-INT-002
+  - TS-INT-003
+  - TS-INT-004
+  - TS-INT-005
+  - TS-REL-002
+  - TS-SPV-001
+  - TS-VID-001
+  - TS-VID-002
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+  alternate_declarations:
+  - origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+    declared_path: THE_CMF_STUDIO(2).zip::05_PRD_CMF_STUDIO_INTERVIEW_FIRST.md
+    observed_sha_or_blob_sha: 6534c0be726ea542e0a9821edf93c99493ebc8d957e76e80cb1799c6c8de95fd
+- source_id: SRC-INT-002
+  declared_path: sources/doctrine/CCP_V9_1_EXPRESSION_CAPTURE_ARCHETYPE_ROUTING.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: interview_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 58e92fee3f9486ab524d1229c4759566f760b6cc91472aff279e457b0b52482b
+  affected_specs:
+  - TS-AIR-002
+  - TS-AIR-006
+  - TS-AIR-008
+  - TS-AIR-009
+  - TS-AIR-011
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-005
+  - TS-INT-007
+  - TS-VID-001
+  historical_assignment_mentions:
+  - TS-ARC-001
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-005
+  - TS-VID-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+  alternate_declarations:
+  - origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+    declared_path: THE_CMF_STUDIO(2).zip::CCP V9 Interview-First Expression Engine.md
+    observed_sha_or_blob_sha: c9014d284080b0d927fc496f292f6c58220790bdb63aff70a004d8a42c997007
+- source_id: SRC-INT-003
+  declared_path: THE_CMF_STUDIO(2).zip::CCP V9.1 Expression Capture & Archetype Routing Update.md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: predecessor_interview_architecture
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 58e92fee3f9486ab524d1229c4759566f760b6cc91472aff279e457b0b52482b
+  affected_specs:
+  - TS-AHP-003
+  - TS-AIR-006
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-005
+  - TS-VID-001
+  historical_assignment_mentions:
+  - TS-AHP-003
+  - TS-ARC-001
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-005
+  - TS-VID-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-001
+  declared_path: src/ccp_studio/contracts/studio_pipeline_recipe_harness.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: fd9a613463c71c9e0f1a0ce3b4ba0cd479b7553ead53a50d6d678d72386e81b8
+  affected_specs:
+  - TS-AHP-002
+  - TS-AHP-004
+  historical_assignment_mentions:
+  - TS-AHP-002
+  - TS-AHP-004
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-002
+  declared_path: src/ccp_studio/services/pipeline_run_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: cede54a5f4bf09f047ffdbacc8f3427cfa197306aebc84c0c1950ff87a185021
+  affected_specs:
+  - TS-AHP-004
+  - TS-AHP-006
+  historical_assignment_mentions:
+  - TS-AHP-004
+  - TS-AHP-006
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-003
+  declared_path: src/ccp_studio/services/pipeline_step_run_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 90c568b255b0d27fe3430f8b4edd7da01cce202cd46f9ec36a916dae2ed362db
+  affected_specs:
+  - TS-AHP-004
+  - TS-AHP-006
+  historical_assignment_mentions:
+  - TS-AHP-004
+  - TS-AHP-006
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-004
+  declared_path: src/ccp_studio/contracts/composition_runtime.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: b0416bbf0b708467c01d8d80aa17c6137ea1b2865cb8b0b9aae039dcfa53fbe3
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-005
+  declared_path: src/ccp_studio/services/composition_runtime_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 83e3f84032bc4538262b03da223739886e575b4d3245fabea184d6cd9d3fc9d1
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-006
+  declared_path: src/ccp_studio/contracts/video_editing_engine.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 38edbceab7152ae1d09d131936bc1625ced13d384932f333acca4425954d4bd7
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-002
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-007
+  declared_path: src/ccp_studio/services/video_editing_engine_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 3d13c36601d1719b5b6c826ae43e9e24a71a77e61f92137396cad60649472e05
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-002
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-002
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-008
+  declared_path: src/ccp_studio/services/video_timeline_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: ad3350e56122474d063f6e5bbebee44a57d298ca14f615ba7b9c3d031637a012
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-003
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-009
+  declared_path: src/ccp_studio/services/video_audio_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 27b20631cfdc261dd99d748a172ddf44ce638fa30af816d12ed123b09602faa6
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-003
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-010
+  declared_path: src/ccp_studio/services/video_caption_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 894a20db54aedc80a5cf691f4edff6560a2148a0206095c37364e04a4801094a
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-003
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-011
+  declared_path: src/ccp_studio/services/video_media_probe_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 10ef27499d7bc52995de2670d7c63e8d563efe37bf402d8b29a1f4b89357c1cc
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-004
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-004
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-012
+  declared_path: src/ccp_studio/services/video_source_asset_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 40ef7cdde27586686901c08e2e917c7284d211b936959c73c57125e08455857c
+  affected_specs:
+  - TS-VID-001
+  - TS-VID-004
+  historical_assignment_mentions:
+  - TS-VID-001
+  - TS-VID-004
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-013
+  declared_path: src/ccp_studio/contracts/deterministic_rendering.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 5276c9d137f6cdc3484fcf3d4296ac885f628776291f28d38975961816645829
+  affected_specs:
+  - TS-VID-004
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-004
+  - TS-VID-005
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-014
+  declared_path: src/ccp_studio/services/deterministic_rendering_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 3ddd14e32e785e2879f037330691cb84979bb5df2e072a792446a3bcbfeff054
+  affected_specs:
+  - TS-VID-004
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-004
+  - TS-VID-005
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-015
+  declared_path: src/ccp_studio/contracts/remotion_ffmpeg_render_adapter.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_SPLIT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: ae99f9540699f88e7d2487b1c2600c8d1cacfbb8d4f19ae7c55d2530c4e4b4ec
+  affected_specs:
+  - TS-VID-004
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-004
+  - TS-VID-005
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-016
+  declared_path: src/ccp_studio/services/remotion_render_adapter_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 0048273bf8f2710063ce13754de4e4b5cfff0ffdd8b895a6dc965a12928fc50a
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-017
+  declared_path: src/ccp_studio/services/ffmpeg_finish_adapter_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ACTIVATE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: ddc53803021e3c0cde5c3b171787bb2c74c09cb52019be3350d956bf384202e3
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-018
+  declared_path: src/ccp_studio/services/remotion_ffmpeg_render_orchestrator_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: REPLACE_WITH_PIPELINE_BINDING
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 0bdd81376e167f92e1d842b80761e57b44981d8a0ca7d63744b764f30df1ccd9
+  affected_specs:
+  - TS-VID-005
+  historical_assignment_mentions:
+  - TS-VID-005
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-019
+  declared_path: src/ccp_studio/contracts/render_qa.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: b3e4aa987d23113438ac1ee023c0f447738dbc4909bd37416834c9485d8380f0
+  affected_specs:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  historical_assignment_mentions:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-020
+  declared_path: src/ccp_studio/services/render_qa_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 01ec1c91c05672610794efb97d188dbcef5cf6ef5e5f22c1565f36f19e390dd8
+  affected_specs:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  historical_assignment_mentions:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-021
+  declared_path: src/ccp_studio/services/ffprobe_validation_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ACTIVATE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 9e345420ef3b55e0676b10e1cf994a7dc8602cc6cac6d8f6f0fd2cdadeaf3f61
+  affected_specs:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  historical_assignment_mentions:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-022
+  declared_path: src/ccp_studio/services/frame_sampling_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ACTIVATE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 41b55520aa1bb1e6cea76002fa7e6acb73047ce239f682108f7fa69b1e4ef98c
+  affected_specs:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  historical_assignment_mentions:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-023
+  declared_path: src/ccp_studio/services/audio_level_analysis_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ACTIVATE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: e39a1a88d9c631714c6dedcdfd47abda1db98e2e55f20de6dd5876f2d20484c4
+  affected_specs:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  historical_assignment_mentions:
+  - TS-EVAL-001
+  - TS-EVAL-002
+  - TS-EVAL-003
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-024
+  declared_path: src/ccp_studio/services/carousel_engine_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 3b9e6042ae490ccc221a923da4d96ccacabb19ace0c908fbbf9b528fe6d8315a
+  affected_specs:
+  - TS-CAR-001
+  historical_assignment_mentions:
+  - TS-CAR-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-025
+  declared_path: src/ccp_studio/services/carousel_render_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: REPLACE_ACTIVATE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 2e0477aecc0f12fcd4b5848f4169ee97a9a2804f593c37eb3c31692233173fd1
+  affected_specs:
+  - TS-CAR-001
+  historical_assignment_mentions:
+  - TS-CAR-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-026
+  declared_path: src/ccp_studio/services/supervisual_runtime_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 8174d3e0513412f2c8cf7e00d67ff5207d3eccf9c84775162ea228bec88e6aa9
+  affected_specs:
+  - TS-SPV-001
+  historical_assignment_mentions:
+  - TS-SPV-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-027
+  declared_path: src/ccp_studio/services/supervisual_project_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: ad98845fac487a89f978b3036e02eac58347fcd7b33b9b7d7ad75df514fdda97
+  affected_specs:
+  - TS-SPV-001
+  historical_assignment_mentions:
+  - TS-SPV-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-028
+  declared_path: src/ccp_studio/contracts/asset_program_compilers.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: b8f018ae42956618e2466465faeb33912824e005c5c7878fb266d7c985638ca3
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-029
+  declared_path: src/ccp_studio/services/asset_program_compiler_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: FORK_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: b4726def1d6917ab2dfc399972d89418e9ae2bcfc4f72bfe5d7612dd312f48fc
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-030
+  declared_path: src/ccp_studio/providers/generative.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: REWRITE_PROVIDER_BOUNDARY
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: d0183a068f2d8e79b8cb549d682cdb35e5645b3211f7cfe8abda8e363b5b9ea8
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-031
+  declared_path: src/ccp_studio/providers/segment_anything_adapter.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: REPLACE_WITH_REAL_ADAPTER
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 4d085144912e2fbb0536490a1093857cf4afd51e306970313dbd6a003b34b1cd
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-032
+  declared_path: src/ccp_studio/services/format02_golden_path_orchestrator_service.py
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: ADAPT_REFERENCE_SLICE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: d10bf54a667cf389d08c289b3bdebf651e2743287becb8b7716720c14102de2d
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-033
+  declared_path: docs/audits/CMF_VISUAL_GEOMETRICS_SKIA_SAM3_PRETEXT_AUDIT_2026-06-24.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_EVIDENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 402b57e027aecd3daba2dced3add91bcc1d2b107c5dc2166adec8ea3678740af
+  affected_specs:
+  - TS-AHP-001
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  - TS-STA-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-034
+  declared_path: docs/prd/modules/PRD_CMF_07_Editing_Composition_Rendering.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_EVIDENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: d8a65762d077ac553fe8d2ccf0e149fb79cc61d116628397f0d2453369667dba
+  affected_specs:
+  - TS-AHP-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-035
+  declared_path: docs/prd/modules/PRD_CMF_13_OpenMontage_Inspired_Production_Orchestration_Adapters.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_EVIDENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 047af694a83e97d7d3c47790a821d0ae564170f1a4a0459a2e9c6ee87fd7def3
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-036
+  declared_path: docs/tech-specs/TS-CMF-095-geometrics-still-visual-composition-runtime-skia-sam3-pretext.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_AND_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: b2b313874608c07707b7e4e8c51a3900754960d535265409c3b70e144d2195e5
+  affected_specs:
+  - TS-STA-001
+  historical_assignment_mentions:
+  - TS-STA-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-037
+  declared_path: docs/tech-specs/TS-CMF-096-carousel-slide-composition-library-and-sequence-builder.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_AND_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: d583495e7e76eeb6a6602c2a264f159826b590103dbdf843ee69777871b71287
+  affected_specs:
+  - TS-CAR-001
+  historical_assignment_mentions:
+  - TS-CAR-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-038
+  declared_path: docs/tech-specs/TS-CMF-097-carousel-builder-engine-compiler-workflow-and-skia-export-runtime.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_AND_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: f0656d0b829ef17506adf9d62cff8562d59f24cace817ea0d5d6526045fc1287
+  affected_specs:
+  - TS-CAR-001
+  historical_assignment_mentions:
+  - TS-CAR-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-039
+  declared_path: docs/tech-specs/TS-CMF-098-carousel-composition-atlas-registry-and-router-integration.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_AS_CANDIDATE_EVIDENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 2cec079f126a53e76ed5677c55963994b92b7f8781cd45d0258ca08ead04a2f7
+  affected_specs:
+  - TS-CAR-001
+  historical_assignment_mentions:
+  - TS-CAR-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-040
+  declared_path: docs/tech-specs/TS-CMF-099-single-image-post-engine-supervisual-router-and-skia-runtime.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_AND_ADAPT
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 3dcc1b5fd504a00d08ee98c7f086448a364b23f354306fa934e2d9f8aeadee00
+  affected_specs:
+  - TS-SPV-001
+  historical_assignment_mentions:
+  - TS-SPV-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-041
+  declared_path: docs/tech-specs/TS-CMF-102-supervisual-composition-families-and-primitive-triad-contracts.md
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: RETAIN_AS_CANDIDATE_EVIDENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 78c0c6cecb885afa262b6dbf690e496a1ecb05a4fe59ffe913afa3838dadd5ec
+  affected_specs:
+  - TS-SPV-001
+  historical_assignment_mentions:
+  - TS-SPV-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-042
+  declared_path: registries/canonical/format_intelligence/formats.v1.json
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: MIGRATION_EVIDENCE_ONLY
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: 7c06d0ee2884ae142426c576ed47159541a57790f7b2d7fdd2a6c0a8e3f480c1
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-043
+  declared_path: registries/canonical/format_intelligence/sub_formats.v1.json
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: MIGRATION_EVIDENCE_ONLY
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: c2b36cfc4ee8263ec60585a6a33d5e580a4869b807ad49f5b581c0368624f1ff
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-044
+  declared_path: registries/canonical/format_intelligence/carousel_format_profiles.v1.json
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: MIGRATION_EVIDENCE_ONLY
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: f081ccaf6c564f2535abe1792281aaff20b2d973c751bb722a87477e89bb46f5
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-LEG-045
+  declared_path: registries/canonical/format_intelligence/supervisual_format_profiles.v1.json
+  origin_registry: sources/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  kind: legacy_archive
+  prior_disposition: MIGRATION_EVIDENCE_ONLY
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Exact predecessor byte evidence required to govern REUSE/ADAPT/ACTIVATE/REPLACE/ARCHIVE decisions without inventing current behavior.
+  bytes_available: true
+  sha256: e2b30932f4062410ad8b396e2ec9058b97afca3108d698fcd74ea217c9358bb7
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-MIG-001
+  declared_path: CMF_STUDIO_PREDECESSOR_MIGRATION_AUDIT_V1(1).md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: predecessor_migration_audit
+  prior_disposition: REFERENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 5912930b2abfb376aef67c140bb745845ede054b07ad6aa0e9bb77f9a06301d7
+  affected_specs:
+  - TS-AHP-001
+  - TS-AHP-004
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-REL-001
+  - TS-REL-002
+  - TS-VAE-BOUND-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  - TS-AHP-004
+  - TS-CAS-004
+  - TS-CAS-005
+  - TS-REL-001
+  - TS-REL-002
+  - TS-VAE-BOUND-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-MIG-002
+  declared_path: EXACT_SOURCE_REUSE_CROSSWALK(1).csv
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: source_reuse_crosswalk
+  prior_disposition: REFERENCE
+  prior_authority: migration_evidence_only
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: c8c97f5d2003d070180a7061484609b2f9c8ef990efa116914f05b4e400e7820
+  affected_specs:
+  - TS-AHP-001
+  - TS-REL-002
+  historical_assignment_mentions:
+  - TS-AHP-001
+  - TS-REL-002
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-MOE-001
+  declared_path: sources/doctrine/MATRIX_OF_EDGING.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: matrix_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 7ba1858cd9238a63f32d28e9cc8e7bbe306ba82ac5fa5af4a0346128aa3b6ebb
+  affected_specs:
+  - TS-AIR-002
+  - TS-AIR-003
+  - TS-AIR-004
+  - TS-AIR-005
+  - TS-AIR-008
+  - TS-AIR-009
+  - TS-AIR-014
+  - TS-INT-007
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-PRD-METHOD-001
+  declared_path: sources/spec_methods/SKILL_PRD_Module_Writer.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: spec_method
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Superseded for this campaign by the updated CA V3.1 lifecycle Skills.
+  bytes_available: true
+  sha256: 40a3d9ba96001d4817ead035115f3ba040cecd6e40e41775a934a495b9eae834
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-PRIM-001
+  declared_path: sources/doctrine/MEANING_PRIMITIVE_REGISTRY_SPEC.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: primitive_spec
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 1851f4e8e07beb6e1886e91f45d8bb12cf38d6fc8af8f20e314788d6d47d7e5f
+  affected_specs:
+  - TS-AIR-004
+  - TS-AIR-005
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-PRIM-002
+  declared_path: sources/doctrine/EXPERIENCE_PRIMITIVE_REGISTRY_SPEC.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: primitive_spec
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 5cb5f1b568c84e41bbbf2ccbb18b938ccee5de1c6cab5cbee96343d88adaee72
+  affected_specs:
+  - TS-AIR-004
+  - TS-AIR-005
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-PRIM-003
+  declared_path: sources/cmf_primitive_registry_snapshot
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: directory_snapshot
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 4a3423b0fce2b30c58e65275a656a0188693656406dd12269fe2e58d4d514447
+  affected_specs:
+  - TS-AIR-004
+  - TS-AIR-005
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-PRIM-CODE-001
+  declared_path: sources/doctrine/PRIMITIVE_COALITION_CONTRACT.py
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: brownfield_code
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 990735d588e03004cbee780cea7e3623361a7fa70991e898ff13f173618cbf08
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-RECENT-001
+  declared_path: sources/research/Efficient_Skill_Grounding_RECENT.pdf
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: research
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: OPTIONAL_REFERENCE
+  classification_reason: Packaged research reference; not current authority and not sole requirement evidence.
+  bytes_available: true
+  sha256: 608d8570469d44a79f4ac3ab06cf662eb4aa2a953aca321152f81cbc07fba7a8
+  affected_specs:
+  - TS-AIR-020
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_IF_AVAILABLE_NO_AUTHORITY_INFERENCE
+- source_id: SRC-REUSE-CROSSWALK-001
+  declared_path: sources/brownfield/EXACT_SOURCE_REUSE_CROSSWALK.csv
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: brownfield_crosswalk
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: c8c97f5d2003d070180a7061484609b2f9c8ef990efa116914f05b4e400e7820
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-RSCS-001
+  declared_path: sources/doctrine/RSCS_RECURSIVE_SIGNAL_COMPRESSION_SYSTEMS.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: distillation_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: bb8ebfcd5c519649b4363731cf11434ce600c71fb5e1d020abb59cbb51b8a330
+  affected_specs:
+  - TS-AIR-002
+  - TS-AIR-007
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-SDA-001
+  declared_path: sources/cmf_sda_registry_snapshot
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: directory_snapshot
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: ded8e22b39a4bbefa394b86a7b379f880ef83f56c8f901b12eb5dfac5f642200
+  affected_specs:
+  - TS-AIR-006
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-SFL-001
+  declared_path: sources/cmf_sfl_registry_snapshot
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: directory_snapshot
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 327cc36abee9428e416fab6b4d1880a26c02bf4082b16a52f6184c7dfdbb7ad1
+  affected_specs:
+  - TS-AIR-006
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-SOURCE-FIRST-001
+  declared_path: sources/doctrine/AHP_PRD_V1_1_SOURCE_FIRST.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: source_first_prd
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Preserved historical predecessor input superseded by the V2.1 candidate authority and current lifecycle Skills.
+  bytes_available: true
+  sha256: cc1cfa721238b999adb1612e805fad60c61c07c566df19d5044fc9e069651508
+  affected_specs:
+  - TS-AIR-011
+  - TS-AIR-016
+  - TS-INT-001
+  - TS-INT-004
+  - TS-INT-006
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-SPEC-001
+  declared_path: Specs_Builder_Library(1).zip
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: spec_method_library
+  prior_disposition: ADAPT_METHOD
+  prior_authority: writing_method_evidence
+  current_class: SUPERSEDED
+  classification_reason: Superseded by Specs_Builder_Library_CA_V2_1_1.zip and its CA V3.1 lifecycle Skills.
+  bytes_available: false
+  sha256: b643d459d7fda5fccff53efd5446af515f17fec3d61ab4da419b660e0d1d988c
+  affected_specs:
+  - TS-AIR-007
+  - TS-REL-002
+  historical_assignment_mentions:
+  - TS-REL-002
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-STATE-001
+  declared_path: CURRENT_STATE_RECONCILIATION(1).md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: current_state_reconciliation
+  prior_disposition: REFERENCE
+  prior_authority: implementation_gate_input
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Available unique reconciliation, migration, doctrine, interview, or brownfield contract evidence.
+  bytes_available: true
+  sha256: 6e9478a31b5b3db3e4c83e86a9275ba4fe05676bb95e206dd62411af1352e905
+  affected_specs:
+  - TS-AHP-001
+  historical_assignment_mentions:
+  - TS-AHP-001
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-STATE-RECON-001
+  declared_path: sources/brownfield/CURRENT_STATE_RECONCILIATION.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: status_reconciliation
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 6e9478a31b5b3db3e4c83e86a9275ba4fe05676bb95e206dd62411af1352e905
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-STUDIO-AMENDMENT-001
+  declared_path: sources/brownfield/CONSCIOUS_ACTIVATIONS_STUDIO_ARCHITECTURE_AMENDMENT_V2_1.zip
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: architecture_amendment
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_AUTHORITY
+  classification_reason: Required candidate authority or governed writing-profile input for specification reconciliation.
+  bytes_available: true
+  sha256: 9059fe3cad98c5d6ca0f9584f091ac503a5e5a9279a4a476821db816dc7603b8
+  affected_specs:
+  - TS-AIR-018
+  - TS-CAS-003
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+- source_id: SRC-TECHSPEC-METHOD-001
+  declared_path: sources/spec_methods/ERA3_Tech_Spec_Writing_Protocol.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: spec_method
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: SUPERSEDED
+  classification_reason: Superseded for this campaign by the updated CA V3.1 lifecycle Skills.
+  bytes_available: true
+  sha256: 6af049310273b5010f0df1827392dfdf80b8631059de73c417d45b1c0049534c
+  affected_specs: []
+  historical_assignment_mentions: []
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-TREE-001
+  declared_path: PROPOSED_TARGET_FILE_TREE(1).md
+  origin_registry: governance/SOURCE_REGISTER_ADDITIONS.csv
+  kind: target_tree
+  prior_disposition: REFERENCE
+  prior_authority: planning_target_only
+  current_class: SUPERSEDED
+  classification_reason: Superseded by the current Program Control product-root and path-ownership registries.
+  bytes_available: true
+  sha256: 6d1c195b35f225706073a989d0a0fe7d42667229bccc23bb4c141b980daaaa8e
+  affected_specs:
+  - TS-REL-002
+  historical_assignment_mentions:
+  - TS-REL-002
+  unique_requirement_dependency: false
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: PRESERVE_HISTORICALLY_DO_NOT_USE_AS_CURRENT_AUTHORITY
+- source_id: SRC-VISUAL-DOCTRINE-001
+  declared_path: sources/doctrine/CCP_CREATIVE_PIPELINE_ARCHITECTURE_V2.md
+  origin_registry: governance/SOURCE_REGISTER.csv
+  kind: visual_doctrine
+  prior_disposition: HASH_LOCKED_BUNDLE_SOURCE
+  prior_authority: AIR_SOURCE_REGISTER
+  current_class: REQUIRED_UNIQUE_EVIDENCE
+  classification_reason: Hash-locked unique doctrine, contract, registry, current-state, or brownfield evidence used by active specifications.
+  bytes_available: true
+  sha256: 8b9175d8631eff50b7f6c959ad245b87f9b307577b51e6dd4d2f622fd44175e8
+  affected_specs:
+  - TS-AIR-017
+  historical_assignment_mentions: []
+  unique_requirement_dependency: true
+  decision_ref: CA_SOURCE_DISPOSITION_V3_1
+  handling: READ_HASH_AND_ENFORCE
+validation:
+  unresolved_required_source_count: 0
+  unresolved_required_sources: []
+  optional_or_deferred_unavailable_count: 28
+  result: PASS_NO_UNRESOLVED_REQUIRED_SOURCE_PATH

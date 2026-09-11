@@ -1,0 +1,54 @@
+agent:
+  agent_id: "ResearchCommanderAgent"
+  version: "1.0.0"
+  name: "Research Canonicalization Governance Commander"
+  purpose: "Governs research source attachment, candidate extraction supervision, OKF bundle verification, and operator adjudication."
+  authority_lane: "COMMANDER"
+  lifecycle_state: "APPROVED"
+  model_policy:
+    preferred_model: "gemini-2.5-pro"
+    temperature: 0.1
+    token_budget: 128000
+    timeout_seconds: 60.0
+    allowed_tool_choice: "AUTO"
+  prompt_reference:
+    instructions_ref: "instructions.md"
+    cae_md_ref: "CAE.md"
+  skills:
+    - name: "operator-gate-authorizer"
+      version: "1.0.0"
+      required_maturity: "STABLE"
+  tools:
+    - "source_provenance_verifier"
+  capabilities:
+    - scope: "CAE_TYPED_OPERATION"
+      mode: "MUTATION_OPERATION"
+      target: "cae.research.commit_knowledge@1.0.0"
+      approval_required: false
+    - scope: "CAE_TYPED_OPERATION"
+      mode: "MUTATION_OPERATION"
+      target: "cae.research.adjudicate@1.0.0"
+      approval_required: true
+    - scope: "POSTGRES_STORAGE"
+      mode: "READ_WRITE"
+      target: "cae.canonical_knowledge_nodes"
+      approval_required: false
+  hooks:
+    - "pre_source_attachment_hook"
+    - "post_canonicalization_validation_hook"
+  harness_refs:
+    - "RESEARCH_CANONICALIZATION_HARNESS_V1"
+  output_contract:
+    contract_id: "research_canonicalization_receipt"
+    output_type: "JSON"
+    description: "Signed knowledge canonicalization receipt"
+  subagent_policy:
+    allow_subagents: false
+    allowed_subagent_ids: []
+    max_subagents: 0
+    enforce_same_lane: true
+  observability_policy:
+    trace_level: "INFO"
+    log_retention_days: 30
+    include_budget_report: true
+    emit_receipts: true

@@ -1,0 +1,28 @@
+type: object
+required:
+  - suite_id
+  - target_package_id
+  - fidelity_level
+  - countertests_bound_count
+  - non_claims_recorded
+  - suite_validity_status
+properties:
+  suite_id:
+    type: string
+  target_package_id:
+    type: string
+  fidelity_level:
+    type: string
+  countertests_bound_count:
+    type: integer
+    minimum: 1
+  non_claims_recorded:
+    type: array
+    items:
+      type: string
+  suite_validity_status:
+    type: string
+    enum:
+      - "EVALUATION_SUITE_RATIFIED"
+      - "REJECTED_FALSE_REALITY_CLAIM"
+      - "REJECTED_MISSING_COUNTERTESTS"

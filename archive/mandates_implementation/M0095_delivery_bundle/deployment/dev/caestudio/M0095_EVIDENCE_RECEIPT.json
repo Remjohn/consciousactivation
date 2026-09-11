@@ -1,0 +1,124 @@
+{
+  "mandate": "M0095",
+  "campaign": "E1 RUNTIME INTEGRATION",
+  "status": "OPERATOR_REVIEW_REQUIRED",
+  "operator_decision": "OPERATOR_DECISION_REQUIRED",
+  "implementation_commit_sha": "b9af237ecb79cc7d79b1e9489f9bfad81b68fa36",
+  "implementation_parent_sha": "1269bc57629b397414e5f02f7a51f8a462c5d066",
+  "uploaded_source_provenance": {
+    "source": "uploaded codebase_clean.zip",
+    "git_metadata_present": false,
+    "local_baseline_method": "fresh extraction of the uploaded archive committed as a local audit baseline",
+    "baseline_commit_is_not_remote_provenance": true
+  },
+  "claims": [
+    {
+      "id": "M0095-E001",
+      "evidence_class": "EXECUTABLE",
+      "claim": "One development/runtime orchestrator launches configured CAE API/UI and downstream runtimes sequentially, with isolated process groups, per-runtime logs, launch failure surfacing, health observation, and clean shutdown.",
+      "source_paths": ["deployment/dev/caestudio/orchestrator.py"],
+      "verification": {
+        "command": "python -m py_compile deployment/dev/caestudio/orchestrator.py tests/cae/test_m0095_runtime_orchestrator.py",
+        "result": "exit 0"
+      }
+    },
+    {
+      "id": "M0095-E002",
+      "evidence_class": "SCHEMA",
+      "claim": "The runtime/capability control matrix defines CAE API/UI as required and OpenChatCut, presentation, SuperVisual, and SAM3 as disabled-by-default downstream capabilities.",
+      "source_paths": ["deployment/dev/caestudio/manifest.json"],
+      "verification": {
+        "command": "python deployment/dev/caestudio/orchestrator.py validate",
+        "result": "exit 0; one origin http://127.0.0.1:3000; optional external runtimes reported disabled"
+      },
+      "manifest_sha256": "6e8ee93a210aaebfba71c8dcb91e600caee018a9272dc6184e04a8fadec63030"
+    },
+    {
+      "id": "M0095-E003",
+      "evidence_class": "TEST",
+      "claim": "Focused tests cover success, process isolation, launch failure, fail-closed configuration, expected HTTP health status, OpenChatCut MCP JSON health, OpenChatCut MCP SSE health, deterministic rendering, and a good-looking-but-wrong health counterexample.",
+      "source_paths": ["tests/cae/test_m0095_runtime_orchestrator.py"],
+      "verification": {
+        "command": "python -m pytest -q tests/cae/test_m0095_runtime_orchestrator.py",
+        "result": "9 passed in 2.25s"
+      }
+    },
+    {
+      "id": "M0095-E004",
+      "evidence_class": "TEST",
+      "claim": "The generated Studio nginx topology is syntactically valid.",
+      "source_paths": ["deployment/dev/caestudio/orchestrator.py", "deployment/dev/caestudio/manifest.json"],
+      "verification": {
+        "command": "nginx -t -c /mnt/data/cae_m0095_repo/deployment/dev/caestudio/.runtime/nginx.conf -p /mnt/data/cae_m0095_repo/deployment/dev/caestudio/.runtime",
+        "result": "nginx configuration syntax is ok; test is successful"
+      }
+    },
+    {
+      "id": "M0095-E005",
+      "evidence_class": "REGISTRY_SOURCE",
+      "claim": "OpenChatCut health behavior is adapted from the existing CAE-native adapter contract, not from a second retrieval or authority system.",
+      "source_paths": ["services/pipeline/src/cmf_pipeline/media/openchatcut.py"],
+      "source_anchors": ["lines 23-24: native MCP default URL and protocol version", "lines 132-171: JSON-RPC request/response validation", "lines 173-190: initialize and serverInfo contract"],
+      "verification": {
+        "command": "grep -nE 'OPENCHATCUT_PROTOCOL_VERSION|def initialize|_parse_response' services/pipeline/src/cmf_pipeline/media/openchatcut.py",
+        "result": "existing adapter exposes protocol 2025-06-18 and initialize/serverInfo handling"
+      }
+    },
+    {
+      "id": "M0095-E006",
+      "evidence_class": "DOCUMENT",
+      "claim": "Brownfield inspection found the existing CAE FastAPI lifecycle, health router, Studio bridge, Vite proxy, presentation adapters, and SuperVisual editor; no pre-existing file in the uploaded root snapshot was modified.",
+      "source_paths": [
+        "api/main.py",
+        "api/routers/health.py",
+        "api/services/studio_bridge.py",
+        "apps/web/vite.config.ts",
+        "engines/presentation/runtime_adapter.py",
+        "engines/visual/supervisual/editor.py",
+        "infra/docker/docker-compose.yml"
+      ],
+      "verification": {
+        "command": "diff -qr /mnt/data/cae_m0095_baseline /mnt/data/cae_m0095_repo",
+        "result": "only deployment/dev (new M0095 directory) and tests/cae/test_m0095_runtime_orchestrator.py differ"
+      }
+    },
+    {
+      "id": "M0095-E007",
+      "evidence_class": "OPERATOR_DECISION_REQUIRED",
+      "claim": "Native external runtime reachability and production readiness are not established by this worktree evidence.",
+      "source_paths": [
+        "deployment/dev/caestudio/README.md",
+        "deployment/dev/caestudio/manifest.json"
+      ],
+      "verification": {
+        "command": "CAE_OPENCHATCUT_ENABLED=true python deployment/dev/caestudio/orchestrator.py validate",
+        "result": "exit 2; fail-closed ConfigurationError because CAE_OPENCHATCUT_UI_URL is not configured"
+      }
+    }
+  ],
+  "environment": {
+    "python": "3.13.5",
+    "node": "v22.16.0",
+    "npm": "10.9.2",
+    "nginx": "1.26.3",
+    "repository_target_python": "3.12.x in existing Docker/runtime declarations",
+    "apps_web_node_modules_present": false,
+    "python_api_dependencies_present": true
+  },
+  "external_source_adoption": {
+    "status": "none",
+    "note": "No external repository source code was copied, extracted, or merged by M0095. Presentation and visual runtime slots are operator-supplied downstream commands. No external license claim is therefore made.",
+    "existing_in_repo_presentation_registry": {
+      "source_path": "engines/presentation/runtime_adapter.py",
+      "slidev": {"tag": "v52.19.1", "commit": "dbc307b", "license": "MIT"},
+      "revealjs": {"tag": "6.0.1", "commit": "52c6c8b", "license": "MIT"}
+    }
+  },
+  "limitations": [
+    "The uploaded archive contains no .git metadata, so remote Git provenance of the archive cannot be cryptographically established from the worktree.",
+    "The orchestrator binds API/UI/control services to loopback; the one public Studio origin is the nginx gateway. Native external runtimes require operator-provided launch commands and target/health URLs.",
+    "External runtime native availability was not proven in this environment. The test sandbox does not provide a native OpenChatCut/presentation/SuperVisual/SAM3 runtime installation, and apps/web node_modules are absent.",
+    "Runtime UI compatibility with a non-root path such as /runtime/openchatcut/ is not proven; the downstream runtime must support its configured base path for a true single-tab UI experience.",
+    "A focused green suite proves orchestrator behavior only; it does not establish semantic correctness, visual quality, provenance sufficiency, or production release authorization."
+  ]
+}

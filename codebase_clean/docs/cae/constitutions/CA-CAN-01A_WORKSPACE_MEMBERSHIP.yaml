@@ -1,0 +1,248 @@
+# Object Constitution: WorkspaceMembership
+# Phase 04 / CA-CAN-01A Boundary & Access Constitutions
+
+id: "CA-REL-001"
+canonical_name: "WorkspaceMembership"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Relation"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-001"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REL-001"
+    canonical_name: "WorkspaceMembership"
+    common_aliases: ["User Role Assignment", "Tenant Membership", "Workspace User Relation"]
+    naming_standard: "PascalCase singular compound relation"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Relation"
+    class_matrix_id: 3
+    class_rationale: "WorkspaceMembership models the operational binding and role authorization between an authenticated principal and a specific Workspace."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Maintains operational role and membership records required to authorize user requests within a customer workspace."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Access Control & Role Authorization"
+    primary_purpose: "Grants an authenticated principal a specific role (ADMIN, MEMBER, AUDITOR) within a single Workspace."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational authorization relation"
+    differentia: "Distinguished from OperatorAccessGrant by being a persistent, customer-managed workspace association rather than a temporary break-glass operator pass."
+    function: "Determines what operations an authenticated user or API service account is permitted to perform in a specific Workspace."
+    boundary: "Must not grant access across multiple Workspaces; does not grant platform operator privileges."
+    normative_definition: >
+      WorkspaceMembership is the operational relation binding an authenticated principal identity to a single
+      Workspace with an assigned role and validity period. It governs customer-level authorization within that
+      Workspace and confers zero authority over peer Workspaces or platform operator functions.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The link between a user principal and a specific Workspace."
+      - "The source of role-based permissions (ADMIN, MEMBER, AUDITOR) in that Workspace."
+    what_it_is_not:
+      - "A global user permission across all workspaces."
+      - "An OperatorAccessGrant (which governs platform support staff)."
+      - "A Guest (Guest is an interview subject, not a dashboard operator)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "OperatorAccessGrant (CA-REL-002)"
+        distinction: "WorkspaceMembership is permanent/standard customer membership; OperatorAccessGrant is a temporary, audited host operator override."
+      - neighbor: "Guest (CA-ENT-003)"
+        distinction: "WorkspaceMembership represents an authenticated system user; Guest represents an interview participant/subject."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Access Control & RBAC"
+    tier: "Workspace Subordinate Relation"
+    specialization: "Standard Role Binding"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["INVITED", "ACTIVE", "SUSPENDED", "REVOKED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "membership_id"
+        type: "UUID"
+        description: "Primary identifier for the membership relation."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key to the containing Workspace."
+      - name: "principal_id"
+        type: "UUID"
+        description: "Identifier of the authenticated user or service principal."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when membership was created."
+    mutable_attributes:
+      - name: "role"
+        type: "STRING"
+        description: "Assigned role (WORKSPACE_ADMIN, WORKSPACE_MEMBER, WORKSPACE_AUDITOR)."
+      - name: "status"
+        type: "STRING"
+        description: "Current relation state (INVITED, ACTIVE, SUSPENDED, REVOKED)."
+      - name: "expires_at"
+        type: "TIMESTAMPTZ"
+        description: "Optional expiration timestamp."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace"]
+    root_boundary: "Workspace"
+    child_relations: []
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "INVITED"
+    terminal_states: ["REVOKED"]
+    states: ["INVITED", "ACTIVE", "SUSPENDED", "REVOKED"]
+    transitions:
+      - from: "INVITED"
+        to: "ACTIVE"
+        operation: "accept_workspace_invitation"
+      - from: "ACTIVE"
+        to: "SUSPENDED"
+        operation: "suspend_workspace_membership"
+      - from: "SUSPENDED"
+        to: "ACTIVE"
+        operation: "reactivate_workspace_membership"
+      - from: "ACTIVE"
+        to: "REVOKED"
+        operation: "revoke_workspace_membership"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "workspace_membership.created"
+      - event_name: "workspace_membership.activated"
+      - event_name: "workspace_membership.revoked"
+    subscribed_events:
+      - event_name: "workspace.suspended"
+      - event_name: "workspace.purged"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Workspace Admin invitation or provisioning workflow"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-WSMEM-001: Every WorkspaceMembership MUST bind to exactly one Workspace (workspace_id)."
+      - "INV-WSMEM-002: A principal's membership in Workspace A confers ZERO permissions in Workspace B."
+      - "INV-WSMEM-003: Revoking a WorkspaceMembership MUST immediately invalidate active session tokens for that workspace."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Multi-Tenant Plan §1; CA-MAP-01 Scope & Authority Matrix"
+    runtime_representation: "cae.workspace_membership (Proposed Phase 08 schema)"
+    promotion_authority: "Workspace Admin"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "invite_workspace_member"
+        parameters: ["workspace_id", "principal_id", "role"]
+      - name: "update_member_role"
+        parameters: ["membership_id", "new_role"]
+      - name: "revoke_member"
+        parameters: ["membership_id", "reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT create a wildcard membership spanning all workspaces."
+      - "MUST NOT assign platform operator privileges via WorkspaceMembership."
+      - "MUST NOT allow a suspended or revoked member to execute workspace operations."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify membership_id, workspace_id, and principal_id are valid UUIDs."
+      - "Verify role is in ['WORKSPACE_ADMIN', 'WORKSPACE_MEMBER', 'WORKSPACE_AUDITOR']."
+    semantic_validators:
+      - "Enforce unique constraint on (workspace_id, principal_id)."
+      - "Ensure target workspace_id exists and is ACTIVE."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_MEMBERSHIP_NOT_FOUND"
+        http_status: 404
+        description: "Membership record does not exist."
+      - code: "ERR_MEMBERSHIP_ALREADY_EXISTS"
+        http_status: 409
+        description: "Principal is already a member of this workspace."
+      - code: "ERR_MEMBERSHIP_REVOKED"
+        http_status: 403
+        description: "Membership has been revoked."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.workspace_membership"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "No private storage files"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "API Authentication & Authorization Gateway"
+      - "Workspace RBAC Engine"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What role does this user hold inside this workspace?"
+      - "Is this user authorized to initiate or review an engagement?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-WSMEM-001"
+        description: "Customer workspace administrator."
+        attributes:
+          membership_id: "22222222-2222-2222-2222-222222222222"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          principal_id: "33333333-3333-3333-3333-333333333333"
+          role: "WORKSPACE_ADMIN"
+          status: "ACTIVE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-WSMEM-001"
+        description: "Using a WorkspaceMembership to authorize access to an unrelated workspace."
+        rejection_reason: "Violates INV-WSMEM-002; memberships are strictly workspace-scoped."
+      - id: "NEG-WSMEM-002"
+        description: "Attempting to grant platform operator access via WorkspaceMembership."
+        rejection_reason: "Violates INV-WSMEM-001 and semantic boundary; operator access requires OperatorAccessGrant."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01A)"
+        summary: "Initial draft constitution establishing WorkspaceMembership as workspace-scoped relation."

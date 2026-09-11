@@ -1,0 +1,66 @@
+{
+  "mandate": "M0080",
+  "status": "IMPLEMENTED_OPERATOR_REVIEW_REQUIRED",
+  "evidence_classification": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "DOCUMENT",
+    "TEST",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "authority_inputs": {
+    "mandate": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/mandates/M0080_FORMAT_SPECIFIC_STORYBOARD_PROGRAM_CONTRACTS_MANDATE.md",
+    "campaign_authority_pack": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/AUTHORITY_PACK/",
+    "constitutional_equivalents_reviewed": [
+      "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    ],
+    "literal_mandate_bundle_present": false,
+    "component_contract_present": false,
+    "limitation": "CAE-M0080_BUNDLE and COMPONENT_CONTRACT.yaml were not present; no claims are made about files not supplied."
+  },
+  "implementation": {
+    "runtime_contracts": "packages/ca_runtime/src/ca_runtime/storyboard_programs.py",
+    "exports": "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "dependency_fixture_repair": "packages/ca_runtime/src/ca_runtime/visual_derivative_production_program.py",
+    "tests": "tests/cae/test_m0080_storyboard_program_contracts.py",
+    "shared_authority": "M0079 StoryboardRevision backed by EditorialStoryboardRecord and GraphRevisionRecord",
+    "format_programs": [
+      "VideoStoryboardProgram",
+      "CarouselStoryboardProgram",
+      "SuperVisualStoryboardProgram",
+      "PresentationStoryboardProgram"
+    ]
+  },
+  "verification": [
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/cae/test_m0080_storyboard_program_contracts.py",
+      "observed_result": "4 passed, 100%",
+      "proves": "All four program contracts compile shared revisions and reject unsupported, ungrounded, malformed, unsafe, and overlapping projections."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/cae/test_visual_derivative_production_program.py tests/cae/test_ca_m005_format_archetype_gate.py",
+      "observed_result": "35 passed, 100%",
+      "proves": "Mandated M0080 baseline plus existing M0079/M39 and adjacent program gates."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/cae/test_m0075_jellyfish_extraction_reference.py tests/cae/test_m0076_exploratory_canvas_reference.py tests/cae/test_m0077_arc_reel_review_extraction.py tests/cae/test_m0078_shot_grammar_reference.py tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/cae/test_visual_derivative_production_program.py tests/cae/test_ca_m005_format_archetype_gate.py",
+      "observed_result": "71 passed, 100%",
+      "proves": "Complete M0074–M0080 storyboard regression."
+    }
+  ],
+  "dependency_resolution": {
+    "psycopg": "available, version 3.3.4",
+    "source_fix": "Imported require_current_tenant_context in visual_derivative_production_program.py; no test was weakened or skipped."
+  },
+  "limitations": [
+    "Native external runtime reachability is not established.",
+    "Human perceptual, rights, and final creative approval remain required.",
+    "Pydantic deprecation warnings remain non-failing."
+  ],
+  "operator_decision_requested": "APPROVE | APPROVE-WITH-LIMITATIONS | REJECT",
+  "commit_sha": "f7f8863d0fa52f5decf91284ece29e810a61f998"
+}

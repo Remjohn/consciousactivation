@@ -1,0 +1,83 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M58",
+  "mandate_title": "Executable Workflow IR",
+  "phase": "PHASE_07_WORKFLOW_ENGINEERING",
+  "parallel_group": "P7-A",
+  "timestamp_utc": "2026-09-02T05:13:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/02_WORKFLOW_ENGINEERING/M58_executable_workflow_ir.md"
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/workflow_ir.py",
+      "artifact_class": "Executable Workflow IR Domain Models, Validator, Diff Engine & Compiler Adapter",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m58_executable_workflow_ir.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 11,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_ir_validates_before_compilation": {
+      "status": "PASSED",
+      "description": "ExecutableWorkflowIR structural, node-uniqueness, and edge-endpoint validity verified before runtime compilation."
+    },
+    "gate_2_canonicalized_identity": {
+      "status": "PASSED",
+      "description": "Equivalent source graphs with scrambled node/edge declarations produce identical cryptographic SHA-256 digests."
+    },
+    "gate_3_controlled_cycle_law": {
+      "status": "PASSED",
+      "description": "Undeclared/unbounded cycles are rejected fail-closed; host-bounded loops with finite iteration policies are accepted."
+    },
+    "gate_4_branch_conditions_and_targets": {
+      "status": "PASSED",
+      "description": "Condition and switch branch targets are verified to exist in the graph, preventing dangling branches."
+    },
+    "gate_5_runtime_compiler_authority": {
+      "status": "PASSED",
+      "description": "WorkflowIRCompiler compiles canonical IR into runtime projection dictionaries compatible with validate_runtime_workflow."
+    }
+  },
+  "false_proof_defenses": [
+    {
+      "vector": "hidden_cycle_rejected",
+      "rule": "INV-WFP-001",
+      "error_code": "ERR_WORKFLOW_IR_ILLEGAL_CYCLE",
+      "verified": true
+    },
+    {
+      "vector": "loop_without_bound_rejected",
+      "rule": "INV-WFP-002",
+      "error_code": "ERR_UNBOUNDED_LOOP",
+      "verified": true
+    },
+    {
+      "vector": "missing_branch_target_rejected",
+      "rule": "INV-WFP-001",
+      "error_code": "ERR_WORKFLOW_IR_BRANCH_TARGET_MISSING",
+      "verified": true
+    },
+    {
+      "vector": "parallel_conflicting_mutations_rejected",
+      "rule": "INV-WFP-004",
+      "error_code": "ERR_PARALLEL_SIDE_EFFECT_CONFLICT",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m58_tests_passed": 11,
+    "combined_phase_5_6_7_tests_passed": 111,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

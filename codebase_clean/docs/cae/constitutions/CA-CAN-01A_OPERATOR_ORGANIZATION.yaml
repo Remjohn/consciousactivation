@@ -1,0 +1,241 @@
+# Object Constitution: OperatorOrganization
+# Phase 04 / CA-CAN-01A Boundary & Access Constitutions
+
+id: "CA-ENT-000"
+canonical_name: "OperatorOrganization"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Entity"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "OPERATOR_AUDIT"
+collision_register_ref: "COL-MAP-001"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-ENT-000"
+    canonical_name: "OperatorOrganization"
+    common_aliases: ["Platform Operator", "System Administrator Entity", "Host Organization"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Entity"
+    class_matrix_id: 1
+    class_rationale: "OperatorOrganization has discrete identity, lifecycle, ownership boundaries, and operational relations, distinct from client tenants."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Maintains operational identity and administration records for host platform staff and system processes."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Platform Governance & Operator Audit"
+    primary_purpose: "Represents the platform host operating organization that governs infrastructure, system maintenance, and operator principals."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational administrative entity"
+    differentia: "Distinguished from Workspace in that it does NOT contain customer tenant data and cannot be a customer tenancy."
+    function: "Provides a single operational root for host operator identities, access policies, and audit governance."
+    boundary: "Must not be used as a client workspace or tenant repository; operator access to tenant workspaces requires an explicit OperatorAccessGrant."
+    normative_definition: >
+      OperatorOrganization is the operational administrative entity representing the host platform operating body.
+      It anchors platform engineering, support, and administrative principals, maintaining governance over cross-workspace
+      access policies without acting as a customer tenant workspace.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The administrative home of platform operators, support engineers, and automation workers."
+      - "The issuing authority boundary for internal operational governance."
+    what_it_is_not:
+      - "A customer tenant workspace."
+      - "A substitute for Workspace tenant isolation."
+      - "An automatic bypass of tenant Row-Level Security."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Workspace (CA-ENT-001)"
+        distinction: "Workspace is the client tenant isolation boundary; OperatorOrganization is the internal platform operator boundary."
+      - neighbor: "OperatorAccessPolicy (CA-POL-001)"
+        distinction: "OperatorOrganization is the operational administrative entity; OperatorAccessPolicy is the canonical contract governing access rules."
+      - neighbor: "OperatorAccessGrant (CA-REL-002)"
+        distinction: "OperatorOrganization is the organizational root; OperatorAccessGrant is a transient, audited authorization ticket for a specific workspace."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Platform Administration"
+    tier: "Root Administrative Container"
+    specialization: "None (Singleton or multi-region root)"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["PROVISIONED", "ACTIVE", "SUSPENDED", "DECOMMISSIONED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "operator_org_id"
+        type: "UUID"
+        description: "Globally unique identifier for the operator organization."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when the organization record was established."
+    mutable_attributes:
+      - name: "org_name"
+        type: "STRING"
+        description: "Human-readable name of the platform operator organization."
+      - name: "org_status"
+        type: "STRING"
+        description: "Lifecycle state (ACTIVE, SUSPENDED)."
+      - name: "contact_email"
+        type: "STRING"
+        description: "Designated administrative contact email."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "OperatorOrganization (Self)"
+    child_relations:
+      - child_object: "OperatorAccessGrant"
+        cardinality: "1:N"
+      - child_object: "OperatorAuditLog"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "PROVISIONED"
+    terminal_states: ["DECOMMISSIONED"]
+    states: ["PROVISIONED", "ACTIVE", "SUSPENDED", "DECOMMISSIONED"]
+    transitions:
+      - from: "PROVISIONED"
+        to: "ACTIVE"
+        operation: "activate_operator_org"
+      - from: "ACTIVE"
+        to: "SUSPENDED"
+        operation: "suspend_operator_org"
+      - from: "SUSPENDED"
+        to: "ACTIVE"
+        operation: "reactivate_operator_org"
+      - from: "SUSPENDED"
+        to: "DECOMMISSIONED"
+        operation: "decommission_operator_org"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "operator_org.created"
+      - event_name: "operator_org.activated"
+      - event_name: "operator_org.suspended"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "System bootstrap and platform configuration"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-OPORG-001: OperatorOrganization MUST NOT hold client customer data, media assets, or interview sessions."
+      - "INV-OPORG-002: OperatorOrganization MUST NOT be used as the workspace_id in tenant-scoped relational tables."
+      - "INV-OPORG-003: Operator principals belonging to OperatorOrganization have NO inherent tenant access without an active OperatorAccessGrant."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Multi-Tenant Plan §1; CA-MAP-01 Scope & Authority Matrix"
+    runtime_representation: "cae.operator_organization (Proposed Phase 08 schema)"
+    promotion_authority: "Platform Security & Governance Council"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "create_operator_organization"
+        parameters: ["org_name", "contact_email"]
+      - name: "update_operator_organization_status"
+        parameters: ["operator_org_id", "target_status", "justification"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT assign customer tenants, guests, or media assets directly to OperatorOrganization."
+      - "MUST NOT delete OperatorOrganization while active OperatorAccessGrants exist."
+      - "MUST NOT bypass audit logging for organization status transitions."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Validate UUID format for operator_org_id."
+      - "Validate RFC 5322 email format for contact_email."
+    semantic_validators:
+      - "Verify operator_org_id does not collide with any client workspace_id."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_OPORG_NOT_FOUND"
+        http_status: 404
+        description: "Referenced OperatorOrganization does not exist."
+      - code: "ERR_OPORG_ALREADY_EXISTS"
+        http_status: 409
+        description: "An OperatorOrganization with this identity already exists."
+      - code: "ERR_OPORG_INVALID_STATE_TRANSITION"
+        http_status: 422
+        description: "Attempted invalid state transition."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.operator_organization"
+    rls_boundary_column: "INAPPLICABLE (Operator administrative root table, access restricted to security role)"
+    storage_boundary: "No private media storage"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Operator Access & Audit Service"
+      - "Security Governance Gateway"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Who is the operating organization running the CAE instance?"
+      - "What organizational container governs platform operators and break-glass grants?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-OPORG-001"
+        description: "Standard primary operating platform organization (e.g., 'Remjohn Operating Platform')."
+        attributes:
+          operator_org_id: "00000000-0000-0000-0000-000000000001"
+          org_name: "Remjohn CAE Platform Operator"
+          org_status: "ACTIVE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-OPORG-001"
+        description: "Using OperatorOrganization as a customer tenant workspace."
+        rejection_reason: "Violates INV-OPORG-001; client data must be scoped to a Workspace."
+      - id: "NEG-OPORG-002"
+        description: "Operator accessing Workspace without an OperatorAccessGrant claiming OperatorOrganization membership is sufficient."
+        rejection_reason: "Violates INV-OPORG-003; operator access requires explicit, audited break-glass grant."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01A)"
+        summary: "Initial draft constitution establishing OperatorOrganization as administrative root distinct from Workspace."

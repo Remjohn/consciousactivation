@@ -1,0 +1,48 @@
+type: object
+required:
+  - reviewed_canonical_id
+  - reviewed_object_name
+  - vectors_evaluated
+  - conflation_challenges_evaluated
+  - review_verdict
+  - collision_register_disposition
+properties:
+  reviewed_canonical_id:
+    type: string
+  reviewed_object_name:
+    type: string
+  vectors_evaluated:
+    type: object
+    description: "Results across all 9 collision vectors"
+  conflation_challenges_evaluated:
+    type: array
+    items:
+      type: object
+      required:
+        - challenge_name
+        - result
+      properties:
+        challenge_name:
+          type: string
+        result:
+          type: string
+          enum: ["PASS_ABSENT", "FAIL_CONFLATION_DETECTED"]
+        details:
+          type: string
+  review_verdict:
+    type: string
+    enum:
+      - "APPROVED_NO_COLLISIONS"
+      - "SPLIT_REQUIRED"
+      - "CONTRACT_CONFLICT"
+      - "PENDING_OPERATOR_DECISION"
+      - "BLOCKED"
+  collision_register_disposition:
+    type: object
+    properties:
+      collision_id:
+        type: string
+      status:
+        type: string
+      recommended_action:
+        type: string

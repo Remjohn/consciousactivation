@@ -1,0 +1,40 @@
+schema_version: conscious-activations-spec-source-traceability/v1
+spec_id: TS-INT-002
+functional_requirements:
+  - fr_id: FR-124
+    owner: Interview Expression
+    story_id: ST-01.03
+    behavior: reconcile word timestamps, phrase boundaries, diarization, audio events, source time bases, media duration, and confidence before time spans are eligible
+    sources: [AHP-PRD-V1.2, AHP-STORIES, TS-INT-001-DRAFT]
+    spec_sections: [2, 3, 5, 6, 8, 9, 10]
+    acceptance_criterion_numbers: [1, 2, 3, 4, 10, 11, 12]
+  - fr_id: FR-128
+    owner: Interview Expression
+    story_id: ST-02.01
+    behavior: create a deterministic compact speaker-aware time-annotated phrase transcript while raw word records remain timing authority and meaningful fillers or events are preserved
+    sources: [AHP-PRD-V1.2, AHP-STORIES, SRC-INT-001, TS-INT-001-DRAFT]
+    spec_sections: [2, 3, 5, 6, 8, 9, 10]
+    acceptance_criterion_numbers: [5, 6, 7, 8, 9, 10, 11, 12]
+draft_dependencies:
+  - spec_id: TS-INT-001
+    edge_id: SDE-026
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    sha256: ca13c9fdcc3b840533de2a955a5388497a434a0b7f94950978012536fd4301e8
+authority_boundaries:
+  interview_expression_owns_source_alignment_and_packed_phrase_evidence: true
+  ts_int_006_owns_reaction_receipt_semantics: true
+  ts_int_004_owns_expression_moment_semantics: true
+  air_owns_semantic_lifecycle_and_compilation: true
+  pipeline_may_consume_but_not_rebuild_meaning: true
+  studio_may_project_and_correct_but_not_redefine_source_truth: true
+  raw_words_remain_timing_authority: true
+  generic_rights_or_creative_safety_approval_authority_created: false
+source_gap_controls:
+  factual_claims_attributed_to_unavailable_sources: []
+  deferred_sources_not_used: [SRC-AM-002, SRC-EXT-017, SRC-EXT-020, SRC-EXT-023]
+claim_ceiling:
+  quality_state: WRITTEN_PENDING_AUDIT
+  authority_state: CANDIDATE_NOT_CURRENT
+  specification_work_authorized: true
+  build_authority: false
+  maximum_pre_ratification_quality_state: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION

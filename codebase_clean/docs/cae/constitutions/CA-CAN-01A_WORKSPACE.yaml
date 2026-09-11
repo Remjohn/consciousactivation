@@ -1,0 +1,265 @@
+# Object Constitution: Workspace
+# Phase 04 / CA-CAN-01A Boundary & Access Constitutions
+
+id: "CA-ENT-001"
+canonical_name: "Workspace"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Entity"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-001"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-ENT-001"
+    canonical_name: "Workspace"
+    common_aliases: ["Tenant", "Customer Workspace", "Client Account"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Entity"
+    class_matrix_id: 1
+    class_rationale: "Workspace has continuous identity, stateful lifecycle, tenant isolation ownership, and is the root parent for all customer operational data."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Serves as the runtime and persistent operational isolation container for customer tenants."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Multi-Tenant Isolation & Customer Scoping"
+    primary_purpose: "Defines the primary customer tenant boundary. All customer operational entities (Engagements, MediaAssets, Interviews, Guests) belong to exactly one Workspace."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational multi-tenant boundary entity"
+    differentia: "Distinguished from Engagement (subordinate campaign) and Guest (subject entity) by being the sole root tenant boundary enforced by PostgreSQL Row-Level Security."
+    function: "Enforces strict isolation, resource scoping, access authorization, and data retention boundaries across customer organizations."
+    boundary: "Must not be merged across organizations; cannot contain or be contained within another Workspace; does not share state with peer Workspaces."
+    normative_definition: >
+      Workspace is the root operational tenant entity in Conscious Activation Engine. It establishes an absolute
+      isolation boundary for customer data, operational state, memberships, engagements, and media assets.
+      Every operational object belongs to exactly one Workspace, and cross-workspace access is prohibited
+      except via explicit, time-bounded OperatorAccessGrants.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The sole customer tenant isolation boundary in CAE."
+      - "The primary security context for PostgreSQL Row-Level Security (`workspace_id`)."
+      - "The private storage namespace prefix (`storage://cae-media/<workspace_id>/...`)."
+    what_it_is_not:
+      - "A Guest (Guest is an interview subject contained within a Workspace)."
+      - "An Engagement (Engagement is a bounded project/campaign inside a Workspace)."
+      - "An OperatorOrganization (OperatorOrganization is host administration)."
+      - "A global identity directory."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Engagement (CA-ENT-004)"
+        distinction: "Workspace is the root tenant boundary; Engagement is a subordinate campaign container inside a single Workspace."
+      - neighbor: "Guest (CA-ENT-003)"
+        distinction: "Workspace is the organizational container; Guest is an individual participant whose records are strictly local to that Workspace."
+      - neighbor: "OperatorOrganization (CA-ENT-000)"
+        distinction: "Workspace is a client customer tenancy; OperatorOrganization is internal platform host management."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Multi-Tenancy & Authorization"
+    tier: "Root Operational Container"
+    specialization: "Standard Tenant Workspace"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["PENDING_PROVISIONING", "ACTIVE", "SUSPENDED", "ARCHIVED", "DELETED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Globally unique primary identifier and tenant security root."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Immutable timestamp when workspace was provisioned."
+    mutable_attributes:
+      - name: "workspace_name"
+        type: "STRING"
+        description: "Human-readable organization or tenant name."
+      - name: "status"
+        type: "STRING"
+        description: "Lifecycle status (ACTIVE, SUSPENDED, ARCHIVED)."
+      - name: "settings"
+        type: "JSONB"
+        description: "Tenant configuration parameters (retention policies, quota limits)."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last modification."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Workspace (Self is root tenant)"
+    child_relations:
+      - child_object: "WorkspaceMembership"
+        cardinality: "1:N"
+      - child_object: "Engagement"
+        cardinality: "1:N"
+      - child_object: "Guest"
+        cardinality: "1:N"
+      - child_object: "MediaAsset"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "PENDING_PROVISIONING"
+    terminal_states: ["DELETED"]
+    states: ["PENDING_PROVISIONING", "ACTIVE", "SUSPENDED", "ARCHIVED", "DELETED"]
+    transitions:
+      - from: "PENDING_PROVISIONING"
+        to: "ACTIVE"
+        operation: "provision_workspace"
+      - from: "ACTIVE"
+        to: "SUSPENDED"
+        operation: "suspend_workspace"
+      - from: "SUSPENDED"
+        to: "ACTIVE"
+        operation: "reactivate_workspace"
+      - from: "ACTIVE"
+        to: "ARCHIVED"
+        operation: "archive_workspace"
+      - from: "ARCHIVED"
+        to: "DELETED"
+        operation: "purge_workspace_data"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "workspace.provisioned"
+      - event_name: "workspace.suspended"
+      - event_name: "workspace.reactivated"
+      - event_name: "workspace.archived"
+      - event_name: "workspace.purged"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Customer onboarding service / administrative provisioning"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-WS-001: Every customer operational table MUST include a foreign key to workspace_id."
+      - "INV-WS-002: PostgreSQL Row-Level Security MUST restrict customer session queries to workspace_id = current_setting('app.current_workspace_id')."
+      - "INV-WS-003: Operational objects from Workspace A MUST NEVER be merged, linked, or transferred to Workspace B without explicit operator audit grant and reconciliation."
+      - "INV-WS-004: All private storage objects MUST use the storage key path prefix `storage://cae-media/<workspace_id>/...`."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Multi-Tenant Plan §1, §3; CA-MAP-01 Scope & Authority Matrix"
+    runtime_representation: "cae.workspace (Proposed Phase 08 schema)"
+    promotion_authority: "Workspace Administrator (Tenant) & Platform Operator (System)"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "provision_workspace"
+        parameters: ["workspace_name", "admin_email", "settings"]
+      - name: "update_workspace_settings"
+        parameters: ["workspace_id", "settings"]
+      - name: "suspend_workspace"
+        parameters: ["workspace_id", "reason"]
+      - name: "reactivate_workspace"
+        parameters: ["workspace_id"]
+      - name: "archive_workspace"
+        parameters: ["workspace_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT execute queries across multiple workspaces without an active OperatorAccessGrant."
+      - "MUST NOT merge two distinct Workspaces into one without formal migration reconciliation."
+      - "MUST NOT allow a deleted Workspace's storage bucket prefix to be accessed."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify workspace_id is a valid UUIDv4."
+      - "Verify workspace_name is non-empty and UTF-8 clean."
+    semantic_validators:
+      - "Enforce workspace_id uniqueness across the entire system."
+      - "Verify RLS policy is attached and enabled on target table."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_WORKSPACE_NOT_FOUND"
+        http_status: 404
+        description: "Target workspace does not exist."
+      - code: "ERR_WORKSPACE_SUSPENDED"
+        http_status: 403
+        description: "Workspace is in suspended state; operations denied."
+      - code: "ERR_WORKSPACE_CROSS_TENANT_VIOLATION"
+        http_status: 403
+        description: "Attempted cross-tenant data access blocked by RLS."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.workspace"
+    rls_boundary_column: "workspace_id (Primary Key)"
+    storage_boundary: "storage://cae-media/<workspace_id>/"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "All CAE Core Services (Interview, VAE, AIR, Campaign, Pipeline)"
+      - "API Gateway & Authentication Service"
+      - "PostgreSQL RLS Engine"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the boundary for customer data isolation?"
+      - "To which customer organization does this engagement, media asset, or interview session belong?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-WS-001"
+        description: "Standard production customer tenant workspace (e.g., 'Acme Enterprise')."
+        attributes:
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          workspace_name: "Acme Corp"
+          status: "ACTIVE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-WS-001"
+        description: "Defining Workspace as a synonym for Guest or treating Guest as the tenant boundary."
+        rejection_reason: "Violates INV-WS-001 and COL-MAP-001; Guest is a local participant inside a Workspace, not the tenant."
+      - id: "NEG-WS-002"
+        description: "Querying customer tables without binding current workspace_id setting."
+        rejection_reason: "Violates INV-WS-002; unconstrained queries leak cross-tenant operational data."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01A)"
+        summary: "Initial draft constitution establishing Workspace as root client tenant boundary."

@@ -1,0 +1,71 @@
+program:
+  id: "guest_genesis_semantic_territory_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Governs Guest Genesis, Voice/Visual DNA reasoning, RSCS distillation, and protected vs centroid semantic territory."
+  operator_entrypoint: "run_guest_genesis_session"
+  inputs:
+    - "authenticated_guest_evidence"
+    - "brand_genesis_session_intake"
+  preconditions:
+    - "workspace_active"
+    - "guest_registered"
+    - "evidence_authenticated"
+  outputs:
+    - "derived_brand_context"
+    - "voice_dna"
+    - "visual_dna"
+    - "distillation_receipts"
+    - "ratified_semantic_territory"
+  artifacts:
+    - "guest_genesis_territory_package"
+  harness: "GUEST_GENESIS_HARNESS_V1"
+  state_machine: "GUEST_GENESIS_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "GuestGenesisCommanderAgent"
+    - "GuestEvidenceHunterAgent"
+    - "AntiCentroidAnalystAgent"
+    - "SemanticTerritoryComposerAgent"
+  subagents: []
+  skills:
+    - name: "guest_evidence_hunter"
+      path: "skills/guest_evidence_hunter/SKILL.md"
+      version: "1.0.0"
+    - name: "anti_centroid_analyst"
+      path: "skills/anti_centroid_analyst/SKILL.md"
+      version: "1.0.0"
+    - name: "semantic_territory_deriver"
+      path: "skills/semantic_territory_deriver/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.guest_genesis.index_evidence@1.0.0"
+    - "cae.guest_genesis.derive_brand_context@1.0.0"
+    - "cae.guest_genesis.synthesize_dna@1.0.0"
+    - "cae.guest_genesis.verify_distillation@1.0.0"
+    - "cae.guest_genesis.ratify_territory@1.0.0"
+    - "cae.guest_genesis.repair@1.0.0"
+  tools:
+    - "evidence_hasher"
+    - "anti_centroid_scanner"
+    - "distillation_verifier"
+  connections:
+    - "air_brand_repository"
+  hooks:
+    - "pre_genesis_hook"
+    - "post_ratification_receipt"
+  extensions: []
+  evals:
+    - "anti_centroid_distinctiveness_eval"
+    - "lineage_integrity_eval"
+  operator_gates:
+    - "territory_ratification_gate"
+  recovery:
+    - "checkpoint_per_transition"
+  receipts:
+    - "guest_genesis_transition_receipt"
+  dependencies: []

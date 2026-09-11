@@ -1,0 +1,33 @@
+type: object
+required:
+  - contract_id
+  - aggregate_name
+  - single_aggregate_verified
+  - stage_transitions_modeled
+  - zero_data_movement_guaranteed
+  - recovery_procedure_defined
+  - contract_status
+properties:
+  contract_id:
+    type: string
+  aggregate_name:
+    type: string
+  single_aggregate_verified:
+    type: boolean
+  stage_transitions_modeled:
+    type: array
+    items:
+      type: string
+  zero_data_movement_guaranteed:
+    type: boolean
+  recovery_procedure_defined:
+    type: boolean
+  data_disposition_summary:
+    type: object
+  contract_status:
+    type: string
+    enum:
+      - "CONTRACT_RATIFIED_SPEC_ONLY"
+      - "PROHIBITED_ACTION_MIGRATION_EXECUTION_FORBIDDEN"
+      - "REJECTED_MULTI_AGGREGATE"
+      - "PENDING_OPERATOR_APPROVAL"

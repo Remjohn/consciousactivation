@@ -1,0 +1,272 @@
+# Object Constitution: SemanticAssessment
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-DSA-001"
+canonical_name: "SemanticAssessment"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Derived Semantic Artifact"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "WORKSPACE_SCOPED"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:53, TS-CAE-TEN-001:3.5"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-DSA-001"
+    canonical_name: "SemanticAssessment"
+    common_aliases: ["Psychological Assessment", "Derived Assessment", "Semantic Evaluation"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Derived Semantic Artifact"
+    class_matrix_id: 8
+    class_rationale: "SemanticAssessment represents a structured qualitative interpretation derived by model reasoning or human analysis from grounded EvidenceItems."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Stores operational psychological insights, role tensions, and candidate archetypes within a customer workspace."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Semantic Inference & Upstream Intelligence"
+    primary_purpose: "Captures qualitative psychological interpretations of guest expressions, serving as the bridge between raw evidence and primitive/archetype activation."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational derived qualitative inference artifact"
+    differentia: "Distinguished from EvidenceItem (raw factual observation) and Receipt (computational execution proof) by embodying subjective, model-generated or analyst-authored psychological interpretations."
+    function: "Synthesizes psychological themes, role tensions, perceptual patterns, and candidate primitive alignments."
+    boundary: "Must be anchored to at least one EvidenceItem via AssessmentEvidenceLink; cannot self-promote to ESTABLISHED without operator verification; must carry explicit epistemic_status."
+    normative_definition: >
+      SemanticAssessment is a derived operational artifact representing a structured qualitative interpretation of
+      interview evidence. It synthesizes role tensions and perceptual patterns, requiring causal linkage to supporting
+      evidence items and maintaining strict epistemic status boundaries.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "A derived qualitative assessment produced by genuine model inference or human analysis."
+      - "A structured artifact carrying role tensions, psychological observations, and reasoning lineage."
+      - "An operational artifact requiring supporting EvidenceItems."
+    what_it_is_not:
+      - "An EvidenceItem (EvidenceItem is the underlying factual evidence; SemanticAssessment is the interpretation)."
+      - "A Receipt (Receipt proves mechanical execution; SemanticAssessment is a qualitative artifact)."
+      - "A Canonical Registry Object (SemanticAssessment is tenant-specific operational data, not global canonical doctrine)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "EvidenceItem (CA-EVI-002)"
+        distinction: "EvidenceItem is the objective recorded fact; SemanticAssessment is the subjective psychological interpretation derived from it."
+      - neighbor: "Receipt (CA-REC-001)"
+        distinction: "Receipt records that an assessment algorithm executed; SemanticAssessment contains the actual qualitative insights produced."
+      - neighbor: "StateTransitionContract (CA-POL-002)"
+        distinction: "StateTransitionContract is canonical governance policy; SemanticAssessment is operational tenant data."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Psychological Analysis & Semantic Inference"
+    tier: "Workspace-Scoped Derived Intelligence"
+    specialization: "Role Tension & Archetype Candidate Assessment"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "candidate"
+    authority_status: "program-governed"
+    lifecycle_phases: ["DRAFT", "ACTIVE", "SUPERSEDED", "QUARANTINED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "assessment_id"
+        type: "UUID"
+        description: "Globally unique identifier for the assessment."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Tenant isolation key."
+      - name: "session_id"
+        type: "UUID"
+        description: "Optional parent InterviewSession identifier."
+      - name: "assessment_type"
+        type: "STRING"
+        description: "Type of assessment (ROLE_TENSION, SENSORY_PROFILE, ARCHETYPE_CANDIDATE)."
+      - name: "model_identity"
+        type: "STRING"
+        description: "Model identifier or analyst identity that produced the assessment."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when assessment was generated."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "Lifecycle status (DRAFT, ACTIVE, SUPERSEDED, QUARANTINED)."
+      - name: "assessment_body"
+        type: "JSONB"
+        description: "Structured qualitative findings, role tensions, confidence scores, and reasoning."
+      - name: "epistemic_status"
+        type: "STRING"
+        description: "Epistemic validity boundary (ESTABLISHED, CANDIDATE, UNVERIFIED)."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last modification."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain:
+      - parent_object: "Workspace"
+        multiplicity: "1"
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "AssessmentEvidenceLink"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "DRAFT"
+    terminal_states: ["SUPERSEDED", "QUARANTINED"]
+    states: ["DRAFT", "ACTIVE", "SUPERSEDED", "QUARANTINED"]
+    transitions:
+      - from: "DRAFT"
+        to: "ACTIVE"
+        operation: "activate_semantic_assessment"
+      - from: "ACTIVE"
+        to: "SUPERSEDED"
+        operation: "supersede_semantic_assessment"
+      - from: "ACTIVE"
+        to: "QUARANTINED"
+        operation: "quarantine_semantic_assessment"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "semantic.assessment.created"
+      - event_name: "semantic.assessment.activated"
+      - event_name: "semantic.assessment.quarantined"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "ModelReasoningEngine or Human Psychological Analyst via generate_assessment"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-DSA-001: Every SemanticAssessment MUST be linked to at least one EvidenceItem via AssessmentEvidenceLink before transition to ACTIVE."
+      - "INV-DSA-002: epistemic_status MUST be initialized to 'UNVERIFIED' or 'CANDIDATE'; automated systems cannot self-declare 'ESTABLISHED'."
+      - "INV-DSA-003: Model generated assessments MUST specify real model_identity (no deterministic fakes masquerading as inference)."
+      - "INV-DSA-004: SemanticAssessment cannot reference evidence items outside its parent workspace_id."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:53, TS-CAE-TEN-001:3.5; AIR Architecture Protocol"
+    runtime_representation: "cae.semantic_assessment (PostgreSQL relational)"
+    promotion_authority: "AIR Psychological Evaluation Lead & Workspace Analyst"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "create_semantic_assessment"
+        parameters: ["workspace_id", "assessment_type", "model_identity", "assessment_body", "evidence_item_ids"]
+      - name: "activate_semantic_assessment"
+        parameters: ["assessment_id"]
+      - name: "supersede_semantic_assessment"
+        parameters: ["assessment_id", "superseded_by_id"]
+      - name: "quarantine_semantic_assessment"
+        parameters: ["assessment_id", "reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT activate a SemanticAssessment that has zero linked EvidenceItems."
+      - "MUST NOT set epistemic_status to 'ESTABLISHED' without explicit human operator attestation."
+      - "MUST NOT delete historical assessments that have been cited in finalized Activation Programs."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify assessment_id, workspace_id are valid UUIDv4."
+      - "Verify assessment_body contains non-empty summary and tension fields."
+    semantic_validators:
+      - "Verify model_identity corresponds to a registered reasoning engine in ProgrammedModelRegistry."
+      - "Verify at least one supporting AssessmentEvidenceLink exists."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_ASSESSMENT_UNGROUNDED"
+        http_status: 422
+        description: "Cannot activate assessment without supporting evidence links."
+      - code: "ERR_ASSESSMENT_INVALID_EPISTEMIC_PROMOTION"
+        http_status: 403
+        description: "Automated engine cannot self-promote to ESTABLISHED."
+      - code: "ERR_ASSESSMENT_NOT_FOUND"
+        http_status: 404
+        description: "Target semantic assessment does not exist."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.semantic_assessment"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL Relational Storage"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "AIR Archetype Candidate Generator"
+      - "AIR Primitive Coalition Synthesizer"
+      - "Activation Program Compiler"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What psychological role tensions and perceptual traits are evidenced in this guest's expressions?"
+      - "Which model or analyst derived this assessment, and what is its epistemic status?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-DSA-001"
+        description: "Model-derived role tension assessment anchored to interview evidence."
+        attributes:
+          assessment_id: "dd0e8400-e29b-41d4-a716-446655440001"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          assessment_type: "ROLE_TENSION"
+          model_identity: "openai/gpt-oss-120b"
+          assessment_body:
+            tension_name: "Autonomy vs Collective Velocity"
+            polarity: "HIGH"
+            observation: "Guest expresses intense friction between personal craft speed and team alignment overhead."
+          epistemic_status: "UNVERIFIED"
+          status: "DRAFT"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-DSA-001"
+        description: "Near-miss: A synthetic reasoning engine generates a SemanticAssessment and sets epistemic_status: 'ESTABLISHED' on grounds that its internal confidence score is 0.99."
+        rejection_reason: "Violates INV-DSA-002; automated engines are prohibited from setting ESTABLISHED without operator verification."
+      - id: "NEG-DSA-002"
+        description: "Near-miss: Creating an assessment that cites evidence IDs as unverified JSON string attributes rather than establishing relational AssessmentEvidenceLinks."
+        rejection_reason: "Violates INV-DSA-001; grounding must be relationally enforced via AssessmentEvidenceLink records."
+      - id: "NEG-DSA-003"
+        description: "Generic violation: Generating an assessment with model_identity set to an empty string."
+        rejection_reason: "Violates INV-DSA-003; reasoning engine identity must be fully transparent and registered."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for SemanticAssessment derived semantic artifact with 26 dimensions."

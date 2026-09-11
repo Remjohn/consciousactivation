@@ -1,0 +1,178 @@
+experience_primitive_id: "EXP-FRC-002"
+canonical_name: "System 1 to System 2 Escalation"
+aliases:
+  - "Intuitive On-Ramping"
+  - "Fast-to-Slow Thinking"
+  - "The Cognitive Staircase"
+
+experience_family: "friction_ability"
+mechanic_role: "loop"
+moment_role: "cognitive_pacing"
+implementation_role: "architectural"
+
+source_audits:
+  - audit_file: "AUDIT_Designing_for_Behavior_Change_Stephen_Wendel.md"
+    primitive_name_in_audit: "System 1 to System 2 Escalation"
+    mcda_score: 175
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Designing_for_Behavior_Change_Stephen_Wendel.md"
+
+book_reference:
+  title: "Designing for Behavior Change"
+  author: "Stephen Wendel"
+  chapters:
+    - "Chapter 4: How the Mind Makes Decisions"
+    - "Chapter 6: Designing the Action"
+  key_pages: "110-125"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Designing for Behavior Change - Stephen Wendel.md"
+
+summary: >
+  System 1 to System 2 Escalation dictates that user workflows must begin entirely
+  in 'System 1' (fast, intuitive, emotional, zero-effort thinking) to bypass initial
+  friction. Only after the user is hooked and committed should the interface gently
+  escalate to 'System 2' (slow, analytical, high-effort thinking) for complex tasks.
+
+core_move: >
+  Design the entry point of every interaction as an emotional, intuitive reaction
+  (e.g., swiping, reacting to a visual), delaying any analytical tasks (e.g.,
+  formulating a complex thesis) until the user has already made micro-commitments.
+
+why_it_works: >
+  Drawing from Daniel Kahneman (via Wendel), System 2 thinking requires massive
+  caloric energy and creates high cognitive friction. If a user is asked to use
+  System 2 immediately ('Write a 300-word thesis on leadership'), their Ability drops
+  and they bounce. System 1 is effortless. By asking for a System 1 response first
+  ('Swipe right if you hate this Tweet'), we secure engagement with near-zero friction.
+  Once engaged, the psychological principle of consistency makes them willing to engage
+  System 2 to justify their initial reaction.
+
+examples:
+  - context: "BOOK: Designing for Behavior Change - The Savings App"
+    application: >
+      Instead of asking users to calculate their retirement needs (System 2), an app
+      asks them to 'Swipe right on your dream vacation' (System 1). After swiping,
+      it asks them to save $5 a week for it.
+    effect: >
+      Bypasses analytical paralysis by leading with emotion.
+
+  - context: "CCP: The Audience Mirror Quiz"
+    application: >
+      A user in the Jury is shown a controversial audio clip. The only option is a
+      Tinder-style swipe: 'Based' or 'Cringe' (System 1). After swiping, the UI
+      prompts: 'Record 30 seconds explaining your vote' (System 2).
+    effect: >
+      Converts a passive listener into an active creator by escalating cognitive load sequentially.
+
+  - context: "CCP: The V2WS Registration"
+    application: >
+      Instead of a complex form asking for business metrics (System 2), the webinar
+      registration is a 1-click Telegram poll: 'What is your biggest speaking fear?'
+      (System 1). The poll click registers them.
+    effect: >
+      Removes all friction from the top of the funnel.
+
+  - context: "CCP: The Post-Mortem Analytics"
+    application: >
+      Immediately after a recording, the UI flashes a giant Gold Medal (System 1 emotion).
+      Only after the user clicks 'View Details' does it reveal the complex graphical
+      breakdown of their Conviction Density (System 2 analysis).
+    effect: >
+      Prevents data overwhelm right after a high-stress performance.
+
+  - context: "CCP: The Law28 Daily Drill"
+    application: >
+      The prompt is delivered via a highly emotional audio note from the Agent
+      (System 1 processing). The user records their raw, unscripted reaction.
+      Only during the 'Redemption Round' are they asked to analytically restructure
+      their hook (System 2).
+    effect: >
+      Ensures the first take is raw and authentic, saving analytical correction for later.
+
+anti_examples:
+  - description: >
+      Sending a push notification that says: 'Analyze the rhetorical structure of
+      Steve Jobs' 2005 commencement speech and record a 3-minute breakdown.'
+    why_it_fails: >
+      It demands immediate, heavy System 2 processing. The user looks at it,
+      experiences a massive spike in cognitive friction, and immediately swipes it away.
+
+experience_stage_fit:
+  entry: 1.0
+  activation: 0.9
+  recording: 0.8
+  scoring: 0.6
+  social_spread: 0.9
+  recovery: 0.4
+  retention: 0.7
+  conversion: 0.8
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 0.9
+  score_card: 0.6
+  share_asset: 0.8
+  voice_prompt: 1.0
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.2
+  clarity: 0.9
+  safety: 0.9
+  status: 0.3
+  belonging: 0.6
+  curiosity: 0.8
+  replay_desire: 0.7
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 0.6
+  challenge_progression: 0.8
+  silent_referral: 0.9
+  coach_os_deployment: 0.7
+  premium_trust_architecture: 0.6
+  onboarding_activation: 1.0
+  social_economy: 0.9
+  content_extraction: 0.8
+
+activation_conditions:
+  - "User is receiving a cold prompt via Telegram Push"
+  - "User is entering the first step of any multi-step funnel"
+
+suppression_conditions:
+  - "User is explicitly in a deep-work Mastermind session with their Supervisor where analytical thought is the primary goal."
+
+misuse_modes:
+  - "The Bait and Switch — asking for a System 1 swipe, and then immediately forcing them into a mandatory 10-page System 2 form, breaking trust."
+  - "Dumbed Down Forever — never escalating to System 2, turning the app into a mindless swiping game with zero actual coaching value."
+
+synergizes_with:
+  - "EXP-TRG-003" # Emotion over Logic (System 1 operates entirely on emotion)
+  - "EXP-FRC-001" # Evolved UI (The Glowing Choice is the UI for System 1)
+
+conflicts_with:
+  - "None. This is a foundational sequencing law."
+
+implementation_targets:
+  frontend_components:
+    - "ProgressiveDisclosureUI — hiding complex data or forms behind a 'More Options' or 'Analyze' button"
+    - "SwipeToReactMechanic — Tinder-style swiping cards for initial topic engagement"
+  backend_rules:
+    - "prompt_engine: format all initial Telegram push notifications as binary questions or high-emotion hooks"
+  telemetry_events:
+    - "system1_engagement_rate"
+    - "system2_escalation_conversion"
+  experiments:
+    - "A/B test: Asking for an audio recording immediately vs Asking for a binary vote THEN asking for an audio recording"
+
+experience_metrics:
+  entry_rate: 1.0
+  react_rate: 0.9
+  completion_rate: 0.7
+  share_rate: 0.8
+  comeback_rate: 0.8
+  day7_retention: 0.8
+  upgrade_signal: 0.6
+
+crosswalk_id: "XW-FRC-SYS1"
+crosswalk_note: >
+  This protects the user from feeling 'homework fatigue' when using the app.

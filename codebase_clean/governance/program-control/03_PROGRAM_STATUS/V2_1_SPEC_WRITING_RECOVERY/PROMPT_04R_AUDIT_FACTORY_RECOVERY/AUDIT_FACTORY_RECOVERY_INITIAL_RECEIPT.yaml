@@ -1,0 +1,56 @@
+schema_version: conscious-activations-audit-factory-recovery-receipt/v1
+receipt_id: CA-P04R-RECOVERY-INITIAL-RECEIPT-2026-07-23
+issued_on: '2026-07-23'
+result: AUDIT_FACTORY_IN_PROGRESS
+factory_state: AUDIT_FACTORY_IN_PROGRESS
+
+repository_durability:
+  repository: Remjohn/consciousactivation
+  branch: main
+  prompt03_and_blocked_p04_commit_sha: da3f55a
+  commit_message: update status files, add spec reconciliation, spec audit, specs workflow v3.1, and package zips
+  prompt04r_spec_durability_commit_sha: 6b10036
+  commit_message_2: add 60 Prompt 03 tech specs and recovery/audit factory infrastructure for Prompt 04R
+  durability_status: CONFIRMED
+
+prompt03_inputs:
+  receipt_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_03_FACTORY_RUN/FULL_SPEC_FACTORY_COMPLETION_RECEIPT.yaml
+  receipt_result: PASS_WITH_EXECUTION_METHOD_CONCERN
+  specs_written: 60
+  all_specs_present_on_disk: true
+
+blocked_p04_package:
+  path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04_AUDIT_FACTORY
+  status: PRESERVED_UNCHANGED
+  all_60_records_classification: AUDIT_BLOCKED_PLACEHOLDER_NOT_REAL_AUDIT
+  real_audits_in_blocked_package: 0
+
+recovery_classification:
+  total_specs: 60
+  audit_pending: 60
+  audit_in_progress: 0
+  audit_complete: 0
+  audit_pending_capacity: 0
+  audit_input_invalid: 0
+
+controller_recovery:
+  controller_recovered_specs: 21
+  registry_path: CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_RECOVERY/PROMPT_04R_AUDIT_FACTORY_RECOVERY/CONTROLLER_RECOVERED_SPEC_REGISTRY.yaml
+
+audit_campaign:
+  initial_concurrency: 3
+  batch_1_specs:
+    - TS-AHP-001
+    - TS-AIR-001
+    - TS-REL-001
+  audit_skill: Specs_Builder_Library_CA_V2_1_3/Specs_Builder_Library/Protocols_and_Skills/Conscious_Activations_V2_1/CA_TECH_SPEC_AUDIT_SKILL.md
+  lifecycle_skill: Specs_Builder_Library_CA_V2_1_3/Specs_Builder_Library/Protocols_and_Skills/Conscious_Activations_V2_1/CA_SPEC_LIFECYCLE_CONTROLLER_SKILL.md
+
+safety_checks:
+  controller_auditing_any_spec: false
+  spec_bytes_modified: false
+  development_capsules_issued: false
+  prompt05_unlocked: false
+  fabricated_findings_created: false
+
+next_required_action: LAUNCH_BATCH_1_THREE_INDEPENDENT_AUDITORS

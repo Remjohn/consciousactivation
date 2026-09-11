@@ -1,0 +1,1023 @@
+diff --git a/docs/cae/specs/M0084/AGENT_HANDOFF.md b/docs/cae/specs/M0084/AGENT_HANDOFF.md
+new file mode 100644
+index 0000000..46ff09a
+--- /dev/null
++++ b/docs/cae/specs/M0084/AGENT_HANDOFF.md
+@@ -0,0 +1,170 @@
++# M0084 Agent Handoff — Evidence-First Source Quality and Adaptive Transformation Rules
++
++**Status:** IMPLEMENTED — OPERATOR REVIEW REQUIRED
++**Mandate:** M0084
++**Implementation commit:** `b9e332d677739e833412cca5d5d0839b6267e34c`
++**Source archive SHA-256:** `7f962c86b13171cc25bec698d6974d412981cef502e858717b5069e50f1810d8`
++
++## 1. Decision implemented
++
++The canonical CAE storyboard transformation path now carries an additive `SourceQualityProfile` and deterministic adaptive transformation rules. The implementation extends the existing `VisualAssetReference → TransformationIntent → TransformationRecipe` lineage; it does not introduce a second asset, storyboard, retrieval, or semantic authority.
++
++Measured profile inputs are source resolution, frame rate, crop history, compression loss, sharpness, prior degradation, and evidence references. The profile derives deterministic quality bands `HIGH`, `MEDIUM`, `LOW`, and `DEGRADED`. Quality bands bound declared scale/reframe/motion magnitude and allowed color treatments, while also recommending safer presentation strategies for degraded evidence.
++
++The adaptive projection preserves `TransformationIntent.intent_id`, semantic constraints, source-quality profile identity, and evidence references. Revision validation rejects source/profile rebinding, evidence lineage drift, and recipes that exceed quality limits. Sensitive primitives fail closed when they omit the magnitude field needed for deterministic validation.
++
++## 2. Authority mapping
++
++The user-authorized official visual-production authority pack is the live repository directory `docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/` with the four files named by M0084. The pack is campaign input; repository Constitution, precedence, existing programs, schemas, and implementation remain the governing repository authorities.
++
++The live repository's canonical constitutional sources are:
++
++- `governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md`
++- `governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml`
++
++The authority-pack build plan requires `SourceQualityProfile`, measurable resolution/crop/compression/sharpness/frame-rate metadata, and automatic reduction of aggressive zoom/reframe/motion where source quality would make manipulation visible. The Visual Asset Editor update requires deterministic validation/clamping of model proposals and explicitly gives high-quality sources more latitude than low/degraded sources. The E-Motion standard places source-quality-aware transformation downstream of editorial intent and within deterministic bounds.
++
++## 3. Brownfield reusable objects
++
++- `packages/ca_runtime/src/ca_runtime/storyboard_session.py::TransformationIntent`
++- `packages/ca_runtime/src/ca_runtime/storyboard_session.py::TransformationRecipe`
++- `packages/ca_runtime/src/ca_runtime/storyboard_session.py::VisualAssetReference`
++- `packages/ca_runtime/src/ca_runtime/storyboard_session.py::StoryboardElement`
++- `packages/ca_runtime/src/ca_runtime/storyboard_session.py::StoryboardSessionStore._validate_revision_input`
++- `services/pipeline/contracts/schemas/transformation_contract.schema.json`
++
++No duplicate transformation authority or source-retrieval system was introduced.
++
++## 4. Exact changed/new repository paths
++
++### Modified
++
++- `packages/ca_runtime/src/ca_runtime/storyboard_session.py`
++- `packages/ca_runtime/src/ca_runtime/__init__.py`
++
++### Added
++
++- `tests/cae/test_m0084_source_quality_profile.py`
++- `docs/cae/specs/M0084/source_quality_profile.md`
++- `docs/cae/specs/M0084/AGENT_HANDOFF.md`
++- `docs/cae/specs/M0084/M0084_EVIDENCE_RECEIPT.json`
++
++No files outside the M0084 allowed boundary were changed.
++
++## 5. Implementation rationale
++
++`SourceQualityProfile` is additive on `VisualAssetReference`, preserving compatibility with historic records that lack the structured profile. Quality scoring uses fixed-point basis points so the new policy does not introduce floating-point ambiguity into canonical payloads.
++
++The deterministic limits are M0084 implementation policy, not universal perceptual constants:
++
++| Quality | Scale | Reframe | Motion | Color |
++|---|---:|---:|---:|---|
++| HIGH | 1200 bps | 1200 bps | 1200 bps | NONE / CONTROLLED / SUBTLE_LUT |
++| MEDIUM | 800 bps | 800 bps | 700 bps | NONE / CONTROLLED |
++| LOW | 400 bps | 400 bps | 300 bps | NONE / GRAYSCALE / CONTROLLED |
++| DEGRADED | 150 bps | 200 bps | 0 bps | NONE / GRAYSCALE |
++
++The safe presentation recommendation moves from standard/subtle treatment at HIGH toward reduced-scale, inset, contextual, grayscale, and containerized strategies as quality deteriorates.
++
++## 6. Verification commands and observed results
++
++### Focused M0084 tests
++
++```text
++PYTHONPATH=packages/ca_contracts/src pytest -q tests/cae/test_m0084_source_quality_profile.py
++```
++
++Observed:
++
++```text
++9 passed, 5 warnings in 0.10s
++```
++
++The five warnings are existing Pydantic V1-style `@validator` deprecation warnings in unrelated pre-existing validators in the same module; no M0084 validator uses the deprecated form.
++
++### Native regression collection
++
++```text
++pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_visual_derivative_production_program.py
++```
++
++Observed: collection is blocked in this environment by:
++
++```text
++ModuleNotFoundError: No module named 'psycopg'
++```
++
++This is an environment/setup limitation. It is not substituted with a mock and is not represented as native runtime proof.
++
++### Syntax validation
++
++```text
++python -m py_compile packages/ca_runtime/src/ca_runtime/storyboard_session.py packages/ca_runtime/src/ca_runtime/__init__.py
++```
++
++Observed: success, no output.
++
++### Diff integrity
++
++```text
++git diff --check
++```
++
++Observed: success, no whitespace errors.
++
++## 7. Test properties established
++
++- HIGH-quality 4K source accepts bounded subtle zoom/reframe/color treatment.
++- A plausible but wrong-looking-good 480p/pre-cropped/compressed source with aggressive zoom is rejected.
++- DEGRADED adaptation is deterministic and preserves intent and evidence lineage.
++- Structured source-quality metadata rejects malformed dimensions/quality ranges and missing evidence.
++- A quality profile cannot be rebound to another asset.
++- A source-quality profile lowers the quality band as crop retention, compression, sharpness, frame rate, and prior degradation worsen.
++- Sensitive `ZOOM` primitives cannot bypass validation by omitting intensity metadata.
++- `StoryboardSessionStore._validate_revision_input` rejects quality-damaging recipes through the existing revision gate.
++
++## 8. Evidence classification
++
++- **EXECUTABLE:** implementation in `packages/ca_runtime/src/ca_runtime/storyboard_session.py`.
++- **SCHEMA:** `SourceQualityProfile` / `TransformationValidationResult` Pydantic models and additive `VisualAssetReference` field.
++- **DOCUMENT:** `docs/cae/specs/M0084/source_quality_profile.md` and repository/authority documentation.
++- **TEST:** `tests/cae/test_m0084_source_quality_profile.py`; 9 focused tests pass.
++- **HYPOTHESIS:** thresholds are deterministic product policy and still require perceptual/operator validation; they are not claimed as universal psychovisual limits.
++- **OPERATOR_DECISION_REQUIRED:** visual preview, semantic adequacy, source lineage, and production runtime reachability remain human/environment checks.
++- **MIGRATION:** none.
++- **REGISTRY_SOURCE:** none.
++
++## 9. External source information
++
++No external repository code was adopted or extracted. No external implementation license applies to this change.
++
++The live GitHub main reference observed during audit is commit `1238dda04cc89e16ed7ac96ac79417c7c321f8a8`. The supplied archive itself contained no `.git`, so this remote SHA is context only, not archive provenance.
++
++## 10. Limitations / acceptance ceiling
++
++The focused unit suite proves deterministic source-quality logic and the existing storyboard validation path under an isolated module-loading harness. It does not prove native DB-backed runtime reachability because `psycopg` is unavailable in the supplied environment.
++
++No visual preview was available for operator inspection during this execution. Therefore visual perceptual acceptance, semantic fitness of each transformed asset, and absence of gratuitous attention remain explicitly unproven until an operator reviews real previews and source lineage.
++
++Quality thresholds are bounded policy, not a substitute for human creative judgment. A profile absent from a legacy asset remains an intentional compatibility path; such an asset does not receive the new quality-aware gate until a profile is attached.
++
++## 11. Commit identity
++
++Baseline snapshot commit representing the supplied archive:
++
++`fa1ed7c895306846e563550f7d2a58adab9c99ec`
++
++M0084 implementation commit:
++
++`b9e332d677739e833412cca5d5d0839b6267e34c`
++
++
++## 12. Operator decision requested
++
++Review the implementation, focused evidence, and limitations, then select exactly one:
++
++`APPROVE`
++`APPROVE-WITH-LIMITATIONS`
++`REJECT`
++
++Do not self-promote. For visual output, operator review must confirm the real preview, meaning-preserving transformation, and source lineage. For any later external-runtime integration, operator review must confirm the runtime remains downstream of CAE authority and replaceable.
+diff --git a/docs/cae/specs/M0084/M0084_EVIDENCE_RECEIPT.json b/docs/cae/specs/M0084/M0084_EVIDENCE_RECEIPT.json
+new file mode 100644
+index 0000000..2992b71
+--- /dev/null
++++ b/docs/cae/specs/M0084/M0084_EVIDENCE_RECEIPT.json
+@@ -0,0 +1,95 @@
++{
++  "mandate": "M0084",
++  "status": "IMPLEMENTED_OPERATOR_REVIEW_REQUIRED",
++  "evidence_classification": [
++    "EXECUTABLE",
++    "SCHEMA",
++    "DOCUMENT",
++    "TEST",
++    "HYPOTHESIS",
++    "OPERATOR_DECISION_REQUIRED"
++  ],
++  "archive": {
++    "path": "codebase_clean(3).zip",
++    "sha256": "7f962c86b13171cc25bec698d6974d412981cef502e858717b5069e50f1810d8"
++  },
++  "authority": {
++    "official_user_authorized_pack": "https://github.com/Remjohn/consciousactivation/tree/main/docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10",
++    "repository_constitution": "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
++    "repository_precedence": "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
++    "external_implementation_adoption": "NONE"
++  },
++  "brownfield": {
++    "canonical_transformation_objects": [
++      "packages/ca_runtime/src/ca_runtime/storyboard_session.py::TransformationIntent",
++      "packages/ca_runtime/src/ca_runtime/storyboard_session.py::TransformationRecipe",
++      "packages/ca_runtime/src/ca_runtime/storyboard_session.py::VisualAssetReference",
++      "packages/ca_runtime/src/ca_runtime/storyboard_session.py::StoryboardSessionStore._validate_revision_input"
++    ],
++    "existing_contract_schema": "services/pipeline/contracts/schemas/transformation_contract.schema.json",
++    "change_strategy": "EXTEND_EXISTING_TRANSFORMATION_LINEAGE"
++  },
++  "implementation": {
++    "changed": [
++      "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
++      "packages/ca_runtime/src/ca_runtime/__init__.py"
++    ],
++    "added": [
++      "tests/cae/test_m0084_source_quality_profile.py",
++      "docs/cae/specs/M0084/source_quality_profile.md",
++      "docs/cae/specs/M0084/AGENT_HANDOFF.md",
++      "docs/cae/specs/M0084/M0084_EVIDENCE_RECEIPT.json"
++    ]
++  },
++  "verification": [
++    {
++      "class": "TEST",
++      "command": "PYTHONPATH=packages/ca_contracts/src pytest -q tests/cae/test_m0084_source_quality_profile.py",
++      "observed": "9 passed, 5 warnings in 0.10s"
++    },
++    {
++      "class": "TEST",
++      "command": "pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_visual_derivative_production_program.py",
++      "observed": "collection blocked by ModuleNotFoundError: No module named 'psycopg'",
++      "claim_ceiling": "No native DB-backed runtime reachability claim"
++    },
++    {
++      "class": "EXECUTABLE",
++      "command": "python -m py_compile packages/ca_runtime/src/ca_runtime/storyboard_session.py packages/ca_runtime/src/ca_runtime/__init__.py",
++      "observed": "success"
++    },
++    {
++      "class": "EXECUTABLE",
++      "command": "git diff --check",
++      "observed": "success"
++    }
++  ],
++  "properties_proven": [
++    "HIGH-quality sources permit bounded subtle transformation",
++    "aggressive transformation of a degraded but superficially polished source is rejected",
++    "adaptive recipe projection is deterministic and preserves intent and evidence references",
++    "malformed source-quality metadata is rejected",
++    "source-quality profile cannot be rebound to another asset",
++    "crop/compression/sharpness/frame-rate/prior-degradation measurements affect quality band",
++    "sensitive transform primitives fail closed without declared intensity",
++    "existing storyboard revision validation rejects quality-damaging recipes"
++  ],
++  "limitations": [
++    "focused M0084 tests load the storyboard module in isolation because psycopg is unavailable",
++    "native package-level regression collection is blocked by missing psycopg",
++    "no real visual preview was available for operator perceptual review",
++    "quality thresholds are bounded M0084 policy, not universal perceptual constants",
++    "legacy assets without SourceQualityProfile intentionally remain on the compatibility path"
++  ],
++  "repository_revision": {
++    "baseline_snapshot_commit": "fa1ed7c895306846e563550f7d2a58adab9c99ec",
++    "implementation_commit": "b9e332d677739e833412cca5d5d0839b6267e34c",
++    "supplied_archive_git_metadata": false,
++    "remote_main_reference": "1238dda04cc89e16ed7ac96ac79417c7c321f8a8"
++  },
++  "operator_decision_requested": [
++    "APPROVE",
++    "APPROVE-WITH-LIMITATIONS",
++    "REJECT"
++  ]
++}
+diff --git a/docs/cae/specs/M0084/source_quality_profile.md b/docs/cae/specs/M0084/source_quality_profile.md
+new file mode 100644
+index 0000000..ffb2fb3
+--- /dev/null
++++ b/docs/cae/specs/M0084/source_quality_profile.md
+@@ -0,0 +1,57 @@
++# M0084 — SourceQualityProfile and Adaptive Transformation Rules
++
++**Evidence class:** SCHEMA + EXECUTABLE + TEST
++**Mandate:** M0084
++**Scope:** `packages/`, `services/`, `docs/cae/specs/`, `tests`
++
++## Decision
++
++Extend the canonical `ca_runtime.storyboard_session` transformation path with a measured `SourceQualityProfile`. A profile is attached to an existing `VisualAssetReference`; it does not become a new asset authority.
++
++Required measurements are resolution, frame rate (in deterministic milli-fps), crop history, compression loss, sharpness, prior degradation, and evidence references. The profile deterministically derives a quality level: `HIGH`, `MEDIUM`, `LOW`, or `DEGRADED`.
++
++`TransformationIntent` remains semantic. `TransformationRecipe` remains its bounded execution projection. Quality-aware functions only constrain or clamp declared transform magnitude; they do not change intent or invent source meaning.
++
++## Deterministic policy
++
++The quality score uses fixed-point basis points and weighted measured inputs:
++
++| Measurement | Weight | Deterministic interpretation |
++|---|---:|---|
++| Resolution | 30% | 2160p+ → 10000; 1080p+ → 8000; 720p+ → 5500; 480p+ → 3500; lower → 2000 |
++| Crop retention | 15% | Higher retained source area scores higher |
++| Compression loss | 20% | `10000 - compression_loss_bps` |
++| Sharpness | 20% | Higher sharpness scores higher |
++| Frame-rate quality | 10% | 30000 milli-fps+ → 10000; 24000+ → 8500; 20000+ → 6500; 15000+ → 4500; lower → 2500 |
++| Prior degradation | 5% | `10000 - prior_degradation_bps` |
++
++Quality bands are `HIGH >= 8000`, `MEDIUM >= 6500`, `LOW >= 4500`, otherwise `DEGRADED`.
++
++Transformation limits are expressed in basis points:
++
++| Quality | Max scale delta | Max reframe | Max motion amplitude | Color |
++|---|---:|---:|---:|---|
++| HIGH | 1200 | 1200 | 1200 | NONE / CONTROLLED / SUBTLE_LUT |
++| MEDIUM | 800 | 800 | 700 | NONE / CONTROLLED |
++| LOW | 400 | 400 | 300 | NONE / GRAYSCALE / CONTROLLED |
++| DEGRADED | 150 | 200 | 0 | NONE / GRAYSCALE |
++
++These limits are implementation policy for M0084, not claims about universal perceptual thresholds.
++
++## Adaptive presentation
++
++The profile recommends `STANDARD`, `SUBTLE_REFRAME`, and `SUBTLE_COLOR` for `HIGH`; `STANDARD`, `REDUCED_SCALE`, and `SELECTIVE_FRAMING` for `MEDIUM`; `REDUCED_SCALE`, `INSET`, `CONTEXTUAL`, and `GRAYSCALE` for `LOW`; and `CONTAINERIZED`, `INSET`, `CONTEXTUAL`, and `GRAYSCALE` for `DEGRADED`.
++
++`adapt_transformation_recipe_for_source_quality()` is a pure clamp. It preserves `intent_id`, preserves input semantic constraints, records the source-quality profile ID/level and evidence references, and selects the first quality-safe presentation strategy. It does not silently rewrite canonical meaning.
++
++## Integration guard
++
++`StoryboardSessionStore._validate_revision_input()` validates any attached profile before accepting a recipe. A profile must refer to the same `asset_id` and its evidence references must remain inside the revision's evidence lineage. Legacy assets without a structured profile continue to validate through the existing contract so this additive change does not silently invalidate historic records.
++
++## False-proof case
++
++A 480p, pre-cropped, compressed speaker clip can look polished after a large zoom. M0084 must still reject the recipe because the transform magnifies source defects and violates the source-quality limit. The acceptable alternative is a smaller/inset/contextual treatment that keeps the evidence legible without making degradation the focal event.
++
++## Non-goals
++
++No new retrieval system, semantic authority, asset store, runtime adapter, database migration, UI surface, provider integration, or external repository extraction is introduced by this mandate.
+diff --git a/packages/ca_runtime/src/ca_runtime/__init__.py b/packages/ca_runtime/src/ca_runtime/__init__.py
+index bbba0b6..75b6fcc 100644
+--- a/packages/ca_runtime/src/ca_runtime/__init__.py
++++ b/packages/ca_runtime/src/ca_runtime/__init__.py
+@@ -1517,6 +1517,7 @@ from .storyboard_session import (
+     StoryboardSessionStore,
+     StoryboardShot,
+     StoryboardValidationReport,
++    SourceQualityProfile,
+     TransformationIntent,
+     TransformationRecipe,
+     VisualAssetReference,
+diff --git a/packages/ca_runtime/src/ca_runtime/storyboard_session.py b/packages/ca_runtime/src/ca_runtime/storyboard_session.py
+index cb3a485..48ab04e 100644
+--- a/packages/ca_runtime/src/ca_runtime/storyboard_session.py
++++ b/packages/ca_runtime/src/ca_runtime/storyboard_session.py
+@@ -15,7 +15,7 @@ import sqlite3
+ from typing import Any, Dict, Iterable, List, Optional, Sequence
+ from uuid import uuid4
+ 
+-from pydantic import BaseModel, Field, validator
++from pydantic import BaseModel, Field, field_validator, validator
+ 
+ from ca_contracts import CanonicalizationError, canonical_sha256, utc_now_rfc3339
+ from ca_runtime.editorial_discovery_store import EditorialDiscoveryStore
+@@ -69,9 +69,263 @@ class VisualAssetReference(BaseModel):
+     evidence_refs: List[str] = Field(default_factory=list)
+     rights_status: str = "UNVERIFIED"
+     source_quality: str = "UNKNOWN"
++    source_quality_profile: Optional[SourceQualityProfile] = None
+     approved: bool = False
+ 
+ 
++class SourceQualityProfile(BaseModel):
++    """Measured source-condition profile used to bound editorial transformations."""
++
++    profile_id: str
++    source_ref: str
++    width_px: int
++    height_px: int
++    frame_rate_milli_fps: int
++    crop_count: int = 0
++    crop_retention_bps: int = 10000
++    compression_loss_bps: int = 0
++    sharpness_bps: int = 10000
++    prior_degradation_bps: int = 0
++    evidence_refs: List[str] = Field(..., min_length=1)
++
++    @field_validator("width_px", "height_px")
++    @classmethod
++    def positive_dimensions(cls, value: int) -> int:
++        if value <= 0:
++            raise ValueError("source dimensions must be positive")
++        return value
++
++    @field_validator("frame_rate_milli_fps")
++    @classmethod
++    def positive_frame_rate(cls, value: int) -> int:
++        if value <= 0:
++            raise ValueError("frame_rate_milli_fps must be positive")
++        return value
++
++    @field_validator("crop_count")
++    @classmethod
++    def non_negative_crop_count(cls, value: int) -> int:
++        if value < 0:
++            raise ValueError("crop_count must be non-negative")
++        return value
++
++    @field_validator(
++        "crop_retention_bps",
++        "compression_loss_bps",
++        "sharpness_bps",
++        "prior_degradation_bps",
++    )
++    @classmethod
++    def bounded_basis_points(cls, value: int) -> int:
++        if not 0 <= value <= 10000:
++            raise ValueError("quality measurements must be between 0 and 10000 bps")
++        return value
++
++    @property
++    def resolution_bps(self) -> int:
++        minimum_dimension = min(self.width_px, self.height_px)
++        if minimum_dimension >= 2160:
++            return 10000
++        if minimum_dimension >= 1080:
++            return 8000
++        if minimum_dimension >= 720:
++            return 5500
++        if minimum_dimension >= 480:
++            return 3500
++        return 2000
++
++    @property
++    def frame_rate_quality_bps(self) -> int:
++        if self.frame_rate_milli_fps >= 30000:
++            return 10000
++        if self.frame_rate_milli_fps >= 24000:
++            return 8500
++        if self.frame_rate_milli_fps >= 20000:
++            return 6500
++        if self.frame_rate_milli_fps >= 15000:
++            return 4500
++        return 2500
++
++    @property
++    def quality_score_bps(self) -> int:
++        score = (
++            self.resolution_bps * 30
++            + self.crop_retention_bps * 15
++            + (10000 - self.compression_loss_bps) * 20
++            + self.sharpness_bps * 20
++            + self.frame_rate_quality_bps * 10
++            + (10000 - self.prior_degradation_bps) * 5
++        ) // 100
++        return max(0, min(10000, score))
++
++    @property
++    def quality_level(self) -> str:
++        if self.quality_score_bps >= 8000:
++            return "HIGH"
++        if self.quality_score_bps >= 6500:
++            return "MEDIUM"
++        if self.quality_score_bps >= 4500:
++            return "LOW"
++        return "DEGRADED"
++
++    @property
++    def presentation_strategies(self) -> List[str]:
++        strategies = {
++            "HIGH": ["STANDARD", "SUBTLE_REFRAME", "SUBTLE_COLOR"],
++            "MEDIUM": ["STANDARD", "REDUCED_SCALE", "SELECTIVE_FRAMING"],
++            "LOW": ["REDUCED_SCALE", "INSET", "CONTEXTUAL", "GRAYSCALE"],
++            "DEGRADED": ["CONTAINERIZED", "INSET", "CONTEXTUAL", "GRAYSCALE"],
++        }
++        return list(strategies[self.quality_level])
++
++
++class TransformationValidationResult(BaseModel):
++    """Deterministic quality gate result; contains no semantic interpretation."""
++
++    allowed: bool
++    source_quality_level: str
++    max_scale_delta_bps: int
++    max_reframe_bps: int
++    max_motion_amplitude_bps: int
++    allowed_color_treatments: List[str]
++    recommended_presentation_strategies: List[str]
++    violations: List[str] = Field(default_factory=list)
++
++
++_TRANSFORMATION_QUALITY_LIMITS = {
++    "HIGH": {"scale": 1200, "reframe": 1200, "motion": 1200, "color": ["NONE", "CONTROLLED", "SUBTLE_LUT"]},
++    "MEDIUM": {"scale": 800, "reframe": 800, "motion": 700, "color": ["NONE", "CONTROLLED"]},
++    "LOW": {"scale": 400, "reframe": 400, "motion": 300, "color": ["NONE", "GRAYSCALE", "CONTROLLED"]},
++    "DEGRADED": {"scale": 150, "reframe": 200, "motion": 0, "color": ["NONE", "GRAYSCALE"]},
++}
++
++
++def _declared_transform_intensity(recipe: "TransformationRecipe") -> Dict[str, Any]:
++    scale_deltas: List[int] = []
++    reframe_bps: List[int] = []
++    motion_bps: List[int] = []
++    color_treatments: List[str] = []
++    undeclared_intensity: List[str] = []
++
++    for primitive in recipe.primitives:
++        op = str(primitive.get("op", "")).upper()
++        if op in {"ZOOM", "SCALE"} and "scale_delta_bps" not in primitive and "amount_bps" not in primitive:
++            undeclared_intensity.append(f"{op} must declare amount_bps or scale_delta_bps")
++        if op == "REFRAME" and "reframe_bps" not in primitive:
++            undeclared_intensity.append("REFRAME must declare reframe_bps")
++        if op == "MOTION" and "motion_amplitude_bps" not in primitive:
++            undeclared_intensity.append("MOTION must declare motion_amplitude_bps")
++        if "scale_delta_bps" in primitive:
++            scale_deltas.append(abs(int(primitive["scale_delta_bps"])))
++        if op in {"ZOOM", "SCALE"} and "amount_bps" in primitive:
++            scale_deltas.append(abs(int(primitive["amount_bps"])))
++        if "reframe_bps" in primitive:
++            reframe_bps.append(abs(int(primitive["reframe_bps"])))
++        if "motion_amplitude_bps" in primitive:
++            motion_bps.append(abs(int(primitive["motion_amplitude_bps"])))
++        if op in {"COLOR", "LUT", "COLOR_TREATMENT"}:
++            color_treatments.append(str(primitive.get("treatment", "CONTROLLED")).upper())
++
++    for keyframe in recipe.keyframes:
++        if "scale_delta_bps" in keyframe:
++            scale_deltas.append(abs(int(keyframe["scale_delta_bps"])))
++        if "motion_amplitude_bps" in keyframe:
++            motion_bps.append(abs(int(keyframe["motion_amplitude_bps"])))
++
++    return {
++        "scale_delta_bps": max(scale_deltas, default=0),
++        "reframe_bps": max(reframe_bps, default=0),
++        "motion_amplitude_bps": max(motion_bps, default=0),
++        "color_treatments": color_treatments or ["NONE"],
++        "undeclared_intensity": undeclared_intensity,
++    }
++
++
++def validate_transformation_for_source_quality(
++    profile: SourceQualityProfile,
++    recipe: "TransformationRecipe",
++) -> TransformationValidationResult:
++    """Fail closed when a recipe exceeds deterministic source-quality limits."""
++
++    limits = _TRANSFORMATION_QUALITY_LIMITS[profile.quality_level]
++    declared = _declared_transform_intensity(recipe)
++    violations: List[str] = list(declared["undeclared_intensity"])
++
++    if declared["scale_delta_bps"] > limits["scale"]:
++        violations.append(
++            f"scale_delta_bps={declared['scale_delta_bps']} exceeds {limits['scale']} for {profile.quality_level}"
++        )
++    if declared["reframe_bps"] > limits["reframe"]:
++        violations.append(
++            f"reframe_bps={declared['reframe_bps']} exceeds {limits['reframe']} for {profile.quality_level}"
++        )
++    if declared["motion_amplitude_bps"] > limits["motion"]:
++        violations.append(
++            f"motion_amplitude_bps={declared['motion_amplitude_bps']} exceeds {limits['motion']} for {profile.quality_level}"
++        )
++    for treatment in declared["color_treatments"]:
++        if treatment not in limits["color"]:
++            violations.append(
++                f"color treatment '{treatment}' is not allowed for {profile.quality_level}"
++            )
++
++    return TransformationValidationResult(
++        allowed=not violations,
++        source_quality_level=profile.quality_level,
++        max_scale_delta_bps=limits["scale"],
++        max_reframe_bps=limits["reframe"],
++        max_motion_amplitude_bps=limits["motion"],
++        allowed_color_treatments=list(limits["color"]),
++        recommended_presentation_strategies=profile.presentation_strategies,
++        violations=violations,
++    )
++
++
++def adapt_transformation_recipe_for_source_quality(
++    profile: SourceQualityProfile,
++    recipe: "TransformationRecipe",
++) -> "TransformationRecipe":
++    """Return a deterministic, provenance-preserving bounded recipe projection."""
++
++    limits = _TRANSFORMATION_QUALITY_LIMITS[profile.quality_level]
++    primitives: List[Dict[str, Any]] = []
++    for primitive in recipe.primitives:
++        copy = dict(primitive)
++        if "scale_delta_bps" in copy:
++            copy["scale_delta_bps"] = min(abs(int(copy["scale_delta_bps"])), limits["scale"])
++        if str(copy.get("op", "")).upper() in {"ZOOM", "SCALE"} and "amount_bps" in copy:
++            copy["amount_bps"] = min(abs(int(copy["amount_bps"])), limits["scale"])
++        if "reframe_bps" in copy:
++            copy["reframe_bps"] = min(abs(int(copy["reframe_bps"])), limits["reframe"])
++        if "motion_amplitude_bps" in copy:
++            copy["motion_amplitude_bps"] = min(abs(int(copy["motion_amplitude_bps"])), limits["motion"])
++        if str(copy.get("op", "")).upper() in {"COLOR", "LUT", "COLOR_TREATMENT"}:
++            treatment = str(copy.get("treatment", "CONTROLLED")).upper()
++            if treatment not in limits["color"]:
++                copy["treatment"] = limits["color"][0]
++        primitives.append(copy)
++
++    keyframes: List[Dict[str, Any]] = []
++    for keyframe in recipe.keyframes:
++        copy = dict(keyframe)
++        if "scale_delta_bps" in copy:
++            copy["scale_delta_bps"] = min(abs(int(copy["scale_delta_bps"])), limits["scale"])
++        if "motion_amplitude_bps" in copy:
++            copy["motion_amplitude_bps"] = min(abs(int(copy["motion_amplitude_bps"])), limits["motion"])
++        keyframes.append(copy)
++
++    constraints = dict(recipe.constraints)
++    constraints.update(
++        {
++            "source_quality_level": profile.quality_level,
++            "source_quality_profile_id": profile.profile_id,
++            "source_quality_evidence_refs": list(profile.evidence_refs),
++            "presentation_strategy": profile.presentation_strategies[0],
++        }
++    )
++    return recipe.model_copy(update={"primitives": primitives, "keyframes": keyframes, "constraints": constraints})
++
++
+ class TransformationIntent(BaseModel):
+     """Why a source is transformed, distinct from how it is rendered."""
+ 
+@@ -545,6 +799,15 @@ class StoryboardSessionStore:
+                             raise StoryboardRevisionValidationError(
+                                 f"asset '{asset.asset_id}' references evidence outside revision lineage"
+                             )
++                        if asset.source_quality_profile is not None:
++                            if asset.source_quality_profile.source_ref != asset.asset_id:
++                                raise StoryboardRevisionValidationError(
++                                    f"asset '{asset.asset_id}' has a source quality profile for another source"
++                                )
++                            if not set(asset.source_quality_profile.evidence_refs).issubset(evidence_refs):
++                                raise StoryboardRevisionValidationError(
++                                    f"asset '{asset.asset_id}' source quality profile references evidence outside revision lineage"
++                                )
+                     intent = element.transformation_intent
+                     recipe = element.transformation_recipe
+                     if recipe is not None and (intent is None or recipe.intent_id != intent.intent_id):
+@@ -555,6 +818,17 @@ class StoryboardSessionStore:
+                         raise StoryboardRevisionValidationError(
+                             f"transformation intent for '{element.element_id}' points at another element"
+                         )
++                    if recipe is not None:
++                        for asset in element.asset_references:
++                            profile = asset.source_quality_profile
++                            if profile is None:
++                                continue
++                            quality_result = validate_transformation_for_source_quality(profile, recipe)
++                            if not quality_result.allowed:
++                                raise StoryboardRevisionValidationError(
++                                    f"element '{element.element_id}' exceeds source-quality limits: "
++                                    + "; ".join(quality_result.violations)
++                                )
+ 
+     def save_revision(
+         self,
+diff --git a/tests/cae/test_m0084_source_quality_profile.py b/tests/cae/test_m0084_source_quality_profile.py
+new file mode 100644
+index 0000000..a42faea
+--- /dev/null
++++ b/tests/cae/test_m0084_source_quality_profile.py
+@@ -0,0 +1,354 @@
++"""M0084 focused tests for source-quality-aware transformation bounds."""
++
++from __future__ import annotations
++
++import importlib.util
++import sys
++import types
++from pathlib import Path
++
++import pytest
++
++ROOT = Path(__file__).resolve().parents[2]
++MODULE_PATH = ROOT / "packages/ca_runtime/src/ca_runtime/storyboard_session.py"
++
++
++def _load_storyboard_module():
++    """Load the scoped module without importing the DB-backed ca_runtime package."""
++    package = types.ModuleType("ca_runtime")
++    package.__path__ = [str(MODULE_PATH.parent)]
++    sys.modules.setdefault("ca_runtime", package)
++
++    editorial = types.ModuleType("ca_runtime.editorial_discovery_store")
++
++    class EditorialDiscoveryStore:  # pragma: no cover - import-only stub
++        pass
++
++    editorial.EditorialDiscoveryStore = EditorialDiscoveryStore
++    sys.modules.setdefault("ca_runtime.editorial_discovery_store", editorial)
++
++    preparation = types.ModuleType("ca_runtime.preparation_graph_store")
++
++    class GraphRevisionRecord:  # pragma: no cover - import-only stub
++        pass
++
++    class PreparationGraphStore:  # pragma: no cover - import-only stub
++        pass
++
++    class StaleBaseRevisionError(Exception):  # pragma: no cover - import-only stub
++        pass
++
++    preparation.GraphRevisionRecord = GraphRevisionRecord
++    preparation.PreparationGraphStore = PreparationGraphStore
++    preparation.StaleBaseRevisionError = StaleBaseRevisionError
++    sys.modules.setdefault("ca_runtime.preparation_graph_store", preparation)
++
++    spec = importlib.util.spec_from_file_location("ca_runtime.storyboard_session", MODULE_PATH)
++    assert spec is not None and spec.loader is not None
++    module = importlib.util.module_from_spec(spec)
++    sys.modules[spec.name] = module
++    spec.loader.exec_module(module)
++    return module
++
++
++m0084 = _load_storyboard_module()
++
++
++@pytest.fixture
++def high_profile():
++    return m0084.SourceQualityProfile(
++        profile_id="sq-high-01",
++        source_ref="asset-01",
++        width_px=3840,
++        height_px=2160,
++        frame_rate_milli_fps=30000,
++        crop_count=0,
++        crop_retention_bps=10000,
++        compression_loss_bps=500,
++        sharpness_bps=9000,
++        prior_degradation_bps=0,
++        evidence_refs=["seg-01"],
++    )
++
++
++def test_high_quality_source_allows_subtle_zoom_and_reframe(high_profile):
++    recipe = m0084.TransformationRecipe(
++        recipe_id="recipe-high",
++        intent_id="intent-01",
++        primitives=[
++            {"op": "ZOOM", "amount_bps": 1200},
++            {"op": "REFRAME", "reframe_bps": 1200},
++            {"op": "COLOR", "treatment": "SUBTLE_LUT"},
++        ],
++    )
++    result = m0084.validate_transformation_for_source_quality(high_profile, recipe)
++    assert result.allowed is True
++    assert result.source_quality_level == "HIGH"
++    assert result.max_scale_delta_bps == 1200
++
++
++def test_low_quality_aggressive_zoom_is_rejected_even_when_it_looks_clean():
++    profile = m0084.SourceQualityProfile(
++        profile_id="sq-low-01",
++        source_ref="asset-02",
++        width_px=854,
++        height_px=480,
++        frame_rate_milli_fps=24000,
++        crop_count=2,
++        crop_retention_bps=6000,
++        compression_loss_bps=4000,
++        sharpness_bps=5000,
++        prior_degradation_bps=2500,
++        evidence_refs=["seg-02"],
++    )
++    recipe = m0084.TransformationRecipe(
++        recipe_id="recipe-wrong",
++        intent_id="intent-02",
++        primitives=[{"op": "ZOOM", "amount_bps": 5000}],
++    )
++    result = m0084.validate_transformation_for_source_quality(profile, recipe)
++    assert result.allowed is False
++    assert any("scale_delta_bps" in violation for violation in result.violations)
++    assert "INSET" in result.recommended_presentation_strategies
++
++
++def test_degraded_source_adaptation_is_deterministic_and_preserves_intent():
++    profile = m0084.SourceQualityProfile(
++        profile_id="sq-degraded-01",
++        source_ref="asset-03",
++        width_px=640,
++        height_px=360,
++        frame_rate_milli_fps=15000,
++        crop_count=3,
++        crop_retention_bps=4500,
++        compression_loss_bps=6500,
++        sharpness_bps=3000,
++        prior_degradation_bps=6000,
++        evidence_refs=["seg-03"],
++    )
++    recipe = m0084.TransformationRecipe(
++        recipe_id="recipe-degraded",
++        intent_id="intent-03",
++        primitives=[
++            {"op": "ZOOM", "amount_bps": 4000},
++            {"op": "REFRAME", "reframe_bps": 1800},
++            {"op": "COLOR", "treatment": "SUBTLE_LUT"},
++            {"op": "MOTION", "motion_amplitude_bps": 2200},
++        ],
++        constraints={"semantic_lock": "keep_source_evidence"},
++    )
++    original = recipe.model_dump()
++    adapted_a = m0084.adapt_transformation_recipe_for_source_quality(profile, recipe)
++    adapted_b = m0084.adapt_transformation_recipe_for_source_quality(profile, recipe)
++    assert recipe.model_dump() == original
++    assert adapted_a.model_dump() == adapted_b.model_dump()
++    assert adapted_a.intent_id == recipe.intent_id
++    assert adapted_a.constraints["source_quality_level"] == "DEGRADED"
++    assert adapted_a.constraints["source_quality_profile_id"] == profile.profile_id
++    assert adapted_a.constraints["source_quality_evidence_refs"] == profile.evidence_refs
++    assert adapted_a.constraints["presentation_strategy"] == "CONTAINERIZED"
++    assert adapted_a.primitives[0]["amount_bps"] == 150
++    assert adapted_a.primitives[2]["treatment"] == "NONE"
++    assert adapted_a.primitives[3]["motion_amplitude_bps"] == 0
++
++
++def test_profile_requires_valid_measured_metadata_and_evidence():
++    with pytest.raises(ValueError, match="source dimensions must be positive"):
++        m0084.SourceQualityProfile(
++            profile_id="sq-invalid",
++            source_ref="asset-invalid",
++            width_px=0,
++            height_px=1080,
++            frame_rate_milli_fps=24000,
++            evidence_refs=["seg-invalid"],
++        )
++
++    with pytest.raises(ValueError, match="between 0 and 10000"):
++        m0084.SourceQualityProfile(
++            profile_id="sq-invalid-2",
++            source_ref="asset-invalid",
++            width_px=1920,
++            height_px=1080,
++            frame_rate_milli_fps=24000,
++            compression_loss_bps=10001,
++            evidence_refs=["seg-invalid"],
++        )
++
++    with pytest.raises(ValueError, match="evidence_refs"):
++        m0084.SourceQualityProfile(
++            profile_id="sq-invalid-3",
++            source_ref="asset-invalid",
++            width_px=1920,
++            height_px=1080,
++            frame_rate_milli_fps=24000,
++        )
++
++
++def test_asset_quality_profile_cannot_be_rebound_to_another_source():
++    profile = m0084.SourceQualityProfile(
++        profile_id="sq-lineage-01",
++        source_ref="asset-authorized",
++        width_px=1920,
++        height_px=1080,
++        frame_rate_milli_fps=30000,
++        evidence_refs=["seg-01"],
++    )
++    asset = m0084.VisualAssetReference(
++        reference_id="ref-01",
++        asset_id="asset-other",
++        evidence_refs=["seg-01"],
++        source_quality_profile=profile,
++    )
++    with pytest.raises(m0084.StoryboardRevisionValidationError, match="another source"):
++        store = object.__new__(m0084.StoryboardSessionStore)
++        store._validate_revision_input(
++            session=m0084.StoryboardSession(
++                workspace_id="ws-01",
++                session_id="session-01",
++                editorial_storyboard_id="storyboard-01",
++                graph_id="graph-01",
++                created_by="operator",
++            ),
++            scenes=[
++                m0084.StoryboardScene(
++                    scene_id="scene-01",
++                    scene_order=0,
++                    semantic_purpose="Preserve evidence.",
++                    source_evidence_refs=["seg-01"],
++                    shots=[
++                        m0084.StoryboardShot(
++                            shot_id="shot-01",
++                            start_ms=0,
++                            end_ms=1000,
++                            semantic_purpose="Show source.",
++                            elements=[
++                                m0084.StoryboardElement(
++                                    element_id="element-01",
++                                    kind="SOURCE_FRAME",
++                                    semantic_purpose="Show source.",
++                                    source_evidence_refs=["seg-01"],
++                                    asset_references=[asset],
++                                )
++                            ],
++                        )
++                    ],
++                )
++            ],
++            source_evidence_refs=["seg-01"],
++        )
++
++
++def test_clean_1080p_profile_is_high_and_can_use_the_subtle_path():
++    profile = m0084.SourceQualityProfile(
++        profile_id="sq-1080-01",
++        source_ref="asset-1080",
++        width_px=1920,
++        height_px=1080,
++        frame_rate_milli_fps=30000,
++        crop_count=0,
++        crop_retention_bps=10000,
++        compression_loss_bps=300,
++        sharpness_bps=9200,
++        prior_degradation_bps=0,
++        evidence_refs=["seg-1080"],
++    )
++    assert profile.quality_level == "HIGH"
++    assert "SUBTLE_REFRAME" in profile.presentation_strategies
++
++
++def test_storyboard_revision_gate_rejects_quality_damaging_recipe():
++    profile = m0084.SourceQualityProfile(
++        profile_id="sq-gate-01",
++        source_ref="asset-gate",
++        width_px=854,
++        height_px=480,
++        frame_rate_milli_fps=24000,
++        crop_count=1,
++        crop_retention_bps=6200,
++        compression_loss_bps=3500,
++        sharpness_bps=5000,
++        prior_degradation_bps=2000,
++        evidence_refs=["seg-gate"],
++    )
++    element = m0084.StoryboardElement(
++        element_id="element-gate",
++        kind="SOURCE_FRAME",
++        semantic_purpose="Make the evidence visible.",
++        source_evidence_refs=["seg-gate"],
++        asset_references=[
++            m0084.VisualAssetReference(
++                reference_id="ref-gate",
++                asset_id="asset-gate",
++                evidence_refs=["seg-gate"],
++                source_quality_profile=profile,
++            )
++        ],
++        transformation_intent=m0084.TransformationIntent(
++            intent_id="intent-gate",
++            source_element_id="element-gate",
++            semantic_target="Evidence region",
++            mode="FOCUS",
++        ),
++        transformation_recipe=m0084.TransformationRecipe(
++            recipe_id="recipe-gate",
++            intent_id="intent-gate",
++            primitives=[{"op": "ZOOM", "amount_bps": 1800}],
++        ),
++    )
++    store = object.__new__(m0084.StoryboardSessionStore)
++    with pytest.raises(m0084.StoryboardRevisionValidationError, match="source-quality limits"):
++        store._validate_revision_input(
++            session=m0084.StoryboardSession(
++                workspace_id="ws-gate",
++                session_id="session-gate",
++                editorial_storyboard_id="storyboard-gate",
++                graph_id="graph-gate",
++                created_by="operator",
++            ),
++            scenes=[
++                m0084.StoryboardScene(
++                    scene_id="scene-gate",
++                    scene_order=0,
++                    semantic_purpose="Preserve source evidence.",
++                    source_evidence_refs=["seg-gate"],
++                    shots=[
++                        m0084.StoryboardShot(
++                            shot_id="shot-gate",
++                            start_ms=0,
++                            end_ms=1000,
++                            semantic_purpose="Reveal the evidence.",
++                            elements=[element],
++                        )
++                    ],
++                )
++            ],
++            source_evidence_refs=["seg-gate"],
++        )
++
++
++def test_quality_measurements_materially_change_quality_band():
++    clean = m0084.SourceQualityProfile(
++        profile_id="sq-clean", source_ref="asset-quality", width_px=1920, height_px=1080,
++        frame_rate_milli_fps=30000, crop_count=0, crop_retention_bps=10000,
++        compression_loss_bps=0, sharpness_bps=10000, prior_degradation_bps=0, evidence_refs=["seg-quality"],
++    )
++    degraded = clean.model_copy(update={
++        "crop_count": 3, "crop_retention_bps": 4500, "compression_loss_bps": 5000,
++        "sharpness_bps": 3500, "frame_rate_milli_fps": 15000, "prior_degradation_bps": 5000,
++    })
++    assert clean.quality_score_bps > degraded.quality_score_bps
++    assert clean.quality_level == "HIGH"
++    assert degraded.quality_level in {"LOW", "DEGRADED"}
++
++
++def test_sensitive_primitive_without_declared_intensity_is_rejected():
++    profile = m0084.SourceQualityProfile(
++        profile_id="sq-undeclared", source_ref="asset-undeclared", width_px=1920, height_px=1080,
++        frame_rate_milli_fps=30000, evidence_refs=["seg-undeclared"],
++    )
++    recipe = m0084.TransformationRecipe(
++        recipe_id="recipe-undeclared", intent_id="intent-undeclared", primitives=[{"op": "ZOOM"}],
++    )
++    result = m0084.validate_transformation_for_source_quality(profile, recipe)
++    assert result.allowed is False
++    assert any("must declare amount_bps" in violation for violation in result.violations)

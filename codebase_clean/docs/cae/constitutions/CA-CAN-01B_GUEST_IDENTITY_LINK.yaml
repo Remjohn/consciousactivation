@@ -1,0 +1,292 @@
+# Object Constitution: GuestIdentityLink
+# Phase 05 / CA-CAN-01B Guest & Evidence Constitutions
+
+id: "CA-MAP-001"
+canonical_name: "GuestIdentityLink"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Crosswalk / Mapping Object"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "OPERATOR_AUDIT"
+collision_register_ref: "COL-MAP-005"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-MAP-001"
+    canonical_name: "GuestIdentityLink"
+    common_aliases: ["Guest Crosswalk", "Identity Mapping Record", "Cross-Workspace Guest Link"]
+    naming_standard: "PascalCase singular compound mapping noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Crosswalk / Mapping Object"
+    class_matrix_id: 17
+    class_rationale: "GuestIdentityLink defines an explicit, versioned, auditable correspondence between two distinct Workspace-local Guest entities without merging their operational lifecycles, database rows, or evidence ownership."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Operates as a governed operational mapping across isolated client workspaces; does not exist on the Global Canonical Plane."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Governed Cross-Workspace Mapping & Longitudinal Research"
+    primary_purpose: "Enables explicit, auditable, dual-consented cross-workspace participant identity correlation for enterprise longitudinal research without compromising multi-tenant isolation, merging historical evidence, or granting ambient access."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational crosswalk and mapping record"
+    differentia: "Distinguished from an automatic identity merge, global Person directory, or access grant by preserving complete separation of underlying Guest entities, requiring explicit dual consent and compliance approval, and enforcing strict disclosure limits."
+    function: "Asserts an auditable correspondence between two workspace-local Guest records under specific legal, consent, and disclosure boundaries."
+    boundary: "Must not silently merge histories; does not grant cross-tenant access permissions; does not transfer evidence ownership; never created automatically by probabilistic matching."
+    normative_definition: >
+      GuestIdentityLink is an operational Crosswalk / Mapping Object that asserts an explicit, versioned, and auditable
+      relationship between two distinct Workspace-local Guest entities across client boundaries. It requires a documented basis,
+      defined scope, dual-workspace authorization, validity window, disclosure limits, revocation lifecycle, and immutable receipt.
+      It strictly forbids automatic record merging, evidence re-attribution, or tenant access bypass.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An explicit, auditable mapping between two distinct Workspace-local Guest records."
+      - "A dual-consented research crosswalk with explicit disclosure boundaries."
+      - "A revocable mapping record with permanent cryptographic receipt lineage."
+    what_it_is_not:
+      - "An automatic or probabilistic identity merge."
+      - "A global Person master record."
+      - "An access token or permission delegation across Workspaces."
+      - "A transfer of evidence or session ownership."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Guest (CA-ENT-003)"
+        distinction: "Guest is a discrete participant entity inside one Workspace; GuestIdentityLink is a mapping relation connecting two distinct Guests."
+      - neighbor: "OperatorAccessGrant (CA-REL-002)"
+        distinction: "OperatorAccessGrant authorizes operator break-glass access to a Workspace; GuestIdentityLink establishes a semantic correspondence between participant records."
+      - neighbor: "WorkspaceMembership (CA-REL-001)"
+        distinction: "WorkspaceMembership defines internal staff access to a Workspace; GuestIdentityLink maps external participant identities under strict research governance."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Cross-Tenant Governance & Mapping"
+    tier: "Governed Crosswalk / Mapping Object"
+    specialization: "Dual-Consented Guest Identity Crosswalk"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["PENDING_APPROVAL", "ACTIVE", "SUSPENDED", "REVOKED", "EXPIRED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "link_id"
+        type: "UUID"
+        description: "Primary unique identifier for the mapping link record."
+      - name: "source_workspace_id"
+        type: "UUID"
+        description: "Workspace identifier of the source guest."
+      - name: "source_guest_id"
+        type: "UUID"
+        description: "Guest identifier of the source participant."
+      - name: "target_workspace_id"
+        type: "UUID"
+        description: "Workspace identifier of the target guest."
+      - name: "target_guest_id"
+        type: "UUID"
+        description: "Guest identifier of the target participant."
+      - name: "link_direction"
+        type: "STRING"
+        description: "Directionality (SYMMETRIC_CORRELATION, DIRECTED_ALIAS, EXTERNAL_CROSSWALK)."
+      - name: "basis"
+        type: "STRING"
+        description: "Documented legal and evidentiary basis (EXPLICIT_DUAL_CONSENT, ADMINISTRATIVE_AUDIT_MATCH, EXTERNAL_IDP_FEDERATION)."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of link establishment."
+      - name: "dual_consent_receipt_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic hash of the verified dual-consent authorization receipt."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "Lifecycle status (PENDING_APPROVAL, ACTIVE, SUSPENDED, REVOKED, EXPIRED)."
+      - name: "disclosure_limits"
+        type: "JSONB"
+        description: "Granular data disclosure rules (METADATA_ONLY, AGGREGATE_ANALYTICS_ONLY, SPAN_CORRELATION)."
+      - name: "valid_until"
+        type: "TIMESTAMPTZ"
+        description: "Expiration timestamp for time-bounded mapping."
+      - name: "revoked_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when link was revoked."
+      - name: "revocation_reason"
+        type: "STRING"
+        description: "Documented reason for revocation."
+      - name: "revocation_receipt_id"
+        type: "UUID"
+        description: "Identifier of the immutable revocation receipt."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last modification."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace (Source)", "Workspace (Target)"]
+    root_boundary: "OperatorOrganization / Compliance Authority"
+    child_relations: []
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "PENDING_APPROVAL"
+    terminal_states: ["REVOKED", "EXPIRED"]
+    states: ["PENDING_APPROVAL", "ACTIVE", "SUSPENDED", "REVOKED", "EXPIRED"]
+    transitions:
+      - from: "PENDING_APPROVAL"
+        to: "ACTIVE"
+        operation: "approve_guest_identity_link"
+      - from: "ACTIVE"
+        to: "SUSPENDED"
+        operation: "suspend_guest_identity_link"
+      - from: "SUSPENDED"
+        to: "ACTIVE"
+        operation: "reactivate_guest_identity_link"
+      - from: "ACTIVE"
+        to: "REVOKED"
+        operation: "revoke_guest_identity_link"
+      - from: "ACTIVE"
+        to: "EXPIRED"
+        operation: "expire_guest_identity_link"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "guest_identity_link.requested"
+      - event_name: "guest_identity_link.approved"
+      - event_name: "guest_identity_link.suspended"
+      - event_name: "guest_identity_link.revoked"
+      - event_name: "guest_identity_link.expired"
+    subscribed_events:
+      - event_name: "guest.consent_withdrawn"
+      - event_name: "guest.anonymized"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Governed cross-workspace mapping protocol with dual tenant approval"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-LNK-001: Every GuestIdentityLink MUST explicitly reference valid source and target Guest records in distinct Workspaces."
+      - "INV-LNK-002: A GuestIdentityLink MUST NEVER merge underlying database records, transfer evidence ownership, or alter PostgreSQL RLS boundaries."
+      - "INV-LNK-003: A GuestIdentityLink requires verified dual-workspace authorization and an immutable dual-consent receipt."
+      - "INV-LNK-004: Revocation or consent withdrawal on either linked Guest immediately transitions the link to REVOKED."
+      - "INV-LNK-005: Probabilistic matching scores (embeddings, name, email) are admissible only as proposal evidence; they NEVER create an automatic link."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Multi-Tenant Plan §3.2, §8.3; CA-MAP-01 Scope & Authority Matrix; Collision Register COL-MAP-005"
+    runtime_representation: "cae.guest_identity_link (PostgreSQL audit table with dual consent foreign keys)"
+    promotion_authority: "CAE Compliance Officer + Dual Workspace Administrators via typed semantic operation"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "request_guest_identity_link"
+        parameters: ["source_workspace_id", "source_guest_id", "target_workspace_id", "target_guest_id", "basis", "disclosure_limits"]
+      - name: "approve_guest_identity_link"
+        parameters: ["link_id", "dual_consent_receipt"]
+      - name: "suspend_guest_identity_link"
+        parameters: ["link_id", "reason"]
+      - name: "revoke_guest_identity_link"
+        parameters: ["link_id", "revocation_reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT automatically create links based on background batch matching or vector clustering."
+      - "MUST NOT allow queries to join raw evidence across workspaces without evaluating disclosure_limits and active link status."
+      - "MUST NOT mutate historical session or evidence rows upon link creation or revocation."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify source_guest_id and target_guest_id belong to different source_workspace_id and target_workspace_id."
+      - "Verify dual_consent_receipt_sha256 is a valid 64-character hex string."
+    semantic_validators:
+      - "Ensure both referenced Guest entities are currently in ACTIVE state."
+      - "Ensure compliance officer signature is present in the approval payload."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_LINK_SAME_WORKSPACE"
+        http_status: 400
+        description: "Cannot create a cross-workspace link between guests in the same workspace."
+      - code: "ERR_LINK_DUAL_CONSENT_MISSING"
+        http_status: 412
+        description: "Operation rejected because verified dual consent receipt is absent."
+      - code: "ERR_LINK_REVOKED"
+        http_status: 403
+        description: "Cross-workspace query rejected because identity link is revoked."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.guest_identity_link"
+    rls_boundary_column: "source_workspace_id / target_workspace_id (Dual RLS policy)"
+    storage_boundary: "OPERATOR_AUDIT ledger"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Cross-Engagement Longitudinal Analytics Engine"
+      - "Compliance & Consent Audit Monitor"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Under what verified legal basis and disclosure limits are Guest A and Guest B correlated?"
+      - "Is there an active, dual-consented crosswalk connecting participant records across these two client workspaces?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-LNK-001"
+        description: "Approved cross-brand research mapping between two enterprise client workspaces with dual consent."
+        attributes:
+          link_id: "77777777-7777-7777-7777-777777777777"
+          source_workspace_id: "11111111-1111-1111-1111-111111111111"
+          source_guest_id: "33333333-3333-3333-3333-333333333333"
+          target_workspace_id: "22222222-2222-2222-2222-222222222222"
+          target_guest_id: "55555555-5555-5555-5555-555555555555"
+          link_direction: "SYMMETRIC_CORRELATION"
+          basis: "EXPLICIT_DUAL_CONSENT"
+          status: "ACTIVE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-LNK-001"
+        description: "Using GuestIdentityLink to grant Workspace A staff direct login or administrative access to Workspace B."
+        rejection_reason: "Violates INV-LNK-002 and Meta-Law §3; GuestIdentityLink is a semantic crosswalk, not an access grant."
+      - id: "NEG-LNK-002"
+        description: "Treating a GuestIdentityLink as an automatic license to merge raw interview transcripts into a single combined timeline."
+        rejection_reason: "Violates Section 5; linking identities does not merge operational records or transfer evidence ownership."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01B)"
+        summary: "Initial draft constitution establishing GuestIdentityLink as governed crosswalk object."

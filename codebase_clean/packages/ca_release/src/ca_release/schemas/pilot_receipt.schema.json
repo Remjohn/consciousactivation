@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "certified": {
+      "type": "boolean"
+    },
+    "claim_ceiling": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "continuity_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "pilot_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "pilot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "production_authorized": {
+      "type": "boolean"
+    },
+    "release_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "semantic_production_package_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "source_package_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "stage_results": {
+      "items": {
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "pilot_id",
+    "source_package_ref",
+    "semantic_production_package_ref",
+    "continuity_ref",
+    "release_ref",
+    "stage_results",
+    "artifact_refs",
+    "result",
+    "claim_ceiling",
+    "production_authorized",
+    "certified",
+    "pilot_sha256"
+  ],
+  "title": "PilotReceipt",
+  "type": "object"
+}

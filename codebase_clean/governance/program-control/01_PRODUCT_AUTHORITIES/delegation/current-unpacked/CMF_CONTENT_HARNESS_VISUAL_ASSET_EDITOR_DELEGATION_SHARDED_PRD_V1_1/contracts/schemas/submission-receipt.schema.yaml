@@ -1,0 +1,32 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Submission Receipt
+type: object
+additionalProperties: false
+required:
+- execution_id
+- status
+- accepted_demand_ref
+- negotiated_profile
+properties:
+  execution_id:
+    type: string
+    minLength: 1
+    pattern: ^VAE-RUN-
+  status:
+    type: string
+    minLength: 1
+    enum:
+    - accepted
+    - rejected
+  accepted_demand_ref:
+    type: string
+    minLength: 1
+  negotiated_profile:
+    type: object
+  rejection:
+    type:
+    - object
+    - 'null'
+  status_resource:
+    type: string
+    minLength: 1

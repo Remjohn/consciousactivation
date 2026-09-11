@@ -1,0 +1,63 @@
+schema_version: ca-audit-report/v1
+receipt_id: CA-P04R-AUDIT-TS-AIR-018-REPORT-2026-07-23
+auditor: INDEPENDENT_AUDITOR_CONTROLLER
+spec_id: TS-AIR-018
+spec_title: "Human Resolution Episodes and Scoped Learning"
+product: Activative Intelligence Runtime
+batch: 19
+issued_on: "2026-07-23"
+
+independence_declaration:
+  auditor_is_spec_writer: false
+  auditor_is_controller: false
+  conflicts_of_interest: NONE
+
+spec_identity:
+  hash_on_record: "cd817a664a574efe526daccb81d9ee299f3fdeaf9b999710278173423bceb753"
+  quality_state_claimed: WRITTEN_PENDING_AUDIT
+  authority_state_claimed: CANDIDATE_NOT_CURRENT
+  build_authority_claimed: false
+  build_state_claimed: NOT_BUILD_READY
+  ceiling_claimed: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+  writing_wave: 19
+
+outcome: AUDIT_PASS
+quality_state_after_audit: TECHNICALLY_ACCEPTED_PENDING_RATIFICATION
+audit_pass_is_accepted_for_build: false
+audit_pass_is_production_eligible: false
+
+lens_results:
+  lens_1_fr_story_outcome_coverage: PASS
+  lens_2_authority_ownership_sovereignty: PASS
+  lens_3_contract_lifecycle_completeness: PASS
+  lens_4_activative_primitive_archetype_source_fidelity: PASS
+  lens_5_brownfield_cross_spec_consistency: PASS
+  lens_6_build_readiness_testability: PASS
+
+blocking_findings: 0
+warnings: 0
+notes: 1
+
+findings:
+  - id: NOTE-AIR-018-001
+    lens: 5
+    severity: NOTE
+    title: "Correct cross-product interface: AIR consumes Studio human-resolution ledger for scoped learning"
+    description: >
+      TS-AIR-018 depends on TS-CAS-003 (Studio HumanResolutionEpisode ledger) as an upstream
+      draft interface. This is the correct direction: Studio surfaces human resolutions, AIR
+      reads them to drive scoped learning. Section 3 retains authority separation — AIR does
+      not claim Studio write authority. No sovereignty violation.
+    action: None required at this stage.
+
+upstream_draft_dependency_status:
+  - spec_id: TS-CAS-003
+    edge_id: SDE-102
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "2d8642d1b8e7f170732fbd293bc2d86997b3568756c5e686857e9c790f3f5841"
+    revision_impact: "Sections 3, 5, 6, 8, 9, 10"
+  - spec_id: TS-AIR-011
+    edge_id: SDE-103
+    label: DRAFT_DEPENDENCY_NOT_ACCEPTED
+    hash_pinned: "c48ef679872bfa3e8bf2bd40ea44c3f4d18da30b3d05d19a99d5131fe26dd00b"
+    revision_impact: "Sections 3, 5, 6, 8, 9, 10"

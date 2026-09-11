@@ -1,0 +1,100 @@
+{
+  "mandate": "M0085",
+  "title": "Evidence-First Visual Asset Studio",
+  "evidence_classes": ["EXECUTABLE", "SCHEMA", "DOCUMENT", "TEST", "REGISTRY_SOURCE", "HYPOTHESIS", "OPERATOR_DECISION_REQUIRED"],
+  "archive_baseline_sha": "91ef5adae9b53de32e504d566a8143cfeaf2c9f1",
+  "m0085_commit_sha": "9ba3b0e684f602bb4ef8e0a08444e4ddf14cebbc",
+  "repository_upstream_reference": "1238dda04cc89e16ed7ac96ac79417c7c321f8a8",
+  "claims": [
+    {
+      "id": "E001",
+      "class": "SCHEMA",
+      "source_path": "services/studio/src/generated/contracts.ts",
+      "command": "cmp -s services/studio/src/generated/contracts.ts governance/program-control/02_CROSS_REPO_CONTRACTS/activative-production-spine/0.1.0-dev.1/generated/typescript/contracts.ts",
+      "observed_result": "contracts-byte-identical"
+    },
+    {
+      "id": "E002",
+      "class": "EXECUTABLE",
+      "source_path": "services/studio/dist/index.js",
+      "command": "cd services/studio && tsc -p tsconfig.json --pretty false && node dist/index.js health --json",
+      "observed_result": "product_id=conscious-activations-studio; version=0.1.0; authority_state=candidate_not_current; development_authorized=true; production_authorized=false; certified=false"
+    },
+    {
+      "id": "E003",
+      "class": "TEST",
+      "source_path": "tests/api/test_visual_studio_pure.py; tests/api/test_studio_bridge.py; tests/phase1/test_studio.py",
+      "command": "python -m pytest tests/api/test_visual_studio_pure.py tests/api/test_studio_bridge.py tests/phase1/test_studio.py -q",
+      "observed_result": "8 passed in 0.44s"
+    },
+    {
+      "id": "E004",
+      "class": "TEST",
+      "source_path": "services/studio/src/revision.ts",
+      "command": "run the same compile-natural-language-revision JSON payload through node services/studio/dist/rpc.js twice and compare stdout with cmp",
+      "observed_result": "replay-identical; deterministic program_sha256 and program_id produced"
+    },
+    {
+      "id": "E005",
+      "class": "TEST",
+      "source_path": "services/studio/src/revision.ts",
+      "command": "compile-natural-language-revision with expected_state_version=8 while context.state_version=7",
+      "observed_result": "ok=false; code=STALE_STATE_VERSION"
+    },
+    {
+      "id": "E006",
+      "class": "TEST",
+      "source_path": "services/studio/src/validators.ts",
+      "command": "compile-natural-language-revision with actor_type=model_program and workflow_role=operator",
+      "observed_result": "ok=false; code=OPERATOR_REQUIRED"
+    },
+    {
+      "id": "E007",
+      "class": "TEST",
+      "source_path": "api/services/visual_studio_contracts.py; tests/api/test_visual_studio_pure.py",
+      "command": "test_good_looking_but_unproven_layer_is_blocked_without_source_lineage",
+      "observed_result": "source_lineage=BLOCKED; semantic_correctness=OPERATOR_REVIEW_REQUIRED"
+    },
+    {
+      "id": "E008",
+      "class": "TEST",
+      "source_path": "api/services/studio_bridge.py; tests/api/test_studio_bridge.py",
+      "command": "run bridge tests for missing entrypoint, malformed JSON, timeout and happy path",
+      "observed_result": "all bridge cases passed within 8-test focused suite"
+    },
+    {
+      "id": "E009",
+      "class": "EXECUTABLE",
+      "source_path": "services/studio/src/revision.ts",
+      "command": "compile-direct-manipulation MOVE_BBOX through services/studio/dist/rpc.js",
+      "observed_result": "ok=true; compilation_status=COMPILED; exact deterministic studio.adjust_bbox operation emitted"
+    },
+    {
+      "id": "E010",
+      "class": "TEST",
+      "source_path": "api/routers/visual_studio.py",
+      "command": "python -m py_compile api/routers/visual_studio.py api/services/visual_studio_contracts.py",
+      "observed_result": "python-api-syntax-ok"
+    },
+    {
+      "id": "E011",
+      "class": "OPERATOR_DECISION_REQUIRED",
+      "source_path": "api/routers/visual_studio.py; apps/web/src/components/visual-studio/VisualAssetStudio.tsx",
+      "command": "operator inspection of a real browser preview and source lineage",
+      "observed_result": "not available in the archive execution environment; no production perceptual claim made"
+    }
+  ],
+  "limitations": [
+    "The archive's full frontend dependency installation is incomplete; broader web typecheck is blocked by missing vite/client types and placeholder React/TanStack packages in node_modules.",
+    "The broader Python API suite is blocked in this environment by missing psycopg; focused M0085 bridge and projection tests avoid that unrelated import path.",
+    "No real campaign media artifact was present for browser playback proof, so the Studio deliberately shows no mock preview when no canonical video URI exists.",
+    "Source quality and geometry are reported as NOT_OBSERVED; semantic correctness remains OPERATOR_REVIEW_REQUIRED.",
+    "Keyframes are inspected only when present in the canonical timeline/motion-plan projection; the archive's current timeline projection does not guarantee keyframe records.",
+    "No external media runtime reachability or native render fidelity was claimed or substituted with mocks."
+  ],
+  "operator_decision": {
+    "required": true,
+    "allowed": ["APPROVE", "APPROVE-WITH-LIMITATIONS", "REJECT"],
+    "request": "Inspect the real Visual Asset Studio preview and source lineage, confirm that any proposed transformation serves meaning without gratuitous attention, and verify downstream runtime replaceability before promotion."
+  }
+}

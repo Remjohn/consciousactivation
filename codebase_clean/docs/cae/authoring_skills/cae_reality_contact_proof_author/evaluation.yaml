@@ -1,0 +1,43 @@
+skill_id: "cae_reality_contact_proof_author"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only static structural compliance of evaluation suite; does not run dynamic reality-contact tests."
+
+test_fixtures:
+  - id: "FIX-REAL-POS-001"
+    name: "Valid WP-08 Reality-Contact Evaluation Suite"
+    type: "positive_anchor"
+    input:
+      suite_id: "EVAL-CAE-WP08-001"
+      target_package_id: "WP-08"
+      tested_claims:
+        - claim_id: "CLM-001"
+          statement: "PostgreSQL transaction rollback removes all mutated rows."
+          claim_type: "STRUCTURAL_PERSISTENCE"
+        - claim_id: "CLM-002"
+          statement: "RLS policy blocks non-member tenant reads."
+          claim_type: "SECURITY_ISOLATION"
+      declared_fidelity: "E3_STAGING_PERSISTENCE"
+      countertests:
+        - countertest_id: "CNT-001"
+          adversary_mode: "Attempt cross-workspace read with spoofed token."
+          expected_rejection: "Empty result / 0 rows."
+      explicit_non_claims:
+        - "No claim of human semantic taste or real-world discernment."
+        - "No claim of production traffic certification."
+    expected_verdict: "EVALUATION_SUITE_RATIFIED"
+
+  - id: "FIX-REAL-NEG-001"
+    name: "Deceptive Negative: False Taste and World Outcome Claim from Staging Test"
+    type: "deceptive_negative"
+    input:
+      suite_id: "EVAL-CAE-FALSE-001"
+      target_package_id: "WP-XX"
+      tested_claims:
+        - claim_id: "CLM-FALSE"
+          statement: "Passing staging test proves superior aesthetic quality and human truth."
+          claim_type: "HUMAN_TASTE_CLAIM_PROHIBITED"
+      declared_fidelity: "E3_STAGING_PERSISTENCE"
+      countertests: []
+      explicit_non_claims: []
+    expected_verdict: "REJECTED_FALSE_REALITY_CLAIM"
+    expected_rejection_reason: "Staging tests cannot claim human semantic taste or real-world truth."

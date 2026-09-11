@@ -1,0 +1,42 @@
+type: object
+required:
+  - receipt_id
+  - skill_id
+  - skill_version
+  - reviewed_canonical_id
+  - execution_timestamp_utc
+  - review_verdict
+  - vectors_cleared_count
+  - conflations_detected
+  - reviewer_identity
+properties:
+  receipt_id:
+    type: string
+    pattern: "^RCP-REV-[0-9a-f]{8}$"
+  skill_id:
+    type: string
+    const: "cae_constitution_collision_reviewer"
+  skill_version:
+    type: string
+  reviewed_canonical_id:
+    type: string
+  execution_timestamp_utc:
+    type: string
+  review_verdict:
+    type: string
+    enum:
+      - "APPROVED_NO_COLLISIONS"
+      - "SPLIT_REQUIRED"
+      - "CONTRACT_CONFLICT"
+      - "PENDING_OPERATOR_DECISION"
+      - "BLOCKED"
+  vectors_cleared_count:
+    type: integer
+    minimum: 0
+    maximum: 9
+  conflations_detected:
+    type: array
+    items:
+      type: string
+  reviewer_identity:
+    type: string

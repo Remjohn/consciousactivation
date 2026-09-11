@@ -1,0 +1,57 @@
+schema_version: conscious-activations-source-traceability/v3.3
+spec_id: TS-AIR-003
+quality_state: WRITTEN_PENDING_AUDIT
+authority_state: CANDIDATE_NOT_CURRENT
+traceability:
+  - fr_id: AIR-FR-013
+    story_id: AIR-ST-03.01
+    requirement: Generate a strategically diverse hypothesis portfolio.
+    spec_sections: [2, 3, 5, 6, 9, 10]
+    primary_sources: [F03_PRD, AIR_STORIES, SRC_AHP_PORTFOLIO_001, SRC_MOE_001, PRM_PSY_001]
+    evidence_contract: strategic_axis_difference_receipt_and_complete_lineage
+  - fr_id: AIR-FR-014
+    story_id: AIR-ST-03.01
+    requirement: Apply hard eligibility gates before scoring.
+    spec_sections: [3, 5, 6, 8, 9, 10]
+    primary_sources: [F03_PRD, AIR_STORIES, SRC_AHP_PORTFOLIO_001, PRM_PSY_001, PRM_PRS_015, PRM_HUM_021]
+    evidence_contract: complete_noncompensable_gate_result_set
+  - fr_id: AIR-FR-015
+    story_id: AIR-ST-03.02
+    requirement: Score hypotheses against the current objective.
+    spec_sections: [3, 5, 6, 8, 9, 10]
+    primary_sources: [F03_PRD, AIR_STORIES, SRC_AHP_PORTFOLIO_001, TS_AIR_001_DRAFT, TS_AIR_002_DRAFT]
+    evidence_contract: independent_profile_pinned_comparative_evaluation_receipt
+  - fr_id: AIR-FR-016
+    story_id: AIR-ST-03.02
+    requirement: Preserve rejected and repaired hypotheses.
+    spec_sections: [3, 5, 6, 8, 9, 10]
+    primary_sources: [F03_PRD, AIR_STORIES, AIR_V21_CONSTITUTION, SRC_AHP_PORTFOLIO_001]
+    evidence_contract: immutable_candidate_state_and_repair_causal_chain
+  - fr_id: AIR-FR-017
+    story_id: AIR-ST-03.03
+    requirement: Use explicit search stopping laws.
+    spec_sections: [3, 5, 6, 8, 9, 10]
+    primary_sources: [F03_PRD, AIR_STORIES, AIR_V21_CONSTITUTION, SRC_AHP_PORTFOLIO_001]
+    evidence_contract: one_reason_specific_search_stopping_receipt_or_typed_blocker
+  - fr_id: AIR-FR-018
+    story_id: AIR-ST-03.03
+    requirement: Promote one selected hypothesis into a planned program.
+    spec_sections: [3, 5, 6, 8, 9, 10]
+    primary_sources: [F03_PRD, AIR_STORIES, AIR_V21_CONSTITUTION, TS_AIR_001_DRAFT, TS_AIR_002_DRAFT]
+    evidence_contract: additive_planned_pack_promotion_with_complete_portfolio_and_receipts
+story_acceptance:
+  AIR-ST-03.01: [AC-01, AC-02, AC-03, AC-04]
+  AIR-ST-03.02: [AC-05, AC-06, AC-07, AC-08]
+  AIR-ST-03.03: [AC-09, AC-10, AC-11, AC-12]
+cross_cutting_acceptance: [AC-13, AC-14, AC-15, AC-16, AC-17, AC-18, AC-19, AC-20, AC-21, AC-22]
+source_disposition_controls:
+  SRC-AHP-PORTFOLIO-001: REQUIRED_UNIQUE_EVIDENCE
+  SRC-MOE-001: REQUIRED_UNIQUE_EVIDENCE
+  SRC-AI2-002: SUPERSEDED_NOT_USED_AS_CURRENT_AUTHORITY
+  SRC-CBAR-001: SUPERSEDED_NOT_USED_AS_CURRENT_AUTHORITY
+upstream_draft_interfaces:
+  - {spec_id: TS-AIR-001, label: DRAFT_DEPENDENCY_NOT_ACCEPTED, sha256: 622b32dc08259bc8148c60f5865359c6a76de37037103789ff1fda0f842c6cbc}
+  - {spec_id: TS-AIR-002, label: DRAFT_DEPENDENCY_NOT_ACCEPTED, sha256: 258c711d84dbbf2e8abc79e910d825cb8370dd0b7e0940e81d91d8a93e1b43e5}
+unattributed_unavailable_source_claims: 0
+result: PASS_ALL_CONTROLLING_FRS_AND_STORIES_TRACED
+

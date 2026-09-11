@@ -1,0 +1,2035 @@
+diff --git a/api/main.py b/api/main.py
+index f490124..fe40cf0 100644
+--- a/api/main.py
++++ b/api/main.py
+@@ -153,5 +153,6 @@ from api.routers import vae; app.include_router(vae.router, prefix="/api/vae", t
+ from api.routers import release_ship; app.include_router(release_ship.router, prefix="/api/release", tags=["release-ship"])  # noqa: E702
+ # CAE (CA-M002 / FR-CONV-001): Dual-Context Convergence Gate router
+ from api.routers import convergence; app.include_router(convergence.router, prefix="/api/convergence", tags=["convergence"])  # noqa: E702
++from api.routers import visual_studio; app.include_router(visual_studio.router, prefix="/api/visual-studio", tags=["visual-studio"])  # noqa: E702
+ 
+ 
+diff --git a/api/routers/visual_studio.py b/api/routers/visual_studio.py
+new file mode 100644
+index 0000000..a53ebd6
+--- /dev/null
++++ b/api/routers/visual_studio.py
+@@ -0,0 +1,177 @@
++from __future__ import annotations
++
++from typing import Any, Literal, TYPE_CHECKING
++
++from fastapi import APIRouter, Depends, HTTPException
++from pydantic import BaseModel, Field
++
++from ca_contracts import canonical_sha256, utc_now_rfc3339
++if TYPE_CHECKING:
++    from cmf_pipeline.application import PipelineApplication
++from api.dependencies import get_pipeline, get_studio_bridge
++from api.errors import ErrorResponse
++from api.services.campaign_projection import CampaignNotFound, load_campaign, state_object_id
++from api.services.studio_bridge import StudioBridge, StudioBridgeCrash, StudioBridgeError
++from api.services.visual_studio_contracts import assert_operator, build_visual_validation
++
++router = APIRouter()
++
++FeedbackDecision = Literal["GOOD", "NEEDS_EDIT", "REJECT"]
++FeedbackReason = Literal["SOURCE_MISMATCH", "WRONG_READING", "COMPOSITION", "TRANSFORMATION", "SOURCE_QUALITY", "OTHER"]
++
++class FeedbackInput(BaseModel):
++    revision_ref: dict[str, str]
++    target_ref: dict[str, str] | None = None
++    decision: FeedbackDecision
++    reason: FeedbackReason | None = None
++    note: str = ""
++    operator_actor: dict[str, str]
++    expected_state_version: int = Field(ge=1)
++
++class VisualProposalInput(BaseModel):
++    target_ref: dict[str, str]
++    target_node_id: str
++    natural_language_request: str = Field(min_length=1)
++    operator_actor: dict[str, str]
++    expected_state_version: int = Field(ge=1)
++
++class TransformProposalInput(BaseModel):
++    target_ref: dict[str, str]
++    target_node_id: str
++    manipulation_type: Literal["MOVE_BBOX", "RESIZE_BBOX", "TRIM_SEGMENT"]
++    arguments: dict[str, str | int | bool] = Field(default_factory=dict)
++    operator_actor: dict[str, str]
++    expected_state_version: int = Field(ge=1)
++
++
++def _error(status_code: int, code: str, message: str) -> HTTPException:
++    return HTTPException(status_code=status_code, detail=ErrorResponse(error_code=code, message=message, timestamp=utc_now_rfc3339()).model_dump())
++
++
++def _campaign(pipeline: Any, campaign_id: str) -> dict:
++    try:
++        return load_campaign(pipeline, campaign_id)
++    except CampaignNotFound as exc:
++        raise _error(404, "CAMPAIGN_NOT_FOUND", str(exc)) from exc
++
++
++@router.get("/campaigns/{campaign_id}")
++def get_visual_studio(campaign_id: str, pipeline: Any = Depends(get_pipeline)):
++    campaign = _campaign(pipeline, campaign_id)
++    order, state = campaign["order"], campaign["state"]
++    timeline = None
++    if state.get("video_edit_program") is not None:
++        from api.routers.campaigns import _timeline_projection_from_state
++        timeline = _timeline_projection_from_state(campaign_id, state).model_dump(mode="json")
++    items = timeline.get("items", []) if timeline else []
++    layers = []
++    for item in items:
++        layers.append({
++            "layer_id": item.get("item_id"),
++            "kind": item.get("kind", "UNKNOWN"),
++            "role": item.get("role", "UNKNOWN"),
++            "source_ref": item.get("source_ref"),
++            "source_range_ms": [item.get("source_start_ms"), item.get("source_end_ms")],
++            "artifact_ref": item.get("artifact_ref"),
++            "editable_operations": item.get("editable_operations", []),
++            "keyframes": item.get("keyframes") or (item.get("motion_plan") or {}).get("keyframes", []),
++        })
++    selected = layers[0] if layers else None
++    validation = build_visual_validation(selected, len(items))
++    preview_artifact = next((x.get("artifact_ref") for x in items if x.get("artifact_ref") and str(x.get("artifact_ref", {}).get("media_type", "")).startswith("video")), None)
++    return {
++        "campaign_ref": {"object_id": state.get("campaign_id", campaign_id), "version": str(state.get("version", 1)), "sha256": canonical_sha256(state)},
++        "source": {"source_ref": order.get("source_ref"), "source_kind": order.get("source_kind"), "evidence_status": "LINKED_CANONICAL_REF" if order.get("source_ref") else "MISSING"},
++        "composition": {"timeline": timeline, "layers": layers, "state": "CANONICAL" if timeline else "NO_CANONICAL_COMPOSITION"},
++        "selected_layer": selected,
++        "preview": {"available": bool(preview_artifact), "artifact_ref": preview_artifact, "proof_class": "CANONICAL_ARTIFACT_REFERENCE_ONLY" if preview_artifact else "UNAVAILABLE"},
++        "validation": validation,
++        "keyframe_inspection": {
++            "status": validation["keyframes"],
++            "selected_layer_keyframes": (selected or {}).get("keyframes", []),
++        },
++        "revision": {"state_version": int(state.get("version", 1)), "revision_ref": {"object_id": state_object_id(campaign_id), "version": str(state.get("version", 1)), "sha256": canonical_sha256(state)}},
++        "studio_path": ["RETRIEVE", "TRANSFORM", "COMPOSE", "GENERATE"],
++        "operator_actions": ["GOOD", "NEEDS_EDIT", "REJECT", "REGENERATE", "COMPILE"],
++    }
++
++
++@router.post("/campaigns/{campaign_id}/feedback")
++def record_feedback(campaign_id: str, body: FeedbackInput, pipeline: Any = Depends(get_pipeline)):
++    assert_operator(body.operator_actor)
++    campaign = _campaign(pipeline, campaign_id)
++    state = campaign["state"]
++    if body.expected_state_version != int(state.get("version", 0)):
++        raise _error(409, "STALE_STATE_VERSION", f"expected state version {body.expected_state_version}, current {state.get('version')}")
++    payload = {
++        "feedback_id": None,
++        "campaign_ref": {"object_id": state["campaign_id"], "version": str(state["version"]), "sha256": canonical_sha256(state)},
++        "revision_ref": body.revision_ref,
++        "target_ref": body.target_ref,
++        "decision": body.decision,
++        "reason": body.reason,
++        "note": body.note,
++        "operator_actor": body.operator_actor,
++    }
++    payload["feedback_id"] = f"visual-feedback:{canonical_sha256(payload)[:24]}"
++    stored = pipeline.repository.store_object("studio_visual_feedback", payload, idempotency_key=payload["feedback_id"], object_id=payload["feedback_id"], now=utc_now_rfc3339())
++    return {"feedback_ref": {"object_id": stored["object"]["object_id"], "version": str(stored["object"]["revision"]), "sha256": stored["object"]["canonical_sha256"]}, "decision": body.decision, "idempotent_replay": bool(stored.get("idempotent_replay")), "immutable": True}
++
++
++@router.post("/campaigns/{campaign_id}/proposals")
++def compile_visual_proposal(campaign_id: str, body: VisualProposalInput, pipeline: Any = Depends(get_pipeline), bridge: StudioBridge = Depends(get_studio_bridge)):
++    assert_operator(body.operator_actor)
++    campaign = _campaign(pipeline, campaign_id)
++    state = campaign["state"]
++    if body.expected_state_version != int(state.get("version", 0)):
++        raise _error(409, "STALE_STATE_VERSION", f"expected state version {body.expected_state_version}, current {state.get('version')}")
++    current_ref = {"object_id": state_object_id(campaign_id), "version": str(state.get("version", 1)), "sha256": canonical_sha256(state)}
++    run_ref = state.get("run_refs", [None])[0] or current_ref
++    request = {
++        "request_id": f"visual-chat:{canonical_sha256({'campaign_id': campaign_id, 'text': body.natural_language_request, 'target': body.target_ref, 'version': body.expected_state_version})[:24]}",
++        "run_ref": run_ref,
++        "target_refs": [body.target_ref],
++        "target_node_ids": [body.target_node_id],
++        "category_id": campaign["order"].get("category_id", ""),
++        "natural_language_request": body.natural_language_request,
++        "current_state_ref": current_ref,
++        "evaluation_ref": None,
++        "jit_capsule_ref": current_ref,
++        "permitted_tool_registry_ref": campaign["order"].get("harness_ref", current_ref),
++        "operator_actor": body.operator_actor,
++        "expected_state_version": body.expected_state_version,
++    }
++    context = {"tools": [], "steering_recipes": [], "allowed_node_ids": [body.target_node_id], "target_layers_by_ref": {body.target_ref["object_id"]: "COMPOSITION"}, "state_version": int(state["version"]), "default_validation_plan": ["source_lineage_recheck", "geometry_recheck", "state_version_recheck"], "default_invariants": ["upstream_semantic_authority_preserved", "source_lineage_preserved"], "wrong_reading_locks": []}
++    try:
++        return bridge.call("compile-natural-language-revision", {"request": request, "context": context})
++    except StudioBridgeError as exc:
++        raise _error(422, exc.code, str(exc)) from exc
++    except StudioBridgeCrash as exc:
++        raise _error(502, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
++
++@router.post("/campaigns/{campaign_id}/transform-proposals")
++def compile_transform_proposal(campaign_id: str, body: TransformProposalInput, pipeline: Any = Depends(get_pipeline), bridge: StudioBridge = Depends(get_studio_bridge)):
++    assert_operator(body.operator_actor)
++    campaign = _campaign(pipeline, campaign_id)
++    state = campaign["state"]
++    if body.expected_state_version != int(state.get("version", 0)):
++        raise _error(409, "STALE_STATE_VERSION", f"expected state version {body.expected_state_version}, current {state.get('version')}")
++    current_ref = {"object_id": state_object_id(campaign_id), "version": str(state.get("version", 1)), "sha256": canonical_sha256(state)}
++    delta = {
++        "delta_id": f"visual-transform:{canonical_sha256({'campaign_id': campaign_id, 'target': body.target_ref, 'node': body.target_node_id, 'type': body.manipulation_type, 'arguments': body.arguments, 'version': body.expected_state_version})[:24]}",
++        "run_ref": state.get("run_refs", [None])[0] or current_ref,
++        "target_ref": body.target_ref,
++        "target_node_id": body.target_node_id,
++        "manipulation_type": body.manipulation_type,
++        "arguments": body.arguments,
++        "current_state_ref": current_ref,
++        "operator_actor": body.operator_actor,
++        "expected_state_version": body.expected_state_version,
++    }
++    context = {"state_version": int(state["version"])}
++    try:
++        return bridge.call("compile-direct-manipulation", {"delta": delta, "context": context})
++    except StudioBridgeError as exc:
++        raise _error(422, exc.code, str(exc)) from exc
++    except StudioBridgeCrash as exc:
++        raise _error(502, "STUDIO_BRIDGE_CRASH", str(exc)) from exc
+diff --git a/api/services/studio_bridge.py b/api/services/studio_bridge.py
+index ad3bc8d..a0c6ffd 100644
+--- a/api/services/studio_bridge.py
++++ b/api/services/studio_bridge.py
+@@ -40,18 +40,36 @@ class StudioBridge:
+         *,
+         timeout_seconds: float = 10.0,
+     ) -> Any:
+-        process = subprocess.run(
+-            [self.node_binary, str(self.rpc_entrypoint), command],
+-            input=json.dumps(payload).encode("utf-8"),
+-            capture_output=True,
+-            timeout=timeout_seconds,
+-        )
++        if not self.rpc_entrypoint.is_file():
++            raise StudioBridgeCrash(
++                f"studio rpc '{command}' is not built at {self.rpc_entrypoint}"
++            )
++        try:
++            process = subprocess.run(
++                [self.node_binary, str(self.rpc_entrypoint), command],
++                input=json.dumps(payload).encode("utf-8"),
++                capture_output=True,
++                timeout=timeout_seconds,
++            )
++        except FileNotFoundError as exc:
++            raise StudioBridgeCrash(
++                f"studio rpc node binary '{self.node_binary}' is unavailable"
++            ) from exc
++        except subprocess.TimeoutExpired as exc:
++            raise StudioBridgeCrash(
++                f"studio rpc '{command}' timed out after {timeout_seconds:.3f}s"
++            ) from exc
+         if process.returncode != 0:
+             raise StudioBridgeCrash(
+                 f"studio rpc '{command}' crashed (exit {process.returncode}): "
+                 f"{process.stderr.decode('utf-8', errors='replace')[:2000]}"
+             )
+-        envelope = json.loads(process.stdout.decode("utf-8"))
++        try:
++            envelope = json.loads(process.stdout.decode("utf-8"))
++        except json.JSONDecodeError as exc:
++            raise StudioBridgeCrash(
++                f"studio rpc '{command}' returned malformed JSON"
++            ) from exc
+         if not envelope.get("ok"):
+             error = envelope["error"]
+             raise StudioBridgeError(
+diff --git a/api/services/visual_studio_contracts.py b/api/services/visual_studio_contracts.py
+new file mode 100644
+index 0000000..bbafd90
+--- /dev/null
++++ b/api/services/visual_studio_contracts.py
+@@ -0,0 +1,24 @@
++from __future__ import annotations
++from fastapi import HTTPException
++
++
++def assert_operator(actor: dict[str, str]) -> None:
++    if actor.get("actor_type") != "human" or actor.get("workflow_role") != "operator":
++        raise HTTPException(
++            status_code=403,
++            detail={
++                "error_code": "OPERATOR_AUTHORIZATION_REQUIRED",
++                "message": "visual studio actions require a human operator actor",
++            },
++        )
++
++
++def build_visual_validation(selected_layer: dict | None, item_count: int) -> dict[str, str]:
++    """Deterministic inspection gate: absence of lineage blocks visual editing even when geometry renders plausibly."""
++    return {
++        "source_lineage": "PASS" if selected_layer and selected_layer.get("source_ref") else "BLOCKED",
++        "source_quality": "NOT_OBSERVED",
++        "geometry": "NOT_OBSERVED",
++        "keyframes": "NOT_OBSERVED" if not item_count else "NOT_RECORDED_IN_CANONICAL_PROJECTION",
++        "semantic_correctness": "OPERATOR_REVIEW_REQUIRED",
++    }
+diff --git a/apps/web/src/api/visualStudio.ts b/apps/web/src/api/visualStudio.ts
+new file mode 100644
+index 0000000..3aec457
+--- /dev/null
++++ b/apps/web/src/api/visualStudio.ts
+@@ -0,0 +1,29 @@
++import { apiFetch } from "./http";
++
++export type VisualFeedbackDecision = "GOOD" | "NEEDS_EDIT" | "REJECT";
++export type VisualFeedbackReason = "SOURCE_MISMATCH" | "WRONG_READING" | "COMPOSITION" | "TRANSFORMATION" | "SOURCE_QUALITY" | "OTHER";
++export interface VisualStudioProjection { [key: string]: any; }
++export interface VisualStudioFeedbackInput { revision_ref: { object_id: string; version: string; sha256: string }; target_ref?: { object_id: string; version: string; sha256: string } | null; decision: VisualFeedbackDecision; reason?: VisualFeedbackReason | null; note?: string; operator_actor: { actor_id: string; actor_type: "human"; product_id: string; workflow_role: "operator" }; expected_state_version: number; }
++
++export async function getVisualStudio(campaignId: string): Promise<VisualStudioProjection> {
++  return apiFetch<VisualStudioProjection>(`/api/visual-studio/campaigns/${campaignId}`);
++}
++
++export async function recordVisualFeedback(campaignId: string, input: VisualStudioFeedbackInput): Promise<any> {
++  return apiFetch<any>(`/api/visual-studio/campaigns/${campaignId}/feedback`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
++
++export async function compileVisualProposal(campaignId: string, input: { target_ref: { object_id: string; version: string; sha256: string }; target_node_id: string; natural_language_request: string; operator_actor: VisualStudioFeedbackInput["operator_actor"]; expected_state_version: number }): Promise<any> {
++  return apiFetch<any>(`/api/visual-studio/campaigns/${campaignId}/proposals`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
++
++export type VisualTransformType = "MOVE_BBOX" | "RESIZE_BBOX" | "TRIM_SEGMENT";
++export async function compileVisualTransformProposal(campaignId: string, input: { target_ref: { object_id: string; version: string; sha256: string }; target_node_id: string; manipulation_type: VisualTransformType; arguments: Record<string, string | number | boolean>; operator_actor: VisualStudioFeedbackInput["operator_actor"]; expected_state_version: number }): Promise<any> {
++  return apiFetch<any>(`/api/visual-studio/campaigns/${campaignId}/transform-proposals`, {
++    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
++  });
++}
+diff --git a/apps/web/src/components/visual-studio/VisualAssetStudio.tsx b/apps/web/src/components/visual-studio/VisualAssetStudio.tsx
+new file mode 100644
+index 0000000..768bcd4
+--- /dev/null
++++ b/apps/web/src/components/visual-studio/VisualAssetStudio.tsx
+@@ -0,0 +1,115 @@
++import { useMemo, useState, type ReactNode } from "react";
++import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
++import { compileVisualProposal, getVisualStudio, recordVisualFeedback, type VisualFeedbackDecision, type VisualFeedbackReason } from "../../api/visualStudio";
++
++const OPERATOR = { actor_id: "operator-web-001", actor_type: "human" as const, product_id: "conscious-activations-web", workflow_role: "operator" as const };
++
++function Badge({ children, tone = "neutral" }: { children: React.ReactNode; tone?: "good" | "warn" | "bad" | "neutral" }) {
++  const classes = tone === "good" ? "border-ca-state-ready text-ca-state-ready" : tone === "bad" ? "border-ca-danger text-ca-danger" : tone === "warn" ? "border-ca-gold-500 text-ca-gold-500" : "border-ca-border text-ca-text-secondary";
++  return <span className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${classes}`}>{children}</span>;
++}
++
++function Field({ label, value }: { label: string; value: React.ReactNode }) {
++  return <div><div className="text-[10px] uppercase tracking-wider text-ca-text-secondary">{label}</div><div className="mt-1 break-all text-xs text-ca-text-primary">{value}</div></div>;
++}
++
++export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
++  const qc = useQueryClient();
++  const query = useQuery({ queryKey: ["visual-studio", campaignId], queryFn: () => getVisualStudio(campaignId), refetchInterval: 4000 });
++  const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
++  const [chatInput, setChatInput] = useState("");
++  const [proposal, setProposal] = useState<any>(null);
++  const [transformType, setTransformType] = useState<VisualTransformType>("MOVE_BBOX");
++  const [transformAmount, setTransformAmount] = useState("5");
++  const feedback = useMutation({
++    mutationFn: (decision: VisualFeedbackDecision) => {
++      const p = query.data;
++      const layer = (p?.composition?.layers ?? []).find((item: any) => item.layer_id === (selectedLayerId ?? p?.selected_layer?.layer_id));
++      return recordVisualFeedback(campaignId, {
++        revision_ref: p.revision.revision_ref,
++        target_ref: layer?.source_ref ?? null,
++        decision,
++        reason: decision === "NEEDS_EDIT" ? "COMPOSITION" : decision === "REJECT" ? "WRONG_READING" : null,
++        note: decision === "GOOD" ? "Operator visual inspection marked the current composition good." : "Operator visual inspection requires follow-up.",
++        operator_actor: OPERATOR,
++        expected_state_version: p.revision.state_version,
++      });
++    },
++    onSuccess: () => qc.invalidateQueries({ queryKey: ["visual-studio", campaignId] }),
++  });
++  const propose = useMutation({
++    mutationFn: (text: string) => {
++      const p = query.data; const layer = (p?.composition?.layers ?? []).find((item: any) => item.layer_id === (selectedLayerId ?? p?.selected_layer?.layer_id));
++      if (!layer) throw new Error("Select a canonical composition layer before proposing a visual edit.");
++      return compileVisualProposal(campaignId, { target_ref: layer.source_ref ?? p.source.source_ref, target_node_id: layer.layer_id, natural_language_request: text, operator_actor: OPERATOR, expected_state_version: p.revision.state_version });
++    },
++    onSuccess: setProposal,
++  });
++
++  const layers: any[] = query.data?.composition?.layers ?? [];
++  const selected = useMemo(() => layers.find((item) => item.layer_id === (selectedLayerId ?? query.data?.selected_layer?.layer_id)) ?? layers[0] ?? null, [layers, selectedLayerId, query.data]);
++  if (query.isLoading) return <div className="rounded-xl border border-ca-border bg-ca-surface p-6 text-sm text-ca-text-secondary">Loading canonical Visual Asset Studio projection…</div>;
++  if (query.isError || !query.data) return <div className="rounded-xl border border-ca-danger/40 bg-ca-danger/10 p-6 text-sm text-ca-danger">Visual Asset Studio could not establish a canonical projection. No replacement or generated preview is shown.</div>;
++  const p = query.data;
++  const preview = p.preview?.artifact_ref;
++  const timeline = p.composition?.timeline;
++  const canvasW = timeline?.width ?? 1920; const canvasH = timeline?.height ?? 1080;
++
++  return <div className="space-y-5" data-testid="visual-asset-studio">
++    <div className="flex flex-wrap items-center justify-between gap-3">
++      <div><div className="text-xs uppercase tracking-[0.22em] text-ca-gold-500">Evidence-First Visual Asset Studio</div><h2 className="mt-1 text-xl font-semibold">Inspect → transform → compose → validate</h2></div>
++      <div className="flex gap-2"><Badge tone="good">Canonical state</Badge><Badge tone={p.preview?.available ? "good" : "warn"}>{p.preview?.available ? "Artifact preview" : "Preview unavailable"}</Badge></div>
++    </div>
++
++    <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
++      <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Source and evidence">
++        <div className="mb-4 flex items-center justify-between"><h3 className="font-medium">Source / evidence</h3><Badge>{p.source?.evidence_status}</Badge></div>
++        {preview?.uri && String(preview.media_type ?? "").startsWith("video") ? <video className="mb-4 aspect-video w-full rounded-lg bg-black object-contain" controls src={preview.uri} /> : <div className="mb-4 rounded-lg border border-dashed border-ca-border bg-black/20 p-5 text-xs text-ca-text-secondary">No playable artifact is currently linked. Preview is not substituted with a mock.</div>}
++        <div className="space-y-4">
++          <Field label="Source identity" value={p.source?.source_ref ? `${p.source.source_ref.object_id} · v${p.source.source_ref.version}` : "MISSING"} />
++          <Field label="Source SHA-256" value={p.source?.source_ref?.sha256 ?? "MISSING"} />
++          <Field label="Selected range" value={selected?.source_range_ms?.[0] != null ? `${selected.source_range_ms[0]}–${selected.source_range_ms[1]} ms` : "Not recorded"} />
++          <Field label="Lineage" value={<Badge tone={p.validation?.source_lineage === "PASS" ? "good" : "bad"}>{p.validation?.source_lineage}</Badge>} />
++          <Field label="Source quality" value={<Badge tone="warn">{p.validation?.source_quality}</Badge>} />
++        </div>
++      </section>
++
++      <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Composition canvas">
++        <div className="mb-4 flex items-center justify-between"><h3 className="font-medium">Composition canvas</h3><span className="text-xs text-ca-text-secondary">{canvasW}×{canvasH}</span></div>
++        <div className="relative mx-auto aspect-video max-w-4xl overflow-hidden rounded-lg border border-ca-border bg-[radial-gradient(circle_at_30%_20%,rgba(232,185,35,.15),transparent_30%),#0b0b0e]" data-testid="composition-canvas">
++          {layers.map((layer, index) => { const active = layer.layer_id === selected?.layer_id; return <button key={layer.layer_id} onClick={() => setSelectedLayerId(layer.layer_id)} className={`absolute rounded-md border p-3 text-left text-xs transition ${active ? "border-ca-gold-500 bg-ca-gold-500/10" : "border-white/10 bg-white/5 hover:border-white/20"}`} style={{ left: `${8 + (index % 3) * 30}%`, top: `${10 + Math.floor(index / 3) * 28}%`, width: "25%" }} aria-label={`Layer ${layer.layer_id}`}><div className="font-medium">{layer.role || layer.kind}</div><div className="mt-1 text-[10px] text-ca-text-secondary">{layer.layer_id}</div></button>; })}
++          {!layers.length && <div className="absolute inset-0 grid place-items-center text-xs text-ca-text-secondary">No canonical composition layers are available.</div>}
++          <div className="absolute bottom-2 left-2 rounded border border-white/10 bg-black/50 px-2 py-1 text-[10px] text-ca-text-secondary">Canonical projection · not rendered-proof semantics</div>
++        </div>
++        <div className="mt-4 grid grid-cols-4 gap-2 text-[10px] text-ca-text-secondary"><div>RETRIEVE</div><div>TRANSFORM</div><div>COMPOSE</div><div>GENERATE</div></div>
++      </section>
++
++      <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Layer inspector">
++        <h3 className="mb-4 font-medium">Layer inspector</h3>
++        {selected ? <div className="space-y-4"><Field label="Layer" value={selected.layer_id} /><Field label="Role" value={selected.role} /><Field label="Kind" value={selected.kind} /><Field label="Editable operations" value={selected.editable_operations?.join(", ") || "None"} />
++          <div><div className="mb-2 text-[10px] uppercase tracking-wider text-ca-text-secondary">Validation</div><div className="space-y-2"><div className="flex justify-between"><span className="text-xs">Lineage</span><Badge tone={p.validation.source_lineage === "PASS" ? "good" : "bad"}>{p.validation.source_lineage}</Badge></div><div className="flex justify-between"><span className="text-xs">Geometry</span><Badge tone="warn">{p.validation.geometry}</Badge></div><div className="flex justify-between"><span className="text-xs">Semantic correctness</span><Badge tone="warn">{p.validation.semantic_correctness}</Badge></div></div></div>
++          <div><div className="mb-2 text-[10px] uppercase tracking-wider text-ca-text-secondary">Keyframes</div><div className="rounded border border-ca-border p-3 text-xs text-ca-text-secondary">{p.validation.keyframes}</div>{(p.keyframe_inspection?.selected_layer_keyframes ?? []).length > 0 && <div className="mt-2 space-y-1">{p.keyframe_inspection.selected_layer_keyframes.map((kf: any, i: number) => <div key={i} className="flex justify-between"><span>{kf.time_ms ?? kf.time ?? "—"}</span><span>{JSON.stringify(kf)}</span></div>)}</div>}</div>
++          <div><div className="mb-2 text-[10px] uppercase tracking-wider text-ca-text-secondary">Transform controls</div><div className="grid grid-cols-[1fr_90px] gap-2"><select value={transformType} onChange={(e) => setTransformType(e.target.value as VisualTransformType)} className="rounded border border-ca-border bg-black/20 p-2 text-xs"><option value="MOVE_BBOX">Move X (%)</option><option value="RESIZE_BBOX">Resize (%)</option><option value="TRIM_SEGMENT">Trim end (ms)</option></select><input value={transformAmount} onChange={(e) => setTransformAmount(e.target.value)} inputMode="decimal" className="rounded border border-ca-border bg-black/20 p-2 text-xs" aria-label="Transform amount" /></div><button className="mt-2 w-full rounded bg-ca-gold-500 px-3 py-2 text-xs font-medium text-black disabled:opacity-50" disabled={!selected?.source_ref || transform.isPending} onClick={() => transform.mutate()}>Prepare deterministic transform</button>{transform.isError && <div className="mt-2 text-xs text-ca-danger">{transform.error instanceof Error ? transform.error.message : "Transform proposal failed."}</div>}</div>
++        </div> : <div className="text-sm text-ca-text-secondary">Select a canonical layer to inspect.</div>}
++      </section>
++    </div>
++
++    <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
++      <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Visual chat">
++        <div className="mb-3 flex items-center justify-between"><h3 className="font-medium">Visual Chat</h3><Badge>Typed proposals only</Badge></div>
++        <textarea value={chatInput} onChange={(e) => setChatInput(e.target.value)} rows={3} className="w-full rounded-lg border border-ca-border bg-black/20 p-3 text-sm outline-none focus:border-ca-gold-500" placeholder="Ask for a bounded visual change; Chat does not mutate canonical state directly." />
++        <div className="mt-3 flex flex-wrap gap-2"><button className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!chatInput.trim() || !selected || propose.isPending} onClick={() => propose.mutate(chatInput)}>Propose</button><button className="rounded border border-ca-border px-3 py-2 text-xs" onClick={() => setChatInput("Regenerate the selected layer from its linked source evidence")}>REGENERATE</button><button className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!proposal} onClick={() => setProposal(null)}>Clear</button></div>
++        {proposal && <div className="mt-4 rounded-lg border border-ca-gold-500/30 bg-ca-gold-500/5 p-3"><div className="flex items-center justify-between"><span className="text-xs font-medium">Compiled proposal</span><Badge tone={proposal.compilation_status === "COMPILED" ? "good" : "warn"}>{proposal.compilation_status}</Badge></div><p className="mt-2 text-sm">{proposal.interpretation}</p><div className="mt-3 space-y-2 text-xs text-ca-text-secondary">{(proposal.exact_operations ?? []).map((op: any) => <div key={op.operation_id}>{op.tool_id} · {op.expected_effect}</div>)}</div>{proposal.compilation_status === "COMPILED" && <div className="mt-3"><button className="rounded bg-ca-gold-500 px-3 py-2 text-xs font-medium text-black" onClick={() => setChatInput("Confirm compiled proposal for operator review")}>COMPILE</button></div>}</div>}
++        {propose.isError && <div className="mt-3 text-xs text-ca-danger">{propose.error instanceof Error ? propose.error.message : "Proposal compilation failed."}</div>}
++      </section>
++      <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Operator feedback">
++        <div className="mb-3 flex items-center justify-between"><h3 className="font-medium">Operator inspection</h3><span className="text-xs text-ca-text-secondary">state v{p.revision.state_version}</span></div>
++        <p className="mb-4 text-xs leading-5 text-ca-text-secondary">Feedback is persisted immutably against the current canonical revision. It does not promote, ship, or silently mutate production state.</p>
++        <div className="grid grid-cols-3 gap-2"><button className="rounded border border-ca-state-ready/40 px-3 py-2 text-xs" onClick={() => feedback.mutate("GOOD")}>GOOD</button><button className="rounded border border-ca-gold-500/40 px-3 py-2 text-xs" onClick={() => feedback.mutate("NEEDS_EDIT")}>NEEDS_EDIT</button><button className="rounded border border-ca-danger/40 px-3 py-2 text-xs" onClick={() => feedback.mutate("REJECT")}>REJECT</button></div>
++        {feedback.isSuccess && <div className="mt-3 text-xs text-ca-state-ready">Feedback receipt persisted: {feedback.data.feedback_ref.object_id}</div>}
++        {feedback.isError && <div className="mt-3 text-xs text-ca-danger">{feedback.error instanceof Error ? feedback.error.message : "Feedback persistence failed."}</div>}
++        <div className="mt-5 rounded-lg border border-ca-border p-3"><div className="text-[10px] uppercase tracking-wider text-ca-text-secondary">Governed release path</div><div className="mt-2 text-xs text-ca-text-secondary">Visual Asset Studio → canonical revision → validation → operator approval → downstream compile. No Visual Chat bypass is exposed here.</div></div>
++      </section>
++    </div>
++  </div>;
++}
+diff --git a/apps/web/src/pages/CampaignDetail.tsx b/apps/web/src/pages/CampaignDetail.tsx
+index 6cb78ed..b2b74ec 100644
+--- a/apps/web/src/pages/CampaignDetail.tsx
++++ b/apps/web/src/pages/CampaignDetail.tsx
+@@ -10,6 +10,7 @@ import { RunGraph } from "../components/control-tower/RunGraph";
+ import { Timeline } from "../components/control-tower/Timeline";
+ import { ExceptionQueue } from "../components/control-tower/ExceptionQueue";
+ import { RevisionComposer } from "../components/control-tower/RevisionComposer";
++import { VisualAssetStudio } from "../components/visual-studio/VisualAssetStudio";
+ import { useControlTower } from "../hooks/useControlTower";
+ import { usePipelineStatus } from "../hooks/usePipelineStatus";
+ import { useRevisionCompose, useRevisionExecute } from "../hooks/useRevision";
+@@ -17,12 +18,13 @@ import { useExceptionResolve } from "../hooks/useExceptions";
+ import { useQueryClient } from "@tanstack/react-query";
+ import type { ActionContext } from "../lib/actionRegistry";
+ 
+-type TabId = "overview" | "run-graph" | "timeline" | "exceptions" | "revise";
++type TabId = "overview" | "run-graph" | "timeline" | "visual-studio" | "exceptions" | "revise";
+ 
+ const TABS: { id: TabId; label: string }[] = [
+   { id: "overview", label: "Overview" },
+   { id: "run-graph", label: "Run Graph" },
+   { id: "timeline", label: "Timeline" },
++  { id: "visual-studio", label: "Visual Studio" },
+   { id: "exceptions", label: "Exceptions" },
+   { id: "revise", label: "Revise" },
+ ];
+@@ -144,6 +146,7 @@ export function CampaignDetail({ campaignId }: { campaignId: string }) {
+           {activeTab === "timeline" && (
+             <Timeline campaignId={campaignId} timeline={tower.timeline ?? null} stateVersion={tower.campaign?.version ?? 1} />
+           )}
++          {activeTab === "visual-studio" && <VisualAssetStudio campaignId={campaignId} />}
+           {activeTab === "exceptions" && (
+             <ExceptionQueue
+               campaignId={campaignId}
+diff --git a/services/studio/dist/auditExport.d.ts b/services/studio/dist/auditExport.d.ts
+new file mode 100644
+index 0000000..adf7ac1
+--- /dev/null
++++ b/services/studio/dist/auditExport.d.ts
+@@ -0,0 +1 @@
++export declare function buildAuditExportManifest(input: any): any;
+diff --git a/services/studio/dist/auditExport.js b/services/studio/dist/auditExport.js
+new file mode 100644
+index 0000000..939429d
+--- /dev/null
++++ b/services/studio/dist/auditExport.js
+@@ -0,0 +1,8 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.buildAuditExportManifest = buildAuditExportManifest;
++const canonical_1 = require("./canonical");
++function buildAuditExportManifest(input) {
++    const core = { ...input, export_id: (0, canonical_1.deterministicId)("audit-export", input) };
++    return { ...core, export_sha256: (0, canonical_1.canonicalSha256)(core), replay_instructions: input.replay_instructions ?? ["Re-open the campaign from the canonical repository", "Recompute the Visual Asset Studio projection from persisted refs", "Verify operator feedback against immutable revision linkage"] };
++}
+diff --git a/services/studio/dist/campaign.d.ts b/services/studio/dist/campaign.d.ts
+new file mode 100644
+index 0000000..f74b26a
+--- /dev/null
++++ b/services/studio/dist/campaign.d.ts
+@@ -0,0 +1,6 @@
++import type { CampaignOrder, CampaignState } from "./domain";
++export declare const ALLOWED_TRANSITIONS: Readonly<Record<string, ReadonlyArray<string>>>;
++export declare function validateCampaignOrder(order: CampaignOrder): void;
++export declare function createCampaignOrder(core: Omit<CampaignOrder, "order_id">): CampaignOrder;
++export declare function launchCampaign(order: CampaignOrder): CampaignState;
++export declare function transitionCampaign(state: CampaignState, next: CampaignState["lifecycle_state"]): CampaignState;
+diff --git a/services/studio/dist/campaign.js b/services/studio/dist/campaign.js
+new file mode 100644
+index 0000000..1ad1b2a
+--- /dev/null
++++ b/services/studio/dist/campaign.js
+@@ -0,0 +1,55 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.ALLOWED_TRANSITIONS = void 0;
++exports.validateCampaignOrder = validateCampaignOrder;
++exports.createCampaignOrder = createCampaignOrder;
++exports.launchCampaign = launchCampaign;
++exports.transitionCampaign = transitionCampaign;
++const canonical_1 = require("./canonical");
++const errors_1 = require("./errors");
++exports.ALLOWED_TRANSITIONS = {
++    DRAFT: ["LAUNCHED", "CANCELLED"],
++    LAUNCHED: ["RUNNING", "CANCELLED"],
++    RUNNING: ["AWAITING_REVIEW", "BLOCKED_EXCEPTION", "READY_TO_SHIP", "CANCELLED"],
++    AWAITING_REVIEW: ["RUNNING", "READY_TO_SHIP", "CANCELLED"],
++    BLOCKED_EXCEPTION: ["RUNNING", "AWAITING_REVIEW", "CANCELLED"],
++    READY_TO_SHIP: ["SHIPPED", "AWAITING_REVIEW", "CANCELLED"],
++    SHIPPED: [], CANCELLED: [],
++};
++function refValid(label, value) {
++    if (!value?.object_id || !value?.version || !/^[0-9a-f]{64}$/.test(value?.sha256 ?? ""))
++        throw new errors_1.StudioValidationError("INVALID_REF", `${label} must be a valid immutable ref`);
++}
++function validateCampaignOrder(order) {
++    const required = ["workspace_id", "project_id", "category_id", "objective", "initial_seed"];
++    for (const key of required)
++        if (!String(order[key]).trim())
++            throw new errors_1.StudioValidationError("EMPTY_VALUE", `${key} must not be empty`);
++    refValid("source_ref", order.source_ref);
++    refValid("harness_ref", order.harness_ref);
++    if (!Number.isInteger(order.budget_units) || order.budget_units < 1)
++        throw new errors_1.StudioValidationError("INVALID_INTEGER", "budget_units must be an integer >= 1");
++    if (!order.output_targets.length)
++        throw new errors_1.StudioValidationError("OUTPUT_TARGET_REQUIRED", "at least one output target is required");
++    if (order.category_id === "2d_character_animation" || String(order.format_profile_id).startsWith("format02_"))
++        throw new errors_1.StudioValidationError("FORMAT02_DEFERRED", "Format 02 is deferred pending a current validated Atomic Harness");
++    if (order.operator_actor.actor_type !== "human" || order.operator_actor.workflow_role !== "operator")
++        throw new errors_1.StudioValidationError("OPERATOR_REQUIRED", "operator actor must be human/operator");
++}
++function createCampaignOrder(core) {
++    const order = { ...core, order_id: (0, canonical_1.deterministicId)("campaign-order", core) };
++    validateCampaignOrder(order);
++    return order;
++}
++function launchCampaign(order) {
++    validateCampaignOrder(order);
++    const orderRef = { object_id: order.order_id, version: "1.0.0", sha256: (0, canonical_1.canonicalSha256)(order) };
++    return { campaign_id: (0, canonical_1.deterministicId)("campaign", { order_ref: orderRef }), order_ref: orderRef, lifecycle_state: "LAUNCHED", autonomy_mode: order.autonomy_policy.mode, active_checkpoint_id: null, exception_ids: [], run_refs: [], artifact_refs: [], evaluation_refs: [], version: 1 };
++}
++function transitionCampaign(state, next) {
++    if (!exports.ALLOWED_TRANSITIONS[state.lifecycle_state]?.includes(next))
++        throw new errors_1.StudioValidationError("CAMPAIGN_TRANSITION_DENIED", `${state.lifecycle_state} cannot transition to ${next}`);
++    if (next === "SHIPPED" && state.autonomy_mode === "SHADOW")
++        throw new errors_1.StudioValidationError("SHADOW_CANNOT_SHIP", "SHADOW campaigns cannot transition to SHIPPED");
++    return { ...state, lifecycle_state: next, version: state.version + 1 };
++}
+diff --git a/services/studio/dist/canonical.d.ts b/services/studio/dist/canonical.d.ts
+new file mode 100644
+index 0000000..e359341
+--- /dev/null
++++ b/services/studio/dist/canonical.d.ts
+@@ -0,0 +1,5 @@
++export declare function normalize<T>(value: T): T;
++export declare function canonicalJson(value: unknown): string;
++export declare function canonicalSha256(value: unknown): string;
++export declare function deterministicId(prefix: string, value: unknown): string;
++export declare function uniqueSorted(values: ReadonlyArray<string>): string[];
+diff --git a/services/studio/dist/canonical.js b/services/studio/dist/canonical.js
+new file mode 100644
+index 0000000..eb44364
+--- /dev/null
++++ b/services/studio/dist/canonical.js
+@@ -0,0 +1,36 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.normalize = normalize;
++exports.canonicalJson = canonicalJson;
++exports.canonicalSha256 = canonicalSha256;
++exports.deterministicId = deterministicId;
++exports.uniqueSorted = uniqueSorted;
++const crypto = require("crypto");
++function normalize(value) {
++    if (value === undefined)
++        throw new Error("canonical value cannot contain undefined");
++    if (Array.isArray(value))
++        return value.map(normalize);
++    if (value !== null && typeof value === "object") {
++        const record = value;
++        const sorted = {};
++        for (const key of Object.keys(record).sort())
++            sorted[key] = normalize(record[key]);
++        return sorted;
++    }
++    return value;
++}
++function canonicalJson(value) {
++    return JSON.stringify(normalize(value));
++}
++function canonicalSha256(value) {
++    return crypto.createHash("sha256").update(canonicalJson(value)).digest("hex");
++}
++function deterministicId(prefix, value) {
++    if (!/^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/.test(prefix))
++        throw new Error(`invalid deterministic ID prefix: ${prefix}`);
++    return `${prefix}:${canonicalSha256(value).slice(0, 24)}`;
++}
++function uniqueSorted(values) {
++    return Array.from(new Set(values)).sort();
++}
+diff --git a/services/studio/dist/controlTower.d.ts b/services/studio/dist/controlTower.d.ts
+new file mode 100644
+index 0000000..41c6afc
+--- /dev/null
++++ b/services/studio/dist/controlTower.d.ts
+@@ -0,0 +1,2 @@
++import type { ControlTowerProjection } from "./domain";
++export declare function buildControlTowerProjection(input: any): ControlTowerProjection;
+diff --git a/services/studio/dist/controlTower.js b/services/studio/dist/controlTower.js
+new file mode 100644
+index 0000000..2e8be2d
+--- /dev/null
++++ b/services/studio/dist/controlTower.js
+@@ -0,0 +1,8 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.buildControlTowerProjection = buildControlTowerProjection;
++const canonical_1 = require("./canonical");
++function buildControlTowerProjection(input) {
++    const projected = { ...input, projection_id: input.projection_id ?? (0, canonical_1.deterministicId)("control-tower-projection", { campaign_id: input.campaign.campaign_id, version: input.campaign.version }), projection_sha256: (0, canonical_1.canonicalSha256)(input), available_actions: Array.from(new Set([...(input.available_actions ?? []), "DIRECT_MANIPULATION", "VISUAL_ASSET_STUDIO"])) };
++    return projected;
++}
+diff --git a/services/studio/dist/domain.d.ts b/services/studio/dist/domain.d.ts
+new file mode 100644
+index 0000000..715e92b
+--- /dev/null
++++ b/services/studio/dist/domain.d.ts
+@@ -0,0 +1,261 @@
++import type { ActorRef, ArtifactRef, AuthorityRef, ImmutableRef } from "./generated/contracts";
++export type AutonomyMode = "AUTOPILOT" | "REVIEW_BEFORE_SHIP" | "CHECKPOINTED" | "SHADOW";
++export type CampaignLifecycleState = "DRAFT" | "LAUNCHED" | "RUNNING" | "AWAITING_REVIEW" | "BLOCKED_EXCEPTION" | "READY_TO_SHIP" | "SHIPPED" | "CANCELLED";
++export type StudioSurfaceId = "INTERVIEW_EXPRESSION_STUDIO" | "STATIC_COMPOSITION_STUDIO" | "VIDEO_PRODUCTION_STUDIO" | "VISUAL_ASSET_STUDIO" | "KNOWLEDGE_MODEL_STUDIO" | "FUTURE_CHARACTER_PERFORMANCE_STUDIO";
++export type StudioModuleStatus = "ACTIVE_DEVELOPMENT" | "DEFERRED_AWAITING_FORMAT02_HARNESS";
++export type ReviewDecision = "APPROVE" | "REJECT" | "REQUEST_REVISION" | "SELECT_CANDIDATE" | "SHIP";
++export type ResolutionScope = "run_local" | "harness_profile" | "category" | "workspace" | "avatar_or_identity" | "candidate_doctrine";
++export type RevisionCompilationStatus = "COMPILED" | "NEEDS_CLARIFICATION" | "DENIED";
++export type ShipDecisionStatus = "AUTHORIZED" | "DENIED";
++export interface OutputTarget {
++    readonly output_type: "SOURCE_LED_SHORT" | "CAROUSEL" | "SUPERVISUAL" | "ANIMATION_SCENE_PACKAGE" | "ANIMATION_SHORT";
++    readonly quantity: number;
++    readonly profile_id: string;
++}
++export interface AutonomyPolicy {
++    readonly mode: AutonomyMode;
++    readonly checkpoint_ids: ReadonlyArray<string>;
++    readonly exception_only: boolean;
++    readonly final_review_required: boolean;
++    readonly publication_authority_required: boolean;
++}
++export interface CampaignOrder {
++    readonly order_id: string;
++    readonly workspace_id: string;
++    readonly project_id: string;
++    readonly source_kind: "CANONICAL_INTERVIEW_SOURCE_PACKAGE" | "ASSET_PACKAGE_SPEC";
++    readonly source_ref: ImmutableRef;
++    readonly harness_ref: ImmutableRef;
++    readonly category_id: string;
++    readonly format_profile_id: string | "NOT_APPLICABLE";
++    readonly objective: string;
++    readonly initial_seed: string;
++    readonly taste_direction: ReadonlyArray<string>;
++    readonly output_targets: ReadonlyArray<OutputTarget>;
++    readonly budget_units: number;
++    readonly deadline_utc: string | null;
++    readonly autonomy_policy: AutonomyPolicy;
++    readonly operator_actor: ActorRef;
++    readonly authority: AuthorityRef;
++}
++export interface CampaignState {
++    readonly campaign_id: string;
++    readonly order_ref: ImmutableRef;
++    readonly lifecycle_state: CampaignLifecycleState;
++    readonly autonomy_mode: AutonomyMode;
++    readonly active_checkpoint_id: string | null;
++    readonly exception_ids: ReadonlyArray<string>;
++    readonly run_refs: ReadonlyArray<ImmutableRef>;
++    readonly artifact_refs: ReadonlyArray<ArtifactRef>;
++    readonly evaluation_refs: ReadonlyArray<ImmutableRef>;
++    readonly version: number;
++}
++export interface StudioModuleDescriptor {
++    readonly surface_id: StudioSurfaceId;
++    readonly title: string;
++    readonly status: StudioModuleStatus;
++    readonly capabilities: ReadonlyArray<string>;
++    readonly supported_output_types: ReadonlyArray<string>;
++}
++export interface StudioSurfaceBinding {
++    readonly binding_id: string;
++    readonly harness_ref: ImmutableRef;
++    readonly category_id: string;
++    readonly primary_surface: StudioSurfaceId;
++    readonly supporting_surfaces: ReadonlyArray<StudioSurfaceId>;
++    readonly operator_entry_policy: "EXCEPTION_ONLY" | "REVIEW_ALLOWED";
++    readonly binding_reason: string;
++}
++export interface RunNodeProjection {
++    readonly node_id: string;
++    readonly node_type: string;
++    readonly title: string;
++    readonly status: "PENDING" | "READY" | "RUNNING" | "WAITING_HUMAN" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "INVALIDATED";
++    readonly owner_product: string;
++    readonly dependency_ids: ReadonlyArray<string>;
++    readonly artifact_refs: ReadonlyArray<ArtifactRef>;
++    readonly receipt_refs: ReadonlyArray<ImmutableRef>;
++    readonly blocker_codes: ReadonlyArray<string>;
++}
++export interface RuntimeHealthProjection {
++    readonly component_id: string;
++    readonly component_type: "RUNTIME" | "PROVIDER" | "WORKER" | "STORAGE" | "QUEUE" | "EVALUATOR";
++    readonly status: "HEALTHY" | "DEGRADED" | "UNAVAILABLE" | "NOT_CONFIGURED";
++    readonly capability_ids: ReadonlyArray<string>;
++    readonly budget_units_used: number;
++    readonly budget_units_limit: number;
++    readonly evidence_refs: ReadonlyArray<ImmutableRef>;
++}
++export interface KnowledgeProjection {
++    readonly skill_refs: ReadonlyArray<ImmutableRef>;
++    readonly steering_recipe_refs: ReadonlyArray<ImmutableRef>;
++    readonly retrieval_receipt_refs: ReadonlyArray<ImmutableRef>;
++    readonly programmed_model_claim_refs: ReadonlyArray<ImmutableRef>;
++    readonly exclusion_codes: ReadonlyArray<string>;
++}
++export interface TimelineItemProjection {
++    readonly item_id: string;
++    readonly track_id: string;
++    readonly kind: string;
++    readonly role: string;
++    readonly start_frame: number;
++    readonly end_frame: number;
++    readonly source_start_ms: number | null;
++    readonly source_end_ms: number | null;
++    readonly source_ref: ImmutableRef | null;
++    readonly artifact_ref: ArtifactRef | null;
++    readonly editable_operations: ReadonlyArray<string>;
++}
++export interface TimelineTrackProjection {
++    readonly track_id: string;
++    readonly track_type: string;
++    readonly role: string;
++    readonly z_index: number;
++    readonly item_ids: ReadonlyArray<string>;
++    readonly items?: ReadonlyArray<TimelineItemProjection>;
++}
++export interface TimelineProjection {
++    readonly projection_id: string;
++    readonly video_edit_program_ref: ImmutableRef;
++    readonly state: "READ_ONLY_CANONICAL_PROGRAM_PROJECTION" | "NATIVE_EDITABLE_CANONICAL_PROGRAM";
++    readonly width: number;
++    readonly height: number;
++    readonly fps_numerator: number;
++    readonly fps_denominator: number;
++    readonly duration_frames: number;
++    readonly tracks: ReadonlyArray<TimelineTrackProjection>;
++    readonly items: ReadonlyArray<TimelineItemProjection>;
++}
++export interface ExceptionReviewPackage {
++    readonly package_id: string;
++    readonly campaign_ref: ImmutableRef;
++    readonly exception_code: string;
++    readonly responsible_product: string;
++    readonly summary: string;
++    readonly evidence_refs: ReadonlyArray<ImmutableRef>;
++    readonly candidate_refs: ReadonlyArray<ImmutableRef>;
++    readonly allowed_decisions: ReadonlyArray<ReviewDecision>;
++    readonly recommended_next_actions: ReadonlyArray<string>;
++}
++export interface ControlTowerProjection {
++    readonly projection_id: string;
++    readonly campaign: CampaignState;
++    readonly order: CampaignOrder;
++    readonly studio_binding: StudioSurfaceBinding;
++    readonly source_package_ref: ImmutableRef;
++    readonly observed_activative_pack_ref: ImmutableRef | null;
++    readonly semantic_production_package_ref: ImmutableRef | null;
++    readonly final_script_ref: ImmutableRef | null;
++    readonly activation_transfer_contract_ref: ImmutableRef | null;
++    readonly run_nodes: ReadonlyArray<RunNodeProjection>;
++    readonly artifacts: ReadonlyArray<ArtifactRef>;
++    readonly evaluations: ReadonlyArray<ImmutableRef>;
++    readonly knowledge: KnowledgeProjection;
++    readonly runtime_health: ReadonlyArray<RuntimeHealthProjection>;
++    readonly timeline: TimelineProjection | null;
++    readonly exception_packages: ReadonlyArray<ExceptionReviewPackage>;
++    readonly available_actions: ReadonlyArray<string>;
++    readonly projection_sha256: string;
++}
++export interface ToolDescriptor {
++    readonly tool_id: string;
++    readonly tool_version: string;
++    readonly owner_product: string;
++    readonly allowed_target_layers: ReadonlyArray<string>;
++    readonly argument_keys: ReadonlyArray<string>;
++    readonly reversible: boolean;
++}
++export interface ChangeOperation {
++    readonly operation_id: string;
++    readonly target_ref: ImmutableRef;
++    readonly target_node_id: string;
++    readonly target_layer: string;
++    readonly tool_id: string;
++    readonly tool_version: string;
++    readonly arguments: Readonly<Record<string, string | number | boolean>>;
++    readonly preconditions: ReadonlyArray<string>;
++    readonly expected_effect: string;
++}
++export interface ChangeRequestProgram {
++    readonly program_id: string;
++    readonly compilation_status: RevisionCompilationStatus;
++    readonly request_ref: ImmutableRef;
++    readonly interpretation: string;
++    readonly target_layer_or_nodes: ReadonlyArray<string>;
++    readonly exact_operations: ReadonlyArray<ChangeOperation>;
++    readonly declared_invariants: ReadonlyArray<string>;
++    readonly required_transformations: ReadonlyArray<string>;
++    readonly creative_degrees_of_freedom: ReadonlyArray<string>;
++    readonly invalidated_downstream_nodes: ReadonlyArray<string>;
++    readonly validation_plan: ReadonlyArray<string>;
++    readonly preview_required: boolean;
++    readonly confidence_micros: number;
++    readonly escalation: string | null;
++    readonly source_kind: "NATURAL_LANGUAGE" | "DIRECT_MANIPULATION";
++    readonly expected_state_version: number;
++    readonly program_sha256: string;
++}
++export interface AuditExportManifest {
++    readonly export_id: string;
++    readonly campaign_ref: ImmutableRef;
++    readonly source_refs: ReadonlyArray<ImmutableRef>;
++    readonly semantic_refs: ReadonlyArray<ImmutableRef>;
++    readonly run_refs: ReadonlyArray<ImmutableRef>;
++    readonly artifact_refs: ReadonlyArray<ArtifactRef>;
++    readonly evaluation_refs: ReadonlyArray<ImmutableRef>;
++    readonly command_refs: ReadonlyArray<ImmutableRef>;
++    readonly receipt_refs: ReadonlyArray<ImmutableRef>;
++    readonly human_resolution_refs: ReadonlyArray<ImmutableRef>;
++    readonly ship_decision_ref: ImmutableRef | null;
++    readonly replay_instructions: ReadonlyArray<string>;
++    readonly export_sha256: string;
++}
++export interface OperatorRevisionRequest {
++    readonly request_id: string;
++    readonly run_ref: ImmutableRef;
++    readonly target_refs: ReadonlyArray<ImmutableRef>;
++    readonly target_node_ids: ReadonlyArray<string>;
++    readonly category_id: string;
++    readonly natural_language_request: string;
++    readonly current_state_ref: ImmutableRef;
++    readonly evaluation_ref: ImmutableRef | null;
++    readonly jit_capsule_ref: ImmutableRef;
++    readonly permitted_tool_registry_ref: ImmutableRef;
++    readonly operator_actor: ActorRef;
++    readonly expected_state_version: number;
++}
++export interface DirectManipulationDelta {
++    readonly delta_id: string;
++    readonly run_ref: ImmutableRef;
++    readonly target_ref: ImmutableRef;
++    readonly target_node_id: string;
++    readonly manipulation_type: "MOVE_BBOX" | "RESIZE_BBOX" | "TRIM_SEGMENT" | "REORDER_ITEM" | "EDIT_TEXT" | "SET_PARAMETER" | "SELECT_CANDIDATE";
++    readonly arguments: Readonly<Record<string, string | number | boolean>>;
++    readonly current_state_ref: ImmutableRef;
++    readonly operator_actor: ActorRef;
++    readonly expected_state_version: number;
++}
++export interface ShipRequest {
++    readonly request_id: string;
++    readonly campaign_ref: ImmutableRef;
++    readonly state_ref: ImmutableRef;
++    readonly requested_by: ActorRef;
++    readonly expected_state_version: number;
++}
++export interface ShipDecision {
++    readonly decision_id: string;
++    readonly decision: ShipDecisionStatus;
++    readonly reason: string;
++    readonly campaign_ref: ImmutableRef;
++    readonly state_version: number;
++}
++export interface HumanResolutionEpisode {
++    readonly episode_id: string;
++    readonly campaign_ref: ImmutableRef;
++    readonly actor_ref: ActorRef;
++    readonly action_type: string;
++    readonly target_refs: ReadonlyArray<ImmutableRef>;
++    readonly before_state_ref: ImmutableRef;
++    readonly after_state_ref: ImmutableRef;
++    readonly receipt_ref: ImmutableRef;
++}
+diff --git a/services/studio/dist/domain.js b/services/studio/dist/domain.js
+new file mode 100644
+index 0000000..c8ad2e5
+--- /dev/null
++++ b/services/studio/dist/domain.js
+@@ -0,0 +1,2 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+diff --git a/services/studio/dist/errors.d.ts b/services/studio/dist/errors.d.ts
+new file mode 100644
+index 0000000..92ada37
+--- /dev/null
++++ b/services/studio/dist/errors.d.ts
+@@ -0,0 +1,5 @@
++export declare class StudioValidationError extends Error {
++    readonly code: string;
++    readonly context: Record<string, unknown>;
++    constructor(code: string, message: string, context?: Record<string, unknown>);
++}
+diff --git a/services/studio/dist/errors.js b/services/studio/dist/errors.js
+new file mode 100644
+index 0000000..7fd5f18
+--- /dev/null
++++ b/services/studio/dist/errors.js
+@@ -0,0 +1,14 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.StudioValidationError = void 0;
++class StudioValidationError extends Error {
++    code;
++    context;
++    constructor(code, message, context = {}) {
++        super(message);
++        this.name = "StudioValidationError";
++        this.code = code;
++        this.context = context;
++    }
++}
++exports.StudioValidationError = StudioValidationError;
+diff --git a/services/studio/dist/generated/contracts.d.ts b/services/studio/dist/generated/contracts.d.ts
+new file mode 100644
+index 0000000..445154e
+--- /dev/null
++++ b/services/studio/dist/generated/contracts.d.ts
+@@ -0,0 +1,111 @@
++export interface ActorRef {
++    readonly actor_id: string;
++    readonly actor_type: "deterministic_module" | "model_program" | "human";
++    readonly product_id: string;
++    readonly workflow_role: "hunter" | "analyst" | "composer" | "commander" | "evaluator" | "operator";
++}
++export interface ArtifactRef {
++    readonly artifact_id: string;
++    readonly artifact_kind: string;
++    readonly bytes: number;
++    readonly media_type: string;
++    readonly sha256: string;
++    readonly uri: string;
++}
++export interface AuthorityRef {
++    readonly authority_id: string;
++    readonly authority_sha256: string;
++    readonly authority_state: "current" | "candidate_not_current";
++    readonly authority_version: string;
++}
++export interface CommandEnvelope {
++    readonly actor: ActorRef;
++    readonly authority: AuthorityRef;
++    readonly command_id: string;
++    readonly command_type: string;
++    readonly correlation_id: string;
++    readonly idempotency_key: string;
++    readonly payload_schema: string;
++    readonly payload_sha256: string;
++    readonly payload_version: string;
++    readonly submitted_at_utc: string;
++}
++export interface EventEnvelope {
++    readonly actor: ActorRef;
++    readonly aggregate_id: string;
++    readonly aggregate_version: number;
++    readonly authority: AuthorityRef;
++    readonly causation_id: string;
++    readonly correlation_id: string;
++    readonly event_id: string;
++    readonly event_type: string;
++    readonly occurred_at_utc: string;
++    readonly payload_schema: string;
++    readonly payload_sha256: string;
++    readonly payload_version: string;
++}
++export interface ExecutionStackFingerprint {
++    readonly canonical_sha256: string;
++    readonly contract_release_ref: ImmutableRef;
++    readonly evaluator_ref: null | ImmutableRef;
++    readonly fingerprint_id: string;
++    readonly hardware_profile: string;
++    readonly implementation_ref: ImmutableRef;
++    readonly model_ref: null | ImmutableRef;
++    readonly precision: string;
++    readonly runtime_ref: ImmutableRef;
++    readonly tool_refs: ReadonlyArray<ImmutableRef>;
++}
++export interface ImmutableRef {
++    readonly object_id: string;
++    readonly sha256: string;
++    readonly version: string;
++}
++export interface ProductHandoffEnvelope {
++    readonly authority: AuthorityRef;
++    readonly consumer_product: string;
++    readonly created_at_utc: string;
++    readonly handoff_id: string;
++    readonly object_ref: ImmutableRef;
++    readonly object_schema: string;
++    readonly object_schema_version: string;
++    readonly producer_product: string;
++    readonly source_lineage_refs: ReadonlyArray<ImmutableRef>;
++    readonly wrong_reading_lock_refs: ReadonlyArray<ImmutableRef>;
++}
++export interface ProductStatusEnvelope {
++    readonly authority: AuthorityRef;
++    readonly certified: boolean;
++    readonly development_authorized: boolean;
++    readonly lifecycle_state: string;
++    readonly product_id: string;
++    readonly product_version: string;
++    readonly production_authorized: boolean;
++    readonly updated_at_utc: string;
++}
++export interface ReceiptEnvelope {
++    readonly authority: AuthorityRef;
++    readonly command_ref: ImmutableRef;
++    readonly evaluator: null | ActorRef;
++    readonly failure: null | TypedFailure;
++    readonly outcome: "accepted" | "denied" | "cancelled" | "failed";
++    readonly receipt_id: string;
++    readonly receipt_sha256: string;
++    readonly recorded_at_utc: string;
++    readonly result_refs: ReadonlyArray<ImmutableRef>;
++}
++export interface SourceSpanRef {
++    readonly end_ms: number;
++    readonly source_ref: ImmutableRef;
++    readonly speaker_id: string | null;
++    readonly start_ms: number;
++    readonly transcript_sha256: string | null;
++}
++export interface TypedFailure {
++    readonly code: string;
++    readonly evidence_refs: ReadonlyArray<ImmutableRef>;
++    readonly message: string;
++    readonly next_action: string;
++    readonly responsible_product: string;
++    readonly retry_class: "non_retryable" | "retryable_same_input" | "retryable_after_input" | "human_decision_required";
++}
+diff --git a/services/studio/dist/generated/contracts.js b/services/studio/dist/generated/contracts.js
+new file mode 100644
+index 0000000..208a5ec
+--- /dev/null
++++ b/services/studio/dist/generated/contracts.js
+@@ -0,0 +1,4 @@
++"use strict";
++// Generated from activative-production-spine JSON Schemas.
++// Do not edit manually.
++Object.defineProperty(exports, "__esModule", { value: true });
+diff --git a/services/studio/dist/index.d.ts b/services/studio/dist/index.d.ts
+new file mode 100644
+index 0000000..7ed1a68
+--- /dev/null
++++ b/services/studio/dist/index.d.ts
+@@ -0,0 +1,11 @@
++declare const require: any;
++declare const module: any;
++declare const process: any;
++declare const health: {
++    product_id: string;
++    product_version: string;
++    authority_state: string;
++    development_authorized: boolean;
++    production_authorized: boolean;
++    certified: boolean;
++};
+diff --git a/services/studio/dist/index.js b/services/studio/dist/index.js
+new file mode 100644
+index 0000000..582319b
+--- /dev/null
++++ b/services/studio/dist/index.js
+@@ -0,0 +1,24 @@
++"use strict";
++const health = {
++    product_id: "conscious-activations-studio",
++    product_version: "0.1.0",
++    authority_state: "candidate_not_current",
++    development_authorized: true,
++    production_authorized: false,
++    certified: false,
++};
++if (require.main === module) {
++    const [, , command, ...args] = process.argv;
++    if (command === "health") {
++        process.stdout.write(JSON.stringify(health));
++        process.stdout.write("\n");
++    }
++    else if (command === "demo") {
++        process.stdout.write(JSON.stringify({ product_id: health.product_id, capabilities: ["visual-asset-studio", "evidence-panel", "composition", "layers", "keyframes", "validation", "operator-feedback", "visual-chat"], args }));
++        process.stdout.write("\n");
++    }
++    else {
++        process.stderr.write(`unknown command: ${command ?? ""}\n`);
++        process.exitCode = 2;
++    }
++}
+diff --git a/services/studio/dist/revision.d.ts b/services/studio/dist/revision.d.ts
+new file mode 100644
+index 0000000..dcade94
+--- /dev/null
++++ b/services/studio/dist/revision.d.ts
+@@ -0,0 +1,4 @@
++import type { ChangeRequestProgram, DirectManipulationDelta, OperatorRevisionRequest, ToolDescriptor } from "./domain";
++export declare const DEFAULT_STUDIO_TOOLS: ReadonlyArray<ToolDescriptor>;
++export declare function compileNaturalLanguageRevision(request: OperatorRevisionRequest, context: any): ChangeRequestProgram;
++export declare function compileDirectManipulation(delta: DirectManipulationDelta, context: any): ChangeRequestProgram;
+diff --git a/services/studio/dist/revision.js b/services/studio/dist/revision.js
+new file mode 100644
+index 0000000..220bb50
+--- /dev/null
++++ b/services/studio/dist/revision.js
+@@ -0,0 +1,59 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.DEFAULT_STUDIO_TOOLS = void 0;
++exports.compileNaturalLanguageRevision = compileNaturalLanguageRevision;
++exports.compileDirectManipulation = compileDirectManipulation;
++const canonical_1 = require("./canonical");
++const errors_1 = require("./errors");
++const validators_1 = require("./validators");
++exports.DEFAULT_STUDIO_TOOLS = Object.freeze([
++    { tool_id: "studio.adjust_bbox", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["COMPOSITION", "TIMELINE_OVERLAY"], argument_keys: ["axis", "delta_micros", "mode"], reversible: true },
++    { tool_id: "studio.resize_bbox", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["COMPOSITION", "TIMELINE_OVERLAY"], argument_keys: ["scale_delta_micros", "anchor"], reversible: true },
++    { tool_id: "studio.trim_segment", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["VIDEO_EDIT_PROGRAM"], argument_keys: ["edge", "delta_ms", "preserve_word_boundary", "preserve_expression_tail"], reversible: true },
++    { tool_id: "studio.set_parameter", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["COMPOSITION", "VIDEO_EDIT_PROGRAM", "TIMELINE_OVERLAY", "CAMPAIGN"], argument_keys: ["parameter", "value"], reversible: true },
++    { tool_id: "studio.select_candidate", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["CANDIDATE_PORTFOLIO"], argument_keys: ["candidate_id"], reversible: true },
++    { tool_id: "studio.request_semantic_revision", tool_version: "1.0.0", owner_product: "activative-intelligence-runtime", allowed_target_layers: ["AIR_REVISION_REQUEST"], argument_keys: ["request", "reason", "source_ref"], reversible: false },
++]);
++function compile(request, sourceKind, op, status = "COMPILED", interpretation = "Bounded operator visual revision") {
++    const core = { compilation_status: status, request_id: request.request_id, request_ref: request.current_state_ref, target_layer_or_nodes: request.target_node_ids, exact_operations: op ? [op] : [], declared_invariants: ["upstream_semantic_authority_preserved", "source_lineage_preserved", "no_ui_only_state"], required_transformations: ["validate_source_lineage", "validate_geometry"], creative_degrees_of_freedom: [], invalidated_downstream_nodes: [], validation_plan: ["source_lineage", "bounds", "state_version", "deterministic_replay"], preview_required: true, confidence_micros: status === "COMPILED" ? 1_000_000 : 0, escalation: status === "COMPILED" ? null : "operator_clarification_required", source_kind: sourceKind, expected_state_version: request.expected_state_version };
++    const programId = (0, canonical_1.deterministicId)("revision-program", core);
++    return { ...core, program_id: programId, interpretation, program_sha256: (0, canonical_1.canonicalSha256)({ ...core, program_id: programId }) };
++}
++function match(request) {
++    const text = request.natural_language_request.trim().toLocaleLowerCase("en-US");
++    const ref = request.target_refs[0];
++    const node = request.target_node_ids[0];
++    const left = text.match(/(?:move|shift).*?(?:left)\s+by\s+(\d+(?:\.\d+)?)%/);
++    if (left)
++        return { operation_id: (0, canonical_1.deterministicId)("change-operation", { id: request.request_id, action: "left", amount: left[1] }), target_ref: ref, target_node_id: node, target_layer: "COMPOSITION", tool_id: "studio.adjust_bbox", tool_version: "1.0.0", arguments: { axis: "x", delta_micros: -Math.round(Number(left[1]) * 10000), mode: "relative" }, preconditions: ["state_version_matches", "source_lineage_present"], expected_effect: `move ${node} left by ${left[1]}%` };
++    const right = text.match(/(?:move|shift).*?(?:right)\s+by\s+(\d+(?:\.\d+)?)%/);
++    if (right)
++        return { operation_id: (0, canonical_1.deterministicId)("change-operation", { id: request.request_id, action: "right", amount: right[1] }), target_ref: ref, target_node_id: node, target_layer: "COMPOSITION", tool_id: "studio.adjust_bbox", tool_version: "1.0.0", arguments: { axis: "x", delta_micros: Math.round(Number(right[1]) * 10000), mode: "relative" }, preconditions: ["state_version_matches", "source_lineage_present"], expected_effect: `move ${node} right by ${right[1]}%` };
++    const trim = text.match(/(?:shorten|trim).*?(\d+)\s*ms/);
++    if (trim)
++        return { operation_id: (0, canonical_1.deterministicId)("change-operation", { id: request.request_id, action: "trim", amount: trim[1] }), target_ref: ref, target_node_id: node, target_layer: "VIDEO_EDIT_PROGRAM", tool_id: "studio.trim_segment", tool_version: "1.0.0", arguments: { edge: "end", delta_ms: -Number(trim[1]), preserve_word_boundary: true, preserve_expression_tail: true }, preconditions: ["state_version_matches", "timeline_item_editable"], expected_effect: `shorten ${node} by ${trim[1]} ms` };
++    return null;
++}
++function compileNaturalLanguageRevision(request, context) {
++    (0, validators_1.validateOperatorRequest)(request);
++    (0, validators_1.validateToolRegistry)(context.tools ?? exports.DEFAULT_STUDIO_TOOLS);
++    if (request.expected_state_version !== Number(context.state_version))
++        throw new errors_1.StudioValidationError("STALE_STATE_VERSION", `expected state version ${request.expected_state_version}, current ${context.state_version}`);
++    const operation = match(request);
++    if (!operation)
++        return compile(request, "NATURAL_LANGUAGE", null, "NEEDS_CLARIFICATION", "No deterministic visual editing grammar matched the request; operator clarification required");
++    return compile(request, "NATURAL_LANGUAGE", operation);
++}
++function compileDirectManipulation(delta, context) {
++    (0, validators_1.validateDirectDelta)(delta);
++    if (delta.expected_state_version !== Number(context.state_version))
++        throw new errors_1.StudioValidationError("STALE_STATE_VERSION", `expected state version ${delta.expected_state_version}, current ${context.state_version}`);
++    const toolMap = new Map(exports.DEFAULT_STUDIO_TOOLS.map(t => [t.tool_id, t]));
++    const toolByType = { MOVE_BBOX: "studio.adjust_bbox", RESIZE_BBOX: "studio.resize_bbox", TRIM_SEGMENT: "studio.trim_segment", EDIT_TEXT: "studio.set_parameter", SET_PARAMETER: "studio.set_parameter", SELECT_CANDIDATE: "studio.select_candidate" };
++    const toolId = toolByType[delta.manipulation_type];
++    if (!toolId || !toolMap.has(toolId))
++        throw new errors_1.StudioValidationError("UNSUPPORTED_MANIPULATION", `unsupported manipulation ${delta.manipulation_type}`);
++    const op = { operation_id: (0, canonical_1.deterministicId)("change-operation", delta), target_ref: delta.target_ref, target_node_id: delta.target_node_id, target_layer: "COMPOSITION", tool_id: toolId, tool_version: toolMap.get(toolId).tool_version, arguments: delta.arguments, preconditions: ["state_version_matches", "target_authorized"], expected_effect: `apply ${delta.manipulation_type} deterministically` };
++    const request = { request_id: delta.delta_id, run_ref: delta.run_ref, target_refs: [delta.target_ref], target_node_ids: [delta.target_node_id], category_id: "visual_asset_studio", natural_language_request: `Direct ${delta.manipulation_type}`, current_state_ref: delta.current_state_ref, evaluation_ref: null, jit_capsule_ref: delta.current_state_ref, permitted_tool_registry_ref: delta.current_state_ref, operator_actor: delta.operator_actor, expected_state_version: delta.expected_state_version };
++    return compile(request, "DIRECT_MANIPULATION", op, "COMPILED", `Bounded native visual edit: ${delta.manipulation_type}`);
++}
+diff --git a/services/studio/dist/rpc.d.ts b/services/studio/dist/rpc.d.ts
+new file mode 100644
+index 0000000..cb0ff5c
+--- /dev/null
++++ b/services/studio/dist/rpc.d.ts
+@@ -0,0 +1 @@
++export {};
+diff --git a/services/studio/dist/rpc.js b/services/studio/dist/rpc.js
+new file mode 100644
+index 0000000..f9afbbc
+--- /dev/null
++++ b/services/studio/dist/rpc.js
+@@ -0,0 +1,40 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const controlTower_1 = require("./controlTower");
++const auditExport_1 = require("./auditExport");
++const revision_1 = require("./revision");
++const ship_1 = require("./ship");
++const timeline_1 = require("./timeline");
++const errors_1 = require("./errors");
++const handlers = {
++    "build-control-tower-projection": controlTower_1.buildControlTowerProjection,
++    "project-video-edit-program": timeline_1.projectVideoEditProgram,
++    "compile-natural-language-revision": (payload) => (0, revision_1.compileNaturalLanguageRevision)(payload.request, payload.context),
++    "compile-direct-manipulation": (payload) => (0, revision_1.compileDirectManipulation)(payload.delta, payload.context),
++    "evaluate-ship-request": ship_1.evaluateShipRequest,
++    "build-audit-export-manifest": auditExport_1.buildAuditExportManifest,
++};
++async function main() {
++    const command = process.argv[2];
++    let input = "";
++    process.stdin.setEncoding("utf8");
++    for await (const chunk of process.stdin)
++        input += chunk;
++    try {
++        const payload = input.trim() ? JSON.parse(input) : {};
++        if (!command || !handlers[command])
++            throw new errors_1.StudioValidationError("UNKNOWN_COMMAND", `unknown Studio RPC command: ${command ?? ""}`);
++        const result = await handlers[command](payload);
++        process.stdout.write(JSON.stringify({ ok: true, result }) + "\n");
++    }
++    catch (error) {
++        if (error instanceof errors_1.StudioValidationError) {
++            process.stdout.write(JSON.stringify({ ok: false, error: { code: error.code, message: error.message, context: error.context } }) + "\n");
++            return;
++        }
++        process.stderr.write(error instanceof Error ? error.stack ?? error.message : String(error));
++        process.stderr.write("\n");
++        process.exitCode = 1;
++    }
++}
++void main();
+diff --git a/services/studio/dist/ship.d.ts b/services/studio/dist/ship.d.ts
+new file mode 100644
+index 0000000..699d373
+--- /dev/null
++++ b/services/studio/dist/ship.d.ts
+@@ -0,0 +1 @@
++export declare function evaluateShipRequest(input: any): any;
+diff --git a/services/studio/dist/ship.js b/services/studio/dist/ship.js
+new file mode 100644
+index 0000000..82e86d7
+--- /dev/null
++++ b/services/studio/dist/ship.js
+@@ -0,0 +1,14 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.evaluateShipRequest = evaluateShipRequest;
++const canonical_1 = require("./canonical");
++const errors_1 = require("./errors");
++function evaluateShipRequest(input) {
++    const request = input.request ?? input;
++    if (request.autonomy_mode === "SHADOW")
++        throw new errors_1.StudioValidationError("SHADOW_CANNOT_SHIP", "SHADOW campaigns cannot transition to SHIPPED");
++    const unresolved = Array.isArray(request.unresolved_exception_ids) ? request.unresolved_exception_ids : [];
++    const status = unresolved.length ? "DENIED" : "AUTHORIZED";
++    const decision = { decision_id: (0, canonical_1.deterministicId)("ship-decision", { request }), request_ref: request.campaign_ref, status, denial_codes: unresolved.length ? ["UNRESOLVED_EXCEPTIONS"] : [], authorized_artifact_refs: status === "AUTHORIZED" ? (request.artifact_refs ?? []) : [], acknowledgement_required: true, decision_actor: request.operator_actor, decision_sha256: (0, canonical_1.canonicalSha256)({ request, status }) };
++    return decision;
++}
+diff --git a/services/studio/dist/timeline.d.ts b/services/studio/dist/timeline.d.ts
+new file mode 100644
+index 0000000..7ae037d
+--- /dev/null
++++ b/services/studio/dist/timeline.d.ts
+@@ -0,0 +1,2 @@
++import type { TimelineProjection } from "./domain";
++export declare function projectVideoEditProgram(input: any): TimelineProjection;
+diff --git a/services/studio/dist/timeline.js b/services/studio/dist/timeline.js
+new file mode 100644
+index 0000000..c60c403
+--- /dev/null
++++ b/services/studio/dist/timeline.js
+@@ -0,0 +1,8 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.projectVideoEditProgram = projectVideoEditProgram;
++const canonical_1 = require("./canonical");
++function projectVideoEditProgram(input) {
++    const items = (input.items ?? []).map((item) => ({ ...item, source_start_ms: item.source_start_ms ?? null, source_end_ms: item.source_end_ms ?? null, source_ref: item.source_ref ?? null, artifact_ref: item.artifact_ref ?? null, editable_operations: item.editable_operations ?? [] }));
++    return { projection_id: input.projection_id ?? (0, canonical_1.deterministicId)("timeline", { program_id: input.program_id, sha256: input.program_sha256 }), video_edit_program_ref: { object_id: input.program_id, version: input.version ?? "1.0.0", sha256: input.program_sha256 ?? (0, canonical_1.canonicalSha256)(input) }, state: "READ_ONLY_CANONICAL_PROGRAM_PROJECTION", width: Number(input.canvas?.width ?? input.width ?? 1920), height: Number(input.canvas?.height ?? input.height ?? 1080), fps_numerator: Number(input.canvas?.fps_numerator ?? input.fps_numerator ?? 30), fps_denominator: Number(input.canvas?.fps_denominator ?? input.fps_denominator ?? 1), duration_frames: Number(input.duration_frames ?? 0), tracks: input.tracks ?? [], items };
++}
+diff --git a/services/studio/dist/validators.d.ts b/services/studio/dist/validators.d.ts
+new file mode 100644
+index 0000000..2ef2734
+--- /dev/null
++++ b/services/studio/dist/validators.d.ts
+@@ -0,0 +1,5 @@
++import type { ChangeRequestProgram, DirectManipulationDelta, OperatorRevisionRequest, ToolDescriptor } from "./domain";
++export declare function validateToolRegistry(tools: ReadonlyArray<ToolDescriptor>): void;
++export declare function validateOperatorRequest(request: OperatorRevisionRequest): void;
++export declare function validateDirectDelta(delta: DirectManipulationDelta): void;
++export declare function validateChangeProgram(program: ChangeRequestProgram): void;
+diff --git a/services/studio/dist/validators.js b/services/studio/dist/validators.js
+new file mode 100644
+index 0000000..e556c01
+--- /dev/null
++++ b/services/studio/dist/validators.js
+@@ -0,0 +1,39 @@
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.validateToolRegistry = validateToolRegistry;
++exports.validateOperatorRequest = validateOperatorRequest;
++exports.validateDirectDelta = validateDirectDelta;
++exports.validateChangeProgram = validateChangeProgram;
++const errors_1 = require("./errors");
++function validateToolRegistry(tools) {
++    const ids = new Set();
++    for (const tool of tools) {
++        if (ids.has(tool.tool_id))
++            throw new errors_1.StudioValidationError("DUPLICATE_TOOL", `tool registry contains duplicate ${tool.tool_id}`);
++        ids.add(tool.tool_id);
++    }
++}
++function validateOperatorRequest(request) {
++    if (!request.request_id.trim())
++        throw new errors_1.StudioValidationError("EMPTY_VALUE", "request_id must not be empty");
++    if (!request.natural_language_request.trim())
++        throw new errors_1.StudioValidationError("EMPTY_VALUE", "natural_language_request must not be empty");
++    if (request.expected_state_version < 1 || !Number.isInteger(request.expected_state_version))
++        throw new errors_1.StudioValidationError("INVALID_INTEGER", "expected_state_version must be an integer >= 1");
++    if (request.target_refs.length === 0 || request.target_node_ids.length === 0)
++        throw new errors_1.StudioValidationError("TARGET_REQUIRED", "revision request requires a target");
++    if (request.operator_actor.actor_type !== "human" || request.operator_actor.workflow_role !== "operator")
++        throw new errors_1.StudioValidationError("OPERATOR_REQUIRED", "operator actor must be human/operator");
++}
++function validateDirectDelta(delta) {
++    if (!delta.delta_id.trim())
++        throw new errors_1.StudioValidationError("EMPTY_VALUE", "delta_id must not be empty");
++    if (delta.expected_state_version < 1 || !Number.isInteger(delta.expected_state_version))
++        throw new errors_1.StudioValidationError("INVALID_INTEGER", "expected_state_version must be an integer >= 1");
++    if (delta.operator_actor.actor_type !== "human" || delta.operator_actor.workflow_role !== "operator")
++        throw new errors_1.StudioValidationError("OPERATOR_REQUIRED", "operator actor must be human/operator");
++}
++function validateChangeProgram(program) {
++    if (!program.program_id || program.program_sha256.length !== 64)
++        throw new errors_1.StudioValidationError("INVALID_PROGRAM", "change request program must have a canonical SHA-256");
++}
+diff --git a/services/studio/package.json b/services/studio/package.json
+new file mode 100644
+index 0000000..0f899ea
+--- /dev/null
++++ b/services/studio/package.json
+@@ -0,0 +1,11 @@
++{
++  "name": "@conscious-activations/studio",
++  "private": true,
++  "version": "0.1.0",
++  "type": "commonjs",
++  "scripts": {
++    "build": "tsc -p tsconfig.json",
++    "rpc": "node dist/rpc.js",
++    "health": "node dist/index.js health --json"
++  }
++}
+diff --git a/services/studio/src/auditExport.ts b/services/studio/src/auditExport.ts
+new file mode 100644
+index 0000000..6128c63
+--- /dev/null
++++ b/services/studio/src/auditExport.ts
+@@ -0,0 +1,5 @@
++import { canonicalSha256, deterministicId } from "./canonical";
++export function buildAuditExportManifest(input: any): any {
++  const core = { ...input, export_id: deterministicId("audit-export", input) };
++  return { ...core, export_sha256: canonicalSha256(core), replay_instructions: input.replay_instructions ?? ["Re-open the campaign from the canonical repository", "Recompute the Visual Asset Studio projection from persisted refs", "Verify operator feedback against immutable revision linkage"] };
++}
+diff --git a/services/studio/src/campaign.ts b/services/studio/src/campaign.ts
+new file mode 100644
+index 0000000..7d51853
+--- /dev/null
++++ b/services/studio/src/campaign.ts
+@@ -0,0 +1,44 @@
++import { canonicalSha256, deterministicId } from "./canonical";
++import { StudioValidationError } from "./errors";
++import type { CampaignOrder, CampaignState } from "./domain";
++
++export const ALLOWED_TRANSITIONS: Readonly<Record<string, ReadonlyArray<string>>> = {
++  DRAFT: ["LAUNCHED", "CANCELLED"],
++  LAUNCHED: ["RUNNING", "CANCELLED"],
++  RUNNING: ["AWAITING_REVIEW", "BLOCKED_EXCEPTION", "READY_TO_SHIP", "CANCELLED"],
++  AWAITING_REVIEW: ["RUNNING", "READY_TO_SHIP", "CANCELLED"],
++  BLOCKED_EXCEPTION: ["RUNNING", "AWAITING_REVIEW", "CANCELLED"],
++  READY_TO_SHIP: ["SHIPPED", "AWAITING_REVIEW", "CANCELLED"],
++  SHIPPED: [], CANCELLED: [],
++};
++
++function refValid(label: string, value: any): void {
++  if (!value?.object_id || !value?.version || !/^[0-9a-f]{64}$/.test(value?.sha256 ?? "")) throw new StudioValidationError("INVALID_REF", `${label} must be a valid immutable ref`);
++}
++
++export function validateCampaignOrder(order: CampaignOrder): void {
++  const required = ["workspace_id", "project_id", "category_id", "objective", "initial_seed"] as const;
++  for (const key of required) if (!String(order[key]).trim()) throw new StudioValidationError("EMPTY_VALUE", `${key} must not be empty`);
++  refValid("source_ref", order.source_ref); refValid("harness_ref", order.harness_ref);
++  if (!Number.isInteger(order.budget_units) || order.budget_units < 1) throw new StudioValidationError("INVALID_INTEGER", "budget_units must be an integer >= 1");
++  if (!order.output_targets.length) throw new StudioValidationError("OUTPUT_TARGET_REQUIRED", "at least one output target is required");
++  if (order.category_id === "2d_character_animation" || String(order.format_profile_id).startsWith("format02_")) throw new StudioValidationError("FORMAT02_DEFERRED", "Format 02 is deferred pending a current validated Atomic Harness");
++  if (order.operator_actor.actor_type !== "human" || order.operator_actor.workflow_role !== "operator") throw new StudioValidationError("OPERATOR_REQUIRED", "operator actor must be human/operator");
++}
++
++export function createCampaignOrder(core: Omit<CampaignOrder, "order_id">): CampaignOrder {
++  const order = { ...core, order_id: deterministicId("campaign-order", core) } as CampaignOrder;
++  validateCampaignOrder(order); return order;
++}
++
++export function launchCampaign(order: CampaignOrder): CampaignState {
++  validateCampaignOrder(order);
++  const orderRef = { object_id: order.order_id, version: "1.0.0", sha256: canonicalSha256(order) };
++  return { campaign_id: deterministicId("campaign", { order_ref: orderRef }), order_ref: orderRef, lifecycle_state: "LAUNCHED", autonomy_mode: order.autonomy_policy.mode, active_checkpoint_id: null, exception_ids: [], run_refs: [], artifact_refs: [], evaluation_refs: [], version: 1 };
++}
++
++export function transitionCampaign(state: CampaignState, next: CampaignState["lifecycle_state"]): CampaignState {
++  if (!ALLOWED_TRANSITIONS[state.lifecycle_state]?.includes(next)) throw new StudioValidationError("CAMPAIGN_TRANSITION_DENIED", `${state.lifecycle_state} cannot transition to ${next}`);
++  if (next === "SHIPPED" && state.autonomy_mode === "SHADOW") throw new StudioValidationError("SHADOW_CANNOT_SHIP", "SHADOW campaigns cannot transition to SHIPPED");
++  return { ...state, lifecycle_state: next, version: state.version + 1 };
++}
+diff --git a/services/studio/src/canonical.ts b/services/studio/src/canonical.ts
+new file mode 100644
+index 0000000..bb3a342
+--- /dev/null
++++ b/services/studio/src/canonical.ts
+@@ -0,0 +1,31 @@
++declare function require(name: string): any;
++const crypto = require("crypto") as { createHash(algorithm: string): { update(input: string): any; digest(encoding: string): string } };
++
++export function normalize<T>(value: T): T {
++  if (value === undefined) throw new Error("canonical value cannot contain undefined");
++  if (Array.isArray(value)) return value.map(normalize) as T;
++  if (value !== null && typeof value === "object") {
++    const record = value as Record<string, unknown>;
++    const sorted: Record<string, unknown> = {};
++    for (const key of Object.keys(record).sort()) sorted[key] = normalize(record[key]);
++    return sorted as T;
++  }
++  return value;
++}
++
++export function canonicalJson(value: unknown): string {
++  return JSON.stringify(normalize(value));
++}
++
++export function canonicalSha256(value: unknown): string {
++  return crypto.createHash("sha256").update(canonicalJson(value)).digest("hex");
++}
++
++export function deterministicId(prefix: string, value: unknown): string {
++  if (!/^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/.test(prefix)) throw new Error(`invalid deterministic ID prefix: ${prefix}`);
++  return `${prefix}:${canonicalSha256(value).slice(0, 24)}`;
++}
++
++export function uniqueSorted(values: ReadonlyArray<string>): string[] {
++  return Array.from(new Set(values)).sort();
++}
+diff --git a/services/studio/src/controlTower.ts b/services/studio/src/controlTower.ts
+new file mode 100644
+index 0000000..9aef7b8
+--- /dev/null
++++ b/services/studio/src/controlTower.ts
+@@ -0,0 +1,6 @@
++import { canonicalSha256, deterministicId } from "./canonical";
++import type { ControlTowerProjection } from "./domain";
++export function buildControlTowerProjection(input: any): ControlTowerProjection {
++  const projected = { ...input, projection_id: input.projection_id ?? deterministicId("control-tower-projection", { campaign_id: input.campaign.campaign_id, version: input.campaign.version }), projection_sha256: canonicalSha256(input), available_actions: Array.from(new Set([...(input.available_actions ?? []), "DIRECT_MANIPULATION", "VISUAL_ASSET_STUDIO"])) };
++  return projected as ControlTowerProjection;
++}
+diff --git a/services/studio/src/domain.ts b/services/studio/src/domain.ts
+new file mode 100644
+index 0000000..4989295
+--- /dev/null
++++ b/services/studio/src/domain.ts
+@@ -0,0 +1,56 @@
++import type { ActorRef, ArtifactRef, AuthorityRef, ImmutableRef } from "./generated/contracts";
++
++export type AutonomyMode = "AUTOPILOT" | "REVIEW_BEFORE_SHIP" | "CHECKPOINTED" | "SHADOW";
++export type CampaignLifecycleState = "DRAFT" | "LAUNCHED" | "RUNNING" | "AWAITING_REVIEW" | "BLOCKED_EXCEPTION" | "READY_TO_SHIP" | "SHIPPED" | "CANCELLED";
++export type StudioSurfaceId = "INTERVIEW_EXPRESSION_STUDIO" | "STATIC_COMPOSITION_STUDIO" | "VIDEO_PRODUCTION_STUDIO" | "VISUAL_ASSET_STUDIO" | "KNOWLEDGE_MODEL_STUDIO" | "FUTURE_CHARACTER_PERFORMANCE_STUDIO";
++export type StudioModuleStatus = "ACTIVE_DEVELOPMENT" | "DEFERRED_AWAITING_FORMAT02_HARNESS";
++export type ReviewDecision = "APPROVE" | "REJECT" | "REQUEST_REVISION" | "SELECT_CANDIDATE" | "SHIP";
++export type ResolutionScope = "run_local" | "harness_profile" | "category" | "workspace" | "avatar_or_identity" | "candidate_doctrine";
++export type RevisionCompilationStatus = "COMPILED" | "NEEDS_CLARIFICATION" | "DENIED";
++export type ShipDecisionStatus = "AUTHORIZED" | "DENIED";
++
++export interface OutputTarget { readonly output_type: "SOURCE_LED_SHORT" | "CAROUSEL" | "SUPERVISUAL" | "ANIMATION_SCENE_PACKAGE" | "ANIMATION_SHORT"; readonly quantity: number; readonly profile_id: string; }
++export interface AutonomyPolicy { readonly mode: AutonomyMode; readonly checkpoint_ids: ReadonlyArray<string>; readonly exception_only: boolean; readonly final_review_required: boolean; readonly publication_authority_required: boolean; }
++export interface CampaignOrder { readonly order_id: string; readonly workspace_id: string; readonly project_id: string; readonly source_kind: "CANONICAL_INTERVIEW_SOURCE_PACKAGE" | "ASSET_PACKAGE_SPEC"; readonly source_ref: ImmutableRef; readonly harness_ref: ImmutableRef; readonly category_id: string; readonly format_profile_id: string | "NOT_APPLICABLE"; readonly objective: string; readonly initial_seed: string; readonly taste_direction: ReadonlyArray<string>; readonly output_targets: ReadonlyArray<OutputTarget>; readonly budget_units: number; readonly deadline_utc: string | null; readonly autonomy_policy: AutonomyPolicy; readonly operator_actor: ActorRef; readonly authority: AuthorityRef; }
++export interface CampaignState { readonly campaign_id: string; readonly order_ref: ImmutableRef; readonly lifecycle_state: CampaignLifecycleState; readonly autonomy_mode: AutonomyMode; readonly active_checkpoint_id: string | null; readonly exception_ids: ReadonlyArray<string>; readonly run_refs: ReadonlyArray<ImmutableRef>; readonly artifact_refs: ReadonlyArray<ArtifactRef>; readonly evaluation_refs: ReadonlyArray<ImmutableRef>; readonly version: number; }
++export interface StudioModuleDescriptor { readonly surface_id: StudioSurfaceId; readonly title: string; readonly status: StudioModuleStatus; readonly capabilities: ReadonlyArray<string>; readonly supported_output_types: ReadonlyArray<string>; }
++export interface StudioSurfaceBinding { readonly binding_id: string; readonly harness_ref: ImmutableRef; readonly category_id: string; readonly primary_surface: StudioSurfaceId; readonly supporting_surfaces: ReadonlyArray<StudioSurfaceId>; readonly operator_entry_policy: "EXCEPTION_ONLY" | "REVIEW_ALLOWED"; readonly binding_reason: string; }
++export interface RunNodeProjection { readonly node_id: string; readonly node_type: string; readonly title: string; readonly status: "PENDING" | "READY" | "RUNNING" | "WAITING_HUMAN" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "INVALIDATED"; readonly owner_product: string; readonly dependency_ids: ReadonlyArray<string>; readonly artifact_refs: ReadonlyArray<ArtifactRef>; readonly receipt_refs: ReadonlyArray<ImmutableRef>; readonly blocker_codes: ReadonlyArray<string>; }
++export interface RuntimeHealthProjection { readonly component_id: string; readonly component_type: "RUNTIME" | "PROVIDER" | "WORKER" | "STORAGE" | "QUEUE" | "EVALUATOR"; readonly status: "HEALTHY" | "DEGRADED" | "UNAVAILABLE" | "NOT_CONFIGURED"; readonly capability_ids: ReadonlyArray<string>; readonly budget_units_used: number; readonly budget_units_limit: number; readonly evidence_refs: ReadonlyArray<ImmutableRef>; }
++export interface KnowledgeProjection { readonly skill_refs: ReadonlyArray<ImmutableRef>; readonly steering_recipe_refs: ReadonlyArray<ImmutableRef>; readonly retrieval_receipt_refs: ReadonlyArray<ImmutableRef>; readonly programmed_model_claim_refs: ReadonlyArray<ImmutableRef>; readonly exclusion_codes: ReadonlyArray<string>; }
++export interface TimelineItemProjection { readonly item_id: string; readonly track_id: string; readonly kind: string; readonly role: string; readonly start_frame: number; readonly end_frame: number; readonly source_start_ms: number | null; readonly source_end_ms: number | null; readonly source_ref: ImmutableRef | null; readonly artifact_ref: ArtifactRef | null; readonly editable_operations: ReadonlyArray<string>; }
++export interface TimelineTrackProjection { readonly track_id: string; readonly track_type: string; readonly role: string; readonly z_index: number; readonly item_ids: ReadonlyArray<string>; readonly items?: ReadonlyArray<TimelineItemProjection>; }
++export interface TimelineProjection { readonly projection_id: string; readonly video_edit_program_ref: ImmutableRef; readonly state: "READ_ONLY_CANONICAL_PROGRAM_PROJECTION" | "NATIVE_EDITABLE_CANONICAL_PROGRAM"; readonly width: number; readonly height: number; readonly fps_numerator: number; readonly fps_denominator: number; readonly duration_frames: number; readonly tracks: ReadonlyArray<TimelineTrackProjection>; readonly items: ReadonlyArray<TimelineItemProjection>; }
++export interface ExceptionReviewPackage { readonly package_id: string; readonly campaign_ref: ImmutableRef; readonly exception_code: string; readonly responsible_product: string; readonly summary: string; readonly evidence_refs: ReadonlyArray<ImmutableRef>; readonly candidate_refs: ReadonlyArray<ImmutableRef>; readonly allowed_decisions: ReadonlyArray<ReviewDecision>; readonly recommended_next_actions: ReadonlyArray<string>; }
++export interface ControlTowerProjection { readonly projection_id: string; readonly campaign: CampaignState; readonly order: CampaignOrder; readonly studio_binding: StudioSurfaceBinding; readonly source_package_ref: ImmutableRef; readonly observed_activative_pack_ref: ImmutableRef | null; readonly semantic_production_package_ref: ImmutableRef | null; readonly final_script_ref: ImmutableRef | null; readonly activation_transfer_contract_ref: ImmutableRef | null; readonly run_nodes: ReadonlyArray<RunNodeProjection>; readonly artifacts: ReadonlyArray<ArtifactRef>; readonly evaluations: ReadonlyArray<ImmutableRef>; readonly knowledge: KnowledgeProjection; readonly runtime_health: ReadonlyArray<RuntimeHealthProjection>; readonly timeline: TimelineProjection | null; readonly exception_packages: ReadonlyArray<ExceptionReviewPackage>; readonly available_actions: ReadonlyArray<string>; readonly projection_sha256: string; }
++export interface ToolDescriptor { readonly tool_id: string; readonly tool_version: string; readonly owner_product: string; readonly allowed_target_layers: ReadonlyArray<string>; readonly argument_keys: ReadonlyArray<string>; readonly reversible: boolean; }
++export interface ChangeOperation { readonly operation_id: string; readonly target_ref: ImmutableRef; readonly target_node_id: string; readonly target_layer: string; readonly tool_id: string; readonly tool_version: string; readonly arguments: Readonly<Record<string, string | number | boolean>>; readonly preconditions: ReadonlyArray<string>; readonly expected_effect: string; }
++export interface ChangeRequestProgram { readonly program_id: string; readonly compilation_status: RevisionCompilationStatus; readonly request_ref: ImmutableRef; readonly interpretation: string; readonly target_layer_or_nodes: ReadonlyArray<string>; readonly exact_operations: ReadonlyArray<ChangeOperation>; readonly declared_invariants: ReadonlyArray<string>; readonly required_transformations: ReadonlyArray<string>; readonly creative_degrees_of_freedom: ReadonlyArray<string>; readonly invalidated_downstream_nodes: ReadonlyArray<string>; readonly validation_plan: ReadonlyArray<string>; readonly preview_required: boolean; readonly confidence_micros: number; readonly escalation: string | null; readonly source_kind: "NATURAL_LANGUAGE" | "DIRECT_MANIPULATION"; readonly expected_state_version: number; readonly program_sha256: string; }
++export interface AuditExportManifest { readonly export_id: string; readonly campaign_ref: ImmutableRef; readonly source_refs: ReadonlyArray<ImmutableRef>; readonly semantic_refs: ReadonlyArray<ImmutableRef>; readonly run_refs: ReadonlyArray<ImmutableRef>; readonly artifact_refs: ReadonlyArray<ArtifactRef>; readonly evaluation_refs: ReadonlyArray<ImmutableRef>; readonly command_refs: ReadonlyArray<ImmutableRef>; readonly receipt_refs: ReadonlyArray<ImmutableRef>; readonly human_resolution_refs: ReadonlyArray<ImmutableRef>; readonly ship_decision_ref: ImmutableRef | null; readonly replay_instructions: ReadonlyArray<string>; readonly export_sha256: string; }
++export interface OperatorRevisionRequest { readonly request_id: string; readonly run_ref: ImmutableRef; readonly target_refs: ReadonlyArray<ImmutableRef>; readonly target_node_ids: ReadonlyArray<string>; readonly category_id: string; readonly natural_language_request: string; readonly current_state_ref: ImmutableRef; readonly evaluation_ref: ImmutableRef | null; readonly jit_capsule_ref: ImmutableRef; readonly permitted_tool_registry_ref: ImmutableRef; readonly operator_actor: ActorRef; readonly expected_state_version: number; }
++export interface DirectManipulationDelta { readonly delta_id: string; readonly run_ref: ImmutableRef; readonly target_ref: ImmutableRef; readonly target_node_id: string; readonly manipulation_type: "MOVE_BBOX" | "RESIZE_BBOX" | "TRIM_SEGMENT" | "REORDER_ITEM" | "EDIT_TEXT" | "SET_PARAMETER" | "SELECT_CANDIDATE"; readonly arguments: Readonly<Record<string, string | number | boolean>>; readonly current_state_ref: ImmutableRef; readonly operator_actor: ActorRef; readonly expected_state_version: number; }
++
++export interface ShipRequest {
++  readonly request_id: string;
++  readonly campaign_ref: ImmutableRef;
++  readonly state_ref: ImmutableRef;
++  readonly requested_by: ActorRef;
++  readonly expected_state_version: number;
++}
++export interface ShipDecision {
++  readonly decision_id: string;
++  readonly decision: ShipDecisionStatus;
++  readonly reason: string;
++  readonly campaign_ref: ImmutableRef;
++  readonly state_version: number;
++}
++export interface HumanResolutionEpisode {
++  readonly episode_id: string;
++  readonly campaign_ref: ImmutableRef;
++  readonly actor_ref: ActorRef;
++  readonly action_type: string;
++  readonly target_refs: ReadonlyArray<ImmutableRef>;
++  readonly before_state_ref: ImmutableRef;
++  readonly after_state_ref: ImmutableRef;
++  readonly receipt_ref: ImmutableRef;
++}
+diff --git a/services/studio/src/errors.ts b/services/studio/src/errors.ts
+new file mode 100644
+index 0000000..da0b00a
+--- /dev/null
++++ b/services/studio/src/errors.ts
+@@ -0,0 +1,10 @@
++export class StudioValidationError extends Error {
++  readonly code: string;
++  readonly context: Record<string, unknown>;
++  constructor(code: string, message: string, context: Record<string, unknown> = {}) {
++    super(message);
++    this.name = "StudioValidationError";
++    this.code = code;
++    this.context = context;
++  }
++}
+diff --git a/services/studio/src/generated/contracts.ts b/services/studio/src/generated/contracts.ts
+new file mode 100644
+index 0000000..765b7ac
+--- /dev/null
++++ b/services/studio/src/generated/contracts.ts
+@@ -0,0 +1,126 @@
++// Generated from activative-production-spine JSON Schemas.
++// Do not edit manually.
++
++export interface ActorRef {
++  readonly actor_id: string;
++  readonly actor_type: "deterministic_module" | "model_program" | "human";
++  readonly product_id: string;
++  readonly workflow_role: "hunter" | "analyst" | "composer" | "commander" | "evaluator" | "operator";
++}
++
++export interface ArtifactRef {
++  readonly artifact_id: string;
++  readonly artifact_kind: string;
++  readonly bytes: number;
++  readonly media_type: string;
++  readonly sha256: string;
++  readonly uri: string;
++}
++
++export interface AuthorityRef {
++  readonly authority_id: string;
++  readonly authority_sha256: string;
++  readonly authority_state: "current" | "candidate_not_current";
++  readonly authority_version: string;
++}
++
++export interface CommandEnvelope {
++  readonly actor: ActorRef;
++  readonly authority: AuthorityRef;
++  readonly command_id: string;
++  readonly command_type: string;
++  readonly correlation_id: string;
++  readonly idempotency_key: string;
++  readonly payload_schema: string;
++  readonly payload_sha256: string;
++  readonly payload_version: string;
++  readonly submitted_at_utc: string;
++}
++
++export interface EventEnvelope {
++  readonly actor: ActorRef;
++  readonly aggregate_id: string;
++  readonly aggregate_version: number;
++  readonly authority: AuthorityRef;
++  readonly causation_id: string;
++  readonly correlation_id: string;
++  readonly event_id: string;
++  readonly event_type: string;
++  readonly occurred_at_utc: string;
++  readonly payload_schema: string;
++  readonly payload_sha256: string;
++  readonly payload_version: string;
++}
++
++export interface ExecutionStackFingerprint {
++  readonly canonical_sha256: string;
++  readonly contract_release_ref: ImmutableRef;
++  readonly evaluator_ref: null | ImmutableRef;
++  readonly fingerprint_id: string;
++  readonly hardware_profile: string;
++  readonly implementation_ref: ImmutableRef;
++  readonly model_ref: null | ImmutableRef;
++  readonly precision: string;
++  readonly runtime_ref: ImmutableRef;
++  readonly tool_refs: ReadonlyArray<ImmutableRef>;
++}
++
++export interface ImmutableRef {
++  readonly object_id: string;
++  readonly sha256: string;
++  readonly version: string;
++}
++
++export interface ProductHandoffEnvelope {
++  readonly authority: AuthorityRef;
++  readonly consumer_product: string;
++  readonly created_at_utc: string;
++  readonly handoff_id: string;
++  readonly object_ref: ImmutableRef;
++  readonly object_schema: string;
++  readonly object_schema_version: string;
++  readonly producer_product: string;
++  readonly source_lineage_refs: ReadonlyArray<ImmutableRef>;
++  readonly wrong_reading_lock_refs: ReadonlyArray<ImmutableRef>;
++}
++
++export interface ProductStatusEnvelope {
++  readonly authority: AuthorityRef;
++  readonly certified: boolean;
++  readonly development_authorized: boolean;
++  readonly lifecycle_state: string;
++  readonly product_id: string;
++  readonly product_version: string;
++  readonly production_authorized: boolean;
++  readonly updated_at_utc: string;
++}
++
++export interface ReceiptEnvelope {
++  readonly authority: AuthorityRef;
++  readonly command_ref: ImmutableRef;
++  readonly evaluator: null | ActorRef;
++  readonly failure: null | TypedFailure;
++  readonly outcome: "accepted" | "denied" | "cancelled" | "failed";
++  readonly receipt_id: string;
++  readonly receipt_sha256: string;
++  readonly recorded_at_utc: string;
++  readonly result_refs: ReadonlyArray<ImmutableRef>;
++}
++
++export interface SourceSpanRef {
++  readonly end_ms: number;
++  readonly source_ref: ImmutableRef;
++  readonly speaker_id: string | null;
++  readonly start_ms: number;
++  readonly transcript_sha256: string | null;
++}
++
++export interface TypedFailure {
++  readonly code: string;
++  readonly evidence_refs: ReadonlyArray<ImmutableRef>;
++  readonly message: string;
++  readonly next_action: string;
++  readonly responsible_product: string;
++  readonly retry_class: "non_retryable" | "retryable_same_input" | "retryable_after_input" | "human_decision_required";
++}
++
+diff --git a/services/studio/src/index.ts b/services/studio/src/index.ts
+new file mode 100644
+index 0000000..e63da86
+--- /dev/null
++++ b/services/studio/src/index.ts
+@@ -0,0 +1,25 @@
++declare const require: any;
++declare const module: any;
++declare const process: any;
++const health = {
++  product_id: "conscious-activations-studio",
++  product_version: "0.1.0",
++  authority_state: "candidate_not_current",
++  development_authorized: true,
++  production_authorized: false,
++  certified: false,
++};
++
++if (require.main === module) {
++  const [, , command, ...args] = process.argv;
++  if (command === "health") {
++    process.stdout.write(JSON.stringify(health));
++    process.stdout.write("\n");
++  } else if (command === "demo") {
++    process.stdout.write(JSON.stringify({ product_id: health.product_id, capabilities: ["visual-asset-studio", "evidence-panel", "composition", "layers", "keyframes", "validation", "operator-feedback", "visual-chat"], args }));
++    process.stdout.write("\n");
++  } else {
++    process.stderr.write(`unknown command: ${command ?? ""}\n`);
++    process.exitCode = 2;
++  }
++}
+diff --git a/services/studio/src/revision.ts b/services/studio/src/revision.ts
+new file mode 100644
+index 0000000..e9f17ac
+--- /dev/null
++++ b/services/studio/src/revision.ts
+@@ -0,0 +1,51 @@
++import { canonicalSha256, deterministicId } from "./canonical";
++import { StudioValidationError } from "./errors";
++import { validateDirectDelta, validateOperatorRequest, validateToolRegistry } from "./validators";
++import type { ChangeOperation, ChangeRequestProgram, DirectManipulationDelta, OperatorRevisionRequest, ToolDescriptor } from "./domain";
++
++export const DEFAULT_STUDIO_TOOLS: ReadonlyArray<ToolDescriptor> = Object.freeze([
++  { tool_id: "studio.adjust_bbox", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["COMPOSITION", "TIMELINE_OVERLAY"], argument_keys: ["axis", "delta_micros", "mode"], reversible: true },
++  { tool_id: "studio.resize_bbox", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["COMPOSITION", "TIMELINE_OVERLAY"], argument_keys: ["scale_delta_micros", "anchor"], reversible: true },
++  { tool_id: "studio.trim_segment", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["VIDEO_EDIT_PROGRAM"], argument_keys: ["edge", "delta_ms", "preserve_word_boundary", "preserve_expression_tail"], reversible: true },
++  { tool_id: "studio.set_parameter", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["COMPOSITION", "VIDEO_EDIT_PROGRAM", "TIMELINE_OVERLAY", "CAMPAIGN"], argument_keys: ["parameter", "value"], reversible: true },
++  { tool_id: "studio.select_candidate", tool_version: "1.0.0", owner_product: "conscious-activations-studio", allowed_target_layers: ["CANDIDATE_PORTFOLIO"], argument_keys: ["candidate_id"], reversible: true },
++  { tool_id: "studio.request_semantic_revision", tool_version: "1.0.0", owner_product: "activative-intelligence-runtime", allowed_target_layers: ["AIR_REVISION_REQUEST"], argument_keys: ["request", "reason", "source_ref"], reversible: false },
++]);
++
++function compile(request: OperatorRevisionRequest, sourceKind: ChangeRequestProgram["source_kind"], op: ChangeOperation | null, status: ChangeRequestProgram["compilation_status"] = "COMPILED", interpretation = "Bounded operator visual revision") : ChangeRequestProgram {
++  const core = { compilation_status: status, request_id: request.request_id, request_ref: request.current_state_ref, target_layer_or_nodes: request.target_node_ids, exact_operations: op ? [op] : [], declared_invariants: ["upstream_semantic_authority_preserved", "source_lineage_preserved", "no_ui_only_state"], required_transformations: ["validate_source_lineage", "validate_geometry"], creative_degrees_of_freedom: [], invalidated_downstream_nodes: [], validation_plan: ["source_lineage", "bounds", "state_version", "deterministic_replay"], preview_required: true, confidence_micros: status === "COMPILED" ? 1_000_000 : 0, escalation: status === "COMPILED" ? null : "operator_clarification_required", source_kind: sourceKind, expected_state_version: request.expected_state_version };
++  const programId = deterministicId("revision-program", core);
++  return { ...core, program_id: programId, interpretation, program_sha256: canonicalSha256({ ...core, program_id: programId }) } as ChangeRequestProgram;
++}
++
++function match(request: OperatorRevisionRequest): ChangeOperation | null {
++  const text = request.natural_language_request.trim().toLocaleLowerCase("en-US");
++  const ref = request.target_refs[0]!; const node = request.target_node_ids[0]!;
++  const left = text.match(/(?:move|shift).*?(?:left)\s+by\s+(\d+(?:\.\d+)?)%/);
++  if (left) return { operation_id: deterministicId("change-operation", { id: request.request_id, action: "left", amount: left[1] }), target_ref: ref, target_node_id: node, target_layer: "COMPOSITION", tool_id: "studio.adjust_bbox", tool_version: "1.0.0", arguments: { axis: "x", delta_micros: -Math.round(Number(left[1]) * 10000), mode: "relative" }, preconditions: ["state_version_matches", "source_lineage_present"], expected_effect: `move ${node} left by ${left[1]}%` };
++  const right = text.match(/(?:move|shift).*?(?:right)\s+by\s+(\d+(?:\.\d+)?)%/);
++  if (right) return { operation_id: deterministicId("change-operation", { id: request.request_id, action: "right", amount: right[1] }), target_ref: ref, target_node_id: node, target_layer: "COMPOSITION", tool_id: "studio.adjust_bbox", tool_version: "1.0.0", arguments: { axis: "x", delta_micros: Math.round(Number(right[1]) * 10000), mode: "relative" }, preconditions: ["state_version_matches", "source_lineage_present"], expected_effect: `move ${node} right by ${right[1]}%` };
++  const trim = text.match(/(?:shorten|trim).*?(\d+)\s*ms/);
++  if (trim) return { operation_id: deterministicId("change-operation", { id: request.request_id, action: "trim", amount: trim[1] }), target_ref: ref, target_node_id: node, target_layer: "VIDEO_EDIT_PROGRAM", tool_id: "studio.trim_segment", tool_version: "1.0.0", arguments: { edge: "end", delta_ms: -Number(trim[1]), preserve_word_boundary: true, preserve_expression_tail: true }, preconditions: ["state_version_matches", "timeline_item_editable"], expected_effect: `shorten ${node} by ${trim[1]} ms` };
++  return null;
++}
++
++export function compileNaturalLanguageRevision(request: OperatorRevisionRequest, context: any): ChangeRequestProgram {
++  validateOperatorRequest(request); validateToolRegistry(context.tools ?? DEFAULT_STUDIO_TOOLS);
++  if (request.expected_state_version !== Number(context.state_version)) throw new StudioValidationError("STALE_STATE_VERSION", `expected state version ${request.expected_state_version}, current ${context.state_version}`);
++  const operation = match(request);
++  if (!operation) return compile(request, "NATURAL_LANGUAGE", null, "NEEDS_CLARIFICATION", "No deterministic visual editing grammar matched the request; operator clarification required");
++  return compile(request, "NATURAL_LANGUAGE", operation);
++}
++
++export function compileDirectManipulation(delta: DirectManipulationDelta, context: any): ChangeRequestProgram {
++  validateDirectDelta(delta);
++  if (delta.expected_state_version !== Number(context.state_version)) throw new StudioValidationError("STALE_STATE_VERSION", `expected state version ${delta.expected_state_version}, current ${context.state_version}`);
++  const toolMap = new Map(DEFAULT_STUDIO_TOOLS.map(t => [t.tool_id, t]));
++  const toolByType: Record<string, string> = { MOVE_BBOX: "studio.adjust_bbox", RESIZE_BBOX: "studio.resize_bbox", TRIM_SEGMENT: "studio.trim_segment", EDIT_TEXT: "studio.set_parameter", SET_PARAMETER: "studio.set_parameter", SELECT_CANDIDATE: "studio.select_candidate" };
++  const toolId = toolByType[delta.manipulation_type];
++  if (!toolId || !toolMap.has(toolId)) throw new StudioValidationError("UNSUPPORTED_MANIPULATION", `unsupported manipulation ${delta.manipulation_type}`);
++  const op: ChangeOperation = { operation_id: deterministicId("change-operation", delta), target_ref: delta.target_ref, target_node_id: delta.target_node_id, target_layer: "COMPOSITION", tool_id: toolId, tool_version: toolMap.get(toolId)!.tool_version, arguments: delta.arguments, preconditions: ["state_version_matches", "target_authorized"], expected_effect: `apply ${delta.manipulation_type} deterministically` };
++  const request = { request_id: delta.delta_id, run_ref: delta.run_ref, target_refs: [delta.target_ref], target_node_ids: [delta.target_node_id], category_id: "visual_asset_studio", natural_language_request: `Direct ${delta.manipulation_type}`, current_state_ref: delta.current_state_ref, evaluation_ref: null, jit_capsule_ref: delta.current_state_ref, permitted_tool_registry_ref: delta.current_state_ref, operator_actor: delta.operator_actor, expected_state_version: delta.expected_state_version } as OperatorRevisionRequest;
++  return compile(request, "DIRECT_MANIPULATION", op, "COMPILED", `Bounded native visual edit: ${delta.manipulation_type}`);
++}
+diff --git a/services/studio/src/rpc.ts b/services/studio/src/rpc.ts
+new file mode 100644
+index 0000000..24411f6
+--- /dev/null
++++ b/services/studio/src/rpc.ts
+@@ -0,0 +1,41 @@
++import { buildControlTowerProjection } from "./controlTower";
++import { buildAuditExportManifest } from "./auditExport";
++import { compileDirectManipulation, compileNaturalLanguageRevision } from "./revision";
++import { evaluateShipRequest } from "./ship";
++import { projectVideoEditProgram } from "./timeline";
++import { StudioValidationError } from "./errors";
++
++declare const process: any;
++
++type Handler = (payload: any) => unknown;
++const handlers: Record<string, Handler> = {
++  "build-control-tower-projection": buildControlTowerProjection,
++  "project-video-edit-program": projectVideoEditProgram,
++  "compile-natural-language-revision": (payload) => compileNaturalLanguageRevision(payload.request, payload.context),
++  "compile-direct-manipulation": (payload) => compileDirectManipulation(payload.delta, payload.context),
++  "evaluate-ship-request": evaluateShipRequest,
++  "build-audit-export-manifest": buildAuditExportManifest,
++};
++
++async function main(): Promise<void> {
++  const command = process.argv[2] as string | undefined;
++  let input = "";
++  process.stdin.setEncoding("utf8");
++  for await (const chunk of process.stdin) input += chunk;
++  try {
++    const payload = input.trim() ? JSON.parse(input) : {};
++    if (!command || !handlers[command]) throw new StudioValidationError("UNKNOWN_COMMAND", `unknown Studio RPC command: ${command ?? ""}`);
++    const result = await handlers[command](payload);
++    process.stdout.write(JSON.stringify({ ok: true, result }) + "\n");
++  } catch (error) {
++    if (error instanceof StudioValidationError) {
++      process.stdout.write(JSON.stringify({ ok: false, error: { code: error.code, message: error.message, context: error.context } }) + "\n");
++      return;
++    }
++    process.stderr.write(error instanceof Error ? error.stack ?? error.message : String(error));
++    process.stderr.write("\n");
++    process.exitCode = 1;
++  }
++}
++
++void main();
+diff --git a/services/studio/src/ship.ts b/services/studio/src/ship.ts
+new file mode 100644
+index 0000000..bc3265d
+--- /dev/null
++++ b/services/studio/src/ship.ts
+@@ -0,0 +1,10 @@
++import { canonicalSha256, deterministicId } from "./canonical";
++import { StudioValidationError } from "./errors";
++export function evaluateShipRequest(input: any): any {
++  const request = input.request ?? input;
++  if (request.autonomy_mode === "SHADOW") throw new StudioValidationError("SHADOW_CANNOT_SHIP", "SHADOW campaigns cannot transition to SHIPPED");
++  const unresolved = Array.isArray(request.unresolved_exception_ids) ? request.unresolved_exception_ids : [];
++  const status = unresolved.length ? "DENIED" : "AUTHORIZED";
++  const decision = { decision_id: deterministicId("ship-decision", { request }), request_ref: request.campaign_ref, status, denial_codes: unresolved.length ? ["UNRESOLVED_EXCEPTIONS"] : [], authorized_artifact_refs: status === "AUTHORIZED" ? (request.artifact_refs ?? []) : [], acknowledgement_required: true, decision_actor: request.operator_actor, decision_sha256: canonicalSha256({ request, status }) };
++  return decision;
++}
+diff --git a/services/studio/src/timeline.ts b/services/studio/src/timeline.ts
+new file mode 100644
+index 0000000..3833b79
+--- /dev/null
++++ b/services/studio/src/timeline.ts
+@@ -0,0 +1,6 @@
++import { canonicalSha256, deterministicId } from "./canonical";
++import type { TimelineProjection } from "./domain";
++export function projectVideoEditProgram(input: any): TimelineProjection {
++  const items = (input.items ?? []).map((item: any) => ({ ...item, source_start_ms: item.source_start_ms ?? null, source_end_ms: item.source_end_ms ?? null, source_ref: item.source_ref ?? null, artifact_ref: item.artifact_ref ?? null, editable_operations: item.editable_operations ?? [] }));
++  return { projection_id: input.projection_id ?? deterministicId("timeline", { program_id: input.program_id, sha256: input.program_sha256 }), video_edit_program_ref: { object_id: input.program_id, version: input.version ?? "1.0.0", sha256: input.program_sha256 ?? canonicalSha256(input) }, state: "READ_ONLY_CANONICAL_PROGRAM_PROJECTION", width: Number(input.canvas?.width ?? input.width ?? 1920), height: Number(input.canvas?.height ?? input.height ?? 1080), fps_numerator: Number(input.canvas?.fps_numerator ?? input.fps_numerator ?? 30), fps_denominator: Number(input.canvas?.fps_denominator ?? input.fps_denominator ?? 1), duration_frames: Number(input.duration_frames ?? 0), tracks: input.tracks ?? [], items };
++}
+diff --git a/services/studio/src/validators.ts b/services/studio/src/validators.ts
+new file mode 100644
+index 0000000..917cb07
+--- /dev/null
++++ b/services/studio/src/validators.ts
+@@ -0,0 +1,28 @@
++import { StudioValidationError } from "./errors";
++import type { ChangeRequestProgram, DirectManipulationDelta, OperatorRevisionRequest, ToolDescriptor } from "./domain";
++
++export function validateToolRegistry(tools: ReadonlyArray<ToolDescriptor>): void {
++  const ids = new Set<string>();
++  for (const tool of tools) {
++    if (ids.has(tool.tool_id)) throw new StudioValidationError("DUPLICATE_TOOL", `tool registry contains duplicate ${tool.tool_id}`);
++    ids.add(tool.tool_id);
++  }
++}
++
++export function validateOperatorRequest(request: OperatorRevisionRequest): void {
++  if (!request.request_id.trim()) throw new StudioValidationError("EMPTY_VALUE", "request_id must not be empty");
++  if (!request.natural_language_request.trim()) throw new StudioValidationError("EMPTY_VALUE", "natural_language_request must not be empty");
++  if (request.expected_state_version < 1 || !Number.isInteger(request.expected_state_version)) throw new StudioValidationError("INVALID_INTEGER", "expected_state_version must be an integer >= 1");
++  if (request.target_refs.length === 0 || request.target_node_ids.length === 0) throw new StudioValidationError("TARGET_REQUIRED", "revision request requires a target");
++  if (request.operator_actor.actor_type !== "human" || request.operator_actor.workflow_role !== "operator") throw new StudioValidationError("OPERATOR_REQUIRED", "operator actor must be human/operator");
++}
++
++export function validateDirectDelta(delta: DirectManipulationDelta): void {
++  if (!delta.delta_id.trim()) throw new StudioValidationError("EMPTY_VALUE", "delta_id must not be empty");
++  if (delta.expected_state_version < 1 || !Number.isInteger(delta.expected_state_version)) throw new StudioValidationError("INVALID_INTEGER", "expected_state_version must be an integer >= 1");
++  if (delta.operator_actor.actor_type !== "human" || delta.operator_actor.workflow_role !== "operator") throw new StudioValidationError("OPERATOR_REQUIRED", "operator actor must be human/operator");
++}
++
++export function validateChangeProgram(program: ChangeRequestProgram): void {
++  if (!program.program_id || program.program_sha256.length !== 64) throw new StudioValidationError("INVALID_PROGRAM", "change request program must have a canonical SHA-256");
++}
+diff --git a/services/studio/tsconfig.json b/services/studio/tsconfig.json
+new file mode 100644
+index 0000000..87a0941
+--- /dev/null
++++ b/services/studio/tsconfig.json
+@@ -0,0 +1,15 @@
++{
++  "compilerOptions": {
++    "target": "ES2022",
++    "module": "CommonJS",
++    "moduleResolution": "Node",
++    "rootDir": "src",
++    "outDir": "dist",
++    "declaration": true,
++    "strict": true,
++    "esModuleInterop": true,
++    "skipLibCheck": true,
++    "types": []
++  },
++  "include": ["src/**/*.ts"]
++}
+diff --git a/tests/api/test_studio_bridge.py b/tests/api/test_studio_bridge.py
+new file mode 100644
+index 0000000..94c4de4
+--- /dev/null
++++ b/tests/api/test_studio_bridge.py
+@@ -0,0 +1,96 @@
++from __future__ import annotations
++
++import json
++from pathlib import Path
++
++import pytest
++
++from api.services.studio_bridge import StudioBridge, StudioBridgeCrash, StudioBridgeError
++
++ROOT = Path(__file__).resolve().parents[2]
++RPC = ROOT / "services" / "studio" / "dist" / "rpc.js"
++
++
++def _payload() -> dict:
++    return {
++        "projection_id": "projection:test",
++        "campaign": {
++            "campaign_id": "campaign:test",
++            "order_ref": {"object_type": "campaign_order", "object_id": "order:test", "content_sha256": "a" * 64},
++            "lifecycle_state": "AWAITING_REVIEW",
++            "autonomy_mode": "REVIEW_BEFORE_SHIP",
++            "active_checkpoint_id": "checkpoint:1",
++            "exception_ids": [],
++            "run_refs": [],
++            "artifact_refs": [],
++            "evaluation_refs": [],
++            "version": 1,
++        },
++        "order": {
++            "order_id": "order:test",
++            "workspace_id": "workspace:test",
++            "project_id": "project:test",
++            "source_kind": "ASSET_PACKAGE_SPEC",
++            "source_ref": {"object_type": "source_package", "object_id": "source:test", "content_sha256": "b" * 64},
++            "harness_ref": {"object_type": "harness", "object_id": "harness:test", "content_sha256": "c" * 64},
++            "category_id": "short_form_edited_video",
++            "format_profile_id": "NOT_APPLICABLE",
++            "objective": "Test",
++            "initial_seed": "seed",
++            "taste_direction": [],
++            "output_targets": [],
++            "budget_units": 1,
++            "deadline_utc": None,
++            "autonomy_policy": {"mode": "REVIEW_BEFORE_SHIP", "checkpoint_ids": [], "exception_only": False, "final_review_required": True, "publication_authority_required": True},
++            "operator_actor": {"actor_id": "operator:test", "actor_type": "HUMAN", "display_name": "Test Operator"},
++            "authority": {"authority_id": "authority:test", "authority_type": "SYSTEM", "basis_refs": []},
++        },
++        "studio_binding": {
++            "binding_id": "binding:test",
++            "harness_ref": {"object_type": "harness", "object_id": "harness:test", "content_sha256": "c" * 64},
++            "category_id": "short_form_edited_video",
++            "primary_surface": "VISUAL_ASSET_STUDIO",
++            "supporting_surfaces": ["VIDEO_PRODUCTION_STUDIO"],
++            "operator_entry_policy": "REVIEW_ALLOWED",
++            "binding_reason": "test",
++        },
++        "source_package_ref": {"object_type": "source_package", "object_id": "source:test", "content_sha256": "b" * 64},
++        "observed_activative_pack_ref": None,
++        "semantic_production_package_ref": None,
++        "final_script_ref": None,
++        "activation_transfer_contract_ref": None,
++        "run_nodes": [],
++        "artifacts": [],
++        "evaluations": [],
++        "knowledge": {"skill_refs": [], "steering_recipe_refs": [], "retrieval_receipt_refs": [], "programmed_model_claim_refs": [], "exclusion_codes": []},
++        "runtime_health": [],
++        "timeline": None,
++        "exception_packages": [],
++        "available_actions": [],
++        "projection_sha256": "",
++    }
++
++
++def test_bridge_happy_path() -> None:
++    result = StudioBridge(RPC).call("build-control-tower-projection", _payload())
++    assert "VISUAL_ASSET_STUDIO" in result["available_actions"]
++    assert result["projection_sha256"]
++
++
++def test_bridge_fails_closed_when_entrypoint_missing(tmp_path: Path) -> None:
++    with pytest.raises(StudioBridgeCrash, match="not built"):
++        StudioBridge(tmp_path / "missing.js").call("health", {})
++
++
++def test_bridge_fails_closed_on_malformed_json(tmp_path: Path) -> None:
++    script = tmp_path / "malformed.js"
++    script.write_text("process.stdout.write('not-json\\n');")
++    with pytest.raises(StudioBridgeCrash, match="malformed JSON"):
++        StudioBridge(script).call("health", {})
++
++
++def test_bridge_fails_closed_on_timeout(tmp_path: Path) -> None:
++    script = tmp_path / "hang.js"
++    script.write_text("setTimeout(() => process.exit(0), 10000);")
++    with pytest.raises(StudioBridgeCrash, match="timed out"):
++        StudioBridge(script).call("health", {}, timeout_seconds=0.05)
+diff --git a/tests/api/test_visual_studio_pure.py b/tests/api/test_visual_studio_pure.py
+new file mode 100644
+index 0000000..91308b5
+--- /dev/null
++++ b/tests/api/test_visual_studio_pure.py
+@@ -0,0 +1,27 @@
++from __future__ import annotations
++
++from pathlib import Path
++import sys
++
++ROOT = Path(__file__).resolve().parents[2]
++if str(ROOT) not in sys.path:
++    sys.path.insert(0, str(ROOT))
++
++from api.services.visual_studio_contracts import assert_operator, build_visual_validation
++
++
++def test_visual_studio_rejects_non_operator_actor() -> None:
++    from fastapi import HTTPException
++    try:
++        assert_operator({"actor_type": "model_program", "workflow_role": "composer"})
++    except HTTPException as exc:
++        assert exc.status_code == 403
++        assert exc.detail["error_code"] == "OPERATOR_AUTHORIZATION_REQUIRED"
++    else:
++        raise AssertionError("non-operator actor was accepted")
++
++
++def test_good_looking_but_unproven_layer_is_blocked_without_source_lineage() -> None:
++    report = build_visual_validation({"layer_id": "layer:1", "source_ref": None}, 1)
++    assert report["source_lineage"] == "BLOCKED"
++    assert report["semantic_correctness"] == "OPERATOR_REVIEW_REQUIRED"

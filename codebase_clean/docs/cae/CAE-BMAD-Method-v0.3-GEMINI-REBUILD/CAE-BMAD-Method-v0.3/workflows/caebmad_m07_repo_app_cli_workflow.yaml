@@ -1,0 +1,53 @@
+name: "CAE-BMAD M07 Repository, Application, and CLI Workflow"
+workflow_id: "WF-M07-REPO-APP-CLI"
+version: "0.3.0-rebuild"
+primary_agent: "cae-repository-analyst"
+
+description: "Execution pipeline for Mandate M07: Rebuilding the Repository, Application, and CLI Investigation Systems across Levels 06, 07, and 08."
+
+preconditions:
+  - "Mandates M01-M06 completed and passed"
+  - "Physical workspace and service code accessible"
+
+steps:
+  - step_id: "01_AUDIT_REPOSITORY_LAYOUT"
+    name: "Audit Physical Workspace & Contracts"
+    agent: "cae-repository-analyst"
+    operating_level: "Level 06: REPOSITORY"
+    action: "Scan filesystem, match manifests, and verify cross-repo contracts."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/REPOSITORY_REALITY_MAP.json"
+      - "docs/cae-bmad/07_brownfield/REPOSITORY_REALITY_MAP.md"
+
+  - step_id: "02_MAP_APPLICATIONS_AND_SERVICES"
+    name: "Map Deployable Services & API Endpoints"
+    agent: "cae-application-analyst"
+    operating_level: "Level 07: APPLICATION"
+    action: "Inspect service entrypoints, route handlers, and daemon workers."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/APPLICATION_MAP.json"
+      - "docs/cae-bmad/07_brownfield/APPLICATION_MAP.md"
+
+  - step_id: "03_MAP_COMMANDS_AND_CLI_SUITES"
+    name: "Audit Script Suites & CLI Entrypoints"
+    agent: "cae-cli-script-analyst"
+    operating_level: "Level 08: SCRIPT / CLI"
+    action: "Catalog utility scripts, test CLI argument parsing, and verify executables."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/COMMAND_CONTROL_MAP.json"
+      - "docs/cae-bmad/07_brownfield/COMMAND_CONTROL_MAP.md"
+
+  - step_id: "04_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_repo_app_cli_system.py and test_m07_repo_app_cli.py, then assemble OPERATOR_GATE_M07.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M07.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Repository Reality Map validates against schema"
+  - "Application Map validates against schema (min 4 services)"
+  - "Command Control Map validates against schema (min 5 commands/suites)"
+  - "100% positive and countertests pass"

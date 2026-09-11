@@ -1,0 +1,44 @@
+type: object
+required:
+  - candidate_object_name
+  - proposed_plane
+  - proposed_scope_class
+  - candidate_primary_class
+  - definition_source_ref
+  - target_runtime_ref
+  - promotion_authority_role
+  - proposed_parent_chain
+properties:
+  candidate_object_name:
+    type: string
+    pattern: "^[A-Za-z0-9_]+$"
+  proposed_plane:
+    type: string
+    enum:
+      - "CANONICAL_PLANE"
+      - "OPERATIONAL_PLANE"
+  proposed_scope_class:
+    type: string
+    enum:
+      - "GLOBAL_CANONICAL"
+      - "WORKSPACE_SCOPED"
+      - "ENGAGEMENT_SCOPED"
+      - "GUEST_SCOPED"
+      - "OPERATOR_AUDIT"
+      - "EPHEMERAL_NONAUTHORITATIVE"
+  candidate_primary_class:
+    type: string
+  definition_source_ref:
+    type: string
+  target_runtime_ref:
+    type: string
+  promotion_authority_role:
+    type: string
+  proposed_parent_chain:
+    type: array
+    items:
+      type: string
+  brownfield_evidence_refs:
+    type: array
+    items:
+      type: string

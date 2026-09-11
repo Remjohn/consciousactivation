@@ -1,0 +1,32 @@
+record_role: historical_resolution_receipt
+canonical_registry: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml#XRI-001
+issue_id: XRI-001
+title: Delegation RC1 source-kind and interview-provenance consumer-conformance failure
+reported_by: visual_asset_editor
+affected_release: "1.1.0-rc.1"
+status: resolved
+severity: blocking
+owner: delegation_protocol
+replacement_target: "1.1.0-rc.2"
+current_release: "1.1.0-rc.4"
+resolution:
+  rc2_disposition: historical_convergence_rejection
+  rc3_disposition: historical_convergence_rejection
+  rc4_disposition: current_local_unsigned_release_candidate
+  source_kind_and_interview_provenance: enforced
+  clean_extracted_layout: PASS
+  parse_without_enforcement: incompatible
+  production_authorized: false
+
+failures:
+  - release_manifest_contains_unshipped_cache_files
+  - validators_assume_source_repository_layout
+  - source_kind_discriminator_missing
+  - interview_expression_provenance_not_enforced
+  - parse_without_enforcement_compatibility
+
+blocks:
+  - VAE Batch B
+  - VAE readiness rerun
+  - cross-repository convergence gate
+historical_note: These blocks describe the original RC1 issue and are not active RC4 dependency declarations.

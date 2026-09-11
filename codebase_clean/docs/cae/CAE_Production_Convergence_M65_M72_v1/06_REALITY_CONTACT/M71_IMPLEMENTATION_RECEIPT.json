@@ -1,0 +1,48 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M71",
+  "mandate_title": "Real Domain Program Golden Run + Benchmark",
+  "phase": "PHASE_06_REALITY_CONTACT",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T11:31:00Z",
+  "head_commit_sha": "c50d66d01a9aeaed21da6b7159e4774f9350204c",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/agent_invocation.py",
+    "packages/ca_runtime/src/ca_runtime/agent_registry.py",
+    "packages/ca_runtime/src/ca_runtime/context_capsule.py",
+    "packages/ca_runtime/src/ca_runtime/program_registry.py",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py",
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py",
+    "programs/research_canonicalization_program/program_manifest.yaml",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/06_REALITY_CONTACT/M71_real_domain_program_golden_run_benchmark.md"
+  ],
+  "source_symbols_changed": [
+    "packages/ca_runtime/src/ca_runtime/factory_certification.py:FactoryCertificationRunner.run_domain_program_benchmark",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py:SqliteProgramStateStore._get_connection"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m71_real_domain_program_golden_run_benchmark.py"
+  ],
+  "verification_summary": {
+    "m71_tests_passed": 7,
+    "total_bundle_tests_passed": 201,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "verifications_proved": [
+      "Gate 1: Complete 5-transition lifecycle of research_canonicalization_program executes with SQLite persistence and monotonic versions (v1 -> v7)",
+      "Gate 2: Induced contradiction triggers bounded state repair under COMMANDER lane with repair ledger tracking and receipt emission",
+      "Gate 3: Negative safety stop enforces Checked Transfer Rule (unauthorized lane transition fails closed with zero state drift)",
+      "Gate 4: Durable state reconstructibility & replay after simulated process restart matches exact persisted transition history",
+      "Gate 5: Evidence manifest links aggregate, transitions, receipts, digests, and lineage",
+      "Gate 6: run_domain_program_benchmark derives phase and receipt counts strictly from observed records in the state store",
+      "Gate 7 (Countertest): Demonstrates that unpersisted or synthetic traces fail golden run acceptance"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}

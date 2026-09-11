@@ -1,0 +1,59 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:authority_snapshot",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_authorities": {
+      "type": "array"
+    },
+    "canonical_program_status_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "constitution_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "constitution_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "constitution_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "issued_by": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "product_authorities": {
+      "type": "array"
+    },
+    "schema_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "snapshot_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_id",
+    "schema_version",
+    "snapshot_id",
+    "constitution_id",
+    "constitution_version",
+    "constitution_sha256",
+    "product_authorities",
+    "candidate_authorities",
+    "canonical_program_status_id",
+    "issued_by"
+  ],
+  "title": "authority_snapshot",
+  "type": "object"
+}

@@ -1,0 +1,30 @@
+mandate_contract:
+  required_sections:
+    - mandate_id
+    - title
+    - status
+    - objective
+    - controlling_requirements
+    - verified_brownfield_state
+    - exact_change_boundary
+    - authorized_work
+    - prohibited_work
+    - implementation_sequence
+    - acceptance_criteria
+    - tests
+    - evidence_required
+    - documentation_updates
+    - stop_conditions
+    - handoff
+  rules:
+    status_values: [PROPOSED, READY_FOR_EXECUTION, EXECUTED_PENDING_REVIEW, ACCEPTED, BLOCKED]
+    one_mandate_per_run: true
+    read_before_write: true
+    reread_after_write: true
+    inspect_actual_repo_symbols: true
+    no_invented_symbols: true
+    stop_on_ownership_ambiguity: true
+    update_prd_same_session_if_durable_truth_changes: true
+    commit_required_for_execution_completion_claim: true
+    tests_must_be_actual: true
+    semantic_claims_require_reality_evidence: true

@@ -1,0 +1,14 @@
+module,skill,display-name,menu-code,description,action,args,phase,preceded-by,followed-by,required,output-location,outputs
+cae-bmad,caebmad-help,CAE-BMAD Help,HLP,Route the operator through the CAE method,, ,anytime,,,false,.caebmad/,_ 
+cae-bmad,caebmad-product-reconstruction,CAE Product Reconstruction,R00,Reconstruct product lineage and current reality,, ,research,,,true,.caebmad/,CAE_PRODUCT_RECONSTRUCTION.md
+cae-bmad,caebmad-operating-level,Agentic Operating Level,R01,Choose the engineering inspection depth,, ,research,caebmad-product-reconstruction,caebmad-grill,true,.caebmad/,CAE_OPERATING_LEVEL_ASSESSMENT.md
+cae-bmad,caebmad-grill,CAE Grill,R02,Resolve human product decisions one question at a time,, ,decision,caebmad-operating-level,caebmad-product-brief,true,.caebmad/,CAE_DECISION_LEDGER.md
+cae-bmad,caebmad-product-brief,CAE Product Brief,R03,Write the reconstructed Product Brief,, ,plan,caebmad-grill,caebmad-prd,true,.caebmad/,CAE_PRODUCT_BRIEF.md
+cae-bmad,caebmad-prd,CAE Modular PRD,R04,Create PRD index and modular PRDs,, ,plan,caebmad-product-brief,caebmad-fr,true,.caebmad/,CAE_PRD_INDEX.md
+cae-bmad,caebmad-fr,CAE Functional Requirements,R05,Create traceable functional requirements,, ,plan,caebmad-prd,caebmad-architecture,true,.caebmad/,FUNCTIONAL_REQUIREMENTS/
+cae-bmad,caebmad-architecture,CAE Architecture,R06,Create brownfield architecture,, ,solutioning,caebmad-fr,caebmad-epics-stories,true,.caebmad/,CAE_ARCHITECTURE.md
+cae-bmad,caebmad-epics-stories,CAE Epics and Stories,R07,Create epics and implementation-ready stories,, ,solutioning,caebmad-architecture,caebmad-ui,true,.caebmad/,EPICS/;STORIES/
+cae-bmad,caebmad-ui,CAE UI/UX,R08,Design UI from approved operator/product behavior,, ,solutioning,caebmad-epics-stories,caebmad-brownfield,false,.caebmad/,UI_UX/
+cae-bmad,caebmad-brownfield,CAE Brownfield Reconciliation,R09,Reconcile specifications with current repository,, ,solutioning,caebmad-fr,caebmad-handoff,true,.caebmad/,CAE_BROWNFIELD_REALITY_MAP.md
+cae-bmad,caebmad-handoff,CAE Implementation Handoff,R10,Map approved Stories into CAE runtime surfaces,, ,implementation,caebmad-brownfield,caebmad-review,true,.caebmad/,CAE_IMPLEMENTATION_HANDOFF.md
+cae-bmad,caebmad-review,CAE Review,R11,Adversarial review of the product package,, ,review,caebmad-handoff,,true,.caebmad/,CAE_REVIEW_RECORD.md

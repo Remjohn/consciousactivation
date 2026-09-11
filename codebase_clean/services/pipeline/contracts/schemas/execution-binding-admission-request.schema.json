@@ -1,0 +1,117 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:execution_binding_admission_request",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "atomic_harness_definition_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "authority_snapshot_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "binding_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "binding_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "binding_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "contract_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "program_status_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "requested_claim": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_record_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "request_id",
+    "binding_id",
+    "binding_version",
+    "binding_sha256",
+    "atomic_harness_definition_ref",
+    "authority_snapshot_id",
+    "program_status_id",
+    "source_record_ids",
+    "contract_refs",
+    "category_id",
+    "profile_id",
+    "requested_claim"
+  ],
+  "title": "execution_binding_admission_request",
+  "type": "object"
+}

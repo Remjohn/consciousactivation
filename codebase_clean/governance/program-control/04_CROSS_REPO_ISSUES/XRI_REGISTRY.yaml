@@ -1,0 +1,721 @@
+schema_version: conscious-activations-xri-registry/v1
+authority: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI_REGISTRY.yaml
+authority_scope: program_level_cross_repository_issue_identity_and_status
+registry_status: active
+canonical_record_count: 20
+retired_identifier_count: 1
+last_verified_date: '2026-07-15'
+crc_status_authority: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CRC_STATUS_REGISTRY.yaml
+status_vocabulary:
+  - open
+  - in_remediation
+  - resolved
+  - closed
+  - superseded
+  - accepted_risk
+issues:
+  - identifier: XRI-001
+    canonical_title: Delegation RC1 source-kind and interview-provenance consumer-conformance failure
+    canonical_description: >-
+      Delegation release 1.1.0-rc.1 lacked a governed Visual Asset Demand
+      source discriminator, enforceable interview-expression Reaction Receipt
+      and Expression Moment provenance, release-relative validators, and a
+      transient-free release manifest. The VAE therefore rejected RC1 for
+      semantic enforcement and release packaging.
+    issue_family: delegation_consumer_conformance
+    originating_repository_or_consumer: 02_VISUAL_ASSET_EDITOR
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories:
+      - 02_VISUAL_ASSET_EDITOR
+      - 03_DELEGATION_PROTOCOL
+      - CMF_PROGRAM_CONTROL
+    severity: blocking
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      authoritative_registration: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/XRI-001.yaml
+      consumer_report: 02_VISUAL_ASSET_EDITOR/validation/DELEGATION_RC1_RELEASE_VALIDATION_2026-07-14.md
+      rejection_receipt: 03_DELEGATION_PROTOCOL/docs/consumer-conformance/VAE_RC1_REJECTION_RECEIPT.yaml
+    resolution_criteria:
+      - source_provenance.source_kind is mandatory and governed
+      - interview_expression requires non-empty Reaction Receipt references
+      - interview_expression requires non-empty Expression Moment references
+      - parse_without_enforcement compatibility is rejected
+      - released validators run from a clean extracted release-only layout
+      - release manifests exclude cache and transient files
+      - an immutable successor is locally validated and adopted by VAE
+    resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/RELEASE_RECEIPT.json
+      - 02_VISUAL_ASSET_EDITOR/validation/DELEGATION_RC4_CONSUMER_VALIDATION_2026-07-15.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/RC4_ADOPTION_REPORT.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/STATUS_TRUTH_RECONCILIATION.yaml
+    superseded_releases:
+      - version: 1.1.0-rc.1
+        disposition: consumer_rejected
+      - version: 1.1.0-rc.2
+        disposition: convergence_rejected
+      - version: 1.1.0-rc.3
+        disposition: convergence_rejected
+    current_release_impact:
+      release: 1.1.0-rc.4
+      blocks_release: false
+      production_authorized: false
+      note: Resolution of XRI-001 does not close trust, signing, or operational readiness concerns.
+    historical_aliases_or_mistaken_uses:
+      - repository: 03_DELEGATION_PROTOCOL
+        mistaken_meaning: Missing immutable upstream source artifacts and exact source-to-local diffs
+        replacement_identifier: DLG-ISSUE-001
+      - repository: 03_DELEGATION_PROTOCOL
+        mistaken_meaning: Publication blocker shorthand in immutable Delegation release snapshots
+        replacement_identifier: DLG-ISSUE-001
+    last_verified_date: '2026-07-15'
+
+  - identifier: XRI-002
+    canonical_title: Conversational Activation category adoption in Builder governance
+    canonical_description: >-
+      Builder governance had to adopt Conversational Activation / Human
+      Expression as the fifth canonical category with stable identity and
+      governed profiles, without inheriting unsupported production
+      certification.
+    issue_family: builder_category_governance
+    originating_repository_or_consumer: 01_ATOMIC_HARNESS_BUILDER
+    current_owner: 01_ATOMIC_HARNESS_BUILDER
+    affected_repositories:
+      - 01_ATOMIC_HARNESS_BUILDER
+      - 02_VISUAL_ASSET_EDITOR
+      - 03_DELEGATION_PROTOCOL
+      - CMF_PROGRAM_CONTROL
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-15'
+      authoritative_registration: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CROSS_REPO_ISSUES.md
+      constitutional_authority: CMF_PROGRAM_CONTROL/00_CONSTITUTION/current-v1.1/amendments/BUILDER_V1_2_CONSTITUTIONAL_ALIGNMENT_AMENDMENT.md
+      product_authority: CMF_PROGRAM_CONTROL/01_PRODUCT_AUTHORITIES/builder/current-unpacked/CMF_ATOMIC_HARNESS_BUILDER_NEXT_SHARDED_PRD_V1_2/prd/05-features/F14-format-categories-sequencing.md
+    resolution_criteria:
+      - Builder recognizes five canonical categories
+      - Conversational Activation / Human Expression has a stable canonical identifier
+      - public_comment, reply_dm, reelcast_expression, and interview_expression remain governed profiles
+      - structural support does not imply benchmark or production certification
+      - current Builder planning metadata preserves the category
+    resolution_evidence:
+      - 01_ATOMIC_HARNESS_BUILDER/governance/CANONICAL_CATEGORY_REGISTRY.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/docs/planning/EPIC_INVENTORY.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CATEGORY_PROFILE_CONVERGENCE.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/RC4_ADOPTION_REPORT.md
+    superseded_releases: []
+    current_release_impact:
+      release: 1.1.0-rc.4
+      blocks_release: false
+      production_authorized: false
+      note: Category adoption is resolved; category certification breadth remains a separate concern.
+    historical_aliases_or_mistaken_uses:
+      - repository: 03_DELEGATION_PROTOCOL
+        mistaken_meaning: Missing Content Harness and VAE implementation repositories, adapters, and executable tests
+        replacement_identifier: DLG-ISSUE-002
+      - repository: 03_DELEGATION_PROTOCOL
+        mistaken_meaning: Owner-ratification publication blocker shorthand
+        replacement_identifier: DLG-ISSUE-002
+    last_verified_date: '2026-07-15'
+
+  - identifier: XRI-003
+    canonical_title: Split validation and admission receipt authority
+    canonical_description: >-
+      The shared submission-receipt model conflated Delegation validation with
+      VAE admission. The governed correction separates protocol validation
+      facts from VAE admission facts so every shared field has one owner.
+    issue_family: shared_contract_authority
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [field_owner_gate]
+    resolution_criteria:
+      - protocol validation and VAE admission are separate typed facts
+      - each receipt field has one enforceable authority owner
+      - legacy combined receipts require lossless compatibility handling
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/tech-specs/TS-DLG-02-AUTHORITY-POLICY-AND-PRINCIPAL-IDENTITY.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_REPO_CONVERGENCE_REPORT.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-004
+    canonical_title: Production acceptance versus consumption authorization ownership
+    canonical_description: >-
+      A VAE-produced result formerly carried downstream consumption authority,
+      conflicting with the Content Harness acknowledgement boundary. The
+      governed model keeps production acceptance with VAE and consumption
+      authorization with the authoritative downstream acknowledgement.
+    issue_family: shared_contract_authority
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: blocking
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [D006, FR-042, schema_freeze]
+    resolution_criteria:
+      - VAE results assert production acceptance only
+      - downstream consumption authority is emitted only by the Content Harness or authorized composition runtime
+      - adapters preserve the ownership distinction
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/tech-specs/TS-DLG-02-AUTHORITY-POLICY-AND-PRINCIPAL-IDENTITY.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-005
+    canonical_title: Evaluation-policy boundary and VAE production sovereignty
+    canonical_description: >-
+      Content Harness evaluation requirements risked transferring VAE-owned
+      workflow and evaluator strategy. The governed boundary permits typed
+      profile requirements and acceptance constraints without transferring
+      production realization authority.
+    issue_family: product_authority_boundary
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 01_ATOMIC_HARNESS_BUILDER
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [field_authority, VAE_production_sovereignty]
+    resolution_criteria:
+      - Builder emits only governed evaluation requirements and profile references
+      - VAE retains evaluator, workflow, model and repair-strategy authority
+      - EVALUATE capability does not imply evaluator certification
+    current_resolution_evidence:
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/BUILDER_TO_DELEGATION_WIRE_MAPPING.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/BOUNDARY_ADAPTER_MANIFEST.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-006
+    canonical_title: Closed public contract objects and enforceable nested ownership
+    canonical_description: >-
+      Open or example-only nested public objects prevented deterministic field
+      ownership and compatibility enforcement across products. RC4 closes
+      governed objects or constrains extension points through versioned rules.
+    issue_family: shared_schema_governance
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: blocking
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [contract_family_validation]
+    resolution_criteria:
+      - public nested objects are closed or use governed versioned extensions
+      - nested authority and compatibility classes are enforceable
+      - unknown governed fields fail closed
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/RELEASE_RECEIPT.json
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/CLEAN_ROOM_VALIDATION_REPORT.json
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_REPO_CONVERGENCE_REPORT.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-007
+    canonical_title: Canonical schema and payload version identity
+    canonical_description: >-
+      Shared schemas lacked sufficient canonical identity and version binding.
+      RC4 binds schema identifiers, message versions, registry metadata,
+      generated declarations and release hashes.
+    issue_family: release_identity_and_versioning
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [generated_types, release_pinning, migration]
+    resolution_criteria:
+      - every shared schema has governed identity and version metadata
+      - generated Python and TypeScript metadata match the canonical registry
+      - consumer pins resolve the same immutable release identity
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/contracts/registry.json
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/contracts/release-manifest.json
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CONTRACT_HASH_MATRIX.csv
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-008
+    canonical_title: Registered principal identity normalization
+    canonical_description: >-
+      Producer and consumer identifiers varied across contract and authority
+      registries. RC4 normalizes them to governed principals with explicit
+      conditional-authority rules.
+    issue_family: principal_and_authority_identity
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [deterministic_authority_validation]
+    resolution_criteria:
+      - producers and consumers resolve to registered principal types
+      - conditional authorities are explicit and validated
+      - unknown principals fail closed
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/governance/PRINCIPAL_AUTHORITY_REGISTRY.yaml
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/contracts/registry.json
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-009
+    canonical_title: External event projection boundary
+    canonical_description: >-
+      The original event state shape could expose VAE-private workflow state.
+      The governed boundary uses typed public facts and protocol-owned
+      projections without transferring internal production state.
+    issue_family: product_encapsulation_boundary
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [D004, VAE_encapsulation]
+    resolution_criteria:
+      - external events use typed public facts
+      - VAE-private workflow fields are not exported
+      - protocol projections remain derived and non-authoritative
+    current_resolution_evidence:
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/ASSET_RESULT_MAPPING.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-010
+    canonical_title: Exact demand identity propagation
+    canonical_description: >-
+      Shared messages inconsistently referenced demands by an unversioned
+      string. RC4 and both consumer mappings preserve exact demand identity,
+      version and payload hash for staleness, audit and replay checks.
+    issue_family: immutable_resource_identity
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: blocking
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [staleness, audit, replay_correctness]
+    resolution_criteria:
+      - related messages carry exact demand resource ID, version and hash
+      - stale identities are rejected
+      - adapters preserve the identity tuple losslessly
+    current_resolution_evidence:
+      - 01_ATOMIC_HARNESS_BUILDER/contracts/integration/BUILDER_TO_DELEGATION_WIRE_MAPPING.yaml
+      - 02_VISUAL_ASSET_EDITOR/contracts/integration/VISUAL_ASSET_DEMAND_REQUEST_MAPPING.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-011
+    canonical_title: Cross-product idempotency and replay scope
+    canonical_description: >-
+      Duplicate delivery and hostile replay semantics lacked one shared scope.
+      RC4 separates these conditions, validates governed identifiers and
+      preserves replay protection through lifecycle and audit receipts.
+    issue_family: lifecycle_integrity
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [security_gate, resilience_gate]
+    resolution_criteria:
+      - duplicate and hostile replay outcomes are distinct
+      - idempotency and nonce scopes are governed and validated
+      - lifecycle and audit behavior is deterministic
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/delegation-contracts/1.1.0-rc.4/protocol/tests
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_REPO_CONVERGENCE_REPORT.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+      note: Durable storage ownership remains separately open under XRI-017.
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-012
+    canonical_title: Cross-product adapter and migration equivalence evidence
+    canonical_description: >-
+      Delegation initially had only local compatibility vectors. RC4 and the
+      Builder and VAE integrations now demonstrate lossless direct, adapter and
+      migration behavior without guessing classification or dropping authority.
+    issue_family: compatibility_and_migration
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: high
+    current_status: resolved
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [cross_product_compatibility_proof]
+    resolution_criteria:
+      - direct compatibility paths preserve all governed semantics
+      - adapters cannot remove constraints or invent source classification
+      - migrations produce new immutable artifacts with negative preservation evidence
+      - both product integrations validate the RC4 behavior
+    current_resolution_evidence:
+      - 01_ATOMIC_HARNESS_BUILDER/docs/planning/BUILDER_DELEGATION_RC4_INTEGRATION_REPORT.md
+      - 02_VISUAL_ASSET_EDITOR/validation/DELEGATION_RC4_CONSUMER_VALIDATION_2026-07-15.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-013
+    canonical_title: Pinned Format 02 product releases and executable adapters
+    canonical_description: >-
+      Format 02 integration evidence does not yet pin production-eligible
+      Builder and VAE releases, executable builds and public adapter versions.
+      Exact Delegation RC4 pins do not themselves satisfy this product-release gate.
+    issue_family: cross_product_release_evidence
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: CMF_PROGRAM_CONTROL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL, CMF_PROGRAM_CONTROL]
+    severity: blocking
+    current_status: open
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [Format_02_integration_certification]
+    resolution_criteria:
+      - pin exact production-eligible Builder and VAE release identities
+      - pin executable adapter artifacts and versions
+      - execute the governed Format 02 integration against those artifacts
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/implementation/IMPLEMENTATION_READINESS.md
+      - 02_VISUAL_ASSET_EDITOR/PROGRAM_STATUS_EXPORT.yaml
+      - 01_ATOMIC_HARNESS_BUILDER/PROGRAM_STATUS_EXPORT.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_publication_or_certification: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-014
+    canonical_title: Harness Control Tower projection contract availability
+    canonical_description: >-
+      The shared Delegation projection still lacks an approved executable
+      Control Tower read-model and event-API integration boundary. Builder
+      planning describes the projection, but cross-product integration evidence is absent.
+    issue_family: control_tower_integration
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 01_ATOMIC_HARNESS_BUILDER
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL, CMF_PROGRAM_CONTROL]
+    severity: high
+    current_status: open
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [GATE-08, Control_Tower_integration]
+    resolution_criteria:
+      - publish the governed Control Tower read-model and event-API boundary
+      - define an additive Delegation projection without creating a second source of truth
+      - validate projection behavior with Builder and Delegation evidence
+    current_resolution_evidence:
+      - 01_ATOMIC_HARNESS_BUILDER/docs/ux/HARNESS_CONTROL_TOWER_UX_CONTRACT.md
+      - 01_ATOMIC_HARNESS_BUILDER/docs/tech-specs/specs/TS-12-HARNESS-CONTROL-TOWER.md
+      - 03_DELEGATION_PROTOCOL/docs/implementation/IMPLEMENTATION_READINESS.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_integration: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-015
+    canonical_title: Cross-repository trust roots and signing lifecycle
+    canonical_description: >-
+      Principal authentication, trust roots, credential rotation, signing and
+      historical verification remain unapproved across products. RC4 is
+      intentionally local and unsigned.
+    issue_family: production_trust_and_signing
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: CMF_PROGRAM_CONTROL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL, CMF_PROGRAM_CONTROL]
+    severity: high
+    current_status: open
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [integrity_proof, production_signing, publication]
+    resolution_criteria:
+      - approve principal identifiers and trust roots
+      - approve credential and key lifecycle
+      - approve signing profile, verification history and incident routing
+      - sign and publish the approved release without changing its governed bytes
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/PROGRAM_STATUS_EXPORT.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CONVERGENCE_VERDICT.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/RC4_ADOPTION_REPORT.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_publication: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-016
+    canonical_title: Transport-neutral product port and delivery contract
+    canonical_description: >-
+      The protocol is transport-neutral, but Builder and VAE do not yet expose
+      one approved delivery-port contract covering acknowledgement, retry,
+      deduplication and conformance across supported transports.
+    issue_family: transport_and_delivery_integration
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: medium
+    current_status: open
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [FR-007, integration_architecture]
+    resolution_criteria:
+      - define transport-neutral product ports
+      - define delivery metadata, acknowledgement, retry and dedupe rules
+      - pass shared transport conformance fixtures
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/implementation/IMPLEMENTATION_READINESS.md
+      - 03_DELEGATION_PROTOCOL/PROGRAM_STATUS_EXPORT.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_integration: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-017
+    canonical_title: Durable protocol state and audit ownership
+    canonical_description: >-
+      Operational ownership for durable protocol state, replay records, audit
+      ledger, object references and projection checkpoints remains unassigned.
+      Contract semantics are stable, but production persistence is not authorized.
+    issue_family: operational_state_and_recovery
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: CMF_PROGRAM_CONTROL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL, CMF_PROGRAM_CONTROL]
+    severity: blocking
+    current_status: open
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [lifecycle_operations, audit, deployment_readiness]
+    resolution_criteria:
+      - assign an operational owner for each durable state family
+      - approve transaction, retention, backup and recovery contracts
+      - demonstrate recovery and historical reproducibility
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/implementation/IMPLEMENTATION_READINESS.md
+      - 02_VISUAL_ASSET_EDITOR/PROGRAM_STATUS_EXPORT.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_operation: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-019
+    canonical_title: Exact field-authority map ratification and denied-path evidence
+    canonical_description: >-
+      Delegation replaced blanket ownership with exact field and item-pointer
+      authority enforcement. RC4 and consumer mappings converge semantically,
+      while executable product denied-path evidence remains gated by product readiness.
+    issue_family: cross_product_authority_proof
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: blocking
+    current_status: in_remediation
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [contract_publication, executable_authority_proof]
+    resolution_criteria:
+      - ratify exact authority paths against pinned product mappings
+      - execute denied-path vectors through both product adapter surfaces
+      - preserve fail-closed unknown-path behavior
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/implementation/EPICS_AND_VERTICAL_STORIES.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CROSS_PRODUCT_AUTHORITY_MATRIX.yaml
+      - 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_proof: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-020
+    canonical_title: Lifecycle transition mapping and cross-product race evidence
+    canonical_description: >-
+      Delegation now enforces the governed lifecycle and absent-transition
+      rejection matrix. Cross-product runtime fact mappings and race schedules
+      remain unavailable until product implementation is separately authorized.
+    issue_family: cross_product_lifecycle_proof
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: 03_DELEGATION_PROTOCOL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL]
+    severity: blocking
+    current_status: in_remediation
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [lifecycle_publication, executable_integration_proof]
+    resolution_criteria:
+      - ratify each public fact-to-transition mapping
+      - execute cross-product race and replay schedules
+      - retain complete legal and absent-transition coverage
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/implementation/EPICS_AND_VERTICAL_STORIES.md
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/LIFECYCLE_CONVERGENCE.yaml
+      - 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_production_proof: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+  - identifier: XRI-021
+    canonical_title: Format 02 end-to-end scenario evidence bundle
+    canonical_description: >-
+      Delegation provides the governed Format 02 scenario portfolio, but real
+      Builder and VAE executions, Control Tower projections, governed assets
+      and a signed evidence bundle remain incomplete.
+    issue_family: cross_product_certification_evidence
+    originating_repository_or_consumer: 03_DELEGATION_PROTOCOL
+    current_owner: CMF_PROGRAM_CONTROL
+    affected_repositories: [01_ATOMIC_HARNESS_BUILDER, 02_VISUAL_ASSET_EDITOR, 03_DELEGATION_PROTOCOL, CMF_PROGRAM_CONTROL]
+    severity: blocking
+    current_status: in_remediation
+    created_evidence:
+      recorded_date: '2026-07-14'
+      original_registration: 03_DELEGATION_PROTOCOL/CROSS_REPO_ISSUES.md
+    blocking_relationships: [Format_02_end_to_end_certification]
+    resolution_criteria:
+      - execute the canonical scenario bundles through pinned real adapters
+      - validate real Control Tower projections and governed assets
+      - produce the approved signed Format 02 evidence bundle
+    current_resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/docs/implementation/EPICS_AND_VERTICAL_STORIES.md
+      - 02_VISUAL_ASSET_EDITOR/PROGRAM_STATUS_EXPORT.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/CATEGORY_PROFILE_CONVERGENCE.yaml
+    release_impact:
+      current_release: 1.1.0-rc.4
+      blocks_current_release: false
+      blocks_Format_02_production_certification: true
+      production_authorized: false
+    historical_aliases: []
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+retired_identifiers:
+  - former_identifier: XRI-018
+    classification: DELEGATION_LOCAL
+    replacement_identifier: DLG-ISSUE-018
+    former_meaning: Missing Delegation repository agent-governance file
+    originating_repository: 03_DELEGATION_PROTOCOL
+    final_status: closed
+    historical_identifiers: [XRI-018]
+    renamed_because: reserved_program_namespace
+    resolution_evidence:
+      - 03_DELEGATION_PROTOCOL/AGENTS.md
+      - 03_DELEGATION_PROTOCOL/00_ALIGNMENT_START_HERE.md
+    active_program_issue: false
+    last_verified_timestamp: '2026-07-15T03:46:27+02:00'
+
+separate_resolved_concerns:
+  - identifier: CRC-401
+    title: VAE repository-local Constitutional Precedence Contract evidence
+    status: resolved
+    canonical_record: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CRC_STATUS_REGISTRY.yaml#CRC-401
+  - identifier: CRC-402
+    title: Complete Feature Contract category-by-asset-family fixture evidence
+    status: resolved
+    canonical_record: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CRC_STATUS_REGISTRY.yaml#CRC-402
+
+separate_open_concerns:
+  - identifier: CRC-403
+    title: Production trust, signing, publication, and repository readiness
+    status: open
+    canonical_record: CMF_PROGRAM_CONTROL/04_CROSS_REPO_ISSUES/CRC_STATUS_REGISTRY.yaml#CRC-403
+    note: This concern is not XRI-001 or XRI-002 and remains open.

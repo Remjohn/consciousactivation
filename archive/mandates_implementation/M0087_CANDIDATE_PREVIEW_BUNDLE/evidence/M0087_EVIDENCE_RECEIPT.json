@@ -1,0 +1,88 @@
+{
+  "baseline": {
+    "local_git_sha": "UNAVAILABLE: supplied archive omitted .git metadata",
+    "source_archive": "/mnt/data/codebase_clean(4).zip",
+    "upstream_main_commit": "1238dda04cc89e16ed7ac96ac79417c7c321f8a8"
+  },
+  "changed_file_sha256": {
+    "api/main.py": "aa9ab82375bf2da3ff3ec9d7f1cc3c6fe61b29485202b9391a3d4a024748e268",
+    "api/routers/candidate_preview.py": "37cbe37daed73250d0d665faae96c149bc22436c2c392f59d1bf6022ba0f89a0",
+    "apps/web/src/api/candidatePreview.ts": "69afa539c2a181d46c894ec0b4208782e14debad2e22fb6f0789b668c1423c0c",
+    "apps/web/src/components/visual-studio/CandidatePreviewPanel.tsx": "38d0f5bc61be04bc13a11f73445fcd6ccdcabf1844797a20562609a86d602714",
+    "apps/web/src/components/visual-studio/VisualAssetStudio.tsx": "2686ce2b070d718efafc01e91fbc5cc843858941250fbacf263a422c6444b355",
+    "services/asset-intelligence/src/cae_asset_intelligence/__init__.py": "a7b9f13d5305dabe1f281bfc0b40e30ffc0396326e7f67b103146ee38288348d",
+    "services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py": "991b6ad5380e6623271a6b1c0529e0587a2a20ef26499e80b613bc04bddb9f69",
+    "tests/api/test_candidate_preview.py": "8937f43b0159ad3227dcf476989afe7a015750bb79b54198308a8f5dd5890244",
+    "tests/asset_intelligence/test_m0087_candidate_preview.py": "8e80d7cc4874d1ac761257f7e7640f6404b351a8a5518040a437fee1154cc1bb"
+  },
+  "evidence": [
+    {
+      "claim": "Candidate preview session, immutable candidate portfolio snapshots, decision receipts, governed auto-acceptance, navigation, rejection lineage, and canonical promotion endpoint are implemented within the allowed boundary.",
+      "class": "EXECUTABLE",
+      "paths": [
+        "services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py",
+        "api/routers/candidate_preview.py",
+        "apps/web/src/api/candidatePreview.ts",
+        "apps/web/src/components/visual-studio/CandidatePreviewPanel.tsx"
+      ]
+    },
+    {
+      "class": "TEST",
+      "command": "python -m pytest -q tests/asset_intelligence/test_m0087_candidate_preview.py tests/api/test_visual_studio_pure.py tests/asset_intelligence/test_cinematic_retrieval_m063.py tests/production_program/test_m0064_asset_selection_binding_lineage.py",
+      "result": "35 passed in 0.47s"
+    },
+    {
+      "class": "TEST",
+      "command": "python -m py_compile api/routers/candidate_preview.py services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py; python -m compileall -q api/routers/candidate_preview.py services/asset-intelligence/src/cae_asset_intelligence/candidate_preview.py services/asset-intelligence/src/cae_asset_intelligence/__init__.py",
+      "result": "PASS"
+    },
+    {
+      "class": "TEST",
+      "command": "python -m pytest -q tests/api/test_candidate_preview.py",
+      "result": "BLOCKED at collection: ModuleNotFoundError: No module named psycopg; API integration layer cannot be truthfully claimed from this environment."
+    },
+    {
+      "class": "TEST",
+      "command": "tsc -p apps/web/tsconfig.json --noEmit",
+      "result": "BLOCKED: TS2688 Cannot find type definition file for vite/client; node_modules are absent in supplied snapshot."
+    },
+    {
+      "claim": "Adopted existing CAE retrieval and canonical native edit behavior rather than creating a second retrieval authority.",
+      "class": "REGISTRY_SOURCE",
+      "source_commit": "1238dda04cc89e16ed7ac96ac79417c7c321f8a8",
+      "source_paths": [
+        "services/asset-intelligence/src/cae_asset_intelligence/retrieval.py",
+        "api/services/human_resolution.py"
+      ]
+    },
+    {
+      "claim": "Authority mapping read from Constitution, precedence contract, current PRD, M65-M72 gate sync, media intelligence brief, and the 2026-09-10 visual production authority pack.",
+      "class": "DOCUMENT",
+      "paths": [
+        "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+        "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+        "docs/PRD/CURRENT.md",
+        "docs/cae/cae_mandate_bundle/01_CA_MANDATE_AUTHORING_PROTOCOL.md",
+        "docs/cae/CAE_Operational_Product_Campaign_M0058_M0068_v1/18_BROWNFIELD_REFERENCE.md",
+        "docs/cae/CAE_Production_Convergence_M65_M72_v1/README.md",
+        "docs/cae/CAE_Production_Convergence_M65_M72_v1/07_PRODUCTION_OPERATOR_GATES/M72_final_production_gate_current_sync.md",
+        "docs/cae/CAE_Product_Brief/10_Media_Intelligence_Asset_Intelligence_Evidence_Retrieval.md",
+        "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+        "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md",
+        "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md",
+        "docs/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md"
+      ]
+    },
+    {
+      "claim": "Operator must inspect actual media, validate semantic suitability/source lineage, confirm automatic-vs-human decision status, and choose APPROVE, APPROVE-WITH-LIMITATIONS, or REJECT. Local environment prevented native API/UI runtime proof and the supplied archive has no commit metadata.",
+      "class": "OPERATOR_DECISION_REQUIRED"
+    }
+  ],
+  "evidence_generated_utc": "2026-09-11T05:31:00Z",
+  "external_sources": {
+    "commit": "N/A",
+    "license": "N/A; no external repository content extracted or vendored.",
+    "used": false
+  },
+  "mandate_id": "M0087"
+}

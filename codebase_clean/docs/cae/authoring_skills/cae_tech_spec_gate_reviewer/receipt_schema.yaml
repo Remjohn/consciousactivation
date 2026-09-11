@@ -1,0 +1,40 @@
+type: object
+required:
+  - receipt_id
+  - skill_id
+  - skill_version
+  - reviewed_spec_id
+  - execution_timestamp_utc
+  - review_verdict
+  - gates_passed_count
+  - gates_failed_count
+  - reviewer_identity
+properties:
+  receipt_id:
+    type: string
+    pattern: "^RCP-GATE-[0-9a-f]{8}$"
+  skill_id:
+    type: string
+    const: "cae_tech_spec_gate_reviewer"
+  skill_version:
+    type: string
+  reviewed_spec_id:
+    type: string
+  execution_timestamp_utc:
+    type: string
+  review_verdict:
+    type: string
+    enum:
+      - "GATES_CLEARED_RECOMMENDED_FOR_OPERATOR_GATE"
+      - "FAILED_GATE_VIOLATION"
+      - "REJECTED_INCOMPLETE_SPEC"
+  gates_passed_count:
+    type: integer
+    minimum: 0
+    maximum: 9
+  gates_failed_count:
+    type: integer
+    minimum: 0
+    maximum: 9
+  reviewer_identity:
+    type: string

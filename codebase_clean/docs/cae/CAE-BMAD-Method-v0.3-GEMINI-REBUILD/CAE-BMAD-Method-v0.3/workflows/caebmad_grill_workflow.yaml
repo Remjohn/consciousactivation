@@ -1,0 +1,52 @@
+name: "CAE-BMAD Grill-Me Alignment Workflow"
+workflow_id: "WF-GRILL-PROTOCOL"
+version: "0.3.0-rebuild"
+primary_agent: "cae-method-orchestrator"
+
+description: "Governed interactive alignment workflow executing the 4 Laws of Signal Distillation (RSCS), enforcing single-question discipline, codebase prechecks, collision primitives, and 320-word substantive recommendations."
+
+preconditions:
+  - "An architectural fork, constitutional trade-off, or gate ambiguity is identified"
+  - "Schemas schemas/grill_session.schema.json and method/CAE_BMAD_GRILL_SPEC.md loaded"
+
+steps:
+  - step_id: "01_CODEBASE_PRECHECK"
+    name: "Zero-Waste Codebase Precheck"
+    agent: "cae-brownfield-auditor"
+    operating_level: "Level 06: REPOSITORY through Level 13: LINE / BLOCK"
+    action: "Inspect physical files, schemas, and tests to determine if the question can be resolved without interrupting the human operator."
+    decision_branch:
+      resolvable_by_code: "Log autonomous resolution in docs/cae-bmad/00_governance/DECISION_LEDGER.md and terminate workflow."
+      requires_human_judgment: "Proceed to Step 02."
+
+  - step_id: "02_FORMULATE_SINGLE_QUESTION"
+    name: "Formulate Single Question"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Articulate exactly ONE focused question. Prohibit compound, batched, or survey-style questionnaires."
+
+  - step_id: "03_SYNTHESIZE_RSCS_RECOMMENDATION"
+    name: "Synthesize Substantive RSCS Recommendation"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT through Level 07: APPLICATION"
+    action: "Construct recommended answer adhering to the 4 Laws of Signal Distillation: ground in first-party code (Law 1), declare active T/V/R collision primitive (Law 2), ensure high signal density (Law 3), and enforce 320-360 word minimum floor."
+
+  - step_id: "04_EVALUATE_ANTI_GENERICITY_GATE"
+    name: "Anti-Genericity Reality Contact Gate"
+    agent: "cae-adversarial-reviewer"
+    operating_level: "ALL LEVELS"
+    action: "Evaluate recommended answer against 4 anti-genericity checks. If output could apply to an unrelated SaaS or generic project, reject as DENSITY_DECAY failure and trigger regeneration."
+
+  - step_id: "05_PRESENT_AND_RECORD"
+    name: "Present Question to Operator & Record Ratification"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Present question and recommendation using templates/grill_question.md. Upon operator response, log outcome in docs/cae-bmad/00_governance/OPERATOR_GATE_DECISIONS.json and DECISION_LEDGER.md."
+    output_artifacts:
+      - "docs/cae-bmad/00_governance/CANONICAL_GRILL_SESSION_*.json"
+      - "docs/cae-bmad/00_governance/DECISION_LEDGER.md"
+
+postconditions:
+  - "Grill session packet validates against schemas/grill_session.schema.json"
+  - "Word count meets or exceeds 320-word density floor"
+  - "Operator decision formally logged in Decision Ledger"

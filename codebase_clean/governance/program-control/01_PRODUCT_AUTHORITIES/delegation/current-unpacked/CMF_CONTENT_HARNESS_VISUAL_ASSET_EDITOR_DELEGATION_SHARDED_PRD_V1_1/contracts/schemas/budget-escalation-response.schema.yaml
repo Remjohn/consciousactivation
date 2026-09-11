@@ -1,0 +1,30 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Budget Escalation Response
+type: object
+additionalProperties: false
+required:
+- escalation_ref
+- decision
+- authority
+properties:
+  escalation_ref:
+    type: string
+    minLength: 1
+  decision:
+    type: string
+    minLength: 1
+    enum:
+    - approved
+    - denied
+    - cancelled
+    - alternative_requested
+  new_authorization:
+    type:
+    - object
+    - 'null'
+  authority:
+    type: object
+  reason:
+    type:
+    - string
+    - 'null'

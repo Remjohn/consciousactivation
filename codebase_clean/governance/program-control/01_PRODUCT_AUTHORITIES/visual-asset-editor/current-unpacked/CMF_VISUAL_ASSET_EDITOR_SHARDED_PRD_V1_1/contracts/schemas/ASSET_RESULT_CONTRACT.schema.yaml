@@ -1,0 +1,58 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Asset Result Contract
+description: ''
+type: object
+additionalProperties: false
+required:
+- execution_id
+- request_id
+- demand_version
+- status
+- accepted_assets
+- evaluation_receipt_ref
+- production_receipt_ref
+- budget_receipt
+- authorized_for_composition
+properties:
+  execution_id: &id001
+    type: string
+  request_id: *id001
+  demand_version:
+    type: integer
+    minimum: 1
+  status:
+    enum:
+    - completed
+    - completed_with_authorized_degradation
+  accepted_assets:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+      - asset_ref
+      - role
+      - master_uri
+      - sha256
+      properties:
+        asset_ref: *id001
+        role: *id001
+        master_uri: *id001
+        sha256: *id001
+        delivery_variants:
+          type: array
+          items:
+            type: object
+  composition_geometry_ref: &id002
+    type: string
+    minLength: 1
+  evaluation_receipt_ref: *id002
+  production_receipt_ref: *id002
+  syntax_usage_context_ref: *id002
+  budget_receipt:
+    type: object
+  limitations:
+    type: array
+    items: *id001
+  authorized_for_composition:
+    type: boolean

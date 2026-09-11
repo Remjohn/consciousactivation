@@ -1,0 +1,265 @@
+# Object Constitution: OperatorAccessGrant
+# Phase 04 / CA-CAN-01A Boundary & Access Constitutions
+
+id: "CA-REL-002"
+canonical_name: "OperatorAccessGrant"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Relation"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "OPERATOR_AUDIT"
+collision_register_ref: "COL-MAP-002"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REL-002"
+    canonical_name: "OperatorAccessGrant"
+    common_aliases: ["Operator Break-Glass Pass", "Audited Operator Ticket", "Temporary Access Grant"]
+    naming_standard: "PascalCase singular compound grant relation"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Relation"
+    class_matrix_id: 3
+    class_rationale: "OperatorAccessGrant is a transient, stateful operational relation binding an operator principal to a target customer Workspace under the governance of an OperatorAccessPolicy."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Represents active runtime break-glass access records that expire and generate audit receipts."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Operator Access & Audit Verification"
+    primary_purpose: "Grants time-bounded, justification-backed, auditable access for a specific operator to perform authorized maintenance or support on a specific Workspace."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational time-bound access relation"
+    differentia: "Distinguished from WorkspaceMembership (permanent tenant user role) and OperatorAccessPolicy (canonical rulebook) by being a transient, audited ticket for host engineers."
+    function: "Provides cryptographic proof and session authorization for emergency break-glass operator actions while enforcing mandatory audit logging."
+    boundary: "Must not be permanent; must not bypass audit logging; cannot span multiple Workspaces on a single grant."
+    normative_definition: >
+      OperatorAccessGrant is the operational relation binding an operator principal to a specific target Workspace
+      for a strictly bounded duration and justified operational purpose, referencing an active OperatorAccessPolicy.
+      It authorizes scoped break-glass maintenance and requires mandatory immutable receipt generation for every action.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "A temporary, audited break-glass access record."
+      - "An explicit binding: (operator_principal, target_workspace, policy_version, justification, time_window)."
+    what_it_is_not:
+      - "A permanent administrative membership in a workspace."
+      - "An unmonitored backdoor."
+      - "An OperatorAccessPolicy (the policy is the rulebook; the grant is the ticket)."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "OperatorAccessPolicy (CA-POL-001)"
+        distinction: "Policy is the immutable canonical contract; Grant is the transient operational execution instance."
+      - neighbor: "WorkspaceMembership (CA-REL-001)"
+        distinction: "Membership is customer tenant identity; Grant is host platform support staff temporary pass."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Access Control & Security Audit"
+    tier: "Audited Break-Glass Relation"
+    specialization: "Temporary Scoped Operator Pass"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "contextual"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["REQUESTED", "ACTIVE", "EXPIRED", "REVOKED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "grant_id"
+        type: "UUID"
+        description: "Primary identifier for the access grant."
+      - name: "operator_principal_id"
+        type: "UUID"
+        description: "Identifier of the platform operator requesting access."
+      - name: "target_workspace_id"
+        type: "UUID"
+        description: "Foreign key to the specific Workspace accessed."
+      - name: "policy_id"
+        type: "STRING"
+        description: "Identifier of the governing OperatorAccessPolicy."
+      - name: "justification_code"
+        type: "STRING"
+        description: "Standardized reason code (e.g. INCIDENT_RESPONSE)."
+      - name: "justification_detail"
+        type: "STRING"
+        description: "Detailed ticket/incident reference explanation."
+      - name: "valid_from"
+        type: "TIMESTAMPTZ"
+        description: "Start timestamp of access validity."
+      - name: "valid_until"
+        type: "TIMESTAMPTZ"
+        description: "Hard expiration timestamp (cannot exceed policy TTL)."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "State (REQUESTED, ACTIVE, EXPIRED, REVOKED)."
+      - name: "revocation_reason"
+        type: "STRING"
+        description: "Reason if revoked before valid_until."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["OperatorOrganization"]
+    root_boundary: "OperatorOrganization (Platform Root) & Workspace (Target Tenant)"
+    child_relations:
+      - child_object: "OperatorAuditReceipt"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "REQUESTED"
+    terminal_states: ["EXPIRED", "REVOKED"]
+    states: ["REQUESTED", "ACTIVE", "EXPIRED", "REVOKED"]
+    transitions:
+      - from: "REQUESTED"
+        to: "ACTIVE"
+        operation: "approve_operator_grant"
+      - from: "ACTIVE"
+        to: "EXPIRED"
+        operation: "expire_operator_grant"
+      - from: "ACTIVE"
+        to: "REVOKED"
+        operation: "revoke_operator_grant"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "operator_grant.issued"
+      - event_name: "operator_grant.expired"
+      - event_name: "operator_grant.revoked"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Operator Access Gateway upon multi-party or incident approval"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-OPGRT-001: (valid_until - valid_from) MUST NOT exceed the governing policy's max_grant_duration_seconds."
+      - "INV-OPGRT-002: An OperatorAccessGrant authorizes access to EXACTLY ONE target_workspace_id."
+      - "INV-OPGRT-003: Every write operation performed under an OperatorAccessGrant MUST emit an immutable OperatorAuditReceipt."
+      - "INV-OPGRT-004: Once status is EXPIRED or REVOKED, all session tokens tied to the grant MUST immediately terminate."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Governance & Specification Bundle v3 §8; CA-MAP-01 Scope & Authority Matrix"
+    runtime_representation: "cae.operator_access_grant (Proposed Phase 08 schema)"
+    promotion_authority: "Security Officer or Automated Multi-Party On-Call Workflow"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "request_operator_grant"
+        parameters: ["operator_principal_id", "target_workspace_id", "policy_id", "justification_code", "duration_seconds"]
+      - name: "approve_operator_grant"
+        parameters: ["grant_id", "approver_principal_id"]
+      - name: "revoke_operator_grant"
+        parameters: ["grant_id", "revoker_principal_id", "reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT issue a grant with target_workspace_id = '*' or null (wildcards strictly forbidden)."
+      - "MUST NOT extend the validity of an existing grant (must issue a new grant with new justification)."
+      - "MUST NOT allow an expired grant to be reactivated."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify grant_id, operator_principal_id, and target_workspace_id are valid UUIDs."
+      - "Verify valid_until > valid_from."
+    semantic_validators:
+      - "Ensure referenced policy_id exists and is in RATIFIED status."
+      - "Ensure duration does not exceed policy maximum."
+      - "Ensure target_workspace_id exists."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_GRANT_NOT_FOUND"
+        http_status: 404
+        description: "Target operator grant does not exist."
+      - code: "ERR_GRANT_EXPIRED"
+        http_status: 401
+        description: "Operator grant has expired."
+      - code: "ERR_GRANT_REVOKED"
+        http_status: 401
+        description: "Operator grant has been explicitly revoked."
+      - code: "ERR_GRANT_INVALID_WORKSPACE"
+        http_status: 403
+        description: "Attempted to use grant on a workspace other than target_workspace_id."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.operator_access_grant"
+    rls_boundary_column: "target_workspace_id (Audited by Security Council)"
+    storage_boundary: "No private storage files"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Operator Access & Break-Glass Gateway"
+      - "Audit Logging Service"
+      - "Security Operations Center (SOC)"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Why was this platform engineer accessing customer workspace data?"
+      - "When did this break-glass grant expire?"
+      - "What receipts document the actions taken during this session?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-OPGRT-001"
+        description: "Approved incident response break-glass grant."
+        attributes:
+          grant_id: "55555555-5555-5555-5555-555555555555"
+          operator_principal_id: "66666666-6666-6666-6666-666666666666"
+          target_workspace_id: "11111111-1111-1111-1111-111111111111"
+          policy_id: "POL-CAE-OPACCESS-2026-V1"
+          justification_code: "INCIDENT_RESPONSE"
+          justification_detail: "INC-8821: Investigating stuck InterviewSession transcript."
+          valid_from: "2026-08-25T05:00:00Z"
+          valid_until: "2026-08-25T07:00:00Z"
+          status: "ACTIVE"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-OPGRT-001"
+        description: "An OperatorAccessGrant created with null target_workspace_id to grant global access."
+        rejection_reason: "Violates INV-OPGRT-002; wildcard or null workspace grants are strictly prohibited."
+      - id: "NEG-OPGRT-002"
+        description: "Treating OperatorAccessGrant as a substitute for permanent customer WorkspaceMembership."
+        rejection_reason: "Violates semantic boundary; grants are transient break-glass passes only."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01A)"
+        summary: "Initial draft constitution establishing OperatorAccessGrant as transient audited relation."

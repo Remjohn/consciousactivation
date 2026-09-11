@@ -1,0 +1,71 @@
+program:
+  id: "knowledge_compiler_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Compiles curated canonical knowledge nodes and OKF documents into authoritative Supabase/PostgreSQL runtime structures while preserving IDs, versions, provenance, lifecycle, and multi-tenant isolation."
+  operator_entrypoint: "run_knowledge_compiler_session"
+  inputs:
+    - "canonical_knowledge_nodes"
+    - "okf_knowledge_bundle"
+  preconditions:
+    - "workspace_active"
+    - "knowledge_nodes_verified"
+    - "lineage_integrity_verified"
+  outputs:
+    - "supabase_knowledge_projections"
+    - "search_index"
+  artifacts:
+    - "compiled_knowledge_projections"
+    - "compilation_receipt"
+  harness: "KNOWLEDGE_COMPILER_HARNESS_V1"
+  state_machine: "KNOWLEDGE_COMPILER_STATE_MACHINE_V1"
+  lanes:
+    - "COMMANDER"
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+  agents:
+    - "KnowledgeCompilerCommanderAgent"
+    - "KnowledgeNodeIngesterHunterAgent"
+    - "SearchIndexBuilderAnalystAgent"
+    - "SupabaseProjectionComposerAgent"
+  subagents: []
+  skills:
+    - name: "knowledge_node_ingester"
+      path: "skills/knowledge_node_ingester/SKILL.md"
+      version: "1.0.0"
+    - name: "search_index_builder"
+      path: "skills/search_index_builder/SKILL.md"
+      version: "1.0.0"
+    - name: "supabase_projection_compiler"
+      path: "skills/supabase_projection_compiler/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "cae.knowledge.ingest_nodes@1.0.0"
+    - "cae.knowledge.compile_projections@1.0.0"
+    - "cae.knowledge.build_search_index@1.0.0"
+    - "cae.knowledge.project_supabase@1.0.0"
+    - "cae.knowledge.rebuild_projections@1.0.0"
+    - "cae.knowledge.sync_retraction@1.0.0"
+    - "cae.knowledge.repair@1.0.0"
+  tools:
+    - "projection_schema_validator"
+    - "token_index_extractor"
+    - "sql_projection_generator"
+  connections:
+    - "postgresql_supabase_knowledge_store"
+  hooks:
+    - "pre_projection_lineage_verification_hook"
+    - "post_database_commit_receipt_hook"
+  extensions: []
+  evals:
+    - "provenance_survival_eval"
+    - "idempotent_rebuild_eval"
+    - "multi_tenant_isolation_eval"
+  operator_gates:
+    - "database_projection_commit_gate"
+    - "rebuild_projection_authorization_gate"
+  recovery:
+    - "repair_compiler_state"
+  receipts:
+    - "cae.receipt.knowledge.compilation@1.0.0"

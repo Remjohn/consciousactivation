@@ -1,0 +1,226 @@
+# Object Constitution: PrimitiveRegistry
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-REG-003"
+canonical_name: "PrimitiveRegistry"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Operator / Primitive"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:46, CA-STATE-01:80, CAE-UPTL-01-CUST-001 (Operator Ratified Class 2)"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REG-003"
+    canonical_name: "PrimitiveRegistry"
+    common_aliases: ["Psychological Primitive Registry", "Primitive Inventory", "AIR Primitive Catalog"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Operator / Primitive"
+    class_matrix_id: 13
+    class_rationale: "PrimitiveRegistry is an immutable canonical registry defining atomic psychological operators, behavioral triggers, and activation dynamics."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Resides strictly on the Canonical Plane as global system doctrine governing atomic psychological operators."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Psychological Operations & Activation Primitives"
+    primary_purpose: "Provides the canonical inventory of 243 psychological primitives used to assemble primitive coalitions, archetype programs, and behavioral activations."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical psychological operator registry"
+    differentia: "Distinguished from SDARegistry (high-level dimensions) and SFLRegistry (sensory experience transforms) by defining atomic behavioral operators and trigger mechanics."
+    function: "Stores primitive definitions, family taxonomies, operational mechanics, and disambiguated ID mappings."
+    boundary: "Must not contain operational tenant data; must enforce Route A disambiguation for EXP-TRG-001/010; duplicate keys are strictly prohibited."
+    normative_definition: >
+      PrimitiveRegistry is the canonical catalog of psychological primitives. It defines 243 atomic operators across 26
+      families, enforcing Route A disambiguation with EXP-TRG-010 and guaranteeing zero duplicate collision errors.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable canonical catalog of 243 psychological primitives."
+      - "The authority governing primitive families and behavioral operators."
+      - "A disambiguated registry where EXP-TRG-001 and EXP-TRG-010 resolve distinct definitions."
+    what_it_is_not:
+      - "A dynamic runtime coalition (Coalition is an operational synthesis of primitives)."
+      - "An operational tenant store."
+      - "An ambiguous registry containing duplicate ID collisions."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "SDARegistry (CA-REG-001)"
+        distinction: "SDARegistry defines semantic dimensions; PrimitiveRegistry defines atomic behavioral activation operators."
+      - neighbor: "SFLRegistry (CA-REG-002)"
+        distinction: "SFLRegistry models sensory failure modes; PrimitiveRegistry models psychological intervention triggers."
+      - neighbor: "Coalition (AIR Synthesis)"
+        distinction: "PrimitiveRegistry defines individual atomic primitives; Coalition is an operational grouping of multiple primitives."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Psychological Operations"
+    tier: "Global Canonical Registry"
+    specialization: "Psychological Primitive & Trigger Catalog"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "operator-ratified"
+    lifecycle_phases: ["PINNED_SNAPSHOT", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "snapshot_id"
+        type: "STRING"
+        description: "Canonical registry snapshot identifier (e.g., 'primitive-inventory-2026-08-26')."
+      - name: "inventory_csv_sha256"
+        type: "STRING"
+        description: "SHA-256 hash of canonical PRIMITIVE_INVENTORY.csv."
+      - name: "total_primitive_count"
+        type: "INTEGER"
+        description: "Total count of unique disambiguated primitives (243)."
+      - name: "family_count"
+        type: "INTEGER"
+        description: "Total count of registered primitive families (26)."
+      - name: "pinned_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when snapshot was sealed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Global Canonical System"
+    child_relations:
+      - child_object: "SemanticAssessment"
+        cardinality: "1:N (Cited in assessments)"
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "PrimitiveRegistry is an immutable canonical snapshot; modifications occur solely via versioned releases."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "canonical.primitive_registry.pinned"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "AIR Primitive Curator & Operator Ratification via CA-UPTL-01/U1"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-PRM-001: Route A Disambiguation — EXP-TRG-001 is canonical for 'First Major Win-State Before Social Expansion' (line 194), and EXP-TRG-010 is canonical for 'External to Internal Trigger Mapping' (line 231)."
+      - "INV-PRM-002: Zero Duplicate Collisions — All 243 primitive canonical IDs MUST be strictly unique across PRIMITIVE_INVENTORY.csv."
+      - "INV-PRM-003: Cryptographic Lineage — EXP-TRG-010 definition MUST match SHA-256 23236e597b508333e66de214153a76c8aaa2b8013fb9d28d06544bb8dd7377f6."
+      - "INV-PRM-004: Ambiguity Refusal — If an ambiguous or colliding primitive ID is encountered at runtime, the resolver MUST raise RegistryItemAmbiguousError."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:46, CA-STATE-01:80, CAE-UPTL-01-CUST-001"
+    runtime_representation: "packages/ca_runtime/src/ca_runtime/registry.py & cae.registry_snapshot"
+    promotion_authority: "AIR Primitive Curator & Platform Operator"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "load_primitive_inventory"
+        parameters: ["csv_path", "definitions_dir"]
+      - name: "resolve_primitive"
+        parameters: ["canonical_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT load inventory files containing duplicate ID definitions."
+      - "MUST NOT merge two distinct primitives with the same name into a single ID."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify PRIMITIVE_INVENTORY.csv contains exactly 243 rows (excluding header)."
+      - "Verify all canonical IDs match regex pattern '^[A-Z]{3,4}-[A-Z]{3,4}-[0-9]{3}$'."
+    semantic_validators:
+      - "Verify EXP-TRG-001 and EXP-TRG-010 resolve to distinct definitions."
+      - "Verify zero duplicate ID collisions across the entire inventory."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_PRIMITIVE_AMBIGUOUS_DUPLICATE"
+        http_status: 409
+        description: "Encountered colliding or ambiguous duplicate primitive ID."
+      - code: "ERR_PRIMITIVE_NOT_FOUND"
+        http_status: 404
+        description: "Requested primitive canonical_id does not exist in inventory."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.registry_snapshot & RegistryResolver in-memory cache"
+    rls_boundary_column: "NOT_APPLICABLE (Global Canonical Plane)"
+    storage_boundary: "Repository CSV/YAML Files & RegistryResolver"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "AIR Coalition Formation Engine"
+      - "AIR Archetype Service"
+      - "RegistryResolver"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the psychological operator definition and trigger mechanics for this Primitive ID?"
+      - "How is EXP-TRG-010 distinguished from EXP-TRG-001?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-PRM-001"
+        description: "Disambiguated EXP-TRG-010 primitive definition."
+        attributes:
+          canonical_id: "EXP-TRG-010"
+          family_id: "EXP-TRG"
+          name: "External to Internal Trigger Mapping"
+          definition_sha256: "23236e597b508333e66de214153a76c8aaa2b8013fb9d28d06544bb8dd7377f6"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-PRM-001"
+        description: "Near-miss: An inventory loader that detects duplicate EXP-TRG-001 and silently overwrites line 194 with line 231 based on 'last-write-wins' semantics."
+        rejection_reason: "Violates INV-PRM-001 and INV-PRM-004; silent overwrites destroy canonical lineage; disambiguation must be explicit via Route A EXP-TRG-010."
+      - id: "NEG-PRM-002"
+        description: "Near-miss: Attempting to define a new primitive in a tenant workspace YAML and injecting it into PrimitiveRegistry without platform governance."
+        rejection_reason: "Violates Global Canonical Plane boundary; tenant custom primitives cannot be injected into global canonical inventory."
+      - id: "NEG-PRM-003"
+        description: "Generic violation: Registering a primitive with invalid ID format 'primitive_123'."
+        rejection_reason: "Violates structural ID pattern requirements."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for PrimitiveRegistry encoding Route A EXP-TRG-010 disambiguation and 26 dimensions."

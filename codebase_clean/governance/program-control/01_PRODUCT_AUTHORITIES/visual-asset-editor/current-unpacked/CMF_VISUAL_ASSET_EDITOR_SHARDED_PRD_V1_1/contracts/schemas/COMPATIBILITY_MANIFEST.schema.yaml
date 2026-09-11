@@ -1,0 +1,49 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Visual Asset Editor Compatibility Manifest
+description: ''
+type: object
+additionalProperties: false
+required:
+- product_version
+- release_id
+- compatibility
+- registries
+- runtime_profiles
+- migration
+- certified_scope
+properties:
+  product_version: &id001
+    type: string
+  release_id: *id001
+  compatibility:
+    type: object
+    required:
+    - builder_target_profile
+    - delegation_contracts
+    - visual_production_plan_ir
+    - supported_category_profiles
+    properties:
+      builder_target_profile:
+        type: object
+      delegation_contracts:
+        type: object
+      visual_production_plan_ir: *id001
+      supported_category_profiles:
+        type: array
+        items:
+          type: object
+  registries:
+    type: object
+  runtime_profiles:
+    type: array
+    items: *id001
+  migration:
+    type: object
+  certified_scope:
+    type: array
+    items: *id001
+  known_limitations:
+    type: array
+    items: *id001
+  rollback:
+    type: object

@@ -1,0 +1,41 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M66",
+  "mandate_title": "Authoritative Program Execution Convergence",
+  "phase": "PHASE_02_PROGRAM_RUNTIME_CONVERGENCE",
+  "bundle": "CAE Production Convergence Bundle M65–M72 v1",
+  "timestamp_utc": "2026-09-02T08:35:00Z",
+  "head_commit_sha": "c50d66d01a9aeaed21da6b7159e4774f9350204c",
+  "governing_authorities_read": [
+    "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+    "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml",
+    "docs/PRD/CURRENT.md",
+    "services/pipeline/AGENTS.md",
+    "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/program_operator_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py",
+    "docs/cae/CAE_Production_Convergence_M65_M72_v1/02_PROGRAM_RUNTIME_CONVERGENCE/M66_authoritative_program_execution_convergence.md"
+  ],
+  "source_symbols_changed": [
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py:UnifiedFactoryCommandEngine",
+    "packages/ca_runtime/src/ca_runtime/factory_observability.py:ReadOnlyObservabilityViewer"
+  ],
+  "delivered_tests": [
+    "tests/cae/test_m66_authoritative_program_execution_convergence.py"
+  ],
+  "verification_summary": {
+    "total_bundle_tests_passed": 163,
+    "regression_tests_passed": 32,
+    "all_tests_passed": true,
+    "verifications_proved": [
+      "RUN PROGRAM creates real aggregate in UniversalProgramStateRuntime",
+      "Returned run ID equals stored aggregate ID",
+      "REPLAY RUN is built dynamically from authoritative ProgramStateTransition records",
+      "Cross-tenant access fails closed with ObservabilityTenantIsolationError",
+      "Pause, resume, approve, reject, repair execute via authoritative state transitions",
+      "Process restart preserves execution aggregate and transition receipts in SQLite store",
+      "Anti-synthetic countertest: non-existent runs fail closed with EntityNotFoundError"
+    ]
+  },
+  "status": "EXECUTED_AT_OPERATOR_GATE"
+}

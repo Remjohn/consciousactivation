@@ -1,0 +1,315 @@
+# Object Constitution: HarnessRun
+# Phase 06 / CA-CAN-01C Harness, Receipt, and Relation Constitutions
+
+id: "CA-EXE-001"
+canonical_name: "HarnessRun"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Execution Packet"
+ontological_plane: "OPERATIONAL_PLANE"
+scope_class: "ENGAGEMENT_SCOPED"
+collision_register_ref: "COL-MAP-002"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-EXE-001"
+    canonical_name: "HarnessRun"
+    common_aliases: ["Runbook Execution", "Harness Execution Instance", "Workflow Run", "Procedural Execution Aggregate"]
+    naming_standard: "PascalCase singular compound noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Execution Packet"
+    class_matrix_id: 13
+    class_rationale: "HarnessRun represents a discrete, bounded operational execution packet and state aggregate scoped to a specific Workspace and Engagement, tracking execution inputs, step progression, event links, receipt links, and error states according to a pinned HarnessTemplate."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "OPERATIONAL_PLANE"
+    plane_rationale: "Represents an active or historical operational execution scoped strictly to a tenant Workspace and Engagement; contains operational state and tenant lineage."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Operational Workflow Execution & Step State Control"
+    primary_purpose: "Binds a pinned canonical HarnessTemplate to an operational execution instance, advancing step-by-step through registered typed semantic operations, emitting immutable state transitions, and accumulating cryptographic execution receipts."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Operational execution packet and workflow state aggregate"
+    differentia: "Distinguished from HarnessTemplate (the stateless canonical blueprint) by being stateful, tenant-scoped, and tied to specific operational inputs and outputs; distinguished from StateAggregate (which is a general concurrency version envelope) by encapsulating the multi-step runbook execution flow."
+    function: "Coordinates the step-by-step execution of a procedural runbook within a tenant workspace, enforcing precondition checks, operation dispatch, receipt collection, and transition gating."
+    boundary: "Does not mutate the referenced HarnessTemplate; does not become permanent global procedural doctrine; does not perform direct SQL database mutations (must invoke typed semantic operations); is not a general unconstrained agent orchestrator."
+    normative_definition: >
+      HarnessRun is an Engagement-scoped Operational Execution Packet that executes a specific, pinned version of a HarnessTemplate
+      within a tenant Workspace. It coordinates step-by-step state transitions, dispatches authorized typed semantic operations,
+      records intermediate inputs and outputs, and accumulates immutable execution receipts. It is strictly bounded by tenant RLS
+      and does not mutate its underlying canonical template.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "A discrete, bounded execution instance of a procedural template within a specific Workspace and Engagement."
+      - "An operational aggregate tracking current state, step history, command links, and execution receipts."
+      - "An operational coordinator that interacts with PostgreSQL state exclusively via registered typed semantic operations."
+    what_it_is_not:
+      - "A canonical template or global procedural definition."
+      - "A general autonomous multi-agent orchestrator or unrestricted state engine."
+      - "A bypass mechanism for database RLS or typed transition contracts."
+      - "A mechanism that mutates or alters canonical definitions."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "HarnessTemplate (CA-STR-001)"
+        distinction: "HarnessRun is an operational execution instance with tenant state; HarnessTemplate is the immutable canonical blueprint."
+      - neighbor: "StateAggregate (CA-STA-001)"
+        distinction: "HarnessRun is the procedural workflow execution coordinator; StateAggregate is the underlying concurrency version envelope in PostgreSQL."
+      - neighbor: "Command (CA-EXE-002)"
+        distinction: "HarnessRun spans an entire multi-step workflow; Command represents a single idempotent atomic operation request."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Workflow Execution & Operational State"
+    tier: "Engagement-Scoped Operational Execution Packet"
+    specialization: "Procedural Runbook Execution Aggregate"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "runtime"
+    mutability: "stateful"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["INITIALIZED", "RUNNING", "WAITING", "BLOCKED", "REPAIR_REQUIRED", "COMPLETED", "FAILED", "ABORTED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "run_id"
+        type: "UUID"
+        description: "Primary unique identifier for the execution run."
+      - name: "workspace_id"
+        type: "UUID"
+        description: "Foreign key anchoring the run strictly to its parent Workspace."
+      - name: "project_id"
+        type: "UUID"
+        description: "Foreign key anchoring the run to its parent Engagement/Project."
+      - name: "template_id"
+        type: "STRING"
+        description: "Canonical string identifier of the referenced HarnessTemplate."
+      - name: "template_version"
+        type: "SEMVER"
+        description: "Pinned semantic version of the referenced HarnessTemplate."
+      - name: "template_content_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 hash of the template at execution initiation."
+      - name: "initiator_actor_id"
+        type: "UUID"
+        description: "Identifier of the actor or service principal initiating the run."
+      - name: "created_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when execution run was initialized."
+    mutable_attributes:
+      - name: "current_state"
+        type: "STRING"
+        description: "Current step identifier in the state machine (e.g. 'RECON', 'CAPTURE', 'ASSESS')."
+      - name: "lifecycle_status"
+        type: "STRING"
+        description: "Lifecycle status (INITIALIZED, RUNNING, WAITING, BLOCKED, REPAIR_REQUIRED, COMPLETED, FAILED, ABORTED)."
+      - name: "state_version"
+        type: "INTEGER"
+        description: "Optimistic concurrency version counter incremented on each transition."
+      - name: "last_receipt_id"
+        type: "UUID"
+        description: "Foreign key to the most recent execution receipt produced by this run."
+      - name: "execution_context"
+        type: "JSONB"
+        description: "Run-local execution scratchpad and step accumulator."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last state modification."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: ["Workspace", "Engagement"]
+    root_boundary: "Workspace"
+    child_relations:
+      - child_object: "Command"
+        cardinality: "1:N (Commands dispatched during run)"
+      - child_object: "StateTransition"
+        cardinality: "1:N (Committed state transitions)"
+      - child_object: "Receipt"
+        cardinality: "1:N (Execution receipts accumulated)"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "INITIALIZED"
+    terminal_states: ["COMPLETED", "FAILED", "ABORTED"]
+    states: ["INITIALIZED", "RUNNING", "WAITING", "BLOCKED", "REPAIR_REQUIRED", "COMPLETED", "FAILED", "ABORTED"]
+    transitions:
+      - from: "INITIALIZED"
+        to: "RUNNING"
+        operation: "start_harness_run"
+      - from: "RUNNING"
+        to: "WAITING"
+        operation: "pause_harness_run"
+      - from: "WAITING"
+        to: "RUNNING"
+        operation: "resume_harness_run"
+      - from: "RUNNING"
+        to: "BLOCKED"
+        operation: "block_harness_run"
+      - from: "RUNNING"
+        to: "REPAIR_REQUIRED"
+        operation: "flag_harness_repair"
+      - from: "REPAIR_REQUIRED"
+        to: "RUNNING"
+        operation: "resolve_harness_repair"
+      - from: "RUNNING"
+        to: "COMPLETED"
+        operation: "complete_harness_run"
+      - from: "RUNNING"
+        to: "FAILED"
+        operation: "fail_harness_run"
+      - from: "RUNNING"
+        to: "ABORTED"
+        operation: "abort_harness_run"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "harness_run.started"
+      - event_name: "harness_run.step_transitioned"
+      - event_name: "harness_run.blocked"
+      - event_name: "harness_run.repair_required"
+      - event_name: "harness_run.completed"
+      - event_name: "harness_run.failed"
+      - event_name: "harness_run.aborted"
+    subscribed_events:
+      - event_name: "workspace.purged"
+      - event_name: "engagement.archived"
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Instantiated by Runner Service in response to a StartWorkflowCommand with pinned template parameters"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-RUN-001: Every HarnessRun MUST belong to exactly one Workspace (workspace_id) and Engagement (project_id)."
+      - "INV-RUN-002: A HarnessRun MUST reference a valid, versioned HarnessTemplate (template_id, template_version, template_content_sha256) and MUST NEVER mutate that template."
+      - "INV-RUN-003: A HarnessRun MUST interact with durable database state ONLY through registered typed semantic operations; direct SQL mutations are prohibited."
+      - "INV-RUN-004: Step executions within a HarnessRun MUST commit atomic state transitions, events, and immutable execution receipts (cae.execution_receipt)."
+      - "INV-RUN-005: HarnessRun existence or step progression DOES NOT prove that a general autonomous agent orchestrator exists; it executes only bounded, contract-guarded procedural transitions."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "Multi-Tenant Plan §3; Bundle v3 `14_CAE_STATE_AND_TRANSITION_CONTROL_PROTOCOL.md`, `17_CAE_HARNESS_RUNBOOK_INTEGRATION_PROTOCOL.md`; Collision Register COL-MAP-002"
+    runtime_representation: "cae.harness_run / cae.state_aggregate (PostgreSQL relational operational projection scoped by workspace_id)"
+    promotion_authority: "Workspace Runner Service / Engagement Lead via registered typed semantic operations"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "initialize_harness_run"
+        parameters: ["workspace_id", "project_id", "template_id", "template_version", "initiator_actor_id", "initial_context"]
+      - name: "step_harness_run"
+        parameters: ["run_id", "current_state", "target_state", "operation_id", "operation_payload", "expected_version"]
+      - name: "flag_harness_repair"
+        parameters: ["run_id", "error_code", "diagnostic_details"]
+      - name: "complete_harness_run"
+        parameters: ["run_id", "terminal_receipt_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT initialize a HarnessRun without a valid Workspace and Engagement parent."
+      - "MUST NOT initialize a HarnessRun referencing an unpinned, unversioned, or missing HarnessTemplate."
+      - "MUST NOT execute direct database UPDATE or INSERT statements outside of typed semantic operations."
+      - "MUST NOT mutate or overwrite the referenced HarnessTemplate definition."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify run_id, workspace_id, and project_id are valid UUIDv4 strings."
+      - "Verify template_id and template_version match an existing ratified HarnessTemplate."
+      - "Verify template_content_sha256 matches the stored template digest."
+    semantic_validators:
+      - "Verify workspace_id matches current tenant RLS context."
+      - "Verify step transitions follow the legal edge topology declared in the HarnessTemplate."
+      - "Verify before_transfer_checks pass before advancing to target_state."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_RUN_PARENT_UNRESOLVED"
+        http_status: 404
+        description: "Parent Workspace or Engagement does not exist or is inactive."
+      - code: "ERR_RUN_TEMPLATE_MISMATCH"
+        http_status: 422
+        description: "Referenced HarnessTemplate version or content hash does not match registry."
+      - code: "ERR_RUN_ILLEGAL_TRANSITION"
+        http_status: 409
+        description: "Attempted step transition is not a valid edge in the HarnessTemplate state machine."
+      - code: "ERR_RUN_DIRECT_MUTATION_PROHIBITED"
+        http_status: 403
+        description: "Attempted direct database write outside of a registered typed semantic operation."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.harness_run / cae.state_aggregate"
+    rls_boundary_column: "workspace_id"
+    storage_boundary: "PostgreSQL relational table `cae.harness_run` scoped by `workspace_id`"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Harness Runner Service"
+      - "Semantic Operation API Gateway"
+      - "Operator Run Status & Lineage UI"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the current operational state, step history, and error status of this workflow execution?"
+      - "Which exact version of the procedural template is being executed, and what receipts have been accumulated?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-RUN-001"
+        description: "Operational run of evidence-to-AIR first slice in workspace."
+        attributes:
+          run_id: "77777777-7777-7777-7777-777777777777"
+          workspace_id: "11111111-1111-1111-1111-111111111111"
+          project_id: "22222222-2222-2222-2222-222222222222"
+          template_id: "cae.evidence_to_air_first_slice"
+          template_version: "1.0.0"
+          current_state: "AUTHENTICATE"
+          lifecycle_status: "RUNNING"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-RUN-001"
+        description: "Initializing a HarnessRun without a Workspace parent or with an unversioned template reference."
+        rejection_reason: "Violates INV-RUN-001, INV-RUN-002, and Multi-Tenant Law; all execution runs must be anchored to a Workspace and reference a versioned template."
+      - id: "NEG-RUN-002"
+        description: "Allowing a HarnessRun to perform direct SQL updates on PostgreSQL tables without invoking typed semantic operations."
+        rejection_reason: "Violates INV-RUN-003 and State Control Protocol; state mutations must occur only through registered semantic operations producing receipts."
+      - id: "NEG-RUN-003"
+        description: "Treating a successful HarnessRun as proof that a general autonomous agent orchestrator exists."
+        rejection_reason: "Violates INV-RUN-005 and Meta-Law §3; a bounded runbook execution is not a general orchestrator."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01C)"
+        summary: "Initial draft constitution establishing HarnessRun as Engagement-scoped Operational Execution Packet."

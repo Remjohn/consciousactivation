@@ -1,0 +1,19 @@
+scenario_id: SCN-07
+title: Result invalidation and replacement
+purpose: Proves historical truth, impact analysis and replacement compatibility.
+contracts:
+- type: invalidation-notice
+  example_ref: ../../../contracts/examples/invalidation-notice.example.yaml
+- type: replacement-notice
+  example_ref: ../../../contracts/examples/replacement-notice.example.yaml
+- type: result-acknowledgement
+  example_ref: ../../../contracts/examples/result-acknowledgement.example.yaml
+expected_shared_states:
+- COMPLETED
+- INVALIDATED
+- REPLACED
+required_assertions:
+- all_messages_schema_valid
+- authority_valid_or_expected_rejection
+- audit_receipts_complete
+- no_unexpected_state_mutation

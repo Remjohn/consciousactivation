@@ -1,0 +1,368 @@
+# TS-CAE-TEN-001 Operation and State Transition Contracts
+# Phase ID: CA-TS-01
+# Specification: TS-CAE-TEN-001_TENANT_GUEST_VERTICAL_SLICE.md
+# Authority: Bundle v3 Semantic Operation API Protocol (16_CAE_SEMANTIC_OPERATION_API_PROTOCOL.md)
+
+version: "1.0.0"
+governance: "Bundle v3 / CA-TS-01"
+author: "Antigravity / Gemini 3.7 Flash High"
+date: "2026-08-25"
+
+invariants:
+  - "Workspace scope MUST be derived from trusted authorization context (JWT/session token), never caller query/body parameter alone."
+  - "Normal operations MUST execute through typed semantic operation wrappers; direct database mutation by agents is prohibited."
+  - "State transitions, event logs, receipts, and reality contact links MUST commit in a single atomic database transaction."
+  - "Optimistic concurrency locking MUST be enforced on all stateful aggregates using expected_version."
+  - "Receipts are append-only; update or deletion of committed receipts raises FATALITY."
+
+operations:
+  - operation_id: "cae.workspace.provision@1.0.0"
+    family: "workspace"
+    description: "Provision a new client tenant isolation boundary."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "System Admin / Platform Provisioning Context"
+    actor_resolution: "actor_id extracted from trusted platform token"
+    input_schema:
+      type: "object"
+      required: ["slug", "display_name", "idempotency_key"]
+      properties:
+        slug: { type: "string", pattern: "^[a-z0-9-]+$" }
+        display_name: { type: "string", minLength: 1 }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["workspace_id", "slug", "status", "receipt_id"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        slug: { type: "string" }
+        status: { type: "string", enum: ["ACTIVE"] }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "ACTIVE"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.workspace and cae.receipt"
+    emitted_events:
+      - "WorkspaceCreatedEvent"
+    receipt_schema:
+      receipt_type: "workspace_provision_receipt"
+      fields: ["workspace_id", "slug", "created_at"]
+    typed_errors:
+      - "TENANCY_VIOLATION: Workspace slug already exists"
+      - "VALIDATION_ERROR: Invalid slug syntax"
+      - "CONTRACT_ERROR: Duplicate idempotency key with different payload"
+    idempotency_key_format: "idemp_ws_prov_{slug}"
+    recovery_action: "Rollback transaction; return existing workspace if idempotent retry."
+
+  - operation_id: "cae.workspace.membership.grant@1.0.0"
+    family: "workspace"
+    description: "Bind an authenticated actor to a role within a specific Workspace."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Extracted from verified Workspace Admin token"
+    actor_resolution: "admin_actor_id from session context"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "target_actor_id", "role", "idempotency_key"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        target_actor_id: { type: "string" }
+        role: { type: "string", enum: ["ADMIN", "MEMBER", "OBSERVER", "SYSTEM_AGENT"] }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["membership_id", "workspace_id", "target_actor_id", "role", "receipt_id"]
+      properties:
+        membership_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        target_actor_id: { type: "string" }
+        role: { type: "string" }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "ACTIVE"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.workspace_membership and cae.receipt"
+    emitted_events:
+      - "MembershipGrantedEvent"
+    receipt_schema:
+      receipt_type: "membership_grant_receipt"
+      fields: ["membership_id", "workspace_id", "target_actor_id", "role"]
+    typed_errors:
+      - "TENANCY_VIOLATION: Actor does not possess admin rights in target workspace"
+      - "CONTRACT_ERROR: Actor already possesses active membership"
+    idempotency_key_format: "idemp_ws_mem_{workspace_id}_{target_actor_id}"
+    recovery_action: "Rollback transaction."
+
+  - operation_id: "cae.operator.grant.issue@1.0.0"
+    family: "operator"
+    description: "Issue a time-bounded diagnostic access grant to an internal platform operator."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Designated CAE Security Officer context"
+    actor_resolution: "security_officer_id from session context"
+    input_schema:
+      type: "object"
+      required: ["operator_org_id", "operator_actor_id", "workspace_id", "justification", "duration_minutes", "idempotency_key"]
+      properties:
+        operator_org_id: { type: "string", format: "uuid" }
+        operator_actor_id: { type: "string" }
+        workspace_id: { type: "string", format: "uuid" }
+        justification: { type: "string", minLength: 10 }
+        duration_minutes: { type: "integer", minimum: 5, maximum: 240 }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["grant_id", "workspace_id", "expires_at", "receipt_id"]
+      properties:
+        grant_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        expires_at: { type: "string", format: "date-time" }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "ACTIVE"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.operator_access_grant and cae.receipt"
+    emitted_events:
+      - "OperatorAccessGrantIssuedEvent"
+    receipt_schema:
+      receipt_type: "operator_grant_receipt"
+      fields: ["grant_id", "workspace_id", "operator_actor_id", "justification", "expires_at"]
+    typed_errors:
+      - "UNAUTHORIZED_OPERATOR_ACCESS: Issuer lacks security officer authorization"
+      - "VALIDATION_ERROR: Insufficient justification text or excessive duration"
+    idempotency_key_format: "idemp_opr_grant_{workspace_id}_{operator_actor_id}_{date}"
+    recovery_action: "Rollback transaction; reject grant."
+
+  - operation_id: "cae.engagement.initialize@1.0.0"
+    family: "engagement"
+    description: "Create a new project/campaign envelope within an authorized workspace."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Extracted from verified Workspace Member/Admin token"
+    actor_resolution: "actor_id from session context"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "title", "idempotency_key"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        title: { type: "string", minLength: 1 }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["engagement_id", "workspace_id", "lifecycle_state", "version", "receipt_id"]
+      properties:
+        engagement_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        lifecycle_state: { type: "string", enum: ["PLANNED"] }
+        version: { type: "integer" }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "PLANNED"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.engagement and cae.receipt"
+    emitted_events:
+      - "EngagementInitializedEvent"
+    receipt_schema:
+      receipt_type: "engagement_init_receipt"
+      fields: ["engagement_id", "workspace_id", "title", "lifecycle_state"]
+    typed_errors:
+      - "TENANCY_VIOLATION: Workspace context mismatch"
+      - "VALIDATION_ERROR: Empty engagement title"
+    idempotency_key_format: "idemp_eng_init_{workspace_id}_{title_slug}"
+    recovery_action: "Rollback transaction."
+
+  - operation_id: "cae.guest.register@1.0.0"
+    family: "guest"
+    description: "Register a participant profile strictly local to the parent workspace."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Extracted from verified Workspace Member token"
+    actor_resolution: "actor_id from session context"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "pseudonym", "consent_status", "idempotency_key"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        pseudonym: { type: "string", minLength: 1 }
+        consent_status: { type: "string", enum: ["PENDING", "GRANTED"] }
+        external_reference_id: { type: "string" }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["guest_id", "workspace_id", "pseudonym", "consent_status", "receipt_id"]
+      properties:
+        guest_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        pseudonym: { type: "string" }
+        consent_status: { type: "string" }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "REGISTERED"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.guest and cae.receipt"
+    emitted_events:
+      - "GuestRegisteredEvent"
+    receipt_schema:
+      receipt_type: "guest_registration_receipt"
+      fields: ["guest_id", "workspace_id", "pseudonym", "consent_status"]
+    typed_errors:
+      - "TENANCY_VIOLATION: Workspace context mismatch"
+      - "CROSS_WORKSPACE_LEAK: Attempted auto-merge with guest in another workspace"
+    idempotency_key_format: "idemp_gst_reg_{workspace_id}_{pseudonym}"
+    recovery_action: "Rollback transaction."
+
+  - operation_id: "cae.media.verify@1.0.0"
+    family: "media"
+    description: "Read back raw bytes from private object storage, verify SHA-256 digest, transition STAGED -> VERIFIED."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Extracted from verified Workspace Member token"
+    actor_resolution: "actor_id from session context"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "media_asset_id", "expected_version", "idempotency_key"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        media_asset_id: { type: "string", format: "uuid" }
+        expected_version: { type: "integer" }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["media_asset_id", "workspace_id", "lifecycle_state", "canonical_sha256", "version", "receipt_id"]
+      properties:
+        media_asset_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        lifecycle_state: { type: "string", enum: ["VERIFIED", "QUARANTINED"] }
+        canonical_sha256: { type: "string" }
+        version: { type: "integer" }
+        receipt_id: { type: "string" }
+    pre_state: "STAGED"
+    post_state: "VERIFIED"
+    expected_version_locking: true
+    transaction_boundary: "Storage readback followed by atomic PostgreSQL update on cae.media_asset and cae.receipt"
+    emitted_events:
+      - "MediaAssetVerifiedEvent"
+    receipt_schema:
+      receipt_type: "media_verification_receipt"
+      fields: ["media_asset_id", "workspace_id", "canonical_sha256", "byte_size", "lifecycle_state"]
+    typed_errors:
+      - "UNVERIFIED_MEDIA_DIGEST: Storage payload SHA-256 does not match recorded digest"
+      - "STALE_VERSION_CONFLICT: MediaAsset version mismatch"
+      - "EVIDENCE_ERROR: Storage object not found"
+    idempotency_key_format: "idemp_med_ver_{workspace_id}_{media_asset_id}"
+    recovery_action: "If hash mismatch, transition to QUARANTINED; if version conflict, reload state."
+
+  - operation_id: "cae.evidence.capture@1.0.0"
+    family: "evidence"
+    description: "Capture and anchor an immutable EvidenceSpan from a verified MediaAsset."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Extracted from verified Workspace Analyst token"
+    actor_resolution: "analyst_actor_id from session context"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "media_asset_id", "source_package_id", "start_offset_ms", "end_offset_ms", "transcript_text", "idempotency_key"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        media_asset_id: { type: "string", format: "uuid" }
+        source_package_id: { type: "string", format: "uuid" }
+        start_offset_ms: { type: "integer", minimum: 0 }
+        end_offset_ms: { type: "integer", minimum: 0 }
+        transcript_text: { type: "string", minLength: 1 }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["evidence_item_id", "evidence_span_id", "workspace_id", "receipt_id"]
+      properties:
+        evidence_item_id: { type: "string", format: "uuid" }
+        evidence_span_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "CAPTURED"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.evidence_item, cae.evidence_span, cae.receipt, cae.receipt_evidence_link"
+    emitted_events:
+      - "EvidenceCapturedEvent"
+    receipt_schema:
+      receipt_type: "evidence_capture_receipt"
+      fields: ["evidence_item_id", "media_asset_id", "start_offset_ms", "end_offset_ms", "transcript_sha256"]
+    typed_errors:
+      - "EVIDENCE_ERROR: Referenced MediaAsset is not in VERIFIED state"
+      - "TENANCY_VIOLATION: MediaAsset belongs to different workspace"
+      - "VALIDATION_ERROR: Invalid span offsets (start >= end)"
+    idempotency_key_format: "idemp_evi_cap_{workspace_id}_{media_asset_id}_{start_offset_ms}_{end_offset_ms}"
+    recovery_action: "Rollback transaction; reject capture."
+
+  - operation_id: "cae.harness.run.initialize@1.0.0"
+    family: "harness"
+    description: "Instantiate an operational HarnessRun referencing a pinned canonical HarnessTemplate."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Extracted from verified Workspace Runner token"
+    actor_resolution: "runner_actor_id from session context"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "engagement_id", "template_id", "template_version", "idempotency_key"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        engagement_id: { type: "string", format: "uuid" }
+        template_id: { type: "string" }
+        template_version: { type: "string" }
+        idempotency_key: { type: "string" }
+    output_schema:
+      type: "object"
+      required: ["run_id", "workspace_id", "engagement_id", "current_step", "lifecycle_state", "version", "receipt_id"]
+      properties:
+        run_id: { type: "string", format: "uuid" }
+        workspace_id: { type: "string", format: "uuid" }
+        engagement_id: { type: "string", format: "uuid" }
+        current_step: { type: "string" }
+        lifecycle_state: { type: "string", enum: ["INITIALIZED"] }
+        version: { type: "integer" }
+        receipt_id: { type: "string" }
+    pre_state: "NONE"
+    post_state: "INITIALIZED"
+    expected_version_locking: false
+    transaction_boundary: "Single atomic transaction on cae.harness_run and cae.receipt"
+    emitted_events:
+      - "HarnessRunInitializedEvent"
+    receipt_schema:
+      receipt_type: "harness_run_init_receipt"
+      fields: ["run_id", "workspace_id", "engagement_id", "template_id", "template_version"]
+    typed_errors:
+      - "CONTRACT_ERROR: Referenced HarnessTemplate or version not found in canonical registry"
+      - "TENANCY_VIOLATION: Engagement does not belong to target workspace"
+    idempotency_key_format: "idemp_hrun_init_{workspace_id}_{engagement_id}_{template_id}_{template_version}"
+    recovery_action: "Rollback transaction."
+
+  - operation_id: "cae.receipt.commit@1.0.0"
+    family: "receipt"
+    description: "Record an immutable, append-only operation receipt and bind reality contact evidence links."
+    plane: "OPERATIONAL_PLANE"
+    scope_derivation: "Internal transactional adapter context"
+    actor_resolution: "actor_id of calling operation"
+    input_schema:
+      type: "object"
+      required: ["workspace_id", "operation_id", "idempotency_key", "actor_id", "canonical_payload", "evidence_item_ids"]
+      properties:
+        workspace_id: { type: "string", format: "uuid" }
+        operation_id: { type: "string" }
+        idempotency_key: { type: "string" }
+        actor_id: { type: "string" }
+        canonical_payload: { type: "object" }
+        evidence_item_ids: { type: "array", items: { type: "string", format: "uuid" } }
+    output_schema:
+      type: "object"
+      required: ["receipt_id", "workspace_id", "payload_sha256", "created_at"]
+      properties:
+        receipt_id: { type: "string" }
+        workspace_id: { type: "string", format: "uuid" }
+        payload_sha256: { type: "string" }
+        created_at: { type: "string", format: "date-time" }
+    pre_state: "NONE"
+    post_state: "COMMITTED"
+    expected_version_locking: false
+    transaction_boundary: "Enclosed within parent operation transaction"
+    emitted_events:
+      - "ReceiptCommittedEvent"
+    receipt_schema:
+      receipt_type: "cae_execution_receipt"
+      fields: ["receipt_id", "workspace_id", "operation_id", "payload_sha256", "evidence_item_count"]
+    typed_errors:
+      - "CONTRACT_ERROR: Duplicate idempotency key with mismatching payload"
+      - "TENANCY_VIOLATION: Evidence item belongs to different workspace"
+    idempotency_key_format: "{idempotency_key}"
+    recovery_action: "Abort parent transaction; trigger rollback."

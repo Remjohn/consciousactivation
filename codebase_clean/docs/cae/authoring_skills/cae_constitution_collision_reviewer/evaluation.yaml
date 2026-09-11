@@ -1,0 +1,49 @@
+skill_id: "cae_constitution_collision_reviewer"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only static rejection of known collision patterns; does not guarantee zero runtime semantic ambiguity."
+
+test_fixtures:
+  - id: "FIX-COL-POS-001"
+    name: "Valid Clean Constitution Workspace"
+    type: "positive_anchor"
+    input:
+      candidate_canonical_id: "CA-ENT-001"
+      candidate_object_name: "Workspace"
+      candidate_constitution_text: "# Constitution for Workspace..."
+      declared_primary_class: "Entity"
+      declared_plane: "OPERATIONAL_PLANE"
+      declared_scope_class: "WORKSPACE_SCOPED"
+      declared_parent_chain: ["Workspace"]
+      declared_authority_axes:
+        definition_source: "Multi-Tenant Plan §1, §3"
+        runtime_representation: "cae.workspace"
+        promotion_authority: "Workspace Admin"
+    expected_verdict: "APPROVED_NO_COLLISIONS"
+
+  - id: "FIX-COL-NEG-001"
+    name: "Deceptive Negative: Unified Operator Access Policy & Grant"
+    type: "deceptive_negative"
+    input:
+      candidate_canonical_id: "CA-CONFL-002"
+      candidate_object_name: "OperatorAccess"
+      candidate_constitution_text: "Defines global operator rules and manages active login sessions across workspaces..."
+      declared_primary_class: "Entity"
+      declared_plane: "OPERATIONAL_PLANE"
+      declared_scope_class: "OPERATOR_AUDIT"
+      declared_parent_chain: ["OperatorOrganization"]
+    expected_verdict: "SPLIT_REQUIRED"
+    expected_split_target: "OperatorAccessPolicy (Canonical Policy) vs OperatorAccessGrant (Operational Relation)"
+
+  - id: "FIX-COL-NEG-002"
+    name: "Deceptive Negative: Monolithic Harness (Template + Run)"
+    type: "deceptive_negative"
+    input:
+      candidate_canonical_id: "CA-CONFL-003"
+      candidate_object_name: "Harness"
+      candidate_constitution_text: "Contains YAML step definitions and mutable step execution status in a single database entity..."
+      declared_primary_class: "Entity"
+      declared_plane: "OPERATIONAL_PLANE"
+      declared_scope_class: "ENGAGEMENT_SCOPED"
+      declared_parent_chain: ["Workspace", "Engagement"]
+    expected_verdict: "SPLIT_REQUIRED"
+    expected_split_target: "HarnessTemplate (Canonical Grammar) vs HarnessRun (Operational Execution Packet)"

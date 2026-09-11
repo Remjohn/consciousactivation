@@ -1,0 +1,77 @@
+method:
+  id: cae-bmad
+  name: "Conscious Activation Engine - BMAD Method"
+  version: 0.3.0-rebuild
+  mode: brownfield-reconstruction
+  authority: "CAE Rebuild Program"
+
+paths:
+  workspace_root: "."
+  caebmad_dir: ".caebmad"
+  method_docs: "docs/cae-bmad"
+  research_library: ".caebmad/research/CAE_RESEARCH_LIBRARY.yaml"
+  decision_ledger: "docs/cae-bmad/00_governance/DECISION_LEDGER.md"
+
+research:
+  target_sources: 216
+  baseline_sources: 144
+  extended_sources: 72
+  completion_requires_target: true
+  score_min: 0
+  score_max: 100
+
+grill:
+  one_question_at_a_time: true
+  inspect_before_ask: true
+  prohibit_code_resolvable_questions: true
+  operator_gate_required: true
+
+truth_taxonomy:
+  allowed_tags:
+    - KNOWN
+    - INHERITED
+    - VERIFIED
+    - PROPOSED
+    - INFERRED
+    - MISSING
+    - CONTRADICTED
+    - DEPRECATED
+
+error_taxonomy:
+  standard_codes:
+    - MANDATE_INPUT_MISSING
+    - SOURCE_UNAVAILABLE
+    - SOURCE_UNVERIFIED
+    - BMAD_EQUIVALENCE_UNRESOLVED
+    - AGENT_NOT_ROUTABLE
+    - SKILL_NOT_LOADABLE
+    - WORKFLOW_UNDER_SPECIFIED
+    - TRACEABILITY_BROKEN
+    - MISSING_IMPLEMENTATION
+    - FALSE_PROOF
+    - CONTRADICTION_UNRESOLVED
+    - OPERATOR_DECISION_REQUIRED
+
+operating_levels:
+  total: 13
+  top: "PRODUCT / INTENT"
+  bottom: "LINE / BLOCK"
+  bidirectional: true
+
+artifacts:
+  required_families:
+    - research_corpus
+    - product_reconstruction
+    - operating_level_assessment
+    - decision_ledger
+    - product_brief
+    - prd_index
+    - prd_modules
+    - functional_requirements
+    - architecture
+    - epics
+    - stories
+    - ui_ux
+    - brownfield_reality_map
+    - implementation_handoff
+    - review_record

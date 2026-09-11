@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicability_envelope": {
+      "type": "object"
+    },
+    "architecture": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "artifact_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "evaluation_dataset_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "lifecycle_state": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "model_artifact_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "model_family": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "parameter_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "quantization": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "runtime_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "source_authority_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tokenizer_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "training_dataset_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "object_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "version": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "model_artifact_id",
+    "version",
+    "artifact_ref",
+    "model_family",
+    "architecture",
+    "parameter_count",
+    "quantization",
+    "runtime_ids",
+    "tokenizer_ref",
+    "training_dataset_refs",
+    "evaluation_dataset_refs",
+    "applicability_envelope",
+    "lifecycle_state",
+    "limitations",
+    "source_authority_refs"
+  ],
+  "title": "ProgrammedModelArtifact",
+  "type": "object"
+}

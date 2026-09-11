@@ -1,0 +1,249 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "MEM-REL-Relatable",
+  "source_zip": "MEM-REL-Relatable.zip",
+  "source_zip_sha256": "0294f0e2039fbbee4ad792463335625041fa00e0a7a8c12014611102e621f2ce",
+  "vision_model_used": "google/gemini-2.5-flash",
+  "base_url": "https://openrouter.ai/api/v1",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 3,
+    "unique_layout_count": 3,
+    "duplicate_slides_collapsed": 0,
+    "unique_slide_roles": [
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 1,
+        "layout_fingerprint": "header_text + text_block + full_bleed_image_with_overlay_text",
+        "container_zones": [
+          "header_zone",
+          "hero_zone",
+          "full_bleed"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "profile name and handle, with profile picture and verified badge"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "main text content, with an emoji"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "full_bleed",
+            "dominant": true,
+            "notes": "main image, covering most of the slide"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "overlay_zone",
+            "dominant": false,
+            "notes": "text in a speech bubble overlaying the image"
+          }
+        ],
+        "reading_order": "top-left profile info, then main text, then the large image with the speech bubble text",
+        "anchor_elements": []
+      },
+      {
+        "slide_role": "comparison_beat",
+        "first_slide_index": 2,
+        "layout_fingerprint": "header_text + comparison_pair",
+        "container_zones": [
+          "header_zone",
+          "hero_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "profile name, handle, and tweet text"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "profile picture"
+          },
+          {
+            "primitive_type": "comparison_pair",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "two images of a man with corresponding text labels, arranged vertically"
+          }
+        ],
+        "reading_order": "top to bottom: header text, then the comparison pair from top-left to top-right, then bottom-left to bottom-right",
+        "anchor_elements": []
+      },
+      {
+        "slide_role": "photo_beat",
+        "first_slide_index": 3,
+        "layout_fingerprint": "header_text + text_block + image_region_with_text_overlay",
+        "container_zones": [
+          "header_zone",
+          "hero_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "profile picture, name, and handle, with a verified badge"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "multi-line text, bolded phrase at the end"
+          },
+          {
+            "primitive_type": "image_region",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "full-width image of a young person on a football field, with text overlays"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "large, bold, multi-line text overlay at the top of the image"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "quoted text overlay at the bottom of the image"
+          }
+        ],
+        "reading_order": "top-left profile info, then the text below it, then the large image with its top text overlay, then the bottom text overlay.",
+        "anchor_elements": []
+      }
+    ]
+  },
+  "all_slide_analyses": [
+    {
+      "slide_index": 1,
+      "layout_fingerprint": "header_text + text_block + full_bleed_image_with_overlay_text",
+      "container_zones": [
+        "header_zone",
+        "hero_zone",
+        "full_bleed"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "profile name and handle, with profile picture and verified badge"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": false,
+          "notes": "main text content, with an emoji"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "full_bleed",
+          "dominant": true,
+          "notes": "main image, covering most of the slide"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "overlay_zone",
+          "dominant": false,
+          "notes": "text in a speech bubble overlaying the image"
+        }
+      ],
+      "reading_order": "top-left profile info, then main text, then the large image with the speech bubble text",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "single_frame",
+      "source_filename": "Visual 1.png"
+    },
+    {
+      "slide_index": 2,
+      "layout_fingerprint": "header_text + comparison_pair",
+      "container_zones": [
+        "header_zone",
+        "hero_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "profile name, handle, and tweet text"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "profile picture"
+        },
+        {
+          "primitive_type": "comparison_pair",
+          "zone": "hero_zone",
+          "dominant": true,
+          "notes": "two images of a man with corresponding text labels, arranged vertically"
+        }
+      ],
+      "reading_order": "top to bottom: header text, then the comparison pair from top-left to top-right, then bottom-left to bottom-right",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "comparison_beat",
+      "source_filename": "Visual 2.png"
+    },
+    {
+      "slide_index": 3,
+      "layout_fingerprint": "header_text + text_block + image_region_with_text_overlay",
+      "container_zones": [
+        "header_zone",
+        "hero_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "profile picture, name, and handle, with a verified badge"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "multi-line text, bolded phrase at the end"
+        },
+        {
+          "primitive_type": "image_region",
+          "zone": "hero_zone",
+          "dominant": true,
+          "notes": "full-width image of a young person on a football field, with text overlays"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": false,
+          "notes": "large, bold, multi-line text overlay at the top of the image"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": false,
+          "notes": "quoted text overlay at the bottom of the image"
+        }
+      ],
+      "reading_order": "top-left profile info, then the text below it, then the large image with its top text overlay, then the bottom text overlay.",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "photo_beat",
+      "source_filename": "Visual 3.png"
+    }
+  ],
+  "stage_2_instructions": "Feed this file together with the harness drill markdown files (ONE_HARNESS_BUILD_PROMPT.md, DRILL_ME_FORMAT.md, HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md) to the manifest authoring model (GLM 5.2 or equivalent non-vision model). The authoring model must produce manifest.json using ONLY deduplication_summary.unique_slide_roles as its visual syntax source — it must NOT re-derive layout from raw images."
+}

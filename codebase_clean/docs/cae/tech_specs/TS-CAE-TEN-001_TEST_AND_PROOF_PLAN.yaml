@@ -1,0 +1,129 @@
+# TS-CAE-TEN-001 Test, Proof, and Hard-Negative Evaluation Plan
+# Phase ID: CA-TS-01
+# Specification: TS-CAE-TEN-001_TENANT_GUEST_VERTICAL_SLICE.md
+# Authority: Bundle v3 Test Governance & Reward Hacking Protocol (10_CAE_TEST_GOVERNANCE_AND_REWARD_HACKING.md)
+
+version: "1.0.0"
+governance: "Bundle v3 / CA-TS-01"
+author: "Antigravity / Gemini 3.7 Flash High"
+date: "2026-08-25"
+
+test_tiers:
+  - tier: "E0_UNIT_FIXTURE"
+    description: "In-memory isolated Pydantic model validation and pure function checks."
+    target_environment: "Local Python runtime"
+    authorizing_scope: "Model syntax and validation logic"
+
+  - tier: "E1_STATIC"
+    description: "Specification schema validation, contract completeness, and static AST inspection."
+    target_environment: "Static file system / CI runner"
+    authorizing_scope: "Deliverable verification before operator gate"
+
+  - tier: "E2_REPOSITORY_FIXTURE"
+    description: "Local SQLite repository integration tests and brownfield mock adapters."
+    target_environment: "Local service testing with SQLite"
+    authorizing_scope: "Legacy compatibility and interface boundaries"
+
+  - tier: "E3_STAGING"
+    description: "Disposable Supabase PostgreSQL instance, real RLS session variable enforcement, private Storage bucket upload and byte readback."
+    target_environment: "Dedicated staging Supabase instance (session pooler)"
+    authorizing_scope: "CA-IMPL-01A / CA-IMPL-01B structural containment proof"
+
+  - tier: "E4_REAL_WORLD_OUTCOME"
+    description: "Production live client traffic, external market qualitative resonance, and human truth."
+    target_environment: "Production environment with human operators"
+    authorizing_scope: "NON-CLAIM: Explicitly out of scope for this technical specification"
+
+hard_negatives:
+  - negative_id: "HN-TS-001"
+    name: "Scope Forgery / Unauthenticated workspace_id Parameter"
+    threat_description: "An unauthenticated caller provides a workspace_id in query parameters to read/write another tenant's data."
+    defense_mechanism: "WorkspaceContextMiddleware extracts workspace_id exclusively from verified JWT/session claims, overriding any caller-supplied parameter."
+    falsification_test: "Submit POST /api/engagement with Body.workspace_id = WorkspaceB while authenticated as Actor in WorkspaceA. Assert operation raises TENANCY_VIOLATION."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-002"
+    name: "Service-Role / RLS Bypass Exposure"
+    threat_description: "A normal user endpoint executes database queries under the Supabase service_role key, bypassing Row-Level Security."
+    defense_mechanism: "Normal agent connections use authenticated user roles with mandatory RLS enforcement; service_role is isolated to administrative scripts."
+    falsification_test: "Execute direct SQL SELECT on cae.workspace as authenticated standard user without setting app.current_workspace_id. Assert 0 rows returned."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-003"
+    name: "Cross-Workspace Parent Chain Orphanage"
+    threat_description: "Inserting a child entity (e.g. MediaAsset) referencing a parent (Engagement) belonging to a different workspace."
+    defense_mechanism: "Composite foreign keys enforce (workspace_id, engagement_id) on all child tables."
+    falsification_test: "Attempt INSERT into cae.media_asset with workspace_id = WorkspaceA and engagement_id = Engagement_in_WorkspaceB. Assert PostgreSQL FK violation error."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-004"
+    name: "Storage Path Registration Without Bytes & Hash Readback"
+    threat_description: "Registering a MediaAsset as VERIFIED simply because a storage path string exists, without reading back bytes or verifying SHA-256."
+    defense_mechanism: "cae.media.verify@1.0.0 performs physical Storage byte download and recomputes SHA-256 before allowing state transition to VERIFIED."
+    falsification_test: "Upload a corrupted 100-byte file where the last byte is altered. Execute media.verify. Assert state transitions to QUARANTINED."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-005"
+    name: "Receipt Premature Emission / Self-Proof"
+    threat_description: "Emitting an execution receipt before the underlying transaction commits, or using the receipt as independent proof of qualitative truth."
+    defense_mechanism: "Receipts commit in the same atomic transaction as state updates; receipts carry evaluator_versions and mark reward_hack_result as UNVERIFIED."
+    falsification_test: "Simulate database failure during state transition update. Assert no orphaned row is inserted into cae.receipt."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-006"
+    name: "Cross-Tenant Idempotency Key Collision"
+    threat_description: "An idempotency key used in Workspace A suppresses or corrupts a command execution in Workspace B."
+    defense_mechanism: "Unique constraint is scoped composite: UNIQUE (workspace_id, operation_id, idempotency_key)."
+    falsification_test: "Execute command with idempotency_key = 'test-key-01' in Workspace A, then execute different command with same key in Workspace B. Assert both execute successfully."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-007"
+    name: "Cross-Workspace Guest Identity Merge"
+    threat_description: "Guest records in different workspaces with identical email/name are merged automatically into a global persona."
+    defense_mechanism: "Anti-Auto-Merge Law enforces workspace locality; Guest table primary key is (workspace_id, guest_id) and cross-workspace queries are prohibited."
+    falsification_test: "Create Guest 'John Doe' (email: john@example.com) in Workspace A and Workspace B. Query guests in Workspace A. Assert exactly 1 guest returned with Workspace A ID."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-008"
+    name: "Count-Only Migration Fallacy"
+    threat_description: "A migration script asserts success by checking table row counts while tenant ownership or lineage is swapped."
+    defense_mechanism: "Automated parity verifier checks SHA-256 payload checksums, tenant IDs, and foreign key graphs in addition to row counts."
+    falsification_test: "Run parity verifier with 1 swapped workspace_id in target table. Assert verifier fails with PARITY_MISMATCH."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-009"
+    name: "Mock Topology Overclaim"
+    threat_description: "Running in-memory SQLite tests and claiming E3 production-shaped multi-tenant isolation."
+    defense_mechanism: "Test runner requires active Supavisor connection string and live Supabase Storage credentials for E3 classification."
+    falsification_test: "Execute E3 test runner without PostgreSQL credentials. Assert test runner aborts with ENVIRONMENT_FIDELITY_ERROR."
+    fidelity: "E1_STATIC"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-010"
+    name: "Missing Downstream Event / Receipt Projection"
+    threat_description: "A state transition succeeds in memory or DB but fails to create an immutable receipt or downstream event."
+    defense_mechanism: "All transitions are wrapped in atomic transaction adapters that enforce receipt insertion before COMMIT."
+    falsification_test: "Attempt state transition with receipt generation disabled. Assert transaction rolls back with CONTRACT_ERROR."
+    fidelity: "E3_STAGING"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+  - negative_id: "HN-TS-011"
+    name: "Centroid Smoothing in Validators"
+    threat_description: "A validator automatically softens or sanitizes qualitative inputs to pass validation rules."
+    defense_mechanism: "Anti-Centroid Patrol constraints forbid generic corporate smoothing or polite tone enforcement in mechanical layers."
+    falsification_test: "Pass raw sharp qualitative expressions with non-standard syntax through validator. Assert expressions are preserved byte-for-byte without sanitization."
+    fidelity: "E2_REPOSITORY_FIXTURE"
+    status: "PLANNED_IN_CA_IMPL_01A"
+
+cleanup_and_isolation:
+  - "Staging database tests execute against disposable PostgreSQL schemas (cae_test_*)."
+  - "Storage tests upload to dedicated test prefixes (cae-media/test-run-*/) and execute mandatory cleanup on teardown."
+  - "Zero transient rows or orphaned storage objects permitted after test suite completion."

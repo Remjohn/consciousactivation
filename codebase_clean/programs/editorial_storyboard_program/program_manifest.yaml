@@ -1,0 +1,46 @@
+program:
+  id: "editorial_storyboard_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Compiles verified evidence segments and candidate narratives into an editorial storyboard."
+  operator_entrypoint: "compile_storyboard"
+  inputs:
+    - "selected_candidate_cluster"
+    - "evidence_segments"
+  preconditions:
+    - "workspace_active"
+    - "evidence_segments_verified"
+  outputs:
+    - "editorial_storyboard"
+  artifacts:
+    - "storyboard_blueprint"
+  harness: "EDITORIAL_HARNESS_V1"
+  state_machine: "STORYBOARD_STATE_MACHINE_V1"
+  lanes:
+    - "COMPOSER"
+  agents:
+    - "StoryboardCompilerAgent"
+  subagents: []
+  skills:
+    - name: "storyboard_compiler"
+      path: "skills/storyboard_compiler/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "emit_editorial_storyboard"
+  tools:
+    - "narrative_validator"
+  connections: []
+  hooks:
+    - "evidence_grounding_verification"
+  extensions: []
+  evals:
+    - "narrative_coherence_eval"
+  operator_gates:
+    - "storyboard_editorial_approval"
+  recovery:
+    - "fallback_to_candidate_draft"
+  receipts:
+    - "storyboard_generation_receipt"
+  dependencies:
+    - program_id: "interview_semantic_program"
+      version_requirement: "^1.0.0"

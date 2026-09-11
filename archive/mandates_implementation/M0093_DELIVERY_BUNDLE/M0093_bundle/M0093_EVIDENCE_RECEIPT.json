@@ -1,0 +1,55 @@
+{
+  "mandate": "M0093",
+  "status": "EXECUTABLE_WITH_OPERATOR_GATES",
+  "scope_boundary": [
+    "engines/presentation/",
+    "engines/carousel/",
+    "adapters/",
+    "apps/web/",
+    "tests/"
+  ],
+  "changed_files": [
+    "adapters/storyboard_runtime.py",
+    "engines/carousel/__init__.py",
+    "engines/carousel/runtime_adapter.py",
+    "engines/presentation/__init__.py",
+    "engines/presentation/runtime_adapter.py",
+    "tests/cae/test_m0093_storyboard_runtime_adapters.py"
+  ],
+  "evidence_classes": {
+    "EXECUTABLE": [
+      "M0080 canonical storyboard programs were reused as the semantic projection authority.",
+      "Carousel and presentation adapters compile downstream payloads without mutating CAE revision state."
+    ],
+    "DOCUMENT": [
+      "Required constitutional, PRD, M0058-M0068, M65-M72, visual-production authority documents were audited at their current repository paths."
+    ],
+    "REGISTRY_SOURCE": [
+      "Open Carrusel src/types/carousel.ts and src/lib/slide-html.ts at 8ba717ba4d59c8a9a5f64d278f6e83cbea34efde, MIT.",
+      "Slidev v52.19.1 docs/guide/syntax.md and docs/guide/animations.md, release commit displayed as dbc307b, MIT.",
+      "reveal.js 6.0.1 index.html plus fragment documentation, release commit displayed as 52c6c8b, MIT."
+    ],
+    "SCHEMA": [
+      "Open Carrusel dimensions and slide shape are represented as downstream payload constraints only."
+    ],
+    "TEST": [
+      "13 focused tests pass: M0093 + M0080 + M0079 regression coverage.",
+      "AST parse checks pass for all six changed files.",
+      "Boundary comparison shows six changed files and zero changes outside the authorized boundary."
+    ],
+    "OPERATOR_DECISION_REQUIRED": [
+      "Native external runtime reachability was not proven in the snapshot.",
+      "Final perceptual preview inspection and source-lineage confirmation remain required.",
+      "Exact CAE Git commit SHA is unavailable because the supplied snapshot has no .git metadata.",
+      "ruff is unavailable."
+    ]
+  },
+  "test_command": "PYTHONPATH=/mnt/data/m0093_test_bootstrap:packages/ca_runtime/src:packages/ca_contracts/src:. python -m pytest -q tests/cae/test_m0093_storyboard_runtime_adapters.py tests/cae/test_m0080_storyboard_program_contracts.py tests/cae/test_m0079_storyboard_session_revision.py",
+  "test_result": "13 passed, 14 warnings in 0.15s",
+  "parse_check": "PASS for all six changed files",
+  "boundary_check": "6 changed files; 0 outside authorized boundary",
+  "native_runtime_reachability": false,
+  "git_commit_sha": null,
+  "operator_decision": "OPERATOR_DECISION_REQUIRED: APPROVE | APPROVE-WITH-LIMITATIONS | REJECT",
+  "self_promotion": false
+}

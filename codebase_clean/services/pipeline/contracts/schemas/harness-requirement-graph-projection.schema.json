@@ -1,0 +1,103 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:harness_requirement_graph_projection",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "type": "array"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "certified": {
+      "type": "boolean"
+    },
+    "compiler_profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "definition_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "definition_semantic_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "definition_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evaluation_requirements": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "invalidation_state": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "production_ready": {
+      "type": "boolean"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "projection_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "purpose": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "repair_laws": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "semantic_dependencies": {
+      "type": "array"
+    },
+    "workflow": {
+      "type": "object"
+    },
+    "wrong_reading_locks": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "definition_id",
+    "definition_version",
+    "category_id",
+    "profile_id",
+    "purpose",
+    "semantic_dependencies",
+    "capabilities",
+    "workflow",
+    "evaluation_requirements",
+    "repair_laws",
+    "wrong_reading_locks",
+    "production_ready",
+    "certified",
+    "invalidation_state",
+    "compiler_profile_id",
+    "definition_semantic_sha256",
+    "projection_id"
+  ],
+  "title": "harness_requirement_graph_projection",
+  "type": "object"
+}

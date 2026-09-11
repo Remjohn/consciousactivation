@@ -1,0 +1,78 @@
+evaluation_id: VQE-F02-0001-C03
+candidate_ref: ASSET-F02-0001-C03
+demand_ref: VAD-F02-0001-v1
+evaluation_profile: character-scene-composition-v1
+deterministic_validation:
+  verdict: pass
+  checks:
+    dimensions: pass
+    alpha: pass
+    file_integrity: pass
+    receipt_completeness: pass
+asset_evaluation:
+  verdict: repair_required
+  scores:
+    semantic_fidelity: 0.94
+    activative_fidelity: 0.84
+    identity_continuity: 0.97
+    technical_quality: 0.95
+composition_evaluation:
+  verdict: pass
+  scores:
+    geometry_fit: 0.93
+    hierarchy_support: 0.92
+    crop_resilience: 0.96
+  render_ref: asset://evaluation/compositions/F02-0001-C03.png
+activation_evaluation:
+  verdict: pass
+  scores:
+    zero_second_hook: 0.86
+    pattern_match_strength: 0.9
+    pattern_interrupt_strength: 0.84
+    viewer_role_clarity: 0.91
+    prediction_gap: 0.82
+    payoff: 0.88
+    affinity: 0.9
+    anticipation_residue: 0.81
+    anti_cliche_strength: 0.89
+  delete_caption_test:
+    applicable: false
+    verdict: not_applicable
+wrong_reading_evaluation:
+  verdict: pass
+  dominant_interpretation: restrained skepticism before recognition
+  lock_results:
+  - lock: Do not read as contempt or mockery.
+    triggered: false
+    evidence: Mouth and brow remain restrained; gaze is relational.
+  - lock: Do not imply that effort is worthless.
+    triggered: false
+    evidence: The visual only stages resistance before explanation.
+  - lock: Do not use a front-facing centered presentation pose.
+    triggered: false
+    evidence: Subject remains three-quarter and right weighted.
+syntax_context_evaluation:
+  recurrence_verdict: beneficial_recurrence
+  contextual_similarity_to_recent_uses: 0.29
+  continuity_value: 0.95
+  fatigue_risk: 0.06
+  explanation:
+  - Same character identity supports continuity.
+  - The pose and reaction role differ from recent uses.
+temporal_evaluation: {}
+failures:
+- failure_code: WEAK_VISIBLE_ACTION
+  severity: major
+  responsible_layer: pose_conditioning
+  evidence_bbox:
+  - 0.55
+  - 0.42
+  - 0.22
+  - 0.18
+  explanation: The open-palm gesture reads as explanation rather than skeptical withholding.
+repair_contract_ref: REPAIR-F02-0001-R1
+verdict: repair_required
+evaluator_identity:
+  vlm: architecture_pending
+  program: character-scene-evaluator-v1
+  profile_version: '1.0'

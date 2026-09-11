@@ -1,0 +1,136 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:jit_execution_capsule",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_kind": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "allowed_actions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "capsule_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "capsule_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "context_refs": {
+      "type": "array"
+    },
+    "evaluation_requirements": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "expires_after_ms": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "forbidden_actions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "implementation_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "input_contracts": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "node_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "output_contracts": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "product_boundary": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "role": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "secrets_included": {
+      "type": "boolean"
+    },
+    "tool_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "unrestricted_context_included": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "capsule_id",
+    "capsule_version",
+    "node_id",
+    "implementation_ref",
+    "actor_kind",
+    "role",
+    "product_boundary",
+    "context_refs",
+    "allowed_actions",
+    "forbidden_actions",
+    "tool_ids",
+    "input_contracts",
+    "output_contracts",
+    "evaluation_requirements",
+    "expires_after_ms",
+    "secrets_included",
+    "unrestricted_context_included"
+  ],
+  "title": "jit_execution_capsule",
+  "type": "object"
+}

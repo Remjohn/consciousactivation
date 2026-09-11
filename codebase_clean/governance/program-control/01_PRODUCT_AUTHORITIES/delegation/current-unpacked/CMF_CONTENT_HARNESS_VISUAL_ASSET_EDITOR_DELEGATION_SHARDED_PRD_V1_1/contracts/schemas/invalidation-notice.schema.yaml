@@ -1,0 +1,41 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Invalidation Notice
+type: object
+additionalProperties: false
+required:
+- notice_id
+- affected_result
+- action
+- trigger
+- scope
+- decision_owner
+properties:
+  notice_id:
+    type: string
+    minLength: 1
+    pattern: ^INV-
+  affected_result:
+    type: object
+  action:
+    type: string
+    minLength: 1
+    enum:
+    - revalidation_required
+    - block_pending_revalidation
+  trigger:
+    type: object
+  scope:
+    type: object
+  affected_dimensions:
+    type: array
+    items:
+      type: string
+      minLength: 1
+  unaffected_dimensions:
+    type: array
+    items:
+      type: string
+      minLength: 1
+  decision_owner:
+    type: string
+    minLength: 1

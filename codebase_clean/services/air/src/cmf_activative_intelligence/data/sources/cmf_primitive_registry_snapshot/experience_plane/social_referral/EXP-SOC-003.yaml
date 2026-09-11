@@ -1,0 +1,185 @@
+experience_primitive_id: "EXP-SOC-003"
+canonical_name: "Identity-Driven Social Proof"
+aliases:
+  - "Relatedness Anchoring"
+  - "Peer Proximity Proof"
+  - "The 'People Like Me' Effect"
+
+experience_family: "social_referral"
+mechanic_role: "trigger"
+moment_role: "friction_reduction"
+implementation_role: "core"
+
+source_audits:
+  - audit_file: "AUDIT_Hooked_Ryan_Hoover.md"
+    primitive_name_in_audit: "Identity-Driven Social Proof"
+    mcda_score: 180
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Hooked_Ryan_Hoover.md"
+
+book_reference:
+  title: "Hooked"
+  author: "Nir Eyal"
+  chapters:
+    - "Chapter 4: Variable Reward (Rewards of the Tribe)"
+  key_pages: "100-115"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Hooked - Ryan Hoover.md"
+
+summary: >
+  Identity-Driven Social Proof dictates that seeing successful peers who are
+  closely aligned with the user's own identity (same niche, same struggle,
+  same tier) is vastly more persuasive than seeing distant, unattainable
+  celebrities. In CCP, we do not highlight a Tony Robbins reaction to motivate
+  a struggling fitness coach. We highlight a fitness coach who just broke through
+  their hedging habit. This creates immediate, localized relatedness and proves
+  that the system works for 'people exactly like me.'
+
+core_move: >
+  Filter and surface social proof, leaderboard data, and community activity
+  exclusively based on identity proximity (niche, tier, struggle) rather than
+  global popularity.
+
+why_it_works: >
+  Nir Eyal explains that 'Rewards of the Tribe' are deeply hardwired into our
+  brains; we look to our immediate tribe to determine what is valuable. Jane
+  McGonigal and Yu-kai Chou also emphasize 'Relatedness'—social proof only works
+  if it is relatable. If a global leaderboard shows a user at rank 45,000 behind
+  celebrities, they experience apathy. If a local leaderboard shows them at
+  rank 3 out of 50 B2B Sales Coaches, they feel intense motivation to engage.
+  Identity proximity transforms generic social pressure into actionable inspiration.
+
+examples:
+  - context: "BOOK: Hooked - Stack Overflow's reputation system"
+    application: >
+      Stack Overflow doesn't just show the best programmers in the world; it shows
+      you the reputation of people answering questions in your specific, niche
+      coding language. The proof is highly localized to your daily reality.
+    effect: >
+      Drives intense tribal participation because the comparison feels relevant.
+
+  - context: "CCP: Conscious Reactions Peer Highlighting"
+    application: >
+      A SaaS founder finishes their reaction. The UI says: '73% of B2B SaaS
+      founders in this cohort voted against this premise. See the top-rated take
+      from your lane.'
+    effect: >
+      The user immediately clicks to listen, driven by intense tribal curiosity
+      about their direct peers.
+
+  - context: "CCP: Silent Testimonial Delivery"
+    application: >
+      During the $29/mo CPSC upgrade prompt, the system doesn't show a generic
+      celebrity endorsement. It dynamically loads a Testimonial Proof artifact
+      from another coach who had the exact same 'hedging' problem the user has.
+    effect: >
+      The objection ('will this work for me?') is annihilated because the proof
+      is perfectly mapped to their identity.
+
+  - context: "CCP: Accountability Partner Matching"
+    application: >
+      Law28 doesn't pair users randomly. It matches a Tier 2 fitness coach with
+      another Tier 2 fitness coach. Their shared identity creates instant
+      social cohesion and mutual respect.
+    effect: >
+      Drop-off rates plummet because they don't want to let down a peer who
+      understands their specific world.
+
+  - context: "CCP: The 'Just Behind You' Nudge"
+    application: >
+      Instead of saying 'You are #500 overall,' the system says: 'John (another
+      Agency Owner) just beat your Conviction score by 2 points. Re-take the drill?'
+    effect: >
+      Hyper-localized competitive pressure based on relatedness.
+
+anti_examples:
+  - description: >
+      A struggling beginner logs in and the dashboard proudly displays:
+      'Global Leader: Gary Vaynerchuk - 99/100 Conviction.'
+    why_it_fails: >
+      The social proof is too distant. The user thinks, 'Of course Gary V
+      is better than me, he's a professional.' It creates no actionable motivation,
+      only a feeling of inadequacy.
+
+experience_stage_fit:
+  entry: 0.8
+  activation: 0.9
+  recording: 0.4
+  scoring: 0.3
+  social_spread: 0.7
+  recovery: 0.8
+  retention: 0.9
+  conversion: 1.0
+
+surface_fit:
+  telegram_message: 0.8
+  mini_app: 0.9
+  score_card: 0.6
+  share_asset: 0.8
+  voice_prompt: 0.6
+  push_nudge: 0.9
+
+user_state_effects:
+  confidence: 0.8
+  urgency: 0.7
+  clarity: 0.8
+  safety: 0.9
+  status: 0.6
+  belonging: 1.0
+  curiosity: 0.9
+  replay_desire: 0.6
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 0.8
+  cbcs_accountability: 1.0
+  challenge_progression: 0.9
+  silent_referral: 0.7
+  coach_os_deployment: 0.6
+  premium_trust_architecture: 0.9
+  onboarding_activation: 0.9
+  social_economy: 0.8
+  content_extraction: 0.4
+
+activation_conditions:
+  - "User is at a decision point (upgrade, record, debate) and needs validation"
+  - "System has enough telemetry to accurately match the user's niche or skill tier"
+  - "A peer with a similar identity has recently completed a successful action"
+
+suppression_conditions:
+  - "User is in a Tier 1 'cold start' and has not provided enough identity data for accurate matching"
+
+misuse_modes:
+  - "Faking social proof with simulated bot users (destroys trust instantly if discovered)."
+  - "Matching based on irrelevant metrics (e.g., matching two people just because they live in the same state, when their coaching niches are vastly different)."
+
+synergizes_with:
+  - "EXP-TRG-004" # Tailoring & Suggestion
+  - "EXP-TRS-003" # Reflective Social Proof
+
+conflicts_with:
+  - "EXP-SOC-004" # If applied globally, it breaks Balanced Status Architecture
+
+implementation_targets:
+  frontend_components:
+    - "DynamicProofCarousel — rendering testimonials filtered by the viewing user's CA-1 profile"
+    - "LocalLeaderboard — a UI strictly constrained to the user's specific skill tier or niche"
+  backend_rules:
+    - "relatedness_engine: prioritize social data points where Jaccard similarity of user_tags > 0.6"
+  telemetry_events:
+    - "localized_proof_viewed"
+    - "peer_comparison_triggered"
+    - "conversion_after_identity_proof"
+  experiments:
+    - "A/B test: Show proof from someone exactly in their tier vs someone just one tier above them"
+
+experience_metrics:
+  entry_rate: 0.8
+  react_rate: 0.7
+  completion_rate: 0.6
+  share_rate: 0.5
+  comeback_rate: 0.8
+  day7_retention: 0.9
+  upgrade_signal: 1.0
+
+crosswalk_id: "XW-SOC-IDENTITY"
+crosswalk_note: >
+  Essential for CPSC conversion. Buyers convert when they see their own
+  specific problem solved by someone they relate to.

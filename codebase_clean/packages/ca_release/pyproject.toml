@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ca-release"
+version = "0.9.0.dev1"
+description = "Development-only release evidence, pilot, backup, benchmark and deployment tooling for Conscious Activations."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "ca-contracts==0.1.0.dev1",
+  "ca-runtime==0.1.0.dev1",
+  "conscious-activations-interview-expression==0.4.0.dev1",
+  "cmf-activative-intelligence-runtime==0.9.0.dev1",
+  "cmf-atomic-harness-pipeline==0.9.0.dev1",
+  "cmf-visual-asset-editor==0.8.0.dev1",
+]
+
+[project.scripts]
+ca-release = "ca_release.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ca_release*"]
+
+[tool.setuptools.package-data]
+ca_release = ["py.typed", "schemas/*.json"]

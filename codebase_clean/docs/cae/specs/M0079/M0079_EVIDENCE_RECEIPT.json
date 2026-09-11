@@ -1,0 +1,64 @@
+{
+  "mandate": "M0079",
+  "status": "IMPLEMENTED_OPERATOR_REVIEW_REQUIRED",
+  "evidence_classification": [
+    "EXECUTABLE",
+    "SCHEMA",
+    "MIGRATION",
+    "DOCUMENT",
+    "TEST",
+    "OPERATOR_DECISION_REQUIRED"
+  ],
+  "authority_inputs": {
+    "campaign_pack": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/AUTHORITY_PACK/",
+    "build_plan": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/00_REPOSITORY_TO_PRODUCT_BUILD_PLAN.md",
+    "asset_editor": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/01_CAE_Product_Update_Visual_Asset_Editor.md",
+    "asset_studio": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/02_CAE_PRD_Update_Visual_Asset_Studio.md",
+    "motion_standards": "archive/mandates_implementation/CAE_Visual_Production_Storyboard_M0073_M0096_v1/AUTHORITY_PACK/CAE_Visual_Production_Update_2026-09-10/03_CONSCIOUS_E_MOTION_EDITING_STANDARDS_v2.md",
+    "constitutional_equivalents_reviewed": [
+      "governance/program-control/00_CONSTITUTION/current-v1.1/docs/00_ACTIVATIVE_SYSTEM_CONSTITUTION.md",
+      "governance/program-control/00_CONSTITUTION/current-v1.1/governance/CONSTITUTIONAL_PRECEDENCE_CONTRACT.yaml"
+    ],
+    "literal_constitution_paths_missing": true
+  },
+  "implementation": {
+    "runtime": "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+    "exports": "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests": "tests/cae/test_m0079_storyboard_session_revision.py",
+    "authority_boundary": "EditorialStoryboardRecord remains narrative authority; GraphRevisionRecord remains immutable revision authority",
+    "external_sources_extracted": false
+  },
+  "verification": [
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/cae/test_m0079_storyboard_session_revision.py",
+      "observed_result": "3 passed",
+      "proves": "M0079 happy path, contrastive grounding rejection, stale write rejection, tenant isolation, feedback immutability, validation, compile gating, and deterministic replay."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/phase4/test_m39_storyboard_semantic_compile.py",
+      "observed_result": "10 passed",
+      "proves": "Existing EditorialStoryboard/M39 semantic compile authority remains green."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/cae/test_m0075_jellyfish_extraction_reference.py tests/cae/test_m0078_shot_grammar_reference.py tests/cae/test_vae_delegation_visual_asset_runtime.py",
+      "observed_result": "46 passed, 100%",
+      "proves": "Unified M0079 and adjacent storyboard/visual regression suite."
+    },
+    {
+      "evidence_class": "TEST",
+      "command": "pytest -q tests/cae/test_m0079_storyboard_session_revision.py tests/phase4/test_m39_storyboard_semantic_compile.py tests/storyboard_reference/test_m0074_wind_comic_extraction.py tests/cae/test_m0075_jellyfish_extraction_reference.py tests/cae/test_m0076_exploratory_canvas_reference.py tests/cae/test_m0078_shot_grammar_reference.py tests/cae/test_vae_delegation_visual_asset_runtime.py",
+      "observed_result": "51 passed, 100%",
+      "proves": "Complete M0074–M0079 storyboard/visual regression, including the new M0079 domain."
+    }
+  ],
+  "limitations": [
+    "Pydantic deprecation warnings remain non-failing; no acceptance criterion is weakened.",
+    "Native external editor/runtime reachability is not claimed.",
+    "Human perceptual quality, rights confirmation, and final creative approval remain operator decisions."
+  ],
+  "operator_decision_requested": "APPROVE | APPROVE-WITH-LIMITATIONS | REJECT",
+  "commit_sha": "9d22849cc8b2d7457e0e979a83e249ff4a50213a"
+}

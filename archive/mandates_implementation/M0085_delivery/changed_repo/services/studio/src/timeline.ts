@@ -1,0 +1,6 @@
+import { canonicalSha256, deterministicId } from "./canonical";
+import type { TimelineProjection } from "./domain";
+export function projectVideoEditProgram(input: any): TimelineProjection {
+  const items = (input.items ?? []).map((item: any) => ({ ...item, source_start_ms: item.source_start_ms ?? null, source_end_ms: item.source_end_ms ?? null, source_ref: item.source_ref ?? null, artifact_ref: item.artifact_ref ?? null, editable_operations: item.editable_operations ?? [] }));
+  return { projection_id: input.projection_id ?? deterministicId("timeline", { program_id: input.program_id, sha256: input.program_sha256 }), video_edit_program_ref: { object_id: input.program_id, version: input.version ?? "1.0.0", sha256: input.program_sha256 ?? canonicalSha256(input) }, state: "READ_ONLY_CANONICAL_PROGRAM_PROJECTION", width: Number(input.canvas?.width ?? input.width ?? 1920), height: Number(input.canvas?.height ?? input.height ?? 1080), fps_numerator: Number(input.canvas?.fps_numerator ?? input.fps_numerator ?? 30), fps_denominator: Number(input.canvas?.fps_denominator ?? input.fps_denominator ?? 1), duration_frames: Number(input.duration_frames ?? 0), tracks: input.tracks ?? [], items };
+}

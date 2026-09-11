@@ -1,0 +1,60 @@
+{
+  "mandate": "M0091",
+  "status": "OPERATOR_DECISION_REQUIRED",
+  "requested_decision": ["APPROVE", "APPROVE-WITH-LIMITATIONS", "REJECT"],
+  "recommended_decision": "APPROVE-WITH-LIMITATIONS",
+  "evidence_classes": {
+    "implementation": "EXECUTABLE",
+    "focused_tests": "TEST",
+    "authority_material": "DOCUMENT",
+    "upstream_mapping": "REGISTRY_SOURCE",
+    "commit": "OPERATOR_DECISION_REQUIRED"
+  },
+  "commands": [
+    {
+      "command": "python -m pytest -q tests/cae/test_m0091_supervisual_editor.py tests/api/test_visual_studio_pure.py",
+      "result": "8 passed in 0.18s"
+    },
+    {
+      "command": "python -m py_compile engines/visual/supervisual/*.py tests/cae/test_m0091_supervisual_editor.py",
+      "result": "PY_COMPILE_PASS"
+    },
+    {
+      "command": "python -m pytest -q tests/phase6/test_composition_products.py tests/api/test_visual_studio_pure.py tests/cae/test_m0080_storyboard_program_contracts.py",
+      "result": "BLOCKED: ModuleNotFoundError: No module named 'psycopg'"
+    },
+    {
+      "command": "cd apps/web && npm test -- --run src/components/visual-studio/SuperVisualPrimitiveStack.test.tsx",
+      "result": "BLOCKED: vitest not found; node_modules absent"
+    },
+    {
+      "command": "tsc -p apps/web/tsconfig.json --noEmit",
+      "result": "BLOCKED: missing vite/client type definition"
+    }
+  ],
+  "scope": {
+    "allowed_boundary_observed": true,
+    "paths_changed": [
+      "engines/visual/supervisual/__init__.py",
+      "engines/visual/supervisual/editor.py",
+      "engines/visual/supervisual/README.md",
+      "engines/visual/supervisual/UPSTREAM_TO_CAE_MAPPING.md",
+      "apps/web/src/components/visual-studio/SuperVisualPrimitiveStack.tsx",
+      "apps/web/src/components/visual-studio/SuperVisualPrimitiveStack.test.tsx",
+      "apps/web/src/components/visual-studio/VisualAssetStudio.tsx",
+      "tests/cae/test_m0091_supervisual_editor.py"
+    ]
+  },
+  "git": {
+    "exact_commit_sha": "UNAVAILABLE_IN_SUPPLIED_SNAPSHOT",
+    "historical_m72_sha": "8fb3733cc6a750560532f87f98af2fe24c229528",
+    "historical_sha_is_substituted": false
+  },
+  "limitations": [
+    "No .git metadata in the supplied archive.",
+    "Mandatory authority files exist at relocated current equivalents, not the literal legacy paths in the mandate.",
+    "Python composition test collection is blocked by missing psycopg.",
+    "Web tests/typecheck are blocked by absent node_modules/dependency type definitions.",
+    "No external runtime availability or perceptual visual-quality proof was established."
+  ]
+}

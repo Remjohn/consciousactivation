@@ -1,0 +1,94 @@
+schema_version: conscious-activations-source-traceability/v3.3
+spec_id: TS-INT-007
+writing_wave: 5
+quality_state: WRITTEN_PENDING_AUDIT
+authority_state: CANDIDATE_NOT_CURRENT
+primary_owner: Interview Expression
+traceability:
+  - requirement_id: AIR-FR-049
+    primary_story_id: AIR-ST-09.01
+    requirement_summary: update evidence-bearing live state after every meaningful event
+    authority_sources:
+      - path: CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/prd/features/F09-live-narrative-state-induction-and-interviewer-resonance.md
+        sha256: a1e1421ee23b0f30f84bffeb37bfd5b6eac74a29d4a9e24a036c85a257ec8fa5
+      - path: CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/planning/EPICS_AND_VERTICAL_STORIES.md
+        sha256: b74fa0d6e4357662b021d92e45e2436b25005c88d4c45bdb8df2010592fd7da0
+    required_unique_evidence: [SRC-AI2-LIVE-001, SRC-INT-001, SRC-INT-002, SRC-MOE-001]
+    normative_sections: [2, 3, 5, 6, 8, 9, 10]
+    implementation_objects:
+      - LiveActivativeSession
+      - LiveActivativeStateSnapshot
+      - LiveObservationSignal
+      - DeliveredActivativeCallRecord
+      - PressureDoseDecision
+      - LiveStateTransitionReceipt
+    acceptance_evidence:
+      - receipt_backed_state_transition_suite
+      - state_projection_golden_fixtures
+      - atomic_command_event_snapshot_receipt_parity
+      - historical_and_effective_replay_proof
+      - deterministic_fresh_process_reproduction
+  - requirement_id: AIR-FR-050
+    primary_story_id: AIR-ST-09.01
+    requirement_summary: preserve genuine interviewer reaction when it changes the next useful call
+    authority_sources:
+      - path: CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/prd/features/F09-live-narrative-state-induction-and-interviewer-resonance.md
+        sha256: a1e1421ee23b0f30f84bffeb37bfd5b6eac74a29d4a9e24a036c85a257ec8fa5
+      - path: CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/planning/EPICS_AND_VERTICAL_STORIES.md
+        sha256: b74fa0d6e4357662b021d92e45e2436b25005c88d4c45bdb8df2010592fd7da0
+    required_unique_evidence: [SRC-INT-001, SRC-MOE-001]
+    normative_sections: [2, 3, 5, 6, 8, 9, 10]
+    implementation_objects:
+      - InterviewerReactionState
+      - ActorAssertion
+      - LiveObservationSignal
+      - LiveStateTransitionReceipt
+    acceptance_evidence:
+      - human_attestation_and_model_isolation_tests
+      - operative_reaction_state_projection_tests
+      - reaction_correction_and_supersession_tests
+      - source_evidence_and_epistemic_state_tests
+  - story_id: AIR-ST-09.01
+    story_summary: maintain an armed evidence-bearing live loop with recorded calls and transitions and truthful reset landing or stop
+    authority_sources:
+      - path: CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/CONSCIOUS_ACTIVATIONS_ACTIVATIVE_INTELLIGENCE_RUNTIME_V2_1_FULL_BUNDLE/planning/EPICS_AND_VERTICAL_STORIES.md
+        sha256: b74fa0d6e4357662b021d92e45e2436b25005c88d4c45bdb8df2010592fd7da0
+    normative_sections: [2, 3, 5, 6, 8, 9, 10]
+    acceptance_evidence:
+      - complete_vertical_session_proof
+      - adversarial_authority_and_provenance_proof
+      - reset_land_stop_and_cancellation_race_tests
+      - replay_and_historical_reproduction_proof
+ownership_traceability:
+  air_owned:
+    - interview_asset_contract_and_armed_binding_semantics
+    - live_narrative_policy_proposal
+    - activative_call_options
+    - pressure_dose_recommendation
+    - counteractivation_hypotheses
+    - smallest_useful_call_proof
+  interview_expression_owned:
+    - live_activative_session_event_stream
+    - current_and_historical_live_state_projection
+    - interviewer_reaction_state_record
+    - actual_delivered_call_record
+    - actual_human_pressure_decision_record
+    - live_observation_and_transition_evidence
+  human_or_source_owned:
+    - guest_personal_truth
+    - interviewer_genuine_reaction
+    - actual_delivery_pressure_reset_landing_stop_and_cancel_choice
+  adjacent_external_ownership:
+    reaction_receipt_full_outcome_classification: TS-INT-006
+    pipeline_execution: Atomic Harness Pipeline
+    visual_realization: Visual Asset Editor
+    projection_and_operator_correction: Studio
+    transport: Delegation Protocol
+    independent_evaluation_receipts: Independent Evaluation
+source_disposition_result:
+  required_authority_available: true
+  required_current_implementation_available: true
+  required_unique_evidence_available: true
+  optional_or_deferred_source_claims_made: false
+  unresolved_required_source_path: false
+result: PASS_COMPLETE_FR_STORY_OWNER_SOURCE_AND_SECTION_TRACEABILITY

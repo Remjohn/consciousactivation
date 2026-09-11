@@ -1,0 +1,41 @@
+schema_version: conscious-activations-source-traceability/v3.3
+spec_id: TS-AHP-003
+quality_state: WRITTEN_PENDING_AUDIT
+authority_state: CANDIDATE_NOT_CURRENT
+traceability:
+  FR-133:
+    requirement: Compile one source-backed Content Batch Orchestration Program.
+    story: ST-03.02
+    source_ids: [SRC-AM-001, SRC-INT-001]
+    spec_sections: ['2', '3', '5.2', '5.3', '6.2', '8', '9.1', '9.2', '10']
+  FR-134:
+    requirement: Route only approved source material through eligible AIR archetypes and Builder Harnesses.
+    story: ST-03.03
+    source_ids: [SRC-INT-003]
+    spec_sections: ['3.2', '3.3', '5.4', '6.4', '8', '9.3', '9.4', '10']
+  FR-135:
+    requirement: Create immutable complete ContentDerivativeJob contracts.
+    story: ST-03.02
+    source_ids: [SRC-CUR-004, SRC-CUR-007]
+    spec_sections: ['3.4', '3.5', '5.5', '6.5', '8', '9.5', '9.6', '10']
+  FR-136:
+    requirement: Share exact source analysis and prevent duplicate or conflicting derivatives.
+    story: ST-03.03
+    source_ids: []
+    deferred_reference_ids: [SRC-AM-002, SRC-EXT-023]
+    governing_current_basis: [F23, ST-03.03, TS-INT-005, TS-AIR-015, TS-AIR-016]
+    spec_sections: ['3.6', '3.7', '5.6', '6.3', '6.6', '8', '9.7', '9.8', '9.9', '9.10', '10']
+story_acceptance:
+  ST-03.02_primary: ['5.2', '5.3', '5.5', '6.2', '6.5', '9.1', '9.5']
+  ST-03.02_adversarial: ['3.5', '5.2', '8.1', '9.6']
+  ST-03.02_replay_and_recovery: ['5.7', '8.2', '8.3', '9.17', '9.18', '10.4']
+  ST-03.03_primary: ['3.3', '5.4', '6.4', '9.3']
+  ST-03.03_reuse_dedupe: ['3.6', '5.6', '6.3', '6.6', '9.7', '9.8', '9.9']
+  ST-03.03_no_manufactured_route: ['3.3', '5.4', '8.1', '9.4']
+upstream_draft_interfaces:
+  TS-AHP-002: immutable_harness_intake_and_execution_binding
+  TS-INT-005: approved_source_evidence_package_and_restrictions
+  TS-AIR-015: semantic_production_package_and_final_script_lineage
+  TS-AIR-016: activation_transfer_fidelity_and_checkpoint_lineage
+unattributed_unavailable_source_claims: []
+result: PASS_COMPLETE_FOR_WRITING_PENDING_INDEPENDENT_AUDIT

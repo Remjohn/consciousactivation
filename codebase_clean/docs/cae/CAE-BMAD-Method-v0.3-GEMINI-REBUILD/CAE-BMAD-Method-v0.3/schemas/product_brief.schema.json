@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Product Brief Schema",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "product_name",
+    "status",
+    "vision_statement",
+    "target_audience",
+    "capability_pillars",
+    "non_goals",
+    "success_metrics"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "product_name": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    },
+    "vision_statement": { "type": "string", "minLength": 20 },
+    "target_audience": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "capability_pillars": {
+      "type": "array",
+      "minItems": 5,
+      "items": { "type": "string" }
+    },
+    "non_goals": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "string" }
+    },
+    "success_metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  }
+}

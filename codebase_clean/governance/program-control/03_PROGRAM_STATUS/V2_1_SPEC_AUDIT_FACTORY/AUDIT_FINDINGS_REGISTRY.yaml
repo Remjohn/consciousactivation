@@ -1,0 +1,28 @@
+schema_version: conscious-activations-prompt04-audit-findings-registry/v1
+updated_on: '2026-07-22'
+registry_state: AUDIT_NOT_STARTED_GATE_BLOCKED
+per_spec_findings: []
+cross_spec_findings: []
+controller_gate_findings:
+  - id: P04-GATE-001
+    severity: CRITICAL
+    lens: lifecycle_gate
+    location: Prompt 04 required gate
+    finding: Prompt 03 did not pass; no canonical target is WRITTEN_PENDING_AUDIT and no required writer receipt exists.
+    evidence:
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_WRITING_FACTORY/FACTORY_GATE_VERDICT.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_RECONCILIATION/SPEC_QUALITY_STATUS_REGISTRY.yaml
+      - CMF_PROGRAM_CONTROL/03_PROGRAM_STATUS/V2_1_SPEC_AUDIT_FACTORY/AUDIT_STATUS_MATRIX.csv
+    required_action: Resolve Prompt 03 blockers and complete the writing factory before rerunning Prompt 04.
+    architect_decision_required: false
+    affected_upstream_downstream_specs: all_60_queued_specs
+    blocks_build: true
+counts:
+  audited_specs: 0
+  accepted_for_build_candidates: 0
+  revision_required: 0
+  architecture_decision_required: 0
+  audit_blocked: 60
+  per_spec_findings: 0
+  cross_spec_findings: 0
+  controller_gate_findings: 1

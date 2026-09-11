@@ -1,0 +1,30 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AHP-001
+spec_path: 05_ATOMIC_HARNESS_PIPELINE/docs/tech-specs/TS-AHP-001.md
+spec_sha256: 5e7fc914dbcfa330ffd903c318158639ca74dc8fcb68eafd9a172772aca89444
+phase: PHASE_03
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 14
+  direct_aggregate_test_evidence: 4
+  implementation_without_direct_ac_test: 10
+  unimplemented_or_nonbehavior: 0
+implementation_paths:
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/authority/service.py
+- 05_ATOMIC_HARNESS_PIPELINE/src/cmf_pipeline/application.py
+- 05_ATOMIC_HARNESS_PIPELINE/contracts/schemas/authority-snapshot.schema.json
+test_evidence:
+- tests/phase3/test_authority_and_batch.py::AuthorityBatchTests::test_program_control_status_wins_and_claim_dimensions_stay_separate
+- tests/phase3/test_authority_and_batch.py::AuthorityBatchTests::test_candidate_authority_denies_build_claim
+- tests/phase3/test_schemas_cli_boundaries.py::SchemaCliBoundaryTests::test_no_format02_or_vae_stage5_activation
+open_gap_ids:
+- GAP-REAL-PROGRAM-CONTROL-ADAPTER
+- GAP-BROWNFIELD-COMPLETE-DISPOSITION
+- GAP-MIGRATION-FAULT-INJECTION
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

@@ -1,0 +1,145 @@
+{
+  "artifact_id": "CAE-ART-WFM-001",
+  "status": "APPROVED",
+  "generated_date": "2026-09-03T09:01:40.261944",
+  "factory_primitives": [
+    {
+      "primitive_id": "PRIM-01",
+      "name": "JIT Context Capsule Assembler",
+      "description": "Assembles minimal token-efficient context packets containing only active schemas, lineage cards, and upstream inputs.",
+      "runtime_binding": "packages/ca_runtime/src/ca_runtime/agent_invocation.py"
+    },
+    {
+      "primitive_id": "PRIM-02",
+      "name": "Deterministic Step Scheduler",
+      "description": "Advances workflow state machines sequentially only upon schema verification of output artifacts.",
+      "runtime_binding": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py"
+    },
+    {
+      "primitive_id": "PRIM-03",
+      "name": "Compare-And-Swap State CAS Runtime",
+      "description": "Guarantees atomic, optimistic locking state mutations preventing race conditions across multi-agent execution.",
+      "runtime_binding": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py"
+    }
+  ],
+  "pipelines": [
+    {
+      "pipeline_id": "PIPE-M01",
+      "name": "Constitution and Method Contract Rebuild",
+      "trigger": "Gemini Activation Prompt M01",
+      "steps": [
+        {
+          "step_number": 1,
+          "agent": "cae-method-orchestrator",
+          "action": "Author Constitution & Governance",
+          "output_artifact": "CAE_BMAD_CONSTITUTION.md"
+        },
+        {
+          "step_number": 2,
+          "agent": "cae-adversarial-reviewer",
+          "action": "Run Countertests & Boundary Checks",
+          "output_artifact": "OPERATOR_GATE_M01.md"
+        }
+      ],
+      "terminal_condition": "All 10 M01 tests pass and operator approves gate.",
+      "rollback_strategy": "Quarantine generated schemas and revert to baseline constitution stubs."
+    },
+    {
+      "pipeline_id": "PIPE-M02",
+      "name": "216-Source Research Library Intake",
+      "trigger": "Gemini Activation Prompt M02",
+      "steps": [
+        {
+          "step_number": 1,
+          "agent": "cae-product-reconstructor",
+          "action": "Ingest 216 Sources and Score Relevance",
+          "output_artifact": "CAE_RESEARCH_LIBRARY.yaml"
+        },
+        {
+          "step_number": 2,
+          "agent": "cae-adversarial-reviewer",
+          "action": "Verify Anti-Flattening Invariants",
+          "output_artifact": "OPERATOR_GATE_M02.md"
+        }
+      ],
+      "terminal_condition": "Exact 216 sources validated against schema with zero unclassified sources.",
+      "rollback_strategy": "Purge .caebmad/research/ output and reload 144-source baseline catalog."
+    },
+    {
+      "pipeline_id": "PIPE-M03",
+      "name": "Multi-Level Engineering Investigation",
+      "trigger": "Gemini Activation Prompt M03",
+      "steps": [
+        {
+          "step_number": 1,
+          "agent": "cae-documentation-analyst",
+          "action": "Scan 13 Operating Levels",
+          "output_artifact": "OPERATING_LEVEL_ASSESSMENT.json"
+        },
+        {
+          "step_number": 2,
+          "agent": "cae-brownfield-auditor",
+          "action": "Identify Code Drift and Broken References",
+          "output_artifact": "OPERATOR_GATE_M03.md"
+        }
+      ],
+      "terminal_condition": "All 13 levels evaluated with concrete filesystem evidence paths.",
+      "rollback_strategy": "Revert assessment deliverables to DRAFT status and log investigation errors."
+    },
+    {
+      "pipeline_id": "PIPE-M04",
+      "name": "Product Intent and Lineage Reconstruction",
+      "trigger": "Gemini Activation Prompt M04",
+      "steps": [
+        {
+          "step_number": 1,
+          "agent": "cae-product-reconstructor",
+          "action": "Synthesize 5 Capability Pillars",
+          "output_artifact": "PRODUCT_RECONSTRUCTION.json"
+        },
+        {
+          "step_number": 2,
+          "agent": "cae-brownfield-auditor",
+          "action": "Map Brownfield Code Crosswalks",
+          "output_artifact": "OPERATOR_GATE_M04.md"
+        }
+      ],
+      "terminal_condition": "All 5 Capability Pillars defined with verified code paths and 216 sources analyzed.",
+      "rollback_strategy": "Revert reconstruction record and re-evaluate capability pillar extraction."
+    }
+  ],
+  "adw_patterns": [
+    {
+      "pattern_id": "ADW-SSSF",
+      "name": "Single-Step Software Factory (SSSF)",
+      "description": "Deterministic step execution pattern where an agent receives a strictly typed context capsule and produces an audited artifact.",
+      "jit_capsule_strategy": "Inject only target schema, input artifact, and specific operating level boundaries."
+    },
+    {
+      "pattern_id": "ADW-ADV-LOOP",
+      "name": "Adversarial Review Loop",
+      "description": "Two-agent pattern where a generator agent's output is subjected to countertests and false-proof defenses by cae-adversarial-reviewer.",
+      "jit_capsule_strategy": "Inject generated artifact, countertest rules, and constitutional boundary checks."
+    }
+  ],
+  "error_recovery_matrix": [
+    {
+      "error_type": "SCHEMA_VALIDATION_ERROR",
+      "detection_agent": "cae-method-orchestrator",
+      "recovery_action": "Reject artifact, emit error diagnostics, retry with corrected parameters.",
+      "operator_escalation": false
+    },
+    {
+      "error_type": "CONTRADICTION_UNRESOLVED",
+      "detection_agent": "cae-adversarial-reviewer",
+      "recovery_action": "Log in Decision Ledger, halt pipeline, generate Operator Gate packet.",
+      "operator_escalation": true
+    },
+    {
+      "error_type": "INFINITE_DESCENT_LOOP",
+      "detection_agent": "cae-brownfield-auditor",
+      "recovery_action": "Circuit-breaker abort, log WORKFLOW_UNDER_SPECIFIED, return to parent level.",
+      "operator_escalation": false
+    }
+  ]
+}

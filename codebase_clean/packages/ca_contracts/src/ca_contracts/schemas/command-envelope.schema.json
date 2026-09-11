@@ -1,0 +1,60 @@
+{
+  "$id": "urn:conscious-activations:activative-production-spine:0.1.0-dev.1:command-envelope",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable command metadata envelope. The payload itself is stored separately and hash-bound.",
+  "properties": {
+    "actor": {
+      "$ref": "actor-ref.schema.json"
+    },
+    "authority": {
+      "$ref": "authority-ref.schema.json"
+    },
+    "command_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "command_type": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "idempotency_key": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "payload_schema": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "payload_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "payload_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?$",
+      "type": "string"
+    },
+    "submitted_at_utc": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "command_id",
+    "command_type",
+    "idempotency_key",
+    "actor",
+    "authority",
+    "payload_schema",
+    "payload_version",
+    "payload_sha256",
+    "submitted_at_utc",
+    "correlation_id"
+  ],
+  "title": "CommandEnvelope",
+  "type": "object"
+}

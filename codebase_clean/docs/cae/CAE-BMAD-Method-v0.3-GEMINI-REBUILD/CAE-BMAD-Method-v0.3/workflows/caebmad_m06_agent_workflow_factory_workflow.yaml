@@ -1,0 +1,58 @@
+name: "CAE-BMAD M06 Agent, Workflow, and Factory Workflow"
+workflow_id: "WF-M06-AGENT-WORKFLOW-FACTORY"
+version: "0.3.0-rebuild"
+primary_agent: "cae-agent-systems-analyst"
+
+description: "Execution pipeline for Mandate M06: Rebuilding the Agent, AI Workflow, and Factory Intelligence Systems across Levels 04 and 05."
+
+preconditions:
+  - "Mandates M01-M05 completed and passed"
+  - "19 agent specifications available"
+  - "Workflow primitive constitutions loaded"
+
+steps:
+  - step_id: "01_AUDIT_AGENT_DEFINITIONS"
+    name: "Audit 19 Governed Agent Definitions"
+    agent: "cae-agent-systems-analyst"
+    operating_level: "Level 04: AGENT"
+    action: "Inspect all agent markdown specs, input/output contracts, and boundaries."
+    output_artifacts: ["Agent Definition Audit"]
+
+  - step_id: "02_EMIT_AGENT_ARCHITECTURE_MAP"
+    name: "Generate Agent System Architecture Map"
+    agent: "cae-agent-systems-analyst"
+    operating_level: "Level 04: AGENT"
+    action: "Assemble docs/cae-bmad/02_investigation/AGENT_ARCHITECTURE_MAP.json and .md."
+    output_artifacts:
+      - "docs/cae-bmad/02_investigation/AGENT_ARCHITECTURE_MAP.json"
+      - "docs/cae-bmad/02_investigation/AGENT_ARCHITECTURE_MAP.md"
+
+  - step_id: "03_MAP_WORKFLOW_PIPELINES"
+    name: "Map Workflow Pipelines & Factory Primitives"
+    agent: "cae-workflow-factory-analyst"
+    operating_level: "Level 05: AI WORKFLOW / FACTORY"
+    action: "Map all active workflow DAGs, SSSF patterns, and JIT context capsules."
+    output_artifacts: ["Workflow DAGs"]
+
+  - step_id: "04_EMIT_WORKFLOW_FACTORY_MAP"
+    name: "Generate Workflow and Factory Map"
+    agent: "cae-workflow-factory-analyst"
+    operating_level: "Level 05: AI WORKFLOW / FACTORY"
+    action: "Assemble docs/cae-bmad/02_investigation/WORKFLOW_FACTORY_MAP.json and .md."
+    output_artifacts:
+      - "docs/cae-bmad/02_investigation/WORKFLOW_FACTORY_MAP.json"
+      - "docs/cae-bmad/02_investigation/WORKFLOW_FACTORY_MAP.md"
+
+  - step_id: "05_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_agent_workflow_factory_system.py and test_m06_agent_workflow_factory.py, then assemble OPERATOR_GATE_M06.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M06.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Agent Architecture Map validates against schema (19 agents)"
+  - "Workflow and Factory Map validates against schema (pipelines with rollback strategies)"
+  - "100% positive and countertests pass"

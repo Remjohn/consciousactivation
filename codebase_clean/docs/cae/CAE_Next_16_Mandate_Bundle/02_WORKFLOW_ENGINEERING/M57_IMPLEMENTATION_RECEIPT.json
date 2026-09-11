@@ -1,0 +1,117 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M57",
+  "mandate_title": "Workflow Primitive Constitution",
+  "phase": "PHASE_07_WORKFLOW_ENGINEERING",
+  "parallel_group": "P7-A",
+  "timestamp_utc": "2026-09-02T05:04:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/02_WORKFLOW_ENGINEERING/M57_workflow_primitive_constitution.md"
+  ],
+  "ratified_vocabulary": {
+    "control_primitives": [
+      "SEQUENCE",
+      "CONDITION",
+      "SWITCH",
+      "LOOP",
+      "RETRY",
+      "PARALLEL",
+      "JOIN",
+      "TIMEOUT",
+      "WAIT",
+      "HUMAN_GATE",
+      "FAIL",
+      "REPAIR",
+      "CANCEL",
+      "RESUME"
+    ],
+    "work_unit_kinds": [
+      "AGENT_CALL",
+      "CODE_FUNCTION",
+      "NOT_APPLICABLE"
+    ]
+  },
+  "delivered_artifacts": [
+    {
+      "path": "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+      "artifact_class": "Canonical Control Flow Primitive Constitution",
+      "dimensions_count": 26,
+      "status": "RATIFIED"
+    },
+    {
+      "path": "docs/cae/CAE_Next_16_Mandate_Bundle/02_WORKFLOW_ENGINEERING/WORKFLOW_PRIMITIVE_SEMANTICS_MATRIX.md",
+      "artifact_class": "Specification & Semantics Matrix",
+      "status": "RATIFIED"
+    },
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/workflow_primitives.py",
+      "artifact_class": "Runtime Domain Models, Errors & Validator",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m57_workflow_primitive_constitution.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 10,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_deterministic_semantics": {
+      "status": "PASSED",
+      "description": "All 14 control-flow primitives and 2 work-unit kinds have explicit, deterministic execution laws."
+    },
+    "gate_2_explicit_failure_and_termination": {
+      "status": "PASSED",
+      "description": "Explicit failure/termination behavior codified for LOOP, RETRY, TIMEOUT, CONDITION, SWITCH, FAIL."
+    },
+    "gate_3_authority_and_state_contracts_enforced": {
+      "status": "PASSED",
+      "description": "HUMAN_GATE requires COMMANDER lane; AGENT_CALL enforces lane isolation; invalid state transitions blocked."
+    },
+    "gate_4_unsupported_primitives_rejected": {
+      "status": "PASSED",
+      "description": "Unratified or improvised primitive kinds are rejected fail-closed."
+    },
+    "gate_5_checked_transfer_ordering": {
+      "status": "PASSED",
+      "description": "6-stage checked transfer protocol preserves source state on failed pre-transfer checks or hooks."
+    }
+  },
+  "false_proof_defenses": [
+    {
+      "vector": "unbounded_loop_rejected",
+      "rule": "INV-WFP-002",
+      "error_code": "ERR_UNBOUNDED_LOOP",
+      "verified": true
+    },
+    {
+      "vector": "unevaluable_condition_rejected",
+      "rule": "INV-WFP-001",
+      "error_code": "ERR_UNEVALUABLE_CONDITION",
+      "verified": true
+    },
+    {
+      "vector": "agent_mutating_loop_bound_rejected",
+      "rule": "INV-WFP-002",
+      "error_code": "ERR_AGENT_MUTATED_LOOP_BOUND",
+      "verified": true
+    },
+    {
+      "vector": "parallel_conflicting_mutating_side_effects_rejected",
+      "rule": "INV-WFP-004",
+      "error_code": "ERR_PARALLEL_SIDE_EFFECT_CONFLICT",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m57_tests_passed": 10,
+    "combined_phase_5_6_7_tests_passed": 100,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

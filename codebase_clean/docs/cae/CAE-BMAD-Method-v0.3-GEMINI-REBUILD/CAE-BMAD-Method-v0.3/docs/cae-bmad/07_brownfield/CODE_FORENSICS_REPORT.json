@@ -1,0 +1,81 @@
+{
+  "artifact_id": "CAE-ART-CFR-001",
+  "status": "APPROVED",
+  "generated_date": "2026-09-03T11:10:04.157376",
+  "classes_inspected": [
+    {
+      "class_name": "ProgramStateRuntime",
+      "file_path": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+      "methods": [
+        "get_current_state",
+        "transition_state_cas",
+        "get_history"
+      ],
+      "verified": true
+    },
+    {
+      "class_name": "WorkflowCompiler",
+      "file_path": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py",
+      "methods": [
+        "compile_dag",
+        "validate_step_contracts",
+        "emit_execution_plan"
+      ],
+      "verified": true
+    },
+    {
+      "class_name": "WorldSignalProvenanceVerifier",
+      "file_path": "services/world-intelligence/src/cae_world_intelligence/verifier.py",
+      "methods": [
+        "verify_signal_provenance",
+        "validate_source_hash",
+        "check_wire_inflation"
+      ],
+      "verified": true
+    }
+  ],
+  "functions_inspected": [
+    {
+      "function_name": "transition_state_cas",
+      "file_path": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+      "signature": "def transition_state_cas(self, expected_version: int, new_state: str) -> bool",
+      "verified": true
+    },
+    {
+      "function_name": "compile_dag",
+      "file_path": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py",
+      "signature": "def compile_dag(self, manifest_path: Path) -> dict",
+      "verified": true
+    },
+    {
+      "function_name": "verify_signal_provenance",
+      "file_path": "services/world-intelligence/src/cae_world_intelligence/verifier.py",
+      "signature": "def verify_signal_provenance(self, signal: dict) -> bool",
+      "verified": true
+    }
+  ],
+  "line_proofs": [
+    {
+      "claim": "Compare-And-Swap (CAS) state machine performs atomic version validation before mutation.",
+      "file_path": "packages/ca_runtime/src/ca_runtime/program_state_runtime.py",
+      "line_number_range": "15-28",
+      "exact_code_snippet": "if current_version != expected_version:\n    raise StateTransitionConflictError('CAS version mismatch')\nself.state = new_state\nself.version += 1",
+      "verified": true
+    },
+    {
+      "claim": "World Intelligence verifier validates cryptographic source hashes and rejects ungrounded signals.",
+      "file_path": "services/world-intelligence/src/cae_world_intelligence/verifier.py",
+      "line_number_range": "32-45",
+      "exact_code_snippet": "computed_hash = hashlib.sha256(raw_bytes).hexdigest()\nif computed_hash != expected_hash:\n    return False\nreturn True",
+      "verified": true
+    },
+    {
+      "claim": "Workflow compiler enforces pre- and post-condition schema validation across pipeline handoffs.",
+      "file_path": "services/pipeline/src/cmf_pipeline/workflow/application/compiler.py",
+      "line_number_range": "50-65",
+      "exact_code_snippet": "for step in pipeline.steps:\n    validate_schema(step.input_schema)\n    validate_schema(step.output_schema)",
+      "verified": true
+    }
+  ],
+  "verdict": "VERIFIED_GROUND_TRUTH"
+}

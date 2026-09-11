@@ -1,0 +1,44 @@
+type: object
+required:
+  - canonical_id
+  - object_name
+  - primary_class
+  - ontological_plane
+  - dimensions_26_status
+  - prohibited_operations
+  - near_neighbors
+  - hard_negatives
+  - constitution_status
+properties:
+  canonical_id:
+    type: string
+  object_name:
+    type: string
+  primary_class:
+    type: string
+  ontological_plane:
+    type: string
+  dimensions_26_status:
+    type: object
+    description: "Map of all 26 dimensions to their classification (APPLICABLE, INAPPLICABLE_WITH_REASON, or PENDING_WITH_BLOCKER)"
+  prohibited_operations:
+    type: array
+    items:
+      type: string
+  near_neighbors:
+    type: array
+    items:
+      type: string
+  hard_negatives:
+    type: array
+    items:
+      type: string
+  constitution_markdown_path:
+    type: string
+  constitution_status:
+    type: string
+    enum:
+      - "DRAFT_COMPLETE"
+      - "PENDING_COLLISION_REVIEW"
+      - "REJECTED_AMBIGUOUS_CLASS"
+      - "PENDING_BLOCKED"

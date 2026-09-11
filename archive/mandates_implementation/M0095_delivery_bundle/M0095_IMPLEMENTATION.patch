@@ -1,0 +1,1701 @@
+diff --git a/deployment/dev/caestudio/.gitignore b/deployment/dev/caestudio/.gitignore
+new file mode 100644
+index 0000000..cc17739
+--- /dev/null
++++ b/deployment/dev/caestudio/.gitignore
+@@ -0,0 +1 @@
++.runtime/
+diff --git a/deployment/dev/caestudio/AGENT_HANDOFF.md b/deployment/dev/caestudio/AGENT_HANDOFF.md
+new file mode 100644
+index 0000000..211ac07
+--- /dev/null
++++ b/deployment/dev/caestudio/AGENT_HANDOFF.md
+@@ -0,0 +1,132 @@
++# M0095 Agent Handoff
++
++**Mandate:** M0095 — Unified CAE Studio Runtime Orchestrator and Single-Tab Topology
++**Campaign:** E1 RUNTIME INTEGRATION
++**Status:** `OPERATOR_REVIEW_REQUIRED`
++**Operator decision requested:** `APPROVE`, `APPROVE-WITH-LIMITATIONS`, or `REJECT`
++
++## 1. Delivered artifact
++
++M0095 adds one bounded development/runtime orchestration layer under `deployment/dev/caestudio/`. The layer launches required CAE API/UI processes and accepts explicit operator-supplied commands for OpenChatCut, presentation, SuperVisual, and SAM3. It exposes a single loopback Studio origin through nginx and registers capabilities/health under the same origin.
++
++The orchestrator is downstream of CAE authority. It does not own semantic meaning, canonical state, provenance, storyboard authority, VAE state, or promotion. External runtimes are declared `downstream_runtime_only` in the manifest and are replaceable.
++
++## 2. Exact paths added
++
++- `deployment/dev/caestudio/.gitignore`
++- `deployment/dev/caestudio/README.md`
++- `deployment/dev/caestudio/__init__.py`
++- `deployment/dev/caestudio/manifest.json`
++- `deployment/dev/caestudio/orchestrator.py`
++- `deployment/dev/caestudio/M0095_EVIDENCE_RECEIPT.json`
++- `deployment/dev/caestudio/AGENT_HANDOFF.md`
++- `tests/cae/test_m0095_runtime_orchestrator.py`
++
++No existing repository file was modified.
++
++## 3. Brownfield authority mapping
++
++| Area | Existing source | M0095 treatment | Evidence class |
++|---|---|---|---|
++| CAE API lifecycle | `api/main.py` | launch unchanged through uvicorn | `DOCUMENT` / `EXECUTABLE` |
++| CAE health | `api/routers/health.py` | probe existing `/api/health`; no health authority duplicated | `REGISTRY_SOURCE` / `EXECUTABLE` |
++| Existing Studio bridge | `api/services/studio_bridge.py` | retained; M0095 does not replace its internal runtime contract | `DOCUMENT` |
++| Web dev surface | `apps/web/vite.config.ts` | proxy unchanged; gateway owns the single public origin | `DOCUMENT` / `EXECUTABLE` |
++| OpenChatCut | `services/pipeline/src/cmf_pipeline/media/openchatcut.py` | MCP health probe adapts the existing native transport contract | `REGISTRY_SOURCE` / `TEST` |
++| Presentation | `engines/presentation/runtime_adapter.py` | downstream launch slot only; no renderer copied | `REGISTRY_SOURCE` |
++| SuperVisual | `engines/visual/supervisual/editor.py` | downstream launch slot only; no competing editor state | `REGISTRY_SOURCE` |
++| SAM3 | manifest capability slot | downstream tracking/geometry capability only; no semantic authority | `SCHEMA` / `OPERATOR_DECISION_REQUIRED` |
++
++The mandatory reading set was inspected before editing, including the Constitution, Constitutional Precedence Contract, current PRD, CAE Mandate Authoring Protocol, M0058-M0068 brownfield references, M65-M72 convergence evidence and final gate, Media Intelligence brief, and the 2026-09-10 Visual Production Authority Pack. The mandate-listed `AUTHORITY_PACK/...` paths resolve in the supplied tree as `docs/AUTHORITY_PACK/...`.
++
++## 4. Runtime behavior
++
++The control matrix is `deployment/dev/caestudio/manifest.json`.
++
++Public origin:
++
++`http://127.0.0.1:3000`
++
++Same-origin control endpoints:
++
++- `/__studio/health`
++- `/__studio/capabilities`
++- `/__studio/topology`
++- `/api/` → CAE API
++- `/ws/` → CAE API WebSocket surface
++- `/` → CAE Studio UI
++- `/runtime/<id>/` → only enabled downstream runtime routes
++
++Each launched process uses its own process group/session and its own log file under `deployment/dev/caestudio/.runtime/` by default. The orchestrator launches processes sequentially, then starts its loopback control server and nginx gateway.
++
++Launch failures are surfaced as `LaunchError` with the affected runtime/log. Health failures are represented as `unhealthy`/`degraded`, not silently promoted to healthy. Configuration errors for enabled optional runtimes fail closed.
++
++## 5. OpenChatCut boundary
++
++The existing CAE adapter records the native OpenChatCut MCP default endpoint and protocol version at `services/pipeline/src/cmf_pipeline/media/openchatcut.py:23-24`, and its initialize path requires JSON-RPC success plus `serverInfo` at lines 173-190. M0095 adapts those transport semantics for health observation and accepts both JSON and `text/event-stream` responses.
++
++No external OpenChatCut source was copied or merged. No external repository license is claimed by M0095. The operator supplies the actual native runtime command and UI URL. The MCP health endpoint defaults to the existing CAE-native adapter URL and can take `CAE_OPENCHATCUT_MCP_TOKEN` from the environment.
++
++## 6. Verification commands and observed results
++
++`python -m py_compile deployment/dev/caestudio/orchestrator.py tests/cae/test_m0095_runtime_orchestrator.py`
++**Observed:** exit 0.
++
++`python -m pytest -q tests/cae/test_m0095_runtime_orchestrator.py`
++**Observed:** `9 passed in 2.25s`.
++
++`python deployment/dev/caestudio/orchestrator.py validate`
++**Observed:** exit 0; deterministic public origin `http://127.0.0.1:3000`; CAE API/UI enabled; external runtimes disabled by default.
++
++`nginx -t -c /mnt/data/cae_m0095_repo/deployment/dev/caestudio/.runtime/nginx.conf -p /mnt/data/cae_m0095_repo/deployment/dev/caestudio/.runtime`
++**Observed:** nginx syntax ok; test successful.
++
++`CAE_OPENCHATCUT_ENABLED=true python deployment/dev/caestudio/orchestrator.py validate`
++**Observed:** exit 2 with structured `ConfigurationError` because the enabled runtime lacks `CAE_OPENCHATCUT_UI_URL`.
++
++`git diff --check 1269bc57629b397414e5f02f7a51f8a462c5d066..b9af237ecb79cc7d79b1e9489f9bfad81b68fa36`
++**Observed:** no whitespace errors.
++
++`git status --short`
++**Observed after cleanup:** clean.
++
++## 7. Required counterexamples / negative proof
++
++The test suite includes a process that stays alive but fails an expected HTTP health contract. This deliberately distinguishes “looks alive / looks good” from actual health acceptance.
++
++It also includes missing enabled-runtime configuration, malformed/incorrect MCP response semantics, process launch failure, and deterministic replay of the gateway rendering.
++
++These tests do **not** prove that an external native runtime is semantically correct or visually acceptable.
++
++## 8. Environment fidelity and limitations
++
++Observed environment: Python 3.13.5, Node v22.16.0, npm 10.9.2, nginx 1.26.3. Existing CAE Docker/runtime declarations target Python 3.12.x. `apps/web/node_modules` is absent in the supplied snapshot, while the required Python API dependencies are present.
++
++Native OpenChatCut, presentation, SuperVisual, and SAM3 availability was not established. No mock is represented as production evidence. The external runtime slots remain disabled unless an operator provides native commands and health/target URLs.
++
++A true single-tab external UI requires the downstream runtime to honor its mapped base path. M0095 verifies the gateway topology and does not assert that every external UI is base-path-safe.
++
++## 9. Git provenance
++
++The uploaded archive contained no `.git` metadata. A fresh local audit history was therefore created from the untouched archive extraction so the implementation delta is reviewable without falsely representing the archive as a remote checkout.
++
++- Local baseline snapshot commit: `1269bc57629b397414e5f02f7a51f8a462c5d066`
++- **M0095 implementation commit:** `b9af237ecb79cc7d79b1e9489f9bfad81b68fa36`
++- M0095 implementation parent: `1269bc57629b397414e5f02f7a51f8a462c5d066`
++
++The implementation commit contains the six M0095 code/test additions. This handoff and its evidence receipt are documentation follow-up artifacts and do not change the implementation SHA above.
++
++## 10. Stop/rollback boundary
++
++Rollback is bounded to the M0095 additions. The runtime root is ignored and disposable. Existing CAE services, canonical state, receipts, rejected artifacts, and upstream/source history are not deleted or migrated by this mandate.
++
++## 11. Operator acceptance gate
++
++Before promotion, the operator must:
++
++1. Review the real Studio preview through the single origin and confirm the intended runtime routing.
++2. Confirm native runtime reachability for each enabled external service; do not infer this from the focused suite.
++3. Confirm external runtimes remain downstream of CAE semantic/state/provenance authority and are independently replaceable.
++4. For visual output, verify source lineage, evidence-first retrieval/transformation order where applicable, and that motion/attention serves meaning rather than introducing gratuitous emphasis.
++
++**Decision required:** `APPROVE` / `APPROVE-WITH-LIMITATIONS` / `REJECT`.
+diff --git a/deployment/dev/caestudio/M0095_EVIDENCE_RECEIPT.json b/deployment/dev/caestudio/M0095_EVIDENCE_RECEIPT.json
+new file mode 100644
+index 0000000..e6a02ee
+--- /dev/null
++++ b/deployment/dev/caestudio/M0095_EVIDENCE_RECEIPT.json
+@@ -0,0 +1,124 @@
++{
++  "mandate": "M0095",
++  "campaign": "E1 RUNTIME INTEGRATION",
++  "status": "OPERATOR_REVIEW_REQUIRED",
++  "operator_decision": "OPERATOR_DECISION_REQUIRED",
++  "implementation_commit_sha": "b9af237ecb79cc7d79b1e9489f9bfad81b68fa36",
++  "implementation_parent_sha": "1269bc57629b397414e5f02f7a51f8a462c5d066",
++  "uploaded_source_provenance": {
++    "source": "uploaded codebase_clean.zip",
++    "git_metadata_present": false,
++    "local_baseline_method": "fresh extraction of the uploaded archive committed as a local audit baseline",
++    "baseline_commit_is_not_remote_provenance": true
++  },
++  "claims": [
++    {
++      "id": "M0095-E001",
++      "evidence_class": "EXECUTABLE",
++      "claim": "One development/runtime orchestrator launches configured CAE API/UI and downstream runtimes sequentially, with isolated process groups, per-runtime logs, launch failure surfacing, health observation, and clean shutdown.",
++      "source_paths": ["deployment/dev/caestudio/orchestrator.py"],
++      "verification": {
++        "command": "python -m py_compile deployment/dev/caestudio/orchestrator.py tests/cae/test_m0095_runtime_orchestrator.py",
++        "result": "exit 0"
++      }
++    },
++    {
++      "id": "M0095-E002",
++      "evidence_class": "SCHEMA",
++      "claim": "The runtime/capability control matrix defines CAE API/UI as required and OpenChatCut, presentation, SuperVisual, and SAM3 as disabled-by-default downstream capabilities.",
++      "source_paths": ["deployment/dev/caestudio/manifest.json"],
++      "verification": {
++        "command": "python deployment/dev/caestudio/orchestrator.py validate",
++        "result": "exit 0; one origin http://127.0.0.1:3000; optional external runtimes reported disabled"
++      },
++      "manifest_sha256": "6e8ee93a210aaebfba71c8dcb91e600caee018a9272dc6184e04a8fadec63030"
++    },
++    {
++      "id": "M0095-E003",
++      "evidence_class": "TEST",
++      "claim": "Focused tests cover success, process isolation, launch failure, fail-closed configuration, expected HTTP health status, OpenChatCut MCP JSON health, OpenChatCut MCP SSE health, deterministic rendering, and a good-looking-but-wrong health counterexample.",
++      "source_paths": ["tests/cae/test_m0095_runtime_orchestrator.py"],
++      "verification": {
++        "command": "python -m pytest -q tests/cae/test_m0095_runtime_orchestrator.py",
++        "result": "9 passed in 2.25s"
++      }
++    },
++    {
++      "id": "M0095-E004",
++      "evidence_class": "TEST",
++      "claim": "The generated Studio nginx topology is syntactically valid.",
++      "source_paths": ["deployment/dev/caestudio/orchestrator.py", "deployment/dev/caestudio/manifest.json"],
++      "verification": {
++        "command": "nginx -t -c /mnt/data/cae_m0095_repo/deployment/dev/caestudio/.runtime/nginx.conf -p /mnt/data/cae_m0095_repo/deployment/dev/caestudio/.runtime",
++        "result": "nginx configuration syntax is ok; test is successful"
++      }
++    },
++    {
++      "id": "M0095-E005",
++      "evidence_class": "REGISTRY_SOURCE",
++      "claim": "OpenChatCut health behavior is adapted from the existing CAE-native adapter contract, not from a second retrieval or authority system.",
++      "source_paths": ["services/pipeline/src/cmf_pipeline/media/openchatcut.py"],
++      "source_anchors": ["lines 23-24: native MCP default URL and protocol version", "lines 132-171: JSON-RPC request/response validation", "lines 173-190: initialize and serverInfo contract"],
++      "verification": {
++        "command": "grep -nE 'OPENCHATCUT_PROTOCOL_VERSION|def initialize|_parse_response' services/pipeline/src/cmf_pipeline/media/openchatcut.py",
++        "result": "existing adapter exposes protocol 2025-06-18 and initialize/serverInfo handling"
++      }
++    },
++    {
++      "id": "M0095-E006",
++      "evidence_class": "DOCUMENT",
++      "claim": "Brownfield inspection found the existing CAE FastAPI lifecycle, health router, Studio bridge, Vite proxy, presentation adapters, and SuperVisual editor; no pre-existing file in the uploaded root snapshot was modified.",
++      "source_paths": [
++        "api/main.py",
++        "api/routers/health.py",
++        "api/services/studio_bridge.py",
++        "apps/web/vite.config.ts",
++        "engines/presentation/runtime_adapter.py",
++        "engines/visual/supervisual/editor.py",
++        "infra/docker/docker-compose.yml"
++      ],
++      "verification": {
++        "command": "diff -qr /mnt/data/cae_m0095_baseline /mnt/data/cae_m0095_repo",
++        "result": "only deployment/dev (new M0095 directory) and tests/cae/test_m0095_runtime_orchestrator.py differ"
++      }
++    },
++    {
++      "id": "M0095-E007",
++      "evidence_class": "OPERATOR_DECISION_REQUIRED",
++      "claim": "Native external runtime reachability and production readiness are not established by this worktree evidence.",
++      "source_paths": [
++        "deployment/dev/caestudio/README.md",
++        "deployment/dev/caestudio/manifest.json"
++      ],
++      "verification": {
++        "command": "CAE_OPENCHATCUT_ENABLED=true python deployment/dev/caestudio/orchestrator.py validate",
++        "result": "exit 2; fail-closed ConfigurationError because CAE_OPENCHATCUT_UI_URL is not configured"
++      }
++    }
++  ],
++  "environment": {
++    "python": "3.13.5",
++    "node": "v22.16.0",
++    "npm": "10.9.2",
++    "nginx": "1.26.3",
++    "repository_target_python": "3.12.x in existing Docker/runtime declarations",
++    "apps_web_node_modules_present": false,
++    "python_api_dependencies_present": true
++  },
++  "external_source_adoption": {
++    "status": "none",
++    "note": "No external repository source code was copied, extracted, or merged by M0095. Presentation and visual runtime slots are operator-supplied downstream commands. No external license claim is therefore made.",
++    "existing_in_repo_presentation_registry": {
++      "source_path": "engines/presentation/runtime_adapter.py",
++      "slidev": {"tag": "v52.19.1", "commit": "dbc307b", "license": "MIT"},
++      "revealjs": {"tag": "6.0.1", "commit": "52c6c8b", "license": "MIT"}
++    }
++  },
++  "limitations": [
++    "The uploaded archive contains no .git metadata, so remote Git provenance of the archive cannot be cryptographically established from the worktree.",
++    "The orchestrator binds API/UI/control services to loopback; the one public Studio origin is the nginx gateway. Native external runtimes require operator-provided launch commands and target/health URLs.",
++    "External runtime native availability was not proven in this environment. The test sandbox does not provide a native OpenChatCut/presentation/SuperVisual/SAM3 runtime installation, and apps/web node_modules are absent.",
++    "Runtime UI compatibility with a non-root path such as /runtime/openchatcut/ is not proven; the downstream runtime must support its configured base path for a true single-tab UI experience.",
++    "A focused green suite proves orchestrator behavior only; it does not establish semantic correctness, visual quality, provenance sufficiency, or production release authorization."
++  ]
++}
+diff --git a/deployment/dev/caestudio/README.md b/deployment/dev/caestudio/README.md
+new file mode 100644
+index 0000000..c9856c5
+--- /dev/null
++++ b/deployment/dev/caestudio/README.md
+@@ -0,0 +1,61 @@
++# CAE Studio Runtime Orchestrator (M0095)
++
++This package provides one development Studio origin and one bounded process orchestrator. It does **not** move CAE semantic meaning, canonical state, provenance, or promotion authority into external runtimes.
++
++## Brownfield fit
++
++The uploaded repository already contains the CAE FastAPI API (`api/main.py`), React/Vite Studio UI (`apps/web`), CAE health endpoint (`GET /api/health`), and the native OpenChatCut MCP adapter (`services/pipeline/src/cmf_pipeline/media/openchatcut.py`). The orchestrator composes those existing paths without replacing them.
++
++The uploaded snapshot also lacks a live `services/studio/` package and does not contain Git metadata. Those pre-existing gaps are not widened or silently repaired by M0095.
++
++## Topology
++
++The public origin is:
++
++`http://127.0.0.1:3000`
++
++Control/health endpoints are exposed only on loopback and are then proxied through the same origin:
++
++- `/__studio/health`
++- `/__studio/capabilities`
++- `/__studio/topology`
++- `/api/` → CAE API
++- `/ws/` → CAE API WebSocket surface
++- `/` → CAE Studio UI
++- `/runtime/<id>/` → only enabled downstream runtimes
++
++Each launched process gets its own process group/session and its own log file under the orchestrator runtime root (`deployment/dev/caestudio/.runtime/` by default). Launching is sequential and deterministic; the manifest is the campaign control matrix.
++
++## Run
++
++From the repository root:
++
++```bash
++python deployment/dev/caestudio/orchestrator.py validate
++python deployment/dev/caestudio/orchestrator.py start
++```
++
++`validate` renders and syntax-checks the deterministic nginx gateway without launching runtime processes. `start` launches enabled runtimes, the loopback control server, and nginx, then prints an observed health document. Press `Ctrl-C` to terminate the owned process groups.
++
++The CAE API requires the repository's normal Python dependencies. The Studio UI requires its normal Node dependencies (`apps/web/node_modules`). The orchestrator does not install or mutate those dependencies.
++
++## Optional runtime enablement
++
++Optional downstream services are **off by default** and fail closed when an enable flag is set but its command/health environment is missing.
++
++OpenChatCut:
++
++```bash
++export CAE_OPENCHATCUT_ENABLED=true
++export CAE_OPENCHATCUT_COMMAND='...native OpenChatCut launcher...'
++export CAE_OPENCHATCUT_UI_URL='http://127.0.0.1:<port>'
++export CAE_OPENCHATCUT_MCP_URL='http://127.0.0.1:5199/api/external-mcp/mcp'
++```
++
++The OpenChatCut health probe uses the current CAE adapter's MCP protocol version (`2025-06-18`) and checks `initialize` plus `serverInfo`. This is a runtime reachability/protocol proof only; it is not proof of semantic correctness or operator acceptance.
++
++Presentation, SuperVisual, and SAM3 use the same pattern with their respective `*_ENABLED`, `*_COMMAND`, `*_URL`, and `*_HEALTH_URL` environment variables.
++
++## Evidence boundary
++
++A green orchestrator test or nginx syntax check proves topology/configuration behavior only. It does not prove that a native external runtime is installed, that a UI is base-path compatible, that an external runtime is semantically correct, or that a visual result is evidence-grounded. Operator review remains mandatory for external runtime reachability, visual quality, source lineage, and promotion.
+diff --git a/deployment/dev/caestudio/__init__.py b/deployment/dev/caestudio/__init__.py
+new file mode 100644
+index 0000000..2a4bcb4
+--- /dev/null
++++ b/deployment/dev/caestudio/__init__.py
+@@ -0,0 +1 @@
++"""M0095 CAE Studio development/runtime orchestration boundary."""
+diff --git a/deployment/dev/caestudio/manifest.json b/deployment/dev/caestudio/manifest.json
+new file mode 100644
+index 0000000..4f4dca8
+--- /dev/null
++++ b/deployment/dev/caestudio/manifest.json
+@@ -0,0 +1,168 @@
++{
++  "schema_version": "1.0",
++  "name": "cae-studio-dev",
++  "public_host": "127.0.0.1",
++  "public_port": 3000,
++  "control_host": "127.0.0.1",
++  "control_port": 3100,
++  "nginx_binary": "nginx",
++  "runtimes": [
++    {
++      "id": "cae-api",
++      "display_name": "CAE API",
++      "enabled_default": true,
++      "required": true,
++      "capabilities": [
++        "cae_api",
++        "canonical_state_access"
++      ],
++      "route_prefix": "/api",
++      "command": [
++        "python",
++        "-m",
++        "uvicorn",
++        "api.main:app",
++        "--host",
++        "127.0.0.1",
++        "--port",
++        "8000"
++      ],
++      "cwd": "${CAE_STUDIO_REPO_ROOT}",
++      "env": {
++        "PYTHONDONTWRITEBYTECODE": "1",
++        "PYTHONPATH": "${CAE_STUDIO_REPO_ROOT}"
++      },
++      "health": {
++        "kind": "http",
++        "url": "http://127.0.0.1:8000/api/health",
++        "expected_status": 200,
++        "timeout_seconds": 2.0
++      },
++      "authority_boundary": "cae_authority"
++    },
++    {
++      "id": "cae-ui",
++      "display_name": "CAE Studio UI",
++      "enabled_default": true,
++      "required": true,
++      "capabilities": [
++        "studio_operator_surface",
++        "visual_asset_studio_surface"
++      ],
++      "command": [
++        "npm",
++        "--prefix",
++        "apps/web",
++        "run",
++        "dev",
++        "--",
++        "--host",
++        "127.0.0.1",
++        "--port",
++        "5173"
++      ],
++      "cwd": "${CAE_STUDIO_REPO_ROOT}",
++      "health": {
++        "kind": "http",
++        "url": "http://127.0.0.1:5173/",
++        "expected_status": 200,
++        "timeout_seconds": 2.0
++      },
++      "authority_boundary": "cae_operator_surface"
++    },
++    {
++      "id": "openchatcut",
++      "display_name": "OpenChatCut",
++      "enabled_default": false,
++      "enabled_env": "CAE_OPENCHATCUT_ENABLED",
++      "required": false,
++      "capabilities": [
++        "native_video_editing",
++        "timeline_execution"
++      ],
++      "route_prefix": "/runtime/openchatcut",
++      "command_env": "CAE_OPENCHATCUT_COMMAND",
++      "target_url_env": "CAE_OPENCHATCUT_UI_URL",
++      "health": {
++        "kind": "mcp_initialize",
++        "url": "http://localhost:5199/api/external-mcp/mcp",
++        "bearer_token_env": "CAE_OPENCHATCUT_MCP_TOKEN",
++        "timeout_seconds": 5.0
++      },
++      "authority_boundary": "downstream_runtime_only",
++      "notes": [
++        "Native OpenChatCut behavior is consumed through CAE's existing MCP adapter.",
++        "MCP health is a reachability/protocol probe, not semantic validation."
++      ]
++    },
++    {
++      "id": "presentation",
++      "display_name": "Presentation Runtime",
++      "enabled_default": false,
++      "enabled_env": "CAE_PRESENTATION_ENABLED",
++      "required": false,
++      "capabilities": [
++        "presentation_runtime",
++        "slide_rendering"
++      ],
++      "route_prefix": "/runtime/presentation",
++      "command_env": "CAE_PRESENTATION_COMMAND",
++      "target_url_env": "CAE_PRESENTATION_URL",
++      "health": {
++        "kind": "http",
++        "url_env": "CAE_PRESENTATION_HEALTH_URL",
++        "expected_status": 200,
++        "timeout_seconds": 3.0
++      },
++      "authority_boundary": "downstream_runtime_only",
++      "notes": [
++        "Presentation renderer remains downstream of CAE storyboard/semantic authority."
++      ]
++    },
++    {
++      "id": "supervisual",
++      "display_name": "SuperVisual",
++      "enabled_default": false,
++      "enabled_env": "CAE_SUPERVISUAL_ENABLED",
++      "required": false,
++      "capabilities": [
++        "supervisual_compilation",
++        "bounded_visual_editing"
++      ],
++      "route_prefix": "/runtime/supervisual",
++      "command_env": "CAE_SUPERVISUAL_COMMAND",
++      "target_url_env": "CAE_SUPERVISUAL_URL",
++      "health": {
++        "kind": "http",
++        "url_env": "CAE_SUPERVISUAL_HEALTH_URL",
++        "expected_status": 200,
++        "timeout_seconds": 3.0
++      },
++      "authority_boundary": "downstream_runtime_only"
++    },
++    {
++      "id": "sam3",
++      "display_name": "SAM3",
++      "enabled_default": false,
++      "enabled_env": "CAE_SAM3_ENABLED",
++      "required": false,
++      "capabilities": [
++        "subject_tracking",
++        "segmentation_geometry"
++      ],
++      "route_prefix": "/runtime/sam3",
++      "command_env": "CAE_SAM3_COMMAND",
++      "target_url_env": "CAE_SAM3_URL",
++      "health": {
++        "kind": "http",
++        "url_env": "CAE_SAM3_HEALTH_URL",
++        "expected_status": 200,
++        "timeout_seconds": 5.0
++      },
++      "authority_boundary": "downstream_runtime_only",
++      "notes": [
++        "SAM3 output is bounded to geometry/tracking support; it does not own semantic identity."
++      ]
++    }
++  ]
++}
+diff --git a/deployment/dev/caestudio/orchestrator.py b/deployment/dev/caestudio/orchestrator.py
+new file mode 100644
+index 0000000..905ded5
+--- /dev/null
++++ b/deployment/dev/caestudio/orchestrator.py
+@@ -0,0 +1,834 @@
++#!/usr/bin/env python3
++"""CAE Studio development/runtime orchestrator.
++
++This module is intentionally a topology/runtime boundary. It owns process
++launching, health observation, deterministic capability registration, and the
++single-origin nginx gateway. It does not own CAE semantic state or promotion.
++"""
++from __future__ import annotations
++
++import argparse
++import hashlib
++import json
++import os
++import re
++import shlex
++import signal
++import socket
++import subprocess
++import sys
++import time
++from dataclasses import dataclass, field
++from datetime import datetime, timezone
++from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
++from pathlib import Path
++from typing import Any, Mapping
++from urllib.error import HTTPError, URLError
++from urllib.request import Request, urlopen
++
++
++DEFAULT_MANIFEST = Path(__file__).with_name("manifest.json")
++_TOKEN = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
++
++
++class OrchestratorError(RuntimeError):
++    """Base orchestrator error."""
++
++
++class ConfigurationError(OrchestratorError):
++    """Manifest/environment is incomplete or invalid."""
++
++
++class LaunchError(OrchestratorError):
++    """A required process could not be launched or exited during startup."""
++
++
++def _now() -> str:
++    return datetime.now(timezone.utc).isoformat()
++
++
++def _env_bool(value: str | None, default: bool = False) -> bool:
++    if value is None:
++        return default
++    normalized = value.strip().lower()
++    if normalized in {"1", "true", "yes", "on"}:
++        return True
++    if normalized in {"0", "false", "no", "off"}:
++        return False
++    raise ConfigurationError(f"invalid boolean value: {value!r}")
++
++
++def _expand(value: str, env: Mapping[str, str]) -> str:
++    def replace(match: re.Match[str]) -> str:
++        key = match.group(1)
++        if key not in env:
++            raise ConfigurationError(f"missing environment variable for template: {key}")
++        return env[key]
++
++    return _TOKEN.sub(replace, value)
++
++
++def _command_from_env(value: str) -> list[str]:
++    parts = shlex.split(value, posix=(os.name != "nt"))
++    if not parts:
++        raise ConfigurationError("command environment value is empty")
++    return parts
++
++
++def _ensure_url(value: str, *, field_name: str) -> str:
++    if not value.startswith(("http://", "https://")):
++        raise ConfigurationError(f"{field_name} must be an http(s) URL: {value!r}")
++    return value.rstrip("/")
++
++
++def _url_host_port(url: str) -> tuple[str, int]:
++    from urllib.parse import urlparse
++
++    parsed = urlparse(url)
++    if parsed.hostname is None or parsed.port is None:
++        raise ConfigurationError(f"target URL must contain a host and port for tcp health: {url}")
++    return parsed.hostname, parsed.port
++
++
++@dataclass(frozen=True)
++class HealthSpec:
++    kind: str
++    url: str | None = None
++    expected_status: int = 200
++    timeout_seconds: float = 2.0
++    bearer_token: str | None = None
++
++
++@dataclass(frozen=True)
++class RuntimeSpec:
++    runtime_id: str
++    display_name: str
++    enabled: bool
++    required: bool
++    capabilities: tuple[str, ...]
++    route_prefix: str | None
++    command: tuple[str, ...] | None
++    cwd: Path
++    env: Mapping[str, str]
++    health: HealthSpec
++    target_url: str | None
++    authority_boundary: str
++    notes: tuple[str, ...] = ()
++
++
++@dataclass
++class RuntimeState:
++    spec: RuntimeSpec
++    process: subprocess.Popen[bytes] | None = None
++    pid: int | None = None
++    log_path: Path | None = None
++    launch_error: str | None = None
++    last_health: bool | None = None
++    last_health_error: str | None = None
++    started_at: str | None = None
++    stopped_at: str | None = None
++
++    @property
++    def status(self) -> str:
++        if not self.spec.enabled:
++            return "disabled"
++        if self.launch_error:
++            return "failed"
++        if self.process is None:
++            return "configured"
++        code = self.process.poll()
++        if code is not None:
++            return "failed" if code != 0 else "stopped"
++        if self.last_health is True:
++            return "healthy"
++        if self.last_health is False:
++            return "unhealthy"
++        return "starting"
++
++    def log_tail(self, limit: int = 4000) -> str:
++        if not self.log_path or not self.log_path.exists():
++            return ""
++        try:
++            data = self.log_path.read_bytes()
++        except OSError:
++            return ""
++        return data[-limit:].decode("utf-8", errors="replace")
++
++
++class _ControlHandler(BaseHTTPRequestHandler):
++    server: "_ControlServer"
++
++    def do_GET(self) -> None:  # noqa: N802
++        if self.path in {"/__studio/health", "/__studio/health/"}:
++            self._json(200, self.server.orchestrator.health_document())
++            return
++        if self.path in {"/__studio/capabilities", "/__studio/capabilities/"}:
++            self._json(200, self.server.orchestrator.capabilities_document())
++            return
++        if self.path in {"/__studio/topology", "/__studio/topology/"}:
++            self._json(200, self.server.orchestrator.topology_document())
++            return
++        self._json(404, {"error": "not_found"})
++
++    def _json(self, status: int, document: Mapping[str, Any]) -> None:
++        payload = json.dumps(document, separators=(",", ":"), sort_keys=True).encode("utf-8")
++        self.send_response(status)
++        self.send_header("Content-Type", "application/json")
++        self.send_header("Cache-Control", "no-store")
++        self.send_header("Content-Length", str(len(payload)))
++        self.end_headers()
++        self.wfile.write(payload)
++
++    def log_message(self, format: str, *args: Any) -> None:
++        sys.stderr.write("[cae-studio-control] " + format % args + "\n")
++
++
++class _ControlServer(ThreadingHTTPServer):
++    daemon_threads = True
++
++    def __init__(self, address: tuple[str, int], orchestrator: "RuntimeOrchestrator") -> None:
++        self.orchestrator = orchestrator
++        super().__init__(address, _ControlHandler)
++
++
++class RuntimeOrchestrator:
++    """Owns only runtime topology; CAE services remain the authorities."""
++
++    def __init__(
++        self,
++        manifest_path: str | Path = DEFAULT_MANIFEST,
++        *,
++        root_dir: str | Path | None = None,
++        startup_probe_count: int = 8,
++        startup_probe_interval: float = 0.5,
++    ) -> None:
++        self.manifest_path = Path(manifest_path).resolve()
++        self.manifest = self._load_manifest(self.manifest_path)
++        self.manifest_sha256 = hashlib.sha256(self.manifest_path.read_bytes()).hexdigest()
++        self.repo_root = Path(root_dir or self.manifest_path.parents[3]).resolve()
++        self.runtime_root = Path(
++            os.environ.get("CAE_STUDIO_RUNTIME_ROOT", self.manifest_path.parent / ".runtime")
++        ).resolve()
++        self.startup_probe_count = startup_probe_count
++        self.startup_probe_interval = startup_probe_interval
++        self.public_host = self.manifest.get("public_host", "127.0.0.1")
++        self.public_port = int(self.manifest.get("public_port", 3000))
++        self.control_host = self.manifest.get("control_host", "127.0.0.1")
++        self.control_port = int(self.manifest.get("control_port", 3100))
++        self.nginx_binary = os.environ.get("CAE_STUDIO_NGINX_BIN", self.manifest.get("nginx_binary", "nginx"))
++        self.specs = self._build_specs()
++        self.states: dict[str, RuntimeState] = {spec.runtime_id: RuntimeState(spec) for spec in self.specs}
++        self.control_server: _ControlServer | None = None
++        self.nginx_process: subprocess.Popen[bytes] | None = None
++        self.nginx_log_path = self.runtime_root / "logs" / "nginx.log"
++        self.config_path = self.runtime_root / "nginx.conf"
++        self._started = False
++
++    @staticmethod
++    def _load_manifest(path: Path) -> dict[str, Any]:
++        try:
++            data = json.loads(path.read_text(encoding="utf-8"))
++        except (OSError, json.JSONDecodeError) as exc:
++            raise ConfigurationError(f"unable to load manifest {path}: {exc}") from exc
++        if not isinstance(data, dict):
++            raise ConfigurationError("manifest root must be an object")
++        if data.get("schema_version") != "1.0":
++            raise ConfigurationError("unsupported manifest schema_version")
++        return data
++
++    def _build_specs(self) -> tuple[RuntimeSpec, ...]:
++        runtimes = self.manifest.get("runtimes")
++        if not isinstance(runtimes, list) or not runtimes:
++            raise ConfigurationError("manifest runtimes must be a non-empty list")
++        seen: set[str] = set()
++        routes: set[str] = set()
++        base_env = dict(os.environ)
++        base_env.setdefault("CAE_STUDIO_REPO_ROOT", str(self.repo_root))
++        base_env.setdefault("CAE_STUDIO_RUNTIME_ROOT", str(self.runtime_root))
++        specs: list[RuntimeSpec] = []
++        for raw in runtimes:
++            if not isinstance(raw, dict):
++                raise ConfigurationError("runtime entry must be an object")
++            runtime_id = str(raw.get("id", ""))
++            if not runtime_id or runtime_id in seen:
++                raise ConfigurationError(f"duplicate or missing runtime id: {runtime_id!r}")
++            seen.add(runtime_id)
++
++            enabled_default = bool(raw.get("enabled_default", False))
++            enabled_env = raw.get("enabled_env")
++            enabled = _env_bool(base_env.get(str(enabled_env)), enabled_default) if enabled_env else enabled_default
++            required = bool(raw.get("required", False))
++            capabilities = tuple(str(v) for v in raw.get("capabilities", []))
++            route_prefix = raw.get("route_prefix")
++            if route_prefix:
++                route_prefix = "/" + str(route_prefix).strip("/") + "/"
++                if route_prefix in routes:
++                    raise ConfigurationError(f"duplicate runtime route: {route_prefix}")
++                routes.add(route_prefix)
++
++            target_url = None
++            target_url_env = raw.get("target_url_env")
++            if target_url_env:
++                target_value = base_env.get(str(target_url_env))
++                if target_value:
++                    target_url = _ensure_url(target_value, field_name=str(target_url_env))
++                elif enabled:
++                    raise ConfigurationError(f"enabled runtime {runtime_id} is missing {target_url_env}")
++
++            command: tuple[str, ...] | None = None
++            command_env = raw.get("command_env")
++            if command_env:
++                command_value = base_env.get(str(command_env))
++                if command_value:
++                    command = tuple(_command_from_env(command_value))
++                elif enabled:
++                    raise ConfigurationError(f"enabled runtime {runtime_id} is missing {command_env}")
++            elif raw.get("command"):
++                raw_command = raw["command"]
++                if not isinstance(raw_command, list) or not all(isinstance(v, str) for v in raw_command):
++                    raise ConfigurationError(f"runtime {runtime_id} command must be an array of strings")
++                command = tuple(_expand(v, base_env) for v in raw_command)
++
++            if enabled and not command:
++                raise ConfigurationError(f"enabled runtime {runtime_id} has no command")
++
++            raw_cwd = str(raw.get("cwd", "."))
++            cwd = Path(_expand(raw_cwd, base_env))
++            if not cwd.is_absolute():
++                cwd = (self.repo_root / cwd).resolve()
++
++            runtime_env = dict(base_env)
++            for key, value in dict(raw.get("env", {})).items():
++                runtime_env[str(key)] = _expand(str(value), base_env)
++
++            health_raw = raw.get("health", {})
++            if not isinstance(health_raw, dict):
++                raise ConfigurationError(f"runtime {runtime_id} health must be an object")
++            health_kind = str(health_raw.get("kind", "process"))
++            health_url = None
++            health_env = health_raw.get("url_env")
++            if health_env:
++                health_value = base_env.get(str(health_env))
++                if health_value:
++                    health_url = _ensure_url(health_value, field_name=str(health_env))
++                elif enabled:
++                    raise ConfigurationError(f"enabled runtime {runtime_id} is missing {health_env}")
++            elif health_raw.get("url"):
++                health_url = _ensure_url(_expand(str(health_raw["url"]), base_env), field_name=f"health.{runtime_id}")
++
++            if health_kind == "tcp_target" and enabled and not target_url:
++                raise ConfigurationError(f"runtime {runtime_id} uses tcp_target health but has no target URL")
++
++            bearer_token = None
++            token_env = health_raw.get("bearer_token_env")
++            if token_env:
++                bearer_token = base_env.get(str(token_env))
++                if enabled and bearer_token is None:
++                    # Tokens are optional unless the runtime explicitly supplies one.
++                    bearer_token = None
++
++            specs.append(
++                RuntimeSpec(
++                    runtime_id=runtime_id,
++                    display_name=str(raw.get("display_name", runtime_id)),
++                    enabled=enabled,
++                    required=required,
++                    capabilities=capabilities,
++                    route_prefix=route_prefix,
++                    command=command,
++                    cwd=cwd,
++                    env=runtime_env,
++                    health=HealthSpec(
++                        kind=health_kind,
++                        url=health_url,
++                        expected_status=int(health_raw.get("expected_status", 200)),
++                        timeout_seconds=float(health_raw.get("timeout_seconds", 2.0)),
++                        bearer_token=bearer_token,
++                    ),
++                    target_url=target_url,
++                    authority_boundary=str(raw.get("authority_boundary", "downstream_runtime_only")),
++                    notes=tuple(str(v) for v in raw.get("notes", [])),
++                )
++            )
++        return tuple(specs)
++
++    def start(self) -> None:
++        if self._started:
++            return
++        self.runtime_root.mkdir(parents=True, exist_ok=True)
++        (self.runtime_root / "logs").mkdir(parents=True, exist_ok=True)
++        self._launch_runtime_processes()
++        self._start_control_server()
++        try:
++            self.config_path.write_text(self.render_nginx_config(), encoding="utf-8")
++            self._launch_nginx()
++        except Exception:
++            self.stop()
++            raise
++        self._started = True
++        self._probe_all()
++
++    def _launch_runtime_processes(self) -> None:
++        self.runtime_root.mkdir(parents=True, exist_ok=True)
++        (self.runtime_root / "logs").mkdir(parents=True, exist_ok=True)
++        for spec in self.specs:
++            state = self.states[spec.runtime_id]
++            if not spec.enabled:
++                continue
++            assert spec.command is not None
++            log_path = self.runtime_root / "logs" / f"{spec.runtime_id}.log"
++            state.log_path = log_path
++            try:
++                with log_path.open("ab") as log_handle:
++                    kwargs: dict[str, Any] = {
++                        "cwd": str(spec.cwd),
++                        "env": dict(spec.env),
++                        "stdout": log_handle,
++                        "stderr": subprocess.STDOUT,
++                    }
++                    if os.name == "nt":
++                        kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
++                    else:
++                        kwargs["start_new_session"] = True
++                    process = subprocess.Popen(list(spec.command), **kwargs)
++            except (OSError, ValueError) as exc:
++                state.launch_error = str(exc)
++                if spec.required:
++                    raise LaunchError(f"failed to launch required runtime {spec.runtime_id}: {exc}") from exc
++                continue
++            state.process = process
++            state.pid = process.pid
++            state.started_at = _now()
++            # Give immediately-crashing processes one observable turn before continuing.
++            time.sleep(0.05)
++            if process.poll() is not None:
++                state.launch_error = f"process exited during startup with code {process.returncode}"
++                if spec.required:
++                    raise LaunchError(
++                        f"required runtime {spec.runtime_id} exited during startup; log={log_path}"
++                    )
++
++    def _start_control_server(self) -> None:
++        try:
++            self.control_server = _ControlServer((self.control_host, self.control_port), self)
++        except OSError as exc:
++            raise LaunchError(f"failed to bind Studio control server: {exc}") from exc
++        self.control_server_thread = __import__("threading").Thread(
++            target=self.control_server.serve_forever,
++            name="cae-studio-control",
++            daemon=True,
++        )
++        self.control_server_thread.start()
++
++    def _launch_nginx(self) -> None:
++        log_path = self.nginx_log_path
++        with log_path.open("ab") as log_handle:
++            kwargs: dict[str, Any] = {
++                "cwd": str(self.runtime_root),
++                "stdout": log_handle,
++                "stderr": subprocess.STDOUT,
++            }
++            if os.name == "nt":
++                kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
++            else:
++                kwargs["start_new_session"] = True
++            try:
++                process = subprocess.Popen(
++                    [self.nginx_binary, "-c", str(self.config_path), "-p", str(self.runtime_root), "-g", "daemon off;"],
++                    **kwargs,
++                )
++            except (OSError, ValueError) as exc:
++                raise LaunchError(f"failed to launch nginx gateway: {exc}") from exc
++        self.nginx_process = process
++        time.sleep(0.05)
++        if process.poll() is not None:
++            raise LaunchError(f"nginx exited during startup with code {process.returncode}; log={log_path}")
++
++    def _probe_all(self) -> None:
++        for _ in range(self.startup_probe_count):
++            all_settled = True
++            for state in self.states.values():
++                if state.spec.enabled:
++                    self._probe_state(state)
++                    if state.status == "starting":
++                        all_settled = False
++            if all_settled:
++                break
++            time.sleep(self.startup_probe_interval)
++
++    def _probe_state(self, state: RuntimeState) -> None:
++        if not state.spec.enabled or state.process is None:
++            return
++        if state.process.poll() is not None:
++            state.last_health = False
++            state.last_health_error = f"process exited with code {state.process.returncode}"
++            return
++        try:
++            ok, detail = self._health_check(state.spec)
++        except Exception as exc:  # health must never crash the control plane
++            ok, detail = False, str(exc)
++        state.last_health = ok
++        state.last_health_error = None if ok else detail
++
++    def _health_check(self, spec: RuntimeSpec) -> tuple[bool, str]:
++        kind = spec.health.kind
++        if kind == "process":
++            return True, "process alive"
++        if kind == "tcp_target":
++            assert spec.target_url is not None
++            host, port = _url_host_port(spec.target_url)
++            with socket.create_connection((host, port), timeout=spec.health.timeout_seconds):
++                return True, "tcp listener reachable"
++        if kind == "http":
++            if not spec.health.url:
++                raise ConfigurationError(f"runtime {spec.runtime_id} http health missing URL")
++            headers = {"User-Agent": "cae-studio-orchestrator/1.0"}
++            if spec.health.bearer_token:
++                headers["Authorization"] = f"Bearer {spec.health.bearer_token}"
++            request = Request(spec.health.url, headers=headers, method="GET")
++            try:
++                with urlopen(request, timeout=spec.health.timeout_seconds) as response:
++                    code = int(response.status)
++                    response.read(4096)
++            except HTTPError as exc:
++                code = exc.code
++            except (URLError, TimeoutError, OSError) as exc:
++                return False, f"http unreachable: {exc}"
++            return (code == spec.health.expected_status, f"http status {code}, expected {spec.health.expected_status}")
++        if kind == "mcp_initialize":
++            if not spec.health.url:
++                raise ConfigurationError(f"runtime {spec.runtime_id} mcp_initialize health missing URL")
++            payload = {
++                "jsonrpc": "2.0",
++                "id": 1,
++                "method": "initialize",
++                "params": {
++                    "protocolVersion": "2025-06-18",
++                    "capabilities": {"roots": {"listChanged": False}},
++                    "clientInfo": {"name": "cae-studio-orchestrator", "version": "1.0"},
++                },
++            }
++            headers = {
++                "Accept": "application/json, text/event-stream",
++                "Content-Type": "application/json",
++                "User-Agent": "cae-studio-orchestrator/1.0",
++            }
++            if spec.health.bearer_token:
++                headers["Authorization"] = f"Bearer {spec.health.bearer_token}"
++            request = Request(
++                spec.health.url,
++                data=json.dumps(payload, separators=(",", ":")).encode("utf-8"),
++                headers=headers,
++                method="POST",
++            )
++            try:
++                with urlopen(request, timeout=spec.health.timeout_seconds) as response:
++                    body = response.read(64 * 1024)
++            except HTTPError as exc:
++                return False, f"mcp http status {exc.code}"
++            except (URLError, TimeoutError, OSError) as exc:
++                return False, f"mcp unreachable: {exc}"
++            content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
++            text = body.decode("utf-8", errors="replace")
++            if content_type == "text/event-stream":
++                documents: list[dict[str, Any]] = []
++                data_lines: list[str] = []
++                for line in text.splitlines():
++                    if line.startswith("data:"):
++                        data_lines.append(line[5:].lstrip())
++                    elif not line.strip() and data_lines:
++                        payload_text = "\n".join(data_lines)
++                        data_lines = []
++                        if payload_text and payload_text != "[DONE]":
++                            try:
++                                parsed = json.loads(payload_text)
++                            except json.JSONDecodeError:
++                                continue
++                            if isinstance(parsed, dict):
++                                documents.append(parsed)
++                if data_lines:
++                    payload_text = "\n".join(data_lines)
++                    if payload_text and payload_text != "[DONE]":
++                        try:
++                            parsed = json.loads(payload_text)
++                        except json.JSONDecodeError:
++                            parsed = None
++                        if isinstance(parsed, dict):
++                            documents.append(parsed)
++                document = documents[-1] if documents else None
++            else:
++                try:
++                    document = json.loads(text)
++                except json.JSONDecodeError:
++                    document = None
++            if not isinstance(document, dict):
++                return False, "mcp response was not a JSON-RPC object"
++            if document.get("jsonrpc") != "2.0" or document.get("id") != 1:
++                return False, "mcp response is not the expected JSON-RPC envelope"
++            if "error" in document:
++                return False, f"mcp error: {document['error']}"
++            server_info = document.get("result", {}).get("serverInfo")
++            if not isinstance(server_info, dict):
++                return False, "mcp initialize result is missing serverInfo"
++            return True, "mcp initialize acknowledged"
++        raise ConfigurationError(f"unsupported health kind: {kind}")
++
++    def render_nginx_config(self) -> str:
++        """Pure deterministic rendering; used by tests and evidence replay."""
++        lines = [
++            "worker_processes 1;",
++            f"pid {self.runtime_root / 'nginx.pid'};",
++            "error_log logs/nginx-error.log warn;",
++            "events {",
++            "    worker_connections 2048;",
++            "}",
++            "http {",
++            "    include /etc/nginx/mime.types;",
++            "    default_type application/octet-stream;",
++            "    sendfile on;",
++            "    client_max_body_size 2g;",
++            "    map $http_upgrade $connection_upgrade {",
++            "        default upgrade;",
++            "        '' close;",
++            "    }",
++            "    server {",
++            f"        listen {self.public_host}:{self.public_port};",
++            "        server_name _;",
++            "        proxy_http_version 1.1;",
++            "        proxy_set_header Host $host;",
++            "        proxy_set_header X-Forwarded-Host $host;",
++            "        proxy_set_header X-Forwarded-Proto $scheme;",
++            "        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
++            "        proxy_set_header X-CAE-Studio-Origin $scheme://$host:$server_port;",
++            "        proxy_set_header Upgrade $http_upgrade;",
++            "        proxy_set_header Connection $connection_upgrade;",
++            "",
++            f"        location /__studio/ {{",
++            f"            proxy_pass http://{self.control_host}:{self.control_port};",
++            "            proxy_buffering off;",
++            "        }",
++        ]
++        for spec in self.specs:
++            if not spec.enabled or not spec.route_prefix or not spec.target_url:
++                continue
++            lines.extend(
++                [
++                    f"        location {spec.route_prefix} {{",
++                    f"            proxy_pass {spec.target_url}/;",
++                    f"            proxy_set_header X-CAE-Runtime-ID {spec.runtime_id};",
++                    f"            proxy_set_header X-CAE-Runtime-Route {spec.route_prefix};",
++                    "            proxy_buffering off;",
++                    "        }",
++                    "",
++                ]
++            )
++        lines.extend(
++            [
++                "        location /api/ {",
++                "            proxy_pass http://127.0.0.1:8000;",
++                "            proxy_buffering off;",
++                "        }",
++                "        location /ws/ {",
++                "            proxy_pass http://127.0.0.1:8000;",
++                "            proxy_read_timeout 3600s;",
++                "            proxy_buffering off;",
++                "        }",
++                "        location / {",
++                "            proxy_pass http://127.0.0.1:5173;",
++                "            proxy_buffering off;",
++                "        }",
++                "    }",
++                "}",
++                "",
++            ]
++        )
++        return "\n".join(lines)
++
++    def health_document(self) -> dict[str, Any]:
++        runtime_health: dict[str, Any] = {}
++        overall = "healthy"
++        for runtime_id, state in self.states.items():
++            self._probe_state(state)
++            runtime_health[runtime_id] = {
++                "status": state.status,
++                "enabled": state.spec.enabled,
++                "required": state.spec.required,
++                "pid": state.pid,
++                "started_at": state.started_at,
++                "stopped_at": state.stopped_at,
++                "health_ok": state.last_health,
++                "health_error": state.last_health_error,
++                "launch_error": state.launch_error,
++                "log_path": str(state.log_path) if state.log_path else None,
++                "log_tail": state.log_tail(),
++            }
++            if state.spec.required and state.status != "healthy":
++                overall = "degraded"
++            elif state.spec.enabled and state.status in {"failed", "unhealthy"}:
++                if overall == "healthy":
++                    overall = "degraded"
++        if self.nginx_process and self.nginx_process.poll() is not None:
++            overall = "degraded"
++        return {
++            "schema_version": "1.0",
++            "manifest_sha256": self.manifest_sha256,
++            "timestamp": _now(),
++            "origin": f"http://{self.public_host}:{self.public_port}",
++            "control_origin": f"http://{self.control_host}:{self.control_port}",
++            "status": overall,
++            "gateway": {
++                "status": "healthy" if self.nginx_process and self.nginx_process.poll() is None else "failed",
++                "pid": self.nginx_process.pid if self.nginx_process else None,
++                "log_path": str(self.nginx_log_path),
++            },
++            "runtimes": runtime_health,
++        }
++
++    def capabilities_document(self) -> dict[str, Any]:
++        capabilities: list[dict[str, Any]] = []
++        for state in self.states.values():
++            for capability in state.spec.capabilities:
++                capabilities.append(
++                    {
++                        "capability": capability,
++                        "runtime_id": state.spec.runtime_id,
++                        "enabled": state.spec.enabled,
++                        "status": state.status,
++                        "route_prefix": state.spec.route_prefix,
++                        "authority_boundary": state.spec.authority_boundary,
++                    }
++                )
++        capabilities.sort(key=lambda item: (item["runtime_id"], item["capability"]))
++        return {
++            "schema_version": "1.0",
++            "manifest_sha256": self.manifest_sha256,
++            "origin": f"http://{self.public_host}:{self.public_port}",
++            "authority": "CAE semantic meaning/state/provenance remain outside the orchestrator; external runtimes are downstream and replaceable.",
++            "capabilities": capabilities,
++        }
++
++    def topology_document(self) -> dict[str, Any]:
++        return {
++            "schema_version": "1.0",
++            "manifest_sha256": self.manifest_sha256,
++            "origin": f"http://{self.public_host}:{self.public_port}",
++            "control_prefix": "/__studio/",
++            "runtimes": [
++                {
++                    "id": spec.runtime_id,
++                    "display_name": spec.display_name,
++                    "enabled": spec.enabled,
++                    "required": spec.required,
++                    "route_prefix": spec.route_prefix,
++                    "target_url": spec.target_url,
++                    "capabilities": list(spec.capabilities),
++                    "authority_boundary": spec.authority_boundary,
++                    "notes": list(spec.notes),
++                }
++                for spec in self.specs
++            ],
++        }
++
++    def stop(self) -> None:
++        if self.control_server:
++            self.control_server.shutdown()
++            self.control_server.server_close()
++            self.control_server = None
++        if self.nginx_process:
++            self._terminate_process(self.nginx_process)
++            self.nginx_process = None
++        for state in self.states.values():
++            if state.process:
++                self._terminate_process(state.process)
++                state.stopped_at = _now()
++                state.process = None
++
++    @staticmethod
++    def _terminate_process(process: subprocess.Popen[bytes]) -> None:
++        if process.poll() is not None:
++            return
++        try:
++            if os.name == "nt":
++                process.send_signal(signal.CTRL_BREAK_EVENT)
++            else:
++                os.killpg(process.pid, signal.SIGTERM)
++        except (OSError, ValueError):
++            try:
++                process.terminate()
++            except OSError:
++                return
++        try:
++            process.wait(timeout=3)
++        except subprocess.TimeoutExpired:
++            try:
++                if os.name == "nt":
++                    process.kill()
++                else:
++                    os.killpg(process.pid, signal.SIGKILL)
++            except OSError:
++                process.kill()
++            process.wait(timeout=3)
++
++    def validate(self) -> None:
++        """Fail closed on configuration; render the deterministic gateway."""
++        self.runtime_root.mkdir(parents=True, exist_ok=True)
++        (self.runtime_root / "logs").mkdir(parents=True, exist_ok=True)
++        rendered = self.render_nginx_config()
++        self.config_path.write_text(rendered, encoding="utf-8")
++        try:
++            result = subprocess.run(
++                [self.nginx_binary, "-t", "-c", str(self.config_path), "-p", str(self.runtime_root)],
++                cwd=self.runtime_root,
++                capture_output=True,
++                text=True,
++                check=False,
++            )
++        except OSError as exc:
++            raise ConfigurationError(f"nginx validation could not execute: {exc}") from exc
++        if result.returncode != 0:
++            raise ConfigurationError(f"nginx -t failed: {result.stderr.strip() or result.stdout.strip()}")
++
++
++def _print_json(document: Mapping[str, Any]) -> None:
++    print(json.dumps(document, indent=2, sort_keys=True))
++
++
++def main(argv: list[str] | None = None) -> int:
++    parser = argparse.ArgumentParser(description="CAE Studio runtime orchestrator")
++    parser.add_argument("command", choices=("validate", "start", "stop"), nargs="?", default="validate")
++    parser.add_argument("--manifest", default=str(DEFAULT_MANIFEST))
++    args = parser.parse_args(argv)
++    orchestrator: RuntimeOrchestrator | None = None
++    try:
++        orchestrator = RuntimeOrchestrator(args.manifest)
++        if args.command == "validate":
++            orchestrator.validate()
++            _print_json(orchestrator.topology_document())
++            return 0
++        if args.command == "start":
++            orchestrator.start()
++            _print_json(orchestrator.health_document())
++            try:
++                while True:
++                    time.sleep(1)
++            except KeyboardInterrupt:
++                return 0
++            finally:
++                orchestrator.stop()
++        if args.command == "stop":
++            # Intentionally no cross-process discovery: stop is for an in-process owner.
++            print("stop requires the orchestrator process that owns the runtime tree")
++            return 0
++    except (OrchestratorError, OSError) as exc:
++        print(json.dumps({"error": str(exc), "type": type(exc).__name__}, indent=2), file=sys.stderr)
++        if orchestrator is not None:
++            orchestrator.stop()
++        return 2
++    finally:
++        if args.command != "start" and orchestrator is not None:
++            orchestrator.stop()
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/tests/cae/test_m0095_runtime_orchestrator.py b/tests/cae/test_m0095_runtime_orchestrator.py
+new file mode 100644
+index 0000000..5d94df8
+--- /dev/null
++++ b/tests/cae/test_m0095_runtime_orchestrator.py
+@@ -0,0 +1,332 @@
++from __future__ import annotations
++
++import json
++import socket
++import sys
++import threading
++from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
++from pathlib import Path
++
++import pytest
++
++from deployment.dev.caestudio.orchestrator import ConfigurationError, LaunchError, RuntimeOrchestrator
++
++
++ROOT = Path(__file__).resolve().parents[2]
++MANIFEST = ROOT / "deployment/dev/caestudio/manifest.json"
++
++
++def _free_port() -> int:
++    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
++        sock.bind(("127.0.0.1", 0))
++        return int(sock.getsockname()[1])
++
++
++def _write_manifest(path: Path, runtimes: list[dict]) -> None:
++    payload = {
++        "schema_version": "1.0",
++        "name": "test",
++        "public_host": "127.0.0.1",
++        "public_port": _free_port(),
++        "control_host": "127.0.0.1",
++        "control_port": _free_port(),
++        "nginx_binary": "nginx",
++        "runtimes": runtimes,
++    }
++    path.write_text(json.dumps(payload), encoding="utf-8")
++
++
++def _sleep_runtime(tmp_path: Path, runtime_id: str, health: dict) -> dict:
++    return {
++        "id": runtime_id,
++        "display_name": runtime_id,
++        "enabled_default": True,
++        "required": True,
++        "capabilities": [runtime_id + "_capability"],
++        "route_prefix": "/runtime/" + runtime_id,
++        "command": [sys.executable, "-c", "import time; time.sleep(60)"],
++        "cwd": str(tmp_path),
++        "health": health,
++        "authority_boundary": "downstream_runtime_only",
++    }
++
++
++def test_default_manifest_is_single_origin_and_external_runtime_is_fail_closed() -> None:
++    orchestrator = RuntimeOrchestrator(MANIFEST, root_dir=ROOT)
++    rendered = orchestrator.render_nginx_config()
++    assert "listen 127.0.0.1:3000;" in rendered
++    assert "location /api/" in rendered
++    assert "location /ws/" in rendered
++    assert "location / {" in rendered
++    assert "location /runtime/openchatcut/" not in rendered
++    assert rendered.count("listen 127.0.0.1:3000;") == 1
++    capabilities = orchestrator.capabilities_document()["capabilities"]
++    openchatcut = [item for item in capabilities if item["runtime_id"] == "openchatcut"]
++    assert openchatcut and all(item["enabled"] is False for item in openchatcut)
++    assert all(item["authority_boundary"] != "cae_authority" for item in openchatcut)
++
++
++def test_render_is_deterministic_across_replay(tmp_path: Path) -> None:
++    manifest = tmp_path / "manifest.json"
++    _write_manifest(
++        manifest,
++        [
++            _sleep_runtime(tmp_path, "alpha", {"kind": "process"}),
++            _sleep_runtime(tmp_path, "beta", {"kind": "process"}),
++        ],
++    )
++    first = RuntimeOrchestrator(manifest, root_dir=ROOT).render_nginx_config()
++    second = RuntimeOrchestrator(manifest, root_dir=ROOT).render_nginx_config()
++    assert first == second
++
++
++def test_processes_are_isolated_and_successfully_health_checked(tmp_path: Path) -> None:
++    manifest = tmp_path / "manifest.json"
++    _write_manifest(
++        manifest,
++        [
++            _sleep_runtime(tmp_path, "alpha", {"kind": "process"}),
++            _sleep_runtime(tmp_path, "beta", {"kind": "process"}),
++        ],
++    )
++    orchestrator = RuntimeOrchestrator(manifest, root_dir=ROOT, startup_probe_count=10, startup_probe_interval=0.1)
++    try:
++        orchestrator._launch_runtime_processes()
++        orchestrator._probe_all()
++        alpha = orchestrator.states["alpha"]
++        beta = orchestrator.states["beta"]
++        assert alpha.status == "healthy"
++        assert beta.status == "healthy"
++        assert alpha.pid is not None and beta.pid is not None
++        assert alpha.pid != beta.pid
++    finally:
++        orchestrator.stop()
++
++
++def test_good_looking_but_wrong_process_is_not_healthy(tmp_path: Path) -> None:
++    class WrongHealthHandler(BaseHTTPRequestHandler):
++        def do_GET(self) -> None:  # noqa: N802
++            self.send_response(404)
++            self.end_headers()
++
++        def log_message(self, format: str, *args: object) -> None:
++            return
++
++    server = ThreadingHTTPServer(("127.0.0.1", _free_port()), WrongHealthHandler)
++    thread = threading.Thread(target=server.serve_forever, daemon=True)
++    thread.start()
++    try:
++        manifest = tmp_path / "manifest.json"
++        _write_manifest(
++            manifest,
++            [_sleep_runtime(tmp_path, "looks_good", {"kind": "http", "url": f"http://127.0.0.1:{server.server_port}/health", "expected_status": 200, "timeout_seconds": 0.5})],
++        )
++        orchestrator = RuntimeOrchestrator(manifest, root_dir=ROOT, startup_probe_count=8, startup_probe_interval=0.1)
++        try:
++            orchestrator._launch_runtime_processes()
++            orchestrator._probe_all()
++            state = orchestrator.states["looks_good"]
++            assert state.process is not None and state.process.poll() is None
++            assert state.status == "unhealthy"
++            assert state.last_health is False
++            assert "http status 404" in (state.last_health_error or "")
++        finally:
++            orchestrator.stop()
++    finally:
++        server.shutdown()
++        server.server_close()
++        thread.join(timeout=2)
++
++
++def test_http_health_requires_expected_status(tmp_path: Path) -> None:
++    class HealthyHandler(BaseHTTPRequestHandler):
++        def do_GET(self) -> None:  # noqa: N802
++            self.send_response(200)
++            self.end_headers()
++            self.wfile.write(b"ok")
++
++        def log_message(self, format: str, *args: object) -> None:
++            return
++
++    server = ThreadingHTTPServer(("127.0.0.1", _free_port()), HealthyHandler)
++    thread = threading.Thread(target=server.serve_forever, daemon=True)
++    thread.start()
++    try:
++        manifest = tmp_path / "manifest.json"
++        _write_manifest(
++            manifest,
++            [
++                _sleep_runtime(
++                    tmp_path,
++                    "http_ok",
++                    {"kind": "http", "url": f"http://127.0.0.1:{server.server_port}/health", "expected_status": 200},
++                )
++            ],
++        )
++        orchestrator = RuntimeOrchestrator(manifest, root_dir=ROOT)
++        ok, detail = orchestrator._health_check(orchestrator.specs[0])
++        assert ok is True
++        assert "status 200" in detail
++    finally:
++        server.shutdown()
++        server.server_close()
++        thread.join(timeout=2)
++
++
++def test_required_launch_failure_is_surfaceable(tmp_path: Path) -> None:
++    manifest = tmp_path / "manifest.json"
++    _write_manifest(
++        manifest,
++        [
++            {
++                "id": "broken",
++                "display_name": "Broken",
++                "enabled_default": True,
++                "required": True,
++                "capabilities": ["broken"],
++                "command": [str(tmp_path / "does-not-exist")],
++                "cwd": str(tmp_path),
++                "health": {"kind": "process"},
++                "authority_boundary": "downstream_runtime_only",
++            }
++        ],
++    )
++    orchestrator = RuntimeOrchestrator(manifest, root_dir=ROOT)
++    with pytest.raises(LaunchError, match="broken"):
++        orchestrator._launch_runtime_processes()
++    assert orchestrator.states["broken"].launch_error
++
++
++def test_enabled_optional_runtime_missing_contract_fails_closed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
++    manifest = tmp_path / "manifest.json"
++    _write_manifest(
++        manifest,
++        [
++            {
++                "id": "external",
++                "display_name": "External",
++                "enabled_default": False,
++                "enabled_env": "M0095_TEST_ENABLED",
++                "required": False,
++                "capabilities": ["external"],
++                "command_env": "M0095_TEST_COMMAND",
++                "target_url_env": "M0095_TEST_URL",
++                "health": {"kind": "http", "url_env": "M0095_TEST_HEALTH"},
++                "authority_boundary": "downstream_runtime_only",
++            }
++        ],
++    )
++    monkeypatch.setenv("M0095_TEST_ENABLED", "true")
++    for key in ("M0095_TEST_COMMAND", "M0095_TEST_URL", "M0095_TEST_HEALTH"):
++        monkeypatch.delenv(key, raising=False)
++    with pytest.raises(ConfigurationError, match="external"):
++        RuntimeOrchestrator(manifest, root_dir=ROOT)
++
++
++def test_openchatcut_native_mcp_health_probe_checks_jsonrpc_and_server_info(tmp_path: Path) -> None:
++    observed: dict[str, object] = {}
++
++    class MCPHandler(BaseHTTPRequestHandler):
++        def do_POST(self) -> None:  # noqa: N802
++            length = int(self.headers.get("Content-Length", "0"))
++            body = json.loads(self.rfile.read(length).decode("utf-8"))
++            observed.update(body)
++            response = {
++                "jsonrpc": "2.0",
++                "id": body.get("id"),
++                "result": {"serverInfo": {"name": "test-openchatcut", "version": "1"}},
++            }
++            encoded = json.dumps(response).encode("utf-8")
++            self.send_response(200)
++            self.send_header("Content-Type", "application/json")
++            self.send_header("Content-Length", str(len(encoded)))
++            self.end_headers()
++            self.wfile.write(encoded)
++
++        def log_message(self, format: str, *args: object) -> None:
++            return
++
++    server = ThreadingHTTPServer(("127.0.0.1", _free_port()), MCPHandler)
++    thread = threading.Thread(target=server.serve_forever, daemon=True)
++    thread.start()
++    try:
++        manifest = tmp_path / "manifest.json"
++        _write_manifest(
++            manifest,
++            [
++                {
++                    "id": "openchatcut",
++                    "display_name": "OpenChatCut",
++                    "enabled_default": True,
++                    "required": False,
++                    "capabilities": ["native_video_editing"],
++                    "command": [sys.executable, "-c", "import time; time.sleep(60)"],
++                    "cwd": str(tmp_path),
++                    "health": {"kind": "mcp_initialize", "url": f"http://127.0.0.1:{server.server_port}/mcp"},
++                    "authority_boundary": "downstream_runtime_only",
++                }
++            ],
++        )
++        orchestrator = RuntimeOrchestrator(manifest, root_dir=ROOT)
++        ok, detail = orchestrator._health_check(orchestrator.specs[0])
++        assert ok is True
++        assert "acknowledged" in detail
++        assert observed["method"] == "initialize"
++        assert observed["params"]["protocolVersion"] == "2025-06-18"  # type: ignore[index]
++    finally:
++        server.shutdown()
++        server.server_close()
++        thread.join(timeout=2)
++
++
++def test_openchatcut_mcp_sse_response_is_accepted(tmp_path: Path) -> None:
++    class SSEHandler(BaseHTTPRequestHandler):
++        def do_POST(self) -> None:  # noqa: N802
++            length = int(self.headers.get("Content-Length", "0"))
++            body = json.loads(self.rfile.read(length).decode("utf-8"))
++            payload = json.dumps(
++                {
++                    "jsonrpc": "2.0",
++                    "id": body.get("id"),
++                    "result": {"serverInfo": {"name": "test-openchatcut", "version": "1"}},
++                }
++            )
++            encoded = f"event: message\ndata: {payload}\n\n".encode("utf-8")
++            self.send_response(200)
++            self.send_header("Content-Type", "text/event-stream")
++            self.send_header("Content-Length", str(len(encoded)))
++            self.end_headers()
++            self.wfile.write(encoded)
++
++        def log_message(self, format: str, *args: object) -> None:
++            return
++
++    server = ThreadingHTTPServer(("127.0.0.1", _free_port()), SSEHandler)
++    thread = threading.Thread(target=server.serve_forever, daemon=True)
++    thread.start()
++    try:
++        manifest = tmp_path / "manifest.json"
++        _write_manifest(
++            manifest,
++            [
++                {
++                    "id": "openchatcut",
++                    "display_name": "OpenChatCut",
++                    "enabled_default": True,
++                    "required": False,
++                    "capabilities": ["native_video_editing"],
++                    "command": [sys.executable, "-c", "import time; time.sleep(60)"],
++                    "cwd": str(tmp_path),
++                    "health": {"kind": "mcp_initialize", "url": f"http://127.0.0.1:{server.server_port}/mcp"},
++                    "authority_boundary": "downstream_runtime_only",
++                }
++            ],
++        )
++        orchestrator = RuntimeOrchestrator(manifest, root_dir=ROOT)
++        ok, detail = orchestrator._health_check(orchestrator.specs[0])
++        assert ok is True
++        assert "acknowledged" in detail
++    finally:
++        server.shutdown()
++        server.server_close()
++        thread.join(timeout=2)

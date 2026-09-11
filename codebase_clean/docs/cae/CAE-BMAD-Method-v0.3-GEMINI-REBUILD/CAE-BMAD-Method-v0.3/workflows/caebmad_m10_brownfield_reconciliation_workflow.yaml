@@ -1,0 +1,43 @@
+name: "CAE-BMAD M10 Brownfield Reconciliation Workflow"
+workflow_id: "WF-M10-BROWNFIELD-RECONCILIATION"
+version: "0.3.0-rebuild"
+primary_agent: "cae-brownfield-auditor"
+
+description: "Execution pipeline for Mandate M10: Rebuilding the Brownfield Reconciliation and Missing-Layer Detection Systems across Levels 01 through 13."
+
+preconditions:
+  - "Mandates M01-M09 completed and passed"
+  - "Brownfield investigation maps (07_brownfield/) loaded"
+
+steps:
+  - step_id: "01_EVALUATE_BROWNFIELD_DELTAS"
+    name: "Audit Subsystem Deltas vs Code Reality"
+    agent: "cae-brownfield-auditor"
+    operating_level: "Level 06: REPOSITORY through Level 13: LINE / BLOCK"
+    action: "Compare product/architecture plans against physical code surfaces and assign fidelity verdicts."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/BROWNFIELD_RECONCILIATION_REPORT.json"
+      - "docs/cae-bmad/07_brownfield/BROWNFIELD_RECONCILIATION_REPORT.md"
+
+  - step_id: "02_COMPILE_MISSING_IMPLEMENTATION_REGISTER"
+    name: "Compile Missing Implementation Register"
+    agent: "cae-brownfield-auditor"
+    operating_level: "Level 03: PLAN / Level 06: REPOSITORY"
+    action: "Itemize all missing layers and partial implementations with severity, blocker flags, and remediation plans."
+    output_artifacts:
+      - "docs/cae-bmad/07_brownfield/MISSING_IMPLEMENTATION_REGISTER.json"
+      - "docs/cae-bmad/07_brownfield/MISSING_IMPLEMENTATION_REGISTER.md"
+
+  - step_id: "03_VALIDATE_AND_GATE"
+    name: "Validate All Deliverables and Prepare Gate"
+    agent: "cae-method-orchestrator"
+    operating_level: "Level 01: PRODUCT / INTENT"
+    action: "Run validate_brownfield_reconciliation_system.py and test_m10_brownfield_reconciliation.py, then assemble OPERATOR_GATE_M10.md."
+    output_artifacts:
+      - "gemini_execution/gates/OPERATOR_GATE_M10.md"
+      - "gemini_execution/ledger/MANDATE_EXECUTION_LEDGER.md"
+
+postconditions:
+  - "Brownfield Reconciliation Report validates against schema (min 5 subsystem evaluations)"
+  - "Missing Implementation Register validates against schema (min 3 gap items with remediation plans)"
+  - "100% positive and countertests pass"

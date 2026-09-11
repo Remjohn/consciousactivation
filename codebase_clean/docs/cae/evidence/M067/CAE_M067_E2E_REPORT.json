@@ -1,0 +1,81 @@
+{
+  "adversarial_campaign": {
+    "captured_checkpoints": [
+      "semantic_intent",
+      "asset_retrieval",
+      "production_program",
+      "asset_lineage_false_proof",
+      "selection_lineage_false_proof"
+    ],
+    "manifest_sha256": "6c85049fc2ce98ec95c7380496dad358c1e935b3908a3c2dc0e522f6f2516c68",
+    "run_id": "m067-adv-f1fca9712e21",
+    "status": "ADVERSARIAL_PASS",
+    "terminal_state": "EXECUTING"
+  },
+  "environment_fidelity": {
+    "endpoint": "http://localhost:5199/api/external-mcp/mcp",
+    "git": {
+      "git_commit_sha": null,
+      "git_metadata_present": false,
+      "repository_root": "/mnt/data/cae_work"
+    },
+    "openchatcut": {
+      "endpoint": "http://localhost:5199/api/external-mcp/mcp",
+      "error": "ConnectionRefusedError: [Errno 111] Connection refused",
+      "host": "localhost",
+      "port": 5199,
+      "reachable": false
+    },
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "source_media": {
+      "path": null,
+      "present": false,
+      "sha256": null
+    }
+  },
+  "execution_date": "2026-09-10",
+  "invariant": "INV-PRODUCT-REAL-001",
+  "mandate_id": "CAE-M067",
+  "observed_state_transition": "CAMPAIGN_READY -> EXECUTING -> BLOCKED",
+  "real_campaign": {
+    "captured_checkpoints": [
+      "semantic_intent",
+      "asset_retrieval",
+      "production_program",
+      "native_openchatcut",
+      "operator_intervention",
+      "qa_release_evidence",
+      "terminal_state"
+    ],
+    "manifest_sha256": "2f5a18d8db8d253f52c23a74f9c0e253369ce0c69ee282f3d144a812c2a47c94",
+    "run_id": "m067-real-blocked-9c062d34f00f",
+    "status": "REAL_CAMPAIGN_BLOCKED",
+    "terminal_state": "BLOCKED"
+  },
+  "status": "IMPLEMENTED_WITH_LIVE_PROOF_BLOCKED",
+  "tests": {
+    "command": "python -m pytest -q tests/e2e/test_m067_real_campaign.py tests/production_program/test_m0064_asset_selection_binding_lineage.py tests/phase6/test_m065_openchatcut_runtime.py tests/cae/test_m066_human_resolution.py",
+    "result": "34 passed"
+  },
+  "title": "Real Campaign Vertical Slice and Product Operability Proof",
+  "verification_statement": {
+    "environment_fidelity": "The default native OpenChatCut MCP port 5199 was probed and refused the connection; the archive has no .git metadata and no real source-media path was supplied.",
+    "false_proof_countercase": "A changed source SHA-256 and a candidate from a different selected scene are rejected by the governed M0064 binding layer.",
+    "measured": [
+      "fail-closed live preconditions",
+      "hash-addressed append-only evidence ledger",
+      "M0064 exact asset identity/lineage rejection",
+      "M0064 wrong-scene selection rejection",
+      "M0065 native adapter contract covered by governed focused tests",
+      "M0066 operator-resolution contract covered by governed focused tests"
+    ],
+    "not_measured": [
+      "actual native OpenChatCut execution in this sandbox",
+      "real external asset retrieval in this archive",
+      "live operator intervention against an actual campaign",
+      "live QA/release authorization and release evidence",
+      "exact Git commit SHA from the uploaded archive"
+    ],
+    "operator_validation_required": "Yes"
+  }
+}

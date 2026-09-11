@@ -1,0 +1,113 @@
+suite_id: cae.evidence_to_air_first_slice.wp08
+suite_version: 1.0.0
+subject: CAE-EVID-001 evidence-to-AIR assessment lifecycle
+scope: >
+  E3 operational and evidence-lineage claims for the isolated staging adapter.
+  This suite is not a semantic, taste, anti-centroid, human, or audience-outcome evaluator.
+environment:
+  required: E3_PRODUCTION_SHAPED
+  actual: E3_PRODUCTION_SHAPED
+  identity: Supabase/PostgreSQL staging plus private cae-media Storage
+  persistence: force-rolled-back relational fixtures; unique temporary storage object deleted
+tests:
+  - test_id: WP08-ENV-001
+    claim_id: CAE-EVID-001.capture-traceability
+    class: ENVIRONMENT_FIDELITY
+    subject: private source object and corresponding media_asset metadata
+    preconditions: [private_storage_available, source_asset_marked_verified]
+    fixture_source: temporary private Supabase Storage object with SHA-256 readback
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: verify_wp08_reality_contact.py::read_private_object
+    assertions: [downloaded_bytes_match_uploaded_bytes, sha256_matches_media_asset_metadata]
+    expected_failure_mode: storage bytes or hash differ
+    reward_hacking_scenario: metadata-only success while the stored source bytes differ
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP08-RH-001
+    claim_id: CAE-EVID-001.capture-traceability
+    class: REWARD_HACK
+    subject: capture operation
+    preconditions: [actor_exists, source_package_exists]
+    fixture_source: STAGED media asset and source package in force-rolled-back staging transaction
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: FirstSliceSemanticOperations.capture_evidence
+    assertions: [staged_asset_rejected, rejected_evidence_absent]
+    expected_failure_mode: source asset is not VERIFIED
+    reward_hacking_scenario: mark only relational references present and bypass verified-source gate
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP08-RH-002
+    claim_id: CAE-EVID-001.capture-traceability
+    class: REWARD_HACK
+    subject: idempotent command handling
+    preconditions: [first_capture_accepted]
+    fixture_source: same command key with altered quoted text
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: FirstSliceSemanticOperations.capture_evidence
+    assertions: [changed_payload_conflicts, no_duplicate_receipt]
+    expected_failure_mode: idempotency key reused with different canonical input
+    reward_hacking_scenario: reuse a valid receipt identity for a different source claim
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP08-RH-003
+    claim_id: CAE-EVID-001.assessment-evidence-linkage
+    class: REWARD_HACK
+    subject: proposal and authentication operations
+    preconditions: [captured_evidence_exists]
+    fixture_source: captured-but-unauthenticated evidence and capture actor identity
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: FirstSliceSemanticOperations.propose_assessment and authenticate_evidence
+    assertions: [unauthenticated_proposal_rejected, self_authentication_rejected]
+    expected_failure_mode: evidence not independently authenticated
+    reward_hacking_scenario: produce an assessment or authentication receipt without independent evidence
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP08-STATE-001
+    claim_id: CAE-EVID-001.assessment-validation-lineage
+    class: STATE
+    subject: validation and confirmation transitions
+    preconditions: [assessment_proposed, authenticated_evidence]
+    fixture_source: valid first-slice staging fixture
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: FirstSliceSemanticOperations.validate_assessment and confirm_assessment
+    assertions: [stale_version_rejected, empty_decision_rejected, negative_cases_leave_no_domain_side_effect]
+    expected_failure_mode: stale state or no operator decision
+    reward_hacking_scenario: advance lifecycle using stale state or an empty approval marker
+    taste_risk: NOT_APPLICABLE
+    anticentroid_risk: NOT_APPLICABLE
+    evidence_status: TRACEABLE
+    receipt_required: true
+  - test_id: WP08-CLAIM-001
+    claim_id: CAE-EVID-001.evaluation-boundary
+    class: REWARD_HACK
+    subject: execution receipt evaluation fields
+    preconditions: [five_step_transition_accepted]
+    fixture_source: receipts generated by the same staging execution
+    required_environment_fidelity: E3_PRODUCTION_SHAPED
+    actual_environment_fidelity: E3_PRODUCTION_SHAPED
+    execution_path: cae.execution_receipt
+    assertions: [reward_hack_is_unverified, taste_is_not_applicable, anti_centroid_is_not_applicable]
+    expected_failure_mode: receipt claims semantic/taste/world proof absent an evaluator
+    reward_hacking_scenario: promote a structural receipt to semantic or human-quality evidence
+    taste_risk: false semantic/taste claim
+    anticentroid_risk: false anti-centroid claim
+    evidence_status: TRACEABLE
+    receipt_required: true
+known_limitations:
+  - capture_evidence trusts the upstream VERIFIED lifecycle state and does not itself download Storage bytes.
+  - no live service/API path, external evaluator, human-review UI, SDA/SFL/Primitive resolver, or E4 outcome is exercised.
+  - the test source is a governed synthetic fixture; it proves storage/database behavior, not human truth.
+promotion_status: IMPLEMENTED_PENDING_VERIFICATION

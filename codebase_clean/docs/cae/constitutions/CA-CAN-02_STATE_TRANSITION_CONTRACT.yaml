@@ -1,0 +1,249 @@
+# Object Constitution: StateTransitionContract
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-POL-002"
+canonical_name: "StateTransitionContract"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Policy / Contract"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:56, TS-CAE-TEN-001:3.7, 14_CAE_STATE_AND_TRANSITION_CONTROL_PROTOCOL.md"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-POL-002"
+    canonical_name: "StateTransitionContract"
+    common_aliases: ["State Contract", "Lifecycle Transition Contract", "Transition Policy Specification"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Policy / Contract"
+    class_matrix_id: 10
+    class_rationale: "StateTransitionContract is an immutable canonical specification that defines the legal state transition graph, authorized operations, and invariants for a given domain entity class."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Resides on the Canonical Plane as global system doctrine governing operational state transitions across all workspaces."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Canonical Protocol & State Governance"
+    primary_purpose: "Provides the deterministic, immutable specification against which all operational state transition requests are validated before execution."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical state governance contract"
+    differentia: "Distinguished from StateAggregate (operational instance state) and StateTransition (historical event) by being a timeless, versioned schema defining legal lifecycle dynamics."
+    function: "Declares valid states, permitted edge transitions, required command parameters, invariant rules, and required receipts."
+    boundary: "Must not contain operational tenant data; cannot be bypassed at runtime; changes require formal governance promotion."
+    normative_definition: >
+      StateTransitionContract is a canonical policy specification defining the formal state machine for an aggregate type.
+      It specifies initial states, terminal states, legal edge transitions, guard preconditions, and side-effect events,
+      serving as the inviolable law for the Transactional Operation Adapter.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable canonical specification defining valid lifecycle transitions for an aggregate class."
+      - "The formal grammar enforced by the state machine runtime."
+      - "A versioned doctrine artifact authored in YAML and pinned in Git."
+    what_it_is_not:
+      - "A StateAggregate (StateAggregate is the operational runtime instance in Postgres)."
+      - "A StateTransition (StateTransition is an execution occurrence)."
+      - "A runtime database table storing customer data."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "StateAggregate (CA-STA-001)"
+        distinction: "StateTransitionContract defines the rules of the state machine; StateAggregate is the runtime instance tracking current position in that machine."
+      - neighbor: "OperatorAccessPolicy (CA-POL-001)"
+        distinction: "OperatorAccessPolicy governs administrative tenant access rules; StateTransitionContract governs aggregate lifecycle state mechanics."
+      - neighbor: "HarnessTemplate (CA-STR-001)"
+        distinction: "HarnessTemplate defines multi-step procedural workflows; StateTransitionContract defines atomic lifecycle state transitions."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "State Machine Governance"
+    tier: "Canonical Policy Specification"
+    specialization: "Aggregate State Machine Contract"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "program-governed"
+    lifecycle_phases: ["DRAFT", "PROMOTED_CANONICAL", "DEPRECATED", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "contract_id"
+        type: "STRING"
+        description: "Canonical contract identifier (e.g., 'STC-MEDIA-001', 'STC-EVID-000')."
+      - name: "target_aggregate_type"
+        type: "STRING"
+        description: "Target domain entity class name."
+      - name: "version"
+        type: "STRING"
+        description: "Semantic version of the contract specification (e.g., '1.0.0')."
+      - name: "initial_state"
+        type: "STRING"
+        description: "Designated initial state upon creation."
+      - name: "terminal_states"
+        type: "ARRAY[STRING]"
+        description: "List of absorbing terminal states."
+      - name: "states"
+        type: "ARRAY[STRING]"
+        description: "Complete list of declared valid states."
+      - name: "transitions"
+        type: "ARRAY[OBJECT]"
+        description: "Directed edge list specifying from_state, to_state, operation_name, and guards."
+      - name: "invariants"
+        type: "ARRAY[STRING]"
+        description: "List of logical invariants enforced across transitions."
+      - name: "contract_sha256"
+        type: "STRING"
+        description: "Cryptographic hash of the canonical contract YAML."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Global Canonical System"
+    child_relations:
+      - child_object: "StateAggregate"
+        cardinality: "1:N (Governs)"
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "StateTransitionContract is a canonical specification; it is version-pinned and immutable."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "canonical.contract.promoted"
+      - event_name: "canonical.contract.deprecated"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Architecture Governance Committee via formal specification RFC"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-STC-001: The transition graph declared in a contract MUST be deterministic (no duplicate (from_state, operation_name) pairs with overlapping guards)."
+      - "INV-STC-002: Every non-initial state MUST be reachable from initial_state."
+      - "INV-STC-003: Terminal states MUST have zero outbound transitions."
+      - "INV-STC-004: All runtime state machine checks MUST strictly evaluate against the pinned contract SHA-256."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:56, TS-CAE-TEN-001:3.7, 14_CAE_STATE_AND_TRANSITION_CONTROL_PROTOCOL.md"
+    runtime_representation: "docs/cae/state/contracts/*.yaml & pinned in-memory registry"
+    promotion_authority: "CAE Platform Architecture Governance Committee"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "register_state_contract"
+        parameters: ["contract_id", "target_aggregate_type", "version", "spec_body"]
+      - name: "deprecate_state_contract"
+        parameters: ["contract_id", "successor_contract_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT modify a promoted contract in place without incrementing semantic version and contract_sha256."
+      - "MUST NOT permit runtime transitions that are not explicitly defined in the active contract."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify contract_id matches standard naming pattern ('STC-<TYPE>-<NUM>')."
+      - "Verify all states referenced in transitions are declared in the states list."
+    semantic_validators:
+      - "Verify reachability graph from initial_state to all non-terminal states."
+      - "Verify absence of dead-end non-terminal states."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_CONTRACT_INVALID_TRANSITION_GRAPH"
+        http_status: 400
+        description: "State contract contains unreachable states or non-deterministic transitions."
+      - code: "ERR_CONTRACT_VERSION_COLLISION"
+        http_status: 409
+        description: "Contract with this ID and version already registered with different hash."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "Git canonical YAML files under docs/cae/state/contracts/"
+    rls_boundary_column: "NOT_APPLICABLE (Global Canonical Plane)"
+    storage_boundary: "Repository Git Storage / Pinned Memory Cache"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Transactional Operation Adapter"
+      - "State Machine Runtime Engine"
+      - "API Gateway Validator"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What are the legal lifecycle states and transitions for this aggregate type?"
+      - "Which operation is required to transition from state A to state B?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-STC-001"
+        description: "StateTransitionContract for MediaAsset (STC-MEDIA-001)."
+        attributes:
+          contract_id: "STC-MEDIA-001"
+          target_aggregate_type: "MediaAsset"
+          version: "1.0.0"
+          initial_state: "REGISTERED"
+          terminal_states: ["QUARANTINED", "DELETED"]
+          states: ["REGISTERED", "STORED", "VERIFIED", "QUARANTINED", "DELETED"]
+          transitions:
+            - from: "REGISTERED"
+              to: "STORED"
+              operation: "upload_media_bytes"
+            - from: "STORED"
+              to: "VERIFIED"
+              operation: "verify_media_asset"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-STC-001"
+        description: "Near-miss: A contract definition where a terminal state ('DELETED') contains an outbound transition ('restore_media_asset' -> 'REGISTERED')."
+        rejection_reason: "Violates INV-STC-003; terminal states are strictly absorbing and cannot have outbound transitions."
+      - id: "NEG-STC-002"
+        description: "Near-miss: Declaring an operational tenant_id attribute inside a StateTransitionContract YAML."
+        rejection_reason: "Violates ontological plane purity; StateTransitionContract is Global Canonical Plane and must never contain tenant identifiers."
+      - id: "NEG-STC-003"
+        description: "Generic violation: Registering a contract with missing initial_state."
+        rejection_reason: "Violates structural contract requirements."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for StateTransitionContract canonical policy specification with 26 dimensions."

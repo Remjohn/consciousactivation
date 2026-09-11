@@ -1,0 +1,963 @@
+diff -ruN /mnt/data/cae_m0093_baseline/codebase_clean/adapters/storyboard_runtime.py /mnt/data/cae_m0093_work/codebase_clean/adapters/storyboard_runtime.py
+--- /mnt/data/cae_m0093_baseline/codebase_clean/adapters/storyboard_runtime.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/cae_m0093_work/codebase_clean/adapters/storyboard_runtime.py	2026-09-11 08:09:56.975250225 +0000
+@@ -0,0 +1,290 @@
++"""Shared governed boundary for storyboard runtime adapters (CAE-M0093).
++
++This module is intentionally downstream of the canonical storyboard programs. It accepts only
++an already validated, operator-approved M0079 revision plus its M0079 compile evidence. Runtime
++adapters may project that expression into downstream syntax, but they may not invent semantic
++meaning, replace the evidence lineage, or mutate CAE state.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Mapping, Sequence
++from urllib.parse import urlsplit
++from html import escape
++
++from ca_contracts import canonical_sha256
++from ca_runtime.storyboard_programs import StoryboardExpression, get_storyboard_program
++from ca_runtime.storyboard_session import (
++    StoryboardCompileReceipt,
++    StoryboardElement,
++    StoryboardRevision,
++    StoryboardValidationReport,
++    VisualAssetReference,
++)
++
++
++class StoryboardRuntimeAdapterError(RuntimeError):
++    """Base error for fail-closed runtime compilation."""
++
++
++class StoryboardRuntimeAuthorizationError(StoryboardRuntimeAdapterError):
++    """The runtime input lacks valid CAE compile/approval evidence."""
++
++
++class StoryboardRuntimeStaleError(StoryboardRuntimeAuthorizationError):
++    """Runtime evidence refers to a different revision/session/workspace."""
++
++
++class StoryboardRuntimeValidationError(StoryboardRuntimeAdapterError):
++    """Runtime-specific constraints or source references are malformed."""
++
++
++@dataclass(frozen=True, slots=True)
++class GovernedStoryboardRuntimeInput:
++    """Immutable handoff bundle from the canonical storyboard layer."""
++
++    revision: StoryboardRevision
++    expression: StoryboardExpression
++    validation_report: StoryboardValidationReport
++    compile_receipt: StoryboardCompileReceipt
++
++
++@dataclass(frozen=True, slots=True)
++class RuntimeArtifact:
++    """Deterministic downstream artifact and its CAE lineage."""
++
++    artifact_id: str
++    runtime: str
++    format_id: str
++    revision_id: str
++    expression_sha256: str
++    artifact_sha256: str
++    lineage_sha256: str
++    payload: Mapping[str, Any]
++    native_reachability_proven: bool = False
++    environment_requirements: tuple[str, ...] = ()
++
++    def manifest(self) -> dict[str, Any]:
++        return {
++            "artifact_id": self.artifact_id,
++            "runtime": self.runtime,
++            "format_id": self.format_id,
++            "revision_id": self.revision_id,
++            "expression_sha256": self.expression_sha256,
++            "artifact_sha256": self.artifact_sha256,
++            "lineage_sha256": self.lineage_sha256,
++            "native_reachability_proven": self.native_reachability_proven,
++            "environment_requirements": list(self.environment_requirements),
++        }
++
++
++
++def validate_runtime_input(
++    handoff: GovernedStoryboardRuntimeInput, *, expected_program_id: str, expected_format_id: str
++) -> StoryboardExpression:
++    """Prove that runtime inputs still bind to an authoritative compiled revision.
++
++    The runtime re-runs the canonical program compiler and compares the supplied expression
++    digest. This makes a visually plausible but semantically altered expression fail closed.
++    """
++
++    revision = handoff.revision
++    expression = handoff.expression
++    report = handoff.validation_report
++    receipt = handoff.compile_receipt
++
++    if not report.passed:
++        raise StoryboardRuntimeAuthorizationError("runtime compilation requires a passing validation report")
++
++    if receipt.status != "COMPILE_READY":
++        raise StoryboardRuntimeAuthorizationError(
++            f"runtime compilation requires COMPILE_READY receipt; got {receipt.status!r}"
++        )
++
++    if len(revision.canonical_sha256) != 64 or any(c not in "0123456789abcdef" for c in revision.canonical_sha256):
++        raise StoryboardRuntimeAuthorizationError("revision canonical_sha256 is malformed")
++
++    identity_pairs = (
++        ("workspace_id", revision.workspace_id, report.workspace_id),
++        ("session_id", revision.session_id, report.session_id),
++        ("revision_id", revision.revision_id, report.revision_id),
++        ("workspace_id", revision.workspace_id, receipt.workspace_id),
++        ("session_id", revision.session_id, receipt.session_id),
++        ("revision_id", revision.revision_id, receipt.revision_id),
++        ("editorial_storyboard_id", revision.editorial_storyboard_id, receipt.editorial_storyboard_id),
++        ("semantic_program_id", revision.semantic_program_id, receipt.semantic_program_id),
++        ("harness_id", revision.harness_id, receipt.harness_id),
++        ("validation_report_id", report.report_id, receipt.validation_report_id),
++    )
++    for field, expected, observed in identity_pairs:
++        if expected != observed:
++            raise StoryboardRuntimeStaleError(
++                f"runtime evidence mismatch for {field}: expected {expected!r}, observed {observed!r}"
++            )
++
++    if expression.status != "COMPILED":
++        raise StoryboardRuntimeAuthorizationError(
++            f"runtime compilation requires COMPILED expression; got {expression.status!r}"
++        )
++    expression_pairs = (
++        ("format_id", expected_format_id, expression.format_id),
++        ("program_id", expected_program_id, expression.program_id),
++        ("session_id", revision.session_id, expression.session_id),
++        ("revision_id", revision.revision_id, expression.revision_id),
++        ("editorial_storyboard_id", revision.editorial_storyboard_id, expression.editorial_storyboard_id),
++        ("semantic_program_id", revision.semantic_program_id, expression.semantic_program_id),
++        ("harness_id", revision.harness_id, expression.harness_id),
++    )
++    for field, expected, observed in expression_pairs:
++        if expected != observed:
++            raise StoryboardRuntimeStaleError(
++                f"expression mismatch for {field}: expected {expected!r}, observed {observed!r}"
++            )
++
++    expected_report_sha = canonical_sha256(
++        {
++            "workspace_id": report.workspace_id,
++            "session_id": report.session_id,
++            "revision_id": report.revision_id,
++            "passed": report.passed,
++            "checks": report.checks,
++            "errors": report.errors,
++            "warnings": report.warnings,
++        }
++    )
++    if report.report_sha256 != expected_report_sha:
++        raise StoryboardRuntimeAuthorizationError("validation report digest does not match its contents")
++
++    expected_receipt_sha = canonical_sha256(
++        {
++            "workspace_id": receipt.workspace_id,
++            "session_id": receipt.session_id,
++            "revision_id": receipt.revision_id,
++            "editorial_storyboard_id": receipt.editorial_storyboard_id,
++            "semantic_program_id": receipt.semantic_program_id,
++            "harness_id": receipt.harness_id,
++            "validation_report_id": receipt.validation_report_id,
++            "status": receipt.status,
++            "revision_sha256": revision.canonical_sha256,
++        }
++    )
++    if receipt.lineage_sha256 != expected_receipt_sha:
++        raise StoryboardRuntimeAuthorizationError("compile receipt lineage digest does not match its contents")
++
++    canonical_program = get_storyboard_program(expected_format_id)
++    expected_expression = canonical_program.compile(revision)
++    if expression.model_dump(exclude={"canonical_sha256"}) != expected_expression.model_dump(exclude={"canonical_sha256"}):
++        raise StoryboardRuntimeStaleError(
++            "supplied storyboard expression does not match the canonical program projection of the revision"
++        )
++    if expression.canonical_sha256 != expected_expression.canonical_sha256:
++        raise StoryboardRuntimeStaleError(
++            "supplied storyboard expression digest does not match the canonical program projection of the revision"
++        )
++
++    return expected_expression
++
++
++def safe_source_uri(asset: VisualAssetReference) -> str | None:
++    uri = asset.source_uri
++    if uri is None:
++        return None
++    value = uri.strip()
++    if not value:
++        return None
++    parsed = urlsplit(value)
++    if parsed.scheme.lower() in {"http", "https"}:
++        return value
++    if not parsed.scheme and value.startswith(("/", "./")):
++        return value
++    raise StoryboardRuntimeValidationError(
++        f"asset '{asset.asset_id}' source_uri must be http(s) or a relative/absolute web path"
++    )
++
++
++def render_element_html(element: StoryboardElement) -> str:
++    """Render a semantically transparent HTML projection of one canonical element."""
++
++    element_id = escape(element.element_id, quote=True)
++    purpose = escape(element.semantic_purpose, quote=False)
++    evidence = escape(",".join(element.source_evidence_refs), quote=True)
++    media_parts: list[str] = []
++    for asset in element.asset_references:
++        uri = safe_source_uri(asset)
++        if uri is None:
++            continue
++        media_parts.append(
++            '<img class="cae-source-asset" '
++            f'data-cae-asset-id="{escape(asset.asset_id, quote=True)}" '
++            f'data-cae-rights-status="{escape(asset.rights_status, quote=True)}" '
++            f'data-cae-source-quality="{escape(asset.source_quality, quote=True)}" '
++            f'src="{escape(uri, quote=True)}" '
++            f'alt="{purpose}" loading="lazy">'
++        )
++    media = "\n".join(media_parts)
++    return (
++        f'<article class="cae-element" data-cae-element-id="{element_id}" '
++        f'data-cae-evidence-refs="{evidence}">\n'
++        f'<h3>{purpose}</h3>\n'
++        f'{media}\n'
++        '</article>'
++    )
++
++
++def render_slide_html(*, scene_id: str, semantic_purpose: str, elements: Sequence[StoryboardElement], width: int, height: int) -> str:
++    """Build a full-size HTML document for carousel preview/export handoff."""
++
++    body = "\n".join(render_element_html(element) for element in elements)
++    return f'''<!doctype html>
++<html lang="en">
++<head>
++<meta charset="utf-8">
++<meta name="viewport" content="width={width}, height={height}, initial-scale=1">
++<title>{escape(semantic_purpose, quote=True)}</title>
++<style>
++html, body {{ margin: 0; width: {width}px; height: {height}px; }}
++body {{ background: #fff; font-family: system-ui, sans-serif; overflow: hidden; }}
++.cae-slide {{ box-sizing: border-box; width: {width}px; height: {height}px; padding: 64px; overflow: hidden; }}
++.cae-element {{ margin: 0 0 28px; }}
++.cae-element h3 {{ margin: 0 0 18px; font-size: 42px; line-height: 1.08; }}
++.cae-source-asset {{ display: block; max-width: 100%; max-height: {max(1, height - 320)}px; object-fit: contain; }}
++</style>
++</head>
++<body>
++<main class="cae-slide" data-cae-scene-id="{escape(scene_id, quote=True)}">
++<h2>{escape(semantic_purpose, quote=False)}</h2>
++{body}
++</main>
++</body>
++</html>'''
++
++
++def open_carrusel_dimensions(aspect_ratio: str) -> tuple[int, int]:
++    dimensions = {"1:1": (1080, 1080), "4:5": (1080, 1350), "9:16": (1080, 1920)}
++    try:
++        return dimensions[aspect_ratio]
++    except KeyError as exc:
++        raise StoryboardRuntimeValidationError(f"unsupported Open Carrusel aspect ratio: {aspect_ratio!r}") from exc
++
++
++def expression_runtime_sha(payload: Mapping[str, Any]) -> str:
++    """Expose one deterministic hash for the produced downstream artifact."""
++
++    return canonical_sha256(payload)
++
++
++__all__ = [
++    "GovernedStoryboardRuntimeInput",
++    "RuntimeArtifact",
++    "StoryboardRuntimeAdapterError",
++    "StoryboardRuntimeAuthorizationError",
++    "StoryboardRuntimeStaleError",
++    "StoryboardRuntimeValidationError",
++    "expression_runtime_sha",
++    "open_carrusel_dimensions",
++    "render_element_html",
++    "render_slide_html",
++    "safe_source_uri",
++    "validate_runtime_input",
++]
+diff -ruN /mnt/data/cae_m0093_baseline/codebase_clean/engines/carousel/__init__.py /mnt/data/cae_m0093_work/codebase_clean/engines/carousel/__init__.py
+--- /mnt/data/cae_m0093_baseline/codebase_clean/engines/carousel/__init__.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/cae_m0093_work/codebase_clean/engines/carousel/__init__.py	2026-09-11 08:08:43.052161558 +0000
+@@ -0,0 +1,5 @@
++"""Carousel runtime adapters (CAE-M0093)."""
++
++from .runtime_adapter import CarouselStoryboardRuntimeAdapter, OPEN_CARRUSEL_UPSTREAM
++
++__all__ = ["CarouselStoryboardRuntimeAdapter", "OPEN_CARRUSEL_UPSTREAM"]
+diff -ruN /mnt/data/cae_m0093_baseline/codebase_clean/engines/carousel/runtime_adapter.py /mnt/data/cae_m0093_work/codebase_clean/engines/carousel/runtime_adapter.py
+--- /mnt/data/cae_m0093_baseline/codebase_clean/engines/carousel/runtime_adapter.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/cae_m0093_work/codebase_clean/engines/carousel/runtime_adapter.py	2026-09-11 08:09:56.975396245 +0000
+@@ -0,0 +1,159 @@
++"""Carousel runtime adapter for CAE-M0093.
++
++The adapter compiles the canonical CarouselStoryboardProgram into an in-memory Open Carrusel-
++compatible payload. It does not write to Open Carrusel storage, call its agents, or promote state.
++"""
++
++from __future__ import annotations
++
++from typing import Any
++
++from ca_contracts import canonical_sha256
++from ca_runtime.storyboard_programs import StoryboardFormat
++from adapters.storyboard_runtime import (
++    GovernedStoryboardRuntimeInput,
++    RuntimeArtifact,
++    StoryboardRuntimeValidationError,
++    expression_runtime_sha,
++    open_carrusel_dimensions,
++    render_slide_html,
++    validate_runtime_input,
++)
++
++OPEN_CARRUSEL_UPSTREAM = {
++    "repository": "https://github.com/Hainrixz/open-carrusel",
++    "commit": "8ba717ba4d59c8a9a5f64d278f6e83cbea34efde",
++    "license": "MIT",
++}
++
++
++class CarouselStoryboardRuntimeAdapter:
++    """Project a compiled CarouselStoryboardProgram into downstream carousel syntax."""
++
++    program_id = "carousel_storyboard_program"
++    format_id = StoryboardFormat.CAROUSEL
++    runtime_id = "open-carrusel-compatible-preview"
++
++    def __init__(self, *, aspect_ratio: str = "4:5") -> None:
++        width, height = open_carrusel_dimensions(aspect_ratio)
++        self.aspect_ratio = aspect_ratio
++        self.width = width
++        self.height = height
++
++    def compile(self, handoff: GovernedStoryboardRuntimeInput) -> RuntimeArtifact:
++        expression = validate_runtime_input(
++            handoff,
++            expected_program_id=self.program_id,
++            expected_format_id=self.format_id,
++        )
++        if len(expression.scenes) > 20:
++            raise StoryboardRuntimeValidationError(
++                "Open Carrusel preview/export contract permits at most 20 slides"
++            )
++
++        slides: list[dict[str, Any]] = []
++        for scene in expression.scenes:
++            elements = []
++            for element_payload in scene["elements"]:
++                # Reuse the exact canonical element projection rather than reinterpreting it.
++                elements.append(element_payload)
++            # The HTML projection is generated from the canonical scene dict without a second
++            # semantic model; element metadata remains embedded in the downstream HTML.
++            scene_html = render_slide_html(
++                scene_id=scene["scene_id"],
++                semantic_purpose=scene["semantic_purpose"],
++                elements=[
++                    _element_model_from_payload(payload)
++                    for payload in elements
++                ],
++                width=self.width,
++                height=self.height,
++            )
++            slides.append(
++                {
++                    "id": f"cae-{scene['scene_id']}",
++                    "html": scene_html,
++                    "previousVersions": [],
++                    "order": scene["slide_index"],
++                    "notes": _slide_notes(scene),
++                }
++            )
++
++        carousel = {
++            "id": f"cae-{handoff.revision.revision_id}",
++            "name": f"CAE {handoff.revision.editorial_storyboard_id}",
++            "aspectRatio": self.aspect_ratio,
++            "slides": slides,
++            "referenceImages": [],
++            "chatSessionId": None,
++            "isTemplate": False,
++            "tags": ["cae", "storyboard"],
++            "createdAt": handoff.revision.created_at,
++            "updatedAt": handoff.revision.created_at,
++        }
++        payload = {
++            "carousels": [carousel],
++            "cae_lineage": {
++                "workspace_id": handoff.revision.workspace_id,
++                "session_id": handoff.revision.session_id,
++                "revision_id": handoff.revision.revision_id,
++                "editorial_storyboard_id": handoff.revision.editorial_storyboard_id,
++                "expression_sha256": expression.canonical_sha256,
++                "validation_report_id": handoff.validation_report.report_id,
++                "compile_receipt_id": handoff.compile_receipt.receipt_id,
++                "receipt_lineage_sha256": handoff.compile_receipt.lineage_sha256,
++            },
++        }
++        artifact_sha = expression_runtime_sha(payload)
++        return RuntimeArtifact(
++            artifact_id=f"carousel-runtime-{handoff.revision.revision_id}",
++            runtime=self.runtime_id,
++            format_id=self.format_id,
++            revision_id=handoff.revision.revision_id,
++            expression_sha256=expression.canonical_sha256,
++            artifact_sha256=artifact_sha,
++            lineage_sha256=handoff.compile_receipt.lineage_sha256,
++            payload=payload,
++            native_reachability_proven=False,
++            environment_requirements=(
++                "Open Carrusel source tree/runtime at the pinned upstream commit",
++                "Browser-capable preview surface",
++                f"slide dimensions {self.width}x{self.height}px",
++            ),
++        )
++
++
++def _slide_notes(scene: dict[str, Any]) -> str:
++    return (
++        f"CAE semantic purpose: {scene['semantic_purpose']}\n"
++        f"Source evidence: {', '.join(scene['source_evidence_refs'])}"
++    )
++
++
++def _element_model_from_payload(payload: dict[str, Any]):
++    """Rehydrate only the fields render_element_html consumes.
++
++    The runtime projection is not a second storyboard model; this tiny local shape is deliberately
++    structural and derives every value from the already-compiled expression.
++    """
++    from types import SimpleNamespace
++
++    assets = []
++    for asset_payload in payload.get("asset_references", []):
++        assets.append(
++            SimpleNamespace(
++                asset_id=asset_payload["asset_id"],
++                source_uri=asset_payload.get("source_uri"),
++                rights_status=asset_payload.get("rights_status", "UNVERIFIED"),
++                source_quality=asset_payload.get("source_quality", "UNKNOWN"),
++            )
++        )
++    return SimpleNamespace(
++        element_id=payload["element_id"],
++        semantic_purpose=payload["semantic_purpose"],
++        source_evidence_refs=payload.get("source_evidence_refs", []),
++        asset_references=assets,
++    )
++
++
++__all__ = ["CarouselStoryboardRuntimeAdapter", "OPEN_CARRUSEL_UPSTREAM"]
+diff -ruN /mnt/data/cae_m0093_baseline/codebase_clean/engines/presentation/__init__.py /mnt/data/cae_m0093_work/codebase_clean/engines/presentation/__init__.py
+--- /mnt/data/cae_m0093_baseline/codebase_clean/engines/presentation/__init__.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/cae_m0093_work/codebase_clean/engines/presentation/__init__.py	2026-09-11 08:08:43.054279625 +0000
+@@ -0,0 +1,5 @@
++"""Presentation runtime adapters (CAE-M0093)."""
++
++from .runtime_adapter import PresentationStoryboardRuntimeAdapter, REVEALJS_UPSTREAM, SLIDEV_UPSTREAM
++
++__all__ = ["PresentationStoryboardRuntimeAdapter", "REVEALJS_UPSTREAM", "SLIDEV_UPSTREAM"]
+diff -ruN /mnt/data/cae_m0093_baseline/codebase_clean/engines/presentation/runtime_adapter.py /mnt/data/cae_m0093_work/codebase_clean/engines/presentation/runtime_adapter.py
+--- /mnt/data/cae_m0093_baseline/codebase_clean/engines/presentation/runtime_adapter.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/cae_m0093_work/codebase_clean/engines/presentation/runtime_adapter.py	2026-09-11 08:10:27.189085702 +0000
+@@ -0,0 +1,205 @@
++"""Presentation runtime adapters for CAE-M0093.
++
++Slidev and reveal.js remain replaceable downstream runtimes. The adapter emits native syntax for
++both runtimes while retaining CAE lineage metadata and never mutating canonical state.
++"""
++
++from __future__ import annotations
++
++from html import escape
++import json
++from typing import Any, Literal
++
++from ca_runtime.storyboard_programs import StoryboardFormat
++from adapters.storyboard_runtime import (
++    GovernedStoryboardRuntimeInput,
++    RuntimeArtifact,
++    StoryboardRuntimeValidationError,
++    expression_runtime_sha,
++    safe_source_uri,
++    validate_runtime_input,
++)
++
++SLIDEV_UPSTREAM = {
++    "repository": "https://github.com/slidevjs/slidev",
++    "tag": "v52.19.1",
++    "commit": "dbc307b",
++    "license": "MIT",
++}
++REVEALJS_UPSTREAM = {
++    "repository": "https://github.com/hakimel/reveal.js",
++    "tag": "6.0.1",
++    "commit": "52c6c8b",
++    "license": "MIT",
++}
++
++
++class PresentationStoryboardRuntimeAdapter:
++    """Compile the canonical presentation storyboard into Slidev or reveal.js source."""
++
++    program_id = "presentation_storyboard_program"
++    format_id = StoryboardFormat.PRESENTATION
++
++    def __init__(self, *, runtime: Literal["slidev", "revealjs"] = "slidev") -> None:
++        if runtime not in {"slidev", "revealjs"}:
++            raise StoryboardRuntimeValidationError(f"unsupported presentation runtime: {runtime!r}")
++        self.runtime = runtime
++
++    def compile(self, handoff: GovernedStoryboardRuntimeInput) -> RuntimeArtifact:
++        expression = validate_runtime_input(
++            handoff,
++            expected_program_id=self.program_id,
++            expected_format_id=self.format_id,
++        )
++        if self.runtime == "slidev":
++            payload = self._compile_slidev(handoff, expression)
++            environment = ("Slidev v52.19.1", "Node.js environment with Slidev installed")
++        else:
++            payload = self._compile_reveal(handoff, expression)
++            environment = ("reveal.js 6.0.1", "Browser/Node environment with reveal.js installed")
++        artifact_sha = expression_runtime_sha(payload)
++        return RuntimeArtifact(
++            artifact_id=f"presentation-{self.runtime}-{handoff.revision.revision_id}",
++            runtime=self.runtime,
++            format_id=self.format_id,
++            revision_id=handoff.revision.revision_id,
++            expression_sha256=expression.canonical_sha256,
++            artifact_sha256=artifact_sha,
++            lineage_sha256=handoff.compile_receipt.lineage_sha256,
++            payload=payload,
++            native_reachability_proven=False,
++            environment_requirements=environment,
++        )
++
++    def _compile_slidev(self, handoff: GovernedStoryboardRuntimeInput, expression) -> dict[str, Any]:
++        sections: list[str] = []
++        for scene in expression.scenes:
++            sections.append(_slidev_scene(scene))
++        slides_md = """---
++title: %s
++---
++
++<!-- cae-revision-id: %s -->
++<!-- cae-compile-receipt-id: %s -->
++
++%s
++""" % (
++            json.dumps(handoff.revision.editorial_storyboard_id, ensure_ascii=False),
++            handoff.revision.revision_id,
++            handoff.compile_receipt.receipt_id,
++            "\n\n---\n\n".join(sections),
++        )
++        return {
++            "entrypoint": "slides.md",
++            "slides_md": slides_md,
++            "lineage": _lineage(handoff, expression.canonical_sha256),
++        }
++
++    def _compile_reveal(self, handoff: GovernedStoryboardRuntimeInput, expression) -> dict[str, Any]:
++        sections: list[str] = []
++        for scene in expression.scenes:
++            sections.append(_reveal_scene(scene))
++        html = f'''<!doctype html>
++<html lang="en">
++<head>
++<meta charset="utf-8">
++<meta name="viewport" content="width=device-width, initial-scale=1">
++<title>{escape(handoff.revision.editorial_storyboard_id, quote=True)}</title>
++<!-- cae-revision-id: {escape(handoff.revision.revision_id, quote=True)} -->
++<!-- cae-compile-receipt-id: {escape(handoff.compile_receipt.receipt_id, quote=True)} -->
++<link rel="stylesheet" href="dist/reset.css">
++<link rel="stylesheet" href="dist/reveal.css">
++<link rel="stylesheet" href="dist/theme/black.css">
++</head>
++<body>
++<div class="reveal"><div class="slides">
++{chr(10).join(sections)}
++</div></div>
++<script src="dist/reveal.js"></script>
++<script>
++Reveal.initialize({{ hash: true }});
++</script>
++</body>
++</html>'''
++        return {
++            "entrypoint": "index.html",
++            "index_html": html,
++            "lineage": _lineage(handoff, expression.canonical_sha256),
++        }
++
++
++def _lineage(handoff: GovernedStoryboardRuntimeInput, expression_sha256: str) -> dict[str, Any]:
++    return {
++        "workspace_id": handoff.revision.workspace_id,
++        "session_id": handoff.revision.session_id,
++        "revision_id": handoff.revision.revision_id,
++        "editorial_storyboard_id": handoff.revision.editorial_storyboard_id,
++        "semantic_program_id": handoff.revision.semantic_program_id,
++        "harness_id": handoff.revision.harness_id,
++        "expression_sha256": expression_sha256,
++        "validation_report_id": handoff.validation_report.report_id,
++        "compile_receipt_id": handoff.compile_receipt.receipt_id,
++    }
++
++
++def _slidev_scene(scene: dict[str, Any]) -> str:
++    build_order = {item["element_id"]: item["build_step"] for item in scene["build_order"]}
++    body = [f"<!-- cae-scene-id: {escape(scene['scene_id'])} -->", f"# {escape(scene['semantic_purpose'])}"]
++    elements = sorted(scene["shots"], key=lambda shot: shot.get("start_ms", 0))
++    for shot in elements:
++        for payload in shot.get("elements", []):
++            step = build_order[payload["element_id"]]
++            attrs = (
++                f'data-cae-element-id="{escape(payload["element_id"], quote=True)}" '
++                f'data-cae-evidence-refs="{escape(",".join(payload.get("source_evidence_refs", [])), quote=True)}"'
++            )
++            body.append(f'<div v-click="{step}" class="cae-element" {attrs}>')
++            body.append(escape(payload["semantic_purpose"]))
++            for asset in payload.get("asset_references", []):
++                uri = safe_source_uri(_asset_from_payload(asset))
++                if uri:
++                    body.append(
++                        f'<img data-cae-asset-id="{escape(asset["asset_id"], quote=True)}" '
++                        f'src="{escape(uri, quote=True)}" alt="{escape(payload["semantic_purpose"], quote=True)}">'
++                    )
++            body.append("</div>")
++    return "\n".join(body)
++
++
++def _reveal_scene(scene: dict[str, Any]) -> str:
++    build_order = {item["element_id"]: item["build_step"] for item in scene["build_order"]}
++    elements: list[str] = []
++    for shot in sorted(scene["shots"], key=lambda item: item.get("start_ms", 0)):
++        for payload in shot.get("elements", []):
++            step = build_order[payload["element_id"]]
++            evidence = escape(",".join(payload.get("source_evidence_refs", [])), quote=True)
++            block = [
++                f'<div class="fragment" data-fragment-index="{step}" '
++                f'data-cae-element-id="{escape(payload["element_id"], quote=True)}" '
++                f'data-cae-evidence-refs="{evidence}">',
++                escape(payload["semantic_purpose"]),
++            ]
++            for asset in payload.get("asset_references", []):
++                uri = safe_source_uri(_asset_from_payload(asset))
++                if uri:
++                    block.append(
++                        f'<img src="{escape(uri, quote=True)}" '
++                        f'data-cae-asset-id="{escape(asset["asset_id"], quote=True)}" '
++                        f'alt="{escape(payload["semantic_purpose"], quote=True)}">'
++                    )
++            block.append("</div>")
++            elements.append("\n".join(block))
++    return (
++        f'<section data-cae-scene-id="{escape(scene["scene_id"], quote=True)}">\n'
++        f'<h2>{escape(scene["semantic_purpose"])}</h2>\n'
++        + "\n".join(elements)
++        + "\n</section>"
++    )
++
++
++def _asset_from_payload(asset: dict[str, Any]):
++    from types import SimpleNamespace
++    return SimpleNamespace(asset_id=asset["asset_id"], source_uri=asset.get("source_uri"))
++
++
++__all__ = ["PresentationStoryboardRuntimeAdapter", "SLIDEV_UPSTREAM", "REVEALJS_UPSTREAM"]
+diff -ruN /mnt/data/cae_m0093_baseline/codebase_clean/tests/cae/test_m0093_storyboard_runtime_adapters.py /mnt/data/cae_m0093_work/codebase_clean/tests/cae/test_m0093_storyboard_runtime_adapters.py
+--- /mnt/data/cae_m0093_baseline/codebase_clean/tests/cae/test_m0093_storyboard_runtime_adapters.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/cae_m0093_work/codebase_clean/tests/cae/test_m0093_storyboard_runtime_adapters.py	2026-09-11 08:10:27.189257331 +0000
+@@ -0,0 +1,275 @@
++"""Focused M0093 tests for downstream storyboard runtime adapters.
++
++The uploaded repository snapshot does not contain all installed runtime-package dependencies, so
++this test module loads the ca_runtime package as a namespace package to isolate the canonical
++storyboard modules without changing application code. This is test-environment plumbing only.
++"""
++
++from __future__ import annotations
++
++import sys
++import types
++from pathlib import Path
++
++import pytest
++
++ROOT = Path(__file__).resolve().parents[2]
++RUNTIME_SRC = ROOT / "packages" / "ca_runtime" / "src" / "ca_runtime"
++
++
++def _bootstrap_canonical_runtime_namespace() -> None:
++    if "ca_runtime" not in sys.modules:
++        package = types.ModuleType("ca_runtime")
++        package.__path__ = [str(RUNTIME_SRC)]
++        sys.modules["ca_runtime"] = package
++
++
++_bootstrap_canonical_runtime_namespace()
++
++from ca_contracts import canonical_sha256
++from ca_runtime.storyboard_programs import get_storyboard_program
++from ca_runtime.storyboard_session import (
++    StoryboardCompileReceipt,
++    StoryboardElement,
++    StoryboardRevision,
++    StoryboardScene,
++    StoryboardShot,
++    StoryboardValidationReport,
++    VisualAssetReference,
++)
++from adapters.storyboard_runtime import (
++    GovernedStoryboardRuntimeInput,
++    StoryboardRuntimeAuthorizationError,
++    StoryboardRuntimeStaleError,
++    StoryboardRuntimeValidationError,
++)
++from engines.carousel import CarouselStoryboardRuntimeAdapter
++from engines.presentation import PresentationStoryboardRuntimeAdapter
++
++
++@pytest.fixture
++def approved_handoff() -> GovernedStoryboardRuntimeInput:
++    asset = VisualAssetReference(
++        reference_id="ref-a1",
++        asset_id="asset-a1",
++        source_uri="https://cdn.example.test/a1.png",
++        evidence_refs=["ev-1"],
++        rights_status="CLEARED",
++        source_quality="HIGH",
++        approved=True,
++    )
++    carousel_element = StoryboardElement(
++        element_id="el-1",
++        kind="image",
++        semantic_purpose="establish the source-backed contrast",
++        source_evidence_refs=["ev-1"],
++        asset_references=[asset],
++    )
++    presentation_element = carousel_element.model_copy(update={"properties": {"build_step": 1}})
++    scene = StoryboardScene(
++        scene_id="scene-0",
++        scene_order=0,
++        semantic_purpose="establish the source-backed contrast",
++        source_evidence_refs=["ev-1"],
++        shots=[StoryboardShot(
++            shot_id="shot-0",
++            start_ms=0,
++            end_ms=1000,
++            semantic_purpose="hold the evidence",
++            elements=[presentation_element],
++        )],
++    )
++    revision = StoryboardRevision(
++        workspace_id="ws-1",
++        session_id="session-1",
++        revision_id="rev-1",
++        revision_seq=1,
++        base_revision_id=None,
++        editorial_storyboard_id="storyboard-1",
++        semantic_program_id="semantic-1",
++        harness_id="harness-1",
++        scenes=[scene],
++        source_evidence_refs=["ev-1"],
++        status="IN_REVIEW",
++        author_id="operator-1",
++        canonical_sha256="a" * 64,
++        created_at="2026-09-11T00:00:00Z",
++    )
++
++    # Build the presentation expression so the same handoff can be swapped to the carousel fixture.
++    expression = get_storyboard_program("PRESENTATION").compile(revision)
++    report_payload = {
++        "workspace_id": revision.workspace_id,
++        "session_id": revision.session_id,
++        "revision_id": revision.revision_id,
++        "passed": True,
++        "checks": {
++            "editorial_storyboard_lineage": "PASS",
++            "source_evidence_lineage": "PASS",
++            "scene_shot_timing": "PASS",
++            "transformation_chain": "PASS",
++        },
++        "errors": [],
++        "warnings": [],
++    }
++    report = StoryboardValidationReport(
++        report_id="validation_rev-1",
++        **report_payload,
++        report_sha256=canonical_sha256(report_payload),
++        created_at="2026-09-11T00:01:00Z",
++    )
++    receipt_payload = {
++        "workspace_id": revision.workspace_id,
++        "session_id": revision.session_id,
++        "revision_id": revision.revision_id,
++        "editorial_storyboard_id": revision.editorial_storyboard_id,
++        "semantic_program_id": revision.semantic_program_id,
++        "harness_id": revision.harness_id,
++        "validation_report_id": report.report_id,
++        "status": "COMPILE_READY",
++    }
++    receipt = StoryboardCompileReceipt(
++        receipt_id="compile_rev-1",
++        **receipt_payload,
++        lineage_sha256=canonical_sha256({**receipt_payload, "revision_sha256": revision.canonical_sha256}),
++        created_at="2026-09-11T00:02:00Z",
++    )
++    return GovernedStoryboardRuntimeInput(
++        revision=revision,
++        expression=expression,
++        validation_report=report,
++        compile_receipt=receipt,
++    )
++
++
++def _carousel_handoff(handoff: GovernedStoryboardRuntimeInput) -> GovernedStoryboardRuntimeInput:
++    expression = get_storyboard_program("CAROUSEL").compile(handoff.revision)
++    return handoff.__class__(
++        revision=handoff.revision,
++        expression=expression,
++        validation_report=handoff.validation_report,
++        compile_receipt=handoff.compile_receipt,
++    )
++
++
++def test_carousel_adapter_compiles_open_carrusel_compatible_preview_and_is_idempotent(approved_handoff):
++    handoff = _carousel_handoff(approved_handoff)
++    adapter = CarouselStoryboardRuntimeAdapter(aspect_ratio="4:5")
++    before = handoff.revision.model_dump(mode="json")
++
++    first = adapter.compile(handoff)
++    second = adapter.compile(handoff)
++
++    assert first.payload == second.payload
++    assert first.lineage_sha256 == second.lineage_sha256
++    assert first.native_reachability_proven is False
++    carousel = first.payload["carousels"][0]
++    assert carousel["aspectRatio"] == "4:5"
++    assert carousel["slides"][0]["order"] == 0
++    assert "width: 1080px; height: 1350px" in carousel["slides"][0]["html"]
++    assert first.payload["cae_lineage"]["compile_receipt_id"] == "compile_rev-1"
++    assert handoff.revision.model_dump(mode="json") == before
++
++
++def test_presentation_adapter_preserves_build_order_for_slidev_and_reveal(approved_handoff):
++    slidev = PresentationStoryboardRuntimeAdapter(runtime="slidev").compile(approved_handoff)
++    reveal = PresentationStoryboardRuntimeAdapter(runtime="revealjs").compile(approved_handoff)
++
++    slides_md = slidev.payload["slides_md"]
++    index_html = reveal.payload["index_html"]
++    assert slides_md.startswith("---\ntitle:")
++    assert "v-click=\"1\"" in slides_md
++    assert "<!-- cae-scene-id: scene-0 -->" in slides_md
++    assert "compile_rev-1" in slides_md
++    assert '<div class="reveal"><div class="slides">' in index_html
++    assert 'class="fragment" data-fragment-index="1"' in index_html
++    assert 'data-cae-element-id="el-1"' in index_html
++    assert '<script src="dist/reveal.js"></script>' in index_html
++    assert "compile_rev-1" in index_html
++    assert slidev.native_reachability_proven is False
++    assert reveal.native_reachability_proven is False
++
++
++def test_good_looking_but_wrong_expression_is_rejected(approved_handoff):
++    wrong_scene = approved_handoff.expression.scenes[0].copy()
++    wrong_scene["semantic_purpose"] = "sell an unrelated conclusion"
++    tampered = approved_handoff.expression.model_copy(update={"scenes": [wrong_scene]})
++    tampered_handoff = approved_handoff.__class__(
++        revision=approved_handoff.revision,
++        expression=tampered,
++        validation_report=approved_handoff.validation_report,
++        compile_receipt=approved_handoff.compile_receipt,
++    )
++
++    with pytest.raises(StoryboardRuntimeStaleError, match="canonical program projection"):
++        PresentationStoryboardRuntimeAdapter().compile(tampered_handoff)
++
++
++def test_missing_operator_authorization_is_rejected(approved_handoff):
++    bad_report_payload = approved_handoff.validation_report.model_copy(update={"passed": False, "errors": ["operator gate failed"]})
++    bad_report = bad_report_payload.model_copy(
++        update={
++            "report_sha256": canonical_sha256({
++                "workspace_id": bad_report_payload.workspace_id,
++                "session_id": bad_report_payload.session_id,
++                "revision_id": bad_report_payload.revision_id,
++                "passed": False,
++                "checks": bad_report_payload.checks,
++                "errors": bad_report_payload.errors,
++                "warnings": bad_report_payload.warnings,
++            })
++        }
++    )
++    bad_handoff = approved_handoff.__class__(
++        revision=approved_handoff.revision,
++        expression=approved_handoff.expression,
++        validation_report=bad_report,
++        compile_receipt=approved_handoff.compile_receipt,
++    )
++    with pytest.raises(StoryboardRuntimeAuthorizationError, match="passing validation report"):
++        PresentationStoryboardRuntimeAdapter().compile(bad_handoff)
++
++
++def test_stale_receipt_is_rejected(approved_handoff):
++    stale_receipt = approved_handoff.compile_receipt.model_copy(update={"revision_id": "rev-old"})
++    stale_handoff = approved_handoff.__class__(
++        revision=approved_handoff.revision,
++        expression=approved_handoff.expression,
++        validation_report=approved_handoff.validation_report,
++        compile_receipt=stale_receipt,
++    )
++    with pytest.raises(StoryboardRuntimeStaleError, match="revision_id"):
++        PresentationStoryboardRuntimeAdapter().compile(stale_handoff)
++
++
++def test_malformed_source_uri_fails_closed(approved_handoff):
++    bad_asset = VisualAssetReference(
++        reference_id="ref-a1",
++        asset_id="asset-a1",
++        source_uri="javascript:alert(1)",
++        evidence_refs=["ev-1"],
++        rights_status="CLEARED",
++        source_quality="HIGH",
++        approved=True,
++    )
++    scene = approved_handoff.revision.scenes[0].model_copy(
++        update={
++            "shots": [approved_handoff.revision.scenes[0].shots[0].model_copy(
++                update={
++                    "elements": [approved_handoff.revision.scenes[0].shots[0].elements[0].model_copy(
++                        update={"asset_references": [bad_asset]}
++                    )]
++                }
++            )]
++        }
++    )
++    bad_revision = approved_handoff.revision.model_copy(update={"scenes": [scene]})
++    expression = get_storyboard_program("CAROUSEL").compile(bad_revision)
++    bad_handoff = approved_handoff.__class__(
++        revision=bad_revision,
++        expression=expression,
++        validation_report=approved_handoff.validation_report.model_copy(update={"revision_id": "rev-1"}),
++        compile_receipt=approved_handoff.compile_receipt,
++    )
++    with pytest.raises(StoryboardRuntimeValidationError, match="source_uri"):
++        CarouselStoryboardRuntimeAdapter().compile(bad_handoff)

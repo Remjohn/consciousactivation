@@ -1,0 +1,232 @@
+# Object Constitution: OperatorAccessPolicy
+# Phase 04 / CA-CAN-01A Boundary & Access Constitutions
+
+id: "CA-POL-001"
+canonical_name: "OperatorAccessPolicy"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Policy / Contract"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-002"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-POL-001"
+    canonical_name: "OperatorAccessPolicy"
+    common_aliases: ["Operator Access Contract", "Internal Access Rules", "Break-Glass Policy"]
+    naming_standard: "PascalCase singular compound policy noun"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Policy / Contract"
+    class_matrix_id: 11
+    class_rationale: "OperatorAccessPolicy specifies normative rules, conditions, jurisdictions, permitted roles, max TTL, and audit obligations governing platform operator actions."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Governs platform-wide rules and invariants stored as versioned canonical specification in git/bundle, independent of runtime database state."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Platform Security & Access Governance"
+    primary_purpose: "Defines the canonical constraints, allowable reasons, maximum duration, and mandatory audit logging required for any host operator to access customer workspace data."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical security governance policy"
+    differentia: "Distinguished from OperatorAccessGrant by being an immutable, versioned specification of rules rather than a transient, time-bound operational permission grant."
+    function: "Enforces least-privilege, mandatory dual-control approvals, maximum time-to-live, and non-negotiable audit logging for platform operators."
+    boundary: "Does not grant permissions by itself; requires an instantiated OperatorAccessGrant to authorize runtime access."
+    normative_definition: >
+      OperatorAccessPolicy is the canonical contract defining the conditions, jurisdictions, permitted roles,
+      required justifications, maximum lifetimes, and audit obligations under which platform operators may obtain
+      temporary, scoped access to customer workspaces. It establishes strict least-privilege invariants and prohibits
+      unbounded, unmonitored administrative access.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The canonical specification of rules for break-glass and maintenance operator access."
+      - "The definition of valid access reasons (INCIDENT_RESPONSE, DATA_RECONCILIATION, CUSTOMER_SUPPORT)."
+      - "The specification of maximum allowable grant duration (e.g., max 4 hours)."
+    what_it_is_not:
+      - "A runtime access grant or token (that is an OperatorAccessGrant)."
+      - "A customer WorkspaceMembership."
+      - "An unrestricted admin backdoor."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "OperatorAccessGrant (CA-REL-002)"
+        distinction: "OperatorAccessPolicy is the canonical rulebook (Policy); OperatorAccessGrant is the active, time-bound execution ticket (Relation)."
+      - neighbor: "WorkspaceMembership (CA-REL-001)"
+        distinction: "OperatorAccessPolicy governs internal platform staff; WorkspaceMembership governs customer tenant users."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Security Policy & Compliance"
+    tier: "Canonical Platform Contract"
+    specialization: "Internal Operator Authorization Policy"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "versioned"
+    epistemic_status: "established"
+    authority_status: "constitutional"
+    lifecycle_phases: ["DRAFT", "RATIFIED", "DEPRECATED", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "policy_id"
+        type: "STRING"
+        description: "Canonical policy identifier (e.g., 'POL-CAE-OPACCESS-V1')."
+      - name: "version"
+        type: "SEMVER"
+        description: "Semantic version of the policy specification."
+      - name: "max_grant_duration_seconds"
+        type: "INTEGER"
+        description: "Maximum allowable TTL for any grant under this policy (e.g., 14400 = 4 hours)."
+      - name: "allowed_justification_codes"
+        type: "ARRAY[STRING]"
+        description: "Whitelisted reason codes (e.g., ['INCIDENT_RESPONSE', 'DATA_RECONCILIATION', 'SUPPORT_ESC'])."
+    mutable_attributes:
+      - name: "status"
+        type: "STRING"
+        description: "Policy lifecycle status (RATIFIED, DEPRECATED)."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Global Canonical Plane"
+    child_relations:
+      - child_object: "OperatorAccessGrant"
+        cardinality: "1:N"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "DRAFT"
+    terminal_states: ["SUPERSEDED"]
+    states: ["DRAFT", "RATIFIED", "DEPRECATED", "SUPERSEDED"]
+    transitions:
+      - from: "DRAFT"
+        to: "RATIFIED"
+        operation: "ratify_operator_policy"
+      - from: "RATIFIED"
+        to: "DEPRECATED"
+        operation: "deprecate_operator_policy"
+      - from: "DEPRECATED"
+        to: "SUPERSEDED"
+        operation: "supersede_operator_policy"
+
+  13_events:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "OperatorAccessPolicy is a canonical specification object in git/bundle; runtime state events are emitted by OperatorAccessGrant and audit loggers."
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "CAE Security & Architecture Governance in Git"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-OPPOL-001: Every OperatorAccessGrant MUST cite a valid, RATIFIED OperatorAccessPolicy."
+      - "INV-OPPOL-002: No grant may exceed the policy's max_grant_duration_seconds."
+      - "INV-OPPOL-003: OperatorAccessPolicy MUST mandate immutable cryptographic receipt emission for every operator action."
+      - "INV-OPPOL-004: OperatorAccessPolicy MUST prohibit bulk data export and cross-workspace semantic data aggregation."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CAE Governance & Specification Bundle v3 §8; CA-MAP-01 Scope & Authority Matrix"
+    runtime_representation: "cae.operator_access_policy (Read-only reference in Postgres or static configuration)"
+    promotion_authority: "Platform Security & Governance Council (Git PR & Multi-Signer Approval)"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "ratify_policy"
+        parameters: ["policy_id", "version", "governance_receipt"]
+      - name: "deprecate_policy"
+        parameters: ["policy_id", "superseding_policy_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT modify an already-ratified policy version in place (must bump version)."
+      - "MUST NOT author a policy that allows permanent or unexpired operator grants."
+      - "MUST NOT permit operator access without mandatory audit receipt generation."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Validate max_grant_duration_seconds is between 300 (5 min) and 28800 (8 hours)."
+      - "Validate allowed_justification_codes contains at least one approved reason."
+    semantic_validators:
+      - "Ensure policy does not permit wildcards on target workspaces without multi-party approval."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_POLICY_NOT_RATIFIED"
+        http_status: 412
+        description: "Referenced policy version is not in RATIFIED state."
+      - code: "ERR_POLICY_DURATION_EXCEEDED"
+        http_status: 400
+        description: "Requested grant duration exceeds policy maximum."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.operator_access_policy (or static canonical YAML bundle)"
+    rls_boundary_column: "INAPPLICABLE (Canonical Plane reference specification)"
+    storage_boundary: "docs/cae/constitutions/"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "Operator Access Grant Controller"
+      - "Audit Log & Compliance Verifier"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What rules constrain platform engineers when accessing customer workspaces?"
+      - "What is the maximum allowable time an emergency break-glass grant can remain active?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-OPPOL-001"
+        description: "Standard production operator break-glass policy."
+        attributes:
+          policy_id: "POL-CAE-OPACCESS-2026-V1"
+          version: "1.0.0"
+          max_grant_duration_seconds: 14400
+          allowed_justification_codes: ["INCIDENT_RESPONSE", "DATA_RECONCILIATION", "SUPPORT_ESCALATION"]
+          status: "RATIFIED"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-OPPOL-001"
+        description: "A policy allowing indefinite, permanent operator access."
+        rejection_reason: "Violates INV-OPPOL-002; indefinite access is strictly forbidden."
+      - id: "NEG-OPPOL-002"
+        description: "Merging OperatorAccessPolicy and OperatorAccessGrant into a single mutable table."
+        rejection_reason: "Violates COL-MAP-002; policy is immutable canonical law, grant is transient operational state."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-25"
+        author: "CAE Governance and Specification Agent (CA-CAN-01A)"
+        summary: "Initial draft constitution establishing OperatorAccessPolicy as canonical contract."

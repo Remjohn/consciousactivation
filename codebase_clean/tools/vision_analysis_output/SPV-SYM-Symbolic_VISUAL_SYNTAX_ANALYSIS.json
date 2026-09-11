@@ -1,0 +1,52 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "SPV-SYM-Symbolic",
+  "source_zip": "SPV-SYM-Symbolic.zip",
+  "source_zip_sha256": "bc2434af09e1fda32409536bf6adfe3da69cd645c6e6de14b78bf72a317a97c9",
+  "vision_model_used": "antigravity-multimodal-analyst",
+  "base_url": "local-antigravity-vision",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 11,
+    "unique_layout_count": 2,
+    "duplicate_slides_collapsed": 9,
+    "unique_slide_roles": [
+      {
+        "slide_role": "single_frame",
+        "first_slide_index": 1,
+        "layout_fingerprint": "header_text_block + hero_comparison_pair_symbolic + footer_badge",
+        "container_zones": [
+          "header_zone",
+          "hero_zone",
+          "footer_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": true,
+            "notes": "Core thesis headline centered across upper canvas"
+          },
+          {
+            "primitive_type": "comparison_pair",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "Dual-state subject contrast (failure state vs triumph state)"
+          },
+          {
+            "primitive_type": "badge",
+            "zone": "footer_zone",
+            "dominant": false,
+            "notes": "Authorship mark in bottom corner"
+          }
+        ],
+        "reading_order": "Header thesis text -> Hero symbolic comparison pair -> Footer attribution badge",
+        "anchor_elements": [
+          "header_text_block",
+          "badge"
+        ]
+      }
+    ]
+  },
+  "stage_2_instructions": "Feed this file to GLM 5.2 to produce manifest.json"
+}

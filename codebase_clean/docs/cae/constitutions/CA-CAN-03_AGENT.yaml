@@ -1,0 +1,317 @@
+# Object Constitution: Agent
+# Phase 05 / CA-CAN-03 Canonical Agent Constitution
+# Governed by Mandate CAE-M49 (01_AGENT_EXECUTION/M49_canonical_agent_constitution_registry.md)
+
+id: "CA-AGT-001"
+canonical_name: "Agent"
+status: "RATIFIED"
+version: "1.0.0"
+maturity: "production_certified"
+primary_artifact_class: "Canonical Reasoning Object"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-005"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-AGT-001"
+    canonical_name: "Agent"
+    common_aliases: ["Canonical Agent", "Governed Agent", "Reasoning Unit", "Autonomous Reasoning Object"]
+    naming_standard: "PascalCase singular compound noun ending in Agent"
+    version: "1.0.0"
+    maturity: "production_certified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Canonical Reasoning Object"
+    class_matrix_id: 9
+    class_rationale: "Agent defines a first-class, reusable, versioned reasoning entity with an immutable authority lane, model policy, prompt root, allowed capabilities, passive skill bindings, tool references, and typed output contracts, completely decoupled from specific Program assignments or runtime sessions."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Defines reusable reasoning specifications and constitutional boundaries on the Global Canonical Plane; contains zero tenant data, guest records, workspace IDs, runtime states, or private credentials."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Bounded Reasoning & Epistemic Authority"
+    primary_purpose: "Serves as the immutable, versioned definition of a reasoning entity, formalizing bounded cognitive responsibility within exactly one of the Four Non-Negotiable Authority Lanes (HUNTER, ANALYST, COMPOSER, COMMANDER), ensuring epistemic separation of powers."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical reasoning entity and epistemic contract specification"
+    differentia: "Distinguished from Program (the operator-addressable unit of supervised work) by being an unassigned reasoning agent; distinguished from Skill (a passive procedural capability) by owning a bounded reasoning loop; distinguished from Harness (which governs workflow control flow) by executing model-assisted transformations within a step."
+    function: "Provides deterministic identity, version, model policy, prompt references, capability projections, tool access, output contracts, and lifecycle gating for model-backed execution."
+    boundary: "Must not contain tenant facts, workspace IDs, private API keys, mutable execution state, or direct database mutation logic; must not execute deterministic control flow that belongs in host code."
+    normative_definition: >
+      Agent is a Global Canonical Reasoning Object that specifies the bounded cognitive identity, authority lane, model policy,
+      prompt governance root, capability projections, passive skill references, and typed output contracts for a reusable AI agent
+      in Conscious Activation Engine. It is immutable per published SemVer tag and contains no tenant-scoped facts. Programs and
+      standalone sessions bind Agents by explicit identifier and version reference without duplicating agent identity.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "The immutable canonical specification of a reasoning entity (e.g. `ResearchCommanderAgent@1.0.0`)."
+      - "A bounded reasoning agent assigned strictly to one Authority Lane (HUNTER, ANALYST, COMPOSER, COMMANDER)."
+      - "An independently addressable object discoverable and resolvable without requiring a parent Program."
+      - "A governed consumer of passive Canonical Skills and explicit Capability Projections."
+    what_it_is_not:
+      - "A workflow orchestrator or state machine (that is `Program` or `HarnessTemplate`)."
+      - "A passive execution procedure (that is `Skill`)."
+      - "A container for client, guest, workspace, or session facts."
+      - "An autonomous entity capable of escalating its own authority lane or approving its own work."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "Program (CA-PRG-001)"
+        distinction: "Program is an operator-addressable unit of work that assigns Agents to workflow steps; Agent is the reusable reasoning entity."
+      - neighbor: "Skill (CA-SKL-001)"
+        distinction: "Skill is a passive, flat procedural document (SKILL.md); Agent is an active reasoning unit that loads and executes Skills."
+      - neighbor: "HarnessTemplate (CA-STR-001)"
+        distinction: "HarnessTemplate specifies the deterministic state graph and transition contracts; Agent reasons within assigned states."
+      - neighbor: "AgentTeamSpec (CA-EXE-002)"
+        distinction: "AgentTeamSpec is a workspace-scoped runtime grouping of agents; Agent is the global canonical definition."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Agent Execution Foundation & Epistemic Governance"
+    tier: "Global Canonical Reasoning Specification"
+    specialization: "Governed Cognitive Reasoning Agent"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "versioned"
+    epistemic_status: "established"
+    authority_status: "constitutional"
+    lifecycle_phases: ["DRAFT", "PROPOSED", "APPROVED", "ACTIVE", "DEPRECATED", "QUARANTINED", "RETIRED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "agent_id"
+        type: "STRING"
+        description: "Canonical unique PascalCase/snake_case identifier (e.g. 'ResearchCommanderAgent')."
+      - name: "version"
+        type: "SEMVER"
+        description: "Semantic version string conforming to SemVer 2.0.0 (e.g. '1.0.0')."
+      - name: "name"
+        type: "STRING"
+        description: "Human-readable descriptive agent title."
+      - name: "purpose"
+        type: "STRING"
+        description: "Normative statement of bounded reasoning scope and responsibility."
+      - name: "authority_lane"
+        type: "STRING"
+        description: "Assigned Authority Lane (HUNTER, ANALYST, COMPOSER, COMMANDER)."
+      - name: "model_policy"
+        type: "JSONB"
+        description: "Model configuration specifying preferred_model, temperature, token_budget, fallback_models, and timeout_seconds."
+      - name: "prompt_reference"
+        type: "JSONB"
+        description: "References to instructions.md, CAE.md root, system_prompt_template, and prompt_sha256."
+      - name: "skills"
+        type: "JSONB"
+        description: "Array of passive skill bindings specifying skill_id, version, sha256, and required_maturity."
+      - name: "capabilities"
+        type: "JSONB"
+        description: "Array of explicit CapabilityProjections declaring scope, access_mode, and target."
+      - name: "tools"
+        type: "ARRAY[STRING]"
+        description: "Array of authorized tool identifiers."
+      - name: "hooks"
+        type: "ARRAY[STRING]"
+        description: "Array of bound hook identifiers."
+      - name: "harness_refs"
+        type: "ARRAY[STRING]"
+        description: "Array of supported HarnessTemplate IDs."
+      - name: "output_contract"
+        type: "JSONB"
+        description: "Typed output contract specifying contract_id, schema_ref, and output_type."
+      - name: "subagent_policy"
+        type: "JSONB"
+        description: "Subagent delegation rules enforcing same-lane containment and maximum subagent counts."
+      - name: "observability_policy"
+        type: "JSONB"
+        description: "Observability configuration specifying trace_level, log_retention, and receipt obligations."
+      - name: "content_sha256"
+        type: "SHA256_HEX"
+        description: "Cryptographic SHA-256 digest of the canonical Agent definition payload."
+    mutable_attributes:
+      - name: "lifecycle_state"
+        type: "STRING"
+        description: "Governance lifecycle state (DRAFT, PROPOSED, APPROVED, ACTIVE, DEPRECATED, QUARANTINED, RETIRED)."
+      - name: "updated_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp of last lifecycle state transition."
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Agent (Self is global canonical root)"
+    child_relations:
+      - child_object: "Program"
+        cardinality: "1:N (Referenced by Programs; Agent holds no reverse Program references)"
+      - child_object: "Skill"
+        cardinality: "1:N (Binds passive canonical skills by reference)"
+      - child_object: "CapabilityProjection"
+        cardinality: "1:N (Declares explicit capability boundaries)"
+
+  12_state_model:
+    status: "APPLICABLE"
+    initial_state: "DRAFT"
+    terminal_states: ["RETIRED"]
+    states: ["DRAFT", "PROPOSED", "APPROVED", "ACTIVE", "DEPRECATED", "QUARANTINED", "RETIRED"]
+    transitions:
+      - from: "DRAFT"
+        to: "PROPOSED"
+        operation: "propose_agent_version"
+      - from: "PROPOSED"
+        to: "APPROVED"
+        operation: "approve_agent_version"
+      - from: "APPROVED"
+        to: "ACTIVE"
+        operation: "activate_agent_version"
+      - from: "ACTIVE"
+        to: "DEPRECATED"
+        operation: "deprecate_agent_version"
+      - from: "ANY"
+        to: "QUARANTINED"
+        operation: "quarantine_agent_version"
+      - from: "DEPRECATED"
+        to: "RETIRED"
+        operation: "retire_agent_version"
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "agent.proposed"
+      - event_name: "agent.approved"
+      - event_name: "agent.activated"
+      - event_name: "agent.deprecated"
+      - event_name: "agent.quarantined"
+      - event_name: "agent.retired"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Authored in Git repository (`agents/`) and registered via canonical AgentRegistry."
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-AGT-001: Agent MUST reside on the CANONICAL_PLANE and MUST NOT contain workspace_id, guest_id, private credentials, or mutable execution state."
+      - "INV-AGT-002: Published Agent versions are strictly immutable; modifying a definition requires issuing a new SemVer tag."
+      - "INV-AGT-003: An Agent is bound strictly to ONE Authority Lane (HUNTER, ANALYST, COMPOSER, COMMANDER) and cannot execute cross-lane work."
+      - "INV-AGT-004: All Skills referenced by an Agent MUST be flat and passive (SKILL.md); no Skill-to-Skill invocation is permitted."
+      - "INV-AGT-005: Unapproved (DRAFT, QUARANTINED, RETIRED) Agent versions MUST fail closed and be rejected from production resolution."
+      - "INV-AGT-006: Subagents spawned or delegated to by an Agent MUST inherit the EXACT same Authority Lane as the parent Agent."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "Versioned YAML manifests in `agents/` and `packages/ca_runtime/src/ca_runtime/agent_registry.py`"
+    runtime_representation: "cae.agent_definition / AgentRegistry in-memory and PostgreSQL snapshots"
+    promotion_authority: "CAE Architecture Governance Committee / Canonical Architecture Lead"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "register_agent"
+        parameters: ["agent_id", "version", "definition_payload", "content_sha256"]
+      - name: "resolve_agent"
+        parameters: ["agent_id", "version", "min_lifecycle", "expected_lane"]
+      - name: "quarantine_agent"
+        parameters: ["agent_id", "version", "quarantine_reason"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT execute direct database SQL mutations from Agent reasoning bodies; use authorized CAE Operations."
+      - "MUST NOT approve its own work or bypass durable Operator Gates."
+      - "MUST NOT spawn subagents across different Authority Lanes."
+      - "MUST NOT register two conflicting definitions under the same (agent_id, version)."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify agent_id is valid PascalCase or snake_case string."
+      - "Verify version conforms to Semantic Versioning 2.0.0."
+      - "Verify content_sha256 matches canonical JSON hash of the definition payload."
+    semantic_validators:
+      - "Verify authority_lane is exactly one of HUNTER, ANALYST, COMPOSER, COMMANDER."
+      - "Verify all referenced skills exist and conform to the passive flat skill constitution."
+      - "Verify capability projections match the declared Authority Lane without lane escalation."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_AGENT_NOT_FOUND"
+        http_status: 404
+        description: "Requested agent ID or version was not found in the registry."
+      - code: "ERR_AGENT_IDENTITY_COLLISION"
+        http_status: 409
+        description: "Attempted to register conflicting definitions under the same agent_id and version."
+      - code: "ERR_AGENT_LIFECYCLE_VIOLATION"
+        http_status: 422
+        description: "Agent lifecycle state does not satisfy the requested execution gate."
+      - code: "ERR_AGENT_LANE_MISMATCH"
+        http_status: 403
+        description: "Agent authority lane does not match the attempted operation or program lane."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.agent_definition"
+    rls_boundary_column: "NONE (Global canonical table; read-only to all authenticated sessions)"
+    storage_boundary: "Git repository `agents/` + PostgreSQL global registry snapshot"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "ProgramRegistry & Program Operator Runtime"
+      - "AgentTeamRuntime Engine"
+      - "JITContextCompiler & Package Assembly"
+      - "Standalone Agent Session Runner"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "Who is this Agent and what is its bounded cognitive responsibility?"
+      - "Which Authority Lane, model policy, prompt governance root, and capability grants govern this Agent?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-AGT-001"
+        description: "Canonical Research Commander Agent in COMMANDER lane."
+        attributes:
+          agent_id: "ResearchCommanderAgent"
+          version: "1.0.0"
+          authority_lane: "COMMANDER"
+          lifecycle_state: "APPROVED"
+          content_sha256: "b6f0f20959f635817d23a4b92b678f844fae2d09876fbc9b70957fae13dc1e90"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-AGT-001"
+        description: "Registering an Agent in HUNTER lane with mutation access to workspace permissions or operator gates."
+        rejection_reason: "Violates INV-AGT-003 and Authority Lane Governance; Hunter lane is strictly signal retrieval and cannot hold mutation capabilities."
+      - id: "NEG-AGT-002"
+        description: "Overwriting an existing Agent definition version in place with modified prompt instructions."
+        rejection_reason: "Violates INV-AGT-002 and Versioning Law; published agent versions are immutable; prompt changes require a new SemVer release."
+      - id: "NEG-AGT-003"
+        description: "Spawning an Analyst subagent from a Hunter parent agent."
+        rejection_reason: "Violates INV-AGT-006 and Epistemic Separation of Powers; subagents must strictly inherit the parent agent's authority lane."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "1.0.0"
+        date: "2026-09-02"
+        author: "CAE Architecture Lead (Mandate M49)"
+        summary: "Initial ratified constitution establishing Agent as a first-class Global Canonical Reasoning Object."

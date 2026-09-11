@@ -1,0 +1,52 @@
+skill_id: "cae_scope_authority_mapper"
+fidelity: "E1_STATIC"
+fidelity_non_claim: "Proves only static constraint and schema compliance of scope/authority mapping; does not prove PostgreSQL RLS performance or live tenant security."
+
+test_fixtures:
+  - id: "FIX-MAP-POS-001"
+    name: "Valid Workspace Scoped Media Asset"
+    type: "positive_anchor"
+    input:
+      candidate_object_name: "MediaAsset"
+      proposed_plane: "OPERATIONAL_PLANE"
+      proposed_scope_class: "WORKSPACE_SCOPED"
+      candidate_primary_class: "Entity"
+      definition_source_ref: "CAE_POSTGRES_STATE_MODEL_RECONCILIATION.md:25-29"
+      target_runtime_ref: "cae.media_asset (PostgreSQL 17.6)"
+      promotion_authority_role: "Workspace Media Ingestion Service"
+      proposed_parent_chain: ["Workspace"]
+      brownfield_evidence_refs: ["sql/0001_cae_foundation_draft.sql:38-57"]
+    expected_verdict: "VALIDATED_MAPPING"
+    expected_isolation_invariants_preserved: true
+
+  - id: "FIX-MAP-NEG-001"
+    name: "Deceptive Negative: False Global Guest Tenancy Key"
+    type: "deceptive_negative"
+    input:
+      candidate_object_name: "Guest"
+      proposed_plane: "OPERATIONAL_PLANE"
+      proposed_scope_class: "GLOBAL_CANONICAL"
+      candidate_primary_class: "Entity"
+      definition_source_ref: "Legacy Global User Spec"
+      target_runtime_ref: "cae.global_guest_table"
+      promotion_authority_role: "Global Admin"
+      proposed_parent_chain: []
+      brownfield_evidence_refs: []
+    expected_verdict: "CONTRACT_CONFLICT"
+    expected_conflict_reason: "Operational object Guest cannot be GLOBAL_CANONICAL and must have Workspace parent chain."
+
+  - id: "FIX-MAP-NEG-002"
+    name: "Deceptive Negative: PostgreSQL Declared Definition Source for SDA"
+    type: "deceptive_negative"
+    input:
+      candidate_object_name: "SDA_Registry"
+      proposed_plane: "CANONICAL_PLANE"
+      proposed_scope_class: "GLOBAL_CANONICAL"
+      candidate_primary_class: "Canonical Ontology"
+      definition_source_ref: "PostgreSQL table cae.registry_item"
+      target_runtime_ref: "cae.registry_item"
+      promotion_authority_role: "Database Admin"
+      proposed_parent_chain: []
+      brownfield_evidence_refs: ["sql/0005_cae_registry_authority.sql"]
+    expected_verdict: "CONTRACT_CONFLICT"
+    expected_conflict_reason: "PostgreSQL is runtime representation, not definition source for inherited canonical registry."

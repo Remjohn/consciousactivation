@@ -1,0 +1,569 @@
+{
+  "$defs": {
+    "AuthorityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "maxLength": 96,
+          "minLength": 1,
+          "type": "string"
+        },
+        "field_scopes": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string",
+            "x-cmf-value-owner": "CONTENT_HARNESS"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "principal": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "action",
+        "principal",
+        "field_scopes"
+      ],
+      "type": "object"
+    },
+    "BoundingBoxBasisPoints": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "width": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "x": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "y": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    "ChangeItem": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "ADD",
+            "REMOVE",
+            "REPLACE"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "reason": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "value_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResourceIdentityRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "operation",
+        "value_ref",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "DemandIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "request_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "request_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "EvidenceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceIdentityRef"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verdict": {
+          "enum": [
+            "PASS",
+            "CONCERNS",
+            "FAIL"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "verdict",
+        "evidence_refs",
+        "note"
+      ],
+      "type": "object"
+    },
+    "ExecutionIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "demand": {
+          "$ref": "#/$defs/DemandIdentityRef"
+        },
+        "execution_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "plan_ref": {
+          "$ref": "#/$defs/ResourceIdentityRef"
+        }
+      },
+      "required": [
+        "execution_id",
+        "demand",
+        "plan_ref"
+      ],
+      "type": "object"
+    },
+    "FailureSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "VALIDATION",
+            "AUTHORITY",
+            "COMPATIBILITY",
+            "BUDGET",
+            "EXECUTION",
+            "INTEGRITY",
+            "LIFECYCLE",
+            "CAPABILITY",
+            "HUMAN_REVIEW",
+            "SECURITY"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "field_paths": {
+          "items": {
+            "pattern": "^(?:/(?:[^~/]|~0|~1)*)*$",
+            "type": "string",
+            "x-cmf-value-owner": "CONTENT_HARNESS"
+          },
+          "type": "array",
+          "uniqueItems": true,
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "message": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "retryable": {
+          "type": "boolean",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "code",
+        "category",
+        "message",
+        "retryable",
+        "field_paths"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "IntegrityProof": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issued_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "key_id": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "nonce": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9_-]{86}$",
+          "type": "string"
+        },
+        "signer": {
+          "$ref": "#/$defs/PrincipalRef"
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_id",
+        "signer",
+        "signature",
+        "issued_at",
+        "expires_at",
+        "nonce"
+      ],
+      "type": "object"
+    },
+    "MoneyAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "type": "string"
+        },
+        "minor_units": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "minor_units"
+      ],
+      "type": "object"
+    },
+    "PrincipalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "principal_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "principal_type": {
+          "enum": [
+            "CONTENT_HARNESS",
+            "DELEGATION_PROTOCOL",
+            "VISUAL_ASSET_EDITOR",
+            "CONTROL_TOWER"
+          ],
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "product_version": {
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        }
+      },
+      "required": [
+        "principal_id",
+        "principal_type",
+        "product_version"
+      ],
+      "type": "object",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "ResourceIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "resource_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "ResultIdentityRef": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_ref": {
+          "format": "uri",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "payload_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "result_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "result_id",
+        "version",
+        "payload_hash",
+        "canonical_ref"
+      ],
+      "type": "object"
+    },
+    "State": {
+      "enum": [
+        "DRAFT",
+        "SUBMITTED",
+        "REJECTED",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "RESULT_READY",
+        "RESULT_REJECTED",
+        "COMPLETED",
+        "AMENDMENT_REQUIRED",
+        "SUPERSEDED",
+        "COST_APPROVAL_REQUIRED",
+        "CAPABILITY_GAP",
+        "HUMAN_REVIEW_REQUIRED",
+        "CANCELLATION_REQUESTED",
+        "CANCELLED",
+        "PARTIAL_RESULT_READY",
+        "INVALIDATED",
+        "REVOKED",
+        "REPLACED"
+      ],
+      "type": "string"
+    }
+  },
+  "$id": "https://contracts.cmf.dev/delegation/amendment-response/1.0/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "CMF delegation protocol amendment-response message.",
+  "properties": {
+    "authorized_successor_demand": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DemandIdentityRef",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "decided_at": {
+      "format": "date-time",
+      "type": "string",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "decision": {
+      "enum": [
+        "ACCEPTED",
+        "REJECTED",
+        "ALTERNATIVE_REQUESTED"
+      ],
+      "type": "string",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "decision_principal": {
+      "$ref": "#/$defs/PrincipalRef",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "proposal_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FailureSummary",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "response_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string",
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    },
+    "selected_option_id": {
+      "anyOf": [
+        {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string",
+          "x-cmf-value-owner": "CONTENT_HARNESS"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-cmf-value-owner": "CONTENT_HARNESS"
+    }
+  },
+  "required": [
+    "response_id",
+    "proposal_id",
+    "selected_option_id",
+    "decision",
+    "authorized_successor_demand",
+    "decision_principal",
+    "reason",
+    "decided_at"
+  ],
+  "title": "Amendment Response",
+  "type": "object",
+  "x-cmf-authority": {
+    "allowed_producers": [
+      "CONTENT_HARNESS"
+    ],
+    "path_kind": "JSON_POINTER_TEMPLATE",
+    "value_owner_by_path": {
+      "/authorized_successor_demand": "CONTENT_HARNESS",
+      "/authorized_successor_demand/canonical_ref": "CONTENT_HARNESS",
+      "/authorized_successor_demand/payload_hash": "CONTENT_HARNESS",
+      "/authorized_successor_demand/request_id": "CONTENT_HARNESS",
+      "/authorized_successor_demand/version": "CONTENT_HARNESS",
+      "/decided_at": "CONTENT_HARNESS",
+      "/decision": "CONTENT_HARNESS",
+      "/decision_principal": "CONTENT_HARNESS",
+      "/decision_principal/principal_id": "CONTENT_HARNESS",
+      "/decision_principal/principal_type": "CONTENT_HARNESS",
+      "/decision_principal/product_version": "CONTENT_HARNESS",
+      "/proposal_id": "CONTENT_HARNESS",
+      "/reason": "CONTENT_HARNESS",
+      "/reason/category": "CONTENT_HARNESS",
+      "/reason/code": "CONTENT_HARNESS",
+      "/reason/field_paths": "CONTENT_HARNESS",
+      "/reason/field_paths/{index}": "CONTENT_HARNESS",
+      "/reason/message": "CONTENT_HARNESS",
+      "/reason/retryable": "CONTENT_HARNESS",
+      "/response_id": "CONTENT_HARNESS",
+      "/selected_option_id": "CONTENT_HARNESS"
+    }
+  },
+  "x-cmf-consumers": [
+    "DELEGATION_PROTOCOL",
+    "CONTENT_HARNESS",
+    "CONTROL_TOWER"
+  ],
+  "x-cmf-idempotency": "REQUIRED",
+  "x-cmf-lifecycle-effects": [
+    "amendment_accepted",
+    "amendment_rejected"
+  ],
+  "x-cmf-message-type": "amendment-response",
+  "x-cmf-message-version": "1.0"
+}

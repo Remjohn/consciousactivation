@@ -1,0 +1,62 @@
+schema_id: cae.policy_rule_package
+schema_version: "1.0.0"
+package_id: editorial_storyboard_policy
+version: "1.0.0"
+status: ACTIVE
+applicable_program: editorial_storyboard_program
+scope: editorial_storyboard_compile
+description: >
+  Declarative authorization rules for the editorial storyboard program.
+  Expresses COMPOSER-lane compilation and COMMANDER-lane approval gates
+  with explicit evidence prerequisites. Does not weaken constitutional
+  Stage-12 human authorization requirements.
+
+rules:
+  - predicate_id: emit_storyboard_composer
+    operation: emit_editorial_storyboard
+    required_authority_lane: COMPOSER
+    actor_class: StoryboardCompilerAgent
+    allow_delegation: false
+    evidence_prerequisites:
+      - evidence_class: EXECUTABLE
+        required: true
+        locator_hint: storyboard_generation_receipt
+      - evidence_class: SCHEMA
+        required: false
+    escalation_conditions:
+      - condition_id: narrative_coherence_fail
+        description: Narrative coherence eval failed; escalate for operator review
+        escalate_to_lane: COMMANDER
+        trigger: eval.narrative_coherence_eval == FAIL
+    notes: Primary compile path under COMPOSER lane.
+
+  - predicate_id: storyboard_editorial_approval
+    operation: approve
+    required_authority_lane: COMMANDER
+    allow_delegation: false
+    evidence_prerequisites:
+      - evidence_class: OPERATOR_DECISION
+        required: true
+        locator_hint: operator_gates.storyboard_editorial_approval
+      - evidence_class: EXECUTABLE
+        required: true
+        locator_hint: storyboard_generation_receipt
+    escalation_conditions: []
+    notes: Constitutional Stage-12 human authorization gate.
+
+  - predicate_id: create_transfer_contract_gate
+    operation: create_transfer_contract
+    required_authority_lane: COMMANDER
+    allow_delegation: false
+    evidence_prerequisites:
+      - evidence_class: OPERATOR_DECISION
+        required: true
+    escalation_conditions: []
+
+constitutional_dependencies:
+  - dependency_id: cae_stage12_human_auth
+    ref: FR-AUTH-002
+    immutable: true
+  - dependency_id: editorial_object_register
+    ref: docs/cae/editorial_intelligence/CAE_EDITORIAL_OBJECT_REGISTER.md
+    immutable: true

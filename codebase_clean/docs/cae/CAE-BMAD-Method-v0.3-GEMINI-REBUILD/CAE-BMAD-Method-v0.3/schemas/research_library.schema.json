@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD Research Library Schema",
+  "type": "object",
+  "required": ["version", "target_sources", "sources"],
+  "properties": {
+    "version": { "type": "string" },
+    "target_sources": { "type": "integer", "enum": [216] },
+    "baseline_count": { "type": "integer" },
+    "extended_count": { "type": "integer" },
+    "sources": {
+      "type": "array",
+      "minItems": 216,
+      "maxItems": 216,
+      "items": {
+        "$ref": "research_source.schema.json"
+      }
+    }
+  }
+}

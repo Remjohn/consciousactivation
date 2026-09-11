@@ -1,0 +1,83 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M63",
+  "mandate_title": "Unified Factory Commands + Read-Only Observability",
+  "phase": "PHASE_09_FACTORY_OBSERVABILITY",
+  "parallel_group": "P8-C",
+  "timestamp_utc": "2026-09-02T06:30:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/04_FACTORY_OBSERVABILITY/M63_unified_factory_commands_read_only_observability.md"
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/factory_observability.py",
+      "artifact_class": "Unified Factory Command Engine, Replay Projection & Read-Only Observability Viewer",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m63_unified_factory_commands_read_only_observability.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 9,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_discover_and_run_programs": {
+      "status": "PASSED",
+      "description": "Operator can discover, list, and run Programs via unified command syntax."
+    },
+    "gate_2_inspect_agent_and_program_definitions": {
+      "status": "PASSED",
+      "description": "Operator can inspect Agent and Program definitions before and after execution."
+    },
+    "gate_3_live_trace_and_replay_parity": {
+      "status": "PASSED",
+      "description": "Live trace inspection and historical replay reflect the exact same execution facts and hashes."
+    },
+    "gate_4_read_only_observability_shield": {
+      "status": "PASSED",
+      "description": "Observability viewer is strictly read-only; attempts to mutate receipts/state fail closed."
+    },
+    "gate_5_statem_parity_and_pending_transition_rendering": {
+      "status": "PASSED",
+      "description": "Agent and Operator views expose identical canonical state; uncommitted target states render as pending."
+    }
+  },
+  "false_proof_defenses": [
+    {
+      "vector": "fake_green_status_rejection",
+      "rule": "INV-OBS-001",
+      "error_code": "SNAPSHOT_STATE_VERIFIED",
+      "verified": true
+    },
+    {
+      "vector": "read_only_mutation_shield",
+      "rule": "INV-OBS-002",
+      "error_code": "ERR_READ_ONLY_OBSERVABILITY_MUTATION",
+      "verified": true
+    },
+    {
+      "vector": "failed_child_call_preservation",
+      "rule": "INV-OBS-003",
+      "error_code": "REPLAY_CHILD_FAILURES_PRESERVED",
+      "verified": true
+    },
+    {
+      "vector": "cross_tenant_trace_query_rejection",
+      "rule": "INV-OBS-004",
+      "error_code": "ERR_OBSERVABILITY_TENANT_ISOLATION",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m63_tests_passed": 9,
+    "combined_phase_5_6_7_8_9_tests_passed": 151,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

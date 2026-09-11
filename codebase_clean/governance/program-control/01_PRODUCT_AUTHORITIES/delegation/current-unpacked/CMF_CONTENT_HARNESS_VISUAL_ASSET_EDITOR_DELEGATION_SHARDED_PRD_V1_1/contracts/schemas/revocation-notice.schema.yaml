@@ -1,0 +1,35 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Revocation Notice
+type: object
+additionalProperties: false
+required:
+- notice_id
+- asset_ref
+- severity
+- effective_immediately
+- reason
+- policy
+properties:
+  notice_id:
+    type: string
+    minLength: 1
+    pattern: ^REV-
+  asset_ref:
+    type: string
+    minLength: 1
+  severity:
+    type: string
+    minLength: 1
+    enum:
+    - major
+    - critical
+  effective_immediately:
+    type: boolean
+  reason:
+    type: object
+  policy:
+    type: object
+  replacement:
+    type:
+    - object
+    - 'null'

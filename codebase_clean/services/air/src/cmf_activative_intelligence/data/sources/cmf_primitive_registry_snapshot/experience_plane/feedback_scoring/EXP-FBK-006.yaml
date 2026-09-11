@@ -1,0 +1,175 @@
+experience_primitive_id: "EXP-FBK-006"
+canonical_name: "Theory/Practice Feedback Loops"
+aliases:
+  - "The Instant Redemption"
+  - "Actionable Critique"
+  - "The Loop Closer"
+
+experience_family: "feedback_scoring"
+mechanic_role: "loop"
+moment_role: "feedback_delivery"
+implementation_role: "architectural"
+
+source_audits:
+  - audit_file: "AUDIT_Gamify_How_Gamification_Motivates_People_Brian_Burke.md"
+    primitive_name_in_audit: "Theory/Practice Loops"
+    mcda_score: 185
+    audit_path: "lab/CCP APRIL Updates/Public_Speaking_Audits/09_Experience_Engineering/AUDIT_Gamify_How_Gamification_Motivates_People_Brian_Burke.md"
+
+book_reference:
+  title: "Gamify"
+  author: "Brian Burke"
+  chapters:
+    - "Chapter 4: Engaging the Players"
+    - "Chapter 6: Designing the Player Experience"
+  key_pages: "88-102"
+  book_path: "lab/Public Speeaking Coaching/09_Experience_Engineering/Gamify How Gamification Motivates People - Brian Burke.md"
+
+summary: >
+  Theory/Practice Feedback Loops dictate that feedback cannot exist in a vacuum.
+  Every time a user receives a score or critique (the Theory), the UI must
+  immediately present a 1-click path to record again and apply the lesson (the Practice),
+  converting the feedback into an instant cycle of improvement.
+
+core_move: >
+  Append a highly visible 'Redemption Round' or 'Try Again' button directly to
+  the bottom of every single AI scorecard and feedback message, ensuring the
+  user never hits a dead end after being told how to improve.
+
+why_it_works: >
+  Brian Burke emphasizes that gamification fails when it only provides a score but
+  no immediate mechanism to change that score. Feedback creates a state of cognitive
+  tension: the user knows they made a mistake and wants to fix it. If they have to
+  wait until tomorrow's drill to fix it, that tension turns into frustration. By
+  closing the loop instantly—offering them a chance to re-record right now—we channel
+  that frustration into immediate practice, driving up the core recording metric.
+
+examples:
+  - context: "BOOK: Gamify - The Enterprise Training Module"
+    application: >
+      Instead of giving employees a quiz score at the end of a 30-minute module,
+      the system scores them after every single question and instantly allows them
+      to retry the question to apply what they just learned from the error.
+    effect: >
+      Dramatically increases mastery and retention by tightening the feedback loop.
+
+  - context: "CCP: The Redemption Round"
+    application: >
+      After receiving a 60/100 Delivery Score and a note that they 'spoke too fast',
+      the Telegram message includes an inline button: '🔄 Record Redemption Take'.
+    effect: >
+      The coach immediately presses it, speaks slower, and gets an 85/100, ending
+      the session on a high note.
+
+  - context: "CCP: The V2WS Live Pivot"
+    application: >
+      During a webinar, the ambient feedback glows red (Theory: Conviction dropping).
+      The prompter instantly flashes a suggested high-emotion re-engagement question
+      for the coach to read (Practice).
+    effect: >
+      Allows the coach to immediately correct the metric in real-time.
+
+  - context: "CCP: The Jury Flip"
+    application: >
+      A user loses a Conscious Reaction debate. The feedback shows the opponent won
+      on 'Logic'. The UI prompts: 'Record a 30-second rebuttal targeting their logic
+      to win the Jury back.'
+    effect: >
+      Turns a failure state into the trigger for the next engagement loop.
+
+  - context: "CCP: The Sandbox Retries"
+    application: >
+      During the Day 1-7 Onboarding, the user is explicitly told: 'You have unlimited
+      retries. Look at the score, delete the audio, and try again until you hit 90.'
+    effect: >
+      Trains the user that feedback is not a final judgment, but a tool for iteration.
+
+anti_examples:
+  - description: >
+      The user records an audio response. The AI sends a message: 'You failed. Your
+      hook was weak and you used too many filler words.' End of message. No button.
+    why_it_fails: >
+      The loop is left open. The user feels defeated and has no clear path to
+      redeem themselves. They close Telegram and go to bed feeling like a failure.
+
+experience_stage_fit:
+  entry: 0.4
+  activation: 0.9
+  recording: 1.0
+  scoring: 1.0
+  social_spread: 0.6
+  recovery: 1.0
+  retention: 0.9
+  conversion: 0.7
+
+surface_fit:
+  telegram_message: 1.0
+  mini_app: 1.0
+  score_card: 1.0
+  share_asset: 0.2
+  voice_prompt: 0.8
+  push_nudge: 0.8
+
+user_state_effects:
+  confidence: 0.7
+  urgency: 0.6
+  clarity: 0.9
+  safety: 0.8
+  status: 0.7
+  belonging: 0.4
+  curiosity: 0.8
+  replay_desire: 1.0
+
+ccp_workflow_fit:
+  conscious_reactions_flow: 1.0
+  cbcs_accountability: 1.0
+  challenge_progression: 0.9
+  silent_referral: 0.6
+  coach_os_deployment: 0.8
+  premium_trust_architecture: 0.7
+  onboarding_activation: 1.0
+  social_economy: 0.8
+  content_extraction: 0.9
+
+activation_conditions:
+  - "User receives a score lower than 90/100"
+  - "User receives explicit constructive feedback from the CPSC AI"
+
+suppression_conditions:
+  - "User receives a perfect 100/100 (do not ask them to retry perfection, trigger an Epic Win instead)."
+
+misuse_modes:
+  - "Infinite Punishment — forcing them to retry until they get it right, trapping them in a loop when they are exhausted."
+  - "Blind Retries — offering a retry button without giving them any specific advice on *what* to change, causing them to fail again."
+
+synergizes_with:
+  - "EXP-FRC-004" # Friction-Zero Ability (The retry button must be 1-click zero friction)
+  - "EXP-FBK-001" # RIM Feedback (The loop must be immediate)
+
+conflicts_with:
+  - "EXP-PRG-003" # Go for an Epic Win (Epic Wins are usually one-shot, high-stakes events where retries are explicitly banned to create tension)
+
+implementation_targets:
+  frontend_components:
+    - "RedemptionButton — a prominent inline Telegram button appended to all sub-90 scorecards"
+    - "DeleteAndRetrySwipe — a Mini App gesture allowing instant wiping of bad audio"
+  backend_rules:
+    - "routing_engine: intercept 'Retry' clicks to automatically preload the previous context/prompt so the user doesn't have to start over"
+  telemetry_events:
+    - "redemption_round_activation_rate"
+    - "score_delta_post_retry"
+  experiments:
+    - "A/B test: Button says 'Try Again' vs 'Redeem Your Score' to test emotional framing"
+
+experience_metrics:
+  entry_rate: 0.4
+  react_rate: 0.8
+  completion_rate: 0.9
+  share_rate: 0.6
+  comeback_rate: 0.9
+  day7_retention: 0.9
+  upgrade_signal: 0.7
+
+crosswalk_id: "XW-FBK-LOOP"
+crosswalk_note: >
+  This is the mechanic that turns passive reading of feedback into active skill development.

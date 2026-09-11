@@ -1,0 +1,100 @@
+program:
+  id: "editorial_discovery_program"
+  version: "1.0.0"
+  status: ACTIVE
+  purpose: "Transforms authentic interview turns into lossless EvidenceSegments, typed SemanticAnnotations, grounded ContentCandidates, and CandidateClusters with a strict fail-closed synthetic producer block before operator selection."
+  operator_entrypoint: "run_editorial_discovery"
+  inputs:
+    - "interview_turns"
+    - "evidence_packages"
+  preconditions:
+    - "workspace_active"
+    - "interview_evidence_authenticated"
+  outputs:
+    - "evidence_segments"
+    - "semantic_annotations"
+    - "content_candidates"
+    - "candidate_clusters"
+    - "editorial_storyboards"
+  artifacts:
+    - "editorial_candidate_portfolio"
+    - "operator_storyboard_snapshot"
+  harness: "EDITORIAL_DISCOVERY_HARNESS_V1"
+  state_machine: "EDITORIAL_DISCOVERY_STATE_MACHINE_V1"
+  lanes:
+    - "HUNTER"
+    - "ANALYST"
+    - "COMPOSER"
+    - "COMMANDER"
+  agents:
+    - "EvidenceSegmenterAgent"
+    - "SemanticAttributionAgent"
+    - "EditorialCandidateComposerAgent"
+    - "SyntheticProofCommanderAgent"
+  subagents: []
+  skills:
+    - name: "evidence_segmentation"
+      path: "skills/evidence_segmentation/SKILL.md"
+      version: "1.0.0"
+    - name: "semantic_attribution"
+      path: "skills/semantic_attribution/SKILL.md"
+      version: "1.0.0"
+    - name: "editorial_candidate_composition"
+      path: "skills/editorial_candidate_composition/SKILL.md"
+      version: "1.0.0"
+    - name: "synthetic_proof_gate"
+      path: "skills/synthetic_proof_gate/SKILL.md"
+      version: "1.0.0"
+    - name: "operator_selection_gate"
+      path: "skills/operator_selection_gate/SKILL.md"
+      version: "1.0.0"
+    - name: "constrained_regeneration"
+      path: "skills/constrained_regeneration/SKILL.md"
+      version: "1.0.0"
+  operations:
+    - "segment_interview_turns"
+    - "attribute_and_classify_segment"
+    - "compose_content_candidate"
+    - "cluster_candidates"
+    - "compare_candidates"
+    - "regenerate_content_candidate"
+    - "enforce_synthetic_proof_block"
+    - "evaluate_production_portfolio"
+    - "operator_select_candidate"
+    - "operator_reject_candidate"
+    - "operator_lock_candidate"
+    - "operator_request_regeneration"
+    - "operator_modify_framing"
+    - "verify_downstream_production_eligibility"
+  tools:
+    - "lossless_segmenter"
+    - "evidence_classifier"
+    - "candidate_composer"
+    - "cluster_engine"
+    - "candidate_search_service"
+    - "operator_selection_manager"
+  connections: []
+  hooks:
+    - "synthetic_producer_fail_closed_block"
+    - "evidence_immutability_verification"
+  extensions: []
+  evals:
+    - "grounded_lineage_eval"
+    - "anti_synthetic_proof_eval"
+  operator_gates:
+    - "editorial_production_selection_gate"
+    - "candidate_lock_gate"
+    - "downstream_eligibility_gate"
+  recovery:
+    - "reject_synthetic_and_revert_to_authenticated_drafts"
+  receipts:
+    - "editorial_decision_receipt"
+    - "synthetic_rejection_receipt"
+    - "operator_selection_receipt"
+    - "operator_rejection_receipt"
+    - "candidate_lock_receipt"
+    - "candidate_regeneration_receipt"
+    - "candidate_comparison_receipt"
+  dependencies:
+    - program_id: "interview_semantic_program"
+      version_requirement: "^1.0.0"

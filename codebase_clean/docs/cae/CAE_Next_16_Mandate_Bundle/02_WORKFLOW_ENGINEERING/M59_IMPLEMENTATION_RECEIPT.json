@@ -1,0 +1,77 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M59",
+  "mandate_title": "Workflow Control-Flow Compiler",
+  "phase": "PHASE_07_WORKFLOW_ENGINEERING",
+  "parallel_group": "P7-B",
+  "timestamp_utc": "2026-09-02T05:21:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/02_WORKFLOW_ENGINEERING/M59_workflow_control_flow_compiler.md"
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/workflow_control_flow.py",
+      "artifact_class": "Workflow Control-Flow Compiler & Deterministic Scheduling Engine",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m59_workflow_control_flow_compiler.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 9,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_deterministic_routing": {
+      "status": "PASSED",
+      "description": "Same workflow IR + same execution state snapshot produces bit-for-bit identical RoutingDecision digest."
+    },
+    "gate_2_loop_bound_enforcement": {
+      "status": "PASSED",
+      "description": "Loop execution stops deterministically at max_iterations with TERMINATE_LOOP action without exceeding host bounds."
+    },
+    "gate_3_join_synchronization": {
+      "status": "PASSED",
+      "description": "JOIN nodes synchronize predecessor branches according to policy (ALL, ANY, QUORUM) and wait until conditions are met."
+    },
+    "gate_4_timeout_transition": {
+      "status": "PASSED",
+      "description": "Elapsed duration exceeding timeout_seconds is detected on running nodes and flagged for recovery routing."
+    },
+    "gate_5_human_gate_suspension": {
+      "status": "PASSED",
+      "description": "HUMAN_GATE steps remain suspended in waiting_human_gates until an explicit, signed grant from COMMANDER lane is registered."
+    }
+  },
+  "false_proof_defenses": [
+    {
+      "vector": "condition_ignores_agent_narrative",
+      "rule": "INV-WFP-001",
+      "error_code": "PREDICATE_EVALUATION_ISOLATION",
+      "verified": true
+    },
+    {
+      "vector": "loop_with_zero_bound_rejected",
+      "rule": "INV-WFP-002",
+      "error_code": "ERR_UNBOUNDED_LOOP",
+      "verified": true
+    },
+    {
+      "vector": "human_gate_unauthorized_lane_grant_rejected",
+      "rule": "INV-WFP-005",
+      "error_code": "ERR_HUMAN_GATE_LANE_VIOLATION",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m59_tests_passed": 9,
+    "combined_phase_5_6_7_tests_passed": 120,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

@@ -1,0 +1,132 @@
+version: "0.3.0-rebuild"
+initial_state: "NOT_STARTED"
+terminal_state: "PROMOTED"
+
+states:
+  - state_id: "NOT_STARTED"
+    phase: "Initialization"
+    description: "Method environment not initialized or newly mounted."
+    required_artifacts: []
+    active_agents: ["cae-method-orchestrator"]
+
+  - state_id: "RESEARCHING"
+    phase: "Phase 1: Reconstruction"
+    description: "Scanning, scoring, and indexing the 216 research sources."
+    required_artifacts: ["ART-01"]
+    active_agents: ["cae-product-reconstructor", "cae-documentation-analyst"]
+
+  - state_id: "RECONSTRUCTING"
+    phase: "Phase 1: Reconstruction"
+    description: "Synthesizing product history, lineage, and baseline capabilities."
+    required_artifacts: ["ART-01", "ART-02"]
+    active_agents: ["cae-product-reconstructor", "cae-brownfield-auditor"]
+
+  - state_id: "INVESTIGATING_LEVELS"
+    phase: "Phase 2: Multi-Level Investigation"
+    description: "Traversing the 13 operating levels to evaluate codebase and doc truth."
+    required_artifacts: ["ART-02", "ART-03"]
+    active_agents: ["cae-documentation-analyst", "cae-code-forensics-analyst", "cae-data-analyst"]
+
+  - state_id: "GRILLING"
+    phase: "Phase 2: CAE Grill"
+    description: "Executing single-question interactive operator grill to resolve contradictions."
+    required_artifacts: ["ART-03", "ART-04"]
+    active_agents: ["cae-method-orchestrator", "cae-product-reconstructor"]
+
+  - state_id: "DEFINING_PRODUCT"
+    phase: "Phase 3: Product Definition"
+    description: "Authoring Product Brief, PRD Index, PRD Modules, and FR Matrix."
+    required_artifacts: ["ART-04", "ART-05", "ART-06", "ART-07", "ART-08"]
+    active_agents: ["cae-product-brief-agent", "cae-prd-agent"]
+
+  - state_id: "SPECIFYING_ARCHITECTURE"
+    phase: "Phase 4: Architecture & Planning"
+    description: "Designing technical architecture, component interfaces, and UX."
+    required_artifacts: ["ART-08", "ART-09", "ART-12"]
+    active_agents: ["cae-architecture-agent", "cae-ux-agent"]
+
+  - state_id: "PLANNING_DELIVERY"
+    phase: "Phase 4: Architecture & Planning"
+    description: "Decomposing architecture into Epics and User Stories."
+    required_artifacts: ["ART-09", "ART-10", "ART-11"]
+    active_agents: ["cae-delivery-agent"]
+
+  - state_id: "MAPPING_BROWNFIELD"
+    phase: "Phase 5: Brownfield & Handoff"
+    description: "Mapping stories against concrete codebase files, databases, and missing layers."
+    required_artifacts: ["ART-11", "ART-13", "ART-14"]
+    active_agents: ["cae-brownfield-auditor", "cae-repository-analyst", "cae-method-orchestrator"]
+
+  - state_id: "REVIEWING"
+    phase: "Phase 6: Proof & Review"
+    description: "Executing adversarial review, false-proof checks, and regression tests."
+    required_artifacts: ["ART-14", "ART-15"]
+    active_agents: ["cae-adversarial-reviewer"]
+
+  - state_id: "AWAITING_OPERATOR_GATE"
+    phase: "Phase 6: Operator Gate"
+    description: "Milestone complete and presented to operator for promotion sign-off."
+    required_artifacts: ["ART-15"]
+    active_agents: ["cae-method-orchestrator"]
+
+  - state_id: "PROMOTED"
+    phase: "Terminal"
+    description: "Method milestone or product release ratified and committed."
+    required_artifacts: ["ART-15"]
+    active_agents: []
+
+transitions:
+  - from_state: "NOT_STARTED"
+    to_state: "RESEARCHING"
+    gate: "INIT_CHECK"
+    condition: "Workspace initialized via init_caebmad.py"
+
+  - from_state: "RESEARCHING"
+    to_state: "RECONSTRUCTING"
+    gate: "CORPUS_CHECK"
+    condition: "216 sources cataloged and scored in CAE_RESEARCH_LIBRARY.yaml"
+
+  - from_state: "RECONSTRUCTING"
+    to_state: "INVESTIGATING_LEVELS"
+    gate: "GATE-01"
+    condition: "Product Reconstruction Record passed Gate 1 review"
+
+  - from_state: "INVESTIGATING_LEVELS"
+    to_state: "GRILLING"
+    gate: "LEVEL_CHECK"
+    condition: "Operating Level Assessment completed; contradictions identified"
+
+  - from_state: "GRILLING"
+    to_state: "DEFINING_PRODUCT"
+    gate: "GATE-02"
+    condition: "Decision Ledger updated and approved by Operator"
+
+  - from_state: "DEFINING_PRODUCT"
+    to_state: "SPECIFYING_ARCHITECTURE"
+    gate: "GATE-03"
+    condition: "Modular PRD and Functional Requirements ratified"
+
+  - from_state: "SPECIFYING_ARCHITECTURE"
+    to_state: "PLANNING_DELIVERY"
+    gate: "ARCH_CHECK"
+    condition: "Architecture Spec and UI/UX Spec completed"
+
+  - from_state: "PLANNING_DELIVERY"
+    to_state: "MAPPING_BROWNFIELD"
+    gate: "GATE-04"
+    condition: "Epics and Stories decomposed with reality-contact acceptance criteria"
+
+  - from_state: "MAPPING_BROWNFIELD"
+    to_state: "REVIEWING"
+    gate: "GATE-05"
+    condition: "Brownfield Reality Map and Handoff Packet assembled"
+
+  - from_state: "REVIEWING"
+    to_state: "AWAITING_OPERATOR_GATE"
+    gate: "REVIEW_CHECK"
+    condition: "Adversarial review completed; zero unaddressed false-proof failures"
+
+  - from_state: "AWAITING_OPERATOR_GATE"
+    to_state: "PROMOTED"
+    gate: "GATE-06"
+    condition: "Operator explicitly signs off promotion gate"

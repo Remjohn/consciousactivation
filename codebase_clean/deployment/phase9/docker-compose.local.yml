@@ -1,0 +1,45 @@
+name: conscious-activations-phase9
+services:
+  pipeline:
+    build:
+      context: ../..
+      dockerfile: deployment/phase9/Dockerfile.python
+    command: ["cmf-pipeline", "status", "--json"]
+    environment:
+      CA_DATA_ROOT: /state
+    volumes:
+      - ca-state:/state
+  air:
+    build:
+      context: ../..
+      dockerfile: deployment/phase9/Dockerfile.python
+    command: ["cmf-air", "status", "--json"]
+    environment:
+      CA_DATA_ROOT: /state
+    volumes:
+      - ca-state:/state
+  interview:
+    build:
+      context: ../..
+      dockerfile: deployment/phase9/Dockerfile.python
+    command: ["cmf-interview", "status", "--json"]
+    environment:
+      CA_DATA_ROOT: /state
+    volumes:
+      - ca-state:/state
+  vae:
+    build:
+      context: ../..
+      dockerfile: deployment/phase9/Dockerfile.python
+    command: ["cmf-vae", "health", "--json"]
+    environment:
+      CA_DATA_ROOT: /state
+    volumes:
+      - ca-state:/state
+  studio:
+    build:
+      context: ../..
+      dockerfile: deployment/phase9/Dockerfile.studio
+    command: ["node", "dist/index.js", "health", "--json"]
+volumes:
+  ca-state: {}

@@ -1,0 +1,157 @@
+schema_bundle_id: cae_interview_program_derived_v3
+status: DERIVED_INTERNAL_STRUCTURES
+canonical_object_authorization: false
+
+HypothesisCandidate:
+  purpose: "view/adapter structure; must bind to existing upstream hypothesis/portfolio authority"
+  required:
+    - candidate_id
+    - collision_statement
+    - provenance
+  fields:
+    candidate_id: semantic_id
+    upstream_hypothesis_refs: [semantic_ref]
+    coordinate_refs: [semantic_ref]
+    audience_cognitive_island_ref: semantic_ref
+    guest_territory_ref: semantic_ref
+    world_signal_refs: [semantic_ref]
+    edge_ref: semantic_ref
+    target_paradigm: string|null
+    expected_discrepancy: string|null
+    desired_evidence: [string]
+    question_objective_ref: semantic_ref|null
+    mechanism_refs: [semantic_ref]
+    archetype_refs: [semantic_ref]
+    format_refs: [semantic_ref]
+    narrative_role_refs: [semantic_ref]
+    distribution_condition: string|null
+    confidence: number|null
+    selection_diagnostics:
+      relevance: number|null
+      evidence_potential: number|null
+      guest_authority: number|null
+      audience_alignment: number|null
+      collision_strength: number|null
+      novelty: number|null
+      downstream_compatibility: number|null
+      research_grounding: number|null
+      distinctiveness: number|null
+      risk: number|null
+      portfolio_overlap: number|null
+    provenance:
+      source_refs: [semantic_ref]
+      audit_refs: [semantic_ref]
+      generated_by: string|null
+      generated_at: string|null
+
+QuestionProgramDerived:
+  purpose: "compiled internal structure that feeds the existing Activative Interview Brief boundary"
+  canonical_object: false
+  required:
+    - hypothesis_ref
+    - objective
+    - expected_evidence
+    - candidate_questions
+  fields:
+    hypothesis_ref: semantic_ref
+    objective: string
+    target_resolution: string
+    expected_evidence: [string]
+    response_shape: [string]
+    composition_compatibility:
+      archetype_refs: [semantic_ref]
+      format_refs: [semantic_ref]
+      narrative_role_refs: [semantic_ref]
+    primitive_coalition_refs: [semantic_ref]
+    candidate_questions: [QuestionCandidate]
+    routing_policy: AnswerRoutingProfile
+    provenance: ProvenanceRef
+
+QuestionCandidate:
+  fields:
+    question_id: semantic_id
+    version: string
+    text: string
+    objective: string
+    mechanism_refs: [semantic_ref]
+    expected_response_shape: [string]
+    expected_evidence: [string]
+    trigger_state: string|null
+    forbidden_failure_patterns: [string]
+    composition_compatibility:
+      archetype_refs: [semantic_ref]
+      format_refs: [semantic_ref]
+      narrative_role_refs: [semantic_ref]
+    parent_candidate_ref: semantic_ref|null
+    locked_dimensions: [string]
+    operator_feedback_refs: [semantic_ref]
+    provenance: ProvenanceRef
+
+AnswerObservation:
+  canonical_object: false
+  required:
+    - question_attempt_ref
+    - observed_response_ref
+    - resolution
+    - completeness
+  fields:
+    question_attempt_ref: semantic_ref
+    observed_response_ref: semantic_ref
+    resolution: "abstract|general|specific|episodic|mechanistic|evidential"
+    completeness: "unknown|partial|sufficient|verified|exhausted"
+    evidence_modes: ["fact|story|feeling|interpretation|forecast|alternative|counterfactual"]
+    temporal_orientation: ["past_reconstruction|present_observation|future_projection|counterfactual|premortem|historical_uncertainty"]
+    social_reference_frame: ["self|peer|authority|group|institution|audience"]
+    interactional_fit: string|null
+    discrepancy_refs: [semantic_ref]
+    missing_requirement_refs: [semantic_ref]
+    new_branch_refs: [semantic_ref]
+    guest_validated_interpretation_refs: [semantic_ref]
+    system_inference_refs: [semantic_ref]
+
+AnswerRoutingProfile:
+  canonical_object: false
+  fields:
+    selection_inputs:
+      - answer_observation
+      - unresolved_requirements
+      - coverage_spine
+      - locked_dimensions
+    bounded_frontier_size:
+      type: integer
+      preferred: 3
+      max: 5
+    allowed_actions:
+      - deepen
+      - broaden
+      - reconcile
+      - verify
+      - reframe
+      - advance
+      - close
+    tie_break_order:
+      - requirement_coverage
+      - hypothesis_evidence_fit
+      - interactional_fit
+      - composition_compatibility
+      - semantic_novelty
+      - operator_preferences
+      - deterministic_candidate_order
+
+ContentCompatibilityView:
+  canonical_object: false
+  fields:
+    hypothesis_ref: semantic_ref
+    question_ref: semantic_ref
+    archetype_refs: [semantic_ref]
+    format_refs: [semantic_ref]
+    narrative_role_refs: [semantic_ref]
+    expected_response_shape: [string]
+    compatibility_reason: string
+    incompatibility_reasons: [string]
+
+ProvenanceRef:
+  fields:
+    upstream_refs: [semantic_ref]
+    source_refs: [semantic_ref]
+    audit_refs: [semantic_ref]

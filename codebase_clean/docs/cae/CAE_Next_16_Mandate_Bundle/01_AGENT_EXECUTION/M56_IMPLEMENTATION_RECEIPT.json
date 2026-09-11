@@ -1,0 +1,54 @@
+{
+  "receipt_id": "cae.mandate.receipt.m56@1.0.0",
+  "mandate_id": "CAE-M56",
+  "title": "Standalone Agent Session Runtime",
+  "phase": "PHASE 6 — AGENT / PROGRAM EXECUTION CONVERGENCE",
+  "parallel_group": "P6-C",
+  "status": "VERIFIED_AND_RATIFIED",
+  "recorded_at": "2026-09-02T06:50:00+02:00",
+  "constitution_ref": "docs/cae/constitutions/CA-CAN-03_AGENT.yaml",
+  "statem_contract_ref": "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+  "code_paths": [
+    "packages/ca_runtime/src/ca_runtime/standalone_session_runtime.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py",
+    "tests/cae/test_m56_standalone_agent_session_runtime.py"
+  ],
+  "test_paths": [
+    "tests/cae/test_m56_standalone_agent_session_runtime.py",
+    "tests/cae/test_m55_bounded_repair_same_session_retry.py",
+    "tests/cae/test_m54_typed_agent_result_explicit_gate_engine.py",
+    "tests/cae/test_m53_program_agent_phase_binding_compiler.py",
+    "tests/cae/test_m52_canonical_agent_invocation_contract.py",
+    "tests/cae/test_m51_hierarchical_portable_cae_md_resolution.py",
+    "tests/cae/test_m50_compiled_agent_package_contract.py",
+    "tests/cae/test_m49_canonical_agent_registry.py"
+  ],
+  "acceptance_gates": {
+    "gate_1_session_discoverable_and_inspectable": "VERIFIED (Agent Session is discoverable, queryable by workspace/purpose/agent, and fully inspectable with scope, lifecycle, and capsule hash)",
+    "gate_2_same_agent_works_in_program_and_session": "VERIFIED (The exact same registered AgentDefinition binds into ProgramAgentPhaseBindingManifest and StandaloneAgentSession)",
+    "gate_3_session_has_explicit_authority_scope": "VERIFIED (Session scope has explicit, hash-addressed bounds on tools, evidence, and max_invocations budget)",
+    "gate_4_context_does_not_leak_across_sessions": "VERIFIED (Context capsules are strictly isolated; cross-session or foreign capsules are rejected fail-closed with SessionContextLeakError)",
+    "gate_5_session_pause_resume_repair": "VERIFIED (Session supports pause, resume, bounded in-session repair with BoundedRepairRuntimeEngine, and completion receipts)"
+  },
+  "false_proof_defenses": {
+    "defense_1_debug_session_broader_tools": "BLOCKED (Requesting tools outside the agent package raises SessionToolEscalationError)",
+    "defense_2_reuse_stale_program_context": "BLOCKED (Passing foreign or cross-session capsules raises SessionContextLeakError)",
+    "defense_3_session_without_operator_authorization": "BLOCKED (Invoking a session in CREATED state raises SessionAuthorizationRequiredError)",
+    "defense_4_session_writes_canonical_state": "BLOCKED (Read-only standalone session attempting state mutations raises SessionCanonicalWriteBlockedError)"
+  },
+  "concrete_trace_demonstrated": {
+    "lifecycle_path": "Session Start (CREATED) -> Operator Authorize (AUTHORIZED) -> Invocation (ACTIVE) -> Pause (PAUSED) -> Resume (ACTIVE) -> Complete (COMPLETED) -> AgentSessionReceipt",
+    "agent_id": "RelationshipCanonicalizationAnalystAgent",
+    "purpose": "DEBATE",
+    "invocations_executed": 1,
+    "receipt_id": "rcpt_sess_...",
+    "receipt_status": "VERIFIED"
+  },
+  "test_evidence": {
+    "suite_phase5_and_6": "90/90 passed in 4.81s",
+    "suite_regression": "32/32 passed in 6.44s"
+  },
+  "limitations": [
+    "Standalone session state mutations require explicit governed Operation binding and are read-only by default"
+  ]
+}

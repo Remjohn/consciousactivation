@@ -1,0 +1,47 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Asset Result Contract
+type: object
+additionalProperties: false
+required:
+- result_id
+- demand
+- visual_editor
+- accepted_assets
+- authorization
+- budget_receipt
+properties:
+  result_id:
+    type: string
+    minLength: 1
+    pattern: ^RESULT-
+  demand:
+    type: object
+    required:
+    - request_id
+    - version
+    - payload_hash
+  visual_editor:
+    type: object
+    required:
+    - product_version
+    - production_acceptance
+  accepted_assets:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+      - asset_ref
+      - asset_role
+      - composition_geometry_ref
+      - evaluation_receipt_ref
+      - production_receipt_ref
+  partial_unresolved:
+    type: array
+  authorization:
+    type: object
+    required:
+    - production_authorized
+    - downstream_consumption_authorized
+  budget_receipt:
+    type: object

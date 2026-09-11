@@ -1,0 +1,83 @@
+{
+  "schema": "harness-visual-syntax-analysis/v1",
+  "harness_name": "SPV-CON-Comparison",
+  "source_zip": "SPV-CON-Comparison.zip",
+  "source_zip_sha256": "6915f7db5b972538ac238d60fe6ebd73d0a9a7d59c7138214a4b3f8647a91d90",
+  "vision_model_used": "google/gemini-2.5-flash",
+  "base_url": "https://openrouter.ai/api/v1",
+  "max_samples": 20,
+  "deduplication_summary": {
+    "total_slides_analysed": 1,
+    "unique_layout_count": 1,
+    "duplicate_slides_collapsed": 0,
+    "unique_slide_roles": [
+      {
+        "slide_role": "grid_collage",
+        "first_slide_index": 1,
+        "layout_fingerprint": "header_text + grid_cluster",
+        "container_zones": [
+          "header_zone",
+          "hero_zone"
+        ],
+        "primitives": [
+          {
+            "primitive_type": "text_block",
+            "zone": "header_zone",
+            "dominant": false,
+            "notes": "multi-line, centered, includes emoji"
+          },
+          {
+            "primitive_type": "text_block",
+            "zone": "hero_zone",
+            "dominant": false,
+            "notes": "bold, title for the grid"
+          },
+          {
+            "primitive_type": "grid_cluster",
+            "zone": "hero_zone",
+            "dominant": true,
+            "notes": "3x2 grid of images with numbered labels and text captions below each"
+          }
+        ],
+        "reading_order": "top text block, then title, then left-to-right, top-to-bottom through the grid items",
+        "anchor_elements": []
+      }
+    ]
+  },
+  "all_slide_analyses": [
+    {
+      "slide_index": 1,
+      "layout_fingerprint": "header_text + grid_cluster",
+      "container_zones": [
+        "header_zone",
+        "hero_zone"
+      ],
+      "primitives": [
+        {
+          "primitive_type": "text_block",
+          "zone": "header_zone",
+          "dominant": false,
+          "notes": "multi-line, centered, includes emoji"
+        },
+        {
+          "primitive_type": "text_block",
+          "zone": "hero_zone",
+          "dominant": false,
+          "notes": "bold, title for the grid"
+        },
+        {
+          "primitive_type": "grid_cluster",
+          "zone": "hero_zone",
+          "dominant": true,
+          "notes": "3x2 grid of images with numbered labels and text captions below each"
+        }
+      ],
+      "reading_order": "top text block, then title, then left-to-right, top-to-bottom through the grid items",
+      "anchor_elements": [],
+      "is_duplicate_of": null,
+      "candidate_slide_role": "grid_collage",
+      "source_filename": "belly_button_anatomy.png"
+    }
+  ],
+  "stage_2_instructions": "Feed this file together with the harness drill markdown files (ONE_HARNESS_BUILD_PROMPT.md, DRILL_ME_FORMAT.md, HARNESS_GAP_ANALYSIS_AND_BUILD_SKILL.md) to the manifest authoring model (GLM 5.2 or equivalent non-vision model). The authoring model must produce manifest.json using ONLY deduplication_summary.unique_slide_roles as its visual syntax source — it must NOT re-derive layout from raw images."
+}

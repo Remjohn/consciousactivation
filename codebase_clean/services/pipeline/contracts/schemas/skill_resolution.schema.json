@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tool_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "applicability_tags": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "category_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "failure_codes": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "forbidden_action_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "format_profile_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "invariant_locks": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "resolution_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "resolution_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "result": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "selected_recipe_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "skill_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "resolution_id",
+    "skill_ref",
+    "selected_recipe_ids",
+    "allowed_tool_ids",
+    "forbidden_action_ids",
+    "invariant_locks",
+    "category_id",
+    "format_profile_id",
+    "failure_codes",
+    "applicability_tags",
+    "result",
+    "resolution_sha256"
+  ],
+  "title": "SkillResolution",
+  "type": "object"
+}

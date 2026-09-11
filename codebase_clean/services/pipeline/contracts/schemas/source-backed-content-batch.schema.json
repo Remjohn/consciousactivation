@@ -1,0 +1,143 @@
+{
+  "$id": "urn:conscious-activations:atomic-harness-pipeline:phase3:source_backed_content_batch",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "batch_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "batch_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "brand_context_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "campaign_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "harness_binding_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "jobs": {
+      "type": "array"
+    },
+    "observed_activative_pack_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "production_authorized": {
+      "type": "boolean"
+    },
+    "semantic_values_owned_by_pipeline": {
+      "type": "boolean"
+    },
+    "shared_analysis_refs": {
+      "type": "array"
+    },
+    "source_package_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "version",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "state": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "batch_id",
+    "batch_version",
+    "campaign_id",
+    "source_package_ref",
+    "observed_activative_pack_ref",
+    "harness_binding_ref",
+    "brand_context_ref",
+    "shared_analysis_refs",
+    "jobs",
+    "state",
+    "semantic_values_owned_by_pipeline",
+    "production_authorized"
+  ],
+  "title": "source_backed_content_batch",
+  "type": "object"
+}

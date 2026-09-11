@@ -1,0 +1,63 @@
+{
+  "artifact_id": "CAE-ART-ARCH-001",
+  "status": "APPROVED",
+  "system_name": "Conscious Activation Engine Core Architecture",
+  "subsystems": [
+    {
+      "subsystem_id": "SUB-WORLD-INTEL",
+      "name": "World Signal Ingestion Subsystem",
+      "responsibility": "Ingests raw media signals, verifies source provenance hashes, checks wire inflation, and normalizes telemetry.",
+      "bound_services": [
+        "services/world-intelligence/"
+      ]
+    },
+    {
+      "subsystem_id": "SUB-PIPELINE-ENGINE",
+      "name": "Deterministic Workflow & Compiler Subsystem",
+      "responsibility": "Compiles multi-agent DAGs, validates step schemas, and orchestrates deterministic state transitions.",
+      "bound_services": [
+        "services/pipeline/"
+      ]
+    },
+    {
+      "subsystem_id": "SUB-RUNTIME-CORE",
+      "name": "Conscious Activation Runtime Core",
+      "responsibility": "Provides JIT context capsules, CAS state machine runtimes, and typed agent invocation harnesses.",
+      "bound_services": [
+        "packages/ca_runtime/"
+      ]
+    },
+    {
+      "subsystem_id": "SUB-STUDIO-UI",
+      "name": "Operator Studio & Visual Telemetry Subsystem",
+      "responsibility": "Renders operator dashboards, telemetry monitors, and Atomic Harness visual syntax tokens.",
+      "bound_services": [
+        "atomic_harnesses_visual_syntax/"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "interface_name": "ResearchSignalIngestionAPI",
+      "type": "REST_API",
+      "contract_schema": "schemas/research_source.schema.json"
+    },
+    {
+      "interface_name": "WorkflowExecutionPlanInterface",
+      "type": "INTERNAL_PYTHON_API",
+      "contract_schema": "schemas/workflow_factory_map.schema.json"
+    },
+    {
+      "interface_name": "ProgramStateCASInterface",
+      "type": "INTERNAL_PYTHON_API",
+      "contract_schema": "docs/cae/constitutions/CA-CAN-02_STATE_AGGREGATE.yaml"
+    }
+  ],
+  "communication_protocols": [
+    "HTTP/2 REST",
+    "Internal Asynchronous Python Callables",
+    "CAS Optimistic Locking"
+  ],
+  "brownfield_integration_strategy": "The architecture directly incorporates existing Python packages (ca_runtime) and microservices (world-intelligence, pipeline), wrapping them in typed schema boundaries rather than rewriting them.",
+  "security_and_governance": "All state transitions guarded by Compare-And-Swap version checks; all operator promotions require explicit gate ratification."
+}

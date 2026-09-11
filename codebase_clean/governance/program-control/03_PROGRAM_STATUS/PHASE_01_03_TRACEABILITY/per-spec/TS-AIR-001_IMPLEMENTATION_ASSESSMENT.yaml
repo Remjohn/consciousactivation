@@ -1,0 +1,30 @@
+schema_version: ca-phase01-03-per-spec-implementation-assessment/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+spec_id: TS-AIR-001
+spec_path: 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/docs/tech-specs/TS-AIR-001.md
+spec_sha256: 622b32dc08259bc8148c60f5865359c6a76de37037103789ff1fda0f842c6cbc
+phase: PHASE_02
+relationship: IMPLEMENTED_CORE_SUBSET
+status: PARTIALLY_IMPLEMENTED
+full_spec_completed: false
+acceptance_criteria:
+  total: 10
+  direct_aggregate_test_evidence: 5
+  implementation_without_direct_ac_test: 5
+  unimplemented_or_nonbehavior: 0
+implementation_paths:
+- 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/cmf_activative_intelligence/domain.py
+- 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/cmf_activative_intelligence/application.py
+- 04_ACTIVATIVE_INTELLIGENCE_RUNTIME/src/cmf_activative_intelligence/repositories/air_repository.py
+test_evidence:
+- tests/phase2/test_air_core.py::AirDomainTests::test_activation_domains_are_complete
+- tests/phase2/test_air_core.py::AirDomainTests::test_epistemic_transition_requires_operator_evidence
+- tests/phase2/test_air_core.py::AirDomainTests::test_planned_cannot_become_observed
+- tests/phase2/test_air_core.py::AirSemanticFlowTests::test_idempotent_replay_and_revision_conflict
+open_gap_ids:
+- GAP-EVAL-INDEPENDENT
+- GAP-MIGRATION-FAULT-INJECTION
+- GAP-PER-SPEC-TESTS
+maximum_supported_claim: CORE_SUBSET_DEVELOPMENT_EVIDENCE_ONLY
+production_ready: false
+certified: false

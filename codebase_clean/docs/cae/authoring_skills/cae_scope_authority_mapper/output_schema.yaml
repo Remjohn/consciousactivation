@@ -1,0 +1,61 @@
+type: object
+required:
+  - object_name
+  - plane
+  - scope_class
+  - authority_axes
+  - legal_parent_chain
+  - isolation_invariants_preserved
+  - mapping_status
+properties:
+  object_name:
+    type: string
+  plane:
+    type: string
+    enum:
+      - "CANONICAL_PLANE"
+      - "OPERATIONAL_PLANE"
+  scope_class:
+    type: string
+    enum:
+      - "GLOBAL_CANONICAL"
+      - "WORKSPACE_SCOPED"
+      - "ENGAGEMENT_SCOPED"
+      - "GUEST_SCOPED"
+      - "OPERATOR_AUDIT"
+      - "EPHEMERAL_NONAUTHORITATIVE"
+  authority_axes:
+    type: object
+    required:
+      - canonical_definition_source
+      - target_runtime_representation
+      - change_promotion_authority
+    properties:
+      canonical_definition_source:
+        type: string
+      target_runtime_representation:
+        type: string
+      change_promotion_authority:
+        type: string
+  legal_parent_chain:
+    type: array
+    items:
+      type: string
+  isolation_invariants_preserved:
+    type: boolean
+  collision_ids:
+    type: array
+    items:
+      type: string
+  mapping_status:
+    type: string
+    enum:
+      - "VALIDATED_MAPPING"
+      - "CONTRACT_CONFLICT"
+      - "SPLIT_REQUIRED"
+      - "PENDING_OPERATOR_DECISION"
+      - "BLOCKED"
+  unresolved_questions:
+    type: array
+    items:
+      type: string

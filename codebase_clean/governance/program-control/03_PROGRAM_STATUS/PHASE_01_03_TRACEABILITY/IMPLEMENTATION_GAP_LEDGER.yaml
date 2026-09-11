@@ -1,0 +1,297 @@
+schema_version: ca-phase01-03-gap-ledger/v1
+bundle_id: CA-PHASE01-03-TRACEABILITY-GAP-CLOSURE-2026-07-23
+gaps:
+- gap_id: GAP-PER-SPEC-TESTS
+  severity: HIGH
+  status: OPEN
+  description: All phases use aggregate test modules instead of exact product-local
+    per-Spec test paths and one-Spec Build Receipts.
+  affected_specs: TS-AHP-001;TS-AHP-002;TS-AHP-003;TS-AHP-004;TS-AHP-005;TS-AHP-006;TS-AHP-007;TS-AHP-008;TS-AIR-001;TS-AIR-002;TS-AIR-004;TS-AIR-005;TS-AIR-006;TS-AIR-007;TS-AIR-018;TS-AIR-019;TS-INT-001;TS-REL-001
+  required_action: Create exact per-Spec suites and acceptance receipts before claiming
+    full Spec completion.
+- gap_id: GAP-EVAL-INDEPENDENT
+  severity: HIGH
+  status: OPEN
+  description: Independent evaluator identities, calibration, and eligibility decisions
+    are represented structurally but not executed as a distinct evaluator runtime.
+  affected_specs: TS-AIR-001;TS-AIR-002;TS-AIR-004;TS-AIR-005;TS-AIR-006;TS-AIR-007;TS-AIR-019
+  required_action: Implement/evidence independent evaluator execution in later evaluation
+    phase.
+- gap_id: GAP-MIGRATION-FAULT-INJECTION
+  severity: HIGH
+  status: OPEN
+  description: Full migration matrices and fault injection at every persistence boundary
+    are not demonstrated.
+  affected_specs: TS-AHP-001;TS-AHP-004;TS-AHP-006;TS-AIR-001;TS-AIR-002
+  required_action: Add migration fixtures, deterministic replay, and transactional
+    failure injection.
+- gap_id: GAP-BROAD-FIRST-PORTFOLIO
+  severity: MEDIUM
+  status: OPEN
+  description: Matrix storage exists but broad-first candidate portfolio and survival
+    comparison are not fully implemented.
+  affected_specs: TS-AIR-002
+  required_action: Implement TS-AIR-003/TS-AIR-002 portfolio flow.
+- gap_id: GAP-PRIMITIVE-RELATION-GRAPH
+  severity: MEDIUM
+  status: OPEN
+  description: Primitive records and bindings exist, but the complete typed relation
+    graph and resolution evidence are incomplete.
+  affected_specs: TS-AIR-004
+  required_action: Implement relation resolver and conflict evidence.
+- gap_id: GAP-PRIMITIVE-STAGE-COVERAGE
+  severity: MEDIUM
+  status: OPEN
+  description: Stage/category coverage matrices and evidence-bearing NOT_APPLICABLE
+    are not fully evaluated.
+  affected_specs: TS-AIR-004
+  required_action: Add stage coverage service and tests.
+- gap_id: GAP-COALITION-CANDIDATE-PORTFOLIO
+  severity: MEDIUM
+  status: OPEN
+  description: One coalition can be stored; comparative coalition portfolios are not
+    implemented.
+  affected_specs: TS-AIR-005
+  required_action: Implement coalition candidate generation/comparison.
+- gap_id: GAP-STEERING-RECIPE-LIFECYCLE
+  severity: MEDIUM
+  status: OPEN
+  description: Steering Recipe candidates are referenced but not governed through
+    promotion lifecycle.
+  affected_specs: TS-AIR-005
+  required_action: Implement candidate and promotion evidence lifecycle.
+- gap_id: GAP-ARCHETYPE-CANDIDATE-PORTFOLIO
+  severity: MEDIUM
+  status: OPEN
+  description: Archetype evidence and one program exist; comparative candidate portfolio/rejection
+    workflow is incomplete.
+  affected_specs: TS-AIR-006
+  required_action: Implement candidate portfolio and explicit rejection receipts.
+- gap_id: GAP-CATEGORY-GEOMETRY-VALIDATION
+  severity: MEDIUM
+  status: OPEN
+  description: Category geometry is stored as text and not independently validated
+    across derivatives.
+  affected_specs: TS-AIR-006
+  required_action: Add category geometry registry and evaluator.
+- gap_id: GAP-VOICE-APPLICATION
+  severity: HIGH
+  status: OPEN
+  description: Voice DNA storage exists; constrained transformation and contrastive
+    continuity evaluation are not implemented.
+  affected_specs: TS-AIR-007
+  required_action: Implement VoiceDNAApplication in Phase 5.
+- gap_id: GAP-VISUAL-DNA-APPLICATION
+  severity: HIGH
+  status: OPEN
+  description: Visual DNA storage exists; semantic visual application and integrity
+    evaluation are not implemented.
+  affected_specs: TS-AIR-007
+  required_action: Implement VisualDNAApplication in Phase 5/6.
+- gap_id: GAP-CCV-PORTFOLIO
+  severity: MEDIUM
+  status: OPEN
+  description: CCV candidate coordinates and invariant-comparison portfolio are not
+    implemented.
+  affected_specs: TS-AIR-007
+  required_action: Implement controlled candidate variation.
+- gap_id: GAP-SDA-SFL-CROSSWALK
+  severity: MEDIUM
+  status: OPEN
+  description: SDA/SFL references are not compiled into a typed context packet.
+  affected_specs: TS-AIR-007
+  required_action: Implement registry crosswalk and handoff.
+- gap_id: GAP-SPEC-AC-NOT-BEHAVIORAL
+  severity: HIGH
+  status: OPEN
+  description: The audited Spec acceptance section is writing-lifecycle oriented rather
+    than behavior-specific; implementation acceptance cannot be proven from it.
+  affected_specs: TS-AHP-005;TS-AHP-006;TS-AHP-007;TS-AHP-008;TS-AIR-018
+  required_action: Issue a bounded Spec amendment with behavior-specific ACs before
+    full completion claim.
+- gap_id: GAP-HUMAN-RESOLUTION-RETRIEVAL
+  severity: MEDIUM
+  status: OPEN
+  description: HumanResolution capture exists; governed retrieval projection and learning-eligibility
+    index are incomplete.
+  affected_specs: TS-AIR-018
+  required_action: Implement retrieval/indexing and promotion boundaries.
+- gap_id: GAP-MULTICAUSAL-ATTRIBUTION
+  severity: MEDIUM
+  status: OPEN
+  description: Single owner routing exists; contested, multi-causal, and unresolved
+    attribution portfolios are incomplete.
+  affected_specs: TS-AIR-019
+  required_action: Implement candidate attribution and evidence comparison.
+- gap_id: GAP-JIT-ROLE-CONTEXT
+  severity: MEDIUM
+  status: OPEN
+  description: Role-specific semantic requirements are not compiled into exact Pipeline
+    JIT context contracts.
+  affected_specs: TS-AIR-019
+  required_action: Implement AIR-to-Pipeline role context requirement handoff.
+- gap_id: GAP-LEARNING-ADMISSION
+  severity: MEDIUM
+  status: OPEN
+  description: Learning disposition does not yet feed a governed retrieval/dataset
+    admission queue.
+  affected_specs: TS-AIR-019
+  required_action: Implement scoped admission and audit receipts.
+- gap_id: GAP-REAL-PROGRAM-CONTROL-ADAPTER
+  severity: HIGH
+  status: OPEN
+  description: Authority reconciliation uses deterministic local records but not the
+    full current Program Control reader/adapters.
+  affected_specs: TS-AHP-001
+  required_action: Implement repository adapters against current Program Control state.
+- gap_id: GAP-BROWNFIELD-COMPLETE-DISPOSITION
+  severity: MEDIUM
+  status: OPEN
+  description: Brownfield admission services exist but do not prove complete disposition
+    of the full predecessor inventory.
+  affected_specs: TS-AHP-001
+  required_action: Run full inventory admission and unique disposition evidence.
+- gap_id: GAP-REAL-BUILDER-PACKAGE-CORPUS
+  severity: HIGH
+  status: OPEN
+  description: Harness intake is tested with fixtures, not a corpus of actual current
+    Builder packages.
+  affected_specs: TS-AHP-002
+  required_action: Admit and validate real Builder outputs.
+- gap_id: GAP-BINDING-INVALIDATION-E2E
+  severity: MEDIUM
+  status: OPEN
+  description: Binding invalidation projection exists but full cross-product stale-binding
+    flow is incomplete.
+  affected_specs: TS-AHP-002
+  required_action: Add end-to-end stale binding tests.
+- gap_id: GAP-REAL-INTERVIEW-AIR-ADAPTERS
+  severity: HIGH
+  status: OPEN
+  description: Batch compilation consumes typed fixtures; real Interview Expression
+    and AIR adapters are not implemented.
+  affected_specs: TS-AHP-003
+  required_action: Implement after Phase 4/5.
+- gap_id: GAP-ROUTE-RANKING-DEDUPE
+  severity: MEDIUM
+  status: OPEN
+  description: Route, overlap, ranking and dedupe policies are only partially represented.
+  affected_specs: TS-AHP-003
+  required_action: Implement governed profile/evaluator-backed route selection.
+- gap_id: GAP-WRONG-READING-INHERITANCE-E2E
+  severity: MEDIUM
+  status: OPEN
+  description: Wrong-reading inheritance is represented but not proven across real
+    derivative jobs.
+  affected_specs: TS-AHP-003
+  required_action: Add cross-product inheritance conformance tests.
+- gap_id: GAP-HUMAN-EXTERNAL-NODE-EXECUTION
+  severity: HIGH
+  status: OPEN
+  description: Human and external product nodes are typed, but actual asynchronous
+    product/human execution is not implemented.
+  affected_specs: TS-AHP-004
+  required_action: Implement explicit node adapters and receipts.
+- gap_id: GAP-ROLE-SEMANTIC-CONTEXT-CONFORMANCE
+  severity: MEDIUM
+  status: OPEN
+  description: JIT capsules exist but AIR role-semantic requirements are not yet validated
+    end-to-end.
+  affected_specs: TS-AHP-004
+  required_action: Add AIR/AHP conformance.
+- gap_id: GAP-FULL-DEPENDENCY-TYPE-COVERAGE
+  severity: MEDIUM
+  status: OPEN
+  description: Descendant invalidation is implemented for generic edges; complete
+    governed dependency type coverage is not proven.
+  affected_specs: TS-AHP-005
+  required_action: Add typed edge registry/property tests.
+- gap_id: GAP-BACKUP-RESTORE-REHEARSAL
+  severity: HIGH
+  status: OPEN
+  description: Checkpoint/replay exists; full backup, migration, restore, and disaster
+    rehearsal is not complete.
+  affected_specs: TS-AHP-006
+  required_action: Implement and execute recovery rehearsal.
+- gap_id: GAP-REAL-SANDBOX-ENFORCEMENT
+  severity: HIGH
+  status: OPEN
+  description: Sandbox declarations and assurance checks exist, but OS/process/network
+    enforcement is not implemented.
+  affected_specs: TS-AHP-007
+  required_action: Implement runtime sandbox execution.
+- gap_id: GAP-CONTINUOUS-ASSURANCE
+  severity: MEDIUM
+  status: OPEN
+  description: Assurance is invoked explicitly; continuous drift monitoring is not
+    active.
+  affected_specs: TS-AHP-007
+  required_action: Add periodic/event-driven assurance.
+- gap_id: GAP-REAL-CANDIDATE-EVALUATOR
+  severity: HIGH
+  status: OPEN
+  description: Candidate comparison uses deterministic numeric fixtures, not real
+    model/evaluator outputs.
+  affected_specs: TS-AHP-008
+  required_action: Integrate later Programmed Model and evaluator phases.
+- gap_id: GAP-ADAPTIVE-SEARCH-INTEGRATION
+  severity: MEDIUM
+  status: OPEN
+  description: Stopping logic exists but is not connected to real candidate generation/evaluation
+    loops.
+  affected_specs: TS-AHP-008
+  required_action: Integrate with model programs.
+- gap_id: GAP-INTERVIEW-DUAL-ADMISSION
+  severity: CRITICAL
+  status: OPEN
+  description: Brief-led and imported interview admission are not implemented.
+  affected_specs: TS-INT-001
+  required_action: Implement Phase 4.
+- gap_id: GAP-CANONICAL-SOURCE-PACKAGE
+  severity: CRITICAL
+  status: OPEN
+  description: Canonical Interview Source Package contracts and services are not implemented.
+  affected_specs: TS-INT-001
+  required_action: Implement Phase 4.
+- gap_id: GAP-INTERVIEW-PERSISTENCE
+  severity: HIGH
+  status: OPEN
+  description: Interview Expression currently has only a shell and shared runtime
+    persistence.
+  affected_specs: TS-INT-001
+  required_action: Implement product domain repository and receipts.
+- gap_id: GAP-FORMAT02-FUTURE-ACTIVATION-GATE
+  severity: DEFERRED
+  status: DEFERRED
+  description: Current denial guards pass; future activation eligibility and evidence
+    gate are intentionally deferred.
+  affected_specs: TS-REL-001
+  required_action: Do not implement until current Harness and independent evidence
+    exist.
+- gap_id: GAP-HISTORICAL-FAMILY-VALIDATION
+  severity: DEFERRED
+  status: DEFERRED
+  description: The 13 historical Format 02 families are preserved in authority documents
+    but not runtime-validated here.
+  affected_specs: TS-REL-001
+  required_action: Validate only in future protected Format 02 campaign.
+- gap_id: GAP-SQLITE-CONNECTION-LIFECYCLE
+  severity: CLOSED
+  status: CLOSED
+  description: SQLite connections emitted ResourceWarnings under warnings-as-errors
+    before this bundle.
+  affected_specs: ''
+  required_action: Closed by contextlib.closing patches and regression validation.
+- gap_id: GAP-TRACEABILITY-EVIDENCE
+  severity: CLOSED
+  status: CLOSED
+  description: Phase bundles lacked exact Spec/AC/code/test/status ledgers.
+  affected_specs: ''
+  required_action: Closed by this bundle matrices, receipts, and validation script.
+- gap_id: GAP-PHASE-CLAIM-BOUNDARY
+  severity: CLOSED
+  status: CLOSED
+  description: Phase-level PASS language could be misread as full per-Spec completion.
+  affected_specs: ''
+  required_action: Closed by truthful per-Spec status registry and claim-boundary
+    overlay.

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAE-BMAD End-to-End Integration Run Schema",
+  "type": "object",
+  "required": [
+    "run_id",
+    "target_area",
+    "execution_timestamp",
+    "trace_steps",
+    "line_level_proofs",
+    "fidelity_verdict"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "target_area": { "type": "string" },
+    "execution_timestamp": { "type": "string" },
+    "trace_steps": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["step_number", "step_name", "operating_level", "agent", "input", "output", "verified"],
+        "properties": {
+          "step_number": { "type": "integer" },
+          "step_name": { "type": "string" },
+          "operating_level": { "type": "string" },
+          "agent": { "type": "string" },
+          "input": { "type": "string" },
+          "output": { "type": "string" },
+          "verified": { "type": "boolean" }
+        }
+      }
+    },
+    "line_level_proofs": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["file_path", "line_start", "symbol_name", "exact_snippet"],
+        "properties": {
+          "file_path": { "type": "string" },
+          "line_start": { "type": "integer" },
+          "symbol_name": { "type": "string" },
+          "exact_snippet": { "type": "string" }
+        }
+      }
+    },
+    "fidelity_verdict": {
+      "type": "string",
+      "enum": ["END_TO_END_PROVEN_AGAINST_REAL_CODE", "INTEGRATION_FAILED"]
+    }
+  }
+}

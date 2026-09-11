@@ -1,0 +1,84 @@
+{
+  "receipt_version": "1.0.0",
+  "mandate_id": "CAE-M62",
+  "mandate_title": "Workflow Isolation, Parallelism + Sandbox Semantics",
+  "phase": "PHASE_08_SDLF_FACTORY",
+  "parallel_group": "P8-B",
+  "phase_completion_status": "PHASE_08_COMPLETE",
+  "timestamp_utc": "2026-09-02T06:15:00Z",
+  "governing_authorities": [
+    "docs/cae/constitutions/CA-CAN-04_WORKFLOW_PRIMITIVES.yaml",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/11_STATEM_ALIGNMENT_CONTRACT.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/00_CONTROL/04_OBJECT_AUTHORITY_MAP.md",
+    "docs/cae/CAE_Next_16_Mandate_Bundle/03_SDLF_FACTORY/M62_workflow_isolation_parallelism_sandbox_semantics.md"
+  ],
+  "delivered_artifacts": [
+    {
+      "path": "packages/ca_runtime/src/ca_runtime/workflow_isolation.py",
+      "artifact_class": "Workflow Sandbox Manager, Parallel Coordinator & Attribution Engine",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "path": "tests/cae/test_m62_workflow_isolation_parallelism_sandbox_semantics.py",
+      "artifact_class": "Acceptance Test Suite",
+      "test_count": 7,
+      "status": "VERIFIED_PASS"
+    }
+  ],
+  "acceptance_gates": {
+    "gate_1_no_shared_target_concurrent_mutation": {
+      "status": "PASSED",
+      "description": "Parallel branches cannot mutate the same target without isolated sandboxes."
+    },
+    "gate_2_deterministic_cancellation_propagation": {
+      "status": "PASSED",
+      "description": "Cancellation cascades recursively to all child branches and marks sandboxes CANCELLED."
+    },
+    "gate_3_cryptographic_artifact_attribution": {
+      "status": "PASSED",
+      "description": "Every artifact is cryptographically bound to its branch, node, agent, and sandbox."
+    },
+    "gate_4_idempotent_cleanup_and_receipts": {
+      "status": "PASSED",
+      "description": "Sandbox cleanup is idempotent and emits immutable CleanupReceipt records."
+    },
+    "gate_5_race_first_success_termination": {
+      "status": "PASSED",
+      "description": "Upon first-success completion, slower branches are immediately cancelled and purged before commit."
+    }
+  },
+  "false_proof_defenses": [
+    {
+      "vector": "concurrent_mutation_conflict_rejection",
+      "rule": "INV-ISO-001",
+      "error_code": "ERR_CONCURRENT_MUTATION_CONFLICT",
+      "verified": true
+    },
+    {
+      "vector": "cancellation_cascading_verification",
+      "rule": "INV-ISO-002",
+      "error_code": "BRANCH_STATE_CANCELLED",
+      "verified": true
+    },
+    {
+      "vector": "first_success_background_branch_purge",
+      "rule": "INV-ISO-003",
+      "error_code": "FIRST_SUCCESS_CLEANED_UP",
+      "verified": true
+    },
+    {
+      "vector": "cross_tenant_sandbox_isolation_rejection",
+      "rule": "INV-ISO-004",
+      "error_code": "ERR_TENANT_SANDBOX_ISOLATION_VIOLATION",
+      "verified": true
+    }
+  ],
+  "test_metrics": {
+    "m62_tests_passed": 7,
+    "combined_phase_5_6_7_8_tests_passed": 142,
+    "regression_tests_passed": 32,
+    "failures": 0,
+    "warnings": 0
+  },
+  "status": "COMPLETE_AT_OPERATOR_GATE"
+}

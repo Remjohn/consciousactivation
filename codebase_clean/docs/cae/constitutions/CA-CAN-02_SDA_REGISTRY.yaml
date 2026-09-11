@@ -1,0 +1,227 @@
+# Object Constitution: SDARegistry
+# Phase 24 / CA-CAN-02 Constitution Set Completion
+
+id: "CA-REG-001"
+canonical_name: "SDARegistry"
+status: "DRAFT_PILOT"
+version: "0.1.0"
+maturity: "development_uncertified"
+primary_artifact_class: "Canonical Ontology"
+ontological_plane: "CANONICAL_PLANE"
+scope_class: "GLOBAL_CANONICAL"
+collision_register_ref: "COL-MAP-004"
+traceability_matrix_ref: "CA-MAP-01:44, CA-STATE-01:78, CAE-UPTL-01-CUST-001 (Operator Ratified Class 3)"
+
+dimensions:
+  1_canonical_identity:
+    status: "APPLICABLE"
+    canonical_id: "CA-REG-001"
+    canonical_name: "SDARegistry"
+    common_aliases: ["SDA Canonical Ontology", "Semantic Dimension Analysis Registry", "SDA Snapshot"]
+    naming_standard: "PascalCase singular noun entity"
+    version: "0.1.0"
+    maturity: "development_uncertified"
+
+  2_artifact_class:
+    status: "APPLICABLE"
+    primary_class: "Canonical Ontology"
+    class_matrix_id: 11
+    class_rationale: "SDARegistry is an immutable canonical ontology defining the semantic dimensions, polarities, and conceptual axes used across psychological analysis in CAE."
+
+  3_ontological_plane:
+    status: "APPLICABLE"
+    plane: "CANONICAL_PLANE"
+    plane_rationale: "Resides strictly on the Canonical Plane as global system doctrine; shared read-only across all workspaces."
+
+  4_architectural_role:
+    status: "APPLICABLE"
+    lane: "Canonical Semantics & Ontological Grounding"
+    primary_purpose: "Provides the immutable, versioned vocabulary of semantic dimensions against which interview evidence, role tensions, and brand archetypes are evaluated."
+
+  5_definition:
+    status: "APPLICABLE"
+    genus: "Canonical ontological registry"
+    differentia: "Distinguished from SFLRegistry (sensory/perceptual functions) and PrimitiveRegistry (atomic operators) by defining abstract psychological and semantic dimension structures."
+    function: "Stores pinned dimension records, semantic definitions, polarities, and validation schemas."
+    boundary: "Must not contain operational tenant data; records inherit version from registry manifest; must be cryptographically pinned."
+    normative_definition: >
+      SDARegistry is the canonical ontology registry containing the authoritative definitions of semantic dimensions
+      and polarities. It is version-pinned via `sda.zip` and `registry_manifest.yaml`, with all items inheriting
+      manifest-level versioning under ratified custodian governance.
+
+  6_semantic_boundary:
+    status: "APPLICABLE"
+    what_it_is:
+      - "An immutable canonical registry of 13 semantic dimension definitions."
+      - "A Global Canonical Plane artifact shared read-only across all tenant workspaces."
+      - "A manifest-governed ontology with ratified version inheritance ('1.0')."
+    what_it_is_not:
+      - "An operational database table storing customer scores."
+      - "A mutable per-tenant configuration."
+      - "An SFL or Primitive registry."
+
+  7_nearest_neighbors:
+    status: "APPLICABLE"
+    distinctions:
+      - neighbor: "SFLRegistry (CA-REG-002)"
+        distinction: "SDARegistry defines abstract psychological dimensions; SFLRegistry defines sensory and perceptual experience functions."
+      - neighbor: "PrimitiveRegistry (CA-REG-003)"
+        distinction: "SDARegistry defines semantic dimensions; PrimitiveRegistry defines atomic psychological operators and triggers."
+      - neighbor: "SemanticAssessment (CA-DSA-001)"
+        distinction: "SDARegistry is the canonical dictionary of dimensions; SemanticAssessment is a tenant's operational measurement along those dimensions."
+
+  8_taxonomic_position:
+    status: "APPLICABLE"
+    domain: "Canonical Ontology"
+    tier: "Global Canonical Registry"
+    specialization: "Semantic Dimension Registry"
+
+  9_lifecycle_and_canonicity:
+    status: "APPLICABLE"
+    canonicality: "canonical"
+    mutability: "immutable"
+    epistemic_status: "established"
+    authority_status: "operator-ratified"
+    lifecycle_phases: ["PINNED_SNAPSHOT", "SUPERSEDED"]
+
+  10_attributes:
+    status: "APPLICABLE"
+    immutable_attributes:
+      - name: "snapshot_id"
+        type: "STRING"
+        description: "Canonical registry snapshot identifier (e.g., 'sda-manifest-1.0')."
+      - name: "manifest_version"
+        type: "STRING"
+        description: "Manifest version inherited by all items ('1.0')."
+      - name: "archive_sha256"
+        type: "STRING"
+        description: "SHA-256 hash of the canonical `sda.zip` archive."
+      - name: "item_count"
+        type: "INTEGER"
+        description: "Total count of valid dimension records (13)."
+      - name: "pinned_at"
+        type: "TIMESTAMPTZ"
+        description: "Timestamp when snapshot was sealed."
+    mutable_attributes: []
+
+  11_relationships:
+    status: "APPLICABLE"
+    parent_chain: []
+    root_boundary: "Global Canonical System"
+    child_relations:
+      - child_object: "SFLRegistry"
+        cardinality: "1:N (Ontological cross-reference)"
+
+  12_state_model:
+    status: "INAPPLICABLE_WITH_REASON"
+    reason: "SDARegistry is an immutable canonical snapshot; state changes occur only via new pinned snapshot releases."
+
+  13_events:
+    status: "APPLICABLE"
+    published_events:
+      - event_name: "canonical.sda_registry.pinned"
+    subscribed_events: []
+
+  14_provenance:
+    status: "APPLICABLE"
+    creation_origin: "Canonical Ontology Lead & Operator Ratification via CA-UPTL-01/U1"
+    immutable_lineage_required: true
+    audit_trail_retention: "PERMANENT"
+
+  15_invariants:
+    status: "APPLICABLE"
+    rules:
+      - "INV-SDA-001: Manifest-Version Inheritance — Every SDA record in the snapshot inherits source_record_version='1.0' from registry_manifest.yaml per operator ratification."
+      - "INV-SDA-002: Cryptographic Immutability — The archive_sha256 MUST exactly match the SHA-256 of `sda.zip`."
+      - "INV-SDA-003: Zero Tenant Leakage — SDA registry definitions MUST NOT contain tenant identifiers or operational workspace state."
+      - "INV-SDA-004: Typed Resolution — Runtime resolution via RegistryResolver MUST return immutable, validated RegistryItem instances."
+
+  16_authority_and_ownership:
+    status: "APPLICABLE"
+    definition_source: "CA-MAP-01:44, CA-STATE-01:78, CAE-UPTL-01-CUST-001"
+    runtime_representation: "packages/ca_runtime/src/ca_runtime/registry.py & cae.registry_snapshot"
+    promotion_authority: "Canonical Ontology Lead & Platform Operator"
+
+  17_authorized_operations:
+    status: "APPLICABLE"
+    operations:
+      - name: "load_sda_snapshot"
+        parameters: ["archive_path", "manifest_path"]
+      - name: "resolve_sda_dimension"
+        parameters: ["canonical_id"]
+
+  18_prohibited_operations:
+    status: "APPLICABLE"
+    prohibitions:
+      - "MUST NOT modify SDA dimension definitions in place."
+      - "MUST NOT insert tenant-specific custom dimensions directly into canonical SDARegistry."
+
+  19_validators:
+    status: "APPLICABLE"
+    structural_validators:
+      - "Verify archive_sha256 matches sda.zip byte hash."
+      - "Verify all 13 YAML documents parse cleanly."
+    semantic_validators:
+      - "Verify manifest-version inheritance assigns '1.0' to all items."
+      - "Verify dimension keys are unique across the snapshot."
+
+  20_error_taxonomy:
+    status: "APPLICABLE"
+    errors:
+      - code: "ERR_SDA_ITEM_NOT_FOUND"
+        http_status: 404
+        description: "Requested SDA dimension canonical_id does not exist."
+      - code: "ERR_SDA_SNAPSHOT_CORRUPTED"
+        http_status: 500
+        description: "SDA archive hash does not match pinned snapshot digest."
+
+  21_storage_representation:
+    status: "APPLICABLE"
+    target_table_projection: "cae.registry_snapshot & in-memory RegistryResolver cache"
+    rls_boundary_column: "NOT_APPLICABLE (Global Canonical Plane)"
+    storage_boundary: "Repository Archive (sda.zip) & Read-only Cache"
+
+  22_runtime_consumers:
+    status: "APPLICABLE"
+    consumers:
+      - "AIR Psychological Analysis Engine"
+      - "RegistryResolver"
+      - "Semantic Assessment Validator"
+
+  23_questions_answered:
+    status: "APPLICABLE"
+    questions:
+      - "What is the canonical definition and polarity of this semantic dimension?"
+      - "Which manifest version governs this SDA record?"
+
+  24_examples:
+    status: "APPLICABLE"
+    positive_anchors:
+      - id: "EX-SDA-001"
+        description: "Canonical SDA dimension snapshot with inherited 1.0 version."
+        attributes:
+          snapshot_id: "sda-manifest-1.0"
+          manifest_version: "1.0"
+          item_count: 13
+          archive_sha256: "b455c1f5b08c96ba1fbda6a7a00c6d7ff43a29aa7b38d3561a0de4859a16f9f7"
+
+  25_hard_negatives:
+    status: "APPLICABLE"
+    deceptive_negatives:
+      - id: "NEG-SDA-001"
+        description: "Near-miss: An unratified resolver that rejects SDA records as 'versionless defect items' because individual YAML files omit an inline 'version:' field."
+        rejection_reason: "Violates INV-SDA-001 (Operator Ratified Manifest-Version Inheritance); records inherit version '1.0' from registry_manifest.yaml and must resolve cleanly."
+      - id: "NEG-SDA-002"
+        description: "Near-miss: Attempting to insert a tenant-specific dimension into the global sda.zip archive to satisfy a single client's taxonomy request."
+        rejection_reason: "Violates INV-SDA-003; canonical registries are global doctrine; client custom taxonomies belong in operational tenant extensions."
+      - id: "NEG-SDA-003"
+        description: "Generic violation: Loading SDA snapshot with mismatched archive SHA-256."
+        rejection_reason: "Violates INV-SDA-002; hash mismatch raises ERR_SDA_SNAPSHOT_CORRUPTED."
+
+  26_version_history:
+    status: "APPLICABLE"
+    changelog:
+      - version: "0.1.0"
+        date: "2026-08-26"
+        author: "CAE Governance and Specification Agent (CA-CAN-02)"
+        summary: "Initial constitution for SDARegistry canonical ontology with 26 dimensions and ratified manifest version inheritance."
