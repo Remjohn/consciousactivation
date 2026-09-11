@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { compileVisualChatProposal, compileVisualTransformProposal, getVisualStudio, recordVisualFeedback, type VisualChatAction, type VisualFeedbackDecision, type VisualTransformType } from "../../api/visualStudio";
 import { CandidatePreviewPanel } from "./CandidatePreviewPanel";
+import { SuperVisualPrimitiveStack } from "./SuperVisualPrimitiveStack";
 
 const OPERATOR = { actor_id: "operator-web-001", actor_type: "human" as const, product_id: "conscious-activations-web", workflow_role: "operator" as const };
 
@@ -85,6 +86,16 @@ export function VisualAssetStudio({ campaignId }: { campaignId: string }) {
     </div>
 
     <CandidatePreviewPanel initialSessionId={candidateSessionId} />
+
+    <SuperVisualPrimitiveStack layers={layers} rendererKind={p?.preview?.artifact_ref?.renderer_kind} />
+
+    <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Rough Notation annotation proposals">
+      <div className="mb-3 flex items-center justify-between"><h3 className="font-medium">Annotation proposals</h3><Badge>Typed · no direct mutation</Badge></div>
+      <p className="mb-3 text-xs leading-5 text-ca-text-secondary">Prepare an annotation proposal against the selected canonical layer. Promotion still follows the existing operator revision path.</p>
+      <div className="flex flex-wrap gap-2">
+        {(["underline", "box", "highlight"] as const).map((type) => <button key={type} className="rounded border border-ca-border px-3 py-2 text-xs" disabled={!selected} onClick={() => { setChatAction("EXPLAIN"); setChatInput(`Prepare a Rough Notation ${type} annotation proposal for the selected layer without changing canonical state.`); }}>{type}</button>)}
+      </div>
+    </section>
 
     <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
       <section className="rounded-xl border border-ca-border bg-ca-surface p-4" aria-label="Source and evidence">

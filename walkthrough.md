@@ -1151,3 +1151,36 @@ Automatic acceptance is deterministic and fail-closed. Human ACCEPT/REJECT is op
 The requested literal bundle supplied `AGENT_HANDOFF.md` and a unified patch but no `COMPONENT_CONTRACT.yaml`; the handoff, patch, current CAE authority hierarchy, and existing retrieval/native-edit contracts controlled integration. See `docs/cae/specs/M0087/M0087_EVIDENCE_RECEIPT.md`.
 
 Implementation commit: `b34a16a4`.
+
+---
+
+# CAE-M0090 and CAE-M0091 Walkthrough — SAM3 Tracking and SuperVisual Editor
+
+Status: Implemented; focused and combined regression verified at 100%
+Date: 2026-09-11
+Boundary: Operator-controlled tracking and bounded visual composition projections over existing CAE storyboard, BBOX, Pretext, Skia, Rough Notation, Visual Asset Studio, and source/evidence authorities
+
+## Exact integration matrix
+
+| Mandate | Active destination | Authority preserved |
+|---|---|---|
+| CAE-M0090 SAM3 TrackingSession | packages/ca_runtime/src/ca_runtime/tracking_session.py | Existing storyboard/BBOX/OpenChatCut geometry and source identity; no semantic invention |
+| CAE-M0090 SAM3 adapter | engines/intelligence/vision/sam3/adapter.py | Operator prompts, immutable revisions, confidence/discontinuity evidence, fail-closed geometry acceptance |
+| CAE-M0091 SuperVisual editor | engines/visual/supervisual/editor.py | Existing CAE composition contract; bounded BBOX, Pretext, Skia, and Rough Notation primitives |
+| CAE-M0091 Visual Studio projection | apps/web/src/components/visual-studio/SuperVisualPrimitiveStack.tsx and existing VisualAssetStudio.tsx | Existing Visual Asset Studio canonical state; additive projection and proposal-only controls |
+| Evidence and mappings | docs/cae/specs/M0090/ and docs/cae/specs/M0091/ | Handoff-defined source-to-destination mappings and explicit limitations |
+
+## Verification matrix
+
+| Suite | Command / scope | Result |
+|---|---|---:|
+| M0090 focused contract suite | python -m pytest -p no:asyncio -q tests/cae/test_m0090_sam3_tracking_session.py | PASS (10/10, 100%) |
+| M0091 focused and Visual Studio purity suites | python -m pytest -q tests/cae/test_m0091_supervisual_editor.py tests/api/test_visual_studio_pure.py | PASS (8/8, 100%) |
+| Combined M0085–M0091 CAE regression | Selected asset-intelligence, Visual Chat, feedback, Studio API, phase-1, M0064, M0090, and M0091 suites | PASS (88/88, 100%) |
+| Existing Studio regression | node --test services/studio/tests/*.test.mjs | PASS (20/20, 100%) |
+| Python syntax and compile | Explicit M0090/M0091 source and test files | PASS |
+| Full apps/web TypeScript check | node_modules/.bin/tsc.cmd -p apps/web/tsconfig.json --noEmit | BLOCKED by unrelated pre-existing repository errors; no M0091-specific errors observed |
+
+The supplied M0090 and M0091 bundle locations were reconciled to the delivered archive bundles. Neither supplied bundle contained a literal COMPONENT_CONTRACT.yaml, so the AGENT_HANDOFF.md files, upstream mappings, existing CAE authority hierarchy, and targeted acceptance tests controlled integration. No native SAM3 runtime capability is claimed. The incomplete trailing M in the request was not executed.
+
+Implementation commit: recorded after verification.
