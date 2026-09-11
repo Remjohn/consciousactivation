@@ -398,19 +398,73 @@ def adapt_transformation_recipe_for_source_quality(
     return recipe.model_copy(update={"primitives": primitives, "keyframes": keyframes, "constraints": constraints})
 
 
+class Keyframe(BaseModel):
+    """Canonical fixed-point keyframe emitted by the final-hit compiler."""
+
+    at_ms: int
+    template: str = "HOLD"
+    scale_bps: Optional[int] = None
+    x_bps: Optional[int] = None
+    y_bps: Optional[int] = None
+    purpose: str = "HOLD"
+
+    @validator("at_ms")
+    def at_ms_non_negative(cls, value: int) -> int:
+        if isinstance(value, bool) or value < 0:
+            raise ValueError("keyframe at_ms must be a non-negative integer")
+        return value
+
+    @validator("template", "purpose")
+    def keyframe_text_non_empty(cls, value: str) -> str:
+        normalized = value.strip().upper()
+        if not normalized:
+            raise ValueError("keyframe template and purpose must be non-empty")
+        return normalized
+
+    @validator("scale_bps")
+    def scale_is_bounded(cls, value: Optional[int]) -> Optional[int]:
+        if value is None:
+            return value
+        if isinstance(value, bool) or value < 0 or value > 20000:
+            raise ValueError("keyframe scale_bps must be an integer in [0, 20000]")
+        return value
+
+    @validator("x_bps", "y_bps")
+    def position_is_bounded(cls, value: Optional[int]) -> Optional[int]:
+        if value is None:
+            return value
+        if isinstance(value, bool) or value < 0 or value > 10000:
+            raise ValueError("keyframe positions must be integers in [0, 10000]")
+        return value
+
+
 class MotionPlan(BaseModel):
     """Deterministic motion/keyframe plan, downstream of semantic intent."""
 
     motion_plan_id: str
     duration_ms: int = 0
-    keyframes: List[Dict[str, Any]] = Field(default_factory=list)
+    keyframes: List[Keyframe] = Field(default_factory=list)
     intensity_bps: int = 0
     attention_cost_bps: int = 0
+    compiled_from_recipe_id: Optional[str] = None
+    source_quality_level: Optional[str] = None
 
     @validator("duration_ms", "intensity_bps", "attention_cost_bps")
     def non_negative(cls, value: int) -> int:
-        if value < 0:
+        if isinstance(value, bool) or value < 0:
             raise ValueError("motion values must be non-negative")
+        return value
+
+    @validator("intensity_bps")
+    def intensity_is_bounded(cls, value: int) -> int:
+        if value > 10000:
+            raise ValueError("motion intensity must be in [0, 10000] bps")
+        return value
+
+    @validator("attention_cost_bps")
+    def attention_cost_is_bounded(cls, value: int) -> int:
+        if value > 10000:
+            raise ValueError("motion attention cost must be in [0, 10000] bps")
         return value
 
 
@@ -1106,6 +1160,83 @@ class StoryboardSessionStore:
                 "feedback for an operator/revision is immutable; create a new revision"
             ) from exc
         return feedback
+
+    def _resolve_final_hit_wrong_reading_locks(
+        self,
+        *,
+        workspace_id: str,
+        revision: StoryboardRevision,
+        wrong_reading_locks: Optional[Sequence[str]],
+    ) -> Optional[Sequence[str]]:
+        if wrong_reading_locks is not None:
+            return wrong_reading_locks
+        if self.editorial_store is not None and revision.semantic_program_id:
+            semantic_program = self.editorial_store.get_semantic_program(
+                workspace_id, revision.semantic_program_id
+            )
+            if semantic_program is not None:
+                return semantic_program.wrong_reading_locks
+        return None
+
+    def validate_final_hit(
+        self,
+        *,
+        workspace_id: str,
+        session_id: str,
+        revision_id: str,
+        format_id: str,
+        design_system_ref: Optional[Dict[str, Any]] = None,
+        harness_constraints: Optional[Dict[str, Any]] = None,
+        wrong_reading_locks: Optional[Sequence[str]] = None,
+        strict: bool = True,
+    ):
+        """Validate an existing canonical revision without mutating persisted state."""
+        from ca_runtime.storyboard_final_hit import validate_final_hit as _validate_final_hit
+
+        revision = self.get_revision(workspace_id, session_id, revision_id)
+        locks = self._resolve_final_hit_wrong_reading_locks(
+            workspace_id=workspace_id,
+            revision=revision,
+            wrong_reading_locks=wrong_reading_locks,
+        )
+        return _validate_final_hit(
+            revision,
+            format_id=format_id,
+            design_system_ref=design_system_ref,
+            harness_constraints=harness_constraints,
+            wrong_reading_locks=locks,
+            strict=strict,
+        )
+
+    def compile_final_hit(
+        self,
+        *,
+        workspace_id: str,
+        session_id: str,
+        revision_id: str,
+        format_id: str,
+        design_system_ref: Optional[Dict[str, Any]] = None,
+        harness_constraints: Optional[Dict[str, Any]] = None,
+        wrong_reading_locks: Optional[Sequence[str]] = None,
+        strict: bool = True,
+    ):
+        """Compile final-hit projections after deterministic validation; no state mutation."""
+        from ca_runtime.storyboard_final_hit import compile_final_hit as _compile_final_hit
+
+        revision = self.get_revision(workspace_id, session_id, revision_id)
+        locks = self._resolve_final_hit_wrong_reading_locks(
+            workspace_id=workspace_id,
+            revision=revision,
+            wrong_reading_locks=wrong_reading_locks,
+        )
+        return _compile_final_hit(
+            revision,
+            format_id=format_id,
+            design_system_ref=design_system_ref,
+            harness_constraints=harness_constraints,
+            wrong_reading_locks=locks,
+            strict=strict,
+        )
 
     def compile_revision(
         self, *, workspace_id: str, session_id: str, revision_id: str

@@ -1526,6 +1526,7 @@ from .editorial_expression_calculus import (
 
 from .storyboard_session import (
     FeedbackDecision,
+    Keyframe,
     MotionPlan,
     OperatorVisualFeedback,
     StoryboardAuthorityError,
@@ -1562,6 +1563,17 @@ from .transformation_recipe import (
     TransformationRecipeRegistry,
     TransformationRecipeTemplate,
     compile_transformation_intent,
+)
+from .storyboard_final_hit import (
+    DesignSystemValidationError,
+    FinalHitCompilation,
+    FinalHitMotionCompilationError,
+    FinalHitValidationError,
+    FinalHitValidationResult,
+    HarnessConstraintValidationError,
+    MotionPlanCompilation,
+    compile_final_hit,
+    validate_final_hit,
 )
 from .storyboard_programs import (
     BaseStoryboardProgram,

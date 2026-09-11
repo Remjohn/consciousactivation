@@ -1,0 +1,55 @@
+{
+  "mandate_id": "M0092",
+  "status": "VERIFIED_AUTOMATED_CONTRACTS",
+  "repository_commit_sha": "recorded after verification commit",
+  "component_contract_present_in_bundle": false,
+  "implementation_paths": [
+    "packages/ca_runtime/src/ca_runtime/storyboard_final_hit.py",
+    "packages/ca_runtime/src/ca_runtime/storyboard_session.py",
+    "packages/ca_runtime/src/ca_runtime/transformation_recipe.py",
+    "packages/ca_runtime/src/ca_runtime/__init__.py"
+  ],
+  "scope_boundary": [
+    "Final-Hit validation over existing StoryboardRevision",
+    "deterministic MotionPlan and typed Keyframe compilation",
+    "source-quality, semantic-purpose, geometry, safe-area, legibility, wrong-reading-lock and attention-budget gates",
+    "no new semantic, retrieval, Design System, VAE, database, or runtime authority"
+  ],
+  "tests": [
+    {
+      "command": "python -m py_compile packages/ca_runtime/src/ca_runtime/storyboard_final_hit.py packages/ca_runtime/src/ca_runtime/storyboard_session.py packages/ca_runtime/src/ca_runtime/transformation_recipe.py packages/ca_runtime/src/ca_runtime/__init__.py tests/cae/test_m0092_final_hit_storyboard_validation.py",
+      "result": "PASS"
+    },
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/cae/test_m0092_final_hit_storyboard_validation.py",
+      "result": "PASS (11/11)"
+    },
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/cae/test_m0083_transformation_intent_recipe.py tests/cae/test_m0090_sam3_tracking_session.py tests/cae/test_m0091_supervisual_editor.py tests/api/test_visual_studio_pure.py",
+      "result": "PASS (29/29)"
+    },
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/cae/test_m0084_source_quality_profile.py",
+      "result": "PASS (9/9)"
+    },
+    {
+      "command": "python -m pytest -p no:asyncio -q tests/cae/test_m0079_storyboard_session_revision.py",
+      "result": "PASS (3/3)"
+    },
+    {
+      "command": "full selected M0083/M0084/M0079/M0085-M0091/M0092 Python regression",
+      "result": "PASS (122/122)"
+    },
+    {
+      "command": "node --test services/studio/tests/*.test.mjs",
+      "result": "PASS (20/20)"
+    }
+  ],
+  "warnings": [
+    "Pydantic deprecation warnings are emitted by existing V1-style validators.",
+    "No native media/browser renderer was exercised; automated coverage proves deterministic data contracts, not perceptual acceptance.",
+    "Final creative acceptance remains operator-owned.",
+    "No literal COMPONENT_CONTRACT.yaml was supplied in the M0092 bundle."
+  ],
+  "source_bundle_sha256": "a6c06b303ee7dfc1f7210edcc760e682624ad7e0f97cdd877d19f1d45faf0422"
+}

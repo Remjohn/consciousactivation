@@ -323,10 +323,14 @@ class TransformationRecipeCompiler:
             if scale_delta_bps == 0 and requested_motion == "SUBTLE_ZOOM":
                 keyframe_template = "STATIC_HOLD"
 
-        primitive_payload = [
-            {"op": op, "target": "intent_target"}
-            for op in template.primitive_ops
-        ]
+        primitive_payload = []
+        for op in template.primitive_ops:
+            primitive = {"op": op, "target": "intent_target"}
+            if op == "REFRAME":
+                primitive["reframe_bps"] = scale_delta_bps
+            elif op in {"ZOOM", "SCALE"}:
+                primitive["amount_bps"] = scale_delta_bps
+            primitive_payload.append(primitive)
         keyframe_payload = _keyframes(
             template=keyframe_template,
             scale_delta_bps=scale_delta_bps,
@@ -394,5 +398,4 @@ __all__ = [
     "TransformationRecipeCompiler",
     "compile_transformation_intent",
 ]
-
 

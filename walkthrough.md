@@ -1184,3 +1184,39 @@ Boundary: Operator-controlled tracking and bounded visual composition projection
 The supplied M0090 and M0091 bundle locations were reconciled to the delivered archive bundles. Neither supplied bundle contained a literal COMPONENT_CONTRACT.yaml, so the AGENT_HANDOFF.md files, upstream mappings, existing CAE authority hierarchy, and targeted acceptance tests controlled integration. No native SAM3 runtime capability is claimed. The incomplete trailing M in the request was not executed.
 
 Implementation commit: recorded after verification.
+
+---
+
+# CAE-M0092 Walkthrough — Final-Hit Validation and MotionPlan Compilation
+
+Status: Implemented; required focused and cross-epoch regression suites verified at 100%
+Date: 2026-09-11
+Boundary: Deterministic validation/projection over existing StoryboardRevision, Narrative Editing Grammar, Transformation Recipe, source-quality, format-program, and operator-owned acceptance authorities
+
+## Exact integration matrix
+
+| Concern | Active destination | Authority preserved |
+|---|---|---|
+| Final-Hit validation | packages/ca_runtime/src/ca_runtime/storyboard_final_hit.py | Existing StoryboardRevision and format-program validation; fail-closed checks only |
+| Typed motion compilation | packages/ca_runtime/src/ca_runtime/storyboard_session.py | Existing TransformationIntent/TransformationRecipe seam; typed Keyframe and MotionPlan projection |
+| Explicit transformation magnitudes | packages/ca_runtime/src/ca_runtime/transformation_recipe.py | Existing M0083 compiler; source-quality validation can inspect declared REFRAME/ZOOM/SCALE magnitude |
+| Runtime surface | packages/ca_runtime/src/ca_runtime/__init__.py | Existing CAE public exports |
+| Evidence | docs/cae/specs/M0092/ | Test receipts, authority mapping, limitations, and bundle identity |
+
+M0092 rejects motion that is unsupported by semantic purpose, narrative grammar, source quality, safe area, evidence lineage, legibility observation, wrong-reading locks, motion intensity, keyframe continuity, or attention budget. Compilation is pure and does not mutate canonical storyboard state. Final creative acceptance remains operator-owned.
+
+## Verification matrix
+
+| Suite | Result |
+|---|---:|
+| M0092 focused validation | PASS (11/11, 100%) |
+| M0083/M0090/M0091 plus Visual Studio compatibility | PASS (29/29, 100%) |
+| M0084 source-quality regression | PASS (9/9, 100%) |
+| M0079 storyboard baseline | PASS (3/3, 100%) |
+| Full selected M0083/M0084/M0079/M0085-M0091/M0092 Python regression | PASS (122/122, 100%) |
+| Existing Studio regression | PASS (20/20, 100%) |
+| Explicit Python compile check | PASS |
+
+The supplied M0092 bundle did not contain a literal COMPONENT_CONTRACT.yaml; the AGENT_HANDOFF.md, declared authority sources, existing CAE implementations, and targeted tests controlled integration. No new semantic, retrieval, Design System, VAE, database, or runtime authority was introduced.
+
+Implementation commit: recorded after verification.
