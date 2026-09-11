@@ -1314,4 +1314,4 @@ M0096 reuses the canonical M0079 Storyboard session/revision, M0080 format progr
 
 The live harness produced and preserved the append-only M067 ledger and manifest under `docs/cae/evidence/M0096/`. Git provenance is present and captured. No mock runtime, synthetic media, or test shim was used. Because native runtime and real source evidence are unavailable, operator correction, native render, QA/release, and partner-ready approval were not claimed. The exact active M0096 evidence and operator decision remain in `docs/cae/certification/M0096/`.
 
-Implementation/evidence commit: recorded after final verification.
+Certification/evidence commit: `766964855fe26d618c34bcd6f97d27c88a19a90d`.

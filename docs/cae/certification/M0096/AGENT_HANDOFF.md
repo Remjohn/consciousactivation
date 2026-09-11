@@ -49,7 +49,7 @@ The four 2026-09-10 visual-production authority files are present at `docs/AUTHO
 - Current upstream `main` commit observed on 2026-09-11: `607e0fcc2b755a92a659deb54305ba8164930ae3`
 - License: `AGPL-3.0-or-later`
 - Exact local file paths and local hashes: `docs/cae/evidence/M0096/M0096_UPSTREAM_TO_CAE_MAPPING.md`
-- The active checkout retains Git metadata; the certification run captured the pre-certification checkout at `169f9db2f836075e2d65f74c4e7395da7a0a11a6`. The local vendored revision is not claimed to match the observed upstream commit.
+- The active checkout retains Git metadata. The certification commit is `766964855fe26d618c34bcd6f97d27c88a19a90d`; the pre-certification checkout was `169f9db2f836075e2d65f74c4e7395da7a0a11a6`. The local vendored revision is not claimed to match the observed upstream commit.
 
 ## Verification commands and results
 
@@ -121,7 +121,7 @@ Supplied source archive SHA-256:
 
 Exact current CAE Git commit SHA:
 
-`169f9db2f836075e2d65f74c4e7395da7a0a11a6` (pre-certification active checkout)
+`766964855fe26d618c34bcd6f97d27c88a19a90d` (certification commit; pre-certification checkout `169f9db2f836075e2d65f74c4e7395da7a0a11a6`)
 
 ## Operator decision requested
 

@@ -24,7 +24,7 @@ The current run does **not** honestly establish the terminal partner-ready state
 | Operator correction / persisted revision | `EXECUTABLE` | NOT REACHED | Existing contract requires immutable feedback and `GOOD` before compile | Cannot execute live correction without source/runtime path. |
 | Optional SAM3 tracking | `HYPOTHESIS` / `OPERATOR_DECISION_REQUIRED` | NOT PROVEN | No native SAM3 path is reachable in this supplied snapshot/run | Do not claim SAM3 capability from documentation alone. |
 | Runtime receipt / QA / release authorization | `EXECUTABLE` | NOT REACHED | M0067 ledger stops at runtime precondition failure | No final preview, native receipt, or release authorization exists. |
-| Exact current CAE commit | `EXECUTABLE` | PASS | Active checkout captured `169f9db2f836075e2d65f74c4e7395da7a0a11a6` before certification edits | Final certification commit is recorded by Git after the evidence commit. |
+| Exact current CAE commit | `EXECUTABLE` | PASS | Certification commit `766964855fe26d618c34bcd6f97d27c88a19a90d`; pre-certification checkout `169f9db2f836075e2d65f74c4e7395da7a0a11a6` | Evidence commit records the blocked runtime state. |
 
 ## Live blocking evidence
 
